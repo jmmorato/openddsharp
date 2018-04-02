@@ -1,2 +1,2 @@
-# openddsharp
+# OpenDDSharp
 OpenDDS wrapper for .NET languages 
