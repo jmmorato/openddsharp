@@ -1,0 +1,52 @@
+﻿#Ignore the files created by Windows
+Thumbs.db
+#Ignore the files created by Visual Studio
+*.dll
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.bak
+*.cache
+*.ilk
+*.log
+*.tlog
+*.ior
+**/.vs/
+**/[Bb]in/
+**/[Oo]bj/
+**/[Tt]est[Rr]esults/
+**/[Oo]utput/
+**/[Dd]ebug/
+**/[Rr]elease/
+*.sbr
+_ReSharper*/
+*.Dotsettings
+#These are the database files for C++ Intellisense
+*.[Vv][Cc].[Dd][Bb]
+*.[Vv][Cc].[Oo][Pp][Ee][Nn][Dd][Bb]
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+# NuGet v3's project.json files produces more ignoreable files
+*.nuget.props
+*.nuget.targets
+# Ignore GhostDoc files
+*.GhostDoc.xml
+**/*.previous.nugetreferenceswitcher
+project.lock.json
+#Ignore folders
+PoC/
+Deprecated/
+Documentation/
+GeneratorCommands/

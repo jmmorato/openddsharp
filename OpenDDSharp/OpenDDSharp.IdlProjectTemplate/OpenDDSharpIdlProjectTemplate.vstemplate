@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>OpenDDSharp IDL Project</Name>
+    <Description>OpenDDSharp IDL Project Template</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>OpenDDSharpIdl</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <CreateInPlace>true</CreateInPlace>
+    <TemplateID>6edeed27-9c44-4a1b-b1c0-d220df705266</TemplateID>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$projectname$.vcxproj" File="Test.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">Test.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.idl" OpenInEditor="true">Test.idl</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$TypeSupport.h">TestTypeSupport.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$TypeSupport.cpp">TestTypeSupport.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="LNK4248.h">LNK4248.h</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="project.json">project.json_rename_me</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

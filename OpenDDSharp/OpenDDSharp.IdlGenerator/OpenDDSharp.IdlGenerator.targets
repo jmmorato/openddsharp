@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+  <PropertyGroup Label="OpenDDS Home">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="ACE Home">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="TAO Home">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE\TAO</TAO_ROOT>
+  </PropertyGroup>
+  <ItemGroup>
+    <IdlFiles Include="*.idl" />
+  </ItemGroup>
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
+  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
+    <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
+    <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
+    <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
+  </Target>
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
+  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent">
+    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntDir)'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\tools\native_project_tempate\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" />
+  </Target>
+  <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent">
+    <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot;" IgnoreExitCode="false" ContinueOnError="false" />
+  </Target>
+  <ItemGroup Condition="'$(Language)' == 'C++'">
+    <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x86\Debug\OpenDDSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x86\Release\OpenDDSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x64\Debug\OpenDDSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x64\Release\OpenDDSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

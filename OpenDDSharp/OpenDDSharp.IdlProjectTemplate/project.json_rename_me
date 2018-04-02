@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "OpenDDSharp.IdlGenerator": "0.1.0"
+  },
+  "frameworks": {
+    "net461": {}
+  },
+  "runtimes": {
+    "win-x86": {},
+    "win-x64": {}
+  }
+}

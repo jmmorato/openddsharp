@@ -1,0 +1,116 @@
+#include "DomainParticipantFactory.h"
+
+OpenDDSharp::DDS::DomainParticipantFactory::DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory) {
+	impl_entity = factory;
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId) {
+	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, nullptr, StatusMask::NoStatusMask);
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos) {
+	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, qos, nullptr, StatusMask::NoStatusMask);
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
+	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, listener, StatusMask::DefaultStatusMask);
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask) {
+	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, listener, statusMask);
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
+	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, qos, listener, StatusMask::DefaultStatusMask);
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask) {
+	if (domainId < 0 || domainId > 232) {
+		return nullptr;
+	}
+
+	::DDS::DomainParticipantQos dpQos;
+	if (qos != nullptr) {
+		dpQos = qos->ToNative();
+	}
+	else {
+		if (impl_entity->get_default_participant_qos(dpQos) != ::DDS::RETCODE_OK) {
+			dpQos = ::PARTICIPANT_QOS_DEFAULT;
+		}
+	}
+
+	::DDS::DomainParticipantListener_var lst = NULL;
+	if (listener != nullptr) {
+		lst = listener->impl_entity;
+	}
+
+	::DDS::DomainParticipant_ptr participant = this->impl_entity->create_participant(domainId, dpQos, lst, (System::UInt32)statusMask);
+
+	if (participant != NULL) {
+		OpenDDSharp::DDS::DomainParticipant^ p = gcnew OpenDDSharp::DDS::DomainParticipant(participant);
+		p->m_listener = listener;
+
+		EntityManager::get_instance().add(participant, p);		
+
+		return p;
+	}
+	else {
+		return nullptr;
+	}
+};
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::LookupParticipant(int domainId) {
+	::DDS::DomainParticipant_ptr dp = impl_entity->lookup_participant(domainId);	
+
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(dp);
+	if (entity != nullptr) {
+		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
+	}
+	else {
+		return nullptr;
+	}
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::GetQos(OpenDDSharp::DDS::DomainParticipantFactoryQos^ qos) {
+	::DDS::DomainParticipantFactoryQos* nativeQos = new ::DDS::DomainParticipantFactoryQos();
+	::DDS::ReturnCode_t ret = impl_entity->get_qos(*nativeQos);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos->FromNative(*nativeQos);
+	}
+
+	return (::OpenDDSharp::DDS::ReturnCode)ret;
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::SetQos(OpenDDSharp::DDS::DomainParticipantFactoryQos^ qos) {
+	::DDS::DomainParticipantFactoryQos nativeQos = qos->ToNative();
+	return (::OpenDDSharp::DDS::ReturnCode)impl_entity->set_qos(nativeQos);
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::GetDefaultDomainParticipantQos(OpenDDSharp::DDS::DomainParticipantQos^ qos) {
+	::DDS::DomainParticipantQos* nativeQos = new ::DDS::DomainParticipantQos();
+	::DDS::ReturnCode_t ret = impl_entity->get_default_participant_qos(*nativeQos);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos->FromNative(*nativeQos);
+	}
+
+	return (::OpenDDSharp::DDS::ReturnCode)ret;
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::SetDefaultDomainParticipantQos(OpenDDSharp::DDS::DomainParticipantQos^ qos) {
+	::DDS::DomainParticipantQos nativeQos = qos->ToNative();
+	return (::OpenDDSharp::DDS::ReturnCode)impl_entity->set_default_participant_qos(nativeQos);
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::DeleteParticipant(OpenDDSharp::DDS::DomainParticipant^ participant) {
+	if (participant == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+	::DDS::ReturnCode_t ret = impl_entity->delete_participant(participant->impl_entity);
+	if (ret == ::DDS::RETCODE_OK) {
+		EntityManager::get_instance().remove(participant->impl_entity);
+	}
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;	
+}

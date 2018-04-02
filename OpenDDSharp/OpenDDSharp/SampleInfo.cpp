@@ -1,0 +1,86 @@
+#include "SampleInfo.h"
+
+OpenDDSharp::DDS::SampleInfo::SampleInfo() {
+};
+
+System::Boolean OpenDDSharp::DDS::SampleInfo::ValidData::get() {
+	return valid_data;
+};
+
+System::UInt32 OpenDDSharp::DDS::SampleInfo::SampleState::get() {
+	return sample_state;
+};
+
+System::UInt32 OpenDDSharp::DDS::SampleInfo::ViewState::get() {
+	return view_state;
+};
+
+System::UInt32 OpenDDSharp::DDS::SampleInfo::InstanceState::get() {
+	return instance_state;
+};
+
+OpenDDSharp::DDS::Timestamp OpenDDSharp::DDS::SampleInfo::SourceTimestamp::get() {
+	return source_timestamp;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::InstanceHandle::get() {
+	return instance_handle;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::PublicationHandle::get() {
+	return publication_handle;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::DisposedGenerationCount::get() {
+	return disposed_generation_count;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::NoWritersGenerationCount::get() {
+	return no_writers_generation_count;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::SampleRank::get() {
+	return sample_rank;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::GenerationRank::get() {
+	return generation_rank;
+};
+
+System::Int32 OpenDDSharp::DDS::SampleInfo::AbsoluteGenerationRank::get() {
+	return absolute_generation_rank;
+};
+
+void OpenDDSharp::DDS::SampleInfo::FromNative(::DDS::SampleInfo native) {	
+	valid_data = native.valid_data;
+	sample_state = native.sample_state;
+	view_state = native.view_state;
+	instance_state = native.instance_state;
+	source_timestamp.FromNative(native.source_timestamp);
+	instance_handle = native.instance_handle;
+	publication_handle = native.publication_handle;
+	disposed_generation_count = native.disposed_generation_count;
+	no_writers_generation_count = native.no_writers_generation_count;
+	sample_rank = native.sample_rank;
+	generation_rank = native.generation_rank;
+	absolute_generation_rank = native.absolute_generation_rank;
+}
+
+::DDS::SampleInfo OpenDDSharp::DDS::SampleInfo::ToNative() {
+	::DDS::SampleInfo ret;
+
+	ret.valid_data = valid_data;
+	ret.sample_state = sample_state;
+	ret.view_state = view_state;
+	ret.instance_state = instance_state;
+	ret.source_timestamp = source_timestamp.ToNative();
+	ret.instance_handle = instance_handle;
+	ret.publication_handle = publication_handle;
+	ret.disposed_generation_count = disposed_generation_count;
+	ret.no_writers_generation_count = no_writers_generation_count;
+	ret.sample_rank = sample_rank;
+	ret.generation_rank = generation_rank;
+	ret.absolute_generation_rank = absolute_generation_rank;
+
+	return ret;
+}

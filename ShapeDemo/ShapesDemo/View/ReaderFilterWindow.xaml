@@ -1,0 +1,53 @@
+﻿<Window x:Class="OpenDDSharp.ShapesDemo.View.ReaderFilterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"   
+        xmlns:converter="clr-namespace:OpenDDSharp.ShapesDemo.Converter"
+        xmlns:model="clr-namespace:OpenDDSharp.ShapesDemo.Model"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        Title="Reader Filter" Height="215" Width="280" Background="#E6EEF6"
+        ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <converter:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+
+        <ObjectDataProvider x:Key="filterKind" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="model:FilterKind"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <DockPanel LastChildFill="False" Margin="5">
+        <Border DockPanel.Dock="Top" BorderBrush="#666666" BorderThickness="1" Margin="0,5,0,0">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="X0:" Width="35" Height="25" Margin="5,0,5,5" />
+                    <Slider Width="80" Margin="0,5,0,0" Minimum="0" Maximum="320" Ticks="5" Value="{Binding X0}" />
+                    <Label Content="X1:" Width="35" Height="25" Margin="5,0,5,5" />
+                    <Slider Width="80" Margin="0,5,0,0" Minimum="0" Maximum="320" Ticks="5" Value="{Binding X1}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Y0:" Width="35" Height="25" Margin="5,0,5,5" />
+                    <Slider Width="80" Margin="0,5,0,0" Minimum="0" Maximum="361" Ticks="5" Value="{Binding Y0}" />
+                    <Label Content="Y1:" Width="35" Height="25" Margin="5,0,5,5" />
+                    <Slider Width="80" Margin="0,5,0,0" Minimum="0" Maximum="361" Ticks="5" Value="{Binding Y1}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Label Content="Filter:" />
+                    <ComboBox Width="80" Height="25" ItemsSource="{Binding Source={StaticResource filterKind}}" SelectedItem="{Binding Path=FilterKind}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+            <RadioButton Content="Enable" GroupName="Enable" Margin="0,0,35,0"
+                         IsChecked="{Binding Enabled}" />
+            <RadioButton Content="Disable" GroupName="Enable"
+                         IsChecked="{Binding Enabled, Converter={StaticResource InverseBooleanConverter}}" />
+        </StackPanel>
+        
+        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0">
+            <Button DockPanel.Dock="Left" Content="OK" Width="80" Height="20" Margin="2" Command="{Binding OkCommand}" />
+            <Button DockPanel.Dock="Right" Content="Cancel" Width="80" Height="20" Margin="2" Command="{Binding CancelCommand}" />
+        </DockPanel>
+    </DockPanel>
+</Window>

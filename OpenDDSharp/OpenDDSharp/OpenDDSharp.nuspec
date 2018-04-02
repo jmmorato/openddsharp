@@ -1,0 +1,55 @@
+<!--<?xml version="1.0"?>-->
+<package >
+  <metadata>
+    <id>OpenDDSharp</id>
+    <version>0.1.0</version>
+    <title>OpenDDSharp</title>
+    <authors>Jose Morato</authors>
+    <owners>Jose Morato</owners>    
+    <projectUrl>http://www.openddsharp.com</projectUrl>
+    <iconUrl>http://www.openddsharp.com/favicon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OpenDDSharp library</description>
+    <releaseNotes>OpenDDSharp library v.0.1.0</releaseNotes>
+    <copyright>Jose Morato</copyright>
+    <tags>OpenDDSharp OpenDDS DDS</tags>
+    <references>      
+    </references>
+  </metadata>
+  <files>
+    <file src=".\bin\Win32\Release\OpenDDSharp.dll" target="build\net461\x86\Release" />
+    <file src=".\bin\Win32\Release\OpenDDSharp.pdb" target="build\net461\x86\Release" />
+    <file src=".\bin\Win32\Debug\OpenDDSharp.dll" target="build\net461\x86\Debug" />
+    <file src=".\bin\Win32\Debug\OpenDDSharp.pdb" target="build\net461\x86\Debug" />
+
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x86\ACE.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x86\TAO.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\lib_x86\OpenDDS_Dcps.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\lib_x86\OpenDDS_Rtps.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\lib_x86\OpenDDS_Rtps_Udp.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x86\ACEd.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x86\TAOd.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" target="build\net461\x86" />
+    <file src="E:\OpenDDS\lib_x86\OpenDDS_Rtps_Udpd.dll" target="build\net461\x86" />
+
+    <file src=".\bin\x64\Release\OpenDDSharp.dll" target="build\net461\x64\Release" />
+    <file src=".\bin\x64\Release\OpenDDSharp.pdb" target="build\net461\x64\Release" />
+    <file src=".\bin\x64\Debug\OpenDDSharp.dll" target="build\net461\x64\Debug" />
+    <file src=".\bin\x64\Debug\OpenDDSharp.pdb" target="build\net461\x64\Debug" />
+
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x64\ACE.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x64\TAO.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\lib_x64\OpenDDS_Dcps.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\lib_x64\OpenDDS_Rtps.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\lib_x64\OpenDDS_Rtps_Udp.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x64\ACEd.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\ACE_wrappers\lib_x64\TAOd.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\lib_x64\OpenDDS_Dcpsd.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\lib_x64\OpenDDS_Rtpsd.dll" target="build\net461\x64" />
+    <file src="E:\OpenDDS\lib_x64\OpenDDS_Rtps_Udpd.dll" target="build\net461\x64" />
+    
+    <file src=".\OpenDDSharp.targets" target="build\net461" />
+    
+  </files>
+</package>

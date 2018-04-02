@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Reference Include="OpenDDSharp" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" >
+      <HintPath>$(MSBuildThisFileDirectory)x86\Debug\OpenDDSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenDDSharp" Condition="'$(Configuration)|$(Platform)'=='Release|x86'" >
+      <HintPath>$(MSBuildThisFileDirectory)x86\Release\OpenDDSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenDDSharp" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" >
+      <HintPath>$(MSBuildThisFileDirectory)x64\Debug\OpenDDSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenDDSharp" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" >
+      <HintPath>$(MSBuildThisFileDirectory)x64\Release\OpenDDSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="AfterBuild">
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Dlls Include="$(MSBuildThisFileDirectory)x86\ACEd.dll;$(MSBuildThisFileDirectory)x86\TAOd.dll;$(MSBuildThisFileDirectory)x86\OpenDDS_Dcpsd.dll;$(MSBuildThisFileDirectory)x86\OpenDDS_Rtpsd.dll;$(MSBuildThisFileDirectory)x86\OpenDDS_Rtps_Udpd.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+      <Dlls Include="$(MSBuildThisFileDirectory)x86\ACE.dll;$(MSBuildThisFileDirectory)x86\TAO.dll;$(MSBuildThisFileDirectory)x86\OpenDDS_Dcps.dll;$(MSBuildThisFileDirectory)x86\OpenDDS_Rtps.dll;$(MSBuildThisFileDirectory)x86\OpenDDS_Rtps_Udp.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Dlls Include="$(MSBuildThisFileDirectory)x64\ACEd.dll;$(MSBuildThisFileDirectory)x64\TAOd.dll;$(MSBuildThisFileDirectory)x64\OpenDDS_Dcpsd.dll;$(MSBuildThisFileDirectory)x64\OpenDDS_Rtpsd.dll;$(MSBuildThisFileDirectory)x64\OpenDDS_Rtps_Udpd.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <Dlls Include="$(MSBuildThisFileDirectory)x64\ACE.dll;$(MSBuildThisFileDirectory)x64\TAO.dll;$(MSBuildThisFileDirectory)x64\OpenDDS_Dcps.dll;$(MSBuildThisFileDirectory)x64\OpenDDS_Rtps.dll;$(MSBuildThisFileDirectory)x64\OpenDDS_Rtps_Udp.dll" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
