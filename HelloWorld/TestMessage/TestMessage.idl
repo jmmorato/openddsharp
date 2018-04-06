@@ -1,0 +1,6 @@
+module HelloWorld{
+	#pragma DCPS_DATA_TYPE "HelloWorld::Message"
+	struct Message {
+		string Content;
+	};
+};
