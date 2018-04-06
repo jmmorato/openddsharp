@@ -39,7 +39,7 @@ namespace OpenDDSharp.HelloWorldSubscriber
             DataReader reader = subscriber.CreateDataReader(topic);
             if (reader == null)
             {
-                throw new Exception("Could not create circle data reader");
+                throw new Exception("Could not create the message data reader");
             }
             MessageDataReader messageReader = new MessageDataReader(reader);
 
