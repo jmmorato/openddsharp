@@ -50,13 +50,13 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::Topic^ GetTopic();
 			OpenDDSharp::DDS::Publisher^ GetPublisher();
 			OpenDDSharp::DDS::ReturnCode WaitForAcknowledgments(OpenDDSharp::DDS::Duration maxWait);
-			OpenDDSharp::DDS::ReturnCode GetLivelinessLostStatus(OpenDDSharp::DDS::LivelinessLostStatus status);
-			OpenDDSharp::DDS::ReturnCode GetOfferedDeadlineMissedStatus(OpenDDSharp::DDS::OfferedDeadlineMissedStatus status);
-			OpenDDSharp::DDS::ReturnCode GetOfferedIncompatibleQosStatus(OpenDDSharp::DDS::OfferedIncompatibleQosStatus status);
-			OpenDDSharp::DDS::ReturnCode GetPublicationMatchedStatus(OpenDDSharp::DDS::PublicationMatchedStatus status);
+			OpenDDSharp::DDS::ReturnCode GetLivelinessLostStatus(OpenDDSharp::DDS::LivelinessLostStatus% status);
+			OpenDDSharp::DDS::ReturnCode GetOfferedDeadlineMissedStatus(OpenDDSharp::DDS::OfferedDeadlineMissedStatus% status);
+			OpenDDSharp::DDS::ReturnCode GetOfferedIncompatibleQosStatus(OpenDDSharp::DDS::OfferedIncompatibleQosStatus% status);
+			OpenDDSharp::DDS::ReturnCode GetPublicationMatchedStatus(OpenDDSharp::DDS::PublicationMatchedStatus% status);
 			OpenDDSharp::DDS::ReturnCode AssertLiveliness();
 			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptions(ICollection<OpenDDSharp::DDS::InstanceHandle>^ subscriptionHandles);
-			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptionData(OpenDDSharp::DDS::SubscriptionBuiltinTopicData subscriptionData, OpenDDSharp::DDS::InstanceHandle subscriptionHandle);
+			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptionData(OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData, OpenDDSharp::DDS::InstanceHandle subscriptionHandle);
 		};
 
 	};

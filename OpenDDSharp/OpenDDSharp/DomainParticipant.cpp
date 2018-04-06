@@ -495,7 +495,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredP
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredParticipantData(OpenDDSharp::DDS::ParticipantBuiltinTopicData participantData, OpenDDSharp::DDS::InstanceHandle participantHandle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredParticipantData(OpenDDSharp::DDS::ParticipantBuiltinTopicData% participantData, OpenDDSharp::DDS::InstanceHandle participantHandle) {
 	::DDS::ParticipantBuiltinTopicData data;
 	::DDS::ReturnCode_t ret = impl_entity->get_discovered_participant_data(data, participantHandle);
 
@@ -525,7 +525,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredT
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredTopicData(OpenDDSharp::DDS::TopicBuiltinTopicData topicData, OpenDDSharp::DDS::InstanceHandle topicHandle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredTopicData(OpenDDSharp::DDS::TopicBuiltinTopicData% topicData, OpenDDSharp::DDS::InstanceHandle topicHandle) {
 	::DDS::TopicBuiltinTopicData data;
 	::DDS::ReturnCode_t ret = impl_entity->get_discovered_topic_data(data, topicHandle);
 

@@ -99,9 +99,9 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode DeleteMultiTopic(OpenDDSharp::DDS::MultiTopic^ multitopic);
 
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredParticipants(ICollection<OpenDDSharp::DDS::InstanceHandle>^ participantHandles);
-			OpenDDSharp::DDS::ReturnCode GetDiscoveredParticipantData(OpenDDSharp::DDS::ParticipantBuiltinTopicData participantData, OpenDDSharp::DDS::InstanceHandle participantHandle);
+			OpenDDSharp::DDS::ReturnCode GetDiscoveredParticipantData(OpenDDSharp::DDS::ParticipantBuiltinTopicData% participantData, OpenDDSharp::DDS::InstanceHandle participantHandle);
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopics(ICollection<OpenDDSharp::DDS::InstanceHandle>^ topicHandles);
-			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopicData(OpenDDSharp::DDS::TopicBuiltinTopicData topicData, OpenDDSharp::DDS::InstanceHandle topicHandle);
+			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopicData(OpenDDSharp::DDS::TopicBuiltinTopicData% topicData, OpenDDSharp::DDS::InstanceHandle topicHandle);
 
 		};
 

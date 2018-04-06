@@ -76,7 +76,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::WaitForAcknowledgment
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->wait_for_acknowledgments(maxWait.ToNative());
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetLivelinessLostStatus(OpenDDSharp::DDS::LivelinessLostStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetLivelinessLostStatus(OpenDDSharp::DDS::LivelinessLostStatus% status) {
 	::DDS::LivelinessLostStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_liveliness_lost_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -86,7 +86,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetLivelinessLostStat
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetOfferedDeadlineMissedStatus(OpenDDSharp::DDS::OfferedDeadlineMissedStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetOfferedDeadlineMissedStatus(OpenDDSharp::DDS::OfferedDeadlineMissedStatus% status) {
 	::DDS::OfferedDeadlineMissedStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_offered_deadline_missed_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -96,7 +96,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetOfferedDeadlineMis
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetOfferedIncompatibleQosStatus(OpenDDSharp::DDS::OfferedIncompatibleQosStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetOfferedIncompatibleQosStatus(OpenDDSharp::DDS::OfferedIncompatibleQosStatus% status) {
 	::DDS::OfferedIncompatibleQosStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_offered_incompatible_qos_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -106,7 +106,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetOfferedIncompatibl
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetPublicationMatchedStatus(OpenDDSharp::DDS::PublicationMatchedStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetPublicationMatchedStatus(OpenDDSharp::DDS::PublicationMatchedStatus% status) {
 	::DDS::PublicationMatchedStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_publication_matched_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -140,7 +140,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptio
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptionData(OpenDDSharp::DDS::SubscriptionBuiltinTopicData subscriptionData, OpenDDSharp::DDS::InstanceHandle subscriptionHandle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptionData(OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData, OpenDDSharp::DDS::InstanceHandle subscriptionHandle) {
 	::DDS::SubscriptionBuiltinTopicData data;
 	::DDS::ReturnCode_t ret = impl_entity->get_matched_subscription_data(data, subscriptionHandle);
 

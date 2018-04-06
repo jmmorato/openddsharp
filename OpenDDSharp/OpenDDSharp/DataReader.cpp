@@ -122,7 +122,7 @@ OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DataReader::GetSubscriber() {
 	}
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSampleRejectedStatus(OpenDDSharp::DDS::SampleRejectedStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSampleRejectedStatus(OpenDDSharp::DDS::SampleRejectedStatus% status) {
 	::DDS::SampleRejectedStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_sample_rejected_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -132,7 +132,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSampleRejectedStat
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetLivelinessChangedStatus(OpenDDSharp::DDS::LivelinessChangedStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetLivelinessChangedStatus(OpenDDSharp::DDS::LivelinessChangedStatus% status) {
 	::DDS::LivelinessChangedStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_liveliness_changed_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -142,7 +142,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetLivelinessChangedS
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetRequestedDeadlineMissedStatus(OpenDDSharp::DDS::RequestedDeadlineMissedStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetRequestedDeadlineMissedStatus(OpenDDSharp::DDS::RequestedDeadlineMissedStatus% status) {
 	::DDS::RequestedDeadlineMissedStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_requested_deadline_missed_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -152,7 +152,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetRequestedDeadlineM
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetRequestedIncompatibleQosStatus(OpenDDSharp::DDS::RequestedIncompatibleQosStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetRequestedIncompatibleQosStatus(OpenDDSharp::DDS::RequestedIncompatibleQosStatus% status) {
 	::DDS::RequestedIncompatibleQosStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_requested_incompatible_qos_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -162,7 +162,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetRequestedIncompati
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSubscriptionMatchedStatus(OpenDDSharp::DDS::SubscriptionMatchedStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSubscriptionMatchedStatus(OpenDDSharp::DDS::SubscriptionMatchedStatus% status) {
 	::DDS::SubscriptionMatchedStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_subscription_matched_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -172,7 +172,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSubscriptionMatche
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSampleLostStatus(OpenDDSharp::DDS::SampleLostStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSampleLostStatus(OpenDDSharp::DDS::SampleLostStatus% status) {
 	::DDS::SampleLostStatus s;
 	::DDS::ReturnCode_t ret = impl_entity->get_sample_lost_status(s);
 	if (ret == ::DDS::RETCODE_OK) {
@@ -205,7 +205,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublication
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublicationData(OpenDDSharp::DDS::PublicationBuiltinTopicData publicationData, OpenDDSharp::DDS::InstanceHandle publicationHandle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublicationData(OpenDDSharp::DDS::PublicationBuiltinTopicData% publicationData, OpenDDSharp::DDS::InstanceHandle publicationHandle) {
 	::DDS::PublicationBuiltinTopicData data;
 	::DDS::ReturnCode_t ret = impl_entity->get_matched_publication_data(data, publicationHandle);
 
