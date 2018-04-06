@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OpenDDSharp</id>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <title>OpenDDSharp</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
@@ -10,7 +10,7 @@
     <iconUrl>http://www.openddsharp.com/favicon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenDDSharp library</description>
-    <releaseNotes>OpenDDSharp library v.0.1.0</releaseNotes>
+    <releaseNotes>OpenDDSharp library v.0.1.1</releaseNotes>
     <copyright>Jose Morato</copyright>
     <tags>OpenDDSharp OpenDDS DDS</tags>
     <references>      

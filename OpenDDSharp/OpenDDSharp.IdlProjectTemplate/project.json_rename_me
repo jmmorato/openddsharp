@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "OpenDDSharp.IdlGenerator": "0.1.0"
+    "OpenDDSharp.IdlGenerator": "0.1.1"
   },
   "frameworks": {
     "net461": {}
