@@ -44,7 +44,11 @@ namespace OpenDDSharp {
 		public:
 			::DDS::DomainParticipant_ptr impl_entity;
 
-		public:			
+		public:
+			/// <summary>
+			/// Gets the domain id used to create the <see cref="DomainParticipant" />. 			
+			/// The domain id identifies the DDS domain to which the <see cref="DomainParticipant" /> belongs.
+			/// </summary>
 			property System::Int32 DomainId {
 				System::Int32 get();
 			};
