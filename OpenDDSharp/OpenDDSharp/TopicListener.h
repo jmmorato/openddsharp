@@ -21,7 +21,7 @@ namespace OpenDDSharp {
 		private:
 			delegate void onInconsistentTopicDelegate(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 			void onInconsistentTopic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
-				OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(topic);
+				OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
 				OpenDDSharp::DDS::Topic^ managedTopic = nullptr;
 				if (entity != nullptr) {
 					managedTopic = static_cast<OpenDDSharp::DDS::Topic^>(entity);

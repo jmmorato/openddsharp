@@ -60,7 +60,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::SetExpressi
 OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::ContentFilteredTopic::GetRelatedTopic() {
 	::DDS::Topic_ptr topic = impl_entity->get_related_topic();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(topic);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::Topic^>(entity);
 	}

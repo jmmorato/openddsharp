@@ -52,7 +52,7 @@ namespace OpenDDSharp {
 			private:
 				delegate void onDataAvailableDelegate(::DDS::DataReader_ptr reader);
 				void onDataAvalaible(::DDS::DataReader_ptr reader) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -63,7 +63,7 @@ namespace OpenDDSharp {
 
 				delegate void onRequestedDeadlineMissedDelegate(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
 				void onRequestedDeadlineMissed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -74,7 +74,7 @@ namespace OpenDDSharp {
 
 				delegate void onRequestedIncompatibleQosDelegate(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status);
 				void onRequestedIncompatibleQos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -85,7 +85,7 @@ namespace OpenDDSharp {
 
 				delegate void onSampleRejectedDelegate(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status);
 				void onSampleRejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -96,7 +96,7 @@ namespace OpenDDSharp {
 
 				delegate void onLivelinessChangedDelegate(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status);
 				void onLivelinessChanged(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -107,7 +107,7 @@ namespace OpenDDSharp {
 
 				delegate void onSubscriptionMatchedDelegate(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
 				void onSubscriptionMatched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -118,7 +118,7 @@ namespace OpenDDSharp {
 
 				delegate void onSampleLostDelegate(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
 				void onSampleLost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -129,7 +129,7 @@ namespace OpenDDSharp {
 
 				delegate void onSubscriptionDisconnectedDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status);
 				void onSubscriptionDisconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -140,7 +140,7 @@ namespace OpenDDSharp {
 
 				delegate void onSubscriptionReconnectedDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status);
 				void onSubscriptionReconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -151,7 +151,7 @@ namespace OpenDDSharp {
 
 				delegate void onSubscriptionLostDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status);
 				void onSubscriptionLost(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -162,7 +162,7 @@ namespace OpenDDSharp {
 
 				delegate void onBudgetExceededDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
 				void onBudgetExceeded(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -173,7 +173,7 @@ namespace OpenDDSharp {
 
 				delegate void onConnectionDeletedDelegate(::DDS::DataReader_ptr reader);
 				void onConnectionDeleted(::DDS::DataReader_ptr reader) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(reader);
+					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
 					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
 					if (entity != nullptr) {
 						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);

@@ -50,7 +50,7 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory:
 		OpenDDSharp::DDS::DomainParticipant^ p = gcnew OpenDDSharp::DDS::DomainParticipant(participant);
 		p->m_listener = listener;
 
-		EntityManager::get_instance().add(participant, p);		
+		EntityManager::get_instance()->add(participant, p);
 
 		return p;
 	}
@@ -62,7 +62,7 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory:
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::LookupParticipant(int domainId) {
 	::DDS::DomainParticipant_ptr dp = impl_entity->lookup_participant(domainId);	
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(dp);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dp);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
 	}
@@ -109,7 +109,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::DeleteP
 	}
 	::DDS::ReturnCode_t ret = impl_entity->delete_participant(participant->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance().remove(participant->impl_entity);
+		EntityManager::get_instance()->remove(participant->impl_entity);
 	}
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;	

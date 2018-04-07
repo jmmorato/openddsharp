@@ -113,7 +113,7 @@ OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DataReader::GetTopicDescr
 OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DataReader::GetSubscriber() {
 	::DDS::Subscriber_ptr subscriber = impl_entity->get_subscriber();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(subscriber);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(subscriber);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::Subscriber^>(entity);
 	}

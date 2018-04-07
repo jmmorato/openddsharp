@@ -51,7 +51,7 @@ OpenDDSharp::OpenDDS::DCPS::DataWriterListener^ OpenDDSharp::DDS::DataWriter::Ge
 OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DataWriter::GetTopic() {
 	::DDS::Topic_ptr topic = impl_entity->get_topic();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(topic);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::Topic^>(entity);
 	}
@@ -63,7 +63,7 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DataWriter::GetTopic() {
 OpenDDSharp::DDS::Publisher^ OpenDDSharp::DDS::DataWriter::GetPublisher() {
 	::DDS::Publisher_ptr publisher = impl_entity->get_publisher();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(publisher);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(publisher);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::Publisher^>(entity);
 	}

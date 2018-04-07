@@ -1,8 +1,7 @@
 #include "EntityManager.h"
 
-OpenDDSharp::EntityManager& OpenDDSharp::EntityManager::get_instance() {
-	static EntityManager instance;
-	return instance;
+OpenDDSharp::EntityManager* OpenDDSharp::EntityManager::get_instance() {
+	return ACE_Singleton<EntityManager, ACE_SYNCH_MUTEX>::instance();
 }
 
 void OpenDDSharp::EntityManager::add(::DDS::Entity_ptr native, gcroot<OpenDDSharp::DDS::Entity^> managed) {

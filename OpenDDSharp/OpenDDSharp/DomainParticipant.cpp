@@ -60,7 +60,7 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::CreateTopic(System
 		OpenDDSharp::DDS::Topic^ t = gcnew OpenDDSharp::DDS::Topic(topic);
 		t->_listener = listener;
 		
-		EntityManager::get_instance().add(topic, t);
+		EntityManager::get_instance()->add(topic, t);
 		contained_entities->Add(t);
 		
 		return t;
@@ -77,7 +77,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteTopic(Op
 			
 	::DDS::ReturnCode_t ret = impl_entity->delete_topic(topic->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance().remove(topic->impl_entity);
+		EntityManager::get_instance()->remove(topic->impl_entity);
 		contained_entities->Remove(topic);
 	}
 	
@@ -126,7 +126,7 @@ OpenDDSharp::DDS::Publisher^ OpenDDSharp::DDS::DomainParticipant::CreatePublishe
 		OpenDDSharp::DDS::Publisher^ p = gcnew OpenDDSharp::DDS::Publisher(publisher);
 		p->m_listener = listener;
 
-		EntityManager::get_instance().add(publisher, p);
+		EntityManager::get_instance()->add(publisher, p);
 		contained_entities->Add(p);
 
 		return p;
@@ -163,7 +163,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeletePublishe
 	
 	::DDS::ReturnCode_t ret = impl_entity->delete_publisher(pub->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance().remove(pub->impl_entity);
+		EntityManager::get_instance()->remove(pub->impl_entity);
 		contained_entities->Remove(pub);
 	}
 
@@ -212,7 +212,7 @@ OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DomainParticipant::CreateSubscri
 		OpenDDSharp::DDS::Subscriber^ s = gcnew OpenDDSharp::DDS::Subscriber(subscriber);
 		s->m_listener = listener;
 
-		EntityManager::get_instance().add(subscriber, s);
+		EntityManager::get_instance()->add(subscriber, s);
 		contained_entities->Add(s);
 
 		return s;
@@ -259,7 +259,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteSubscrib
 		
 	::DDS::ReturnCode_t ret = impl_entity->delete_subscriber(sub->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance().remove(sub->impl_entity);
+		EntityManager::get_instance()->remove(sub->impl_entity);
 		contained_entities->Remove(sub);
 	}	
 
@@ -292,7 +292,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContaine
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 	if (ret == ::DDS::RETCODE_OK) {
 		for each (Entity^ e in entities) {
-			EntityManager::get_instance().remove(e->impl_entity);			
+			EntityManager::get_instance()->remove(e->impl_entity);
 			e->contained_entities->Clear();
 		}		
 		contained_entities->Clear();		
@@ -359,7 +359,7 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::FindTopic(System::
 
 	::DDS::Topic_ptr topic = impl_entity->find_topic(context.marshal_as<const char *>(topicName), timeout.ToNative());
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(topic);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::Topic^>(entity);
 	}

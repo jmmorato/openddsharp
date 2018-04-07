@@ -55,7 +55,7 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::CreateDataWriter(Open
 	OpenDDSharp::DDS::DataWriter^ w = gcnew OpenDDSharp::DDS::DataWriter(dw);
 	w->_listener = listener;
 
-	EntityManager::get_instance().add(dw, w);
+	EntityManager::get_instance()->add(dw, w);
 	contained_entities->Add(w);
 
 	return w;
@@ -64,7 +64,7 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::CreateDataWriter(Open
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteDataWriter(OpenDDSharp::DDS::DataWriter^ datawriter) {	
 	::DDS::ReturnCode_t ret = impl_entity->delete_datawriter(datawriter->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance().remove(datawriter->impl_entity);
+		EntityManager::get_instance()->remove(datawriter->impl_entity);
 		contained_entities->Remove(datawriter);
 	}
 	else {
@@ -78,7 +78,7 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::LookupDataWriter(Syst
 	msclr::interop::marshal_context context;
 
 	::DDS::DataWriter_ptr dw = impl_entity->lookup_datawriter(context.marshal_as<const char *>(topicName));
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(dw);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dw);
 
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::DataWriter^>(entity);
@@ -92,7 +92,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteContainedEntitie
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 	if (ret != ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
-			EntityManager::get_instance().remove(e->impl_entity);			
+			EntityManager::get_instance()->remove(e->impl_entity);
 		}	
 		contained_entities->Clear();
 	}	
@@ -164,7 +164,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::WaitForAcknowledgments
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Publisher::GetParticipant() {	
 	::DDS::DomainParticipant_ptr participant = impl_entity->get_participant();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(participant);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);
 
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);

@@ -12,17 +12,17 @@ namespace OpenDDSharp {
 
 	private class EntityManager {
 
-	private:				
+	friend class ACE_Singleton<EntityManager, ACE_SYNCH_MUTEX>;
+
+	private:			
 		std::map<::DDS::Entity_ptr, gcroot<OpenDDSharp::DDS::Entity^>> m_entities;
 
 	private:
 		EntityManager() = default;
 		~EntityManager() = default;
-		EntityManager(const EntityManager&) = delete;
-		EntityManager& operator=(const EntityManager&) = delete;
 
 	public:
-		static OpenDDSharp::EntityManager& get_instance();
+		static OpenDDSharp::EntityManager* get_instance();
 		void add(::DDS::Entity_ptr native, gcroot<::OpenDDSharp::DDS::Entity^> managed);
 		void remove(::DDS::Entity_ptr native);
 		gcroot<OpenDDSharp::DDS::Entity^> find(::DDS::Entity_ptr native);

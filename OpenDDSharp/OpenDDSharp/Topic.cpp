@@ -33,7 +33,7 @@ System::String^ OpenDDSharp::DDS::Topic::GetName() {
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Topic::GetParticipant() {
 	::DDS::DomainParticipant_ptr participant = impl_entity->get_participant();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(participant);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
 	}

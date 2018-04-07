@@ -52,7 +52,7 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(Ope
 		OpenDDSharp::DDS::DataReader^ r = gcnew OpenDDSharp::DDS::DataReader(dr);
 		r->_listener = listener;
 
-		EntityManager::get_instance().add(dr, r);
+		EntityManager::get_instance()->add(dr, r);
 		contained_entities->Add(r);
 
 		return r;
@@ -69,7 +69,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteDataReader(Open
 	
 	::DDS::ReturnCode_t ret = impl_entity->delete_datareader(datareader->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance().remove(datareader->impl_entity);
+		EntityManager::get_instance()->remove(datareader->impl_entity);
 		contained_entities->Remove(datareader);
 	}	
 
@@ -80,7 +80,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteContainedEntiti
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 	if (ret != ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
-			EntityManager::get_instance().remove(e->impl_entity);
+			EntityManager::get_instance()->remove(e->impl_entity);
 		}
 		contained_entities->Clear();
 	}
@@ -92,7 +92,7 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::LookupDataReader(Sys
 	msclr::interop::marshal_context context;
 
 	::DDS::DataReader_ptr dr = impl_entity->lookup_datareader(context.marshal_as<const char *>(topicName));
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(dr);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dr);
 
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::DataReader^>(entity);
@@ -112,7 +112,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::GetDatareaders(IColle
 	::DDS::ReturnCode_t ret = impl_entity->get_datareaders(seq, sampleStates, viewStates, instanceStates);
 	if (ret == ::DDS::RETCODE_OK) {
 		for (unsigned int i = 0; i < seq.length(); i++) {
-			OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(seq[i]);
+			OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(seq[i]);
 			readers->Add(static_cast<OpenDDSharp::DDS::DataReader^>(entity));
 		}
 	}
@@ -177,7 +177,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::EndAccess() {
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Subscriber::GetParticipant() {
 	::DDS::DomainParticipant_ptr participant = impl_entity->get_participant();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance().find(participant);
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);
 	if (entity != nullptr) {
 		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
 	}
