@@ -6,6 +6,10 @@ OpenDDSharp::DDS::DomainParticipant::DomainParticipant(::DDS::DomainParticipant_
 	impl_entity = participant;	
 };
 
+System::Int32 OpenDDSharp::DDS::DomainParticipant::DomainId::get() {
+	return GetDomainId();
+}
+
 OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::CreateTopic(System::String^ topicName, System::String^ typeName) {
 	return OpenDDSharp::DDS::DomainParticipant::CreateTopic(topicName, typeName, nullptr, nullptr, StatusMask::NoStatusMask);
 };

@@ -42,7 +42,12 @@ namespace OpenDDSharp {
 			OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ m_listener;			
 
 		public:
-			::DDS::DomainParticipant_ptr impl_entity;			
+			::DDS::DomainParticipant_ptr impl_entity;
+
+		public:			
+			property System::Int32 DomainId {
+				System::Int32 get();
+			};
 		
 		internal:
 			DomainParticipant(::DDS::DomainParticipant_ptr participant);
@@ -76,8 +81,7 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode GetDefaultSubscriberQos(OpenDDSharp::DDS::SubscriberQos^ qos);
 			OpenDDSharp::DDS::ReturnCode SetDefaultSubscriberQos(OpenDDSharp::DDS::SubscriberQos^ qos);
 			OpenDDSharp::DDS::ReturnCode DeleteSubscriber(OpenDDSharp::DDS::Subscriber^ sub);
-
-			System::Int32 GetDomainId();
+			
 			System::Boolean ContainsEntity(OpenDDSharp::DDS::InstanceHandle handle);
 			OpenDDSharp::DDS::ReturnCode GetQos(OpenDDSharp::DDS::DomainParticipantQos^ qos);
 			OpenDDSharp::DDS::ReturnCode SetQos(OpenDDSharp::DDS::DomainParticipantQos^ qos);
@@ -102,6 +106,9 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredParticipantData(OpenDDSharp::DDS::ParticipantBuiltinTopicData% participantData, OpenDDSharp::DDS::InstanceHandle participantHandle);
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopics(ICollection<OpenDDSharp::DDS::InstanceHandle>^ topicHandles);
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopicData(OpenDDSharp::DDS::TopicBuiltinTopicData% topicData, OpenDDSharp::DDS::InstanceHandle topicHandle);
+
+		private:
+			System::Int32 GetDomainId();
 
 		};
 
