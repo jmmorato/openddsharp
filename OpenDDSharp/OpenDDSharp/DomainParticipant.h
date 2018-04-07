@@ -548,7 +548,7 @@ namespace OpenDDSharp {
 			/// for the data-updates it receives.
 			/// </summary>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-			OpenDDSharp::DDS::ReturnCode GetCurrentTimestamp(OpenDDSharp::DDS::Timestamp currentTime);
+			OpenDDSharp::DDS::ReturnCode GetCurrentTimestamp(OpenDDSharp::DDS::Timestamp% currentTime);
 			
 			/// <summary>
 			/// Creates a <see cref="ContentFilteredTopic" />. The <see cref="ContentFilteredTopic" /> can be used to do content-based subscriptions.

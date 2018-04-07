@@ -343,7 +343,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::AssertLiveline
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->assert_liveliness();
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetCurrentTimestamp(OpenDDSharp::DDS::Timestamp currentTime) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetCurrentTimestamp(OpenDDSharp::DDS::Timestamp% currentTime) {
 	::DDS::Time_t time;
 	::DDS::ReturnCode_t ret = impl_entity->get_current_time(time);
 
