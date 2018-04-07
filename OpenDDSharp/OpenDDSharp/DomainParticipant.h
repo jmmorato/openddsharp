@@ -164,6 +164,30 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::Topic^ CreateTopic(System::String^ topicName, System::String^ typeName, OpenDDSharp::DDS::TopicQos^ qos, OpenDDSharp::DDS::TopicListener^ listener, StatusMask statusMask);
 
 			/// <summary>
+			/// Gets the default value of the <see cref="Topic" /> QoS, that is, the QoS policies that will be used for newly created <see cref="Topic" />
+			/// entities in the case where the QoS policies are defaulted in the CreateTopic operation.
+			/// </summary>
+			/// <remarks>
+			/// The values retrieved <see cref="GetDefaultTopicQos" /> will match the set of values specified on the last successful call to
+			/// <see cref="SetDefaultTopicQos" />, or else, if the call was never made, the default values defined by the DDS standard.
+			/// </remarks>
+			/// <param name="qos">The <see cref="TopicQos" /> to be filled up.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			OpenDDSharp::DDS::ReturnCode GetDefaultTopicQos(OpenDDSharp::DDS::TopicQos^ qos);
+
+			/// <summary>
+			/// Sets a default value of the <see cref="Topic" /> QoS policies which will be used for newly created <see cref="Topic" /> entities in the
+			/// case where the QoS policies are defaulted in the CreateTopic operation.
+			/// </summary>
+			/// <remarks>
+			/// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
+			/// return <see cref="ReturnCode::InconsistentPolicy" />.
+			/// </remarks>
+			/// <param name="qos">The default <see cref="TopicQos" /> to be set.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			OpenDDSharp::DDS::ReturnCode SetDefaultTopicQos(OpenDDSharp::DDS::TopicQos^ qos);			
+
+			/// <summary>
 			/// Looks for an existing (or ready to exist) enabled <see cref="Topic" />, based on its name.
 			/// </summary>
 			/// <remarks>

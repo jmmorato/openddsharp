@@ -74,6 +74,26 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::CreateTopic(System
 	}
 };
 
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDefaultTopicQos(OpenDDSharp::DDS::TopicQos^ qos) {
+	::DDS::TopicQos nativeQos;
+	::DDS::ReturnCode_t ret = impl_entity->get_default_topic_qos(nativeQos);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos->FromNative(nativeQos);
+	}
+
+	return (::OpenDDSharp::DDS::ReturnCode)ret;
+}
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetDefaultTopicQos(OpenDDSharp::DDS::TopicQos^ qos) {
+	if (qos == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+	::DDS::TopicQos nativeQos = qos->ToNative();
+	return (::OpenDDSharp::DDS::ReturnCode)impl_entity->set_default_topic_qos(nativeQos);
+}
+
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteTopic(OpenDDSharp::DDS::Topic^ topic) {
 	if (topic == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
