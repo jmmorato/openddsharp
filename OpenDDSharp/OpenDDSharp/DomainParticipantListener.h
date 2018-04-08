@@ -319,6 +319,9 @@ namespace OpenDDSharp {
 				};
 
 			public:
+				/// <summary>
+				/// Creates a new instance of the <see cref="DomainParticipantListener" />
+				/// </summary>
 				DomainParticipantListener();
 
 			public:
@@ -459,8 +462,8 @@ namespace OpenDDSharp {
 
 				/// <summary>
 				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::InconsistentTopicStatus" /> communication status.</para>
-				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::InconsistentTopicStatus" /> indicates that a topic was attempted to be registered that
-				/// already exists with different characteristics. Typically, the existing topic may have a different type associated with it.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::InconsistentTopicStatus" /> indicates that a <see cref="OpenDDSharp::DDS::Topic" /> was attempted to be registered that
+				/// already exists with different characteristics. Typically, the existing <see cref="OpenDDSharp::DDS::Topic" /> may have a different type associated with it.</para>
 				/// </summary>
 				virtual void OnInconsistentTopic(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::InconsistentTopicStatus status) = 0;
 
