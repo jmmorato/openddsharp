@@ -4,10 +4,15 @@
 #include "TopicListenerNative.h"
 #include "InconsistentTopicStatus.h"
 #include "EntityManager.h"
+#include "StatusKind.h"
 
 namespace OpenDDSharp {
 	namespace DDS {
 
+		/// <summary>
+		/// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="Topic" />
+		/// such that the application can be notified of relevant status changes.		
+		/// <summary>
 		public ref class TopicListener abstract {
 
 		typedef void(__stdcall *onInconsistentTopicDeclaration)(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
@@ -31,9 +36,17 @@ namespace OpenDDSharp {
 			};
 
 		public:
+			/// <summary>
+			/// Creates a new instance of the <see cref="TopicListener" />
+			/// </summary>
 			TopicListener();
 
-		public:			
+		public:
+			/// <summary>
+			/// <para>Handles the <see cref="StatusKind::InconsistentTopicStatus" /> communication status.</para>
+			/// <para>The <see cref="StatusKind::InconsistentTopicStatus" /> indicates that a <see cref="Topic" /> was attempted to be registered that
+			/// already exists with different characteristics. Typically, the existing <see cref="Topic" /> may have a different type associated with it.</para>
+			/// </summary>
 			virtual void OnInconsistentTopic(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::InconsistentTopicStatus status) = 0;
 		};
 	};
