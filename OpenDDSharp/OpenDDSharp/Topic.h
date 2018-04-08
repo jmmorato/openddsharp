@@ -39,7 +39,7 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::DDS::TopicListener^ listener);
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::DDS::TopicListener^ listener, StatusMask mask);
 			OpenDDSharp::DDS::TopicListener^ GetListener();
-			OpenDDSharp::DDS::ReturnCode GetInconsistentTopicStatus(OpenDDSharp::DDS::InconsistentTopicStatus status);
+			OpenDDSharp::DDS::ReturnCode GetInconsistentTopicStatus(OpenDDSharp::DDS::InconsistentTopicStatus% status);
 			
 		};
 

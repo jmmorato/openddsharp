@@ -87,7 +87,7 @@ OpenDDSharp::DDS::TopicListener^ OpenDDSharp::DDS::Topic::GetListener() {
 	return _listener;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Topic::GetInconsistentTopicStatus(OpenDDSharp::DDS::InconsistentTopicStatus status) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Topic::GetInconsistentTopicStatus(OpenDDSharp::DDS::InconsistentTopicStatus% status) {
 	::DDS::InconsistentTopicStatus native;
 	::DDS::ReturnCode_t ret = impl_entity->get_inconsistent_topic_status(native);
 
