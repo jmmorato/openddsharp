@@ -356,7 +356,8 @@ namespace OpenDDSharp {
 
 				/// <summary>
 				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::SampleRejectedStatus" /> communication status.</para>
-				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::SampleRejectedStatus" /> indicates that a sample received by the  <see cref="OpenDDSharp::DDS::DataReader" /> has been rejected.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::SampleRejectedStatus" /> indicates that a sample received by the 
+				/// <see cref="OpenDDSharp::DDS::DataReader" /> has been rejected.</para>
 				/// </summary>
 				virtual void OnSampleRejected(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::SampleRejectedStatus status) = 0;
 
