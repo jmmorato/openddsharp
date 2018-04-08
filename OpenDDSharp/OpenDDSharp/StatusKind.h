@@ -8,21 +8,6 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
-		/*public enum class StatusKind : System::UInt32 {
-			InconsistentTopicStatus = ::DDS::INCONSISTENT_TOPIC_STATUS,
-			OfferedDeadlineMissedStatus = ::DDS::OFFERED_DEADLINE_MISSED_STATUS,
-			RequestedDeadlineMissedStatus = ::DDS::REQUESTED_DEADLINE_MISSED_STATUS,
-			OfferedIncompatibleQosStatus = ::DDS::OFFERED_INCOMPATIBLE_QOS_STATUS,
-			RequestedIncompatibleQosStatus = ::DDS::REQUESTED_INCOMPATIBLE_QOS_STATUS,
-			SampleLostStatus = ::DDS::SAMPLE_LOST_STATUS,
-			SampleRejectedStatus = ::DDS::SAMPLE_REJECTED_STATUS,
-			DataOnReadersStatus = ::DDS::DATA_ON_READERS_STATUS,
-			DataAvailableStatus = ::DDS::DATA_AVAILABLE_STATUS,
-			LivelinessLostStatus = ::DDS::LIVELINESS_LOST_STATUS,
-			LivelinessChangedStatus = ::DDS::LIVELINESS_CHANGED_STATUS,
-			PublicationMatchedStatus = ::DDS::PUBLICATION_MATCHED_STATUS,
-			SubscriptionMatchedStatus = ::DDS::SUBSCRIPTION_MATCHED_STATUS
-		};*/
 
 		public value struct StatusKind {
 
@@ -39,7 +24,7 @@ namespace OpenDDSharp {
 			static const StatusKind LivelinessLostStatus = ::DDS::LIVELINESS_LOST_STATUS;
 			static const StatusKind LivelinessChangedStatus = ::DDS::LIVELINESS_CHANGED_STATUS;
 			static const StatusKind PublicationMatchedStatus = ::DDS::PUBLICATION_MATCHED_STATUS;
-			static const StatusKind SubscriptionMatchedStatus = ::DDS::SUBSCRIPTION_MATCHED_STATUS;
+			static const StatusKind SubscriptionMatchedStatus = ::DDS::SUBSCRIPTION_MATCHED_STATUS;			
 
 		private:
 			System::UInt32 m_value;
