@@ -1,12 +1,28 @@
 #pragma once
 
-#pragma once
-
 #include "DomainParticipantListenerNative.h"
+
+namespace OpenDDSharp {
+	namespace DDS {
+		value struct StatusKind;
+		ref class DeadlineQosPolicy;
+	}
+};
 
 namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DCPS {
+			
+			/// <summary>
+			/// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DomainParticipant" />
+			/// such that the application can be notified of relevant status changes.		
+			/// <summary>
+			/// <remarks>
+			/// The purpose of the <see cref="DomainParticipantListener" /> is to be the listener of last resort that is notified of all status changes not
+			/// captured by more specific listeners attached to the <see cref="Entity" /> objects.When a relevant status change occurs, DDS will first attempt 
+			/// to notify the listener attached to the concerned <see cref="Entity" /> if one is installed. Otherwise, DDS will notify the Listener 
+			/// attached to the <see cref="DomainParticipant" />.
+			/// </remarks>
 			public ref class DomainParticipantListener abstract {
 
 			typedef void(__stdcall *onDataOnReadersDeclaration)(::DDS::Subscriber_ptr subscriber);
@@ -306,27 +322,146 @@ namespace OpenDDSharp {
 				DomainParticipantListener();
 
 			public:
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::DataOnReadersStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::DataOnReadersStatus" /> indicates that new data is available on some of the data
+				/// readers associated with the subscriber. Applications receiving this status can call <see cref="Subscriber::GetDataReaders /> on
+				/// the subscriber to get the set of data readers with data available.</para>
+				/// </summary>
 				virtual void OnDataOnReaders(OpenDDSharp::DDS::Subscriber^ subscriber) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::DataAvailableStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::DataAvailableStatus" /> indicates that samples are available on the <see cref="OpenDDSharp::DDS::DataReader" />.
+				/// Applications receiving this status can use the various take and read operations on the <see cref="OpenDDSharp::DDS::DataReader" /> to retrieve the data.</para>
+				/// </summary>
 				virtual void OnDataAvailable(OpenDDSharp::DDS::DataReader^ reader) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::RequestedDeadlineMissedStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::RequestedDeadlineMissedStatus" /> indicates that the deadline requested via the
+				/// <see cref="OpenDDSharp::DDS::DeadlineQosPolicy" /> was not respected for a specific instance.</para>
+				/// </summary>
 				virtual void OnRequestedDeadlineMissed(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::RequestedDeadlineMissedStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::RequestedIncompatibleQosStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::RequestedIncompatibleQosStatus" /> indicates that one or more QoS policy values that
+				/// were requested were incompatible with what was offered.</para>
+				/// </summary>
 				virtual void OnRequestedIncompatibleQos(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::RequestedIncompatibleQosStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::SampleRejectedStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::SampleRejectedStatus" /> indicates that a sample received by the  <see cref="OpenDDSharp::DDS::DataReader" /> has been rejected.</para>
+				/// </summary>
 				virtual void OnSampleRejected(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::SampleRejectedStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::LivelinessChangedStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::LivelinessChangedStatus" /> indicates that there have been liveliness changes for one or
+				/// more <see cref="OpenDDSharp::DDS::DataWriter" />s that are publishing instances for this <see cref="OpenDDSharp::DDS::DataReader" />.</para>
+				/// </summary>
 				virtual void OnLivelinessChanged(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::LivelinessChangedStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::SubscriptionMatchedStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::SubscriptionMatchedStatus" /> indicates that either a compatible <see cref="OpenDDSharp::DDS::DataWriter" /> has been
+				/// matched or a previously matched <see cref="OpenDDSharp::DDS::DataWriter" /> has ceased to be matched.</para>
+				/// </summary>
 				virtual void OnSubscriptionMatched(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::SubscriptionMatchedStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::SampleLostStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::SampleLostStatus" /> indicates that a sample has been lost and 
+				/// never received by the <see cref="OpenDDSharp::DDS::DataReader" />.</para>
+				/// </summary>
 				virtual void OnSampleLost(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::SampleLostStatus status) = 0;
+
+				/// <summary>
+				/// Called when a subscription connection failure has been detected and there are still associations using the connection
+				/// after the configurable graceful_disconnected_period.
+				/// </summary>
 				virtual void OnSubscriptionDisconnected(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::SubscriptionDisconnectedStatus status) = 0;
+
+				/// <summary>
+				/// Called when a disconnected subscription connection has been reconnected.
+				/// </summary>
 				virtual void OnSubscriptionReconnected(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::SubscriptionReconnectedStatus status) = 0;
+
+				/// <summary>
+				/// Called when a subscription connection is lost and hence one or more associations from this publication to some subscribers have been lost.
+				/// A connection is "lost" when the retry attempts have been exhausted.
+				/// </summary>
 				virtual void OnSubscriptionLost(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus status) = 0;
+
+				/// <summary>
+				/// Allow reporting delays in excess of the	policy duration setting.
+				/// </summary>
 				virtual void OnBudgetExceeded(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus status) = 0;
+
+				/// <summary>
+				/// Called when the connection object is cleaned up and the reconnect thread exits.
+				/// </summary>
 				virtual void OnConnectionDeleted(OpenDDSharp::DDS::DataReader^ reader) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::OfferedDeadlineMissedStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::OfferedDeadlineMissedStatus" /> indicates that the deadline offered by the
+				/// <see cref="OpenDDSharp::DDS::DataWriter" /> has been missed for one or more instances.</para>
+				/// </summary>
 				virtual void OnOfferedDeadlineMissed(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::OfferedDeadlineMissedStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::OfferedIncompatibleQosStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::OfferedIncompatibleQosStatus" /> indicates that an offered QoS was incompatible with
+				/// the requested QoS of a <see cref="OpenDDSharp::DDS::DataReader" />.</para>
+				/// </summary>
 				virtual void OnOfferedIncompatibleQos(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::OfferedIncompatibleQosStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::LivelinessLostStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::LivelinessLostStatus" /> indicates that the liveliness that the <see cref="OpenDDSharp::DDS::DataWriter" /> committed
+				/// through its Liveliness QoS has not been respected. This means that any connected <see cref="OpenDDSharp::DDS::DataReader" />s will consider this 
+				/// <see cref="OpenDDSharp::DDS::DataWriter" /> no longer active</para>
+				/// </summary>
 				virtual void OnLivelinessLost(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::LivelinessLostStatus status) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::PublicationMatchedStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::PublicationMatchedStatus" /> indicates that the liveliness that the <see cref="OpenDDSharp::DDS::DataWriter" /> committed
+				/// through its Liveliness QoS has not been respected. This means that any connected <see cref="OpenDDSharp::DDS::DataReader" />s 
+				/// will consider this <see cref="OpenDDSharp::DDS::DataWriter" /> no longer active.</para>
+				/// </summary>
 				virtual void OnPublicationMatched(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::PublicationMatchedStatus status) = 0;
+
+				/// <summary>
+			    /// Called when a publication connection failure has been detected and there are still associations using the connection
+				/// after the configurable graceful_disconnected_period.
+				/// </summary>
 				virtual void OnPublicationDisconnected(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus status) = 0;
+
+				/// <summary>
+				/// Called when a disconnected publication connection has been reconnected.
+				/// </summary>
 				virtual void OnPublicationReconnected(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus status) = 0;
+
+				/// <summary>
+				/// Called when a publication connection is lost and hence one or more associations from this publication to some subscribers have been lost.
+				/// A connection is "lost" when the retry attempts have been exhausted.
+				/// </summary>
 				virtual void OnPublicationLost(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus status) = 0;
+
+				/// <summary>
+				/// Called when the publication connection object is cleaned up and the reconnect thread exits.
+				/// </summary>
 				virtual void OnConnectionDeleted(OpenDDSharp::DDS::DataWriter^ reader) = 0;
+
+				/// <summary>
+				/// <para>Handles the <see cref="OpenDDSharp::DDS::StatusKind::InconsistentTopicStatus" /> communication status.</para>
+				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::InconsistentTopicStatus" /> indicates that a topic was attempted to be registered that
+				/// already exists with different characteristics. Typically, the existing topic may have a different type associated with it.</para>
+				/// </summary>
 				virtual void OnInconsistentTopic(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::InconsistentTopicStatus status) = 0;
 
 			};
