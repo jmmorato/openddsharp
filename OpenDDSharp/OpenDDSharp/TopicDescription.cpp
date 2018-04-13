@@ -4,6 +4,18 @@ OpenDDSharp::DDS::TopicDescription::TopicDescription(::DDS::TopicDescription_ptr
 	impl_entity = topicDescription;
 }
 
+System::String^ OpenDDSharp::DDS::TopicDescription::TypeName::get() {
+	return GetTypeName();
+}
+
+System::String^ OpenDDSharp::DDS::TopicDescription::Name::get() {
+	return GetName();
+}
+
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::TopicDescription::Participant::get() {
+	return GetParticipant();
+}
+
 System::String^ OpenDDSharp::DDS::TopicDescription::GetTypeName() {
 	msclr::interop::marshal_context context;
 

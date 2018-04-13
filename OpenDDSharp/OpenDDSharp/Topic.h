@@ -20,6 +20,12 @@ namespace OpenDDSharp {
 		ref class TopicListener;
 		ref class DomainParticipant;
 
+		/// <summary>
+		/// Topic is the most basic description of the data to be published and subscribed.
+		/// A Topic is identified by its name, which must be unique in the whole Domain. In addition (by virtue of implemeting
+		/// <see cref="ITopicDescription") /> it fully specifies the type of the data that can be communicated when publishing or subscribing to the Topic.
+		/// Topic is the only <see cref="ITopicDescription" /> that can be used for publications and therefore associated to a <see cref="DataWriter" />.
+		/// </summary>
 		public ref class Topic : public OpenDDSharp::DDS::Entity, public ITopicDescription {
 
 		internal:
@@ -30,16 +36,80 @@ namespace OpenDDSharp {
 			Topic(::DDS::Topic_ptr topic);
 
 		public:
-			virtual System::String^ GetTypeName();
-			virtual System::String^ GetName();
-			virtual OpenDDSharp::DDS::DomainParticipant^ GetParticipant();
+			/// <summary>
+			/// Gets type name used to create the <see cref="ITopicDescription" />.
+			/// </summary>
+			property System::String^ TypeName {
+				virtual System::String^ get();
+			};
+
+			/// <summary>
+			/// Gets the name used to create the <see cref="ITopicDescription" />.
+			/// </summary>
+			property System::String^ Name {
+				virtual System::String^ get();
+			};
+
+			/// <summary>
+			/// Gets the <see cref="DomainParticipant" /> to which the <see cref="ITopicDescription" /> belongs.
+			/// </summary>
+			property OpenDDSharp::DDS::DomainParticipant^ Participant {
+				virtual OpenDDSharp::DDS::DomainParticipant^ get();
+			};
+
+		public:
+			/// <summary>
+			/// Gets the native TopicDescription pointer.
+			/// Internal use only.			
+			/// </summary>
 			virtual ::DDS::TopicDescription_ptr ToNative();
+
+			/// <summary>
+			/// Sets the <see cref="Topic" /> QoS policies.
+			/// </summary>
+			/// <param name="qos">The <see cref="TopicQos" /> to be set.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetQos(OpenDDSharp::DDS::TopicQos^ qos);
+
+			/// <summary>
+			/// Gets the <see cref="Topic" /> QoS policies.
+			/// </summary>
+			/// <param name="qos">The <see cref="TopicQos" /> to be filled up.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetQos(OpenDDSharp::DDS::TopicQos^ qos);
-			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::DDS::TopicListener^ listener);
-			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::DDS::TopicListener^ listener, StatusMask mask);
+
+			/// <summary>
+			/// Allows access to the attached <see cref="TopicListener" />.
+			/// </summary>
+			/// <returns>The attached <see cref="TopicListener" />.</returns>
 			OpenDDSharp::DDS::TopicListener^ GetListener();
+
+			/// <summary>
+			/// Sets the <see cref="TopicListener" /> using the <see cref="StatusMask::DefaultStatusMask" />.
+			/// </summary>			
+			/// <param name="listener">The <see cref="TopicListener" /> to be set.</param>			
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::DDS::TopicListener^ listener);
+			
+			/// <summary>
+			/// Sets the <see cref="TopicListener" />.
+			/// </summary>
+			/// <param name="listener">The <see cref="TopicListener" /> to be set.</param>
+			/// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::DDS::TopicListener^ listener, StatusMask mask);
+
+
+			/// <summary>
+			/// This method allows the application to retrieve the <see cref="InconsistentTopicStatus" /> of the <see cref="Topic" />.
+			/// </summary>
+			/// <param name="status">The <see cref="InconsistentTopicStatus" /> structure to be fill up.</param>
 			OpenDDSharp::DDS::ReturnCode GetInconsistentTopicStatus(OpenDDSharp::DDS::InconsistentTopicStatus% status);
+
+		private:
+			System::String^ GetTypeName();
+			System::String^ GetName();
+			OpenDDSharp::DDS::DomainParticipant^ GetParticipant();
 			
 		};
 
