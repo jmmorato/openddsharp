@@ -6,11 +6,6 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
-		/*public enum class StatusMask : System::UInt32 {
-			DefaultStatusMask = ::OpenDDS::DCPS::DEFAULT_STATUS_MASK,
-			AllStatusMask = ::OpenDDS::DCPS::ALL_STATUS_MASK,
-			NoStatusMask = ::OpenDDS::DCPS::NO_STATUS_MASK
-		};*/
 
 		public value struct StatusMask {
 
