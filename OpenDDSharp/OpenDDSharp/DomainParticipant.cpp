@@ -333,6 +333,10 @@ OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ OpenDDSharp::DDS::DomainP
 	return m_listener;
 };
 
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetListener(OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
+	return  OpenDDSharp::DDS::DomainParticipant::SetListener(listener, StatusMask::DefaultStatusMask);
+}
+
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetListener(OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, OpenDDSharp::DDS::StatusMask mask) {
 	m_listener = listener;
 	if (m_listener != nullptr) {

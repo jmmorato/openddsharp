@@ -56,6 +56,10 @@ namespace OpenDDSharp {
 			OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ m_listener;			
 
 		public:
+			/// <summary>
+			/// Native DomainParticipant pointer.
+			/// For internal use only.
+			/// </summary>
 			::DDS::DomainParticipant_ptr impl_entity;
 
 		public:
@@ -469,7 +473,7 @@ namespace OpenDDSharp {
 			/// <summary>
 			/// Sets the <see cref="DomainParticipant" /> QoS policies.
 			/// </summary>
-			/// <param name="qos">The default <see cref="DomainParticipantQos" /> to be set.</param>
+			/// <param name="qos">The <see cref="DomainParticipantQos" /> to be set.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetQos(OpenDDSharp::DDS::DomainParticipantQos^ qos);
 			
@@ -480,9 +484,16 @@ namespace OpenDDSharp {
 			OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ GetListener();
 
 			/// <summary>
+			/// Sets the <see cref="DomainParticipantListener" /> using the <see cref="StatusMask::DefaultStatusMask" />.
+			/// </summary>
+			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be set.</param>			
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener);
+
+			/// <summary>
 			/// Sets the <see cref="DomainParticipantListener" />.
 			/// </summary>
-			/// <param name="listener">The default <see cref="DomainParticipantListener" /> to be set.</param>
+			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be set.</param>
 			/// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, OpenDDSharp::DDS::StatusMask mask);	
