@@ -17,7 +17,7 @@ namespace OpenDDSharp.ShapesDemo.Service
         private const string CIRCLE_TOPIC_NAME = "Circle";
         private const string TRIANGLE_TOPIC_NAME = "Triangle";
         private string FILTER_OUTSIDE = "(x BETWEEN %0 AND %1) AND (y BETWEEN %2 AND %3)";
-        private string FILTER_INSIDE = "(x < % 0) OR(x > %1) OR(y< %2) OR(y > %3)";
+        private string FILTER_INSIDE = "(x < %0) OR(x > %1) OR(y< %2) OR(y > %3)";
         #endregion
 
         #region Events
