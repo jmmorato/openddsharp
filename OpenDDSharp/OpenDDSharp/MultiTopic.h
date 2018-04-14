@@ -6,6 +6,8 @@
 
 #include "TopicDescription.h"
 #include "DomainParticipant.h"
+#include "ViewStateKind.h"
+#include "InstanceStateKind.h"
 
 #include <vcclr.h>
 #include <msclr/marshal.h>
