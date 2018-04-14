@@ -6,6 +6,10 @@ OpenDDSharp::DDS::Publisher::Publisher(::DDS::Publisher_ptr publisher) : OpenDDS
 	impl_entity = publisher;	
 };
 
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Publisher::Participant::get() {
+	return GetParticipant();
+}
+
 OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::CreateDataWriter(OpenDDSharp::DDS::Topic^ topic) {
 	return OpenDDSharp::DDS::Publisher::CreateDataWriter(topic, nullptr, nullptr, StatusMask::NoStatusMask);
 };
