@@ -54,17 +54,17 @@ namespace OpenDDSharp {
 		public:
 			/// <summary>
 			/// Gets the expression parameters associated with the <see cref="ContentFilteredTopic" />. That is, the parameters specified
-			/// on the last successful call to <see cref="ContentFilteredTopic::SetExpressionParameters" />, or if was never called, the parameters
+			/// on the last successful call to <see cref="ContentFilteredTopic::SetExpressionParameters" />, or if it was never called, the parameters
 			///	specified when the <see cref="ContentFilteredTopic" /> was created.
 			/// </summary>
-			/// <param name="params">The parameters collection to be filled up.</param>
+			/// <param name="params">The expression parameters collection to be filled up.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetExpressionParameters(ICollection<System::String^>^ params);
 
 			/// <summary>
 			/// Changes the expression parameters associated with the <see cref="ContentFilteredTopic" />.
 			/// </summary>
-			/// <param name="params">The new parameters collection to be set.</param>
+			/// <param name="params">The expression parameters collection to be set.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetExpressionParameters(ICollection<System::String^>^ params);
 
