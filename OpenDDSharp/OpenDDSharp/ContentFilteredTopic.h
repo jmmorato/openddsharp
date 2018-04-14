@@ -20,10 +20,10 @@ namespace OpenDDSharp {
 		///	criteria. This class therefore can be used to request content-based subscriptions.
 		/// </summary>
 		/// <remarks>
-		/// The selection of the content is done using the filterExpression with parameters expressionParameters.
+		/// The selection of the content is done using the filter expression with the expression parameters.
 		/// <list type="bullet">
-		///		<item><description>The filterExpression attribute is a string that specifies the criteria to select the data samples of interest. It is similar to the WHERE part of an SQL clause.</description></item>
-		///		<item><description>The expressionParameters attribute is a sequence of strings that give values to the 'parameters' ("%n" tokens) in the filterExpression. The number of supplied parameters must fit with the requested values in the filterExpression</description></item>
+		///		<item><description>The filter expression is a string that specifies the criteria to select the data samples of interest. It is similar to the WHERE part of an SQL clause.</description></item>
+		///		<item><description>The expression parameters are a collection of strings that give values to the 'parameters' ("%n" tokens) in the filter expression. The number of supplied parameters must fit with the requested values in the filter expression</description></item>
 		///	</list>
 		/// </remarks>
 		public ref class ContentFilteredTopic : public OpenDDSharp::DDS::TopicDescription {
