@@ -5,6 +5,10 @@ OpenDDSharp::DDS::MultiTopic::MultiTopic(::DDS::MultiTopic_ptr native) : TopicDe
 	impl_entity = native;
 }
 
+System::String^ OpenDDSharp::DDS::MultiTopic::SubscriptionExpression::get() {
+	return GetSubscriptionExpression();
+}
+
 System::String^ OpenDDSharp::DDS::MultiTopic::GetSubscriptionExpression() {
 	msclr::interop::marshal_context context;
 
