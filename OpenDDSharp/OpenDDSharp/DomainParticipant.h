@@ -458,7 +458,7 @@ namespace OpenDDSharp {
 			/// <para>The containment applies recursively. That is, it applies both to entities (<see cref="ITopicDescription" />, <see cref="Publisher" />, or <see cref="Subscriber" />) created
 			/// directly using the <see cref="DomainParticipant" /> as well as entities created using a contained <see cref="Publisher" />, or <see cref="Subscriber" /> as the factory, and so forth.</para>
 			/// <para></para>
-			/// <para>The instance handle for an <see cref="Entity" /> may be obtained from built-in topic data, from various statuses, or from the <see cref="Entity" /> operation <see cref="Entity::GetInstanceHandle" />.</para>
+			/// <para>The instance handle for an <see cref="Entity" /> may be obtained from built-in topic data, from various statuses, or from the <see cref="Entity" /> property <see cref="Entity::InstanceHandle" />.</para>
 			/// <remarks>
 			/// <returns><see langword="true"/> if the <see cref="Entity" /> is contained by the <see cref="DomainParticipant" />, otherwise <see langword="false"/>.</returns>
 			System::Boolean ContainsEntity(OpenDDSharp::DDS::InstanceHandle handle);
@@ -550,8 +550,8 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <remarks>
 			/// <para>The <see cref="DataWriter" /> to ignore is identified by the <paramref name="handle" /> argument. This handle is the one that appears in the <see cref="SampleInfo" /> retrieved
-			/// when reading the data-samples from the built-in <see cref="DataReader" /> on the “DCPSPublication” topic. To ignore a local <see cref="DataWriter" />, the handle can be obtained by 
-			/// calling <see cref="Entity::GetInstanceHandle" /> for the local <see cref="DataWriter" />.</para>
+			/// when reading the data-samples from the built-in <see cref="DataReader" /> on the “DCPSPublication” topic. To ignore a local <see cref="DataWriter" />, the handle can be obtained with 
+			/// the property <see cref="Entity::InstanceHandle" /> for the local <see cref="DataWriter" />.</para>
 			/// <para>There is no way to reverse this operation.</para>
 			/// <remarks>
 			/// <param name="handle">The <see cref="InstanceHandle" /> of the <see cref="DataWriter" /> to be ignored.</param>

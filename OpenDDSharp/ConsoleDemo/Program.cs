@@ -73,9 +73,8 @@ namespace ConsoleDemo
                 if (!useListener)
                 {
                     waitSet = new WaitSet();
-
-                    statusCondition = dataReader.GetStatusCondition();
-                    waitSet.AttachCondition(statusCondition);
+                    
+                    waitSet.AttachCondition(dataReader.StatusCondition);
                     statusCondition.SetEnabledStatuses(StatusKind.DataAvailableStatus);
 
                     new System.Threading.Thread(delegate ()

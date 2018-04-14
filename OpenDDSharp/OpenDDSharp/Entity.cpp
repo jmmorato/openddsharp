@@ -5,6 +5,18 @@ OpenDDSharp::DDS::Entity::Entity(::DDS::Entity_ptr entity) {
 	contained_entities = gcnew List<Entity^>();
 }
 
+OpenDDSharp::DDS::StatusCondition^ OpenDDSharp::DDS::Entity::StatusCondition::get() {
+	return GetStatusCondition();
+}
+
+OpenDDSharp::DDS::StatusMask OpenDDSharp::DDS::Entity::StatusChanges::get() {
+	return GetStatusChanges();
+}
+
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::Entity::InstanceHandle::get() {
+	return GetInstanceHandle();
+}
+
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Entity::Enable() {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->enable();
 }
@@ -12,7 +24,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Entity::Enable() {
 OpenDDSharp::DDS::StatusCondition^ OpenDDSharp::DDS::Entity::GetStatusCondition() {
 	::DDS::StatusCondition_ptr native = impl_entity->get_statuscondition();
 	if (native != NULL) {
-		return gcnew StatusCondition(native, this);
+		return gcnew OpenDDSharp::DDS::StatusCondition(native, this);
 	} 
 	else {
 		return nullptr;
