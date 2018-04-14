@@ -4,6 +4,14 @@ OpenDDSharp::DDS::ContentFilteredTopic::ContentFilteredTopic(::DDS::ContentFilte
 	impl_entity = native;
 }
 
+System::String^ OpenDDSharp::DDS::ContentFilteredTopic::FilterExpression::get() {
+	return GetFilterExpression();
+}
+
+OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::ContentFilteredTopic::RelatedTopic::get() {
+	return GetRelatedTopic();
+}
+
 System::String^ OpenDDSharp::DDS::ContentFilteredTopic::GetFilterExpression() {
 	msclr::interop::marshal_context context;
 
