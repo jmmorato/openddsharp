@@ -9,6 +9,14 @@ OpenDDSharp::DDS::DataReader::DataReader(::DDS::DataReader_ptr dataReader) : Ope
 	impl_entity = dataReader;
 }
 
+OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DataReader::Subscriber::get() {
+	return GetSubscriber();
+}
+
+OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DataReader::TopicDescription::get() {
+	return GetTopicDescription();
+}
+
 OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadCondition(OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
 	::DDS::ReadCondition_ptr native =  impl_entity->create_readcondition(sampleStates, viewStates, instanceStates);
 	if (native != NULL) {
@@ -100,7 +108,7 @@ OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ OpenDDSharp::DDS::DataReader::Ge
 	return _listener;
 }
 
-OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DataReader::GetTopicDescription(System::String^ name) {		
+OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DataReader::GetTopicDescription() {		
 	::DDS::TopicDescription_ptr desc = impl_entity->get_topicdescription();
 	if (desc != NULL) {
 		return gcnew OpenDDSharp::DDS::TopicDescription(desc);
