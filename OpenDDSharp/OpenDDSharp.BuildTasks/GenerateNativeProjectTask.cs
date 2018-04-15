@@ -171,7 +171,27 @@ namespace OpenDDSharp.BuildTasks
                 Platform = "x86";
 
             string solutionConfiguration = string.Format("{0}|{1}", Configuration, Platform);
-            _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+
+            int retry = 100;
+            bool success = false;
+
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+                }
+                catch (COMException)
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                        System.Threading.Thread.Sleep(150);
+                    else
+                        throw;
+                }
+            }
         }
 
         private void ShutDown()
