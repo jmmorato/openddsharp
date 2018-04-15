@@ -180,6 +180,7 @@ namespace OpenDDSharp.BuildTasks
                 try
                 {
                     _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+                    success = true;
                 }
                 catch (COMException)
                 {
