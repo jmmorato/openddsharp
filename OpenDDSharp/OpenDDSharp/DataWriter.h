@@ -174,7 +174,7 @@ namespace OpenDDSharp {
 			/// identify the corresponding matched <see cref="DataReader" /> entities. These handles match the ones that appear in the <see cref="SampleInfo::InstanceState" />
 			///	property of the <see cref="SampleInfo" /> when reading the "DCPSSubscriptions" builtin topic.
 			/// </remarks>
-			/// <param name="subscriptionHandles">The collection of sucription <see cref="InstanceHandle" />s to be filled up.</param> 
+			/// <param name="subscriptionHandles">The collection of subscription <see cref="InstanceHandle" />s to be filled up.</param> 
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptions(ICollection<OpenDDSharp::DDS::InstanceHandle>^ subscriptionHandles);
 
