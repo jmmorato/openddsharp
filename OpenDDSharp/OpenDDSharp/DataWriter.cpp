@@ -6,6 +6,14 @@ OpenDDSharp::DDS::DataWriter::DataWriter(::DDS::DataWriter_ptr dataWriter) : Ope
 	impl_entity = dataWriter;	
 }
 
+OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DataWriter::Topic::get() {
+	return GetTopic();
+}
+
+OpenDDSharp::DDS::Publisher^ OpenDDSharp::DDS::DataWriter::Publisher::get() {
+	return GetPublisher();
+}
+
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::SetQos(OpenDDSharp::DDS::DataWriterQos^ qos) {
 	if (qos == nullptr) {
 		return ::OpenDDSharp::DDS::ReturnCode::BadParameter;
