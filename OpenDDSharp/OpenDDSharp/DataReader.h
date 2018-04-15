@@ -86,7 +86,14 @@ namespace OpenDDSharp {
 
 			OpenDDSharp::DDS::QueryCondition^ CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, List<System::String^>^ queryParameters);
 
-			OpenDDSharp::DDS::ReturnCode DeleteReadcondition(OpenDDSharp::DDS::ReadCondition^ condition);
+			/// <summary>
+			/// Deletes a <see cref="ReadCondition" /> attached to the <see cref="DataReader" />. Since <see cref="QueryCondition" /> specializes <see cref="ReadCondition" /> it can
+			/// also be used to delete a <see cref="QueryCondition" />.
+			/// </summary>
+			/// <remarks>
+			/// If the <see cref="ReadCondition" /> is not attached to the <see cref="DataReader" />, the operation will return the error <see cref="ReturnCode::PreconditionNotMet" />.
+			/// </remarks>
+			OpenDDSharp::DDS::ReturnCode DeleteReadCondition(OpenDDSharp::DDS::ReadCondition^ condition);
 
 			/// <summary>
 			/// Deletes all the entities that were created by means of the "create" operations on the <see cref="DataReader" />. That is, it

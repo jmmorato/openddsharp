@@ -54,7 +54,7 @@ OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondi
 	}
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteReadcondition(OpenDDSharp::DDS::ReadCondition^ condition) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteReadCondition(OpenDDSharp::DDS::ReadCondition^ condition) {
 	if (condition == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
