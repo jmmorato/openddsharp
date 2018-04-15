@@ -221,7 +221,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublication
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublicationData(OpenDDSharp::DDS::PublicationBuiltinTopicData% publicationData, OpenDDSharp::DDS::InstanceHandle publicationHandle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublicationData(OpenDDSharp::DDS::InstanceHandle publicationHandle, OpenDDSharp::DDS::PublicationBuiltinTopicData% publicationData) {
 	::DDS::PublicationBuiltinTopicData data;
 	::DDS::ReturnCode_t ret = impl_entity->get_matched_publication_data(data, publicationHandle);
 

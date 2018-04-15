@@ -262,10 +262,10 @@ namespace OpenDDSharp {
 			/// will fail and return <see cref="ReturnCode::BadParameter" />. The operation <see cref="GetMatchedPublications" /> can be used to find the publications that
 			///	are currently matched with the <see cref="DataReader" />.
 			/// </remarks>
-			/// <param name="publicationData">The <see cref="PublicationBuiltinTopicData" /> structure to be filled up.</param> 
 			/// <param name="publicationHandle">The <see cref="InstanceHandle" /> of the publication data requested.</param> 
+			/// <param name="publicationData">The <see cref="PublicationBuiltinTopicData" /> structure to be filled up.</param>			
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-			OpenDDSharp::DDS::ReturnCode GetMatchedPublicationData(OpenDDSharp::DDS::PublicationBuiltinTopicData% publicationData, OpenDDSharp::DDS::InstanceHandle publicationHandle);
+			OpenDDSharp::DDS::ReturnCode GetMatchedPublicationData(OpenDDSharp::DDS::InstanceHandle publicationHandle, OpenDDSharp::DDS::PublicationBuiltinTopicData% publicationData);
 
 		private:
 			OpenDDSharp::DDS::Subscriber^ GetSubscriber();
