@@ -84,7 +84,19 @@ namespace OpenDDSharp {
 		public:
 			OpenDDSharp::DDS::ReadCondition^ CreateReadCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates);			
 
-			OpenDDSharp::DDS::QueryCondition^ CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, List<System::String^>^ queryParameters);
+			/// <summary>
+			/// Creates a <see cref="QueryCondition" />. 
+			/// </summary>
+			/// <remarks>
+			/// The returned <see cref="QueryCondition" /> will be attached and belong to the <see cref="DataReader" />.
+			/// </remarks>			
+			/// <param name="sampleStates">The desired sample states mask.</param>
+			/// <param name="viewStates">The desired view states mask.</param>
+			/// <param name="instanceStates">The desired instance states mask.</param>
+			/// <param name="queryExpression">The query string, which must be a subset of the SQL query language.</param>
+			/// <param name="queryParameters">A sequence of strings which are the parameter values used in the SQL query string. The number of values in queryParameters must be equal or greater than the highest referenced n token in the queryExpression.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			OpenDDSharp::DDS::QueryCondition^ CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, ... array<System::String^>^ queryParameters);
 
 			/// <summary>
 			/// Deletes a <see cref="ReadCondition" /> attached to the <see cref="DataReader" />. Since <see cref="QueryCondition" /> specializes <see cref="ReadCondition" /> it can
@@ -93,6 +105,8 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// If the <see cref="ReadCondition" /> is not attached to the <see cref="DataReader" />, the operation will return the error <see cref="ReturnCode::PreconditionNotMet" />.
 			/// </remarks>
+			/// <param name="condition">The <see cref="ReadCondition" /> to be deleted.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode DeleteReadCondition(OpenDDSharp::DDS::ReadCondition^ condition);
 
 			/// <summary>

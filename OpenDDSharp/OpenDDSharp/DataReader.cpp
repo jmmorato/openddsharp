@@ -27,12 +27,12 @@ OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadConditi
 	}
 }
 
-OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, List<System::String^>^ queryParameters) {
+OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, ... array<System::String^>^ queryParameters) {
 	msclr::interop::marshal_context context;
 
 	int count = 0;
 	if (queryParameters != nullptr) {
-		count = queryParameters->Count;
+		count = queryParameters->Length;
 	}
 
 	::DDS::StringSeq seq;	
