@@ -4,6 +4,11 @@ OpenDDSharp::DDS::QueryCondition::QueryCondition(::DDS::QueryCondition_ptr query
 	impl_entity = query_condition;	
 }
 
+
+System::String^ OpenDDSharp::DDS::QueryCondition::QueryExpression::get() {
+	return GetQueryExpression();
+}
+
 System::String^ OpenDDSharp::DDS::QueryCondition::GetQueryExpression() {
 	msclr::interop::marshal_context context;
 
@@ -11,7 +16,7 @@ System::String^ OpenDDSharp::DDS::QueryCondition::GetQueryExpression() {
 	return context.marshal_as<System::String^>(s);
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::GetQueryParameters(List<System::String^>^ queryParameters) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::GetQueryParameters(IList<System::String^>^ queryParameters) {
 	if (queryParameters == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
@@ -34,7 +39,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::GetQueryParameter
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::SetQueryParameters(List<System::String^>^ queryParameters) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::SetQueryParameters(... array<System::String^>^ queryParameters) {
 	if (queryParameters == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
@@ -42,10 +47,10 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::SetQueryParameter
 	msclr::interop::marshal_context context;
 
 	::DDS::StringSeq seq;
-	seq.length(queryParameters->Count);
+	seq.length(queryParameters->Length);
 
 	System::Int32 i = 0;
-	while(i < queryParameters->Count)
+	while(i < queryParameters->Length)
 	{
 		seq[i] = context.marshal_as<const char*>(queryParameters[i]);
 		i++;
