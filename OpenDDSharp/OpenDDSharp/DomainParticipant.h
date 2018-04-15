@@ -599,7 +599,7 @@ namespace OpenDDSharp {
 			/// <param name="filterExpression">The filter expression to be used for the content filter.</param>
 			/// <param name="expressionParameters">The collection of parameters to be used in the filter expression.</param>
 			/// <returns>The newly created <see cref="ContentFilteredTopic" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::ContentFilteredTopic^ CreateContentFilteredTopic(System::String^ name, OpenDDSharp::DDS::Topic^ relatedTopic, System::String^ filterExpression, ICollection<System::String^>^ expressionParameters);
+			OpenDDSharp::DDS::ContentFilteredTopic^ CreateContentFilteredTopic(System::String^ name, OpenDDSharp::DDS::Topic^ relatedTopic, System::String^ filterExpression, ... array<System::String^>^ expressionParameters);
 
 			/// <summary>
 			/// Deletes an existing <see cref="ContentFilteredTopic" />.
@@ -631,7 +631,7 @@ namespace OpenDDSharp {
 			/// <param name="name">The subscription expression used for the <see cref="MultiTopic" />.</param>
 			/// <param name="expressionParameters">The collection of parameters to be used in the subscription expression.</param>
 			/// <returns>The newly created <see cref="MultiTopic" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::MultiTopic^ CreateMultiTopic(System::String^ name, System::String^ typeName, System::String^ subscriptionExpression, ICollection<System::String^>^ expressionParameters);
+			OpenDDSharp::DDS::MultiTopic^ CreateMultiTopic(System::String^ name, System::String^ typeName, System::String^ subscriptionExpression, ... array<System::String^>^ expressionParameters);
 
 			/// <summary>
 			/// Deletes an existing <see cref="MultiTopic" />.

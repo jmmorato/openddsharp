@@ -408,7 +408,7 @@ OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DomainParticipant::Lookup
 	}
 }
 
-OpenDDSharp::DDS::ContentFilteredTopic^ OpenDDSharp::DDS::DomainParticipant::CreateContentFilteredTopic(System::String^ name, OpenDDSharp::DDS::Topic^ relatedTopic, System::String^ filterExpression, ICollection<System::String^>^ expressionParameters) {
+OpenDDSharp::DDS::ContentFilteredTopic^ OpenDDSharp::DDS::DomainParticipant::CreateContentFilteredTopic(System::String^ name, OpenDDSharp::DDS::Topic^ relatedTopic, System::String^ filterExpression, ... array<System::String^>^ expressionParameters) {
 	if (System::String::IsNullOrWhiteSpace(name)) {
 		return nullptr;
 	}
@@ -425,7 +425,7 @@ OpenDDSharp::DDS::ContentFilteredTopic^ OpenDDSharp::DDS::DomainParticipant::Cre
 
 	::DDS::StringSeq seq;
 	if (expressionParameters != nullptr) {
-		seq.length(expressionParameters->Count);
+		seq.length(expressionParameters->Length);
 
 		int i = 0;
 		for each (System::String^ s in expressionParameters)
@@ -456,7 +456,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContentF
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->delete_contentfilteredtopic(contentFilteredTopic->impl_entity);
 }
 
-OpenDDSharp::DDS::MultiTopic^ OpenDDSharp::DDS::DomainParticipant::CreateMultiTopic(System::String^ name, System::String^ typeName, System::String^ subscriptionExpression, ICollection<System::String^>^ expressionParameters) {
+OpenDDSharp::DDS::MultiTopic^ OpenDDSharp::DDS::DomainParticipant::CreateMultiTopic(System::String^ name, System::String^ typeName, System::String^ subscriptionExpression, ... array<System::String^>^ expressionParameters) {
 	if (System::String::IsNullOrWhiteSpace(name)) {
 		return nullptr;
 	}
@@ -473,7 +473,7 @@ OpenDDSharp::DDS::MultiTopic^ OpenDDSharp::DDS::DomainParticipant::CreateMultiTo
 
 	::DDS::StringSeq seq;
 	if (expressionParameters != nullptr) {
-		seq.length(expressionParameters->Count);
+		seq.length(expressionParameters->Length);
 
 		int i = 0;
 		for each (System::String^ s in expressionParameters)
