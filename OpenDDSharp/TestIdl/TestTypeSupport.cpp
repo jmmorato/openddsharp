@@ -147,7 +147,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Read(
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::BasicTestStructDataReader::Read(receivedData, receivedInfo, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::BasicTestStructDataReader::Read(receivedData, receivedInfo, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Read(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -193,7 +193,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Take(
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::BasicTestStructDataReader::Take(receivedData, receivedInfo, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::BasicTestStructDataReader::Take(receivedData, receivedInfo, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Take(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -239,7 +239,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::ReadI
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::BasicTestStructDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::BasicTestStructDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::ReadInstance(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -285,7 +285,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeI
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::BasicTestStructDataReader::TakeInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::BasicTestStructDataReader::TakeInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeInstance(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -331,7 +331,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::ReadN
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::BasicTestStructDataReader::ReadNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::BasicTestStructDataReader::ReadNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::ReadNextInstance(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -377,7 +377,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeN
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::BasicTestStructDataReader::TakeNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::BasicTestStructDataReader::TakeNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeNextInstance(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -1010,7 +1010,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Read(List<
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::TestStructDataReader::Read(receivedData, receivedInfo, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::TestStructDataReader::Read(receivedData, receivedInfo, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Read(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -1056,7 +1056,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Take(List<
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::TestStructDataReader::Take(receivedData, receivedInfo, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::TestStructDataReader::Take(receivedData, receivedInfo, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Take(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -1102,7 +1102,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::ReadInstan
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::TestStructDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::TestStructDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::ReadInstance(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -1148,7 +1148,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeInstan
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::TestStructDataReader::TakeInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::TestStructDataReader::TakeInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeInstance(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -1194,7 +1194,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::ReadNextIn
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::TestStructDataReader::ReadNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::TestStructDataReader::ReadNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::ReadNextInstance(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -1240,7 +1240,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeNextIn
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::Test::TestStructDataReader::TakeNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->GetSampleStateMask(), condition->GetViewStateMask(), condition->GetInstanceStateMask());
+	return OpenDDSharp::Test::TestStructDataReader::TakeNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeNextInstance(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
