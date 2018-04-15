@@ -25,15 +25,15 @@ namespace OpenDDSharp {
 
 		/// <summary>
 		/// A Publisher is the object responsible for the actual dissemination of publications.
-		/// The Publisher acts on the behalf of one or several <see cref="DataWriter" /> objects that belong to it. When it is informed of a change to the
-		/// data associated with one of its <see cref="DataWriter" /> objects, it decides when it is appropriate to actually send the data-update message.
-		///	In making this decision, it considers any extra information that goes with the data(timestamp, writer, etc.) as well as the QoS
-		///	of the Publisher and the <see cref="DataWriter" />.
 		/// </summary>
 		/// <remarks>
-		/// All operations except for the operations <see cref="Publisher::SetQos" />, <see cref="Publisher::GetQos" />, <see cref="Publisher::SetListener" />,
+		/// <para>The Publisher acts on the behalf of one or several <see cref="DataWriter" /> objects that belong to it. When it is informed of a change to the
+		/// data associated with one of its <see cref="DataWriter" /> objects, it decides when it is appropriate to actually send the data-update message.
+		/// In making this decision, it considers any extra information that goes with the data(timestamp, writer, etc.) as well as the QoS
+		///	of the Publisher and the <see cref="DataWriter" />.</para>
+		/// <para>All operations except for the operations <see cref="Publisher::SetQos" />, <see cref="Publisher::GetQos" />, <see cref="Publisher::SetListener" />,
 		/// <see cref="Publisher::GetListener" />, <see cref="Entity::Enable" />, <see cref="Entity::GetStatusCondition" />, CreateDataWriter,
-		/// and <see cref="Entity::DeleteDataWriter" /> return the value <see cref="ReturnCode::NotEnabled" />.
+		/// and <see cref="Entity::DeleteDataWriter" /> return the value <see cref="ReturnCode::NotEnabled" /> if the Publisher has not been enabled yet.</para>
 		/// <remarks>
 		public ref class Publisher : public OpenDDSharp::DDS::Entity {
 
