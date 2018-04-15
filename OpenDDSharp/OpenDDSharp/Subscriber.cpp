@@ -6,28 +6,32 @@ OpenDDSharp::DDS::Subscriber::Subscriber(::DDS::Subscriber_ptr subscriber) : Ope
 	impl_entity = subscriber;
 };
 
-OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topic) {
-	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topic, nullptr, nullptr, StatusMask::NoStatusMask);
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Subscriber::Participant::get() {
+	return GetParticipant();
+}
+
+OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription) {
+	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topicDescription, nullptr, nullptr, StatusMask::NoStatusMask);
 };
 
-OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topic, ::OpenDDSharp::DDS::DataReaderQos^ qos) {
-	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topic, qos, nullptr, StatusMask::NoStatusMask);
+OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::DDS::DataReaderQos^ qos) {
+	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topicDescription, qos, nullptr, StatusMask::NoStatusMask);
 };
 
-OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topic, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener) {
-	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topic, nullptr, listener, StatusMask::DefaultStatusMask);
+OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener) {
+	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topicDescription, nullptr, listener, StatusMask::DefaultStatusMask);
 };
 
-OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topic, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask statusMask) {
-	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topic, nullptr, listener, statusMask);
+OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask statusMask) {
+	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topicDescription, nullptr, listener, statusMask);
 };
 
-OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topic, ::OpenDDSharp::DDS::DataReaderQos^ qos, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener) {
-	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topic, qos, listener, StatusMask::DefaultStatusMask);
+OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::DDS::DataReaderQos^ qos, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener) {
+	return OpenDDSharp::DDS::Subscriber::CreateDataReader(topicDescription, qos, listener, StatusMask::DefaultStatusMask);
 };
 
-OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topic, ::OpenDDSharp::DDS::DataReaderQos^ qos, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask statusMask) {
-	if (topic == nullptr) {
+OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::DDS::DataReaderQos^ qos, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask statusMask) {
+	if (topicDescription == nullptr) {
 		return nullptr;
 	}
 
@@ -46,7 +50,7 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(Ope
 		lst = listener->impl_entity;
 	}
 	
-	::DDS::DataReader_ptr dr = impl_entity->create_datareader(topic->ToNative(), drQos, lst.in(), (System::UInt32)statusMask);
+	::DDS::DataReader_ptr dr = impl_entity->create_datareader(topicDescription->ToNative(), drQos, lst.in(), (System::UInt32)statusMask);
 
 	if (dr != NULL) {
 		OpenDDSharp::DDS::DataReader^ r = gcnew OpenDDSharp::DDS::DataReader(dr);
@@ -102,7 +106,11 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::LookupDataReader(Sys
 	}
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::GetDatareaders(ICollection<OpenDDSharp::DDS::DataReader^>^ readers, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::GetDataReaders(IList<OpenDDSharp::DDS::DataReader^>^ readers) {
+	return GetDataReaders(readers, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+}
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::GetDataReaders(IList<OpenDDSharp::DDS::DataReader^>^ readers, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
 	if (readers == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
@@ -166,7 +174,7 @@ OpenDDSharp::DDS::SubscriberListener^ OpenDDSharp::DDS::Subscriber::GetListener(
 	return m_listener;
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::BeginAccess() {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::BeginAccess() {	
 	return (::OpenDDSharp::DDS::ReturnCode)impl_entity->begin_access();
 };
 
