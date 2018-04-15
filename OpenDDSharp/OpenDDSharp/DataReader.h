@@ -82,10 +82,37 @@ namespace OpenDDSharp {
 			DataReader(::DDS::DataReader_ptr dataReader);
 		
 		public:
+			/// <summary>
+			/// Creates a <see cref="ReadCondition" /> to read samples with any sample states, any view states and any instance states.
+			/// </summary>
+			/// <remarks>
+			/// The returned <see cref="ReadCondition" /> will be attached and belong to the <see cref="DataReader" />.
+			/// </remarks>
+			/// <returns>The newly created <see cref="ReadCondition" /> on success, otherwise <see langword="null"/>.</returns>
+			OpenDDSharp::DDS::ReadCondition^ CreateReadCondition();
+
+			/// <summary>
+			/// Creates a <see cref="ReadCondition" /> to read samples with the desired sample states, view states and instance states.
+			/// </summary>
+			/// <param name="sampleStates">The desired sample states mask.</param>
+			/// <param name="viewStates">The desired view states mask.</param>
+			/// <param name="instanceStates">The desired instance states mask.</param>
+			/// <returns>The newly created <see cref="ReadCondition" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::ReadCondition^ CreateReadCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates);			
 
 			/// <summary>
-			/// Creates a <see cref="QueryCondition" />. 
+			/// Creates a <see cref="QueryCondition" /> to read samples with any sample states, any view states and any instance states. 
+			/// </summary>
+			/// <remarks>
+			/// The returned <see cref="QueryCondition" /> will be attached and belong to the <see cref="DataReader" />.
+			/// </remarks>						
+			/// <param name="queryExpression">The query string, which must be a subset of the SQL query language.</param>
+			/// <param name="queryParameters">A sequence of strings which are the parameter values used in the SQL query string. The number of values in queryParameters must be equal or greater than the highest referenced n token in the queryExpression.</param>
+			/// <returns>The newly created <see cref="QueryCondition" /> on success, otherwise <see langword="null"/>.</returns>
+			OpenDDSharp::DDS::QueryCondition^ CreateQueryCondition(System::String^ queryExpression, ... array<System::String^>^ queryParameters);
+
+			/// <summary>
+			/// Creates a <see cref="QueryCondition" /> with the desired sample states, view states and instance states. 
 			/// </summary>
 			/// <remarks>
 			/// The returned <see cref="QueryCondition" /> will be attached and belong to the <see cref="DataReader" />.
@@ -95,7 +122,7 @@ namespace OpenDDSharp {
 			/// <param name="instanceStates">The desired instance states mask.</param>
 			/// <param name="queryExpression">The query string, which must be a subset of the SQL query language.</param>
 			/// <param name="queryParameters">A sequence of strings which are the parameter values used in the SQL query string. The number of values in queryParameters must be equal or greater than the highest referenced n token in the queryExpression.</param>
-			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			/// <returns>The newly created <see cref="QueryCondition" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::QueryCondition^ CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, ... array<System::String^>^ queryParameters);
 
 			/// <summary>

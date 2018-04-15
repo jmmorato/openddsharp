@@ -17,6 +17,10 @@ OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DataReader::TopicDescript
 	return GetTopicDescription();
 }
 
+OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadCondition() {
+	return CreateReadCondition(OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+}
+
 OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadCondition(OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
 	::DDS::ReadCondition_ptr native =  impl_entity->create_readcondition(sampleStates, viewStates, instanceStates);
 	if (native != NULL) {
@@ -25,6 +29,10 @@ OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadConditi
 	else {
 		return nullptr;
 	}
+}
+
+OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondition(System::String^ queryExpression, ... array<System::String^>^ queryParameters) {
+	return CreateQueryCondition(OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState, queryExpression, queryParameters);
 }
 
 OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, System::String^ queryExpression, ... array<System::String^>^ queryParameters) {
