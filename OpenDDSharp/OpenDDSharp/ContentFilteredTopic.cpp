@@ -24,7 +24,7 @@ System::String^ OpenDDSharp::DDS::ContentFilteredTopic::GetFilterExpression() {
 	}
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::GetExpressionParameters(ICollection<System::String^>^ params) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::GetExpressionParameters(IList<System::String^>^ params) {
 	if (params == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
@@ -45,7 +45,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::GetExpressi
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::SetExpressionParameters(ICollection<System::String^>^ params) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::SetExpressionParameters(... array<System::String^>^ params) {
 	if (params == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
@@ -53,7 +53,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::SetExpressi
 	msclr::interop::marshal_context context;
 
 	::DDS::StringSeq seq;
-	seq.length(params->Count);
+	seq.length(params->Length);
 
 	int i = 0;
 	for each (System::String^ s in params)
