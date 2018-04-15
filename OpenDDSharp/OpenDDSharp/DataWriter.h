@@ -189,9 +189,9 @@ namespace OpenDDSharp {
 			/// will fail and return <see cref="ReturnCode::BadParameter" />. The operation <see cref="GetMatchedSubscriptions" /> can be used to find the subscriptions that
 			///	are currently matched with the <see cref="DataWriter" />.</para>
 			/// </remarks>
-			/// <param name="subscriptionData">The <see cref="SubscriptionBuiltinTopicData" /> structure to be filled up.</param> 
-			/// <param name="subscriptionHandle">The <see cref="InstanceHandle" /> of the subscription.</param> 
-			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptionData(OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData, OpenDDSharp::DDS::InstanceHandle subscriptionHandle);
+			/// <param name="subscriptionHandle">The <see cref="InstanceHandle" /> of the subscription data requested.</param> 
+			/// <param name="subscriptionData">The <see cref="SubscriptionBuiltinTopicData" /> structure to be filled up.</param> 			
+			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptionData(OpenDDSharp::DDS::InstanceHandle subscriptionHandle, OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData);
 
 		private:
 			OpenDDSharp::DDS::Topic^ GetTopic();

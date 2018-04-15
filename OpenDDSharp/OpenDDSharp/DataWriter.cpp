@@ -148,7 +148,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptio
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptionData(OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData, OpenDDSharp::DDS::InstanceHandle subscriptionHandle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptionData(OpenDDSharp::DDS::InstanceHandle subscriptionHandle, OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData) {
 	::DDS::SubscriptionBuiltinTopicData data;
 	::DDS::ReturnCode_t ret = impl_entity->get_matched_subscription_data(data, subscriptionHandle);
 
