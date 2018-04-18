@@ -217,19 +217,19 @@
   <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
     <TAO_ROOT>E:\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="E:\PROJECTS\OPENDDS\OpenDDSharp\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
   </Target>
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="E:\PROJECTS\OPENDDS\OpenDDSharp\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll"  />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll"  />
   <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent">
-    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntDir)'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="E:\PROJECTS\OPENDDS\OpenDDSharp\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" />
+    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntDir)'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" />
   </Target>
   <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="E:\PROJECTS\OPENDDS\OpenDDSharp\OpenDDSharp.IdlGenerator\bin\$(Platform)\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot;" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\$(Platform)\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot;" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
