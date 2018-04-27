@@ -75,7 +75,7 @@ namespace ConsoleDemo
                     waitSet = new WaitSet();
                     
                     waitSet.AttachCondition(dataReader.StatusCondition);
-                    statusCondition.SetEnabledStatuses(StatusKind.DataAvailableStatus);
+                    statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
                     new System.Threading.Thread(delegate ()
                     {
@@ -91,7 +91,7 @@ namespace ConsoleDemo
                             if (cond == statusCondition && cond.TriggerValue)
                             {
                                 StatusCondition sCond = (StatusCondition)cond;
-                                StatusMask mask = sCond.GetEnabledStatuses();
+                                StatusMask mask = sCond.EnabledStatuses;
                                 if ((mask & StatusKind.DataAvailableStatus) != 0)
                                     DataAvailable(dataReader);
                             }
