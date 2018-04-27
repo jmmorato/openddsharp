@@ -16,7 +16,7 @@ namespace OpenDDSharp {
 
 		/// <summary>
 		/// A StatusCondition object is a specific <see cref="Condition" /> that is associated with each <see cref="Entity" />.
-		/// The trigger_value of the StatusCondition depends on the communication status of that entity (e.g., arrival of data, loss of
+		/// The <see cref="Condition::TriggerValue" /> of the StatusCondition depends on the communication status of that entity (e.g., arrival of data, loss of
 		/// information, etc.), 'filtered' by the set of <see cref="EnabledStatuses" /> on the StatusCondition.
 		/// </summary>
 		public ref class StatusCondition : public Condition {
