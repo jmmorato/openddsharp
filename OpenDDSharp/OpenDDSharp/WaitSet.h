@@ -37,7 +37,7 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new <see cref="WaitSet" /> 
+			/// Creates a new instance of the <see cref="WaitSet" />
 			/// </summary>
 			WaitSet();
 
@@ -95,7 +95,7 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// If the <see cref="Condition" /> was not attached to the <see cref="WaitSet" />, the operation will return <see cref="ReturnCode::PreconditionNotMet" />.
 			/// </remarks>
-			/// <param name="cond">The <see cref="Condition" /> to be deattached.</param>
+			/// <param name="cond">The <see cref="Condition" /> to be detached.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode DetachCondition(Condition^ cond);
 
