@@ -7,7 +7,6 @@
 #pragma managed
 
 #include "LNK4248.h"
-//#include "DataWriter.h"
 
 // incomplete types generate LNK4248 warnings when compiled for .NET
 SUPPRESS_LNK4248_CORBA
