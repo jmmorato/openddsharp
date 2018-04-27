@@ -88,7 +88,7 @@ namespace ConsoleDemo
 
                         foreach (Condition cond in conditions)
                         {
-                            if (cond == statusCondition && cond.GetTriggerValue())
+                            if (cond == statusCondition && cond.TriggerValue)
                             {
                                 StatusCondition sCond = (StatusCondition)cond;
                                 StatusMask mask = sCond.GetEnabledStatuses();
