@@ -226,7 +226,7 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// <para>The deletion of a <see cref="Topic" /> is not allowed if there are any existing <see cref="DataReader" />, <see cref="DataWriter" />, <see cref="ContentFilteredTopic" />, or <see cref="MultiTopic" /> 
 			/// objects that are using the <see cref="Topic" />.If the DeleteTopic operation is called on a <see cref="Topic" /> with any of these existing objects attached to
-			///	it, it will return <see cref="ReturnCode::PreconditionNotMet" /> .</para>
+			///	it, it will return <see cref="ReturnCode::PreconditionNotMet" />.</para>
 			/// <para>The <see cref="DeleteTopic" /> operation must be called on the same <see cref="DomainParticipant" /> object used to create the <see cref="Topic" />. If <see cref="DeleteTopic" /> is
 			/// called on a different <see cref="DomainParticipant" />, the operation will have no effect and it will return <see cref="ReturnCode::PreconditionNotMet" />.</para>
 			/// </remarks>
