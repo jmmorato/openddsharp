@@ -6,14 +6,14 @@ OpenDDSharp::DDS::StatusCondition::StatusCondition(::DDS::StatusCondition_ptr st
 	m_entity = entity;
 }
 
-OpenDDSharp::DDS::StatusMask OpenDDSharp::DDS::StatusCondition::GetEnabledStatuses() {
+OpenDDSharp::DDS::StatusMask OpenDDSharp::DDS::StatusCondition::EnabledStatuses::get() {
 	return impl_entity->get_enabled_statuses();
 }
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::StatusCondition::SetEnabledStatuses(OpenDDSharp::DDS::StatusMask mask) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_enabled_statuses(mask);
+void OpenDDSharp::DDS::StatusCondition::EnabledStatuses::set(OpenDDSharp::DDS::StatusMask value) {
+	impl_entity->set_enabled_statuses(value);
 }
 
-OpenDDSharp::DDS::Entity^ OpenDDSharp::DDS::StatusCondition::GetEntity() {
+OpenDDSharp::DDS::Entity^ OpenDDSharp::DDS::StatusCondition::Entity::get() {
 	return m_entity;
 }

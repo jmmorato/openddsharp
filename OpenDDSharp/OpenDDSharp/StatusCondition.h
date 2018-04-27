@@ -10,21 +10,49 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+
+		ref class WaitSet;
 		ref class Entity;
 
+		/// <summary>
+		/// A StatusCondition object is a specific <see cref="Condition" /> that is associated with each <see cref="Entity" />.
+		/// The trigger_value of the StatusCondition depends on the communication status of that entity (e.g., arrival of data, loss of
+		/// information, etc.), 'filtered' by the set of <see cref="EnabledStatuses" /> on the StatusCondition.
+		/// </summary>
 		public ref class StatusCondition : public Condition {
 
 		internal:
 			::DDS::StatusCondition_ptr impl_entity;
 			OpenDDSharp::DDS::Entity^ m_entity;
 
+		public:
+			/// <summary>
+			/// Gets the <see cref="Entity" /> associated with the <see cref="StatusCondition" />.
+			/// </summary>
+			/// <remarks>
+			/// Note that there is exactly one <see cref="Entity" /> associated with each <see cref="StatusCondition" />.
+			/// </remarks>
+			property OpenDDSharp::DDS::Entity^ Entity{
+				OpenDDSharp::DDS::Entity^ get();
+			}
+
+			/// <summary>
+			/// Gets or sets the <see cref="StatusMask" /> that is taken into account to determine the <see cref="Condition::TriggerValue" /> of the <see cref="StatusCondition" />.
+			/// </summary>
+			/// <remarks>
+			/// <para>Set a new value for the property may change the <see cref="Condition::TriggerValue" /> of the <see cref="StatusCondition" />.</para>
+			/// <para><see cref="WaitSet" /> objects behavior depend on the changes of the <see cref="Condition::TriggerValue" /> of their attached conditions. 
+			/// Therefore, any <see cref="WaitSet" /> to which the <see cref="StatusCondition" /> is attached is potentially affected by this operation.</para>
+			/// <para>If the setter is not invoked, the default mask of enabled statuses includes all the statuses.</para>
+			/// </remarks>
+			property OpenDDSharp::DDS::StatusMask EnabledStatuses {
+				OpenDDSharp::DDS::StatusMask get();
+				void set(OpenDDSharp::DDS::StatusMask value);
+			}
+
 		internal:
 			StatusCondition(::DDS::StatusCondition_ptr status_condition, OpenDDSharp::DDS::Entity^ entity);
 
-		public:
-			OpenDDSharp::DDS::StatusMask GetEnabledStatuses();
-			OpenDDSharp::DDS::ReturnCode SetEnabledStatuses(OpenDDSharp::DDS::StatusMask mask);
-			OpenDDSharp::DDS::Entity^ GetEntity();
 		};
 	};
 };
