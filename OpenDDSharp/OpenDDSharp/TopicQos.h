@@ -131,7 +131,7 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new instance of <see cref="SubscriberQos" />.
+			/// Creates a new instance of <see cref="TopicQos" />.
 			/// </summary>
 			TopicQos();			
 

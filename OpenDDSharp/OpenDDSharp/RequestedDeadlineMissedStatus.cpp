@@ -14,7 +14,7 @@ System::Int32 OpenDDSharp::DDS::RequestedDeadlineMissedStatus::TotalCountChange:
 	return total_count_change;
 };
 
-System::Int32 OpenDDSharp::DDS::RequestedDeadlineMissedStatus::LastInstanceHandle::get() {
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::RequestedDeadlineMissedStatus::LastInstanceHandle::get() {
 	return last_instance_handle;
 };
 

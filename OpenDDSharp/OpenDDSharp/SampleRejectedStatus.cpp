@@ -19,7 +19,7 @@ OpenDDSharp::DDS::SampleRejectedStatusKind OpenDDSharp::DDS::SampleRejectedStatu
 	return last_reason;
 };
 
-System::Int32 OpenDDSharp::DDS::SampleRejectedStatus::LastInstanceHandle::get() {
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::SampleRejectedStatus::LastInstanceHandle::get() {
 	return last_instance_handle;
 };
 

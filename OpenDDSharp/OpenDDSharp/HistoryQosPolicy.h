@@ -10,13 +10,15 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		ref class Entity;
+
 		/// <summary>
 		/// This policy controls the behavior of DDS when the value of an instance changes before it is finally communicated to some of its existing <see cref="DataReader" /> entities.
 		/// </summary>
 		/// <remarks>
 		/// <para>This policy defaults to a "keep last" with a depth of one.</para>
 		/// <para>The setting of History Depth must be consistent with the ResourceLimits MaxSamplesPerInstance. 
-		/// For these two QoS to be consistent, they must verify that Depth <= MaxSamplesPerInstance.</para>
+		/// For these two QoS to be consistent, they must verify that Depth &lt;= MaxSamplesPerInstance.</para>
 		/// <remarks>
 		public ref class HistoryQosPolicy {
 

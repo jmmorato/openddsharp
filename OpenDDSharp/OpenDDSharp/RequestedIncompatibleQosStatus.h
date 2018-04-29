@@ -15,6 +15,9 @@ using namespace System::Collections::Generic;
 namespace OpenDDSharp {
 	namespace DDS {
 
+		/// <summary>
+		/// The RequestedIncompatibleQos status indicates that one or more QoS policy values that were requested were incompatible with what was offered.
+		/// </summary>
 		public value struct RequestedIncompatibleQosStatus {
 
 		private:
@@ -24,18 +27,30 @@ namespace OpenDDSharp {
 			IEnumerable<OpenDDSharp::DDS::QosPolicyCount^>^ policies;
 
 		public:
+			/// <summary>
+			/// Gets the cumulative count of times data writers with incompatible QoS have been reported.
+			/// </summary>
 			property System::Int32 TotalCount {
 				System::Int32 get();
 			};
 
+			/// <summary>
+			/// Gets the incremental count of incompatible data writers since the last time this status was accessed.
+			/// </summary>
 			property System::Int32 TotalCountChange {
 				System::Int32 get();
 			};
 
+			/// <summary>
+			/// Gets one of the QoS policies that was incompatible in the last incompatibility detected.
+			/// </summary>
 			property System::Int32 LastPolicyId {
 				System::Int32 get();
 			};
 
+			/// <summary>
+			/// Gets the sequence of values that indicates the total number of incompatibilities that have been detected for each QoS policy.
+			/// </summary>
 			property IEnumerable<OpenDDSharp::DDS::QosPolicyCount^>^ Policies {
 				IEnumerable<OpenDDSharp::DDS::QosPolicyCount^>^ get();
 			};

@@ -17,12 +17,21 @@ using namespace System::Collections::Generic;
 namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DCPS {
+
+			ref class DataReader;
+
+			/// <summary>
+			/// The PublicationLost status indicates that a <see cref="DataReader" /> has been lost.
+			/// </summary>
 			public value struct PublicationLostStatus {
 
 			private:
 				IEnumerable<OpenDDSharp::DDS::InstanceHandle>^ subscription_handles;
 
 			public:
+				/// <summary>
+				/// Gets the sequence of lost subscription handles.
+				/// </summary>
 				property IEnumerable<OpenDDSharp::DDS::InstanceHandle>^ SubscriptionHandles {
 					IEnumerable<OpenDDSharp::DDS::InstanceHandle>^ get();
 				};

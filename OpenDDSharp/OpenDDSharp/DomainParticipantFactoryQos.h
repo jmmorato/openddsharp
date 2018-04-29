@@ -10,6 +10,8 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		ref class DomainParticipantFactory;
+
 		/// <summary>
 		/// Holds the <see cref="DomainParticipantFactory" /> Quality of Service policies.
 		/// </summary>

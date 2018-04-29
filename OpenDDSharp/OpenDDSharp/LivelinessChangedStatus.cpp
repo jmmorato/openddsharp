@@ -24,7 +24,7 @@ System::Int32 OpenDDSharp::DDS::LivelinessChangedStatus::NotAliveCountChange::ge
 	return not_alive_count_change;
 };
 
-System::Int32 OpenDDSharp::DDS::LivelinessChangedStatus::LastPublicationHandle::get() {
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::LivelinessChangedStatus::LastPublicationHandle::get() {
 	return last_publication_handle;
 };
 

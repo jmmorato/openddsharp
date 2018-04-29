@@ -1,7 +1,7 @@
 #include "SubscriptionLostStatus.h"
 
 OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus::SubscriptionLostStatus(::OpenDDS::DCPS::SubscriptionLostStatus status) {
-	List<System::Int32>^ list = gcnew List<System::Int32>();
+	List<OpenDDSharp::DDS::InstanceHandle>^ list = gcnew List<OpenDDSharp::DDS::InstanceHandle>();
 	int length = status.publication_handles.length();
 	int i = 0;
 	while (i < length) {
@@ -12,6 +12,6 @@ OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus::SubscriptionLostStatus(::Ope
 	publication_handles = list;
 };
 
-IEnumerable<System::Int32>^OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus::PublicationHandles::get() {
+IEnumerable<OpenDDSharp::DDS::InstanceHandle>^OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus::PublicationHandles::get() {
 	return publication_handles;
 };

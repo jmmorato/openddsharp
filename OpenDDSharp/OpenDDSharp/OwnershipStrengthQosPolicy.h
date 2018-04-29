@@ -9,8 +9,10 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		ref class DataWriter;
+
 		/// <summary>
-		/// This QoS policy should be used in combination with the OWNERSHIP policy. It only applies to the situation case where
+		/// This QoS policy should be used in combination with the Ownership policy. It only applies to the situation case where
 		/// ownership kind is set to Exclusive.
 		/// </summary>
 		public ref class OwnershipStrengthQosPolicy {

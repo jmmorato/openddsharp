@@ -8,6 +8,9 @@ namespace OpenDDSharp {
 	namespace DDS {
 
 		ref class OwnershipQosPolicy;
+		ref class Topic;
+		ref class DataWriter;
+		ref class DataReader;
 
 		/// <summary>
 		/// This enumeration defines the valid kinds of the <see cref="OwnershipQosPolicy" /> Kind.

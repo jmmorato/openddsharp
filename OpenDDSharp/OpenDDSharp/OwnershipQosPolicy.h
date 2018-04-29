@@ -9,6 +9,8 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		ref class Entity;
+
 		/// <summary>
 		/// This policy controls whether DDS allows multiple <see cref="DataWriter" /> objects to update the same instance (identified by Topic + key) of a data-object.
 		/// </summary>

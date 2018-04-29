@@ -14,6 +14,6 @@ System::Int32 OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus::TotalCountChange
 	return total_count_change;
 };
 
-System::Int32 OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus::LastInstanceHandle::get() {
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus::LastInstanceHandle::get() {
 	return last_instance_handle;
 };
