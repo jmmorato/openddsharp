@@ -16,6 +16,9 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		/// <summary>
+		/// Holds the <see cref="DataReader" /> Quality of Service policies.
+		/// </summary>
 		public ref class DataReaderQos {
 
 		private:
@@ -33,55 +36,94 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy^ reader_data_lifecycle;
 
 		public:
+			/// <summary>
+			/// Gets the durability QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::DurabilityQosPolicy^ Durability {
 				OpenDDSharp::DDS::DurabilityQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the deadline QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::DeadlineQosPolicy^ Deadline {
 				OpenDDSharp::DDS::DeadlineQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the latency budget QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::LatencyBudgetQosPolicy^ LatencyBudget {
 				OpenDDSharp::DDS::LatencyBudgetQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the liveliness QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::LivelinessQosPolicy^ Liveliness {
 				OpenDDSharp::DDS::LivelinessQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the reliability QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::ReliabilityQosPolicy^ Reliability {
 				OpenDDSharp::DDS::ReliabilityQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the destination order QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::DestinationOrderQosPolicy^ DestinationOrder {
 				OpenDDSharp::DDS::DestinationOrderQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the history QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::HistoryQosPolicy^ History {
 				OpenDDSharp::DDS::HistoryQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the resource limits QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::ResourceLimitsQosPolicy^ ResourceLimits {
 				OpenDDSharp::DDS::ResourceLimitsQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the user data QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::UserDataQosPolicy^ UserData {
 				OpenDDSharp::DDS::UserDataQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the ownership QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::OwnershipQosPolicy^ Ownership {
 				OpenDDSharp::DDS::OwnershipQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the time based filter QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::TimeBasedFilterQosPolicy^ TimeBasedFilter {
 				OpenDDSharp::DDS::TimeBasedFilterQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the reader data lifecycle QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy^ ReaderDataLifecycle {
 				OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy^ get();
 			};	
 
 		public:
+			/// <summary>
+			/// Creates a new instance of <see cref="DataReaderQos" />.
+			/// </summary>
 			DataReaderQos();			
 
 		internal:

@@ -10,17 +10,26 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		/// <summary>
+		/// Holds the <see cref="DomainParticipantFactory" /> Quality of Service policies.
+		/// </summary>
 		public ref class DomainParticipantFactoryQos {
 
 		private:			
 			OpenDDSharp::DDS::EntityFactoryQosPolicy^ entity_factory;
 
 		public:
+			/// <summary>
+			/// Gets the entity factory QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::EntityFactoryQosPolicy^ EntityFactory {
 				OpenDDSharp::DDS::EntityFactoryQosPolicy^ get();
 			};
 
 		public:
+			/// <summary>
+			/// Creates a new instance of <see cref="DomainParticipantFactoryQos" />.
+			/// </summary>
 			DomainParticipantFactoryQos();
 
 		internal:

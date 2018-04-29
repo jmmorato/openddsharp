@@ -8,6 +8,9 @@
 namespace OpenDDSharp {
 	namespace DDS {
 
+		/// <summary>
+		/// Holds the <see cref="Publisher" /> Quality of Service policies.
+		/// </summary>
 		public ref class PublisherQos {
 
 		private:
@@ -17,23 +20,38 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::EntityFactoryQosPolicy^ entity_factory;
 
 		public:			
+			/// <summary>
+			/// Gets the presentation QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::PresentationQosPolicy^ Presentation {
 				OpenDDSharp::DDS::PresentationQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the partition QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::PartitionQosPolicy^ Partition {
 				OpenDDSharp::DDS::PartitionQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the group data QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::GroupDataQosPolicy^ GroupData {
 				OpenDDSharp::DDS::GroupDataQosPolicy^ get();
 			};
 
+			/// <summary>
+			/// Gets the entity factory QoS policy.
+			/// </summary>
 			property OpenDDSharp::DDS::EntityFactoryQosPolicy^ EntityFactory {
 				OpenDDSharp::DDS::EntityFactoryQosPolicy^ get();
 			};
 
 		public:
+			/// <summary>
+			/// Creates a new instance of <see cref="PublisherQos" />.
+			/// </summary>
 			PublisherQos();						
 
 		internal:
