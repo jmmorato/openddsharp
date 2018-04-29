@@ -6,13 +6,35 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+		
+		ref class Entity;
+		ref class DomainParticipant;
+		ref class Publisher;
+		ref class Subscriber;
+		ref class Topic;
+		ref class DataWriter;
+		ref class DataReader;
 
+		/// <summary>
+		/// This policy controls the behavior of the <see cref="Entity" /> as a factory for other entities.
+		/// </summary>
+		/// <remarks>
+		/// <para>This policy concerns only <see cref="DomainParticipant" /> (as factory for <see cref="Publisher" />, <see cref="Subscriber" />, and <see cref="Topic" />), 
+		/// <see cref="Publisher" /> (as factory for <see cref="DataWriter" />), and <see cref="Subscriber" /> (as factory for <see cref="DataReader" />).</para>
+		/// <para>This policy is mutable. A change in the policy affects only the entities created after the change; not the previously created entities.</para>
+		/// </remarks>
 		public ref class EntityFactoryQosPolicy {
 
 		private:
 			::System::Boolean autoenable_created_entities;
 
 		public:
+			/// <summary>
+			/// Gets or sets the value for the autoenable created entities.
+			/// A value equals <see langword="true" /> indicates that the factory create operation will automatically invoke the enable operation each time a new <see cref="Entity" /> is created.
+			/// A value equals <see langword="false" /> indicates that the <see cref="Entity" /> will not be automatically enabled. The application will need to enable it explicitly by means of the enable operation.
+			/// The default value for this property is <see langword="true" />
+			/// </summary>
 			property System::Boolean AutoenableCreatedEntities {
 				System::Boolean get();
 				void set(System::Boolean value);

@@ -6,8 +6,24 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+
+		ref class HistoryQosPolicy;
+
+		/// <summary>
+		/// This enumeration defines the valid kinds of the <see cref="HistoryQosPolicy" /> Kind.
+		/// </summary>
 		public enum class HistoryQosPolicyKind : System::Int32 {
+			/// <summary>
+			/// Specifies that only the last depth values should be kept. When a data writer contains depth samples of a given instance, a write of
+			/// new samples for that instance are queued for delivery and the oldest unsent samples are discarded. When a data reader contains depth samples of a given instance, 
+			/// any incoming samples for that instance are kept and the oldest samples are discarded.
+			/// </summary>
 			KeepLastHistoryQos = ::DDS::KEEP_LAST_HISTORY_QOS,
+
+			/// <summary>
+			/// specifies that all possible samples for that instance should be kept. When "keep all" is specified and the number of unread samples is
+			/// equal to the "resource limits" property of MaxSamplesPerInstance then any incoming samples are rejected.
+			/// </summary>
 			KeepAllHistoryQos = ::DDS::KEEP_ALL_HISTORY_QOS
 		};
 	};
