@@ -190,7 +190,7 @@ namespace OpenDDSharp {
 
 			public:
 				/// <summary>
-				/// Creates a new instance of the <see cref="DataReaderListener" />
+				/// Creates a new instance of <see cref="DataReaderListener" />
 				/// </summary>
 				DataReaderListener();
 

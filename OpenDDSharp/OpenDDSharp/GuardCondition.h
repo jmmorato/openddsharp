@@ -39,7 +39,7 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new instance of the <see cref="GuardCondition" />
+			/// Creates a new instance of <see cref="GuardCondition" />
 			/// </summary>
 			GuardCondition();
 

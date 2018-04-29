@@ -37,7 +37,7 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new instance of the <see cref="WaitSet" />
+			/// Creates a new instance of <see cref="WaitSet" />
 			/// </summary>
 			WaitSet();
 

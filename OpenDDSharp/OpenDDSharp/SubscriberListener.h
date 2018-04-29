@@ -35,7 +35,7 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new instance of the <see cref="SubscriberListener" />
+			/// Creates a new instance of <see cref="SubscriberListener" />
 			/// </summary>
 			SubscriberListener();
 

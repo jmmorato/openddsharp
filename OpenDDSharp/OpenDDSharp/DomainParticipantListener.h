@@ -320,7 +320,7 @@ namespace OpenDDSharp {
 
 			public:
 				/// <summary>
-				/// Creates a new instance of the <see cref="DomainParticipantListener" />
+				/// Creates a new instance of <see cref="DomainParticipantListener" />
 				/// </summary>
 				DomainParticipantListener();
 

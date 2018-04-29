@@ -8,7 +8,8 @@
 #include "UserDataQosPolicy.h"
 
 namespace OpenDDSharp {
-	namespace DDS {		
+	namespace DDS {
+
 		public value struct ParticipantBuiltinTopicData {
 
 		private:

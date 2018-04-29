@@ -17,7 +17,7 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new instance of the <see cref="PublisherListener" />
+			/// Creates a new instance of <see cref="PublisherListener" />
 			/// </summary>
 			PublisherListener();
 

@@ -135,7 +135,7 @@ namespace OpenDDSharp {
 
 			public:
 				/// <summary>
-				/// Creates a new instance of the <see cref="DataWriterListener" />
+				/// Creates a new instance of <see cref="DataWriterListener" />
 				/// </summary>
 				DataWriterListener();
 
