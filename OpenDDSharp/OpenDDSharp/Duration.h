@@ -13,7 +13,7 @@ namespace OpenDDSharp {
 			static const System::Int32 DurationInfiniteSec = ::DDS::DURATION_INFINITE_SEC;
 			static const System::UInt32 DurationInfiniteNsec = ::DDS::DURATION_INFINITE_NSEC;
 			static const System::Int32 DurationZeroSec = ::DDS::DURATION_ZERO_SEC;
-			static const System::UInt32 DurationZeraoNsec = ::DDS::DURATION_ZERO_NSEC;
+			static const System::UInt32 DurationZeroNsec = ::DDS::DURATION_ZERO_NSEC;
 
 		private:
 			System::Int32 sec;
