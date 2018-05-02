@@ -2,6 +2,8 @@
 
 OpenDDSharp::DDS::ReliabilityQosPolicy::ReliabilityQosPolicy() {
 	kind = OpenDDSharp::DDS::ReliabilityQosPolicyKind::BestEffortReliabilityQos;
+	max_blocking_time.Seconds = Duration::DurationInfiniteSec;
+	max_blocking_time.NanoSeconds = Duration::DurationInfiniteNsec;
 };
 
 OpenDDSharp::DDS::ReliabilityQosPolicyKind OpenDDSharp::DDS::ReliabilityQosPolicy::Kind::get() {
