@@ -2,7 +2,7 @@
 
 ::OpenDDSharp::DDS::TimeBasedFilterQosPolicy::TimeBasedFilterQosPolicy() {
 	minimum_separation.Seconds = OpenDDSharp::DDS::Duration::DurationZeroSec;
-	minimum_separation.NanoSeconds = OpenDDSharp::DDS::Duration::DurationZeraoNsec;
+	minimum_separation.NanoSeconds = OpenDDSharp::DDS::Duration::DurationZeroNsec;
 };
 
 ::OpenDDSharp::DDS::Duration OpenDDSharp::DDS::TimeBasedFilterQosPolicy::MinimumSeparation::get() {
