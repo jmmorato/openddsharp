@@ -6,10 +6,23 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+
+		value struct InstanceStateKind;
+		 
+		/// <summary>
+		/// Represent a bit-mask of <see cref="InstanceStateKind" />
+		/// </summary>
 		public value struct InstanceStateMask {
 
-		public:			
+		public:
+			/// <summary>
+			/// A mask containing any <see cref="InstanceStateKind" />
+			/// </summary>
 			static const InstanceStateMask AnyInstanceState = ::DDS::ANY_INSTANCE_STATE;
+
+			/// <summary>
+			/// A mask containing not alive <see cref="InstanceStateKind" /> (i.e. NotAliveDisposedInstanceState and NotAliveNoWritersInstanceState)
+			/// </summary>
 			static const InstanceStateMask NotAliveInstanceState = ::DDS::NOT_ALIVE_INSTANCE_STATE;
 
 		private:

@@ -6,9 +6,18 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+		
+		value struct  ViewStateKind;
+
+		/// <summary>
+		/// Represent a bit-mask of <see cref="ViewStateKind" />
+		/// </summary>
 		public value struct ViewStateMask {
 
 		public:
+			/// <summary>
+			/// A mask containing any <see cref="ViewStateKind" />
+			/// </summary>
 			static const ViewStateMask AnyViewState = ::DDS::ANY_VIEW_STATE;
 
 		private:

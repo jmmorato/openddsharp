@@ -8,10 +8,21 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+
+		/// <summary>
+		/// Indicates whether or not a sample has ever been read.
+		/// </summary>
 		public value struct SampleStateKind {
 
 		public:
+			/// <summary>
+			/// Sample has been read. 
+			/// </summary>
 			static const SampleStateKind ReadSampleState = ::DDS::READ_SAMPLE_STATE;
+
+			/// <summary>
+			/// Sample has not been read.
+			/// </summary>
 			static const SampleStateKind NotReadSampleState = ::DDS::NOT_READ_SAMPLE_STATE;			
 
 		private:

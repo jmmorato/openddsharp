@@ -23,7 +23,11 @@
 
 namespace OpenDDSharp {
 	namespace OpenDDS {
-		namespace DCPS {		
+		namespace DCPS {
+
+			/// <summary>
+			/// Singleton object to obtain the <see cref="OpenDDSharp::DDS::DomainParticipantFactory" />.
+			/// </summary>
 			public ref class ParticipantService {
 
 			private:
@@ -31,14 +35,35 @@ namespace OpenDDSharp {
 				::OpenDDS::DCPS::Service_Participant* impl_entity;
 
 			public:
+				/// <summary>
+				/// Gets the singleton instance
+				/// </summary>
 				static property ParticipantService^ Instance { ParticipantService^ get(); }
 
 			private:
 				ParticipantService();
 		
 			public:
+				/// <summary>
+				/// Initialize the DDS client environment and get the <see cref="OpenDDSharp::DDS::DomainParticipantFactory" />.
+				/// </summary>
+				/// <returns> The <see cref="OpenDDSharp::DDS::DomainParticipantFactory" />.</returns>
 				OpenDDSharp::DDS::DomainParticipantFactory^ GetDomainParticipantFactory();
+
+				/// <summary>
+				/// Initialize the DDS client environment and get the <see cref="OpenDDSharp::DDS::DomainParticipantFactory" />.
+				/// This method consumes -DCPS* and -ORB* options and their arguments.
+				/// </summary>
+				/// <param name="argv">The array of parameters to be consumed (i.e. -DCPS* and -ORB* options).</param>
+				/// <returns> The <see cref="OpenDDSharp::DDS::DomainParticipantFactory" />.</returns>
 				OpenDDSharp::DDS::DomainParticipantFactory^ GetDomainParticipantFactory(array<System::String^>^ argv);
+
+				/// <summary>
+				/// Stop being a participant in the service.
+				/// </summary>
+				/// </remarks>
+				/// Required Precondition: All DomainParticipants have been deleted.
+				/// </remarks>
 				void Shutdown();
 			};
 		};

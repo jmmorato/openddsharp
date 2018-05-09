@@ -8,10 +8,21 @@
 
 namespace OpenDDSharp {
 	namespace DDS {
+
+		/// <summary>
+		/// Indicates whether or not an instance is new.
+		/// </summary>
 		public value struct ViewStateKind {
 
 		public:
+			/// <summary>
+			/// New instance.
+			/// </summary>
 			static const ViewStateKind NewViewState = ::DDS::NEW_VIEW_STATE;
+
+			/// <summary>
+			/// Not a new instance.
+			/// </summary>
 			static const ViewStateKind NotNewViewState = ::DDS::NOT_NEW_VIEW_STATE;
 
 		private:
