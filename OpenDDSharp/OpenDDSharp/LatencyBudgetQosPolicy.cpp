@@ -1,8 +1,8 @@
 #include "LatencyBudgetQosPolicy.h"
 
 ::OpenDDSharp::DDS::LatencyBudgetQosPolicy::LatencyBudgetQosPolicy() {
-	duration.Seconds = OpenDDSharp::DDS::Duration::DurationZeroSec;
-	duration.NanoSeconds = OpenDDSharp::DDS::Duration::DurationZeroNsec;
+	duration.Seconds = OpenDDSharp::DDS::Duration::ZeroSeconds;
+	duration.NanoSeconds = OpenDDSharp::DDS::Duration::ZeroNanoseconds;
 };
 
 ::OpenDDSharp::DDS::Duration OpenDDSharp::DDS::LatencyBudgetQosPolicy::Duration::get() {

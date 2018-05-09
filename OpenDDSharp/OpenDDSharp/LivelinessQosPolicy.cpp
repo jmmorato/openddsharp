@@ -2,8 +2,8 @@
 
 ::OpenDDSharp::DDS::LivelinessQosPolicy::LivelinessQosPolicy() {
 	kind = OpenDDSharp::DDS::LivelinessQosPolicyKind::AutomaticLivelinessQos;	
-	lease_duration.Seconds = OpenDDSharp::DDS::Duration::DurationInfiniteSec;
-	lease_duration.NanoSeconds = OpenDDSharp::DDS::Duration::DurationInfiniteNsec;
+	lease_duration.Seconds = OpenDDSharp::DDS::Duration::InfiniteSeconds;
+	lease_duration.NanoSeconds = OpenDDSharp::DDS::Duration::InfiniteNanoseconds;
 };
 
 ::OpenDDSharp::DDS::LivelinessQosPolicyKind OpenDDSharp::DDS::LivelinessQosPolicy::Kind::get() {

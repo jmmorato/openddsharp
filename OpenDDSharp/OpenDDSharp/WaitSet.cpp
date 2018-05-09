@@ -9,8 +9,8 @@ OpenDDSharp::DDS::WaitSet::WaitSet(::DDS::WaitSet_ptr waitSet) {
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::Wait(ICollection<Condition^>^ activeConditions) {
 	Duration duration;
-	duration.Seconds = duration.DurationInfiniteSec;
-	duration.NanoSeconds = duration.DurationInfiniteNsec;
+	duration.Seconds = duration.InfiniteSeconds;
+	duration.NanoSeconds = duration.InfiniteNanoseconds;
 
 	return OpenDDSharp::DDS::WaitSet::Wait(activeConditions, duration);
 }

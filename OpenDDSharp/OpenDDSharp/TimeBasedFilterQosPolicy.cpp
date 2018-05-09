@@ -1,8 +1,8 @@
 #include "TimeBasedFilterQosPolicy.h"
 
 ::OpenDDSharp::DDS::TimeBasedFilterQosPolicy::TimeBasedFilterQosPolicy() {
-	minimum_separation.Seconds = OpenDDSharp::DDS::Duration::DurationZeroSec;
-	minimum_separation.NanoSeconds = OpenDDSharp::DDS::Duration::DurationZeroNsec;
+	minimum_separation.Seconds = OpenDDSharp::DDS::Duration::ZeroSeconds;
+	minimum_separation.NanoSeconds = OpenDDSharp::DDS::Duration::ZeroNanoseconds;
 };
 
 ::OpenDDSharp::DDS::Duration OpenDDSharp::DDS::TimeBasedFilterQosPolicy::MinimumSeparation::get() {

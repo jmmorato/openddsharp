@@ -1,8 +1,8 @@
 #include "LifespanQosPolicy.h"
 
 OpenDDSharp::DDS::LifespanQosPolicy::LifespanQosPolicy() {		
-	duration.Seconds = OpenDDSharp::DDS::Duration::DurationInfiniteSec;
-	duration.NanoSeconds = OpenDDSharp::DDS::Duration::DurationInfiniteNsec;
+	duration.Seconds = OpenDDSharp::DDS::Duration::InfiniteSeconds;
+	duration.NanoSeconds = OpenDDSharp::DDS::Duration::InfiniteNanoseconds;
 };
 
 ::OpenDDSharp::DDS::Duration OpenDDSharp::DDS::LifespanQosPolicy::Duration::get() {

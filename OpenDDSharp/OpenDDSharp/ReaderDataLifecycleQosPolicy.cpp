@@ -1,11 +1,11 @@
 #include "ReaderDataLifecycleQosPolicy.h"
 
 ::OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy::ReaderDataLifecycleQosPolicy() {
-	autopurge_nowriter_samples_delay.Seconds = OpenDDSharp::DDS::Duration::DurationInfiniteSec;
-	autopurge_nowriter_samples_delay.NanoSeconds = OpenDDSharp::DDS::Duration::DurationInfiniteNsec;
+	autopurge_nowriter_samples_delay.Seconds = OpenDDSharp::DDS::Duration::InfiniteSeconds;
+	autopurge_nowriter_samples_delay.NanoSeconds = OpenDDSharp::DDS::Duration::InfiniteNanoseconds;
 
-	autopurge_disposed_samples_delay.Seconds = OpenDDSharp::DDS::Duration::DurationInfiniteSec;
-	autopurge_disposed_samples_delay.NanoSeconds = OpenDDSharp::DDS::Duration::DurationInfiniteNsec;
+	autopurge_disposed_samples_delay.Seconds = OpenDDSharp::DDS::Duration::InfiniteSeconds;
+	autopurge_disposed_samples_delay.NanoSeconds = OpenDDSharp::DDS::Duration::InfiniteNanoseconds;
 };
 
 ::OpenDDSharp::DDS::Duration OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy::AutopurgeNowriterSamplesDelay::get() {

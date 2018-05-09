@@ -7,15 +7,15 @@ System::Boolean OpenDDSharp::DDS::SampleInfo::ValidData::get() {
 	return valid_data;
 };
 
-System::UInt32 OpenDDSharp::DDS::SampleInfo::SampleState::get() {
+OpenDDSharp::DDS::SampleStateKind OpenDDSharp::DDS::SampleInfo::SampleState::get() {
 	return sample_state;
 };
 
-System::UInt32 OpenDDSharp::DDS::SampleInfo::ViewState::get() {
+OpenDDSharp::DDS::ViewStateKind OpenDDSharp::DDS::SampleInfo::ViewState::get() {
 	return view_state;
 };
 
-System::UInt32 OpenDDSharp::DDS::SampleInfo::InstanceState::get() {
+OpenDDSharp::DDS::InstanceStateKind OpenDDSharp::DDS::SampleInfo::InstanceState::get() {
 	return instance_state;
 };
 
@@ -23,11 +23,11 @@ OpenDDSharp::DDS::Timestamp OpenDDSharp::DDS::SampleInfo::SourceTimestamp::get()
 	return source_timestamp;
 };
 
-System::Int32 OpenDDSharp::DDS::SampleInfo::InstanceHandle::get() {
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::SampleInfo::InstanceHandle::get() {
 	return instance_handle;
 };
 
-System::Int32 OpenDDSharp::DDS::SampleInfo::PublicationHandle::get() {
+OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::SampleInfo::PublicationHandle::get() {
 	return publication_handle;
 };
 

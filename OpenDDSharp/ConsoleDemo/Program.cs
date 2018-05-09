@@ -82,7 +82,7 @@ namespace ConsoleDemo
                         ICollection<Condition> conditions = new List<Condition>();
                         Duration duration = new Duration
                         {
-                            Seconds = Duration.DurationInfiniteSec
+                            Seconds = Duration.InfiniteSeconds
                         };
                         waitSet.Wait(conditions, duration);
 

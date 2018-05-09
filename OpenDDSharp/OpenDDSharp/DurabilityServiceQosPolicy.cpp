@@ -1,8 +1,8 @@
 #include "DurabilityServiceQosPolicy.h"
 
 ::OpenDDSharp::DDS::DurabilityServiceQosPolicy::DurabilityServiceQosPolicy() {	
-	service_cleanup_delay.Seconds = OpenDDSharp::DDS::Duration::DurationZeroSec;
-	service_cleanup_delay.NanoSeconds = OpenDDSharp::DDS::Duration::DurationZeroSec;
+	service_cleanup_delay.Seconds = OpenDDSharp::DDS::Duration::ZeroSeconds;
+	service_cleanup_delay.NanoSeconds = OpenDDSharp::DDS::Duration::ZeroSeconds;
 	history_kind = OpenDDSharp::DDS::HistoryQosPolicyKind::KeepLastHistoryQos;
 	history_depth = 1;
 	max_samples = OpenDDSharp::DDS::ResourceLimitsQosPolicy::LengthUnlimited;

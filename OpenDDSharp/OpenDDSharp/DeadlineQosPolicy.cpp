@@ -1,8 +1,8 @@
 #include "DeadlineQosPolicy.h"
 
 ::OpenDDSharp::DDS::DeadlineQosPolicy::DeadlineQosPolicy() {
-	period.Seconds = OpenDDSharp::DDS::Duration::DurationInfiniteSec;
-	period.NanoSeconds = OpenDDSharp::DDS::Duration::DurationInfiniteNsec;
+	period.Seconds = OpenDDSharp::DDS::Duration::InfiniteSeconds;
+	period.NanoSeconds = OpenDDSharp::DDS::Duration::InfiniteNanoseconds;
 };
 
 ::OpenDDSharp::DDS::Duration OpenDDSharp::DDS::DeadlineQosPolicy::Period::get() {
