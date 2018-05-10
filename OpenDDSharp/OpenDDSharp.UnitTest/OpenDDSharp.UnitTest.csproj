@@ -79,6 +79,10 @@
       <Project>{1aadf375-9149-4000-82ab-af4cd15144da}</Project>
       <Name>OpenDDSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestIdl\TestIdl.vcxproj">
+      <Project>{a2b3a918-e652-41b0-ac1b-121e51360497}</Project>
+      <Name>TestIdl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
