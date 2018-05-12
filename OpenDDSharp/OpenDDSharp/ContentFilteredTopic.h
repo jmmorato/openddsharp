@@ -24,10 +24,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma managed
 
 #include "TopicDescription.h"
-#include "DomainParticipant.h"
 
 #include <vcclr.h>
 #include <msclr/marshal.h>
+
+#using <System.Core.dll>
+#using <System.Linq.dll>
+
+using namespace System::Linq;
+using namespace System::Collections::Generic;
 
 namespace OpenDDSharp {
 	namespace DDS {
@@ -77,7 +82,7 @@ namespace OpenDDSharp {
 			///	specified when the <see cref="ContentFilteredTopic" /> was created.
 			/// </summary>
 			/// <param name="params">The expression parameters list to be filled up.</param>
-			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			/// <returns>The <see cref="OpenDDSharp::DDS::ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetExpressionParameters(IList<System::String^>^ params);
 
 			/// <summary>

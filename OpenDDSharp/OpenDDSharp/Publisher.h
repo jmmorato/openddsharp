@@ -35,25 +35,23 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <vcclr.h>
 #include <msclr/marshal.h>
 
-namespace OpenDDSharp {
+namespace OpenDDSharp {	
 	namespace DDS {
 
 		ref class PublisherListener;
 		ref class DomainParticipant;
-		ref class DataWriterListener;
 
 		/// <summary>
 		/// A Publisher is the object responsible for the actual dissemination of publications.
 		/// </summary>
 		/// <remarks>
-		/// <para>The Publisher acts on the behalf of one or several <see cref="DataWriter" /> objects that belong to it. When it is informed of a change to the
-		/// data associated with one of its <see cref="DataWriter" /> objects, it decides when it is appropriate to actually send the data-update message.
+		/// <para>The Publisher acts on the behalf of one or several <see cref="OpenDDSharp::DDS::DataWriter" /> objects that belong to it. When it is informed of a change to the
+		/// data associated with one of its <see cref="OpenDDSharp::DDS::DataWriter" /> objects, it decides when it is appropriate to actually send the data-update message.
 		/// In making this decision, it considers any extra information that goes with the data(timestamp, writer, etc.) as well as the QoS
-		///	of the Publisher and the <see cref="DataWriter" />.</para>
-		/// <para>All operations except for the operations <see cref="Publisher::SetQos" />, <see cref="Publisher::GetQos" />, <see cref="Publisher::SetListener" />,
-		/// <see cref="Publisher::GetListener" />, <see cref="Entity::Enable" />, <see cref="Entity::GetStatusCondition" />, CreateDataWriter,
-		/// and <see cref="Entity::DeleteDataWriter" /> return the value <see cref="ReturnCode::NotEnabled" /> if the Publisher has not been enabled yet.</para>
-		/// <remarks>
+		///	of the Publisher and the <see cref="OpenDDSharp::DDS::DataWriter" />.</para>
+		/// <para>All operations except for the operations SetQos, Publisher::GetQos, SetListener,GetListener, Enable, GetStatusCondition, 
+		/// CreateDataWriter, and DeleteDataWriter return the value <see cref="ReturnCode::NotEnabled" /> if the Publisher has not been enabled yet.</para>
+		/// </remarks>
 		public ref class Publisher : public OpenDDSharp::DDS::Entity {
 
 		internal:
@@ -100,22 +98,22 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::DataWriter^ CreateDataWriter(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::DataWriterQos^ qos);
 
 			/// <summary>
-			/// Creates a new <see cref="DataWriter" /> with the default QoS policies and attaches to it the specified <see cref="DataWriterListener" />.
-			/// The specified <see cref="DataWriterListener" /> will be attached with the default <see cref="StatusMask" />. 
+			/// Creates a new <see cref="OpenDDSharp::DDS::DataWriter" /> with the default QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" />.
+			/// The specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" /> will be attached with the default <see cref="StatusMask" />. 
 			/// </summary>
 			/// <remarks>
-			/// <para>The created <see cref="DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
+			/// <para>The created <see cref="OpenDDSharp::DDS::DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
 			/// <para>The <see cref="Topic" /> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to create this
 			/// <see cref="Publisher" />. If the <see cref="Topic" /> was created from a different <see cref="DomainParticipant" />, 
 			/// the operation will fail and return a <see langword="null"/> result.</para>
 			/// </remarks>
-			/// <param name="topic">The <see cref="Topic" /> that the <see cref="DataWriter" /> will be associated with.</param>
-			/// <param name="listener">The <see cref="DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>
-			/// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
+			/// <param name="topic">The <see cref="Topic" /> that the <see cref="OpenDDSharp::DDS::DataWriter" /> will be associated with.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" /> to be attached to the newly created <see cref="OpenDDSharp::DDS::DataWriter" />.</param>
+			/// <returns>The newly created <see cref="OpenDDSharp::DDS::DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataWriter^ CreateDataWriter(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::OpenDDS::DCPS::DataWriterListener^ listener);
 
 			/// <summary>
-			/// Creates a new <see cref="DataWriter" /> with the default QoS policies and attaches to it the specified <see cref="DataWriterListener" />.			
+			/// Creates a new <see cref="DataWriter" /> with the default QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" />.			
 			/// </summary>
 			/// <remarks>
 			/// <para>The created <see cref="DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
@@ -124,14 +122,14 @@ namespace OpenDDSharp {
 			/// the operation will fail and return a <see langword="null"/> result.</para>
 			/// </remarks>
 			/// <param name="topic">The <see cref="Topic" /> that the <see cref="DataWriter" /> will be associated with.</param>
-			/// <param name="listener">The <see cref="DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>
 			/// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataWriter^ CreateDataWriter(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::OpenDDS::DCPS::DataWriterListener^ listener, StatusMask statusMask);
 
 			/// <summary>
-			/// Creates a new <see cref="DataWriter" /> with the desired QoS policies and attaches to it the specified <see cref="DataWriterListener" />.
-			/// The specified <see cref="DataWriterListener" /> will be attached with the default <see cref="StatusMask" />. 
+			/// Creates a new <see cref="DataWriter" /> with the desired QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" />.
+			/// The specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" /> will be attached with the default <see cref="StatusMask" />. 
 			/// </summary>
 			/// <remarks>
 			/// <para>The created <see cref="DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
@@ -141,12 +139,12 @@ namespace OpenDDSharp {
 			/// </remarks>
 			/// <param name="topic">The <see cref="Topic" /> that the <see cref="DataWriter" /> will be associated with.</param>
 			/// <param name="qos">The <see cref="DataWriterQos" /> policies to be used for creating the new <see cref="DataWriter" />.</param>
-			/// <param name="listener">The <see cref="DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>			
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>			
 			/// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataWriter^ CreateDataWriter(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::DataWriterQos^ qos, OpenDDSharp::OpenDDS::DCPS::DataWriterListener^ listener);
 
 			/// <summary>
-			/// Creates a new <see cref="DataWriter" /> with the desired QoS policies and attaches to it the specified <see cref="DataWriterListener" />.			
+			/// Creates a new <see cref="DataWriter" /> with the desired QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" />.			
 			/// </summary>
 			/// <remarks>
 			/// <para>The created <see cref="DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
@@ -156,7 +154,7 @@ namespace OpenDDSharp {
 			/// </remarks>
 			/// <param name="topic">The <see cref="Topic" /> that the <see cref="DataWriter" /> will be associated with.</param>
 			/// <param name="qos">The <see cref="DataWriterQos" /> policies to be used for creating the new <see cref="DataWriter" />.</param>
-			/// <param name="listener">The <see cref="DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>	
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataWriterListener" /> to be attached to the newly created <see cref="DataWriter" />.</param>	
 			/// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataWriter^ CreateDataWriter(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::DataWriterQos^ qos, OpenDDSharp::OpenDDS::DCPS::DataWriterListener^ listener, StatusMask statusMask);
@@ -167,7 +165,7 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// <para>The DeleteDataWriter operation must be called on the same <see cref="Publisher" /> object used to create the <see cref="DataWriter" />. If
 			/// DeleteDataWriter operation is called on a different <see cref="Publisher" />, the operation will have no effect and it will return
-			///	<see cref="ReturnCode::PreconditionNotMet".</para>
+			///	<see cref="ReturnCode::PreconditionNotMet" />.</para>
 			/// <para>The deletion of the <see cref="DataWriter" /> will automatically unregister all instances. Depending on the settings of the
 			/// <see cref="WriterDataLifecycleQosPolicy" />, the deletion of the <see cref="DataWriter" /> may also dispose all instances.</para>
 			/// </remarks>
@@ -301,7 +299,7 @@ namespace OpenDDSharp {
 			/// <see cref="DataWriter" /> entities in the case where the QoS policies are defaulted in the CreateDataWriter operation.
 			/// </summary>
 			/// <remarks>
-			/// The values retrieved by <see cref="GetDefaultDataWriterQos" /> will match the set of values specified on the last successful call to
+			/// The values retrieved by GetDefaultDataWriterQos will match the set of values specified on the last successful call to
 			/// <see cref="SetDefaultDataWriterQos" />, or else, if the call was never made, the default DDS standard values.
 			/// </remarks>
 			/// <param name="qos">The <see cref="DataWriterQos" /> to be filled up.</param>
@@ -311,12 +309,12 @@ namespace OpenDDSharp {
 			/// <summary>
 			/// Sets a default value of the <see cref="DataWriter" /> QoS policies which will be used for newly created <see cref="DataWriter" /> entities in
 			/// the case where the QoS policies are defaulted in the CreateDataWriter operation.
-			/// <summary>
+			/// </summary>
 			/// <remarks>
 			/// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
 			/// return <see cref="ReturnCode::InconsistentPolicy" />.
 			/// </remarks>
-			/// <param name="qos">The default <see cref="DataWriterQos" /> to be set.</param>
+			/// <param name="qos">The default <see cref="OpenDDSharp::DDS::DataWriterQos" /> to be set.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetDefaultDataWriterQos(OpenDDSharp::DDS::DataWriterQos^ qos);
 				

@@ -51,22 +51,43 @@ namespace OpenDDSharp {
 			SampleStateKind(System::UInt32 value);
 
 		public:
-			static operator System::UInt32(SampleStateKind self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="SampleStateKind" /> to <see cref="System::UInt32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::UInt32" /> value.</returns>
+			static operator System::UInt32(SampleStateKind value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::UInt32" /> to <see cref="SampleStateKind" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="SampleStateKind" /> value.</returns>
 			static operator SampleStateKind(System::UInt32 value) {
 				SampleStateKind r(value);
 				return r;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="SampleStateKind" /> to <see cref="SampleStateMask" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="SampleStateMask" /> value.</returns>
 			static operator SampleStateMask(SampleStateKind value) {
 				SampleStateMask r(value);
 				return r;
 			}
 
-			static SampleStateMask operator  | (SampleStateKind a, SampleStateKind b) {
-				return static_cast<SampleStateMask>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+			/// <summary>
+			/// Bit-wise operator.
+			/// </summary>
+			/// <param name="left">The left value of the operator.</param>
+			/// <param name="right">The right value of the operator.</param>
+			/// <returns>The resulting <see cref="SampleStateMask" />.</returns>
+			static SampleStateMask operator | (SampleStateKind left, SampleStateKind right) {
+				return static_cast<SampleStateMask>(static_cast<unsigned int>(left) | static_cast<unsigned int>(right));
 			}
 
 		};

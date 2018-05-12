@@ -31,14 +31,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using namespace System::Linq;
 using namespace System::Collections::Generic;
 
+
+namespace OpenDDSharp {
+	namespace DDS {
+		ref class DataWriter;
+	}
+}
+
 namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DCPS {
 
-			ref class DataWriter;
-
 			/// <summary>
-			/// The SubscriptionLost status indicates that a <see cref="DataWriter" /> has been lost.
+			/// The SubscriptionLost status indicates that a <see cref="OpenDDSharp::DDS::DataWriter" /> has been lost.
 			/// </summary>
 			public value struct SubscriptionLostStatus {
 

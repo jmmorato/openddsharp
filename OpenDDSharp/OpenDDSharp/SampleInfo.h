@@ -153,21 +153,15 @@ namespace OpenDDSharp {
 
 		public:
 			/// <summary>
-			/// Creates a new instance of <see cref="SampleInfo" />
+			/// Creates a new instance of <see cref="OpenDDSharp::DDS::SampleInfo" />
 			/// </summary>
 			SampleInfo();
 
 		public:
-			/// <summary>
-			/// Load the current <see cref="SampleInfo" /> structure from the a native OpenDDS structure.
-			/// Internal use only.
-			/// </summary>
+			/// <exclude />
 			void FromNative(::DDS::SampleInfo native);
 
-			/// <summary>
-			/// Gets the native OpenDDS <see cref="SampleInfo" /> structure.
-			/// Internal use only.
-			/// </summary>
+			/// <exclude />
 			::DDS::SampleInfo ToNative();
 		};
 	};

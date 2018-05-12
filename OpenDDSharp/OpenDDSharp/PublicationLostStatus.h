@@ -34,13 +34,17 @@ using namespace System::Linq;
 using namespace System::Collections::Generic;
 
 namespace OpenDDSharp {
+	namespace DDS {
+		ref class DataReader;
+	}
+}
+
+namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DCPS {
 
-			ref class DataReader;
-
 			/// <summary>
-			/// The PublicationLost status indicates that a <see cref="DataReader" /> has been lost.
+			/// The PublicationLost status indicates that a <see cref="OpenDDSharp::DDS::DataReader" /> has been lost.
 			/// </summary>
 			public value struct PublicationLostStatus {
 

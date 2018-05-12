@@ -59,13 +59,14 @@ namespace OpenDDSharp {
 		/// <para>A DataWriter is bound to exactly one <see cref="Topic" /> and therefore to exactly one data type. The <see cref="Topic" /> 
 		/// must exist prior to the DataWriter’s creation.</para>
 		/// <para>The DataWriter must be specialized for each particular application data-type.</para>
-		/// <para> All operations except for the operations <see cref="DataWriter::SetQos" />, <see cref="DataWriter::GetQos" />, <see cref="DataWriter::SetListener" />,
-		/// <see cref="DataWriter::GetListener" />, <see cref="Entity::Enable" />, and <see cref="Entity::GetStatusCondition" />
-		/// return the value <see cref="ReturnCode::NotEnabled" /> if the DataWriter has not been enabled yet.
+		/// <para>All operations except for the operations <see cref="DataWriter::SetQos" />, <see cref="DataWriter::GetQos" />, SetListener,
+		/// <see cref="DataWriter::GetListener" />, <see cref="Entity::Enable" />, and <see cref="Entity::StatusCondition" />
+		/// return the value <see cref="ReturnCode::NotEnabled" /> if the DataWriter has not been enabled yet.</para>
 		/// </remarks>
 		public ref class DataWriter : public OpenDDSharp::DDS::Entity {
 
 		public:
+			/// <exclude />
 			::DDS::DataWriter_ptr impl_entity;
 
 		internal:
@@ -205,11 +206,12 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <remarks>
 			/// <para>The subscriptionHandle must correspond to a subscription currently associated with the <see cref="DataWriter" />, otherwise the operation
-			/// will fail and return <see cref="ReturnCode::BadParameter" />. The operation <see cref="GetMatchedSubscriptions" /> can be used to find the subscriptions that
+			/// will fail and return <see cref="ReturnCode::BadParameter" />. The operation GetMatchedSubscriptions can be used to find the subscriptions that
 			///	are currently matched with the <see cref="DataWriter" />.</para>
 			/// </remarks>
 			/// <param name="subscriptionHandle">The <see cref="InstanceHandle" /> of the subscription data requested.</param> 
-			/// <param name="subscriptionData">The <see cref="SubscriptionBuiltinTopicData" /> structure to be filled up.</param> 			
+			/// <param name="subscriptionData">The <see cref="SubscriptionBuiltinTopicData" /> structure to be filled up.</param> 	
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetMatchedSubscriptionData(OpenDDSharp::DDS::InstanceHandle subscriptionHandle, OpenDDSharp::DDS::SubscriptionBuiltinTopicData% subscriptionData);
 
 		private:

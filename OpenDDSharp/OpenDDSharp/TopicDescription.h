@@ -32,9 +32,9 @@ namespace OpenDDSharp {
 	namespace DDS {
 
 		/// <summary>
-		/// Default implementation of the <see cref="ITopicDescription"> interface.
+		/// Default implementation of the <see cref="ITopicDescription" /> interface.
 		/// It is the base class for <see cref="ContentFilteredTopic" />, and <see cref="MultiTopic" />.
-		/// <summary>
+		/// </summary>
 		public ref class TopicDescription : ITopicDescription {
 
 		internal:
@@ -71,10 +71,7 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::DomainParticipant^ GetParticipant();
 
 		public:
-			/// <summary>
-			/// Gets the native TopicDescription pointer.
-			/// Internal use only.			
-			/// </summary>
+			/// <exclude />
 			virtual ::DDS::TopicDescription_ptr ToNative();
 		};
 	};

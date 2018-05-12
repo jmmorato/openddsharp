@@ -56,10 +56,20 @@ namespace OpenDDSharp {
 			StatusMask(System::UInt32 value);
 
 		public:
-			static operator System::UInt32(StatusMask self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="StatusMask" /> to <see cref="System::UInt32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::UInt32" /> value.</returns>
+			static operator System::UInt32(StatusMask value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::UInt32" /> to <see cref="StatusMask" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="StatusMask" /> value.</returns>
 			static operator StatusMask(System::UInt32 value) {
 				StatusMask r(value);
 				return r;

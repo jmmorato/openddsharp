@@ -41,8 +41,7 @@ namespace OpenDDSharp {
 	namespace DDS {
 
 		ref class SubscriberListener;
-		ref class DomainParticipant;
-		ref class DataReaderListener;
+		ref class DomainParticipant;		
 
 		/// <summary>
 		/// A Subscriber is the object responsible for the actual reception of the data resulting from its subscriptions.
@@ -53,7 +52,7 @@ namespace OpenDDSharp {
 		/// available, through its listener or by enabling related conditions. The application can access the list of concerned <see cref="DataReader" />
 		///	objects through the operation GetDataReaders and then access the data available though operations on the <see cref="DataReader" />.</para>
 		/// <para>All operations except for the operations <see cref="SetQos" />, <see cref="GetQos" />, SetListener,
-		/// <see cref="GetListener" />, <see cref="Entity::Enable" />, <see cref="Entity::GetStatusCondition" />, CreateDataReader,
+		/// <see cref="GetListener" />, <see cref="Entity::Enable" />, <see cref="Entity::StatusCondition" />, CreateDataReader,
 		/// return the value <see cref="ReturnCode::NotEnabled" /> if the Subscriber has not been enabled yet.</para>
 		/// </remarks>
 		public ref class Subscriber : public OpenDDSharp::DDS::Entity {
@@ -102,8 +101,8 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::DataReader^ CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::DDS::DataReaderQos^ qos);
 
 			/// <summary>
-			/// Creates a new <see cref="DataReader" /> with the default QoS policies and attaches to it the specified <see cref="DataReaderListener" />.
-			/// The specified <see cref="DataReaderListener" /> will be attached with the default <see cref="StatusMask" />. 
+			/// Creates a new <see cref="DataReader" /> with the default QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.
+			/// The specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> will be attached with the default <see cref="StatusMask" />. 
 			/// </summary>
 			/// <remarks>
 			/// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
@@ -112,12 +111,12 @@ namespace OpenDDSharp {
 			///	return a <see langword="null"/> result.</para>
 			/// </remarks>
 			/// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
-			/// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
 			/// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataReader^ CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener);
 
 			/// <summary>
-			/// Creates a new <see cref="DataReader" /> with the default QoS policies and attaches to it the specified <see cref="DataReaderListener" />.			
+			/// Creates a new <see cref="DataReader" /> with the default QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.			
 			/// </summary>
 			/// <remarks>
 			/// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
@@ -126,23 +125,23 @@ namespace OpenDDSharp {
 			///	return a <see langword="null"/> result.</para>
 			/// </remarks>
 			/// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
-			/// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
 			/// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataReader^ CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask statusMask);
 
 			/// <summary>
-			/// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="DataReaderListener" />.
-			/// The specified <see cref="DataReaderListener" /> will be attached with the default <see cref="StatusMask" />. 
+			/// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.
+			/// The specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> will be attached with the default <see cref="StatusMask" />. 
 			/// </summary>
 			/// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
 			/// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
-			/// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
 			/// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataReader^ CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::DDS::DataReaderQos^ qos, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener);
 
 			/// <summary>
-			/// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="DataReaderListener" />.			
+			/// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.			
 			/// </summary>
 			/// <remarks>
 			/// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
@@ -152,25 +151,25 @@ namespace OpenDDSharp {
 			/// </remarks>
 			/// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
 			/// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
-			/// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
 			/// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::DataReader^ CreateDataReader(OpenDDSharp::DDS::ITopicDescription^ topicDescription, ::OpenDDSharp::DDS::DataReaderQos^ qos, ::OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask statusMask);
 
 			/// <summary>
-			/// Deletes a <see cref="DataReader" /> that belongs to the <see cref="Subscriber" />.
+			/// Deletes a <see cref="OpenDDSharp::DDS::DataReader" /> that belongs to the <see cref="OpenDDSharp::DDS::Subscriber" />.
 			/// </summary>
 			/// <remarks>
-			/// <para>If the <see cref="DataReader" /> does not belong to the <see cref="Subscriber" />, the operation returns the error <see cref="ReturnCode::PreconditionNotMet" />.</para>
-			/// <para>The deletion of a <see cref="DataReader" /> is not allowed if there are any existing <see cref="ReadCondition" /> or <see cref="QueryCondition" /> objects that are
-			/// attached to the <see cref="DataReader" />. If the delete_datareader operation is called on a <see cref="DataReader" /> with any of these existing objects
-			///	attached to it, it will return <see cref="ReturnCode::PreconditionNotMet" />.</para>
-			/// <para>The DeleteDataReader operation must be called on the same <see cref="Subscriber" /> object used to create the <see cref="DataReader" />. If
-			/// DeleteDataReader is called on a different <see cref="Subscriber" />, the operation will have no effect and it will return
+			/// <para>If the <see cref="OpenDDSharp::DDS::DataReader" /> does not belong to the <see cref="OpenDDSharp::DDS::Subscriber" />, the operation returns the error <see cref="OpenDDSharp::DDS::ReturnCode::PreconditionNotMet" />.</para>
+			/// <para>The deletion of a <see cref="OpenDDSharp::DDS::DataReader" /> is not allowed if there are any existing <see cref="OpenDDSharp::DDS::ReadCondition" /> or <see cref="OpenDDSharp::DDS::QueryCondition" /> objects that are
+			/// attached to the <see cref="OpenDDSharp::DDS::DataReader" />. If the DeleteDataReader operation is called on a <see cref="OpenDDSharp::DDS::DataReader" /> with any of these existing objects
+			///	attached to it, it will return <see cref="OpenDDSharp::DDS::ReturnCode::PreconditionNotMet" />.</para>
+			/// <para>The DeleteDataReader operation must be called on the same <see cref="OpenDDSharp::DDS::Subscriber" /> object used to create the <see cref="OpenDDSharp::DDS::DataReader" />. If
+			/// DeleteDataReader is called on a different <see cref="OpenDDSharp::DDS::Subscriber" />, the operation will have no effect and it will return
 			///	<see cref="ReturnCode::PreconditionNotMet" />.</para>
-			/// <remarks>
-			/// <param name="datareader">The <see cref="DataReader" /> to be deleted.</param>
-			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			/// </remarks>
+			/// <param name="datareader">The <see cref="OpenDDSharp::DDS::DataReader" /> to be deleted.</param>
+			/// <returns>The <see cref="OpenDDSharp::DDS::ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode DeleteDataReader(OpenDDSharp::DDS::DataReader^ datareader);
 
 			/// <summary>
@@ -256,12 +255,12 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode GetDataReaders(IList<OpenDDSharp::DDS::DataReader^>^ readers, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates);
 
 			/// <summary>
-			/// Invokes the operation OnDataAvailable on the <see cref="DataReaderListener" /> objects attached to contained <see cref="DataReader" />
+			/// Invokes the operation OnDataAvailable on the <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> objects attached to contained <see cref="DataReader" />
 			/// entities with a <see cref="StatusKind::DataAvailableStatus" /> that is considered changed.
 			/// </summary>
 			/// <remarks>
 			/// This operation is typically invoked from the OnDataOnReaders operation in the <see cref="SubscriberListener" />. That way the
-			/// <see cref="SubscriberListener" /> can delegate to the DataReaderListener objects the handling of the data. 
+			/// <see cref="SubscriberListener" /> can delegate to the <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> objects the handling of the data. 
 			/// </remarks>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode NotifyDataReaders();			

@@ -38,12 +38,13 @@ namespace OpenDDSharp {
 
 		ref class TopicListener;
 		ref class DomainParticipant;
+		ref class DataWriter;
 
 		/// <summary>
 		/// Topic is the most basic description of the data to be published and subscribed.
 		/// A Topic is identified by its name, which must be unique in the whole Domain. In addition (by virtue of implemeting
-		/// <see cref="ITopicDescription") /> it fully specifies the type of the data that can be communicated when publishing or subscribing to the Topic.
-		/// Topic is the only <see cref="ITopicDescription" /> that can be used for publications and therefore associated to a <see cref="DataWriter" />.
+		/// <see cref="ITopicDescription" />) it fully specifies the type of the data that can be communicated when publishing or subscribing to the Topic.
+		/// Topic is the only <see cref="ITopicDescription" /> that can be used for publications and therefore associated to a <see cref="OpenDDSharp::DDS::DataWriter" />.
 		/// </summary>
 		public ref class Topic : public OpenDDSharp::DDS::Entity, public ITopicDescription {
 
@@ -77,10 +78,7 @@ namespace OpenDDSharp {
 			};
 
 		public:
-			/// <summary>
-			/// Gets the native TopicDescription pointer.
-			/// Internal use only.			
-			/// </summary>
+			/// <exclude />
 			virtual ::DDS::TopicDescription_ptr ToNative();
 
 			/// <summary>
@@ -123,6 +121,7 @@ namespace OpenDDSharp {
 			/// This method allows the application to retrieve the <see cref="InconsistentTopicStatus" /> of the <see cref="Topic" />.
 			/// </summary>
 			/// <param name="status">The <see cref="InconsistentTopicStatus" /> structure to be fill up.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetInconsistentTopicStatus(OpenDDSharp::DDS::InconsistentTopicStatus% status);
 
 		private:

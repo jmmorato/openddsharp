@@ -30,15 +30,18 @@ namespace OpenDDSharp {
 	namespace DDS {
 
 		ref class Entity;
+		ref class Subscriber;
+		ref class Publisher;
+		ref class DataWriter;
 
 		/// <summary>
 		/// This policy controls how each <see cref="Subscriber" /> resolves the final value of a data instance that is written by multiple <see cref="DataWriter" />
 		/// objects (which may be associated with different <see cref="Publisher" /> objects) running on different nodes.
 		/// </summary>
 		/// <remarks>
-		/// The value offered is considered compatible with the value requested if and only if the inequality "offered kind >= requested
+		/// The value offered is considered compatible with the value requested if and only if the inequality "offered kind &gt;= requested
 		/// kind" evaluates to 'true'. For the purposes of this inequality, the values of DestinationOrder kind are considered
-		/// ordered such that ByReceptionTimestamp < BySourceTimestamp.
+		/// ordered such that ByReceptionTimestamp &lt; BySourceTimestamp.
 		/// </remarks>
 		public ref class DestinationOrderQosPolicy {
 

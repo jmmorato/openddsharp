@@ -28,7 +28,7 @@ namespace OpenDDSharp {
 		/// <summary>
 		/// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="Publisher" />
 		/// such that the application can be notified of relevant status changes.		
-		/// <summary>
+		/// </summary>
 		public ref class PublisherListener abstract : public OpenDDSharp::OpenDDS::DCPS::DataWriterListener {
 
 		internal:

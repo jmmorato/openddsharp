@@ -23,27 +23,27 @@ OpenDDSharp::DDS::DomainParticipantFactory::DomainParticipantFactory(::DDS::Doma
 	impl_entity = factory;
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId) {
 	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, nullptr, StatusMask::NoStatusMask);
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos) {
 	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, qos, nullptr, StatusMask::NoStatusMask);
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
 	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, listener, StatusMask::DefaultStatusMask);
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask) {
 	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, listener, statusMask);
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener) {
 	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, qos, listener, StatusMask::DefaultStatusMask);
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask) {
 	if (domainId < 0 || domainId > 232) {
 		return nullptr;
 	}
@@ -78,7 +78,7 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory:
 	}
 };
 
-OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::LookupParticipant(int domainId) {
+OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::LookupParticipant(System::Int32 domainId) {
 	::DDS::DomainParticipant_ptr dp = impl_entity->lookup_participant(domainId);	
 
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dp);

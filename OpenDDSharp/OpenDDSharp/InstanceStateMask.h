@@ -51,10 +51,20 @@ namespace OpenDDSharp {
 			InstanceStateMask(System::UInt32 value);
 
 		public:
-			static operator System::UInt32(InstanceStateMask self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="InstanceStateMask" /> to <see cref="System::UInt32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::UInt32" /> value.</returns>
+			static operator System::UInt32(InstanceStateMask value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::UInt32" /> to <see cref="InstanceStateMask" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="InstanceStateMask" /> value.</returns>
 			static operator InstanceStateMask(System::UInt32 value) {
 				InstanceStateMask r(value);
 				return r;

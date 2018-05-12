@@ -80,7 +80,7 @@ namespace OpenDDSharp {
 				/// <summary>
 				/// Stop being a participant in the service.
 				/// </summary>
-				/// </remarks>
+				/// <remarks>
 				/// Required Precondition: All DomainParticipants have been deleted.
 				/// </remarks>
 				void Shutdown();

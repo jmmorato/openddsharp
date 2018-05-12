@@ -66,7 +66,7 @@ namespace OpenDDSharp {
 		public:
 			/// <summary>
 			/// <para>This operation allows an application thread to wait for the occurrence of certain conditions. If none of the conditions attached
-			/// to the <see cref="WaitSet" /> have a <see cref="Condition::TriggerValue" /> of <see langword="true"/>, the wait operation will block suspending the calling thread.</para>
+			/// to the <see cref="WaitSet" /> have a <see cref="OpenDDSharp::DDS::Condition::TriggerValue" /> of <see langword="true"/>, the wait operation will block suspending the calling thread.</para>
 			/// <para>The wait operation will wait infinite time for the conditions.</para>
 			/// </summary>
 			/// <remarks>
@@ -74,7 +74,7 @@ namespace OpenDDSharp {
 			/// <see cref="WaitSet" /> that already has a thread blocking on it, the operation will return immediately with the value <see cref="ReturnCode::PreconditionNotMet" />.
 			/// </remarks>
 			/// <param name="activeConditions">
-			/// The collection of <see cref="Condition" />s with the <see cref="Condition::TriggerValue" /> equals <see langword="true"/> when the thread is unblocked.
+			/// The collection of <see cref="OpenDDSharp::DDS::Condition" />s with the <see cref="OpenDDSharp::DDS::Condition::TriggerValue" /> equals <see langword="true"/> when the thread is unblocked.
 			/// </param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode Wait(ICollection<Condition^>^ activeConditions);
@@ -87,50 +87,50 @@ namespace OpenDDSharp {
 			/// <para>It is not allowed for more than one application thread to be waiting on the same <see cref="WaitSet" />. If the wait operation is invoked on a
 			/// <see cref="WaitSet" /> that already has a thread blocking on it, the operation will return immediately with the value <see cref="ReturnCode::PreconditionNotMet" />.</para>
 			/// <para>The wait operation takes a timeout argument that specifies the maximum duration for the wait. It this duration is exceeded and
-			/// none of the attached <see cref="Condition" /> objects is <see langword="true"/>, wait will return with the return code <see cref="ReturnCode::Timeout" />.</para>
+			/// none of the attached <see cref="OpenDDSharp::DDS::Condition" /> objects is <see langword="true"/>, wait will return with the return code <see cref="ReturnCode::Timeout" />.</para>
 			/// </remarks>
 			/// <param name="activeConditions">
-			/// The collection of <see cref="Condition" />s with the <see cref="Condition::TriggerValue" /> equals <see langword="true"/> when the thread is unblocked.
+			/// The collection of <see cref="OpenDDSharp::DDS::Condition" />s with the <see cref="OpenDDSharp::DDS::Condition::TriggerValue" /> equals <see langword="true"/> when the thread is unblocked.
 			/// </param>
 			/// <param name="timeout">Maximum duration for the wait.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode Wait(ICollection<Condition^>^ activeConditions, OpenDDSharp::DDS::Duration timeout);
 
 			/// <summary>
-			/// Attaches a <see cref="Condition" /> to the <see cref="WaitSet" />.
+			/// Attaches a <see cref="OpenDDSharp::DDS::Condition" /> to the <see cref="WaitSet" />.
 			/// </summary>
 			/// <remarks>
-			/// <para>It is possible to attach a <see cref="Condition" /> on a <see cref="WaitSet" /> that is currently being waited upon (via the wait operation). In this case, if the
-			/// <see cref="Condition" /> has a <see cref="Condition::TriggerValue" /> of <see langword="true"/>, then attaching the condition will unblock the <see cref="WaitSet" />.</para>
-			/// <para>Adding a <see cref="Condition" /> that is already attached to the <see cref="WaitSet" /> has no effect.</para>
+			/// <para>It is possible to attach a <see cref="OpenDDSharp::DDS::Condition" /> on a <see cref="WaitSet" /> that is currently being waited upon (via the wait operation). In this case, if the
+			/// <see cref="Condition" /> has a <see cref="OpenDDSharp::DDS::Condition::TriggerValue" /> of <see langword="true"/>, then attaching the condition will unblock the <see cref="WaitSet" />.</para>
+			/// <para>Adding a <see cref="OpenDDSharp::DDS::Condition" /> that is already attached to the <see cref="WaitSet" /> has no effect.</para>
 			/// </remarks>
 			/// <param name="cond">The <see cref="Condition" /> to be attached.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode AttachCondition(Condition^ cond);
 
 			/// <summary>
-			/// Detaches a <see cref="Condition" /> from the <see cref="WaitSet" />.
+			/// Detaches a <see cref="OpenDDSharp::DDS::Condition" /> from the <see cref="WaitSet" />.
 			/// </summary>
 			/// <remarks>
 			/// If the <see cref="Condition" /> was not attached to the <see cref="WaitSet" />, the operation will return <see cref="ReturnCode::PreconditionNotMet" />.
 			/// </remarks>
-			/// <param name="cond">The <see cref="Condition" /> to be detached.</param>
+			/// <param name="cond">The <see cref="OpenDDSharp::DDS::Condition" /> to be detached.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode DetachCondition(Condition^ cond);
 
 			/// <summary>
 			/// Retrieves the list of attached conditions.
 			/// </summary>
-			/// <param name="attachedConditions">The collection of <see cref="Condition" />s to be filled up.</param>
+			/// <param name="attachedConditions">The collection of <see cref="OpenDDSharp::DDS::Condition" />s to be filled up.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-			OpenDDSharp::DDS::ReturnCode GetConditions(ICollection<Condition^>^ attachedConditions);
+			OpenDDSharp::DDS::ReturnCode GetConditions(ICollection<OpenDDSharp::DDS::Condition^>^ attachedConditions);
 
 			/// <summary>
 			/// Convenience method for detaching multiple conditions, for example when shutting down.
 			/// </summary>
-			/// <param name="conditions">The collection of <see cref="Condition" />s to be detached.</param>
+			/// <param name="conditions">The collection of <see cref="OpenDDSharp::DDS::Condition" />s to be detached.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-			OpenDDSharp::DDS::ReturnCode DetachConditions(ICollection<Condition^>^ conditions);
+			OpenDDSharp::DDS::ReturnCode DetachConditions(ICollection<OpenDDSharp::DDS::Condition^>^ conditions);
 
 		};
 	};

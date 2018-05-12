@@ -32,7 +32,7 @@ namespace OpenDDSharp {
 		ref class Publisher;
 		ref class DomainParticipant;
 
-		/// <summray>
+		/// <summary>
 		/// This policy controls the behavior of the <see cref="DataWriter" /> with regards to the lifecycle of the data-instances it manages, that is, the
 		/// data-instances that have been either explicitly registered with the <see cref="DataWriter" /> using the register operations or implicitly by directly writing the data.
 		/// </summary>

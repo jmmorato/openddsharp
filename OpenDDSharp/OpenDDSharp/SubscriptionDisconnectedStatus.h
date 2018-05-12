@@ -32,13 +32,17 @@ using namespace System::Linq;
 using namespace System::Collections::Generic;
 
 namespace OpenDDSharp {
+	namespace DDS {
+		ref class DataWriter;
+	}
+}
+
+namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DCPS {
 
-			ref class DataWriter;
-
 			/// <summary>
-			/// The SubscriptionDisconnected status indicates that a <see cref="DataWriter" /> has been disconnected.
+			/// The SubscriptionDisconnected status indicates that a <see cref="OpenDDSharp::DDS::DataWriter" /> has been disconnected.
 			/// </summary>
 			public value struct SubscriptionDisconnectedStatus {
 

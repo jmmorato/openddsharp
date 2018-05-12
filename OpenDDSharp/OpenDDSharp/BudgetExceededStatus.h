@@ -26,14 +26,16 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "InstanceHandle.h"
 
 namespace OpenDDSharp {
+	namespace DDS {		
+		ref class LatencyBudgetQosPolicy;
+	}
+}
+namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DCPS {
 
-			ref class DataReader;
-			ref class LatencyBudgetQosPolicy;
-
 			/// <summary>
-			/// The BudgetExceeded status indicates delays in excess of the <see cref="LatencyBudgetQosPolicy" /> duration.
+			/// The BudgetExceeded status indicates delays in excess of the <see cref="OpenDDSharp::DDS::LatencyBudgetQosPolicy" /> duration.
 			/// </summary>
 			public value struct BudgetExceededStatus {
 

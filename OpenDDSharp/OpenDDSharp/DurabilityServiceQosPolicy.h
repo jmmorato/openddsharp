@@ -30,10 +30,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 namespace OpenDDSharp {
 	namespace DDS {
 
+		ref class DataReader;
+		ref class DataWriter;
+
 		/// <summary>
 		/// This policy is used to configure the history QoS and the resource limits QoS used by the fictitious <see cref="DataReader" /> and
 		/// <see cref="DataWriter" /> used by the "persistence service".
-		/// </summrary>
+		/// </summary>
 		public ref class DurabilityServiceQosPolicy {
 
 		private:

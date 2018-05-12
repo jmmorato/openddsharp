@@ -51,22 +51,43 @@ namespace OpenDDSharp {
 			ViewStateKind(System::UInt32 value);
 
 		public:
-			static operator System::UInt32(ViewStateKind self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="ViewStateKind" /> to <see cref="System::UInt32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::UInt32" /> value.</returns>
+			static operator System::UInt32(ViewStateKind value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::UInt32" /> to <see cref="ViewStateKind" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="ViewStateKind" /> value.</returns>
 			static operator ViewStateKind(System::UInt32 value) {
 				ViewStateKind r(value);
 				return r;
 			}
 	
+			/// <summary>
+			/// Implicit conversion operator from <see cref="ViewStateKind" /> to <see cref="ViewStateMask" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="ViewStateMask" /> value.</returns>
 			static operator ViewStateMask(ViewStateKind value) {
 				ViewStateMask r(value);
 				return r;
 			}
 
-			static ViewStateMask operator  | (ViewStateKind a, ViewStateKind b) {
-				return static_cast<ViewStateMask>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+			/// <summary>
+			/// Bit-wise operator.
+			/// </summary>
+			/// <param name="left">The left value of the operator.</param>
+			/// <param name="right">The right value of the operator.</param>
+			/// <returns>The resulting <see cref="ViewStateMask" />.</returns>
+			static ViewStateMask operator | (ViewStateKind left, ViewStateKind right) {
+				return static_cast<ViewStateMask>(static_cast<unsigned int>(left) | static_cast<unsigned int>(right));
 			}
 
 		};

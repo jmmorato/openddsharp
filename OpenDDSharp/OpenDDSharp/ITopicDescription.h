@@ -62,10 +62,7 @@ namespace OpenDDSharp {
 				OpenDDSharp::DDS::DomainParticipant^ get();
 			};
 
-			/// <summary>
-			/// Gets the native TopicDescription pointer.
-			/// Internal use only.			
-			/// </summary>
+			/// <exclude />
 			::DDS::TopicDescription_ptr ToNative();
 		};
 	};

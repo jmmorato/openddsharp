@@ -52,8 +52,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 namespace OpenDDSharp {
 	namespace DDS {
 
-		ref class SampleInfo;
-		ref class DomainParticipantListener;
+		ref class SampleInfo;		
 		ref class ContentFilteredTopic;
 		ref class MultiTopic;
 
@@ -75,10 +74,7 @@ namespace OpenDDSharp {
 			OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ m_listener;			
 
 		public:
-			/// <summary>
-			/// Native DomainParticipant pointer.
-			/// For internal use only.
-			/// </summary>
+			/// <exclude />
 			::DDS::DomainParticipant_ptr impl_entity;
 
 		public:
@@ -328,9 +324,9 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// The values retrieved by the <see cref="GetDefaultPublisherQos" /> call will match the set of values specified on the last successful call to
 			/// <see cref="SetDefaultPublisherQos" />, or else, if the call was never made, the default values defined by the DDS standard.
-			/// <remarks>
+			/// </remarks>
 			/// <param name="qos">The <see cref="PublisherQos" /> to be filled up.</param>
-			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+			/// <returns>The <see cref="OpenDDSharp::DDS::ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetDefaultPublisherQos(OpenDDSharp::DDS::PublisherQos^ qos);
 
 			/// <summary>
@@ -432,10 +428,10 @@ namespace OpenDDSharp {
 			/// <see cref="Subscriber" /> entities in the case where the QoS policies are defaulted in the CreateSubscriber operation.			
 			/// </summary>
 			/// <remarks>
-			/// The values retrieved by the <see cref="GetDefaultSubscriberQos" /> call will match the set of values specified on the last successful call to
+			/// The values retrieved by the GetDefaultSubscriberQos call will match the set of values specified on the last successful call to
 			/// <see cref="SetDefaultSubscriberQos" />, or else, if the call was never made, the default values defined by the DDS standard.
-			/// <remarks>
-			/// <param name="qos">The <see cref="SubscriberQos" /> to be filled up.</param>
+			/// </remarks>
+			/// <param name="qos">The <see cref="OpenDDSharp::DDS::SubscriberQos" /> to be filled up.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetDefaultSubscriberQos(OpenDDSharp::DDS::SubscriberQos^ qos);
 
@@ -476,9 +472,9 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// <para>The containment applies recursively. That is, it applies both to entities (<see cref="ITopicDescription" />, <see cref="Publisher" />, or <see cref="Subscriber" />) created
 			/// directly using the <see cref="DomainParticipant" /> as well as entities created using a contained <see cref="Publisher" />, or <see cref="Subscriber" /> as the factory, and so forth.</para>
-			/// <para></para>
 			/// <para>The instance handle for an <see cref="Entity" /> may be obtained from built-in topic data, from various statuses, or from the <see cref="Entity" /> property <see cref="Entity::InstanceHandle" />.</para>
-			/// <remarks>
+			/// </remarks>
+			/// <param name="handle">The <see cref="OpenDDSharp::DDS::InstanceHandle" /> to be checked.</param>
 			/// <returns><see langword="true"/> if the <see cref="Entity" /> is contained by the <see cref="DomainParticipant" />, otherwise <see langword="false"/>.</returns>
 			System::Boolean ContainsEntity(OpenDDSharp::DDS::InstanceHandle handle);
 
@@ -497,22 +493,22 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode SetQos(OpenDDSharp::DDS::DomainParticipantQos^ qos);
 			
 			/// <summary>
-			/// Allows access to the attached <see cref="DomainParticipantListener" />.
+			/// Allows access to the attached <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.
 			/// </summary>
-			/// <returns>The attached <see cref="DomainParticipantListener" />.</returns>
+			/// <returns>The attached <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.</returns>
 			OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ GetListener();
 
 			/// <summary>
-			/// Sets the <see cref="DomainParticipantListener" /> using the <see cref="StatusMask::DefaultStatusMask" />.
+			/// Sets the <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> using the <see cref="StatusMask::DefaultStatusMask" />.
 			/// </summary>
-			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be set.</param>			
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> to be set.</param>			
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener);
 
 			/// <summary>
-			/// Sets the <see cref="DomainParticipantListener" />.
+			/// Sets the <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.
 			/// </summary>
-			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be set.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> to be set.</param>
 			/// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, OpenDDSharp::DDS::StatusMask mask);	
@@ -569,10 +565,10 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <remarks>
 			/// <para>The <see cref="DataWriter" /> to ignore is identified by the <paramref name="handle" /> argument. This handle is the one that appears in the <see cref="SampleInfo" /> retrieved
-			/// when reading the data-samples from the built-in <see cref="DataReader" /> on the “DCPSPublication” topic. To ignore a local <see cref="DataWriter" />, the handle can be obtained with 
+			/// when reading the data-samples from the built-in <see cref="DataReader" /> on the "DCPSPublication" topic. To ignore a local <see cref="DataWriter" />, the handle can be obtained with 
 			/// the property <see cref="Entity::InstanceHandle" /> for the local <see cref="DataWriter" />.</para>
 			/// <para>There is no way to reverse this operation.</para>
-			/// <remarks>
+			/// </remarks>
 			/// <param name="handle">The <see cref="InstanceHandle" /> of the <see cref="DataWriter" /> to be ignored.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode IgnorePublication(OpenDDSharp::DDS::InstanceHandle handle);
@@ -582,8 +578,8 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <remarks>
 			/// <para>The <see cref="DataReader" /> to ignore is identified by the <paramref name="handle" /> argument. This handle is the one that appears in the <see cref="SampleInfo" />
-			/// retrieved when reading the data-samples from the built-in <see cref="DataReader" /> on the “DCPSSubscription” topic. To ignore a local <see cref="DataReader" />, the handle can be obtained by 
-			/// calling <see cref="Entity::GetInstanceHandle" /> for the local <see cref="DataReader" />.</para>
+			/// retrieved when reading the data-samples from the built-in <see cref="DataReader" /> on the "DCPSSubscription" topic. To ignore a local <see cref="DataReader" />, the handle can be obtained by 
+			/// getting the <see cref="Entity::InstanceHandle" /> for the local <see cref="DataReader" />.</para>
 			/// <para>There is no way to reverse this operation.</para>
 			/// </remarks>
 			/// <param name="handle">The <see cref="InstanceHandle" /> of the <see cref="DataReader" /> to be ignored.</param>
@@ -601,6 +597,7 @@ namespace OpenDDSharp {
 			/// Gets the current value of the timestamp that DDS uses to time-stamp data-writes and to set the reception timestamp
 			/// for the data-updates it receives.
 			/// </summary>
+			/// <param name="currentTime">The <see cref="OpenDDSharp::DDS::Timestamp" /> structure to be filled up.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetCurrentTimestamp(OpenDDSharp::DDS::Timestamp% currentTime);
 			
@@ -646,8 +643,8 @@ namespace OpenDDSharp {
 			/// <paramref name="subscriptionExpression" /> and <paramref name="expressionParameters" /> arguments.</para>
 			/// </remarks>
 			/// <param name="name">The name of the <see cref="MultiTopic" />.</param>
-			/// <param name="name">The type name used for the <see cref="MultiTopic" />.</param>
-			/// <param name="name">The subscription expression used for the <see cref="MultiTopic" />.</param>
+			/// <param name="typeName">The type name used for the <see cref="MultiTopic" />.</param>
+			/// <param name="subscriptionExpression">The subscription expression used for the <see cref="MultiTopic" />.</param>
 			/// <param name="expressionParameters">The collection of parameters to be used in the subscription expression.</param>
 			/// <returns>The newly created <see cref="MultiTopic" /> on success, otherwise <see langword="null"/>.</returns>
 			OpenDDSharp::DDS::MultiTopic^ CreateMultiTopic(System::String^ name, System::String^ typeName, System::String^ subscriptionExpression, ... array<System::String^>^ expressionParameters);
@@ -669,28 +666,28 @@ namespace OpenDDSharp {
 
 			/// <summary>
 			/// Retrieves the list of <see cref="DomainParticipant" />s that have been discovered in the domain and that the application has not
-			/// indicated should be “ignored” by means of the <see cref="DomainParticipant" /> <see cref="IgnoreParticipant" /> operation.
+			/// indicated should be "ignored" by means of the <see cref="DomainParticipant" /> <see cref="IgnoreParticipant" /> operation.
 			/// </summary>
 			/// <remarks>
 			/// The operation may fail if the infrastructure does not locally maintain the connectivity information. In this case the operation
 			/// will return <see cref="ReturnCode::Unsupported" />.
-			/// <remarks>
-			/// <param name="participantHandles">The collection of <see cref="InstanceHandle" />s to fill up.</param>
+			/// </remarks>
+			/// <param name="participantHandles">The collection of <see cref="InstanceHandle" />s to be filled up.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredParticipants(ICollection<OpenDDSharp::DDS::InstanceHandle>^ participantHandles);
 
 			/// <summary>
 			/// Retrieves information on a <see cref="DomainParticipant" /> that has been discovered on the network. The participant must
-			/// be in the same domain as the participant on which this operation is invoked and must not have been “ignored” by means of the
+			/// be in the same domain as the participant on which this operation is invoked and must not have been "ignored" by means of the
 			///	<see cref="DomainParticipant" /> <see cref="IgnoreParticipant" /> operation.
 			/// </summary>
 			/// <remarks>
 			/// <para>The <paramref name="participantHandle"/> must correspond to such a <see cref="DomainParticipant" />. Otherwise, the operation will fail and return
 			/// <see cref="ReturnCode::PreconditionNotMet" />.</para>
-			///	<para>Use the operation <see cref="GetDiscoveredParticipants" /> to find the <see cref="Topic" /> that are currently discovered.</para>
+			///	<para>Use the operation GetDiscoveredParticipants to find the <see cref="Topic" /> that are currently discovered.</para>
 			///	<para>The operation may also fail if the infrastructure does not hold the information necessary to fill in the <paramref name="participantData"/>.In this
 			///	case the operation will return <see cref="ReturnCode::Unsupported" />.</para>
-			/// <remarks>
+			/// </remarks>
 			/// <param name="participantData">The <see cref="ParticipantBuiltinTopicData" /> to fill up.</param>
 			/// <param name="participantHandle">The <see cref="InstanceHandle" />  of the <see cref="DomainParticipant" /> to get the data.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
@@ -698,9 +695,9 @@ namespace OpenDDSharp {
 
 			/// <summary>
 			/// Retrieves the list of <see cref="Topic" />s that have been discovered in the domain and that the application has not indicated
-			/// should be “ignored” by means of the <see cref="DomainParticipant" /> <see cref="IgnoreTopic" /> operation.
+			/// should be "ignored" by means of the <see cref="DomainParticipant" /> <see cref="IgnoreTopic" /> operation.
 			/// </summary>
-			/// <param name="topicHandles">The collection of <see cref="InstanceHandle" />s to fill up.</param>
+			/// <param name="topicHandles">The collection of <see cref="OpenDDSharp::DDS::InstanceHandle" />s to fill up.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopics(ICollection<OpenDDSharp::DDS::InstanceHandle>^ topicHandles);
 
@@ -712,7 +709,7 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// <para>The <paramref name="topicHandle"/> must correspond to such a topic. Otherwise, the operation will fail and return
 			/// <see cref="ReturnCode::PreconditionNotMet" />.</para>
-			///	<para>Use the operation <see cref="GetDiscoveredTopics" /> to find the topics that are currently discovered.</para>
+			///	<para>Use the operation GetDiscoveredTopics to find the topics that are currently discovered.</para>
 			///	<para>The operation may also fail if the infrastructure does not hold the information necessary to fill in the <paramref name="topicData"/>. In this case
 			///	the operation will return <see cref="ReturnCode::Unsupported" />.</para>
 			/// <para>The operation may fail if the infrastructure does not locally maintain the connectivity information. In this case the operation 
@@ -720,6 +717,7 @@ namespace OpenDDSharp {
 			/// </remarks>
 			/// <param name="topicData">The <see cref="TopicBuiltinTopicData" /> to fill up.</param>
 			/// <param name="topicHandle">The <see cref="InstanceHandle" />  of the <see cref="Topic" /> to get the data.</param>
+			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetDiscoveredTopicData(OpenDDSharp::DDS::TopicBuiltinTopicData% topicData, OpenDDSharp::DDS::InstanceHandle topicHandle);
 
 		private:

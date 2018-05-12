@@ -50,7 +50,7 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <param name="domainId">Domain ID that the application intends to join.</param>
 			/// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(int domainId);
+			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(System::Int32 domainId);
 
 			/// <summary>
 			/// Creates a <see cref="DomainParticipant" /> with the desired QoS policies and without listener attached.
@@ -60,51 +60,52 @@ namespace OpenDDSharp {
 			/// </remarks>
 			/// <param name="domainId">Domain ID that the application intends to join.</param>
 			/// <param name="qos">The <see cref="DomainParticipantQos" /> policies to be used for creating the new <see cref="DomainParticipant" />.</param>
-			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos);
-
-			/// <summary>
-			/// Creates a new <see cref="DomainParticipant" /> with the default QoS policies and attaches to it the specified <see cref="DomainParticipantListener" />.
-			/// The specified <see cref="DomainParticipantListener" /> will be attached with the default <see cref="StatusMask" />.
-			/// </summary>
-			/// <param name="domainId">Domain ID that the application intends to join.</param>
-			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
 			/// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(int domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener);
+			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(System::Int32 domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos);
 
 			/// <summary>
-			/// Creates a <see cref="DomainParticipant" /> with the default QoS policies and attaches to it the specified <see cref="DomainParticipantListener" />.
+			/// Creates a new <see cref="DomainParticipant" /> with the default QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.
+			/// The specified <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> will be attached with the default <see cref="StatusMask" />.
 			/// </summary>
 			/// <param name="domainId">Domain ID that the application intends to join.</param>
-			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
+			/// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
+			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(System::Int32 domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener);
+
+			/// <summary>
+			/// Creates a <see cref="DomainParticipant" /> with the default QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.
+			/// </summary>
+			/// <param name="domainId">Domain ID that the application intends to join.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
 			/// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(int domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask);
+			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(System::Int32 domainId, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask);
 
 			/// <summary>
-			/// Creates a new <see cref="DomainParticipant" /> with the desired QoS policies and attaches to it the specified <see cref="DomainParticipantListener" />.
-			/// The specified <see cref="DomainParticipantListener" /> will be attached with the default <see cref="StatusMask" />.
+			/// Creates a new <see cref="DomainParticipant" /> with the desired QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.
+			/// The specified <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> will be attached with the default <see cref="StatusMask" />.
 			/// </summary>
 			/// <remarks>
 			/// If the specified QoS policies are not consistent, the operation will fail and no <see cref="DomainParticipant" /> will be created.
 			/// </remarks>
 			/// <param name="domainId">Domain ID that the application intends to join.</param>
 			/// <param name="qos">The <see cref="DomainParticipantQos" /> policies to be used for creating the new <see cref="DomainParticipant" />.</param>
-			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
 			/// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener);
+			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(System::Int32 domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener);
 
 			/// <summary>
-			/// Creates a new <see cref="DomainParticipant" /> with the desired QoS policies and attaches to it the specified <see cref="DomainParticipantListener" />.	
+			/// Creates a new <see cref="DomainParticipant" /> with the desired QoS policies and attaches to it the specified <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" />.	
 			/// </summary>
 			/// <remarks>
 			/// If the specified QoS policies are not consistent, the operation will fail and no <see cref="DomainParticipant" /> will be created.
 			/// </remarks>
 			/// <param name="domainId">Domain ID that the application intends to join.</param>
 			/// <param name="qos">The <see cref="DomainParticipantQos" /> policies to be used for creating the new <see cref="DomainParticipant" />.</param>
-			/// <param name="listener">The <see cref="DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
 			/// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(int domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask);
+			OpenDDSharp::DDS::DomainParticipant^ CreateParticipant(System::Int32 domainId, OpenDDSharp::DDS::DomainParticipantQos^ qos, OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener^ listener, StatusMask statusMask);
 
 			/// <summary>
 			/// This operation retrieves a previously created <see cref="DomainParticipant" /> belonging to specified <paramref name="domainId"/>.
@@ -112,10 +113,10 @@ namespace OpenDDSharp {
 			/// <remarks>
 			/// If multiple <see cref="DomainParticipant" /> entities belonging to that <paramref name="domainId"/> exist, then the operation will return one of them. 
 			/// It is not specified which one.
-			/// <remarks>
+			/// </remarks>
 			/// <param name="domainId">Domain ID of the participant to lookup.</param>
 			/// <returns>The <see cref="DomainParticipant" />, if it exists, otherwise <see langword="null"/>.</returns>
-			OpenDDSharp::DDS::DomainParticipant^ LookupParticipant(int domainId);	
+			OpenDDSharp::DDS::DomainParticipant^ LookupParticipant(System::Int32 domainId);	
 
 			/// <summary>
 			/// This operation returns the value of the <see cref="DomainParticipantFactory" /> QoS policies.

@@ -36,9 +36,9 @@ namespace OpenDDSharp {
 		namespace DCPS {
 
 			/// <summary>
-			/// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DataWriter" />
+			/// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="OpenDDSharp::DDS::DataWriter" />
 			/// such that the application can be notified of relevant status changes.		
-			/// <summary>
+			/// </summary>
 			public ref class DataWriterListener abstract {
 
 			typedef void(__stdcall *onOfferedDeadlineMissedDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
@@ -164,6 +164,8 @@ namespace OpenDDSharp {
 				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::OfferedDeadlineMissedStatus" /> indicates that the deadline offered by the
 				/// <see cref="OpenDDSharp::DDS::DataWriter" /> has been missed for one or more instances.</para>
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::DDS::OfferedDeadlineMissedStatus" />.</param>
 				virtual void OnOfferedDeadlineMissed(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::OfferedDeadlineMissedStatus status) = 0;
 
 				/// <summary>
@@ -171,6 +173,8 @@ namespace OpenDDSharp {
 				/// <para>The <see cref="OpenDDSharp::DDS::StatusKind::OfferedIncompatibleQosStatus" /> indicates that an offered QoS was incompatible with
 				/// the requested QoS of a <see cref="OpenDDSharp::DDS::DataReader" />.</para>
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::DDS::OfferedIncompatibleQosStatus" />.</param>
 				virtual void OnOfferedIncompatibleQos(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::OfferedIncompatibleQosStatus status) = 0;
 
 				/// <summary>
@@ -179,6 +183,8 @@ namespace OpenDDSharp {
 				/// through its Liveliness QoS has not been respected. This means that any connected <see cref="OpenDDSharp::DDS::DataReader" />s will consider this 
 				/// <see cref="OpenDDSharp::DDS::DataWriter" /> no longer active</para>
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::DDS::LivelinessLostStatus" />.</param>
 				virtual void OnLivelinessLost(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::LivelinessLostStatus status) = 0;
 
 				/// <summary>
@@ -187,29 +193,38 @@ namespace OpenDDSharp {
 				/// through its Liveliness QoS has not been respected. This means that any connected <see cref="OpenDDSharp::DDS::DataReader" />s 
 				/// will consider this <see cref="OpenDDSharp::DDS::DataWriter" /> no longer active.</para>
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::DDS::PublicationMatchedStatus" />.</param>
 				virtual void OnPublicationMatched(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::PublicationMatchedStatus status) = 0;
 
 				/// <summary>
 				/// Called when a publication connection failure has been detected and there are still associations using the connection
 				/// after the configurable graceful_disconnected_period.
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus" />.</param>
 				virtual void OnPublicationDisconnected(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus status) = 0;
 
 				/// <summary>
 				/// Called when a disconnected publication connection has been reconnected.
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus" />.</param>
 				virtual void OnPublicationReconnected(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus status) = 0;
 
 				/// <summary>
 				/// Called when a publication connection is lost and hence one or more associations from this publication to some subscribers have been lost.
 				/// A connection is "lost" when the retry attempts have been exhausted.
 				/// </summary>
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus" />.</param>
 				virtual void OnPublicationLost(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus status) = 0;
 
 				/// <summary>
 				/// Called when the publication connection object is cleaned up and the reconnect thread exits.
 				/// </summary>
-				virtual void OnConnectionDeleted(OpenDDSharp::DDS::DataWriter^ reader) = 0;
+				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
+				virtual void OnConnectionDeleted(OpenDDSharp::DDS::DataWriter^ writer) = 0;
 			};
 		};
 	};

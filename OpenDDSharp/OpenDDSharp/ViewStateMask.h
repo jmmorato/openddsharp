@@ -46,10 +46,20 @@ namespace OpenDDSharp {
 			ViewStateMask(System::UInt32 value);
 
 		public:
-			static operator System::UInt32(ViewStateMask self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="ViewStateMask" /> to <see cref="System::UInt32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::UInt32" /> value.</returns>
+			static operator System::UInt32(ViewStateMask value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::UInt32" /> to <see cref="ViewStateMask" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="ViewStateMask" /> value.</returns>
 			static operator ViewStateMask(System::UInt32 value) {
 				ViewStateMask r(value);
 				return r;

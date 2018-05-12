@@ -59,8 +59,7 @@ namespace OpenDDSharp {
 
 		ref class Subscriber;
 		ref class ReadCondition;
-		ref class QueryCondition;
-		ref class DataReaderListener;
+		ref class QueryCondition;		
 		ref class DataWriter;
 
 		/// <summary>
@@ -72,13 +71,16 @@ namespace OpenDDSharp {
 		/// that identifies the data to be read. The subscription has a unique resulting type. The data-reader may give access to several instances of the
 		///	resulting type, which can be distinguished from each other by their key.</para>
 		/// <para>All operations except for the operations <see cref="SetQos" />, <see cref="GetQos" />, SetListener,
-		/// <see cref="GetListener" />, <see cref="Entity::Enable" />, and <see cref="Entity::GetStatusCondition" />
+		/// <see cref="GetListener" />, <see cref="Entity::Enable" />, and <see cref="Entity::StatusCondition" />
 		/// return the value <see cref="ReturnCode::NotEnabled" /> if the DataReader has not been enabled yet.</para>
 		/// </remarks>
 		public ref class DataReader : public OpenDDSharp::DDS::Entity {
 
 		public:
+			/// <exclude />
 			::DDS::DataReader_ptr impl_entity;
+
+		internal:
 			OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ _listener;
 
 		public:
@@ -182,22 +184,22 @@ namespace OpenDDSharp {
 			OpenDDSharp::DDS::ReturnCode SetQos(OpenDDSharp::DDS::DataReaderQos^ qos);
 
 			/// <summary>
-			/// Allows access to the attached <see cref="DataReaderListener" />.
+			/// Allows access to the attached <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.
 			/// </summary>
-			/// <returns>The attached <see cref="DataReaderListener" />.</returns>
+			/// <returns>The attached <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.</returns>
 			OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ GetListener();
 
 			/// <summary>
-			/// Sets the <see cref="DataReaderListener" /> using the <see cref="StatusMask::DefaultStatusMask" />.
+			/// Sets the <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> using the <see cref="StatusMask::DefaultStatusMask" />.
 			/// </summary>
-			/// <param name="listener">The <see cref="DataReaderListener" /> to be set.</param>			
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> to be set.</param>			
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener);
 
 			/// <summary>
-			/// Sets the <see cref="DataReaderListener" />.
+			/// Sets the <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" />.
 			/// </summary>
-			/// <param name="listener">The <see cref="DataReaderListener" /> to be set.</param>
+			/// <param name="listener">The <see cref="OpenDDSharp::OpenDDS::DCPS::DataReaderListener" /> to be set.</param>
 			/// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode SetListener(OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ listener, OpenDDSharp::DDS::StatusMask mask);						
@@ -278,7 +280,7 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <remarks>
 			/// The publicationHandle must correspond to a publication currently associated with the <see cref="DataReader" /> otherwise the operation
-			/// will fail and return <see cref="ReturnCode::BadParameter" />. The operation <see cref="GetMatchedPublications" /> can be used to find the publications that
+			/// will fail and return <see cref="ReturnCode::BadParameter" />. The operation GetMatchedPublications can be used to find the publications that
 			///	are currently matched with the <see cref="DataReader" />.
 			/// </remarks>
 			/// <param name="publicationHandle">The <see cref="InstanceHandle" /> of the publication data requested.</param> 

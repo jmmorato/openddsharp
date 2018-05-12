@@ -44,10 +44,20 @@ namespace OpenDDSharp {
 			InstanceHandle(System::Int32 value);
 
 		public:
-			static operator System::Int32(InstanceHandle self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="InstanceHandle" /> to <see cref="System::Int32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::Int32" /> value.</returns>
+			static operator System::Int32(InstanceHandle value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::Int32" /> to <see cref="InstanceHandle" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="InstanceHandle" /> value.</returns>
 			static operator InstanceHandle(System::Int32 value) {
 				InstanceHandle r(value);
 				return r;

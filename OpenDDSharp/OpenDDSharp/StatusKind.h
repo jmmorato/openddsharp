@@ -114,22 +114,43 @@ namespace OpenDDSharp {
 			StatusKind(System::UInt32 value);
 
 		public:
-			static operator System::UInt32(StatusKind self) {
-				return self.m_value;
+			/// <summary>
+			/// Implicit conversion operator from <see cref="StatusKind" /> to <see cref="System::UInt32" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="System::UInt32" /> value.</returns>
+			static operator System::UInt32(StatusKind value) {
+				return value.m_value;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="System::UInt32" /> to <see cref="StatusKind" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="StatusKind" /> value.</returns>
 			static operator StatusKind(System::UInt32 value) {
 				StatusKind r(value);
 				return r;
 			}
 
+			/// <summary>
+			/// Implicit conversion operator from <see cref="StatusKind" /> to <see cref="StatusMask" />.
+			/// </summary>
+			/// <param name="value">The value to transform.</param>
+			/// <returns>The <see cref="StatusMask" /> value.</returns>
 			static operator StatusMask(StatusKind value) {
 				StatusMask r(value);
 				return r;
 			}
 
-			static StatusMask operator  | (StatusKind a, StatusKind b) {
-				return static_cast<StatusMask>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+			/// <summary>
+			/// Bit-wise operator.
+			/// </summary>
+			/// <param name="left">The left value of the operator.</param>
+			/// <param name="right">The right value of the operator.</param>
+			/// <returns>The resulting <see cref="StatusMask" />.</returns>
+			static StatusMask operator | (StatusKind left, StatusKind right) {
+				return static_cast<StatusMask>(static_cast<unsigned int>(left) | static_cast<unsigned int>(right));
 			}
 
 		};

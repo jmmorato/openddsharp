@@ -31,7 +31,7 @@ namespace OpenDDSharp {
 		/// <summary>
 		/// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="Topic" />
 		/// such that the application can be notified of relevant status changes.		
-		/// <summary>
+		/// </summary>
 		public ref class TopicListener abstract {
 
 		typedef void(__stdcall *onInconsistentTopicDeclaration)(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
@@ -66,6 +66,8 @@ namespace OpenDDSharp {
 			/// <para>The <see cref="StatusKind::InconsistentTopicStatus" /> indicates that a <see cref="Topic" /> was attempted to be registered that
 			/// already exists with different characteristics. Typically, the existing <see cref="Topic" /> may have a different type associated with it.</para>
 			/// </summary>
+			/// <param name="topic">The <see cref="OpenDDSharp::DDS::Topic" /> that triggered the event.</param>
+			/// <param name="status">The current <see cref="OpenDDSharp::DDS::InconsistentTopicStatus" />.</param>
 			virtual void OnInconsistentTopic(OpenDDSharp::DDS::Topic^ topic, OpenDDSharp::DDS::InconsistentTopicStatus status) = 0;
 		};
 	};
