@@ -9,7 +9,7 @@ clone_depth: 1
 install:
   - mkdir ext && cd ext
   - git clone git://github.com/objectcomputing/OpenDDS.git
-  - git checkout tags/DDS-3.12 -b master
+  - git checkout DDS-3.12 -b master
   - cd OpenDDS
   - call configure --no-tests
   - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
