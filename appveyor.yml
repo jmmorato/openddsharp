@@ -5,7 +5,6 @@ branches:
 os: Visual Studio 2017
 
 clone_depth: 1
-clone_folder: C:\
 
 install:
   - mkdir ext && cd ext
