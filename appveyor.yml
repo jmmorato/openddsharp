@@ -8,14 +8,14 @@ clone_depth: 1
 
 install:
   - mkdir ext && cd ext
-  - git clone --depth 1 git://github.com/objectcomputing/OpenDDS.git
+  - git clone git://github.com/objectcomputing/OpenDDS.git
   - git checkout tags/DDS-3.12 -b master
   - cd OpenDDS
   - call configure --no-tests
-  - git apply C:\OpenDDSharp\Patches\ConditionImpl.h.patch
-  - git apply C:\OpenDDSharp\Patches\DataReaderImpl.cpp.patch
-  - git apply C:\OpenDDSharp\Patches\DataReaderImpl.h.patch
-  - git apply C:\OpenDDSharp\Patches\unique_ptr.h.patch
+  - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
+  - git apply C:\projects\openddsharp\Patches\DataReaderImpl.cpp.patch
+  - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
+  - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch
   - cd ..
   - cd ..
   - set MPC_ROOT C:\ext\OpenDDS\ACE_wrappers\MPC
@@ -43,9 +43,9 @@ configuration:
   - Release
 
 build_script:
-  - msbuild OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Debug;Platform=x64
-  - msbuild OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Release;Platform=x64
-  - msbuild OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Debug;Platform=x86
-  - msbuild OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Release;Platform=x64
+  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Debug;Platform=x64
+  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Release;Platform=x64
+  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Debug;Platform=x86
+  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Release;Platform=x64
   
   
