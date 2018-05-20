@@ -14,7 +14,7 @@ install:
   - git checkout tags/DDS-3.12 
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64  
   - ps: Start-FileDownload 'http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
-  - 7z e ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip -aoa -oC:\projects\openddsharp\ext\OpenDDS
+  - 7z e ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip -aoa -oC:\projects\openddsharp\ext\OpenDDS\ACE_wrappers
   - dir ACE_wrappers
   - set MPC_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\MPC
   - set ACE_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers
