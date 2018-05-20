@@ -17,14 +17,13 @@ install:
   - 7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
   - set MPC_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\MPC
   - set ACE_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers
+  - set TAO_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\TAO
   - set DDS_ROOT C:\projects\openddsharp\ext\OpenDDS
   - call configure --no-tests    
   - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.cpp.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
-  - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch
-  - cd ..
-  - cd .. 
+  - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch 
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=x64
   - xcopy C:\ext\OpenDDS\ACE_wrappers\lib E:\ext\OpenDDS\ACE_wrappers\lib_x64
@@ -37,6 +36,7 @@ install:
   - xcopy C:\ext\OpenDDS\ACE_wrappers\bin E:\ext\OpenDDS\ACE_wrappers\bin_86
   - xcopy C:\ext\OpenDDS\lib E:\ext\OpenDDS\lib_x86
   - xcopy C:\ext\OpenDDS\bin E:\ext\OpenDDS\bin_x86
+  - cd ..\..
   
 platform:
   - x86
