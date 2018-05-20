@@ -1,0 +1,18 @@
+diff --git "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\DataReaderImpl-5c0fa3c.001.cpp" "b/E:\\OpenDDS\\dds\\DCPS\\DataReaderImpl.cpp"
+index dae89ede4..2d4e68b6a 100644
+--- "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\DataReaderImpl-5c0fa3c.001.cpp"
++++ "b/E:\\OpenDDS\\dds\\DCPS\\DataReaderImpl.cpp"
+@@ -127,6 +127,13 @@ DataReaderImpl::DataReaderImpl()
+   periodic_monitor_ = TheServiceParticipant->monitor_factory_->create_data_reader_periodic_monitor(this);
+ }
+ 
++void
++DataReaderImpl::LivelinessTimer::check_liveliness()
++{
++	CheckLivelinessCommand c(this);
++	execute_or_enqueue(c);
++}
++
+ // This method is called when there are no longer any reference to the
+ // the servant.
+ DataReaderImpl::~DataReaderImpl()

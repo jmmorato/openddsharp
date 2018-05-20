@@ -1,0 +1,13 @@
+diff --git "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\ConditionImpl-5c0fa3c.001.h" "b/E:\\OpenDDS\\dds\\DCPS\\ConditionImpl.h"
+index e2fc6dd22..20374395a 100644
+--- "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\ConditionImpl-5c0fa3c.001.h"
++++ "b/E:\\OpenDDS\\dds\\DCPS\\ConditionImpl.h"
+@@ -24,7 +24,7 @@ OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+ namespace OpenDDS {
+ namespace DCPS {
+ 
+-class ConditionImpl
++class OpenDDS_Dcps_Export ConditionImpl
+   : public virtual OpenDDS::DCPS::LocalObject<DDS::Condition> {
+ public:
+   DDS::ReturnCode_t attach_to_ws(DDS::WaitSet_ptr ws);
