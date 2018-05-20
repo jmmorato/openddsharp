@@ -12,17 +12,19 @@ install:
   - cd OpenDDS
   - git fetch && git fetch --tags
   - git checkout tags/DDS-3.12 
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
+  - set MPC_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\MPC
+  - set ACE_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers
+  - set DDS_ROOT C:\projects\openddsharp\ext\OpenDDS  
+  - call configure --no-tests
+  - 7z e ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip -oC:/projects/openddsharp/ext/OpenDDS
   - call configure --no-tests
   - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.cpp.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch
   - cd ..
-  - cd ..
-  - set MPC_ROOT C:\ext\OpenDDS\ACE_wrappers\MPC
-  - set ACE_ROOT C:\ext\OpenDDS\ACE_wrappers
-  - set DDS_ROOT C:\ext\OpenDDS  
+  - cd .. 
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=x64
   - xcopy C:\ext\OpenDDS\ACE_wrappers\lib E:\ext\OpenDDS\ACE_wrappers\lib_x64
