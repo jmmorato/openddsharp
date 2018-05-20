@@ -26,16 +26,16 @@ install:
   - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch 
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=x64
-  - xcopy C:\ext\OpenDDS\ACE_wrappers\lib C:\ext\OpenDDS\ACE_wrappers\lib_x64
-  - xcopy C:\ext\OpenDDS\ACE_wrappers\bin C:\ext\OpenDDS\ACE_wrappers\bin_x64
-  - xcopy C:\ext\OpenDDS\lib C:\ext\OpenDDS\lib_x64
-  - xcopy C:\ext\OpenDDS\bin C:\ext\OpenDDS\bin_x64
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x64
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_x64
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\lib C:\projects\openddsharp\ext\OpenDDS\lib_x64
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\bin C:\projects\openddsharp\ext\OpenDDS\bin_x64
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=Win32
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=Win32
-  - xcopy C:\ext\OpenDDS\ACE_wrappers\lib C:\ext\OpenDDS\ACE_wrappers\lib_x86
-  - xcopy C:\ext\OpenDDS\ACE_wrappers\bin C:\ext\OpenDDS\ACE_wrappers\bin_86
-  - xcopy C:\ext\OpenDDS\lib C:\ext\OpenDDS\lib_x86
-  - xcopy C:\ext\OpenDDS\bin C:\ext\OpenDDS\bin_x86
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x86
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_86
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\lib C:\projects\openddsharp\ext\OpenDDS\lib_x86
+  - xcopy C:\projects\openddsharp\ext\OpenDDS\bin C:\projects\openddsharp\ext\OpenDDS\bin_x86
   - cd ..\..
   
 platform:
