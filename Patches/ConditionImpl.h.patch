@@ -1,7 +1,7 @@
-diff --git "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\ConditionImpl-5c0fa3c.001.h" "b/E:\\OpenDDS\\dds\\DCPS\\ConditionImpl.h"
+diff --git a/dds/DCPS/ConditionImpl.h b/dds/DCPS/ConditionImpl.h
 index e2fc6dd22..20374395a 100644
---- "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\ConditionImpl-5c0fa3c.001.h"
-+++ "b/E:\\OpenDDS\\dds\\DCPS\\ConditionImpl.h"
+--- a/dds/DCPS/ConditionImpl.h
++++ b/dds/DCPS/ConditionImpl.h
 @@ -24,7 +24,7 @@ OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
  namespace OpenDDS {
  namespace DCPS {

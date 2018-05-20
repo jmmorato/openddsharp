@@ -1,7 +1,7 @@
-diff --git "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\unique_ptr-5c0fa3c.000.h" "b/E:\\OpenDDS\\dds\\DCPS\\unique_ptr.h"
+diff --git a/dds/DCPS/unique_ptr.h b/dds/DCPS/unique_ptr.h
 index 72f307331..c08e2d849 100644
---- "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\unique_ptr-5c0fa3c.000.h"
-+++ "b/E:\\OpenDDS\\dds\\DCPS\\unique_ptr.h"
+--- a/dds/DCPS/unique_ptr.h
++++ b/dds/DCPS/unique_ptr.h
 @@ -108,7 +108,7 @@ public:
    }
  

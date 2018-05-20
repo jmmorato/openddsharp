@@ -1,7 +1,7 @@
-diff --git "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\DataReaderImpl-5c0fa3c.002.h" "b/E:\\OpenDDS\\dds\\DCPS\\DataReaderImpl.h"
+diff --git a/dds/DCPS/DataReaderImpl.h b/dds/DCPS/DataReaderImpl.h
 index 616dc1816..2ab3faeca 100644
---- "a/C:\\Users\\morjos\\AppData\\Local\\Temp\\TortoiseGit\\DataReaderImpl-5c0fa3c.002.h"
-+++ "b/E:\\OpenDDS\\dds\\DCPS\\DataReaderImpl.h"
+--- a/dds/DCPS/DataReaderImpl.h
++++ b/dds/DCPS/DataReaderImpl.h
 @@ -727,11 +727,12 @@ private:
        , liveliness_timer_id_(-1)
      { }
