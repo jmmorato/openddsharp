@@ -231,6 +231,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="BudgetExceededStatus.cpp" />
     <ClCompile Include="BuiltinTopicKey.cpp" />
     <ClCompile Include="Condition.cpp" />
@@ -329,6 +330,7 @@
     <ClCompile Include="WriterDataLifecycleQosPolicy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssemblyInfo.h" />
     <ClInclude Include="BudgetExceededStatus.h" />
     <ClInclude Include="BuiltinTopicKey.h" />
     <ClInclude Include="Condition.h" />
@@ -400,6 +402,7 @@
     <ClInclude Include="ReliabilityQosPolicyKind.h" />
     <ClInclude Include="RequestedDeadlineMissedStatus.h" />
     <ClInclude Include="RequestedIncompatibleQosStatus.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceLimitsQosPolicy.h" />
     <ClInclude Include="ReturnCode.h" />
     <ClInclude Include="SampleInfo.h" />
@@ -449,6 +452,9 @@
     <None Include="OpenDDSharp.targets">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

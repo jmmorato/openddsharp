@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OpenDDSharp</id>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <title>OpenDDSharp</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
@@ -14,7 +14,7 @@
       OpenDDS wrapper for .NET languages.
       OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </description>
-    <releaseNotes>OpenDDSharp library v.0.2.0</releaseNotes>
+    <releaseNotes>OpenDDSharp library v.0.2.1</releaseNotes>
     <copyright>Jose Morato</copyright>
     <tags>OpenDDSharp OpenDDS DDS</tags>
     <references>      

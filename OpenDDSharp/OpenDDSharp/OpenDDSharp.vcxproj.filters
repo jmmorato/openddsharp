@@ -9,6 +9,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{cfa245ae-af5e-4c80-a4b1-d31de3fdf507}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticipantService.cpp">
@@ -297,6 +300,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuardCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -622,9 +628,20 @@
     <ClInclude Include="TopicDescription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AssemblyInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenDDSharp.nuspec" />
     <None Include="OpenDDSharp.targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
