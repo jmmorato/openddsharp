@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
-    <DDS_ROOT>E:\OpenDDS</DDS_ROOT>
+    <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
-    <ACE_ROOT>E:\OpenDDS\ACE_wrappers</ACE_ROOT>
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
-    <TAO_ROOT>E:\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -122,7 +122,7 @@
       <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\;$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_Rtps_Udpd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
     </Link>
@@ -189,7 +189,7 @@
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

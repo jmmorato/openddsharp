@@ -94,6 +94,15 @@
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" />
+  <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
+    <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+  </PropertyGroup>
   <Target Name="AfterBuild">
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
       <Dlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAOd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Dcpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps_Udpd.dll" />

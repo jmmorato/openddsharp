@@ -10,6 +10,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenDDSharp.IdlGenerator", "OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.vcxproj", "{9282A186-FECA-1BAD-F74D-08556236AF2C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestIdl", "TestIdl\TestIdl.vcxproj", "{A2B3A918-E652-41B0-AC1B-121E51360497}"
+	ProjectSection(ProjectDependencies) = postProject
+		{97F88957-84D4-48DA-A8AF-56CF035DD5DA} = {97F88957-84D4-48DA-A8AF-56CF035DD5DA}
+		{31E6D26F-AA5F-4763-8633-5B3FD2F4CA08} = {31E6D26F-AA5F-4763-8633-5B3FD2F4CA08}
+		{9282A186-FECA-1BAD-F74D-08556236AF2C} = {9282A186-FECA-1BAD-F74D-08556236AF2C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDDSharp.BuildTasks", "OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj", "{97F88957-84D4-48DA-A8AF-56CF035DD5DA}"
 EndProject
@@ -30,6 +35,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{DD4809A9-6F47-4686-8433-D8A10F3EB9E8}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "OpenDDSharp.Doc", "OpenDDSharp.Doc\OpenDDSharp.Doc.shfbproj", "{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1AADF375-9149-4000-82AB-AF4CD15144DA} = {1AADF375-9149-4000-82AB-AF4CD15144DA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -156,13 +164,10 @@ Global
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Debug|x64.Build.0 = Debug|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Debug|x86.Build.0 = Debug|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x64.ActiveCfg = Release|Any CPU
-		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x64.Build.0 = Release|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x86.ActiveCfg = Release|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection

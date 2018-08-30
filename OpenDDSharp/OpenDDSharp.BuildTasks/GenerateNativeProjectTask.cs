@@ -25,6 +25,7 @@ using Microsoft.Build.Utilities;
 using EnvDTE;
 using EnvDTE80;
 using System.Runtime.InteropServices;
+using EnvDTE100;
 
 namespace OpenDDSharp.BuildTasks
 {    
@@ -32,7 +33,7 @@ namespace OpenDDSharp.BuildTasks
     {
         #region Fields
         private DTE2 _dte;
-        private Solution2 _solution;
+        private Solution4 _solution;
         private Project _project;
         private string _solutionName;
         private string _projectName;
@@ -62,9 +63,15 @@ namespace OpenDDSharp.BuildTasks
         [STAThread]
         public override bool Execute()
         {
-            Log.LogMessage(MessageImportance.High, "Generating native IDL library...");
+            Log.LogMessage(MessageImportance.High, "Generating native IDL library...");            
 
             Initialize();
+#if DEBUG
+            Log.LogMessage(MessageImportance.High, "TemplatePath: " + TemplatePath);
+            Log.LogMessage(MessageImportance.High, "IntDir: " + IntDir);
+            Log.LogMessage(MessageImportance.High, "_projectName: " + _projectName);
+#endif
+
             GenerateSolutionFile();
             GenerateProjectFile();
             CopyIdlFiles();
@@ -76,18 +83,27 @@ namespace OpenDDSharp.BuildTasks
 
         private void Initialize()
         {
+            TemplatePath = Path.GetFullPath(TemplatePath);
+            IntDir = Path.GetFullPath(IntDir);
+
             _solutionName = OriginalProjectName + "NativeSolution";
-            _projectName = OriginalProjectName + "Native";
+            _projectName = OriginalProjectName + "Native.vcxproj";
+
+            string fullPath = Path.Combine(IntDir, _projectName);
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
 
             Type type = Type.GetTypeFromProgID("VisualStudio.DTE.15.0");
-            Object obj = Activator.CreateInstance(type, true);
+            object obj = Activator.CreateInstance(type, true);
             _dte = (DTE2)obj;
         }
 
         private void GenerateSolutionFile()
         {           
             _dte.Solution.Create(IntDir, _solutionName);
-            _solution = (Solution2)_dte.Solution;
+            _solution = (Solution4)_dte.Solution;
         }
 
         private void GenerateProjectFile()
@@ -99,11 +115,11 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    if (_project != null)
-                        _solution.Remove(_project);
-
-                    _solution.AddFromTemplate(TemplatePath, IntDir, _projectName);
-                    _project = _solution.Projects.Item(1);
+                    if (_project == null)
+                    {
+                        _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
+                        _project = _solution.Projects.Item(1);
+                    }
 
                     foreach (ITaskItem s in IdlFiles)
                     {
@@ -125,6 +141,7 @@ namespace OpenDDSharp.BuildTasks
                         _project.ProjectItems.AddFromFile(filename + "C.inl");
                         _project.ProjectItems.AddFromFile(filename + "TypeSupportC.inl");
                     }
+
                     _project.Save();
 
                     // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
@@ -146,15 +163,22 @@ namespace OpenDDSharp.BuildTasks
                     doc.Save(_project.FullName);
                     success = true;
                 }
-                catch (COMException)
+                catch (COMException ex)
                 {
                     success = false;
                     retry--;
-                    
+
                     if (retry > 0)
+                    {
                         System.Threading.Thread.Sleep(150);
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
                     else
-                        throw;                    
+                    {
+                        throw;
+                    }
                 }
             }            
         }
@@ -201,15 +225,22 @@ namespace OpenDDSharp.BuildTasks
                     _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
                     success = true;
                 }
-                catch (COMException)
+                catch (COMException ex)
                 {
                     success = false;
                     retry--;
 
                     if (retry > 0)
+                    {
                         System.Threading.Thread.Sleep(150);
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
                     else
+                    {
                         throw;
+                    }
                 }
             }
         }

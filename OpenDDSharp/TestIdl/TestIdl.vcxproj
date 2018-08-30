@@ -209,13 +209,13 @@
     <ClCompile Include="TestTypeSupport.cpp" />
   </ItemGroup>
   <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
-    <DDS_ROOT>E:\OpenDDS</DDS_ROOT>
+    <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
-    <ACE_ROOT>E:\OpenDDS\ACE_wrappers</ACE_ROOT>
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
-    <TAO_ROOT>E:\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">

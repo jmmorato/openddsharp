@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
-    <DDS_ROOT>E:\OpenDDS</DDS_ROOT>
+    <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
-    <ACE_ROOT>E:\OpenDDS\ACE_wrappers</ACE_ROOT>
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
-    <TAO_ROOT>E:\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="be_global.cpp" />
@@ -56,7 +56,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="NativeIdlProject.vcxproj.filters" />
-    <None Include="NativeIdlProjectTemplate.vstemplate" />
+    <None Include="NativeIdlProjectTemplate.vstemplate">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="OpenDDSharp.IdlGenerator.targets" />
     <None Include="OpenDDSharp.IdlGenerator.nuspec">
       <SubType>Designer</SubType>

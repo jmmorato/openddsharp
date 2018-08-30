@@ -102,6 +102,15 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
+    <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+  </PropertyGroup>
   <Target Name="AfterBuild">
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
       <Dlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAOd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Dcpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps_Udpd.dll" />

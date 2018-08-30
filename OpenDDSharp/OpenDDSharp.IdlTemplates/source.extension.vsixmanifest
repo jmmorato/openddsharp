@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="OpenDDSharp.IdlTemplates.f81de387-81a9-402b-a3c7-9e3861ee4190" Version="1.1" Language="en-US" Publisher="Jose Morato" />
+        <Identity Id="OpenDDSharp.IdlTemplates.f81de387-81a9-402b-a3c7-9e3861ee4190" Version="1.2" Language="en-US" Publisher="Jose Morato" />
         <DisplayName>OpenDDSharp IDL Templates</DisplayName>
         <Description xml:space="preserve">OpenDDSharp IDL Templates</Description>
     </Metadata>
