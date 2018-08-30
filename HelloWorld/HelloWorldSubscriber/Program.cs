@@ -45,7 +45,7 @@ namespace OpenDDSharp.HelloWorldSubscriber
 
             while (true)
             {
-                StatusMask mask = messageReader.GetStatusChanges();
+                StatusMask mask = messageReader.StatusChanges;
                 if ((mask & StatusKind.DataAvailableStatus) != 0)
                 {
                     List<Message> receivedData = new List<Message>();
