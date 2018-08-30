@@ -192,13 +192,12 @@ namespace OpenDDSharp.ShapesDemo.Service
             if (_config.ReaderFilterConfig.Enabled)
             {
                 string filter = _config.ReaderFilterConfig.FilterKind == FilterKind.Inside ? FILTER_INSIDE : FILTER_OUTSIDE;
-                topic = _participant.CreateContentFilteredTopic("CFSquare" + (++_cfSquareCount), _squareTopic, filter, new List<string>
-                {
-                    _config.ReaderFilterConfig.X0.ToString(),
-                    _config.ReaderFilterConfig.X1.ToString(),
-                    _config.ReaderFilterConfig.Y0.ToString(),
-                    _config.ReaderFilterConfig.Y1.ToString()
-                });
+                topic = _participant.CreateContentFilteredTopic("CFSquare" + (++_cfSquareCount), 
+                                                                _squareTopic, filter,
+                                                                _config.ReaderFilterConfig.X0.ToString(),
+                                                                _config.ReaderFilterConfig.X1.ToString(),
+                                                                _config.ReaderFilterConfig.Y0.ToString(),
+                                                                _config.ReaderFilterConfig.Y1.ToString());
             }
             else
             {
@@ -223,13 +222,12 @@ namespace OpenDDSharp.ShapesDemo.Service
             if (_config.ReaderFilterConfig.Enabled)
             {
                 string filter = _config.ReaderFilterConfig.FilterKind == FilterKind.Inside ? FILTER_INSIDE : FILTER_OUTSIDE;
-                topic = _participant.CreateContentFilteredTopic("CFCircle" + (++_cfCircleCount), _circleTopic, filter, new List<string>
-                {
-                    _config.ReaderFilterConfig.X0.ToString(),
-                    _config.ReaderFilterConfig.X1.ToString(),
-                    _config.ReaderFilterConfig.Y0.ToString(),
-                    _config.ReaderFilterConfig.Y1.ToString()
-                });
+                topic = _participant.CreateContentFilteredTopic("CFCircle" + (++_cfCircleCount), 
+                                                                _circleTopic, filter,  
+                                                                _config.ReaderFilterConfig.X0.ToString(),
+                                                                _config.ReaderFilterConfig.X1.ToString(),
+                                                                _config.ReaderFilterConfig.Y0.ToString(),
+                                                                _config.ReaderFilterConfig.Y1.ToString());
             }
             else
             {
@@ -254,13 +252,12 @@ namespace OpenDDSharp.ShapesDemo.Service
             if (_config.ReaderFilterConfig.Enabled)
             {
                 string filter = _config.ReaderFilterConfig.FilterKind == FilterKind.Inside ? FILTER_INSIDE : FILTER_OUTSIDE;
-                topic = _participant.CreateContentFilteredTopic("CFTriangle" + (++_cfTriangleCount), _triangleTopic, filter, new List<string>
-                {
-                    _config.ReaderFilterConfig.X0.ToString(),
-                    _config.ReaderFilterConfig.X1.ToString(),
-                    _config.ReaderFilterConfig.Y0.ToString(),
-                    _config.ReaderFilterConfig.Y1.ToString()
-                });
+                topic = _participant.CreateContentFilteredTopic("CFTriangle" + (++_cfTriangleCount), 
+                                                                _triangleTopic, filter, 
+                                                                _config.ReaderFilterConfig.X0.ToString(),
+                                                                _config.ReaderFilterConfig.X1.ToString(),
+                                                                _config.ReaderFilterConfig.Y0.ToString(),
+                                                                _config.ReaderFilterConfig.Y1.ToString());
             }
             else
             {

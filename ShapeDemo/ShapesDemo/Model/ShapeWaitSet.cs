@@ -31,10 +31,10 @@ namespace OpenDDSharp.ShapesDemo.Model
             };
 
             _cancelCondition = new GuardCondition();
-            _statusCondition = dataReader.GetStatusCondition();
+            _statusCondition = dataReader.StatusCondition;
             _waitSet.AttachCondition(_statusCondition);
             _waitSet.AttachCondition(_cancelCondition);
-            _statusCondition.SetEnabledStatuses(StatusKind.DataAvailableStatus);
+            _statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             _thread.Start();
         }
         #endregion
@@ -47,26 +47,26 @@ namespace OpenDDSharp.ShapesDemo.Model
                 ICollection<Condition> conditions = new List<Condition>();
                 Duration duration = new Duration
                 {
-                    Seconds = Duration.DurationInfiniteSec
+                    Seconds = Duration.InfiniteSeconds
                 };
                 _waitSet.Wait(conditions, duration);
 
                 foreach (Condition cond in conditions)
                 {
-                    if (cond == _cancelCondition && cond.GetTriggerValue())
+                    if (cond == _cancelCondition && cond.TriggerValue)
                     {
                         // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
-                        _cancelCondition.SetTriggerValue(false);
+                        _cancelCondition.TriggerValue = false;
 
                         // The thread activity has been canceled. We exit even if another condition (data available)
                         // is active: no point extracting data if we're going down anyway.
                         return;
                     }
 
-                    if (cond == _statusCondition && cond.GetTriggerValue())
+                    if (cond == _statusCondition && cond.TriggerValue)
                     {
                         StatusCondition sCond = (StatusCondition)cond;
-                        StatusMask mask = sCond.GetEnabledStatuses();
+                        StatusMask mask = sCond.EnabledStatuses;
                         if ((mask & StatusKind.DataAvailableStatus) != 0)
                             _dataAvailableFunc(_dataReader);
                     }
@@ -80,7 +80,7 @@ namespace OpenDDSharp.ShapesDemo.Model
         {
             if (!_disposed)
             {
-                _cancelCondition.SetTriggerValue(true);
+                _cancelCondition.TriggerValue = true;
                 // We join the thread here because it may still be updating data (== using reader). _cancelCondition at true is the out condition.
                 _thread.Join(500);
 
