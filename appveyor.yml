@@ -35,6 +35,7 @@ install:
   - xcopy C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
   - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
   - xcopy C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
+  - nuget restore C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln
   - cd ..\..
   
 platform:
