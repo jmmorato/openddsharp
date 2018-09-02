@@ -95,6 +95,18 @@ namespace OpenDDSharp.BuildTasks
                 File.Delete(fullPath);
             }
 
+            fullPath = Path.Combine(IntDir, _projectName + ".filters");
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+
+            fullPath = Path.Combine(IntDir, _projectName + ".user");
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+
             Type type = Type.GetTypeFromProgID("VisualStudio.DTE.15.0");
             object obj = Activator.CreateInstance(type, true);
             _dte = (DTE2)obj;
