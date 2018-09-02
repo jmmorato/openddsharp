@@ -11,7 +11,7 @@ install:
   - git clone git://github.com/objectcomputing/OpenDDS.git
   - cd OpenDDS
   - git fetch && git fetch --tags
-  - git checkout tags/DDS-3.12 
+  - git checkout tags/DDS-3.13 
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64  
   - ps: Start-FileDownload 'http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
   - 7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
@@ -25,29 +25,23 @@ install:
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch 
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
-  - msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=x64
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\lib\* C:\projects\openddsharp\ext\OpenDDS\lib_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\bin\* C:\projects\openddsharp\ext\OpenDDS\bin_x64 /s /i
-  - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=Win32
-  - msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=Win32
-  - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x86 /s /i
-  - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_86 /s /i
-  - xcopy C:\projects\openddsharp\ext\OpenDDS\lib\* C:\projects\openddsharp\ext\OpenDDS\lib_x86 /s /i
-  - xcopy C:\projects\openddsharp\ext\OpenDDS\bin\* C:\projects\openddsharp\ext\OpenDDS\bin_x86 /s /i
   - cd ..\..
   
 platform:
   - x64
 
 configuration:
-  - Release
+  - Debug
 
 build_script:
   - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Debug;Platform=x64
-  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Release;Platform=x64
-  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Debug;Platform=x86
-  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /m /p:Configuration=Release;Platform=x64
-  
+
+test:
+  assemblies:
+    only:
+      - OpenDDSharp.UnitTest.dll
   
