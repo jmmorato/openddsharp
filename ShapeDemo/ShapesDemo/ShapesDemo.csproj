@@ -263,11 +263,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\OpenDDSharp.0.2.0\build\net461\OpenDDSharp.targets" Condition="Exists('..\packages\OpenDDSharp.0.2.0\build\net461\OpenDDSharp.targets')" />
+  <Import Project="..\packages\OpenDDSharp.0.2.1\build\net461\OpenDDSharp.targets" Condition="Exists('..\packages\OpenDDSharp.0.2.1\build\net461\OpenDDSharp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\OpenDDSharp.0.2.0\build\net461\OpenDDSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenDDSharp.0.2.0\build\net461\OpenDDSharp.targets'))" />
+    <Error Condition="!Exists('..\packages\OpenDDSharp.0.2.1\build\net461\OpenDDSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenDDSharp.0.2.1\build\net461\OpenDDSharp.targets'))" />
   </Target>
 </Project>
