@@ -25,6 +25,7 @@ set MPC_ROOT=%CD%\ACE_wrappers\MPC
 set ACE_ROOT=%CD%\ACE_wrappers
 set TAO_ROOT=%CD%\ACE_wrappers\TAO
 set DDS_ROOT=%CD%
+set PATH=%PATH%;%ACE_ROOT%\bin;%DDS_ROOT%\bin;%ACE_ROOT%\lib;%DDS_ROOT%\lib
 
 REM Call OpenDDS configure script
 call configure --no-tests
@@ -58,6 +59,9 @@ cd ..\..\OpenDDSharp
 REM Copy the OpenDDSharp code generator templates
 xcopy %CD%\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
 xcopy %CD%\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
+
+REM Restore nuget packages for the solution
+nuget restore OpenDDSharp.sln
 
 REM Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder
 msbuild OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
