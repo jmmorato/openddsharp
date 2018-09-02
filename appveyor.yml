@@ -19,7 +19,8 @@ install:
   - set ACE_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers
   - set TAO_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\TAO
   - set DDS_ROOT C:\projects\openddsharp\ext\OpenDDS
-  - call configure --no-tests    
+  - call configure --no-tests
+  - xcopy C:\projects\openddsharp\Build\ACE.vcxproj %ACE_ROOT%\ace /y 
   - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.cpp.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
