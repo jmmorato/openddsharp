@@ -113,13 +113,20 @@ namespace OpenDDSharp.BuildTasks
         }
 
         private void GenerateSolutionFile()
-        {           
+        {
+            string fullPath = Path.Combine(IntDir, _solutionName + ".sln");
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
             _dte.Solution.Create(IntDir, _solutionName);
             _solution = (Solution4)_dte.Solution;
         }
 
         private void GenerateProjectFile()
         {
+            AddProjectTemplate();            
+
             int retry = 100;
             bool success = false;
 
@@ -127,12 +134,6 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    if (_project == null)
-                    {
-                        _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
-                        _project = _solution.Projects.Item(1);
-                    }
-
                     foreach (ITaskItem s in IdlFiles)
                     {
                         string filename = s.GetMetadata("Filename");
@@ -172,6 +173,7 @@ namespace OpenDDSharp.BuildTasks
                             node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
                         }
                     }
+
                     doc.Save(_project.FullName);
                     success = true;
                 }
@@ -183,6 +185,7 @@ namespace OpenDDSharp.BuildTasks
                     if (retry > 0)
                     {
                         System.Threading.Thread.Sleep(150);
+
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
 #endif
@@ -192,7 +195,48 @@ namespace OpenDDSharp.BuildTasks
                         throw;
                     }
                 }
-            }            
+            }
+        }
+
+        private void AddProjectTemplate()
+        {
+            int retry = 100;
+            bool success = false;
+
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    if (_solution.Projects.Count == 0)
+                    {
+                        _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
+                    }
+                    _project = _solution.Projects.Item(1);
+
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            if (_project == null)
+                throw new ApplicationException("The project couldn't be created.");
         }
 
         private void CopyIdlFiles()
