@@ -31,6 +31,10 @@ install:
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\lib\* C:\projects\openddsharp\ext\OpenDDS\lib_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\bin\* C:\projects\openddsharp\ext\OpenDDS\bin_x64 /s /i
+  - xcopy C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
+  - xcopy C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
+  - msbuild C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
+  - xcopy C:\projects\openddsharp\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
   - cd ..\..
   
 platform:
