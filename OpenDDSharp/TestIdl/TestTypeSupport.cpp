@@ -135,11 +135,11 @@ OpenDDSharp::Test::BasicTestStructDataReader::BasicTestStructDataReader(::OpenDD
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Read(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo) {
-	return OpenDDSharp::Test::BasicTestStructDataReader::Read(receivedData, receivedInfo, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return OpenDDSharp::Test::BasicTestStructDataReader::Read(receivedData, receivedInfo, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Read(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples) {
-	return OpenDDSharp::Test::BasicTestStructDataReader::Read(receivedData, receivedInfo, maxSamples, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return OpenDDSharp::Test::BasicTestStructDataReader::Read(receivedData, receivedInfo, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::Read(List<BasicTestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
@@ -997,11 +997,11 @@ OpenDDSharp::Test::TestStructDataReader::TestStructDataReader(::OpenDDSharp::DDS
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Read(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo) {
-	return OpenDDSharp::Test::TestStructDataReader::Read(receivedData, receivedInfo, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return OpenDDSharp::Test::TestStructDataReader::Read(receivedData, receivedInfo, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Read(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples) {
-	return OpenDDSharp::Test::TestStructDataReader::Read(receivedData, receivedInfo, maxSamples, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return OpenDDSharp::Test::TestStructDataReader::Read(receivedData, receivedInfo, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::Read(List<TestStruct^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
