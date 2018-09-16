@@ -8,6 +8,7 @@
     <owners>Jose Morato</owners>    
     <projectUrl>http://www.openddsharp.com</projectUrl>
     <iconUrl>http://www.openddsharp.com/favicon.png</iconUrl>
+    <licenseUrl>http://www.openddsharp.com/Home/License</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenDDSharp IDL Generator</description>
     <releaseNotes>OpenDDSharp IDL Generator v.0.2.1</releaseNotes>
