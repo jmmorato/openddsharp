@@ -104,15 +104,15 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Write
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->write_w_timestamp(data->ToNative(), handle, time);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Delete(BasicTestStruct^ data) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Dispose(BasicTestStruct^ data) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), ::DDS::HANDLE_NIL);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Delete(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Dispose(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), handle);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Delete(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::Dispose(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
 	::DDS::Time_t time;
 	time.sec = timestamp.Seconds;
 	time.nanosec = timestamp.NanoSeconds;
@@ -966,15 +966,15 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Write(Test
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->write_w_timestamp(data->ToNative(), handle, time);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Delete(TestStruct^ data) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Dispose(TestStruct^ data) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), ::DDS::HANDLE_NIL);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Delete(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Dispose(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), handle);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Delete(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::Dispose(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
 	::DDS::Time_t time;
 	time.sec = timestamp.Seconds;
 	time.nanosec = timestamp.NanoSeconds;

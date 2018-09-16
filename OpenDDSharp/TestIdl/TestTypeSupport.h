@@ -82,9 +82,9 @@ namespace Test {
 		OpenDDSharp::DDS::ReturnCode Write(BasicTestStruct^ data);
         OpenDDSharp::DDS::ReturnCode Write(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
         OpenDDSharp::DDS::ReturnCode Write(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
-		OpenDDSharp::DDS::ReturnCode Delete(BasicTestStruct^ data);
-		OpenDDSharp::DDS::ReturnCode Delete(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
-        OpenDDSharp::DDS::ReturnCode Delete(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(BasicTestStruct^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
         OpenDDSharp::DDS::ReturnCode GetKeyValue(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
         System::Int32 LookupInstance(BasicTestStruct^ instance);
 	};
@@ -440,9 +440,9 @@ namespace Test {
 		OpenDDSharp::DDS::ReturnCode Write(TestStruct^ data);
         OpenDDSharp::DDS::ReturnCode Write(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
         OpenDDSharp::DDS::ReturnCode Write(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
-		OpenDDSharp::DDS::ReturnCode Delete(TestStruct^ data);
-		OpenDDSharp::DDS::ReturnCode Delete(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
-        OpenDDSharp::DDS::ReturnCode Delete(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(TestStruct^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
         OpenDDSharp::DDS::ReturnCode GetKeyValue(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle);
         System::Int32 LookupInstance(TestStruct^ instance);
 	};

@@ -29,9 +29,9 @@
 		OpenDDSharp::DDS::ReturnCode Write(<%TYPE%>^ data);
         OpenDDSharp::DDS::ReturnCode Write(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle);
         OpenDDSharp::DDS::ReturnCode Write(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
-		OpenDDSharp::DDS::ReturnCode Delete(<%TYPE%>^ data);
-		OpenDDSharp::DDS::ReturnCode Delete(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle);
-        OpenDDSharp::DDS::ReturnCode Delete(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(<%TYPE%>^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
         OpenDDSharp::DDS::ReturnCode GetKeyValue(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle);
         System::Int32 LookupInstance(<%TYPE%>^ instance);
 	};

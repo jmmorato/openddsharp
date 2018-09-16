@@ -68,15 +68,15 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Write(<%TYPE%>^ 
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->write_w_timestamp(data->ToNative(), handle, time);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Delete(<%TYPE%>^ data) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Dispose(<%TYPE%>^ data) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), ::DDS::HANDLE_NIL);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Delete(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Dispose(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), handle);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Delete(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::Dispose(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
 	::DDS::Time_t time;
 	time.sec = timestamp.Seconds;
 	time.nanosec = timestamp.NanoSeconds;
