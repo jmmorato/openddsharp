@@ -8,10 +8,10 @@ to be suitable for systems whose requirements include real-time, high
 volume, robustness, failure tolerant data distribution utilizing a
 publish and subscribe model.
 
-OpenDDSharp has been compiled with OpenDDS v3.13
-
 OpenDDS Website: [http://www.opendds.org](http://www.opendds.org)  
 OpenDDS Repository: [https://github.com/objectcomputing/OpenDDS](https://github.com/objectcomputing/OpenDDS)
+
+OpenDDSharp has been compiled with OpenDDS v3.13
 
 | Package | NuGet |
 |---------|-------|
