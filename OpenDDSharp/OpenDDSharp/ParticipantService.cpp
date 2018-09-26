@@ -27,14 +27,15 @@ OpenDDSharp::OpenDDS::DCPS::ParticipantService::ParticipantService() {
 	ACE::init();
 
 	impl_entity = ::OpenDDS::DCPS::Service_Participant::instance();
+	
+    /*::OpenDDS::DCPS::TransportConfig_rch config = ::OpenDDS::DCPS::TransportRegistry::instance()->create_config("openddsharp_rtps_interop");
+    ::OpenDDS::DCPS::TransportInst_rch inst = ::OpenDDS::DCPS::TransportRegistry::instance()->create_inst("internal_openddsharp_rtps_transport", "rtps_udp");
+    ::OpenDDS::DCPS::RtpsUdpInst_rch rui = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::RtpsUdpInst>(inst);
+    rui->handshake_timeout_ = 1;
 
-	::OpenDDS::DCPS::TransportConfig_rch config = ::OpenDDS::DCPS::TransportRegistry::instance()->create_config("openddsharp_rtps_interop");
-	::OpenDDS::DCPS::TransportInst_rch inst = ::OpenDDS::DCPS::TransportRegistry::instance()->create_inst("internal_openddsharp_rtps_transport", "rtps_udp");
-	::OpenDDS::DCPS::RtpsUdpInst_rch rui = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::RtpsUdpInst>(inst);
-	rui->handshake_timeout_ = 1;
+    config->instances_.push_back(inst);
+    ::OpenDDS::DCPS::TransportRegistry::instance()->global_config(config);*/
 
-	config->instances_.push_back(inst);
-	::OpenDDS::DCPS::TransportRegistry::instance()->global_config(config);
 	::OpenDDS::RTPS::RtpsDiscovery_rch disc = ::OpenDDS::DCPS::make_rch<::OpenDDS::RTPS::RtpsDiscovery>("RtpsDiscovery");
 	disc->resend_period(ACE_Time_Value(1));
 	disc->sedp_multicast(true);

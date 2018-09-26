@@ -22,6 +22,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma unmanaged 
 #include <dds/DCPS/Service_Participant.h>
 #include <dds/DCPS/Marked_Default_Qos.h>
+#include <dds/DCPS/transport/framework/TransportRegistry.h>
+
+#include <dds/DCPS/transport/rtps_udp/RtpsUdp.h>
+
+#include <dds/DCPS/transport/rtps_udp/RtpsUdpInst.h>
+#include <dds/DCPS/transport/rtps_udp/RtpsUdpInst_rch.h>
 #pragma managed
 
 #include "DomainParticipant.h"
@@ -40,6 +46,7 @@ namespace OpenDDSharp {
 
 		private:
 			::DDS::DomainParticipantFactory_ptr impl_entity;
+			long counter = 0;
 
 		internal:
 			DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory);			
