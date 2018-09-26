@@ -68,21 +68,20 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(Ope
 	if (listener != nullptr) {
 		lst = listener->impl_entity;
 	}
-	
-	::DDS::DataReader_ptr dr = impl_entity->create_datareader(topicDescription->ToNative(), drQos, lst.in(), (System::UInt32)statusMask);
 
-	if (dr != NULL) {
-		OpenDDSharp::DDS::DataReader^ r = gcnew OpenDDSharp::DDS::DataReader(dr);
-		r->_listener = listener;
+	::DDS::DataReader_ptr dr = impl_entity->create_datareader(topicDescription->ToNative(), drQos, lst, (System::UInt32)statusMask);
 
-		EntityManager::get_instance()->add(dr, r);
-		contained_entities->Add(r);
-
-		return r;
-	}
-	else {
+	if (dr == NULL) {
 		return nullptr;
 	}
+
+	OpenDDSharp::DDS::DataReader^ r = gcnew OpenDDSharp::DDS::DataReader(dr);
+	r->_listener = listener;
+
+	EntityManager::get_instance()->add(dr, r);
+	contained_entities->Add(r);
+
+	return r;	
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteDataReader(OpenDDSharp::DDS::DataReader^ datareader) {
@@ -93,7 +92,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteDataReader(Open
 	::DDS::ReturnCode_t ret = impl_entity->delete_datareader(datareader->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(datareader->impl_entity);
-		contained_entities->Remove(datareader);
+		contained_entities->Remove(datareader);		    
 	}	
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
@@ -101,6 +100,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteDataReader(Open
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteContainedEntities() {	
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
+
 	if (ret != ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
 			EntityManager::get_instance()->remove(e->impl_entity);
