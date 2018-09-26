@@ -93,7 +93,7 @@ namespace ConsoleDemo
                 {
                     waitSet = new WaitSet();
                     statusCondition = dataReader.StatusCondition;
-                    waitSet.AttachCondition(dataReader.StatusCondition);
+                    waitSet.AttachCondition(statusCondition);
                     statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
                     new System.Threading.Thread(delegate ()
