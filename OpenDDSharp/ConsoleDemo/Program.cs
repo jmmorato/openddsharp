@@ -92,7 +92,7 @@ namespace ConsoleDemo
                 if (!useListener)
                 {
                     waitSet = new WaitSet();
-                    
+                    statusCondition = dataReader.StatusCondition;
                     waitSet.AttachCondition(dataReader.StatusCondition);
                     statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
@@ -204,11 +204,7 @@ namespace ConsoleDemo
         {
             try
             {
-                TestStructDataReader dr = new TestStructDataReader(reader);
-                
-                //SampleInfo info = new SampleInfo();
-                //TestStruct sample = new TestStruct();
-                //ReturnCode error = dr.TakeNextSample(sample, info);
+                TestStructDataReader dr = new TestStructDataReader(reader);               
 
                 List<TestStruct> samples = new List<TestStruct>();
                 List<SampleInfo> infos = new List<SampleInfo>();
