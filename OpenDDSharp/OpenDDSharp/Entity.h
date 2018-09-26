@@ -52,8 +52,10 @@ namespace OpenDDSharp {
 		/// </summary>
 		public ref class Entity abstract {
 
-		internal:
+		public:
 			::DDS::Entity_ptr impl_entity;
+
+        internal:
 			ICollection<Entity^>^ contained_entities;
 
 		public:
