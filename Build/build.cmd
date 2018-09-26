@@ -35,6 +35,7 @@ REM Apply the needed OpenDDS patches
 git apply %CD%\..\..\Patches\ConditionImpl.h.patch
 git apply %CD%\..\..\Patches\DataReaderImpl.cpp.patch
 git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
+git apply %CD%\..\..\Patches\MultiTopicDataReaderBase.cpp.patch
 git apply %CD%\..\..\Patches\unique_ptr.h.patch 
 
 REM Build OpenDDS for x64 platforms and create the bin_x64 and lib_x64 folders
