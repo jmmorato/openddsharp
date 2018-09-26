@@ -520,7 +520,7 @@ namespace OpenDDSharp {
 			/// </summary>
 			/// <remarks>
 			/// <para>Prior to deleting each contained entity, this operation will recursively call the corresponding DeleteContainedEntities
-			/// operation on each contained entity (if applicable).This pattern is applied recursively.In this manner the operation
+			/// operation on each contained entity (if applicable).This pattern is applied recursively. In this manner the operation
 			///	DeleteContainedEntities on the <see cref="DomainParticipant" /> will end up deleting all the entities recursively contained in the
 			///	<see cref="DomainParticipant" />, that is also the <see cref="DataWriter" />, <see cref="DataReader" />, as well as the <see cref="QueryCondition" /> 
 			/// and <see cref="ReadCondition" /> objects belonging to the contained DataReaders.</para>
