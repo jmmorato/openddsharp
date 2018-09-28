@@ -56,10 +56,7 @@ namespace OpenDDSharp {
 
 		internal:
 			::DDS::Publisher_ptr impl_entity;
-			OpenDDSharp::DDS::PublisherListener^ m_listener;
-
-        public:
-            !Publisher();
+			OpenDDSharp::DDS::PublisherListener^ m_listener;       
 
 		public:
 			/// <summary>
@@ -70,7 +67,10 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			Publisher(::DDS::Publisher_ptr publisher);			
+			Publisher(::DDS::Publisher_ptr publisher);	
+
+        public:
+            !Publisher();
 
 		public:
 			/// <summary>

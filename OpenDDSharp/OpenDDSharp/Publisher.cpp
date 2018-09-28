@@ -88,14 +88,16 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::CreateDataWriter(Open
 	return w;
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteDataWriter(OpenDDSharp::DDS::DataWriter^ datawriter) {	
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteDataWriter(OpenDDSharp::DDS::DataWriter^ datawriter) {
+    if (datawriter == nullptr) {
+        return OpenDDSharp::DDS::ReturnCode::BadParameter;
+    }
+
 	::DDS::ReturnCode_t ret = impl_entity->delete_datawriter(datawriter->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(datawriter->impl_entity);
 		contained_entities->Remove(datawriter);
-	}
-	else {
-		
+        datawriter->impl_entity = NULL;        
 	}
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;

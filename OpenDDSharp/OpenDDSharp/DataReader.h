@@ -81,7 +81,8 @@ namespace OpenDDSharp {
 			::DDS::DataReader_ptr impl_entity;
 
 		internal:
-			OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ _listener;
+			OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ _listener;       
+            ICollection<ReadCondition^>^ conditions;
 
         public:
             !DataReader();

@@ -46,12 +46,13 @@ OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadConditi
 
 OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadCondition(OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
 	::DDS::ReadCondition_ptr native =  impl_entity->create_readcondition(sampleStates, viewStates, instanceStates);
-	if (native != NULL) {
-		return gcnew OpenDDSharp::DDS::ReadCondition(native, this);
-	}
-	else {
-		return nullptr;
-	}
+    if (native == NULL) {
+        return nullptr;
+    }	
+
+    ReadCondition^ condition = gcnew OpenDDSharp::DDS::ReadCondition(native, this);
+    conditions->Add(condition);
+    return condition;
 }
 
 OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondition(System::String^ queryExpression, ... array<System::String^>^ queryParameters) {
@@ -77,12 +78,13 @@ OpenDDSharp::DDS::QueryCondition^ OpenDDSharp::DDS::DataReader::CreateQueryCondi
 	}
 
 	::DDS::QueryCondition_ptr native = impl_entity->create_querycondition(sampleStates, viewStates, instanceStates, context.marshal_as<const char*>(queryExpression), seq);
-	if (native != NULL) {
-		return gcnew OpenDDSharp::DDS::QueryCondition(native, this);
-	}
-	else {
-		return nullptr;
-	}
+    if (native == NULL) {
+        return nullptr;
+    }
+
+    QueryCondition^ condition = gcnew OpenDDSharp::DDS::QueryCondition(native, this);
+    conditions->Add(condition);
+    return condition;
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteReadCondition(OpenDDSharp::DDS::ReadCondition^ condition) {
@@ -90,7 +92,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteReadCondition(O
 		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->delete_readcondition(condition->impl_entity);
+    ::DDS::ReturnCode_t ret = impl_entity->delete_readcondition(condition->impl_entity);
+    if (ret == ::DDS::RETCODE_OK) {
+        conditions->Remove(condition);       
+    }
+
+    return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteContainedEntities() {

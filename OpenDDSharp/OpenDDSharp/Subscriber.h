@@ -59,10 +59,7 @@ namespace OpenDDSharp {
 
 		internal:
 			::DDS::Subscriber_ptr impl_entity;
-			OpenDDSharp::DDS::SubscriberListener^ m_listener;
-
-        public:
-            !Subscriber();
+			OpenDDSharp::DDS::SubscriberListener^ m_listener;        
 
 		public:
 			/// <summary>
@@ -74,6 +71,9 @@ namespace OpenDDSharp {
 
 		internal:
 			Subscriber(::DDS::Subscriber_ptr subscriber);
+
+        public:
+            !Subscriber();
 
 		public:
 			/// <summary>

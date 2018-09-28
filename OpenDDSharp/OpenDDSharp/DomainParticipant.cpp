@@ -126,6 +126,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteTopic(Op
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(topic->impl_entity);
 		contained_entities->Remove(topic);
+        topic->impl_entity = NULL;        
 	}
 	
 	return (OpenDDSharp::DDS::ReturnCode)ret;
@@ -212,6 +213,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeletePublishe
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(pub->impl_entity);
 		contained_entities->Remove(pub);
+        pub->impl_entity = NULL;
 	}
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
@@ -308,6 +310,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteSubscrib
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(sub->impl_entity);
 		contained_entities->Remove(sub);
+        sub->impl_entity = NULL;        
 	}	
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;	
@@ -476,7 +479,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContentF
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->delete_contentfilteredtopic(contentFilteredTopic->impl_entity);
+    ::DDS::ReturnCode_t ret = impl_entity->delete_contentfilteredtopic(contentFilteredTopic->impl_entity);
+    if (ret == ::DDS::RETCODE_OK) {
+        contentFilteredTopic->impl_entity = NULL;        
+    }
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
 OpenDDSharp::DDS::MultiTopic^ OpenDDSharp::DDS::DomainParticipant::CreateMultiTopic(System::String^ name, System::String^ typeName, System::String^ subscriptionExpression, ... array<System::String^>^ expressionParameters) {
@@ -524,7 +532,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteMultiTop
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->delete_multitopic(multitopic->impl_entity);
+    ::DDS::ReturnCode_t ret = impl_entity->delete_multitopic(multitopic->impl_entity);
+    if (ret == ::DDS::RETCODE_OK) {
+        multitopic->impl_entity = NULL;        
+    }
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredParticipants(ICollection<OpenDDSharp::DDS::InstanceHandle>^ participantHandles) {
