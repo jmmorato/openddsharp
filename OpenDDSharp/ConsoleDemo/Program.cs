@@ -188,10 +188,8 @@ namespace ConsoleDemo
                 if (!useListener)
                     waitSet.DetachCondition(statusCondition);                    
                 
-
-                
                 participant.DeleteContainedEntities();
-                domainFactory.DeleteParticipant(participant);
+                domainFactory.DeleteParticipant(participant);                
             }            
             
             participantService.Shutdown();
