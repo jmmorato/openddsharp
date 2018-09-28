@@ -19,10 +19,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "QueryCondition.h"
 
-OpenDDSharp::DDS::QueryCondition::QueryCondition(::DDS::QueryCondition_ptr query_condition, OpenDDSharp::DDS::DataReader^ reader) : ReadCondition(query_condition, reader) {
-	impl_entity = query_condition;	
+OpenDDSharp::DDS::QueryCondition::QueryCondition(::DDS::QueryCondition_ptr query_condition, OpenDDSharp::DDS::DataReader^ reader) : ReadCondition(static_cast<::DDS::ReadCondition_ptr>(query_condition), reader) {
+	impl_entity = ::DDS::QueryCondition::_duplicate(query_condition);
 }
 
+OpenDDSharp::DDS::QueryCondition::!QueryCondition() {
+    impl_entity = NULL;
+}
 
 System::String^ OpenDDSharp::DDS::QueryCondition::QueryExpression::get() {
 	return GetQueryExpression();

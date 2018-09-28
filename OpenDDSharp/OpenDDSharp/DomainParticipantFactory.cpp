@@ -20,8 +20,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DomainParticipantFactory.h"
 
 OpenDDSharp::DDS::DomainParticipantFactory::DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory) {
-	impl_entity = factory;
+	impl_entity = ::DDS::DomainParticipantFactory::_duplicate(factory);
 };
+
+OpenDDSharp::DDS::DomainParticipantFactory::!DomainParticipantFactory() {
+    impl_entity = NULL;
+}
 
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(System::Int32 domainId) {
 	return OpenDDSharp::DDS::DomainParticipantFactory::CreateParticipant(domainId, nullptr, nullptr, StatusMask::NoStatusMask);

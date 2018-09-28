@@ -68,6 +68,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::MultiTopic_ptr impl_entity;
 
+        public:
+            !MultiTopic();
+
 		public:
 			/// <summary>
 			/// Gets the subscription expression associated with the <see cref="MultiTopic" />. 

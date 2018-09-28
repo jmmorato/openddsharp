@@ -58,6 +58,9 @@ namespace OpenDDSharp {
 			::DDS::Publisher_ptr impl_entity;
 			OpenDDSharp::DDS::PublisherListener^ m_listener;
 
+        public:
+            !Publisher();
+
 		public:
 			/// <summary>
 			/// Gets the <see cref="DomainParticipant" /> to which the <see cref="Publisher" /> belongs.

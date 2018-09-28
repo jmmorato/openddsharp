@@ -21,9 +21,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ContentFilteredTopic.h"
 #include "MultiTopic.h"
 
-OpenDDSharp::DDS::DomainParticipant::DomainParticipant(::DDS::DomainParticipant_ptr participant) : OpenDDSharp::DDS::Entity(participant) {
-	impl_entity = participant;	
+OpenDDSharp::DDS::DomainParticipant::DomainParticipant(::DDS::DomainParticipant_ptr participant) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(participant)) {
+	impl_entity = ::DDS::DomainParticipant::_duplicate(participant);
 };
+
+OpenDDSharp::DDS::DomainParticipant::!DomainParticipant() {
+    impl_entity = NULL;
+}
 
 System::Int32 OpenDDSharp::DDS::DomainParticipant::DomainId::get() {
 	return GetDomainId();

@@ -40,6 +40,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::TopicDescription_ptr impl_entity;
 
+        public:
+            !TopicDescription();
+
 		internal:
 			TopicDescription(::DDS::TopicDescription_ptr topicDescription);
 

@@ -20,8 +20,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Entity.h"
 
 OpenDDSharp::DDS::Entity::Entity(::DDS::Entity_ptr entity) {
-	impl_entity = entity;
+	impl_entity = ::DDS::Entity::_duplicate(entity);
 	contained_entities = gcnew List<Entity^>();
+}
+
+OpenDDSharp::DDS::Entity::!Entity() {
+    impl_entity = NULL;
 }
 
 OpenDDSharp::DDS::StatusCondition^ OpenDDSharp::DDS::Entity::StatusCondition::get() {

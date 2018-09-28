@@ -55,6 +55,9 @@ namespace OpenDDSharp {
 		public:
 			::DDS::Entity_ptr impl_entity;
 
+        public:
+            !Entity();
+
         internal:
 			ICollection<Entity^>^ contained_entities;
 

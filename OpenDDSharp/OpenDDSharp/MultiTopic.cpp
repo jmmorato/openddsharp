@@ -21,7 +21,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DomainParticipant.h"
 
 OpenDDSharp::DDS::MultiTopic::MultiTopic(::DDS::MultiTopic_ptr native) : TopicDescription(native) {
-	impl_entity = native;
+	impl_entity = ::DDS::MultiTopic::_duplicate(native);
+}
+
+OpenDDSharp::DDS::MultiTopic::!MultiTopic() {
+    impl_entity = NULL;
 }
 
 System::String^ OpenDDSharp::DDS::MultiTopic::SubscriptionExpression::get() {

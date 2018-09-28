@@ -21,9 +21,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "PublisherListener.h"
 #include "DomainParticipant.h"
 
-OpenDDSharp::DDS::Publisher::Publisher(::DDS::Publisher_ptr publisher) : OpenDDSharp::DDS::Entity(publisher) {
-	impl_entity = publisher;	
+OpenDDSharp::DDS::Publisher::Publisher(::DDS::Publisher_ptr publisher) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(publisher)) {
+	impl_entity = ::DDS::Publisher::_duplicate(publisher);
 };
+
+OpenDDSharp::DDS::Publisher::!Publisher() {
+    impl_entity = NULL;
+}
 
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Publisher::Participant::get() {
 	return GetParticipant();

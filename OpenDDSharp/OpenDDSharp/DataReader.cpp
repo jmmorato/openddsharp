@@ -24,8 +24,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "QueryCondition.h"
 #include "TopicDescription.h"
 
-OpenDDSharp::DDS::DataReader::DataReader(::DDS::DataReader_ptr dataReader) : OpenDDSharp::DDS::Entity(dataReader) {
-	impl_entity = dataReader;
+OpenDDSharp::DDS::DataReader::DataReader(::DDS::DataReader_ptr dataReader) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(dataReader)) {
+	impl_entity = ::DDS::DataReader::_duplicate(dataReader);
+}
+
+OpenDDSharp::DDS::DataReader::!DataReader() {
+    impl_entity = NULL;
 }
 
 OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DataReader::Subscriber::get() {

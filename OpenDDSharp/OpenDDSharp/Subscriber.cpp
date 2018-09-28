@@ -21,9 +21,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "SubscriberListener.h"
 #include "DomainParticipant.h"
 
-OpenDDSharp::DDS::Subscriber::Subscriber(::DDS::Subscriber_ptr subscriber) : OpenDDSharp::DDS::Entity(subscriber) {
-	impl_entity = subscriber;
+OpenDDSharp::DDS::Subscriber::Subscriber(::DDS::Subscriber_ptr subscriber) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(subscriber)) {
+	impl_entity = ::DDS::Subscriber::_duplicate(subscriber);
 };
+
+OpenDDSharp::DDS::Subscriber::!Subscriber() {
+    impl_entity = NULL;
+}
 
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Subscriber::Participant::get() {
 	return GetParticipant();

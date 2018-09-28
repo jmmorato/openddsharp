@@ -55,6 +55,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::ContentFilteredTopic_ptr impl_entity;
 
+        public:
+            !ContentFilteredTopic();
+
 		public:
 			/// <summary>
 			/// Gets the filter expression associated with the <see cref="ContentFilteredTopic" />. That is, the expression specified when the

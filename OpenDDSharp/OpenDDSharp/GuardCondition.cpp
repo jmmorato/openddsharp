@@ -19,12 +19,16 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "GuardCondition.h"
 
-OpenDDSharp::DDS::GuardCondition::GuardCondition(::DDS::GuardCondition_ptr native) : OpenDDSharp::DDS::Condition(native) {
-	impl_entity = native;	
+OpenDDSharp::DDS::GuardCondition::GuardCondition(::DDS::GuardCondition_ptr native) : OpenDDSharp::DDS::Condition(static_cast<::DDS::Condition_ptr>(native)) {
+	impl_entity = ::DDS::GuardCondition::_duplicate(native);
 }
 
 OpenDDSharp::DDS::GuardCondition::GuardCondition() : GuardCondition(new ::DDS::GuardCondition()) {
+   
+}
 
+OpenDDSharp::DDS::GuardCondition::!GuardCondition() {
+    impl_entity = NULL;
 }
 
 System::Boolean OpenDDSharp::DDS::GuardCondition::TriggerValue::get() {

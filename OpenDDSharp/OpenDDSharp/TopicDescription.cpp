@@ -20,7 +20,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "TopicDescription.h"
 
 OpenDDSharp::DDS::TopicDescription::TopicDescription(::DDS::TopicDescription_ptr topicDescription) {
-	impl_entity = topicDescription;
+	impl_entity = ::DDS::TopicDescription::_duplicate(topicDescription);
+}
+
+OpenDDSharp::DDS::TopicDescription::!TopicDescription() {
+    impl_entity = NULL;
 }
 
 System::String^ OpenDDSharp::DDS::TopicDescription::TypeName::get() {

@@ -21,8 +21,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "TopicListener.h"
 #include "DomainParticipant.h"
 
-OpenDDSharp::DDS::Topic::Topic(::DDS::Topic_ptr topic) : OpenDDSharp::DDS::Entity(topic) {
-	impl_entity = topic;	
+OpenDDSharp::DDS::Topic::Topic(::DDS::Topic_ptr topic) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(topic)) {
+	impl_entity = ::DDS::Topic::_duplicate(topic);
+}
+
+OpenDDSharp::DDS::Topic::!Topic() {
+    impl_entity = NULL;
 }
 
 System::String^ OpenDDSharp::DDS::Topic::TypeName::get() {

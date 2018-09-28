@@ -51,6 +51,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::WaitSet_ptr impl_entity; 
 
+        public:
+            !WaitSet();
+
 		private:
 			ICollection<Condition^>^ conditions;
 

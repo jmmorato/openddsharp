@@ -39,6 +39,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::Condition_ptr impl_entity;
 
+        public:
+            !Condition();
+
 		public:
 			/// <summary>
 			/// Gets the trigger value of the <see cref="Condition" />

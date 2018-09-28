@@ -19,9 +19,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "ReadCondition.h"
 
-OpenDDSharp::DDS::ReadCondition::ReadCondition(::DDS::ReadCondition_ptr read_condition, OpenDDSharp::DDS::DataReader^ reader) : Condition(read_condition) {
-	impl_entity = read_condition;
+OpenDDSharp::DDS::ReadCondition::ReadCondition(::DDS::ReadCondition_ptr read_condition, OpenDDSharp::DDS::DataReader^ reader) : Condition(static_cast<::DDS::Condition_ptr>(read_condition)) {
+	impl_entity = ::DDS::ReadCondition::_duplicate(read_condition);
 	data_reader = reader;
+}
+
+OpenDDSharp::DDS::ReadCondition::!ReadCondition() {
+    impl_entity = NULL;
 }
 
 OpenDDSharp::DDS::SampleStateMask OpenDDSharp::DDS::ReadCondition::SampleStateMask::get() {

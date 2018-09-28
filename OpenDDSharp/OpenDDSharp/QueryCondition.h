@@ -47,6 +47,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::QueryCondition_ptr impl_entity;
 
+        public:
+            !QueryCondition();
+
 		public:
 			/// <summary>
 			/// Gets the queryexpression associated with the <see cref="QueryCondition" />. 

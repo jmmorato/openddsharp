@@ -21,8 +21,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DataWriterListener.h"
 #include "Publisher.h"
 
-OpenDDSharp::DDS::DataWriter::DataWriter(::DDS::DataWriter_ptr dataWriter) : OpenDDSharp::DDS::Entity(dataWriter) {
-	impl_entity = dataWriter;	
+OpenDDSharp::DDS::DataWriter::DataWriter(::DDS::DataWriter_ptr dataWriter) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(dataWriter)) {
+	impl_entity = ::DDS::DataWriter::_duplicate(dataWriter);
+}
+
+OpenDDSharp::DDS::DataWriter::!DataWriter() {
+    impl_entity = NULL;
 }
 
 OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DataWriter::Topic::get() {

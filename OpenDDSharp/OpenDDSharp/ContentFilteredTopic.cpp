@@ -20,7 +20,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ContentFilteredTopic.h"
 
 OpenDDSharp::DDS::ContentFilteredTopic::ContentFilteredTopic(::DDS::ContentFilteredTopic_ptr native) : TopicDescription(native) {
-	impl_entity = native;
+	impl_entity = ::DDS::ContentFilteredTopic::_duplicate(native);
+}
+
+OpenDDSharp::DDS::ContentFilteredTopic::!ContentFilteredTopic() {
+    impl_entity = NULL;
 }
 
 System::String^ OpenDDSharp::DDS::ContentFilteredTopic::FilterExpression::get() {

@@ -46,6 +46,9 @@ namespace OpenDDSharp {
 			::DDS::ReadCondition_ptr impl_entity;
 			OpenDDSharp::DDS::DataReader^ data_reader;
 
+        public:
+            !ReadCondition();
+
 		public:
 			/// <summary>
 			/// Gets the set of sample-states that are taken into account to determine the trigger value of the <see cref="ReadCondition" />. 

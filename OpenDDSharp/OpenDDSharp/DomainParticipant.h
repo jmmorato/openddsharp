@@ -77,6 +77,9 @@ namespace OpenDDSharp {
 			/// <exclude />
 			::DDS::DomainParticipant_ptr impl_entity;
 
+        public:
+            !DomainParticipant();
+
 		public:
 			/// <summary>
 			/// Gets the domain id used to create the <see cref="DomainParticipant" />. 			

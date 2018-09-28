@@ -44,6 +44,9 @@ namespace OpenDDSharp {
 		internal:
 			::DDS::GuardCondition_ptr impl_entity;
 
+        public:
+            !GuardCondition();
+
 		public:
 			/// <summary>
 			/// Gets/Sets the trigger value of the <see cref="GuardCondition" />

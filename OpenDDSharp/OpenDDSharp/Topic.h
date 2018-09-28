@@ -55,6 +55,9 @@ namespace OpenDDSharp {
 		internal:
 			Topic(::DDS::Topic_ptr topic);
 
+        public:
+            !Topic();
+
 		public:
 			/// <summary>
 			/// Gets type name used to create the <see cref="ITopicDescription" />.

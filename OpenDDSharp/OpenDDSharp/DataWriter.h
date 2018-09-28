@@ -72,6 +72,9 @@ namespace OpenDDSharp {
 		internal:
 			OpenDDSharp::OpenDDS::DCPS::DataWriterListener^ _listener;
 
+        public:
+            !DataWriter();
+
 		public:
 			/// <summary>
 			/// Gets the <see cref="Topic" /> associated with the <see cref="DataWriter" />. 

@@ -20,8 +20,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Condition.h"
 
 OpenDDSharp::DDS::Condition::Condition(::DDS::Condition_ptr condition) {
-	impl_entity = condition;
+	impl_entity = ::DDS::Condition::_duplicate(condition);
 };
+
+OpenDDSharp::DDS::Condition::!Condition() {
+    impl_entity = NULL;
+}
 
 System::Boolean OpenDDSharp::DDS::Condition::TriggerValue::get() {
 	return GetTriggerValue();

@@ -83,6 +83,9 @@ namespace OpenDDSharp {
 		internal:
 			OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ _listener;
 
+        public:
+            !DataReader();
+
 		public:
 			/// <summary>
 			/// Gets the <see cref="Subscriber" /> to which the <see cref="DataReader" /> belongs.

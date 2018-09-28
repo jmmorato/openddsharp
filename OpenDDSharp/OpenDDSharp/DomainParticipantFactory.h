@@ -49,7 +49,10 @@ namespace OpenDDSharp {
 			long counter = 0;
 
 		internal:
-			DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory);			
+			DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory);	
+
+        public:
+            !DomainParticipantFactory();
 
 		public:
 			/// <summary>

@@ -22,9 +22,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 OpenDDSharp::DDS::WaitSet::WaitSet() : WaitSet(new ::DDS::WaitSet()) { };
 
 OpenDDSharp::DDS::WaitSet::WaitSet(::DDS::WaitSet_ptr waitSet) {
-	impl_entity = waitSet;
+	impl_entity = ::DDS::WaitSet::_duplicate(waitSet);
 	conditions = gcnew List<Condition^>();
 };
+
+OpenDDSharp::DDS::WaitSet::!WaitSet() {
+    impl_entity = NULL;
+}
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::Wait(ICollection<Condition^>^ activeConditions) {
 	Duration duration;

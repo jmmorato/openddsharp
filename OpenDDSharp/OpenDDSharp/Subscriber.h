@@ -61,6 +61,9 @@ namespace OpenDDSharp {
 			::DDS::Subscriber_ptr impl_entity;
 			OpenDDSharp::DDS::SubscriberListener^ m_listener;
 
+        public:
+            !Subscriber();
+
 		public:
 			/// <summary>
 			/// Gets the <see cref="DomainParticipant" /> to which the <see cref="Subscriber" /> belongs.
