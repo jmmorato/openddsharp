@@ -208,7 +208,7 @@
       <CallingConvention>Cdecl</CallingConvention>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
-      <DisableSpecificWarnings>4635;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4635;4461;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
