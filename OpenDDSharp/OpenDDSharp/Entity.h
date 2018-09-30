@@ -27,6 +27,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "StatusMask.h"
 #include "InstanceHandle.h"
 #include "StatusCondition.h"
+#include "EntityManager.h"
 
 #using <System.Core.dll>
 #using <System.Linq.dll>
@@ -53,10 +54,7 @@ namespace OpenDDSharp {
 		public ref class Entity abstract {
 
 		public:
-			::DDS::Entity_ptr impl_entity;
-
-        public:
-            !Entity();
+			::DDS::Entity_ptr impl_entity;        
 
         internal:
 			ICollection<Entity^>^ contained_entities;
@@ -93,6 +91,9 @@ namespace OpenDDSharp {
 
 		internal:
 			Entity(::DDS::Entity_ptr entity);
+
+        public:
+            !Entity();
 
 		public:
 			/// <summary>
@@ -131,8 +132,8 @@ namespace OpenDDSharp {
 
 			OpenDDSharp::DDS::InstanceHandle GetInstanceHandle();
 
-		internal:
-			ICollection<Entity^>^ GetContainedEntities();
+		internal:			
+            virtual void ClearContainedEntities();
 		};
 
 	};

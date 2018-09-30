@@ -59,17 +59,14 @@ OpenDDSharp::DDS::StatusMask OpenDDSharp::DDS::Entity::GetStatusChanges() {
 }
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::Entity::GetInstanceHandle() {
-	return impl_entity->get_instance_handle();	
+    return impl_entity->get_instance_handle();
 }
 
-ICollection<OpenDDSharp::DDS::Entity^>^ OpenDDSharp::DDS::Entity::GetContainedEntities() {
-	List<Entity^>^ ret = gcnew List<Entity^>();
-
-	for each (Entity^ e in contained_entities)
-	{
-		ret = Enumerable::ToList(Enumerable::Concat(ret, e->GetContainedEntities()));
-		ret->Add(e);
-	}
-
-	return ret;
+void OpenDDSharp::DDS::Entity::ClearContainedEntities() {
+    for each (Entity^ e in contained_entities) {
+        EntityManager::get_instance()->remove(e->impl_entity);
+        e->ClearContainedEntities();
+        e->impl_entity = NULL;
+    }
+    contained_entities->Clear();
 }

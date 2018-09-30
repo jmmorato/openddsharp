@@ -109,6 +109,8 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteContainedEntiti
 	if (ret != ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
 			EntityManager::get_instance()->remove(e->impl_entity);
+            e->ClearContainedEntities();
+            e->impl_entity = NULL;
 		}
 		contained_entities->Clear();
 	}

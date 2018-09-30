@@ -121,7 +121,8 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteContainedEntitie
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 	if (ret != ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
-			EntityManager::get_instance()->remove(e->impl_entity);
+			EntityManager::get_instance()->remove(e->impl_entity);            
+            e->impl_entity = NULL;
 		}	
 		contained_entities->Clear();
 	}	

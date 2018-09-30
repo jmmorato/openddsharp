@@ -292,6 +292,9 @@ namespace OpenDDSharp {
 			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
 			OpenDDSharp::DDS::ReturnCode GetMatchedPublicationData(OpenDDSharp::DDS::InstanceHandle publicationHandle, OpenDDSharp::DDS::PublicationBuiltinTopicData% publicationData);
 
+        internal:
+            void ClearContainedEntities() override;
+
 		private:
 			OpenDDSharp::DDS::Subscriber^ GetSubscriber();
 			OpenDDSharp::DDS::ITopicDescription^ GetTopicDescription();

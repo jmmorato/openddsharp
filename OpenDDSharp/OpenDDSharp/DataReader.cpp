@@ -26,6 +26,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 OpenDDSharp::DDS::DataReader::DataReader(::DDS::DataReader_ptr dataReader) : OpenDDSharp::DDS::Entity(static_cast<::DDS::Entity_ptr>(dataReader)) {
 	impl_entity = ::DDS::DataReader::_duplicate(dataReader);
+    conditions = gcnew List<ReadCondition^>();
 }
 
 OpenDDSharp::DDS::DataReader::!DataReader() {
@@ -101,7 +102,13 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteReadCondition(O
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteContainedEntities() {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->delete_contained_entities();
+    ::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
+
+    if (ret != ::DDS::RETCODE_OK) {
+        ClearContainedEntities();
+    }
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::SetQos(OpenDDSharp::DDS::DataReaderQos^ qos) {
@@ -260,4 +267,11 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublication
 	}
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
+}
+
+void OpenDDSharp::DDS::DataReader::ClearContainedEntities() {
+    for each (ReadCondition^ e in conditions) {        
+        e->impl_entity = NULL;
+    }
+    conditions->Clear();
 }

@@ -337,14 +337,15 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetQos(OpenDDS
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContainedEntities() {
-	ICollection<Entity^>^ entities = this->GetContainedEntities();
-
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 	if (ret == ::DDS::RETCODE_OK) {
-		for each (Entity^ e in entities) {
+
+		for each (Entity^ e in contained_entities) {
 			EntityManager::get_instance()->remove(e->impl_entity);
-			e->contained_entities->Clear();
-		}		
+            e->ClearContainedEntities();
+            e->impl_entity = NULL;
+		}
+
 		contained_entities->Clear();		
 	}
 	
