@@ -554,6 +554,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredP
 		System::UInt32 i = 0;
 		while (i < seq.length()) {
 			participantHandles->Add(seq[i]);
+            i++;
 		}
 	}
 
@@ -584,6 +585,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDiscoveredT
 		System::UInt32 i = 0;
 		while (i < seq.length()) {
 			topicHandles->Add(seq[i]);
+            i++;
 		}
 	}
 
