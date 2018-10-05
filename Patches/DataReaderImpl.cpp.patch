@@ -1,8 +1,8 @@
 diff --git a/dds/DCPS/DataReaderImpl.cpp b/dds/DCPS/DataReaderImpl.cpp
-index 794e3cac9..d803f7c5a 100644
+index 794e3cac9..d491eb3fb 100644
 --- a/dds/DCPS/DataReaderImpl.cpp
 +++ b/dds/DCPS/DataReaderImpl.cpp
-@@ -120,6 +120,13 @@ DataReaderImpl::DataReaderImpl()
+@@ -120,19 +120,18 @@ DataReaderImpl::DataReaderImpl()
    periodic_monitor_ = TheServiceParticipant->monitor_factory_->create_data_reader_periodic_monitor(this);
  }
  
@@ -16,23 +16,43 @@ index 794e3cac9..d803f7c5a 100644
  // This method is called when there are no longer any reference to the
  // the servant.
  DataReaderImpl::~DataReaderImpl()
-@@ -143,8 +150,15 @@ DataReaderImpl::cleanup()
-   // back onto the listener at the moment the related DDS entity has been
+ {
+   DBG_ENTRY_LVL("DataReaderImpl","~DataReaderImpl",6);
+-
+-#ifndef OPENDDS_NO_OWNERSHIP_KIND_EXCLUSIVE
+-  OwnershipManagerPtr owner_manager = this->ownership_manager();
+-  if (owner_manager) {
+-    owner_manager->unregister_reader(topic_servant_->type_name(), this);
+-  }
+-#endif
+-
+ }
+ 
+ // this method is called when delete_datareader is called.
+@@ -144,6 +143,22 @@ DataReaderImpl::cleanup()
    // deleted
    set_listener(0, NO_STATUS_MASK);
-+  topic_servant_ = 0;
  
++#ifndef OPENDDS_NO_OWNERSHIP_KIND_EXCLUSIVE
++  OwnershipManagerPtr owner_manager = this->ownership_manager();
++  if (owner_manager) {
++  owner_manager->unregister_reader(topic_servant_->type_name(), this);
++  }
++#endif
++
++  topic_servant_ = 0;
++
 +#ifndef OPENDDS_NO_CONTENT_FILTERED_TOPIC
 +  content_filtered_topic_ = 0;
 +#endif
- 
++
 +#ifndef OPENDDS_NO_MULTI_TOPIC
 +  multi_topic_ = 0;
 +#endif
+ 
  }
  
- void DataReaderImpl::init(
-@@ -3140,6 +3154,14 @@ DataReaderImpl::get_cf_topic() const
+@@ -3140,6 +3155,14 @@ DataReaderImpl::get_cf_topic() const
  }
  #endif
  
