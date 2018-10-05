@@ -119,8 +119,65 @@ namespace OpenDDSharp.BuildTasks
             {
                 File.Delete(fullPath);
             }
-            _dte.Solution.Create(IntDir, _solutionName);
-            _solution = (Solution4)_dte.Solution;
+
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    _dte.Solution.Create(IntDir, _solutionName);
+
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            retry = 100;
+            success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    _solution = (Solution4)_dte.Solution;
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
         }
 
         private void GenerateProjectFile()
