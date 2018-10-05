@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DomainParticipantFactory.h"
+#include "ParticipantService.h"
 
 OpenDDSharp::DDS::DomainParticipantFactory::DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory) {
 	impl_entity = ::DDS::DomainParticipantFactory::_duplicate(factory);
@@ -71,7 +72,7 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory:
 
 	if (participant != NULL) {
 		char id_string[32];
-		sprintf(id_string, "%d", ++counter);
+		sprintf(id_string, "%d", ++OpenDDSharp::OpenDDS::DCPS::ParticipantService::Instance->counter);
 		char config_name[64] = "openddsharp_rtps_interop_";
 		char inst_name[64] = "internal_openddsharp_rtps_transport_";
 		strcat(config_name, id_string);
@@ -80,7 +81,6 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory:
 		::OpenDDS::DCPS::TransportConfig_rch config = ::OpenDDS::DCPS::TransportRegistry::instance()->create_config(config_name);
 		::OpenDDS::DCPS::TransportInst_rch inst = ::OpenDDS::DCPS::TransportRegistry::instance()->create_inst(inst_name, "rtps_udp");
 		::OpenDDS::DCPS::RtpsUdpInst_rch rui = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::RtpsUdpInst>(inst);
-		rui->handshake_timeout_ = 1;
 		config->instances_.push_back(inst);		
 
 		::OpenDDS::DCPS::TransportRegistry::instance()->bind_config(config_name, participant);		

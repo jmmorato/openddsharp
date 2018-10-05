@@ -45,8 +45,7 @@ namespace OpenDDSharp {
 		public ref class DomainParticipantFactory {
 
 		private:
-			::DDS::DomainParticipantFactory_ptr impl_entity;
-			long counter = 0;
+			::DDS::DomainParticipantFactory_ptr impl_entity;			
 
 		internal:
 			DomainParticipantFactory(::DDS::DomainParticipantFactory_ptr factory);	
