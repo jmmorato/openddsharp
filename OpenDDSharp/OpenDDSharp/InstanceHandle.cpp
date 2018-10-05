@@ -22,3 +22,16 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 OpenDDSharp::DDS::InstanceHandle::InstanceHandle(System::Int32 value) {
 	m_value = value;
 };
+
+bool OpenDDSharp::DDS::InstanceHandle::Equals(System::Object^ other) {
+    if (other == nullptr || GetType() != other->GetType())
+        return false;
+
+    InstanceHandle i = (InstanceHandle)other;
+    return (m_value == i.m_value);
+}
+
+int OpenDDSharp::DDS::InstanceHandle::GetHashCode()
+{
+    return m_value;
+}

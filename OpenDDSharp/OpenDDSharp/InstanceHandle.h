@@ -63,6 +63,38 @@ namespace OpenDDSharp {
 				return r;
 			}
 
+            /// <summary>
+            /// Equals comparison operator.
+            /// </summary>
+            /// <param name="x">The left value for the comparison.</param>
+            /// <param name="y">The right value for the comparison.</param>
+            /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+            static bool operator ==(InstanceHandle x, InstanceHandle y) {
+                return x.m_value == y.m_value;
+            }
+
+            /// <summary>
+            /// Not equals comparison operator.
+            /// </summary>
+            /// <param name="x">The left value for the comparison.</param>
+            /// <param name="y">The right value for the comparison.</param>
+            /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+            static bool operator !=(InstanceHandle x, InstanceHandle y) {
+                return x.m_value != y.m_value;
+            }
+
+            /// <summary>
+            /// Determines whether the specified object is equal to the current object.
+            /// </summary>
+            /// <param name="other">The object to compare with the current object.</param>
+            /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>            
+            virtual bool Equals(Object^ other) override;
+            
+            /// <summary>
+            /// Serves as the default hash function.
+            /// </summary>            
+            /// <returns>A hash code for the current object.</returns>
+            virtual int GetHashCode() override;
 		};
 	}
 };
