@@ -597,5 +597,679 @@ namespace Test {
 	};
 
 ///////////////////////////////////////////////////////////////////////
+
+    public ref class Athlete {
+
+    private:
+        System::Int32 m_AthleteId;
+        System::String^ m_FirstName;
+        System::String^ m_SecondName;
+        System::String^ m_Country;
+
+    public:
+        property System::Int32 AthleteId {
+            System::Int32 get();
+            void set(System::Int32 value);
+        }
+        property System::String^ FirstName {
+            System::String^ get();
+            void set(System::String^ value);
+        }
+        property System::String^ SecondName {
+            System::String^ get();
+            void set(System::String^ value);
+        }
+        property System::String^ Country {
+            System::String^ get();
+            void set(System::String^ value);
+        }
+
+    public:
+        Athlete();
+
+    internal:
+        ::Test::Athlete ToNative();
+        void FromNative(::Test::Athlete native);
+    };
+
+    public ref class AthleteTypeSupport {
+
+	private:
+		msclr::interop::marshal_context context;
+        static ::Test::AthleteTypeSupport_ptr impl_entity;
+
+	public:
+		AthleteTypeSupport();
+		System::String^ GetTypeName();
+		OpenDDSharp::DDS::ReturnCode RegisterType(::OpenDDSharp::DDS::DomainParticipant^ participant, System::String^ typeName);
+        OpenDDSharp::DDS::ReturnCode UnregisterType(::OpenDDSharp::DDS::DomainParticipant^ participant, System::String^ typeName);
+
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+	public ref class AthleteDataWriter : OpenDDSharp::DDS::DataWriter {
+
+	private:
+		::Test::AthleteDataWriter_ptr impl_entity;
+
+	public:
+		AthleteDataWriter(::OpenDDSharp::DDS::DataWriter^ dataWriter);
+        OpenDDSharp::DDS::InstanceHandle RegisterInstance(Athlete^ instance);
+        OpenDDSharp::DDS::InstanceHandle RegisterInstance(Athlete^ instance, OpenDDSharp::DDS::Timestamp timestamp);
+        OpenDDSharp::DDS::ReturnCode UnregisterInstance(Athlete^ data);
+		OpenDDSharp::DDS::ReturnCode UnregisterInstance(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode UnregisterInstance(Athlete^ data,OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Write(Athlete^ data);
+        OpenDDSharp::DDS::ReturnCode Write(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Write(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(Athlete^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+        OpenDDSharp::DDS::ReturnCode GetKeyValue(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        System::Int32 LookupInstance(Athlete^ instance);
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+	public ref class AthleteDataReader : OpenDDSharp::DDS::DataReader {
+
+	private:
+		::Test::AthleteDataReader_ptr impl_entity;
+
+	public:
+		AthleteDataReader(::OpenDDSharp::DDS::DataReader^ dataReader);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo);
+
+		OpenDDSharp::DDS::ReturnCode Read(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::SampleStateMask sampleStates,
+										  OpenDDSharp::DDS::ViewStateMask viewStates,
+										  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode Take(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo);
+
+		OpenDDSharp::DDS::ReturnCode Take(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples);
+
+        OpenDDSharp::DDS::ReturnCode Take(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::ReadCondition^ condition);        
+
+        OpenDDSharp::DDS::ReturnCode Take(List<Athlete^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::SampleStateMask sampleStates,
+										  OpenDDSharp::DDS::ViewStateMask viewStates,
+										  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+        
+        OpenDDSharp::DDS::ReturnCode ReadInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode ReadInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode ReadInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode ReadInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,												  
+												  OpenDDSharp::DDS::InstanceHandle handle,
+                                                  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::SampleStateMask sampleStates,
+												  OpenDDSharp::DDS::ViewStateMask viewStates,
+												  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode TakeInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode TakeInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode TakeInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode TakeInstance(List<Athlete^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::SampleStateMask sampleStates,
+												  OpenDDSharp::DDS::ViewStateMask viewStates,
+												  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::SampleStateMask sampleStates,
+												      OpenDDSharp::DDS::ViewStateMask viewStates,
+												      OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
+												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												       OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::SampleStateMask sampleStates,
+												      OpenDDSharp::DDS::ViewStateMask viewStates,
+												      OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextSample(Athlete^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextSample(Athlete^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo);
+
+        OpenDDSharp::DDS::ReturnCode GetKeyValue(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle);
+
+        OpenDDSharp::DDS::InstanceHandle LookupInstance(Athlete^ instance);
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+    public ref class Result {
+
+    private:
+        System::Int32 m_AthleteId;
+        System::Int32 m_Rank;
+        System::Single m_Score;
+
+    public:
+        property System::Int32 AthleteId {
+            System::Int32 get();
+            void set(System::Int32 value);
+        }
+        property System::Int32 Rank {
+            System::Int32 get();
+            void set(System::Int32 value);
+        }
+        property System::Single Score {
+            System::Single get();
+            void set(System::Single value);
+        }
+
+    public:
+        Result();
+
+    internal:
+        ::Test::Result ToNative();
+        void FromNative(::Test::Result native);
+    };
+
+    public ref class ResultTypeSupport {
+
+	private:
+		msclr::interop::marshal_context context;
+        static ::Test::ResultTypeSupport_ptr impl_entity;
+
+	public:
+		ResultTypeSupport();
+		System::String^ GetTypeName();
+		OpenDDSharp::DDS::ReturnCode RegisterType(::OpenDDSharp::DDS::DomainParticipant^ participant, System::String^ typeName);
+        OpenDDSharp::DDS::ReturnCode UnregisterType(::OpenDDSharp::DDS::DomainParticipant^ participant, System::String^ typeName);
+
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+	public ref class ResultDataWriter : OpenDDSharp::DDS::DataWriter {
+
+	private:
+		::Test::ResultDataWriter_ptr impl_entity;
+
+	public:
+		ResultDataWriter(::OpenDDSharp::DDS::DataWriter^ dataWriter);
+        OpenDDSharp::DDS::InstanceHandle RegisterInstance(Result^ instance);
+        OpenDDSharp::DDS::InstanceHandle RegisterInstance(Result^ instance, OpenDDSharp::DDS::Timestamp timestamp);
+        OpenDDSharp::DDS::ReturnCode UnregisterInstance(Result^ data);
+		OpenDDSharp::DDS::ReturnCode UnregisterInstance(Result^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode UnregisterInstance(Result^ data,OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Write(Result^ data);
+        OpenDDSharp::DDS::ReturnCode Write(Result^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Write(Result^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(Result^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(Result^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(Result^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+        OpenDDSharp::DDS::ReturnCode GetKeyValue(Result^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        System::Int32 LookupInstance(Result^ instance);
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+	public ref class ResultDataReader : OpenDDSharp::DDS::DataReader {
+
+	private:
+		::Test::ResultDataReader_ptr impl_entity;
+
+	public:
+		ResultDataReader(::OpenDDSharp::DDS::DataReader^ dataReader);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo);
+
+		OpenDDSharp::DDS::ReturnCode Read(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::SampleStateMask sampleStates,
+										  OpenDDSharp::DDS::ViewStateMask viewStates,
+										  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode Take(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo);
+
+		OpenDDSharp::DDS::ReturnCode Take(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples);
+
+        OpenDDSharp::DDS::ReturnCode Take(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::ReadCondition^ condition);        
+
+        OpenDDSharp::DDS::ReturnCode Take(List<Result^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::SampleStateMask sampleStates,
+										  OpenDDSharp::DDS::ViewStateMask viewStates,
+										  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+        
+        OpenDDSharp::DDS::ReturnCode ReadInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode ReadInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode ReadInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode ReadInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,												  
+												  OpenDDSharp::DDS::InstanceHandle handle,
+                                                  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::SampleStateMask sampleStates,
+												  OpenDDSharp::DDS::ViewStateMask viewStates,
+												  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode TakeInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode TakeInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode TakeInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode TakeInstance(List<Result^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::SampleStateMask sampleStates,
+												  OpenDDSharp::DDS::ViewStateMask viewStates,
+												  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::SampleStateMask sampleStates,
+												      OpenDDSharp::DDS::ViewStateMask viewStates,
+												      OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
+												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												       OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::SampleStateMask sampleStates,
+												      OpenDDSharp::DDS::ViewStateMask viewStates,
+												      OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextSample(Result^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextSample(Result^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo);
+
+        OpenDDSharp::DDS::ReturnCode GetKeyValue(Result^ data, OpenDDSharp::DDS::InstanceHandle handle);
+
+        OpenDDSharp::DDS::InstanceHandle LookupInstance(Result^ instance);
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+    public ref class AthleteResult {
+
+    private:
+        System::Int32 m_AthleteId;
+        System::String^ m_FirstName;
+        System::String^ m_SecondName;
+        System::String^ m_Country;
+        System::Int32 m_Rank;
+        System::Single m_Score;
+
+    public:
+        property System::Int32 AthleteId {
+            System::Int32 get();
+            void set(System::Int32 value);
+        }
+        property System::String^ FirstName {
+            System::String^ get();
+            void set(System::String^ value);
+        }
+        property System::String^ SecondName {
+            System::String^ get();
+            void set(System::String^ value);
+        }
+        property System::String^ Country {
+            System::String^ get();
+            void set(System::String^ value);
+        }
+        property System::Int32 Rank {
+            System::Int32 get();
+            void set(System::Int32 value);
+        }
+        property System::Single Score {
+            System::Single get();
+            void set(System::Single value);
+        }
+
+    public:
+        AthleteResult();
+
+    internal:
+        ::Test::AthleteResult ToNative();
+        void FromNative(::Test::AthleteResult native);
+    };
+
+    public ref class AthleteResultTypeSupport {
+
+	private:
+		msclr::interop::marshal_context context;
+        static ::Test::AthleteResultTypeSupport_ptr impl_entity;
+
+	public:
+		AthleteResultTypeSupport();
+		System::String^ GetTypeName();
+		OpenDDSharp::DDS::ReturnCode RegisterType(::OpenDDSharp::DDS::DomainParticipant^ participant, System::String^ typeName);
+        OpenDDSharp::DDS::ReturnCode UnregisterType(::OpenDDSharp::DDS::DomainParticipant^ participant, System::String^ typeName);
+
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+	public ref class AthleteResultDataWriter : OpenDDSharp::DDS::DataWriter {
+
+	private:
+		::Test::AthleteResultDataWriter_ptr impl_entity;
+
+	public:
+		AthleteResultDataWriter(::OpenDDSharp::DDS::DataWriter^ dataWriter);
+        OpenDDSharp::DDS::InstanceHandle RegisterInstance(AthleteResult^ instance);
+        OpenDDSharp::DDS::InstanceHandle RegisterInstance(AthleteResult^ instance, OpenDDSharp::DDS::Timestamp timestamp);
+        OpenDDSharp::DDS::ReturnCode UnregisterInstance(AthleteResult^ data);
+		OpenDDSharp::DDS::ReturnCode UnregisterInstance(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode UnregisterInstance(AthleteResult^ data,OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Write(AthleteResult^ data);
+        OpenDDSharp::DDS::ReturnCode Write(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Write(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(AthleteResult^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+        OpenDDSharp::DDS::ReturnCode GetKeyValue(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        System::Int32 LookupInstance(AthleteResult^ instance);
+	};
+
+///////////////////////////////////////////////////////////////////////
+
+	public ref class AthleteResultDataReader : OpenDDSharp::DDS::DataReader {
+
+	private:
+		::Test::AthleteResultDataReader_ptr impl_entity;
+
+	public:
+		AthleteResultDataReader(::OpenDDSharp::DDS::DataReader^ dataReader);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo);
+
+		OpenDDSharp::DDS::ReturnCode Read(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode Read(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::SampleStateMask sampleStates,
+										  OpenDDSharp::DDS::ViewStateMask viewStates,
+										  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode Take(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo);
+
+		OpenDDSharp::DDS::ReturnCode Take(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples);
+
+        OpenDDSharp::DDS::ReturnCode Take(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::ReadCondition^ condition);        
+
+        OpenDDSharp::DDS::ReturnCode Take(List<AthleteResult^>^ receivedData,
+										  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+										  System::Int32 maxSamples,
+										  OpenDDSharp::DDS::SampleStateMask sampleStates,
+										  OpenDDSharp::DDS::ViewStateMask viewStates,
+										  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+        
+        OpenDDSharp::DDS::ReturnCode ReadInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode ReadInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode ReadInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode ReadInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,												  
+												  OpenDDSharp::DDS::InstanceHandle handle,
+                                                  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::SampleStateMask sampleStates,
+												  OpenDDSharp::DDS::ViewStateMask viewStates,
+												  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode TakeInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode TakeInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode TakeInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode TakeInstance(List<AthleteResult^>^ receivedData,
+												  List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												  OpenDDSharp::DDS::InstanceHandle handle,
+												  System::Int32 maxSamples,
+												  OpenDDSharp::DDS::SampleStateMask sampleStates,
+												  OpenDDSharp::DDS::ViewStateMask viewStates,
+												  OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+        OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::SampleStateMask sampleStates,
+												      OpenDDSharp::DDS::ViewStateMask viewStates,
+												      OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
+												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												       OpenDDSharp::DDS::InstanceHandle handle);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::ReadCondition^ condition);
+
+        OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
+												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
+												      OpenDDSharp::DDS::InstanceHandle handle,
+												      System::Int32 maxSamples,
+												      OpenDDSharp::DDS::SampleStateMask sampleStates,
+												      OpenDDSharp::DDS::ViewStateMask viewStates,
+												      OpenDDSharp::DDS::InstanceStateMask instanceStates);
+
+		OpenDDSharp::DDS::ReturnCode ReadNextSample(AthleteResult^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo);
+
+		OpenDDSharp::DDS::ReturnCode TakeNextSample(AthleteResult^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo);
+
+        OpenDDSharp::DDS::ReturnCode GetKeyValue(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle);
+
+        OpenDDSharp::DDS::InstanceHandle LookupInstance(AthleteResult^ instance);
+	};
+
+///////////////////////////////////////////////////////////////////////
 };
 };

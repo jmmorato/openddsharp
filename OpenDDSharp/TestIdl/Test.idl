@@ -23,7 +23,8 @@ module Test {
     const long TEST_CONST = 1;
 	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";
     
-	#pragma DCPS_DATA_TYPE "Test::TestStruct"    
+	#pragma DCPS_DATA_TYPE "Test::TestStruct"
+	#pragma DCPS_DATA_KEY "Test::TestStruct Id"
     struct TestStruct {
 		long Id;
 		string RawData;
@@ -50,5 +51,36 @@ module Test {
 		ArrayLongDouble LongDoubleArray;
 		BasicTestStruct StructTest;		
         PrimitiveEnum TestEnum;
+	};
+
+	#pragma DCPS_DATA_TYPE "Test::Athlete"    
+	#pragma DCPS_DATA_KEY "Test::Athlete AthleteId"
+	struct Athlete
+	{
+		long AthleteId;
+		string FirstName;
+		string SecondName;
+		string Country;
+	};
+
+	#pragma DCPS_DATA_TYPE "Test::Result"
+	#pragma DCPS_DATA_KEY "Test::Result AthleteId"
+	struct Result
+	{				
+		long AthleteId;
+		long Rank;
+		float Score;		
+	};
+
+	#pragma DCPS_DATA_TYPE "Test::AthleteResult"    
+	#pragma DCPS_DATA_KEY "Test::AthleteResult AthleteId"
+	struct AthleteResult
+	{
+		long AthleteId;
+		string FirstName;
+		string SecondName;
+		string Country;
+		long Rank;
+		float Score;
 	};
 };
