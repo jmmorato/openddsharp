@@ -71,6 +71,7 @@
     <Compile Include="DomainParticipantFactoryTest.cs" />
     <Compile Include="DomainParticipantTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TopicTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
