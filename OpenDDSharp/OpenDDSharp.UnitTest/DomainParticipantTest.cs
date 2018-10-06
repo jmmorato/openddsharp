@@ -18,13 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using OpenDDSharp.DDS;
-using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.Test;
+using OpenDDSharp.OpenDDS.DCPS;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest
 {
@@ -37,8 +37,8 @@ namespace OpenDDSharp.UnitTest
         #endregion
 
         #region Fields
-        static DomainParticipantFactory _dpf;
-        DomainParticipant _participant;
+        private static DomainParticipantFactory _dpf;
+        private DomainParticipant _participant;
         #endregion
 
         #region Initialization/Cleanup
