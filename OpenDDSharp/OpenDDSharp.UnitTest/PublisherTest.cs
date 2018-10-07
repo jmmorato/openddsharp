@@ -20,9 +20,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
-using OpenDDSharp.OpenDDS.DCPS;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.Test;
+using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.UnitTest.Listeners;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest
 {
@@ -981,49 +982,4 @@ namespace OpenDDSharp.UnitTest
         }
         #endregion
     }
-
-    #region Auxiliar Classes
-    public class MyDataWriterListener : DataWriterListener
-    {
-        public override void OnConnectionDeleted(DataWriter writer)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnLivelinessLost(DataWriter writer, LivelinessLostStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnOfferedDeadlineMissed(DataWriter writer, OfferedDeadlineMissedStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnOfferedIncompatibleQos(DataWriter writer, OfferedIncompatibleQosStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnPublicationDisconnected(DataWriter writer, PublicationDisconnectedStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnPublicationLost(DataWriter writer, PublicationLostStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnPublicationReconnected(DataWriter writer, PublicationReconnectedStatus status)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-    #endregion
 }
