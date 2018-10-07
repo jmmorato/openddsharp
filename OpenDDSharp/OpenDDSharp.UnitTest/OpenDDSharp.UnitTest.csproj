@@ -70,8 +70,15 @@
   <ItemGroup>
     <Compile Include="DomainParticipantFactoryTest.cs" />
     <Compile Include="DomainParticipantTest.cs" />
+    <Compile Include="Listeners\MyDataReaderListener.cs" />
+    <Compile Include="Listeners\MyDataWriterListener.cs" />
+    <Compile Include="Listeners\MyParticipantListener.cs" />
+    <Compile Include="Listeners\MyPublisherListener.cs" />
+    <Compile Include="Listeners\MySubscriberListener.cs" />
+    <Compile Include="Listeners\MyTopicListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublisherTest.cs" />
+    <Compile Include="SubscriberTest.cs" />
     <Compile Include="TopicTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +94,7 @@
       <Name>TestIdl</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
