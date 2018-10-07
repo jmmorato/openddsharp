@@ -877,7 +877,7 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
+            Topic topic = _participant.CreateTopic(nameof(TestContainsEntity), typeName);
             Assert.IsNotNull(topic);            
 
             Publisher publisher = _participant.CreatePublisher();
@@ -899,7 +899,7 @@ namespace OpenDDSharp.UnitTest
             result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestDeleteContainedEntities), typeName);
+            Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestContainsEntity), typeName);
             Assert.IsNotNull(otherTopic);
 
             Subscriber otherBuiltin = otherParticipant.GetBuiltinSubscriber();
