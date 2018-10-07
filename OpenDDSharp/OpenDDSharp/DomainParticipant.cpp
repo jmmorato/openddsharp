@@ -125,8 +125,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteTopic(Op
 	::DDS::ReturnCode_t ret = impl_entity->delete_topic(topic->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(topic->impl_entity);
-		contained_entities->Remove(topic);
-        topic->impl_entity = NULL;        
+		contained_entities->Remove(topic);      
 	}
 	
 	return (OpenDDSharp::DDS::ReturnCode)ret;
@@ -213,7 +212,6 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeletePublishe
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(pub->impl_entity);
 		contained_entities->Remove(pub);
-        pub->impl_entity = NULL;
 	}
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
@@ -309,8 +307,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteSubscrib
 	::DDS::ReturnCode_t ret = impl_entity->delete_subscriber(sub->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(sub->impl_entity);
-		contained_entities->Remove(sub);
-        sub->impl_entity = NULL;        
+		contained_entities->Remove(sub);       
 	}	
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;	
@@ -343,7 +340,6 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContaine
 		for each (Entity^ e in contained_entities) {
 			EntityManager::get_instance()->remove(e->impl_entity);
             e->ClearContainedEntities();
-            e->impl_entity = NULL;
 		}
 
 		contained_entities->Clear();		
@@ -480,10 +476,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContentF
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-    ::DDS::ReturnCode_t ret = impl_entity->delete_contentfilteredtopic(contentFilteredTopic->impl_entity);
-    if (ret == ::DDS::RETCODE_OK) {
-        contentFilteredTopic->impl_entity = NULL;        
-    }
+    ::DDS::ReturnCode_t ret = impl_entity->delete_contentfilteredtopic(contentFilteredTopic->impl_entity);    
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
@@ -534,9 +527,6 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteMultiTop
 	}
 
     ::DDS::ReturnCode_t ret = impl_entity->delete_multitopic(multitopic->impl_entity);
-    if (ret == ::DDS::RETCODE_OK) {
-        multitopic->impl_entity = NULL;        
-    }
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }

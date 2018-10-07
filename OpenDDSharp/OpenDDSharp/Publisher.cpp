@@ -96,8 +96,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteDataWriter(OpenD
 	::DDS::ReturnCode_t ret = impl_entity->delete_datawriter(datawriter->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
 		EntityManager::get_instance()->remove(datawriter->impl_entity);
-		contained_entities->Remove(datawriter);
-        datawriter->impl_entity = NULL;        
+		contained_entities->Remove(datawriter);            
 	}
 
 	return (OpenDDSharp::DDS::ReturnCode)ret;
@@ -121,8 +120,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteContainedEntitie
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 	if (ret != ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
-			EntityManager::get_instance()->remove(e->impl_entity);            
-            e->impl_entity = NULL;
+			EntityManager::get_instance()->remove(e->impl_entity);
 		}	
 		contained_entities->Clear();
 	}	
