@@ -26,6 +26,12 @@ OpenDDSharp::DDS::DataWriterQos::DataWriterQos() {
 	latency_budget = gcnew OpenDDSharp::DDS::LatencyBudgetQosPolicy();
 	liveliness = gcnew OpenDDSharp::DDS::LivelinessQosPolicy();
 	reliability = gcnew OpenDDSharp::DDS::ReliabilityQosPolicy();
+    reliability->Kind = OpenDDSharp::DDS::ReliabilityQosPolicyKind::ReliableReliabilityQos;
+    Duration duration;
+    duration.Seconds = 0;
+    duration.NanoSeconds = 100000000;
+    reliability->MaxBlockingTime = duration;
+    
 	destination_order = gcnew OpenDDSharp::DDS::DestinationOrderQosPolicy();
 	history = gcnew OpenDDSharp::DDS::HistoryQosPolicy();
 	resource_limits = gcnew OpenDDSharp::DDS::ResourceLimitsQosPolicy();
