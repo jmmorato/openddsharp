@@ -461,8 +461,7 @@ namespace OpenDDSharp.UnitTest
             listener = new MyDataReaderListener();
             DataReader datareader4 = subscriber.CreateDataReader(topic, listener, StatusMask.AllStatusMask);
             Assert.IsNotNull(datareader4);
-            Assert.AreEqual(subscriber, datareader4.Subscriber
-);
+            Assert.AreEqual(subscriber, datareader4.Subscriber);
             received = (MyDataReaderListener)datareader4.GetListener();
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
@@ -585,6 +584,264 @@ namespace OpenDDSharp.UnitTest
 
             result = _participant.DeleteSubscriber(subscriber);
             Assert.AreEqual(ReturnCode.Ok, result);
+        }
+
+        [TestMethod]
+        [TestCategory("Subscriber")]
+        public void TestNotifyDataReaders()
+        {
+            // Initialize entities
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+            Assert.IsNotNull(topic);
+            Assert.IsNull(topic.GetListener());
+            Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+            int subscriberReceived = 0;
+            int readerReceived = 0;
+
+            // Create the Subscriber and the DataReader with the corresponding listeners
+            MySubscriberListener subListener = new MySubscriberListener();
+            subListener.DataOnReaders += (sub) =>
+            {
+                subscriberReceived++;
+                if (subscriberReceived % 2 == 0)
+                {
+                    sub.NotifyDataReaders();
+                }
+            };
+            Subscriber subscriber = _participant.CreateSubscriber(subListener);
+            Assert.IsNotNull(subscriber);
+
+            MyDataReaderListener readListener = new MyDataReaderListener();
+            readListener.DataAvailable += (read) =>
+            {
+                readerReceived++;
+            };
+            DataReader reader = subscriber.CreateDataReader(topic, readListener);
+            Assert.IsNotNull(reader);
+
+            System.Threading.Thread.Sleep(100);
+
+            // Publish instances
+            for (int i = 0; i < 10; i++)
+            {
+                dataWriter.Write(new TestStruct
+                {
+                    Id = i,
+                    ShortType = (short)i
+                });
+
+                System.Threading.Thread.Sleep(100);
+            }
+
+            System.Threading.Thread.Sleep(100);
+
+            // Check the received instances
+            Assert.AreEqual(10, subscriberReceived);
+            Assert.AreEqual(5, readerReceived);
+        }
+
+        [TestMethod]
+        [TestCategory("Subscriber")]
+        public void TestGetDataReaders()
+        {
+            // Initialize entities
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+            Assert.IsNotNull(topic);
+            Assert.IsNull(topic.GetListener());
+            Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+
+            Topic otherTopic = _participant.CreateTopic("Other" + nameof(TestNotifyDataReaders), typeName);
+            Assert.IsNotNull(otherTopic);
+            Assert.IsNull(otherTopic.GetListener());
+            Assert.AreEqual("Other" + nameof(TestNotifyDataReaders), otherTopic.Name);
+            Assert.AreEqual(typeName, otherTopic.TypeName);
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+            DataWriter otherWriter = publisher.CreateDataWriter(otherTopic);
+            Assert.IsNotNull(otherWriter);
+            TestStructDataWriter otherDataWriter = new TestStructDataWriter(otherWriter);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReader reader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(reader);
+            TestStructDataReader dataReader = new TestStructDataReader(reader);
+
+            DataReader otherReader = subscriber.CreateDataReader(otherTopic);
+            Assert.IsNotNull(otherReader);
+            TestStructDataReader otherDataReader = new TestStructDataReader(otherReader);
+
+            // Check that the GetDataReaders without sending any sample
+            List<DataReader> list = new List<DataReader>();
+            result = subscriber.GetDataReaders(list);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(0, list.Count);
+
+            // Publish in the topic and check again
+            result = dataWriter.Write(new TestStruct
+            {
+                Id = 1
+            });
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            System.Threading.Thread.Sleep(100);
+            
+            result = subscriber.GetDataReaders(list);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(1, list.Count);
+
+            // Publish in the otherTopic and check again
+            result = otherDataWriter.Write(new TestStruct
+            {
+                Id = 1
+            });
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            System.Threading.Thread.Sleep(100);
+            
+            result = subscriber.GetDataReaders(list, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(2, list.Count);
+
+            // Take from both DataReaders and check again
+            List<TestStruct> received = new List<TestStruct>();
+            List<SampleInfo> sampleInfos = new List<SampleInfo>();
+
+            result = dataReader.Take(received, sampleInfos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = otherDataReader.Take(received, sampleInfos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = subscriber.GetDataReaders(list);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [TestMethod]
+        [TestCategory("Subscriber")]
+        public void TestBeginEndAccess()
+        {
+            // OpenDDS Issue: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.
+            // Just prepare the unit test for the moment.
+
+            // Initialize entities
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+            Assert.IsNotNull(topic);
+            Assert.IsNull(topic.GetListener());
+            Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+
+            Topic otherTopic = _participant.CreateTopic("Other" + nameof(TestNotifyDataReaders), typeName);
+            Assert.IsNotNull(otherTopic);
+            Assert.IsNull(otherTopic.GetListener());
+            Assert.AreEqual("Other" + nameof(TestNotifyDataReaders), otherTopic.Name);
+            Assert.AreEqual(typeName, otherTopic.TypeName);
+
+            PublisherQos pubQos = new PublisherQos();
+            pubQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
+            pubQos.Presentation.CoherentAccess = true;
+            pubQos.Presentation.OrderedAccess = true;
+            Publisher publisher = _participant.CreatePublisher(pubQos);
+            Assert.IsNotNull(publisher);
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+            DataWriter otherWriter = publisher.CreateDataWriter(otherTopic);
+            Assert.IsNotNull(otherWriter);
+            TestStructDataWriter otherDataWriter = new TestStructDataWriter(otherWriter);
+
+            SubscriberQos subQos = new SubscriberQos();
+            subQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
+            subQos.Presentation.CoherentAccess = true;
+            subQos.Presentation.OrderedAccess = true;
+            MySubscriberListener listener = new MySubscriberListener();
+            listener.DataOnReaders += (sub) =>
+            {
+                result = sub.BeginAccess();
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                List<DataReader> list = new List<DataReader>();
+                result = sub.GetDataReaders(list);
+
+                // Here we should check that we received two DataReader
+                // read the data of each one and confirm tha the group coherent access
+                // is working as expected.
+
+                result = sub.EndAccess();
+                Assert.AreEqual(ReturnCode.Ok, result);
+            };
+
+            Subscriber subscriber = _participant.CreateSubscriber(subQos, listener);
+            Assert.IsNotNull(subscriber);
+
+            DataReader reader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(reader);
+            TestStructDataReader dataReader = new TestStructDataReader(reader);
+
+            DataReader otherReader = subscriber.CreateDataReader(otherTopic);
+            Assert.IsNotNull(otherReader);
+            TestStructDataReader otherDataReader = new TestStructDataReader(otherReader);
+
+            // Call EndAccess without calling first BeginAccess
+            result = subscriber.EndAccess();
+            Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
+
+            // Publish a samples in both topics
+            result = publisher.BeginCoherentChanges();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = dataWriter.Write(new TestStruct
+            {
+                Id = 1
+            });
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = otherDataWriter.Write(new TestStruct
+            {
+                Id = 1
+            });
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = publisher.EndCoherentChanges();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Give some time to the subscriber to process the messages
+            System.Threading.Thread.Sleep(500);
         }
         #endregion
 
