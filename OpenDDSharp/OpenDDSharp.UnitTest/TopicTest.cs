@@ -92,49 +92,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQos()
         {
             // Create a non-default QoS
-            TopicQos qos = new TopicQos();
-            qos.Deadline.Period = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 0
-            };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.DurabilityService.HistoryDepth = 5;
-            qos.DurabilityService.HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.DurabilityService.MaxInstances = 5;
-            qos.DurabilityService.MaxSamples = 5;
-            qos.DurabilityService.MaxSamplesPerInstance = 5;
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Lifespan.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.TopicData.Value = new List<byte> { 0x5 };
-            qos.TransportPriority.Value = 5;
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
 
             // Create a new Topic using the non-default QoS
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -152,48 +110,7 @@ namespace OpenDDSharp.UnitTest
             TopicQos getQos = new TopicQos();
             result = topic.GetQos(getQos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos);
-            Assert.IsNotNull(qos.Deadline);
-            Assert.IsNotNull(qos.DestinationOrder);
-            Assert.IsNotNull(qos.Durability);
-            Assert.IsNotNull(qos.DurabilityService);
-            Assert.IsNotNull(qos.History);
-            Assert.IsNotNull(qos.LatencyBudget);
-            Assert.IsNotNull(qos.Lifespan);
-            Assert.IsNotNull(qos.Liveliness);
-            Assert.IsNotNull(qos.Ownership);
-            Assert.IsNotNull(qos.Reliability);
-            Assert.IsNotNull(qos.ResourceLimits);
-            Assert.IsNotNull(qos.TopicData);
-            Assert.IsNotNull(qos.TransportPriority);
-            Assert.AreEqual(5, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, qos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.TransientLocalDurabilityQos, qos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.DurabilityService.HistoryKind);
-            Assert.AreEqual(5, qos.DurabilityService.HistoryDepth);
-            Assert.AreEqual(5, qos.DurabilityService.MaxInstances);
-            Assert.AreEqual(5, qos.DurabilityService.MaxSamples);
-            Assert.AreEqual(5, qos.DurabilityService.MaxSamplesPerInstance);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.History.Kind);
-            Assert.AreEqual(5, qos.History.Depth);
-            Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
-            Assert.AreEqual(5, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.Lifespan.Duration.NanoSeconds);
-            Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, qos.Liveliness.Kind);
-            Assert.AreEqual(5, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual((uint)5, qos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, qos.Ownership.Kind);
-            Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
-            Assert.AreEqual(5, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)5, qos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(1, qos.TopicData.Value.Count());
-            Assert.AreEqual(0x5, qos.TopicData.Value.First());
-            Assert.AreEqual(5, qos.TransportPriority.Value);
+            TestHelper.TestNonDefaultTopicQos(getQos);
         }
 
         [TestMethod]
@@ -216,46 +133,7 @@ namespace OpenDDSharp.UnitTest
             TopicQos getQos = new TopicQos();
             result = topic.GetQos(getQos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(getQos.Deadline);
-            Assert.IsNotNull(getQos.DestinationOrder);
-            Assert.IsNotNull(getQos.Durability);
-            Assert.IsNotNull(getQos.DurabilityService);
-            Assert.IsNotNull(getQos.History);
-            Assert.IsNotNull(getQos.LatencyBudget);
-            Assert.IsNotNull(getQos.Lifespan);
-            Assert.IsNotNull(getQos.Liveliness);
-            Assert.IsNotNull(getQos.Ownership);
-            Assert.IsNotNull(getQos.Reliability);
-            Assert.IsNotNull(getQos.ResourceLimits);
-            Assert.IsNotNull(getQos.TopicData);
-            Assert.IsNotNull(getQos.TransportPriority);
-            Assert.AreEqual(Duration.InfiniteSeconds, getQos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, getQos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, getQos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, getQos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, getQos.DurabilityService.HistoryKind);
-            Assert.AreEqual(1, getQos.DurabilityService.HistoryDepth);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, getQos.DurabilityService.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, getQos.DurabilityService.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, getQos.DurabilityService.MaxSamplesPerInstance);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, getQos.History.Kind);
-            Assert.AreEqual(1, getQos.History.Depth);
-            Assert.AreEqual(Duration.ZeroSeconds, getQos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, getQos.LatencyBudget.Duration.NanoSeconds);
-            Assert.AreEqual(Duration.InfiniteSeconds, getQos.Lifespan.Duration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, getQos.Lifespan.Duration.NanoSeconds);
-            Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, getQos.Liveliness.Kind);
-            Assert.AreEqual(Duration.InfiniteSeconds, getQos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, getQos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, getQos.Ownership.Kind);
-            Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, getQos.Reliability.Kind);
-            Assert.AreEqual(Duration.InfiniteSeconds, getQos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, getQos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, getQos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, getQos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, getQos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(0, getQos.TopicData.Value.Count());
-            Assert.AreEqual(0, getQos.TransportPriority.Value);
+            TestHelper.TestDefaultTopicQos(getQos);
 
             // Try to change an immutable property
             TopicQos qos = new TopicQos();

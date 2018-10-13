@@ -85,13 +85,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQos()
         {
             // Create a non-default QoS and create a subscriber with it
-            SubscriberQos qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
 
             Subscriber subscriber = _participant.CreateSubscriber(qos);
             Assert.IsNotNull(subscriber);
@@ -100,20 +94,7 @@ namespace OpenDDSharp.UnitTest
             qos = new SubscriberQos();
             ReturnCode result = subscriber.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
-            Assert.IsTrue(qos.Presentation.CoherentAccess);
-            Assert.IsTrue(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestNonDefaultSubscriberQos(qos);
         }
 
         [TestMethod]
@@ -127,18 +108,7 @@ namespace OpenDDSharp.UnitTest
             SubscriberQos qos = new SubscriberQos();
             ReturnCode result = subscriber.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
-            Assert.IsFalse(qos.Presentation.CoherentAccess);
-            Assert.IsFalse(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestDefaultSubscriberQos(qos);
 
             // Try to change an immutable property
             qos.Presentation.CoherentAccess = true;
@@ -257,7 +227,7 @@ namespace OpenDDSharp.UnitTest
         public void TestNewDataReaderQos()
         {
             DataReaderQos qos = new DataReaderQos();
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
         }
 
         [TestMethod]
@@ -280,10 +250,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(subscriber);
 
             // Create a non-default DataReader Qos, call GetDefaultDataReaderQos and check the default values 
-            DataReaderQos qos = CreateNonDefaultDataReaderQos();
+            DataReaderQos qos = TestHelper.CreateNonDefaultDataReaderQos();
             result = subscriber.GetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
         }
 
         [TestMethod]
@@ -306,14 +276,14 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(subscriber);
 
             // Creates a non-default QoS, set it an check it
-            DataReaderQos qos = CreateNonDefaultDataReaderQos();
+            DataReaderQos qos = TestHelper.CreateNonDefaultDataReaderQos();
             result = subscriber.SetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new DataReaderQos();
             result = subscriber.GetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestNonDefaultDataReaderQos(qos);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
 
             DataReader reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
@@ -321,28 +291,28 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             result = reader.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestNonDefaultDataReaderQos(qos);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
 
             // Put back the default QoS and check it
             qos = new DataReaderQos();
             result = subscriber.SetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            qos = CreateNonDefaultDataReaderQos();
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
             result = subscriber.GetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
 
             DataReader otherReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(otherReader);
 
-            qos = CreateNonDefaultDataReaderQos();
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
             result = otherReader.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
 
             // Create an inconsistent QoS and try to set it
-            qos = CreateNonDefaultDataReaderQos();
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
             qos.TimeBasedFilter.MinimumSeparation = new Duration
             {
                 Seconds = 5,
@@ -429,10 +399,10 @@ namespace OpenDDSharp.UnitTest
             DataReaderQos qos = new DataReaderQos();
             result = datareader1.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
 
             // Test overload with QoS parameter
-            qos = CreateNonDefaultDataReaderQos();
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
             DataReader datareader2 = subscriber.CreateDataReader(topic, qos);
             Assert.IsNotNull(datareader2);
             Assert.AreEqual(subscriber, datareader2.Subscriber);
@@ -441,7 +411,7 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             result = datareader2.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestNonDefaultDataReaderQos(qos);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
 
             // Test overload with listener parameter
             MyDataReaderListener listener = new MyDataReaderListener();
@@ -455,7 +425,7 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             result = datareader3.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
 
             // Test overload with listener and StatusMask parameters
             listener = new MyDataReaderListener();
@@ -469,10 +439,10 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             result = datareader4.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
 
             // Test overload with QoS and listener parameters
-            qos = CreateNonDefaultDataReaderQos();
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
             listener = new MyDataReaderListener();
             DataReader datareader5 = subscriber.CreateDataReader(topic, qos, listener);
             Assert.IsNotNull(datareader5);
@@ -484,10 +454,10 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             result = datareader5.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestNonDefaultDataReaderQos(qos);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
 
             // Test full call overload
-            qos = CreateNonDefaultDataReaderQos();
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
             listener = new MyDataReaderListener();
             DataReader datareader6 = subscriber.CreateDataReader(topic, qos, listener, StatusMask.AllStatusMask);
             Assert.IsNotNull(datareader6);
@@ -499,7 +469,7 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             result = datareader6.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestNonDefaultDataReaderQos(qos);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
         }
 
         [TestMethod]
@@ -533,7 +503,7 @@ namespace OpenDDSharp.UnitTest
             DataReaderQos qos = new DataReaderQos();
             result = datareader.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestDefaultDataReaderQos(qos);
+            TestHelper.TestDefaultDataReaderQos(qos);
 
             result = otherSubscriber.DeleteDataReader(datareader);
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
@@ -843,163 +813,6 @@ namespace OpenDDSharp.UnitTest
             // Give some time to the subscriber to process the messages
             System.Threading.Thread.Sleep(500);
         }
-        #endregion
-
-        #region Private Methods
-        private DataReaderQos CreateNonDefaultDataReaderQos()
-        {
-            DataReaderQos qos = new DataReaderQos();
-            
-            qos.Deadline.Period = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 0
-            };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };            
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };            
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.TimeBasedFilter.MinimumSeparation = new Duration
-            {
-                Seconds = 3,
-                NanoSeconds = 3
-            };
-            qos.UserData.Value = new List<byte> { 0x5 };           
-
-            return qos;
-        }
-
-        private void TestDefaultDataReaderQos(DataReaderQos qos)
-        {
-            Assert.IsNotNull(qos);
-            Assert.IsNotNull(qos.Deadline);
-            Assert.IsNotNull(qos.DestinationOrder);
-            Assert.IsNotNull(qos.Durability);                  
-            Assert.IsNotNull(qos.History);
-            Assert.IsNotNull(qos.LatencyBudget);                
-            Assert.IsNotNull(qos.Liveliness);
-            Assert.IsNotNull(qos.Ownership);
-            Assert.IsNotNull(qos.ReaderDataLifecycle);
-            Assert.IsNotNull(qos.Reliability);
-            Assert.IsNotNull(qos.ResourceLimits);
-            Assert.IsNotNull(qos.TimeBasedFilter);
-            Assert.IsNotNull(qos.UserData);                     
-            Assert.IsNotNull(qos.Deadline.Period);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, qos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.History.Kind);
-            Assert.AreEqual(1, qos.History.Depth);
-            Assert.IsNotNull(qos.LatencyBudget.Duration);
-            Assert.AreEqual(Duration.ZeroSeconds, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, qos.LatencyBudget.Duration.NanoSeconds);            
-            Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, qos.Liveliness.Kind);
-            Assert.IsNotNull(qos.Liveliness.LeaseDuration);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, qos.Ownership.Kind);
-            Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.NanoSeconds);
-            Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.NanoSeconds);
-            Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, qos.Reliability.Kind);
-            Assert.IsNotNull(qos.Reliability.MaxBlockingTime);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.IsNotNull(qos.TimeBasedFilter.MinimumSeparation);
-            Assert.AreEqual(0, qos.TimeBasedFilter.MinimumSeparation.Seconds);
-            Assert.AreEqual((uint)0, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());            
-        }
-
-        private void TestNonDefaultDataReaderQos(DataReaderQos qos)
-        {
-            Assert.IsNotNull(qos);
-            Assert.IsNotNull(qos.Deadline);
-            Assert.IsNotNull(qos.DestinationOrder);
-            Assert.IsNotNull(qos.Durability);            
-            Assert.IsNotNull(qos.History);
-            Assert.IsNotNull(qos.LatencyBudget);            
-            Assert.IsNotNull(qos.Liveliness);
-            Assert.IsNotNull(qos.Ownership);
-            Assert.IsNotNull(qos.ReaderDataLifecycle);
-            Assert.IsNotNull(qos.Reliability);
-            Assert.IsNotNull(qos.ResourceLimits);
-            Assert.IsNotNull(qos.TimeBasedFilter);
-            Assert.IsNotNull(qos.UserData);            
-
-            Assert.IsNotNull(qos.Deadline.Period);
-            Assert.AreEqual(5, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, qos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.TransientLocalDurabilityQos, qos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.History.Kind);
-            Assert.AreEqual(5, qos.History.Depth);
-            Assert.IsNotNull(qos.LatencyBudget.Duration);
-            Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
-            Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, qos.Liveliness.Kind);
-            Assert.IsNotNull(qos.Liveliness.LeaseDuration);
-            Assert.AreEqual(5, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual((uint)5, qos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, qos.Ownership.Kind);
-            Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay);
-            Assert.AreEqual(5, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.Seconds);
-            Assert.AreEqual((uint)5, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.NanoSeconds);
-            Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay);
-            Assert.AreEqual(5, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.Seconds);
-            Assert.AreEqual((uint)5, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.NanoSeconds);
-            Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
-            Assert.IsNotNull(qos.Reliability.MaxBlockingTime);
-            Assert.AreEqual(5, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)5, qos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
-            Assert.IsNotNull(qos.TimeBasedFilter.MinimumSeparation);
-            Assert.AreEqual(3, qos.TimeBasedFilter.MinimumSeparation.Seconds);
-            Assert.AreEqual((uint)3, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
-            Assert.AreEqual(0x5, qos.UserData.Value.First());
-        }
-        #endregion
+        #endregion        
     }
 }

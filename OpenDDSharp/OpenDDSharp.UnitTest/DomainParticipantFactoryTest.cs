@@ -44,7 +44,7 @@ namespace OpenDDSharp.UnitTest
         #region Test Methods
         [TestMethod]
         [TestCategory("DomainParticipantFactory")]
-        public void TestNewParticipantQos()
+        public void TestNewParticipantFactoryQos()
         {
             DomainParticipantFactoryQos qos = new DomainParticipantFactoryQos();
 
@@ -98,18 +98,11 @@ namespace OpenDDSharp.UnitTest
         [TestCategory("DomainParticipantFactory")]
         public void TestGetDefaultDomainParticipantQos()
         {
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
+            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
 
             ReturnCode result = _dpf.GetDefaultDomainParticipantQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            TestHelper.TestDefaultDomainParticipantQos(qos);
         }
 
         [TestMethod]
@@ -117,22 +110,14 @@ namespace OpenDDSharp.UnitTest
         public void TestSetDefaultDomainParticipantQos()
         {
             // Creates a non-default QoS, set it an check it
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
-
+            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
             ReturnCode result = _dpf.SetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new DomainParticipantQos();
             result = _dpf.GetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            TestHelper.TestNonDefaultDomainParticipantQos(qos);            
 
             // Put back the default QoS and check it
             qos = new DomainParticipantQos();
@@ -141,11 +126,7 @@ namespace OpenDDSharp.UnitTest
 
             result = _dpf.GetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            TestHelper.TestDefaultDomainParticipantQos(qos);
         }
 
         [TestMethod]
@@ -160,17 +141,11 @@ namespace OpenDDSharp.UnitTest
 
             DomainParticipantQos qos = new DomainParticipantQos();
             ReturnCode result = domainParticipant0.GetQos(qos);
-            Assert.AreEqual(ReturnCode.Ok, result);                        
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDomainParticipantQos(qos);
 
             // Test overload with QoS parameter
-            qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
+            qos = TestHelper.CreateNonDefaultDomainParticipantQos();
             DomainParticipant domainParticipant1 = _dpf.CreateParticipant(1, qos);
             Assert.IsNotNull(domainParticipant1);
             Assert.AreEqual(1, domainParticipant1.DomainId);
@@ -178,13 +153,8 @@ namespace OpenDDSharp.UnitTest
 
             qos = new DomainParticipantQos();
             result = domainParticipant1.GetQos(qos);
-            Assert.AreEqual(ReturnCode.Ok, result);            
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultDomainParticipantQos(qos);
 
             // Test overload with listener parameter
             MyParticipantListener listener = new MyParticipantListener();
@@ -194,12 +164,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(domainParticipant2.GetListener());
             
             result = domainParticipant2.GetQos(qos);
-            Assert.AreEqual(ReturnCode.Ok, result);            
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDomainParticipantQos(qos);
 
             // Test overload with listener and StatusMask parameters
             DomainParticipant domainParticipant3 = _dpf.CreateParticipant(3, listener, StatusMask.NoStatusMask);
@@ -209,11 +175,7 @@ namespace OpenDDSharp.UnitTest
 
             result = domainParticipant2.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            TestHelper.TestDefaultDomainParticipantQos(qos);
 
             // Test overload with QoS and listener parameters
             qos = new DomainParticipantQos();
@@ -225,12 +187,7 @@ namespace OpenDDSharp.UnitTest
 
             result = domainParticipant4.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            TestHelper.TestNonDefaultDomainParticipantQos(qos);
 
             // Test full call overload
             qos = new DomainParticipantQos();
@@ -242,12 +199,7 @@ namespace OpenDDSharp.UnitTest
 
             result = domainParticipant5.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            TestHelper.TestNonDefaultDomainParticipantQos(qos);
 
             // Delete all participants
             result = _dpf.DeleteParticipant(domainParticipant0);

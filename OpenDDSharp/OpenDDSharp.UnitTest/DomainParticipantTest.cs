@@ -87,30 +87,18 @@ namespace OpenDDSharp.UnitTest
         public void TestNewParticipantQos()
         {
             DomainParticipantQos qos = new DomainParticipantQos();
-
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            TestHelper.TestDefaultDomainParticipantQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestGetQos()
         {
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
+            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
 
             ReturnCode result = _participant.GetQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            TestHelper.TestDefaultDomainParticipantQos(qos);
         }
 
         [TestMethod]
@@ -118,9 +106,7 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQos()
         {
             // Creates a non-default QoS, set it an check it
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
+            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
 
             ReturnCode result = _participant.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -128,12 +114,7 @@ namespace OpenDDSharp.UnitTest
             qos = new DomainParticipantQos();
             result = _participant.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            TestHelper.TestNonDefaultDomainParticipantQos(qos);
 
             // Put back the default QoS and check it
             qos = new DomainParticipantQos();
@@ -142,11 +123,7 @@ namespace OpenDDSharp.UnitTest
 
             result = _participant.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.UserData);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            TestHelper.TestDefaultDomainParticipantQos(qos);
         }
 
         [TestMethod]
@@ -226,241 +203,33 @@ namespace OpenDDSharp.UnitTest
         public void TestNewTopicQos()
         {
             TopicQos qos = new TopicQos();
-
-            Assert.IsNotNull(qos.Deadline);
-            Assert.IsNotNull(qos.DestinationOrder);
-            Assert.IsNotNull(qos.Durability);
-            Assert.IsNotNull(qos.DurabilityService);
-            Assert.IsNotNull(qos.History);
-            Assert.IsNotNull(qos.LatencyBudget);
-            Assert.IsNotNull(qos.Lifespan);
-            Assert.IsNotNull(qos.Liveliness);
-            Assert.IsNotNull(qos.Ownership);
-            Assert.IsNotNull(qos.Reliability);
-            Assert.IsNotNull(qos.ResourceLimits);
-            Assert.IsNotNull(qos.TopicData);
-            Assert.IsNotNull(qos.TransportPriority);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, qos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.DurabilityService.HistoryKind);
-            Assert.AreEqual(1, qos.DurabilityService.HistoryDepth);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.DurabilityService.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.DurabilityService.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.DurabilityService.MaxSamplesPerInstance);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.History.Kind);
-            Assert.AreEqual(1, qos.History.Depth);
-            Assert.AreEqual(Duration.ZeroSeconds, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, qos.LatencyBudget.Duration.NanoSeconds);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Lifespan.Duration.NanoSeconds);
-            Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, qos.Liveliness.Kind);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, qos.Ownership.Kind);
-            Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, qos.Reliability.Kind);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(0, qos.TopicData.Value.Count());
-            Assert.AreEqual(0, qos.TransportPriority.Value);
+            TestHelper.TestDefaultTopicQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestGetDefaultTopicQos()
         {
-            TopicQos qos = new TopicQos();
-            qos.Deadline.Period = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 0
-            };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.DurabilityService.HistoryDepth = 5;
-            qos.DurabilityService.HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.DurabilityService.MaxInstances = 5;
-            qos.DurabilityService.MaxSamples = 5;
-            qos.DurabilityService.MaxSamplesPerInstance = 5;
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Lifespan.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.TopicData.Value = new List<byte> { 0x5 };
-            qos.TransportPriority.Value = 5;
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
 
             ReturnCode result = _participant.GetDefaultTopicQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos);
-            Assert.IsNotNull(qos.Deadline);
-            Assert.IsNotNull(qos.DestinationOrder);
-            Assert.IsNotNull(qos.Durability);
-            Assert.IsNotNull(qos.DurabilityService);
-            Assert.IsNotNull(qos.History);
-            Assert.IsNotNull(qos.LatencyBudget);
-            Assert.IsNotNull(qos.Lifespan);
-            Assert.IsNotNull(qos.Liveliness);
-            Assert.IsNotNull(qos.Ownership);
-            Assert.IsNotNull(qos.Reliability);
-            Assert.IsNotNull(qos.ResourceLimits);
-            Assert.IsNotNull(qos.TopicData);
-            Assert.IsNotNull(qos.TransportPriority);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, qos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.DurabilityService.HistoryKind);
-            Assert.AreEqual(1, qos.DurabilityService.HistoryDepth);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.DurabilityService.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.DurabilityService.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.DurabilityService.MaxSamplesPerInstance);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.History.Kind);
-            Assert.AreEqual(1, qos.History.Depth);
-            Assert.AreEqual(Duration.ZeroSeconds, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, qos.LatencyBudget.Duration.NanoSeconds);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Lifespan.Duration.NanoSeconds);
-            Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, qos.Liveliness.Kind);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, qos.Ownership.Kind);
-            Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, qos.Reliability.Kind);
-            Assert.AreEqual(Duration.InfiniteSeconds, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(0, qos.TopicData.Value.Count());
-            Assert.AreEqual(0, qos.TransportPriority.Value);
+            TestHelper.TestDefaultTopicQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestSetDefaultTopicQos()
         {
-            TopicQos qos = new TopicQos();
-
-            qos.Deadline.Period = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 0
-            };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.DurabilityService.HistoryDepth = 5;
-            qos.DurabilityService.HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.DurabilityService.MaxInstances = 5;
-            qos.DurabilityService.MaxSamples = 5;
-            qos.DurabilityService.MaxSamplesPerInstance = 5;
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Lifespan.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5
-            };
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.TopicData.Value = new List<byte> { 0x5 };
-            qos.TransportPriority.Value = 5;
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
 
             ReturnCode result = _participant.SetDefaultTopicQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new TopicQos();
             result = _participant.GetDefaultTopicQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos);
-            Assert.IsNotNull(qos.Deadline);
-            Assert.IsNotNull(qos.DestinationOrder);
-            Assert.IsNotNull(qos.Durability);
-            Assert.IsNotNull(qos.DurabilityService);
-            Assert.IsNotNull(qos.History);
-            Assert.IsNotNull(qos.LatencyBudget);
-            Assert.IsNotNull(qos.Lifespan);
-            Assert.IsNotNull(qos.Liveliness);
-            Assert.IsNotNull(qos.Ownership);
-            Assert.IsNotNull(qos.Reliability);
-            Assert.IsNotNull(qos.ResourceLimits);
-            Assert.IsNotNull(qos.TopicData);
-            Assert.IsNotNull(qos.TransportPriority);
-            Assert.AreEqual(5, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.ZeroNanoseconds, qos.Deadline.Period.NanoSeconds);
-            Assert.AreEqual(DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
-            Assert.AreEqual(DurabilityQosPolicyKind.TransientLocalDurabilityQos, qos.Durability.Kind);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.DurabilityService.HistoryKind);
-            Assert.AreEqual(5, qos.DurabilityService.HistoryDepth);
-            Assert.AreEqual(5, qos.DurabilityService.MaxInstances);
-            Assert.AreEqual(5, qos.DurabilityService.MaxSamples);
-            Assert.AreEqual(5, qos.DurabilityService.MaxSamplesPerInstance);
-            Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.History.Kind);
-            Assert.AreEqual(5, qos.History.Depth);
-            Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
-            Assert.AreEqual(5, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.Lifespan.Duration.NanoSeconds);
-            Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, qos.Liveliness.Kind);
-            Assert.AreEqual(5, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual((uint)5, qos.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, qos.Ownership.Kind);
-            Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
-            Assert.AreEqual(5, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)5, qos.Reliability.MaxBlockingTime.NanoSeconds);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxInstances);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
-            Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(1, qos.TopicData.Value.Count());
-            Assert.AreEqual(0x5, qos.TopicData.Value.First());
-            Assert.AreEqual(5, qos.TransportPriority.Value);
+            TestHelper.TestNonDefaultTopicQos(qos);
         }
 
         [TestMethod]
@@ -568,61 +337,25 @@ namespace OpenDDSharp.UnitTest
         public void TestNewPublisherQos()
         {
             PublisherQos qos = new PublisherQos();
-
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
-            Assert.IsFalse(qos.Presentation.CoherentAccess);
-            Assert.IsFalse(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestDefaultPublisherQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestGetDefaultPublisherQos()
         {
-            PublisherQos qos = new PublisherQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
 
             ReturnCode result = _participant.GetDefaultPublisherQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
-            Assert.IsFalse(qos.Presentation.CoherentAccess);
-            Assert.IsFalse(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestDefaultPublisherQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestSetDefaultPulisherQos()
         {
-            PublisherQos qos = new PublisherQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
 
             ReturnCode result = _participant.SetDefaultPublisherQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -630,33 +363,14 @@ namespace OpenDDSharp.UnitTest
             qos = new PublisherQos();
             result = _participant.GetDefaultPublisherQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
-            Assert.IsTrue(qos.Presentation.CoherentAccess);
-            Assert.IsTrue(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestNonDefaultPublisherQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestCreatePublisher()
         {
-            PublisherQos qos = new PublisherQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
 
             MyPublisherListener listener = new MyPublisherListener();
             Publisher publisher = _participant.CreatePublisher(qos, listener, StatusMask.DefaultStatusMask);
@@ -666,20 +380,7 @@ namespace OpenDDSharp.UnitTest
             PublisherQos getPublisherQos = new PublisherQos();
             ReturnCode result = publisher.GetQos(getPublisherQos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
-            Assert.IsTrue(qos.Presentation.CoherentAccess);
-            Assert.IsTrue(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);           
+            TestHelper.TestNonDefaultPublisherQos(getPublisherQos);     
         }
 
         [TestMethod]
@@ -716,61 +417,25 @@ namespace OpenDDSharp.UnitTest
         public void TestNewSubscriberQos()
         {
             SubscriberQos qos = new SubscriberQos();
-
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
-            Assert.IsFalse(qos.Presentation.CoherentAccess);
-            Assert.IsFalse(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestDefaultSubscriberQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestGetDefaultSubscriberQos()
         {
-            SubscriberQos qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
 
             ReturnCode result = _participant.GetDefaultSubscriberQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
-            Assert.IsFalse(qos.Presentation.CoherentAccess);
-            Assert.IsFalse(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestDefaultSubscriberQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestSetDefaultSubscriberQos()
         {
-            SubscriberQos qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
 
             ReturnCode result = _participant.SetDefaultSubscriberQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -778,33 +443,14 @@ namespace OpenDDSharp.UnitTest
             qos = new SubscriberQos();
             result = _participant.GetDefaultSubscriberQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
-            Assert.IsTrue(qos.Presentation.CoherentAccess);
-            Assert.IsTrue(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestNonDefaultSubscriberQos(qos);
         }
 
         [TestMethod]
         [TestCategory("DomainParticipant")]
         public void TestCreateSubscriber()
         {
-            SubscriberQos qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
 
             MySubscriberListener listener = new MySubscriberListener();
             Subscriber subscriber = _participant.CreateSubscriber(qos, listener, StatusMask.DefaultStatusMask);
@@ -814,20 +460,7 @@ namespace OpenDDSharp.UnitTest
             SubscriberQos getSubscriberQos = new SubscriberQos();
             ReturnCode result = subscriber.GetQos(getSubscriberQos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(qos.EntityFactory);
-            Assert.IsNotNull(qos.GroupData);
-            Assert.IsNotNull(qos.Partition);
-            Assert.IsNotNull(qos.Presentation);
-            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
-            Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
-            Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
-            Assert.IsTrue(qos.Presentation.CoherentAccess);
-            Assert.IsTrue(qos.Presentation.OrderedAccess);
-            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+            TestHelper.TestNonDefaultSubscriberQos(qos);
         }
 
         [TestMethod]
