@@ -165,6 +165,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataWriter::GetMatchedSubscriptio
 		System::UInt32 i = 0;
 		while (i < seq.length()) {
 			subscriptionHandles->Add(seq[i]);
+            i++;
 		}
 	}
 
