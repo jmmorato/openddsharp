@@ -68,6 +68,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataWriterTest.cs" />
     <Compile Include="DomainParticipantFactoryTest.cs" />
     <Compile Include="DomainParticipantTest.cs" />
     <Compile Include="Listeners\MyDataReaderListener.cs" />
