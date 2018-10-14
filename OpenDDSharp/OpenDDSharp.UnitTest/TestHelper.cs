@@ -24,7 +24,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest
 {
-    internal class TestHelper
+    internal static class TestHelper
     {
         #region DomainParticipant QoS
         public static DomainParticipantQos CreateNonDefaultDomainParticipantQos()
@@ -614,6 +614,48 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(3, qos.TimeBasedFilter.MinimumSeparation.Seconds);
             Assert.AreEqual((uint)3, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.AreEqual(0x5, qos.UserData.Value.First());
+        }
+        #endregion
+
+        #region Extensions
+        public static bool WaitForSubscriptions(this DataWriter writer, int subscriptionsCount, int milliseconds)
+        {
+            PublicationMatchedStatus status = new PublicationMatchedStatus();
+            writer.GetPublicationMatchedStatus(ref status);
+            int count = milliseconds / 100;
+            while (status.CurrentCount != subscriptionsCount && count > 0)
+            {
+                System.Threading.Thread.Sleep(100);
+                writer.GetPublicationMatchedStatus(ref status);
+                count--;
+            }
+
+            if (count == 0 && status.CurrentCount != subscriptionsCount)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool WaitForPublications(this DataReader reader, int publicationsCount, int milliseconds)
+        {
+            List<InstanceHandle> handles = new List<InstanceHandle>();
+            reader.GetMatchedPublications(handles);
+            int count = milliseconds / 100;
+            while (handles.Count != publicationsCount && count > 0)
+            {
+                System.Threading.Thread.Sleep(100);
+                reader.GetMatchedPublications(handles);
+                count--;
+            }
+
+            if (count == 0 && handles.Count != publicationsCount)
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
     }
