@@ -37,7 +37,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::<%SCOPED%>DataWriter::RegisterInst
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::UnregisterInstance(<%TYPE%>^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::<%SCOPED%> native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataWriter::UnregisterInstance(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle) {
