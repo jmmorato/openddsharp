@@ -17,6 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
@@ -656,6 +657,23 @@ namespace OpenDDSharp.UnitTest
             }
 
             return true;
+        }
+
+        public static DateTime ToDateTime(this Timestamp timestamp)
+        {
+            return new DateTime(1970, 1, 1).AddSeconds(timestamp.Seconds).AddMilliseconds(timestamp.NanoSeconds / 1000000);
+        }
+
+        public static Timestamp ToTimestamp(this DateTime dateTime)
+        {
+            DateTime epoc = new DateTime(1970, 1, 1);
+            TimeSpan span = dateTime - epoc;
+
+            return new Timestamp
+            {
+                Seconds = span.Seconds,
+                NanoSeconds = (uint)span.Milliseconds / 1000000
+            };
         }
         #endregion
     }
