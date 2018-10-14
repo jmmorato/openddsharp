@@ -73,7 +73,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::BasicTestStructDataWriter::R
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::UnregisterInstance(BasicTestStruct^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::Test::BasicTestStruct native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataWriter::UnregisterInstance(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
@@ -935,7 +940,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::TestStructDataWriter::Regist
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::UnregisterInstance(TestStruct^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::Test::TestStruct native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataWriter::UnregisterInstance(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
@@ -1419,7 +1429,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::AthleteDataWriter::RegisterI
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataWriter::UnregisterInstance(Athlete^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::Test::Athlete native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataWriter::UnregisterInstance(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle) {
@@ -1877,7 +1892,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::ResultDataWriter::RegisterIn
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataWriter::UnregisterInstance(Result^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::Test::Result native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataWriter::UnregisterInstance(Result^ data, OpenDDSharp::DDS::InstanceHandle handle) {
@@ -2383,7 +2403,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::AthleteResultDataWriter::Reg
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataWriter::UnregisterInstance(AthleteResult^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::Test::AthleteResult native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataWriter::UnregisterInstance(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle) {
