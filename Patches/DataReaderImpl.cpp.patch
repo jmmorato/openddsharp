@@ -1,5 +1,5 @@
 diff --git a/dds/DCPS/DataReaderImpl.cpp b/dds/DCPS/DataReaderImpl.cpp
-index 794e3cac9..d491eb3fb 100644
+index 794e3cac9..5985067f1 100644
 --- a/dds/DCPS/DataReaderImpl.cpp
 +++ b/dds/DCPS/DataReaderImpl.cpp
 @@ -120,19 +120,18 @@ DataReaderImpl::DataReaderImpl()
@@ -52,7 +52,58 @@ index 794e3cac9..d491eb3fb 100644
  
  }
  
-@@ -3140,6 +3155,14 @@ DataReaderImpl::get_cf_topic() const
+@@ -855,30 +870,32 @@ DDS::ReturnCode_t DataReaderImpl::set_qos(
+     if (qos_ == qos)
+       return DDS::RETCODE_OK;
+ 
+-    if (!Qos_Helper::changeable(qos_, qos) && enabled_ == true) {
+-      return DDS::RETCODE_IMMUTABLE_POLICY;
++    if (enabled_ == true) {
++      if (!Qos_Helper::changeable(qos_, qos)) {
++        return DDS::RETCODE_IMMUTABLE_POLICY;
+ 
+-    } else {
+-      Discovery_rch disco = TheServiceParticipant->get_discovery(domain_id_);
+-      DDS::SubscriberQos subscriberQos;
+-
+-      RcHandle<SubscriberImpl> subscriber = get_subscriber_servant();
+-      bool status = false;
+-      if (subscriber) {
+-        subscriber->get_qos(subscriberQos);
+-        status =
+-          disco->update_subscription_qos(
++      } else {
++        Discovery_rch disco = TheServiceParticipant->get_discovery(domain_id_);
++        DDS::SubscriberQos subscriberQos;
++
++        RcHandle<SubscriberImpl> subscriber = get_subscriber_servant();
++        bool status = false;
++        if (subscriber) {
++          subscriber->get_qos(subscriberQos);
++          status =
++            disco->update_subscription_qos(
+               domain_id_,
+               dp_id_,
+               this->subscription_id_,
+               qos,
+               subscriberQos);
+-      }
+-      if (!status) {
+-        ACE_ERROR_RETURN((LM_ERROR,
+-            ACE_TEXT("(%P|%t) DataReaderImpl::set_qos, ")
+-            ACE_TEXT("qos not updated. \n")),
+-            DDS::RETCODE_ERROR);
++        }
++        if (!status) {
++          ACE_ERROR_RETURN((LM_ERROR,
++                            ACE_TEXT("(%P|%t) DataReaderImpl::set_qos, ")
++                            ACE_TEXT("qos not updated. \n")),
++                            DDS::RETCODE_ERROR);
++        }
+       }
+     }
+ 
+@@ -3140,6 +3157,14 @@ DataReaderImpl::get_cf_topic() const
  }
  #endif
  

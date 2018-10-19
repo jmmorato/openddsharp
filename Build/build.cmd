@@ -38,6 +38,7 @@ git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
 git apply %CD%\..\..\Patches\MultiTopicDataReaderBase.cpp.patch
 git apply %CD%\..\..\Patches\unique_ptr.h.patch
 git apply %CD%\..\..\Patches\SubscriberImpl.cpp.patch
+git apply %CD%\..\..\Patches\DataWriterImpl.cpp.patch
 
 REM Build OpenDDS for x64 platforms and create the bin_x64 and lib_x64 folders
 msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
