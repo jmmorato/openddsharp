@@ -447,7 +447,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeN
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::GetKeyValue(BasicTestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::Test::BasicTestStruct aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::BasicTestStructDataReader::LookupInstance(BasicTestStruct^ instance) {
@@ -1319,7 +1324,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeNextSa
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::GetKeyValue(TestStruct^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::Test::TestStruct aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::TestStructDataReader::LookupInstance(TestStruct^ instance) {
@@ -1813,7 +1823,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataReader::TakeNextSampl
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataReader::GetKeyValue(Athlete^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::Test::Athlete aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::AthleteDataReader::LookupInstance(Athlete^ instance) {
@@ -2281,7 +2296,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataReader::TakeNextSample
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataReader::GetKeyValue(Result^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::Test::Result aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::ResultDataReader::LookupInstance(Result^ instance) {
@@ -2797,7 +2817,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataReader::TakeNex
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataReader::GetKeyValue(AthleteResult^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::Test::AthleteResult aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::Test::AthleteResultDataReader::LookupInstance(AthleteResult^ instance) {

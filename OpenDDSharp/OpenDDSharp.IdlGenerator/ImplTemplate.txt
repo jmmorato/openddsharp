@@ -411,7 +411,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataReader::TakeNextSample(<
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataReader::GetKeyValue(<%TYPE%>^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::<%SCOPED%> aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::<%SCOPED%>DataReader::LookupInstance(<%TYPE%>^ instance) {
