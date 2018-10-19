@@ -790,7 +790,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(0, count);
 
             result = dataWriter.Dispose(instance1);
@@ -799,7 +799,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             // Call dispose with the handle parameter
@@ -813,7 +813,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             result = dataWriter.Dispose(instance2, handle2);
@@ -822,7 +822,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(2, count);
 
             // Call dispose with the handle parameter and specific timestamp 
@@ -837,7 +837,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(2, count);
 
             result = dataWriter.Dispose(instance3, handle3, now);
@@ -846,7 +846,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(3, count);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
