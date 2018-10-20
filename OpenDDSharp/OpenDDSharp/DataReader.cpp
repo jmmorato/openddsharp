@@ -252,6 +252,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetMatchedPublication
 		System::UInt32 i = 0;
 		while (i < seq.length()) {
 			publicationHandles->Add(seq[i]);
+            i++;
 		}
 	}
 
