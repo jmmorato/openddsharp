@@ -73,8 +73,9 @@ namespace OpenDDSharp.UnitTest
             qos.DurabilityService.MaxInstances = 5;
             qos.DurabilityService.MaxSamples = 5;
             qos.DurabilityService.MaxSamplesPerInstance = 5;
+            qos.DurabilityService.ServiceCleanupDelay = new Duration { Seconds = 5, NanoSeconds = 5 };
             qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
+            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;            
             qos.LatencyBudget.Duration = new Duration
             {
                 Seconds = 5,
@@ -177,6 +178,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(5, qos.DurabilityService.MaxInstances);
             Assert.AreEqual(5, qos.DurabilityService.MaxSamples);
             Assert.AreEqual(5, qos.DurabilityService.MaxSamplesPerInstance);
+            Assert.IsNotNull(qos.DurabilityService.ServiceCleanupDelay);
+            Assert.AreEqual(5, qos.DurabilityService.ServiceCleanupDelay.Seconds);
+            Assert.AreEqual((uint)5, qos.DurabilityService.ServiceCleanupDelay.NanoSeconds);
             Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.History.Kind);
             Assert.AreEqual(5, qos.History.Depth);
             Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
