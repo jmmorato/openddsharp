@@ -29,6 +29,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "InstanceStateMask.h"
 #include "DataReader.h"
 
+#pragma make_public(::DDS::ReadCondition)
+
 namespace OpenDDSharp {
 	namespace DDS {
 
@@ -42,8 +44,12 @@ namespace OpenDDSharp {
 		/// </remarks>
 		public ref class ReadCondition : public Condition {
 
-		internal:
+        public:
+            /// <exclude />
+            [System::ComponentModel::EditorBrowsable(System::ComponentModel::EditorBrowsableState::Never)]
 			::DDS::ReadCondition_ptr impl_entity;
+
+        internal:
 			OpenDDSharp::DDS::DataReader^ data_reader;
 
         public:

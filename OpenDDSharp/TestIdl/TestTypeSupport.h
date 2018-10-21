@@ -185,22 +185,22 @@ namespace Test {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -208,22 +208,22 @@ namespace Test {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<BasicTestStruct^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<BasicTestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -543,22 +543,22 @@ namespace Test {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -566,22 +566,22 @@ namespace Test {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<TestStruct^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<TestStruct^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -766,22 +766,22 @@ namespace Test {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -789,22 +789,22 @@ namespace Test {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Athlete^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -984,22 +984,22 @@ namespace Test {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -1007,22 +1007,22 @@ namespace Test {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Result^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -1217,22 +1217,22 @@ namespace Test {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -1240,22 +1240,22 @@ namespace Test {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<AthleteResult^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,

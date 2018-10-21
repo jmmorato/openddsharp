@@ -33,6 +33,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <vcclr.h>
 #include <msclr/marshal.h>
 
+#pragma make_public(::DDS::QueryCondition)
+
 namespace OpenDDSharp {
 	namespace DDS {
 
@@ -44,7 +46,9 @@ namespace OpenDDSharp {
 		/// </remarks>
 		public ref class QueryCondition : public ReadCondition {
 
-		internal:
+		public:
+            /// <exclude />
+            [System::ComponentModel::EditorBrowsable(System::ComponentModel::EditorBrowsableState::Never)]
 			::DDS::QueryCondition_ptr impl_entity;
 
         public:

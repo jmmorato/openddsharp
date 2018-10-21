@@ -132,22 +132,22 @@
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -155,22 +155,22 @@
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<<%TYPE%>^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<<%TYPE%>^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
