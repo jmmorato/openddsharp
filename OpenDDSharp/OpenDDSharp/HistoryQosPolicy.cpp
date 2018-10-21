@@ -41,12 +41,12 @@ void OpenDDSharp::DDS::HistoryQosPolicy::Depth::set(System::Int32 value) {
 };
 
 ::DDS::HistoryQosPolicy OpenDDSharp::DDS::HistoryQosPolicy::ToNative() {
-	::DDS::HistoryQosPolicy* qos = new ::DDS::HistoryQosPolicy();
+	::DDS::HistoryQosPolicy qos;
 
-	qos->kind = (::DDS::HistoryQosPolicyKind)kind;
-	qos->depth = depth;
+	qos.kind = (::DDS::HistoryQosPolicyKind)kind;
+	qos.depth = depth;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::HistoryQosPolicy::FromNative(::DDS::HistoryQosPolicy qos) {

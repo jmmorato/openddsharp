@@ -33,12 +33,12 @@ OpenDDSharp::DDS::EntityFactoryQosPolicy^ OpenDDSharp::DDS::DomainParticipantQos
 };
 
 ::DDS::DomainParticipantQos OpenDDSharp::DDS::DomainParticipantQos::ToNative() {
-	::DDS::DomainParticipantQos* qos = new ::DDS::DomainParticipantQos();
+	::DDS::DomainParticipantQos qos;
 
-	qos->entity_factory = entity_factory->ToNative();
-	qos->user_data = user_data->ToNative();
+	qos.entity_factory = entity_factory->ToNative();
+	qos.user_data = user_data->ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DomainParticipantQos::FromNative(::DDS::DomainParticipantQos qos) {

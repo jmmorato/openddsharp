@@ -42,12 +42,12 @@ void OpenDDSharp::DDS::ReliabilityQosPolicy::MaxBlockingTime::set(OpenDDSharp::D
 };
 
 ::DDS::ReliabilityQosPolicy OpenDDSharp::DDS::ReliabilityQosPolicy::ToNative() {
-	::DDS::ReliabilityQosPolicy* qos = new ::DDS::ReliabilityQosPolicy();
+	::DDS::ReliabilityQosPolicy qos;
 
-	qos->kind = (::DDS::ReliabilityQosPolicyKind)kind;
-	qos->max_blocking_time = max_blocking_time.ToNative();
+	qos.kind = (::DDS::ReliabilityQosPolicyKind)kind;
+	qos.max_blocking_time = max_blocking_time.ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::ReliabilityQosPolicy::FromNative(::DDS::ReliabilityQosPolicy qos) {

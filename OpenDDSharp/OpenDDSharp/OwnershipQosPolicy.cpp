@@ -32,11 +32,11 @@ void OpenDDSharp::DDS::OwnershipQosPolicy::Kind::set(::OpenDDSharp::DDS::Ownersh
 };
 
 ::DDS::OwnershipQosPolicy OpenDDSharp::DDS::OwnershipQosPolicy::ToNative() {
-	::DDS::OwnershipQosPolicy* qos = new ::DDS::OwnershipQosPolicy();
+	::DDS::OwnershipQosPolicy qos;
 	
-	qos->kind = (::DDS::OwnershipQosPolicyKind)kind;
+	qos.kind = (::DDS::OwnershipQosPolicyKind)kind;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::OwnershipQosPolicy::FromNative(::DDS::OwnershipQosPolicy qos) {

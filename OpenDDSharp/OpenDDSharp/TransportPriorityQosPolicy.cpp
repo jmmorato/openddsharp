@@ -32,11 +32,11 @@ void OpenDDSharp::DDS::TransportPriorityQosPolicy::Value::set(System::Int32 valu
 };
 
 ::DDS::TransportPriorityQosPolicy OpenDDSharp::DDS::TransportPriorityQosPolicy::ToNative() {
-	::DDS::TransportPriorityQosPolicy* qos = new ::DDS::TransportPriorityQosPolicy();
+	::DDS::TransportPriorityQosPolicy qos;
 
-	qos->value = m_value;	
+	qos.value = m_value;	
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::TransportPriorityQosPolicy::FromNative(::DDS::TransportPriorityQosPolicy qos) {

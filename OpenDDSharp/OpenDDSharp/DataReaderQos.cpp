@@ -84,22 +84,22 @@ OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy^ OpenDDSharp::DDS::DataReaderQos:
 };
 
 ::DDS::DataReaderQos OpenDDSharp::DDS::DataReaderQos::ToNative() {
-	::DDS::DataReaderQos* qos = new ::DDS::DataReaderQos();
+	::DDS::DataReaderQos qos;
 	
-	qos->durability = durability->ToNative();	
-	qos->deadline = deadline->ToNative();
-	qos->latency_budget = latency_budget->ToNative();
-	qos->liveliness = liveliness->ToNative();
-	qos->reliability = reliability->ToNative();
-	qos->destination_order = destination_order->ToNative();
-	qos->history = history->ToNative();
-	qos->resource_limits = resource_limits->ToNative();
-	qos->user_data = user_data->ToNative();
-	qos->ownership = ownership->ToNative();
-	qos->time_based_filter = time_based_filter->ToNative();
-	qos->reader_data_lifecycle = reader_data_lifecycle->ToNative();
+	qos.durability = durability->ToNative();	
+	qos.deadline = deadline->ToNative();
+	qos.latency_budget = latency_budget->ToNative();
+	qos.liveliness = liveliness->ToNative();
+	qos.reliability = reliability->ToNative();
+	qos.destination_order = destination_order->ToNative();
+	qos.history = history->ToNative();
+	qos.resource_limits = resource_limits->ToNative();
+	qos.user_data = user_data->ToNative();
+	qos.ownership = ownership->ToNative();
+	qos.time_based_filter = time_based_filter->ToNative();
+	qos.reader_data_lifecycle = reader_data_lifecycle->ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DataReaderQos::FromNative(::DDS::DataReaderQos qos) {	

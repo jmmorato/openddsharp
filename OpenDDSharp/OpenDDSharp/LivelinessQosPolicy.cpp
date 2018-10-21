@@ -42,12 +42,12 @@ void OpenDDSharp::DDS::LivelinessQosPolicy::LeaseDuration::set(::OpenDDSharp::DD
 };
 
 ::DDS::LivelinessQosPolicy OpenDDSharp::DDS::LivelinessQosPolicy::ToNative() {
-	::DDS::LivelinessQosPolicy* qos = new ::DDS::LivelinessQosPolicy();
+	::DDS::LivelinessQosPolicy qos;
 
-	qos->kind = (::DDS::LivelinessQosPolicyKind)kind;
-	qos->lease_duration = lease_duration.ToNative();
+	qos.kind = (::DDS::LivelinessQosPolicyKind)kind;
+	qos.lease_duration = lease_duration.ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::LivelinessQosPolicy::FromNative(::DDS::LivelinessQosPolicy qos) {

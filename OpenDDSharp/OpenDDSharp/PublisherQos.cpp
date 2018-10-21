@@ -43,14 +43,14 @@ OpenDDSharp::DDS::EntityFactoryQosPolicy^ OpenDDSharp::DDS::PublisherQos::Entity
 };
 
 ::DDS::PublisherQos OpenDDSharp::DDS::PublisherQos::ToNative() {
-	::DDS::PublisherQos* qos = new ::DDS::PublisherQos();
+	::DDS::PublisherQos qos;
 
-	qos->presentation = presentation->ToNative();
-	qos->partition = partition->ToNative();
-	qos->group_data = group_data->ToNative();
-	qos->entity_factory = entity_factory->ToNative();
+	qos.presentation = presentation->ToNative();
+	qos.partition = partition->ToNative();
+	qos.group_data = group_data->ToNative();
+	qos.entity_factory = entity_factory->ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::PublisherQos::FromNative(::DDS::PublisherQos qos) {

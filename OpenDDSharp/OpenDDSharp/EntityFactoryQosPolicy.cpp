@@ -32,16 +32,16 @@ void OpenDDSharp::DDS::EntityFactoryQosPolicy::AutoenableCreatedEntities::set(Sy
 }
 
 ::DDS::EntityFactoryQosPolicy OpenDDSharp::DDS::EntityFactoryQosPolicy::ToNative() {
-	::DDS::EntityFactoryQosPolicy* qos = new ::DDS::EntityFactoryQosPolicy();
+	::DDS::EntityFactoryQosPolicy qos;
 
 	if (autoenable_created_entities) {
-		qos->autoenable_created_entities = TRUE;
+		qos.autoenable_created_entities = TRUE;
 	}
 	else {
-		qos->autoenable_created_entities = FALSE;
+		qos.autoenable_created_entities = FALSE;
 	}
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::EntityFactoryQosPolicy::FromNative(::DDS::EntityFactoryQosPolicy qos) {	

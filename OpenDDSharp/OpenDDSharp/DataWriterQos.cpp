@@ -104,25 +104,25 @@ OpenDDSharp::DDS::WriterDataLifecycleQosPolicy^ OpenDDSharp::DDS::DataWriterQos:
 };
 
 ::DDS::DataWriterQos OpenDDSharp::DDS::DataWriterQos::ToNative() {
-	::DDS::DataWriterQos* qos = new ::DDS::DataWriterQos();
+	::DDS::DataWriterQos qos;
 	
-	qos->durability = durability->ToNative();
-	qos->durability_service = durability_service->ToNative();
-	qos->deadline = deadline->ToNative();
-	qos->latency_budget = latency_budget->ToNative();
-	qos->liveliness = liveliness->ToNative();
-	qos->reliability = reliability->ToNative();
-	qos->destination_order = destination_order->ToNative();
-	qos->history = history->ToNative();
-	qos->resource_limits = resource_limits->ToNative();
-	qos->transport_priority = transport_priority->ToNative();
-	qos->lifespan = lifespan->ToNative();
-	qos->ownership = ownership->ToNative();
-	qos->user_data = user_data->ToNative();
-	qos->ownership_strength = ownership_strength->ToNative();
-	qos->writer_data_lifecycle = writer_data_lifecycle->ToNative();
+	qos.durability = durability->ToNative();
+	qos.durability_service = durability_service->ToNative();
+	qos.deadline = deadline->ToNative();
+	qos.latency_budget = latency_budget->ToNative();
+	qos.liveliness = liveliness->ToNative();
+	qos.reliability = reliability->ToNative();
+	qos.destination_order = destination_order->ToNative();
+	qos.history = history->ToNative();
+	qos.resource_limits = resource_limits->ToNative();
+	qos.transport_priority = transport_priority->ToNative();
+	qos.lifespan = lifespan->ToNative();
+	qos.ownership = ownership->ToNative();
+	qos.user_data = user_data->ToNative();
+	qos.ownership_strength = ownership_strength->ToNative();
+	qos.writer_data_lifecycle = writer_data_lifecycle->ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DataWriterQos::FromNative(::DDS::DataWriterQos qos) {	

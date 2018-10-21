@@ -33,12 +33,12 @@ void OpenDDSharp::DDS::LifespanQosPolicy::Duration::set(::OpenDDSharp::DDS::Dura
 };
 
 ::DDS::LifespanQosPolicy OpenDDSharp::DDS::LifespanQosPolicy::ToNative() {
-	::DDS::LifespanQosPolicy* qos = new ::DDS::LifespanQosPolicy();
+	::DDS::LifespanQosPolicy qos;
 
-	qos->duration.sec = duration.Seconds;
-	qos->duration.nanosec = duration.NanoSeconds;
+	qos.duration.sec = duration.Seconds;
+	qos.duration.nanosec = duration.NanoSeconds;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::LifespanQosPolicy::FromNative(::DDS::LifespanQosPolicy qos) {

@@ -45,12 +45,12 @@ void OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy::AutopurgeDisposedSamplesDel
 
 
 ::DDS::ReaderDataLifecycleQosPolicy OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy::ToNative() {
-	::DDS::ReaderDataLifecycleQosPolicy* qos = new ::DDS::ReaderDataLifecycleQosPolicy();
+    ::DDS::ReaderDataLifecycleQosPolicy qos;
 
-	qos->autopurge_nowriter_samples_delay = autopurge_nowriter_samples_delay.ToNative();
-	qos->autopurge_disposed_samples_delay = autopurge_disposed_samples_delay.ToNative();
+	qos.autopurge_nowriter_samples_delay = autopurge_nowriter_samples_delay.ToNative();
+	qos.autopurge_disposed_samples_delay = autopurge_disposed_samples_delay.ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::ReaderDataLifecycleQosPolicy::FromNative(::DDS::ReaderDataLifecycleQosPolicy qos) {

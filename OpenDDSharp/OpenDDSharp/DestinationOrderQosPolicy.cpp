@@ -32,11 +32,11 @@ void OpenDDSharp::DDS::DestinationOrderQosPolicy::Kind::set(OpenDDSharp::DDS::De
 };
 
 ::DDS::DestinationOrderQosPolicy OpenDDSharp::DDS::DestinationOrderQosPolicy::ToNative() {
-	::DDS::DestinationOrderQosPolicy* qos = new ::DDS::DestinationOrderQosPolicy();
+	::DDS::DestinationOrderQosPolicy qos;
 
-	qos->kind = (::DDS::DestinationOrderQosPolicyKind)kind;
+	qos.kind = (::DDS::DestinationOrderQosPolicyKind)kind;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DestinationOrderQosPolicy::FromNative(::DDS::DestinationOrderQosPolicy qos) {

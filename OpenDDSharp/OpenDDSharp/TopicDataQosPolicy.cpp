@@ -36,19 +36,19 @@ void OpenDDSharp::DDS::TopicDataQosPolicy::Value::set(IEnumerable<System::Byte>^
 		m_value = gcnew List<System::Byte>();
 	}
 
-	::DDS::TopicDataQosPolicy* qos = new ::DDS::TopicDataQosPolicy();
+	::DDS::TopicDataQosPolicy qos;
 
 	int count = System::Linq::Enumerable::Count(m_value);
-	qos->value.length(count);
+	qos.value.length(count);
 
 	int i = 0;
 	while (i < count) {
 		System::Byte byte = System::Linq::Enumerable::ElementAt(m_value, i);
-		qos->value[i] = static_cast<CORBA::Octet>(byte);
+		qos.value[i] = static_cast<CORBA::Octet>(byte);
 		i++;
 	}
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::TopicDataQosPolicy::FromNative(::DDS::TopicDataQosPolicy qos) {

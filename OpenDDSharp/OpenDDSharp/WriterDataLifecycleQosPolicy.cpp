@@ -32,11 +32,11 @@ void OpenDDSharp::DDS::WriterDataLifecycleQosPolicy::AutodisposeUnregisteredInst
 };
 
 ::DDS::WriterDataLifecycleQosPolicy OpenDDSharp::DDS::WriterDataLifecycleQosPolicy::ToNative() {
-	::DDS::WriterDataLifecycleQosPolicy* qos = new ::DDS::WriterDataLifecycleQosPolicy();
+	::DDS::WriterDataLifecycleQosPolicy qos;
 
-	qos->autodispose_unregistered_instances = autodispose_unregistered_instances;
+	qos.autodispose_unregistered_instances = autodispose_unregistered_instances;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::WriterDataLifecycleQosPolicy::FromNative(::DDS::WriterDataLifecycleQosPolicy qos) {

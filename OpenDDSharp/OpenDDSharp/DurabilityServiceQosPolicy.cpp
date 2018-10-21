@@ -78,16 +78,16 @@ void OpenDDSharp::DDS::DurabilityServiceQosPolicy::MaxSamplesPerInstance::set(Sy
 };
 
 ::DDS::DurabilityServiceQosPolicy OpenDDSharp::DDS::DurabilityServiceQosPolicy::ToNative() {
-	::DDS::DurabilityServiceQosPolicy* qos = new ::DDS::DurabilityServiceQosPolicy();
+	::DDS::DurabilityServiceQosPolicy qos;
 
-	qos->service_cleanup_delay = service_cleanup_delay.ToNative();
-	qos->history_kind = (::DDS::HistoryQosPolicyKind)history_kind;
-	qos->history_depth = history_depth;
-	qos->max_samples = max_samples;
-	qos->max_instances = max_instances;
-	qos->max_samples_per_instance = max_samples_per_instance;
+	qos.service_cleanup_delay = service_cleanup_delay.ToNative();
+	qos.history_kind = (::DDS::HistoryQosPolicyKind)history_kind;
+	qos.history_depth = history_depth;
+	qos.max_samples = max_samples;
+	qos.max_instances = max_instances;
+	qos.max_samples_per_instance = max_samples_per_instance;
 	
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DurabilityServiceQosPolicy::FromNative(::DDS::DurabilityServiceQosPolicy qos) {

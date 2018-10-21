@@ -32,11 +32,11 @@ void OpenDDSharp::DDS::OwnershipStrengthQosPolicy::Value::set(System::Int32 valu
 };
 
 ::DDS::OwnershipStrengthQosPolicy OpenDDSharp::DDS::OwnershipStrengthQosPolicy::ToNative() {
-	::DDS::OwnershipStrengthQosPolicy* qos = new ::DDS::OwnershipStrengthQosPolicy();
+	::DDS::OwnershipStrengthQosPolicy qos;
 
-	qos->value = m_value;
+	qos.value = m_value;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::OwnershipStrengthQosPolicy::FromNative(::DDS::OwnershipStrengthQosPolicy qos) {

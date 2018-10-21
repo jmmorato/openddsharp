@@ -33,11 +33,11 @@ void OpenDDSharp::DDS::DeadlineQosPolicy::Period::set(::OpenDDSharp::DDS::Durati
 };
 
 ::DDS::DeadlineQosPolicy OpenDDSharp::DDS::DeadlineQosPolicy::ToNative() {
-	::DDS::DeadlineQosPolicy* qos = new ::DDS::DeadlineQosPolicy();
+	::DDS::DeadlineQosPolicy qos;
 
-	qos->period = period.ToNative();
+	qos.period = period.ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DeadlineQosPolicy::FromNative(::DDS::DeadlineQosPolicy qos) {

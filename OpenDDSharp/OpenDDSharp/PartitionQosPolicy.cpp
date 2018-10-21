@@ -38,19 +38,19 @@ void OpenDDSharp::DDS::PartitionQosPolicy::Name::set(IEnumerable<System::String^
 		name = gcnew List<System::String^>();
 	}
 
-	::DDS::PartitionQosPolicy* qos = new ::DDS::PartitionQosPolicy();
+	::DDS::PartitionQosPolicy qos;
 
 	int count = System::Linq::Enumerable::Count(name);
-	qos->name.length(count);
+	qos.name.length(count);
 
 	int i = 0;
 	while (i < count) {
 		System::String^ str = System::Linq::Enumerable::ElementAt(name, i);
-		qos->name[i] = context.marshal_as<const char*>(str);
+		qos.name[i] = context.marshal_as<const char*>(str);
 		i++;
 	}
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::PartitionQosPolicy::FromNative(::DDS::PartitionQosPolicy qos) {

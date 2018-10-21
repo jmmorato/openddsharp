@@ -33,11 +33,11 @@ void OpenDDSharp::DDS::LatencyBudgetQosPolicy::Duration::set(::OpenDDSharp::DDS:
 };
 
 ::DDS::LatencyBudgetQosPolicy OpenDDSharp::DDS::LatencyBudgetQosPolicy::ToNative() {
-	::DDS::LatencyBudgetQosPolicy* qos = new ::DDS::LatencyBudgetQosPolicy();
+	::DDS::LatencyBudgetQosPolicy qos;
 
-	qos->duration = duration.ToNative();
+	qos.duration = duration.ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::LatencyBudgetQosPolicy::FromNative(::DDS::LatencyBudgetQosPolicy qos) {	

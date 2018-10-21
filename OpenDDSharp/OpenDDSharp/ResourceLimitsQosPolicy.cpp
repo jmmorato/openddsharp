@@ -50,13 +50,13 @@ void OpenDDSharp::DDS::ResourceLimitsQosPolicy::MaxSamplesPerInstance::set(Syste
 };
 
 ::DDS::ResourceLimitsQosPolicy OpenDDSharp::DDS::ResourceLimitsQosPolicy::ToNative() {
-	::DDS::ResourceLimitsQosPolicy* qos = new ::DDS::ResourceLimitsQosPolicy();
+	::DDS::ResourceLimitsQosPolicy qos;
 
-	qos->max_instances = max_instances;
-	qos->max_samples = max_samples;
-	qos->max_samples_per_instance = max_samples_per_instance;
+	qos.max_instances = max_instances;
+	qos.max_samples = max_samples;
+	qos.max_samples_per_instance = max_samples_per_instance;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::ResourceLimitsQosPolicy::FromNative(::DDS::ResourceLimitsQosPolicy qos) {

@@ -50,25 +50,25 @@ void OpenDDSharp::DDS::PresentationQosPolicy::OrderedAccess::set(System::Boolean
 };
 
 ::DDS::PresentationQosPolicy OpenDDSharp::DDS::PresentationQosPolicy::ToNative() {
-	::DDS::PresentationQosPolicy* qos = new ::DDS::PresentationQosPolicy();
+	::DDS::PresentationQosPolicy qos;
 
-	qos->access_scope = (::DDS::PresentationQosPolicyAccessScopeKind)access_scope;
+	qos.access_scope = (::DDS::PresentationQosPolicyAccessScopeKind)access_scope;
 
 	if (coherent_access) {
-		qos->coherent_access = TRUE;
+		qos.coherent_access = TRUE;
 	}
 	else {
-		qos->coherent_access = FALSE;
+		qos.coherent_access = FALSE;
 	}
 
 	if (ordered_access) {
-		qos->ordered_access = TRUE;
+		qos.ordered_access = TRUE;
 	}
 	else {
-		qos->ordered_access = FALSE;
+		qos.ordered_access = FALSE;
 	}
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::PresentationQosPolicy::FromNative(::DDS::PresentationQosPolicy qos) {

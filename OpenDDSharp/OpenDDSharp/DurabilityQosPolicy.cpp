@@ -32,11 +32,11 @@ void OpenDDSharp::DDS::DurabilityQosPolicy::Kind::set(::OpenDDSharp::DDS::Durabi
 };
 
 ::DDS::DurabilityQosPolicy OpenDDSharp::DDS::DurabilityQosPolicy::ToNative() {
-	::DDS::DurabilityQosPolicy* qos = new ::DDS::DurabilityQosPolicy();
+	::DDS::DurabilityQosPolicy qos;
 
-	qos->kind = (::DDS::DurabilityQosPolicyKind)kind;
+	qos.kind = (::DDS::DurabilityQosPolicyKind)kind;
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::DurabilityQosPolicy::FromNative(::DDS::DurabilityQosPolicy qos) {

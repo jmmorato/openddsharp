@@ -33,11 +33,11 @@ void OpenDDSharp::DDS::TimeBasedFilterQosPolicy::MinimumSeparation::set(::OpenDD
 };
 
 ::DDS::TimeBasedFilterQosPolicy OpenDDSharp::DDS::TimeBasedFilterQosPolicy::ToNative() {
-	::DDS::TimeBasedFilterQosPolicy* qos = new ::DDS::TimeBasedFilterQosPolicy();
+	::DDS::TimeBasedFilterQosPolicy qos;
 
-	qos->minimum_separation = minimum_separation.ToNative();
+	qos.minimum_separation = minimum_separation.ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::TimeBasedFilterQosPolicy::FromNative(::DDS::TimeBasedFilterQosPolicy qos) {

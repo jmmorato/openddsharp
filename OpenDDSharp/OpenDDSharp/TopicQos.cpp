@@ -88,23 +88,23 @@ OpenDDSharp::DDS::OwnershipQosPolicy^ OpenDDSharp::DDS::TopicQos::Ownership::get
 };
 
 ::DDS::TopicQos OpenDDSharp::DDS::TopicQos::ToNative() {
-	::DDS::TopicQos* qos = new ::DDS::TopicQos();
+	::DDS::TopicQos qos;
 
-	qos->topic_data = topic_data->ToNative();
-	qos->durability = durability->ToNative();
-	qos->durability_service = durability_service->ToNative();
-	qos->deadline = deadline->ToNative();
-	qos->latency_budget = latency_budget->ToNative();
-	qos->liveliness = liveliness->ToNative();
-	qos->reliability = reliability->ToNative();
-	qos->destination_order = destination_order->ToNative();
-	qos->history = history->ToNative();
-	qos->resource_limits = resource_limits->ToNative();
-	qos->transport_priority = transport_priority->ToNative();
-	qos->lifespan = lifespan->ToNative();
-	qos->ownership = ownership->ToNative();
+	qos.topic_data = topic_data->ToNative();
+	qos.durability = durability->ToNative();
+	qos.durability_service = durability_service->ToNative();
+	qos.deadline = deadline->ToNative();
+	qos.latency_budget = latency_budget->ToNative();
+	qos.liveliness = liveliness->ToNative();
+	qos.reliability = reliability->ToNative();
+	qos.destination_order = destination_order->ToNative();
+	qos.history = history->ToNative();
+	qos.resource_limits = resource_limits->ToNative();
+	qos.transport_priority = transport_priority->ToNative();
+	qos.lifespan = lifespan->ToNative();
+	qos.ownership = ownership->ToNative();
 
-	return *qos;
+	return qos;
 };
 
 void OpenDDSharp::DDS::TopicQos::FromNative(::DDS::TopicQos qos) {
