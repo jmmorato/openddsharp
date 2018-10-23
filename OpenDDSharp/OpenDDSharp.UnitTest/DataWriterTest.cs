@@ -322,6 +322,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
+            Assert.AreEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
 
             // After one second and a half one deadline should be lost
             System.Threading.Thread.Sleep(1000);
@@ -330,6 +331,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
         }
 
         [TestMethod]
