@@ -53,8 +53,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			SampleLostStatus(::DDS::SampleLostStatus status);
-			::DDS::SampleLostStatus ToNative();
+			SampleLostStatus(::DDS::SampleLostStatus status);			
 			void FromNative(::DDS::SampleLostStatus native);
 		};
 	};

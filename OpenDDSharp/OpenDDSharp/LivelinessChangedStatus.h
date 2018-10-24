@@ -79,8 +79,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			LivelinessChangedStatus(::DDS::LivelinessChangedStatus status);
-			::DDS::LivelinessChangedStatus ToNative();
+			LivelinessChangedStatus(::DDS::LivelinessChangedStatus status);			
 			void FromNative(::DDS::LivelinessChangedStatus native);
 		};
 	};

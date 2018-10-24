@@ -80,8 +80,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			SubscriptionMatchedStatus(::DDS::SubscriptionMatchedStatus status);
-			::DDS::SubscriptionMatchedStatus ToNative();
+			SubscriptionMatchedStatus(::DDS::SubscriptionMatchedStatus status);			
 			void FromNative(::DDS::SubscriptionMatchedStatus native);
 		};
 	};

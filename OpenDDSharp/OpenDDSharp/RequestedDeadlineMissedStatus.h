@@ -63,8 +63,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			RequestedDeadlineMissedStatus(::DDS::RequestedDeadlineMissedStatus status);
-			::DDS::RequestedDeadlineMissedStatus ToNative();
+			RequestedDeadlineMissedStatus(::DDS::RequestedDeadlineMissedStatus status);			
 			void FromNative(::DDS::RequestedDeadlineMissedStatus native);
 		};
 	};

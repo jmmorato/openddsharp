@@ -75,8 +75,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			RequestedIncompatibleQosStatus(::DDS::RequestedIncompatibleQosStatus status);
-			::DDS::RequestedIncompatibleQosStatus ToNative();
+			RequestedIncompatibleQosStatus(::DDS::RequestedIncompatibleQosStatus status);			
 			void FromNative(::DDS::RequestedIncompatibleQosStatus native);
 		};
 	};

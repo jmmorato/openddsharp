@@ -47,18 +47,6 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::DDS::PublicationMatchedStatus::Las
 	return last_subscription_handle;
 };
 
-::DDS::PublicationMatchedStatus OpenDDSharp::DDS::PublicationMatchedStatus::ToNative() {
-	::DDS::PublicationMatchedStatus ret;
-
-	ret.total_count = total_count;
-	ret.total_count_change = total_count_change;
-	ret.current_count = current_count;
-	ret.current_count_change = current_count_change;
-	ret.last_subscription_handle = last_subscription_handle;
-
-	return ret;
-}
-
 void OpenDDSharp::DDS::PublicationMatchedStatus::FromNative(::DDS::PublicationMatchedStatus native) {
 	total_count = native.total_count;
 	total_count_change = native.total_count_change;

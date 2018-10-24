@@ -54,8 +54,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			LivelinessLostStatus(::DDS::LivelinessLostStatus status);
-			::DDS::LivelinessLostStatus ToNative();
+			LivelinessLostStatus(::DDS::LivelinessLostStatus status);			
 			void FromNative(::DDS::LivelinessLostStatus native);
 		};
 	};

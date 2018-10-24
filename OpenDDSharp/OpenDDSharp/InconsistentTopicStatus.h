@@ -52,8 +52,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			InconsistentTopicStatus(::DDS::InconsistentTopicStatus status);
-			::DDS::InconsistentTopicStatus ToNative();
+			InconsistentTopicStatus(::DDS::InconsistentTopicStatus status);			
 			void FromNative(::DDS::InconsistentTopicStatus status);
 		};
 	};

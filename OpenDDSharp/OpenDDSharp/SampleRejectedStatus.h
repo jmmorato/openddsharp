@@ -70,8 +70,7 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			SampleRejectedStatus(::DDS::SampleRejectedStatus status);
-			::DDS::SampleRejectedStatus ToNative();
+			SampleRejectedStatus(::DDS::SampleRejectedStatus status);			
 			void FromNative(::DDS::SampleRejectedStatus native);
 		};
 	};

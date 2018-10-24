@@ -51,34 +51,6 @@ IEnumerable<OpenDDSharp::DDS::QosPolicyCount^>^ OpenDDSharp::DDS::OfferedIncompa
 	return policies;
 };
 
-::DDS::OfferedIncompatibleQosStatus OpenDDSharp::DDS::OfferedIncompatibleQosStatus::ToNative() {
-	::DDS::OfferedIncompatibleQosStatus ret;
-
-	ret.total_count = total_count;
-	ret.total_count_change = total_count_change;
-	ret.last_policy_id = last_policy_id;
-
-	::DDS::QosPolicyCountSeq seq;
-	if (policies != nullptr) {
-		int count = System::Linq::Enumerable::Count(policies);
-		seq.length(count);
-
-		int i = 0;
-		while (i < count) {
-			QosPolicyCount^ policy = System::Linq::Enumerable::ElementAt(policies, i);
-			seq[i] = policy->ToNative();
-			i++;
-		}
-	}
-	else {
-		seq.length(0);
-	}
-
-	ret.policies = seq;
-
-	return ret;
-}
-
 void OpenDDSharp::DDS::OfferedIncompatibleQosStatus::FromNative(::DDS::OfferedIncompatibleQosStatus native) {
 	total_count = native.total_count;
 	total_count_change = native.total_count_change;
