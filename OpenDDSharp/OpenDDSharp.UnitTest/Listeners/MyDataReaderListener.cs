@@ -43,11 +43,6 @@ namespace OpenDDSharp.UnitTest.Listeners
             BudgetExceeded?.Invoke(reader, status);
         }
 
-        public override void OnConnectionDeleted(DataReader reader)
-        {
-            ConnectionDeleted?.Invoke(reader);
-        }
-
         public override void OnDataAvailable(DataReader reader)
         {
             DataAvailable?.Invoke(reader);

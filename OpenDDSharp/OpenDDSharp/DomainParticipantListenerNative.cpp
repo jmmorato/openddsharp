@@ -30,16 +30,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> onSubscriptionDisconnected,
 																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> onSubscriptionReconnected,
 																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> onSubscriptionLost,
-																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded,
-																							   std::function<void(::DDS::DataReader_ptr)> onReaderConnectionDeleted,
+																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded,																							   
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
 																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationDisconnectedStatus)> onPublicationDisconnected,
 																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationReconnectedStatus)> onPublicationReconnected,
-																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationLostStatus)> onPublicationLost,
-																							   std::function<void(::DDS::DataWriter_ptr)> onWriterConnectionDeleted,
+																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationLostStatus)> onPublicationLost,																							   
 																							   std::function<void(::DDS::Topic_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
 	_onDataOnReaders = onDataOnReaders;
 	_onDataAvalaible = onDataAvalaible;
@@ -52,16 +50,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onSubscriptionDisconnected = onSubscriptionDisconnected;
 	_onSubscriptionReconnected = onSubscriptionReconnected;
 	_onSubscriptionLost = onSubscriptionLost;
-	_onBudgetExceeded = onBudgetExceeded;
-	_onReaderConnectionDeleted = onReaderConnectionDeleted;
+	_onBudgetExceeded = onBudgetExceeded;	
 	_onOfferedDeadlineMissed = onOfferedDeadlineMissed;
 	_onOfferedIncompatibleQos = onOfferedIncompatibleQos;
 	_onLivelinessLost = onLivelinessLost;
 	_onPublicationMatched = onPublicationMatched;
 	_onPublicationDisconnected = onPublicationDisconnected;
 	_onPublicationReconnected = onPublicationReconnected;
-	_onPublicationLost = onPublicationLost;
-	_onWriterConnectionDeleted = onWriterConnectionDeleted;
+	_onPublicationLost = onPublicationLost;	
 	_onInconsistentTopic = onInconsistentTopic;
 }
 
@@ -77,16 +73,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onSubscriptionDisconnected = nullptr;
 	_onSubscriptionReconnected = nullptr;
 	_onSubscriptionLost = nullptr;
-	_onBudgetExceeded = nullptr;
-	_onReaderConnectionDeleted = nullptr;
+	_onBudgetExceeded = nullptr;	
 	_onOfferedDeadlineMissed = nullptr;
 	_onOfferedIncompatibleQos = nullptr;
 	_onLivelinessLost = nullptr;
 	_onPublicationMatched = nullptr;
 	_onPublicationDisconnected = nullptr;
 	_onPublicationReconnected = nullptr;
-	_onPublicationLost = nullptr;
-	_onWriterConnectionDeleted = nullptr;
+	_onPublicationLost = nullptr;	
 	_onInconsistentTopic = nullptr;
 };
 
@@ -150,11 +144,6 @@ void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_budget_ex
 		_onBudgetExceeded(reader, status);
 }
 
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_connection_deleted(::DDS::DataReader_ptr reader) {
-	if (_onReaderConnectionDeleted != nullptr)
-		_onReaderConnectionDeleted(reader);
-}
-
 void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
 	if (_onOfferedDeadlineMissed != nullptr)
 		_onOfferedDeadlineMissed(writer, status);
@@ -189,11 +178,6 @@ void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_publicati
 	if (_onPublicationLost != nullptr)
 		_onPublicationLost(writer, status);
 };
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_connection_deleted(::DDS::DataWriter_ptr writer) {
-	if (_onWriterConnectionDeleted != nullptr)
-		_onWriterConnectionDeleted(writer);
-}
 
 void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus & status) {
 	if (_onInconsistentTopic != nullptr)

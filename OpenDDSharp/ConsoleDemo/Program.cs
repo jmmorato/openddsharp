@@ -349,10 +349,5 @@ namespace ConsoleDemo
         {
             Console.WriteLine(nameof(OnBudgetExceeded));
         }
-
-        public override void OnConnectionDeleted(DataReader reader)
-        {
-            Console.WriteLine(nameof(OnConnectionDeleted));
-        }
     }
 }

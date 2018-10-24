@@ -29,8 +29,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																				 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> onSubscriptionDisconnected,
 																				 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> onSubscriptionReconnected,
 																				 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> onSubscriptionLost,
-																				 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded,
-																				 std::function<void(::DDS::DataReader_ptr)> onConnectionDeleted) {
+																				 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded) {
 	_onDataAvalaible = onDataAvalaible;
 	_onRequestedDeadlineMissed = onRequestedDeadlineMissed;
 	_onRequestedIncompatibleQos = onRequestedIncompatibleQos;
@@ -42,7 +41,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onSubscriptionReconnected = onSubscriptionReconnected;
 	_onSubscriptionLost = onSubscriptionLost;
 	_onBudgetExceeded = onBudgetExceeded;
-	_onConnectionDeleted = onConnectionDeleted;
 }
 
 ::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative::~DataReaderListenerNative() {
@@ -56,8 +54,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onSubscriptionDisconnected = nullptr;
 	_onSubscriptionReconnected = nullptr;
 	_onSubscriptionLost = nullptr;
-	_onBudgetExceeded = nullptr;
-	_onConnectionDeleted = nullptr;
+	_onBudgetExceeded = nullptr;	
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative::on_data_available(::DDS::DataReader_ptr reader) {
@@ -113,9 +110,4 @@ void ::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative::on_subscription_los
 void ::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative::on_budget_exceeded(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status) {
 	if (_onBudgetExceeded != nullptr)
 		_onBudgetExceeded(reader, status);
-}
-
-void ::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative::on_connection_deleted(::DDS::DataReader_ptr reader) {
-	if (_onConnectionDeleted != nullptr)
-		_onConnectionDeleted(reader);
 }

@@ -59,8 +59,7 @@ namespace OpenDDSharp {
 			typedef void(__stdcall *onSubscriptionDisconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status);
 			typedef void(__stdcall *onSubscriptionReconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status);
 			typedef void(__stdcall *onSubscriptionLostDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status);
-			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
-			typedef void(__stdcall *onConnectionDeletedDeclaration)(::DDS::DataReader_ptr reader);
+			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);			
 
 			internal:
 				::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative* impl_entity;
@@ -76,8 +75,7 @@ namespace OpenDDSharp {
 				onSubscriptionDisconnectedDeclaration onSubscriptionDisconnectedFunctionCpp;
 				onSubscriptionReconnectedDeclaration onSubscriptionReconnectedFunctionCpp;
 				onSubscriptionLostDeclaration onSubscriptionLostFunctionCpp;
-				onBudgetExceededDeclaration onBudgetExceededFunctionCpp;
-				onConnectionDeletedDeclaration onConnectionDeletedFunctionCpp;
+				onBudgetExceededDeclaration onBudgetExceededFunctionCpp;	
 
 			private:
 				delegate void onDataAvailableDelegate(::DDS::DataReader_ptr reader);
@@ -201,17 +199,6 @@ namespace OpenDDSharp {
 					OnBudgetExceeded(dataReader, OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus(status));
 				};
 
-				delegate void onConnectionDeletedDelegate(::DDS::DataReader_ptr reader);
-				void onConnectionDeleted(::DDS::DataReader_ptr reader) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
-					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
-					if (entity != nullptr) {
-						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-					}
-
-					OnConnectionDeleted(dataReader);
-				};
-
 			public:
 				/// <summary>
 				/// Creates a new instance of <see cref="DataReaderListener" />
@@ -311,14 +298,7 @@ namespace OpenDDSharp {
 				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus" /> status.</param>
 				virtual void OnBudgetExceeded(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus status) = 0;
 
-				/// <summary>
-				/// Called when the connection object is cleaned up and the reconnect thread exits.
-				/// </summary>
-				/// <param name="reader">The <see cref="OpenDDSharp::DDS::DataReader" /> that triggered the event.</param>
-				virtual void OnConnectionDeleted(OpenDDSharp::DDS::DataReader^ reader) = 0;
-
 			};
-
 		};
 	};
 };

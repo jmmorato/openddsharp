@@ -74,11 +74,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	System::Runtime::InteropServices::GCHandle gchBudgetExceeded = System::Runtime::InteropServices::GCHandle::Alloc(fpBudgetExceeded);
 	System::IntPtr ipBudgetExceeded = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpBudgetExceeded);	
 	onBudgetExceededFunctionCpp = static_cast<onBudgetExceededDeclaration>(ipBudgetExceeded.ToPointer());
-
-	onConnectionDeletedDelegate^ fpConnectionDeleted = gcnew onConnectionDeletedDelegate(this, &::OpenDDSharp::OpenDDS::DCPS::DataReaderListener::onConnectionDeleted);
-	System::Runtime::InteropServices::GCHandle gchConnectionDeleted = System::Runtime::InteropServices::GCHandle::Alloc(fpConnectionDeleted);
-	System::IntPtr ipConnectionDeleted = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpConnectionDeleted);	
-	onConnectionDeletedFunctionCpp = static_cast<onConnectionDeletedDeclaration>(ipConnectionDeleted.ToPointer());
 	
 	impl_entity = new OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative(onDataAvalaibleFunctionCpp, 
 																		   onRequestedDeadlineMissedFunctionCpp,
@@ -90,6 +85,5 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																		   onSubscriptionDisconnectedFunctionCpp,
 																		   onSubscriptionReconnectedFunctionCpp,
 																		   onSubscriptionLostFunctionCpp,
-																		   onBudgetExceededFunctionCpp,
-																		   onConnectionDeletedFunctionCpp);
+																		   onBudgetExceededFunctionCpp);
 };

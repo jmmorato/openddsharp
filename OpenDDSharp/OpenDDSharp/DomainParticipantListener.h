@@ -57,16 +57,14 @@ namespace OpenDDSharp {
 			typedef void(__stdcall *onSubscriptionDisconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status);
 			typedef void(__stdcall *onSubscriptionReconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status);
 			typedef void(__stdcall *onSubscriptionLostDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status);
-			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
-			typedef void(__stdcall *onReaderConnectionDeletedDeclaration)(::DDS::DataReader_ptr reader);
+			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);			
 			typedef void(__stdcall *onOfferedDeadlineMissedDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
 			typedef void(__stdcall *onOfferedIncompatibleQosDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status);
 			typedef void(__stdcall *onLivelinessLostDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status);
 			typedef void(__stdcall *onPublicationMatchedDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 			typedef void(__stdcall *onPublicationDisconnectedDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationDisconnectedStatus& status);
 			typedef void(__stdcall *onPublicationReconnectedDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status);
-			typedef void(__stdcall *onPublicationLostDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationLostStatus& status);
-			typedef void(__stdcall *onWriterConnectionDeletedDeclaration)(::DDS::DataWriter_ptr writer);
+			typedef void(__stdcall *onPublicationLostDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationLostStatus& status);			
 			typedef void(__stdcall *onInconsistentTopicDeclaration)(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 
 			internal:
@@ -84,16 +82,14 @@ namespace OpenDDSharp {
 				onSubscriptionDisconnectedDeclaration onSubscriptionDisconnectedFunctionCpp;
 				onSubscriptionReconnectedDeclaration onSubscriptionReconnectedFunctionCpp;
 				onSubscriptionLostDeclaration onSubscriptionLostFunctionCpp;
-				onBudgetExceededDeclaration onBudgetExceededFunctionCpp;
-				onReaderConnectionDeletedDeclaration onReaderConnectionDeletedFunctionCpp;
+				onBudgetExceededDeclaration onBudgetExceededFunctionCpp;				
 				onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissedFunctionCpp;
 				onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQosFunctionCpp;
 				onLivelinessLostDeclaration onLivelinessLostFunctionCpp;
 				onPublicationMatchedDeclaration onPublicationMatchedFunctionCpp;
 				onPublicationDisconnectedDeclaration onPublicationDisconnectedFunctionCpp;
 				onPublicationReconnectedDeclaration onPublicationReconnectedFunctionCpp;
-				onPublicationLostDeclaration onPublicationLostFunctionCpp;
-				onWriterConnectionDeletedDeclaration onWriterConnectionDeletedFunctionCpp;
+				onPublicationLostDeclaration onPublicationLostFunctionCpp;				
 				onInconsistentTopicDeclaration onInconsistentTopicFunctionCpp;
 
 			private:
@@ -229,17 +225,6 @@ namespace OpenDDSharp {
 					OnBudgetExceeded(dataReader, OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus(status));
 				};
 
-				delegate void onReaderConnectionDeletedDelegate(::DDS::DataReader_ptr reader);
-				void onReaderConnectionDeleted(::DDS::DataReader_ptr reader) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
-					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
-					if (entity != nullptr) {
-						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-					}
-					
-					OnConnectionDeleted(dataReader);
-				};
-
 				delegate void onOfferedDeadlineMissedDelegate(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status);
 				void onOfferedDeadlineMissed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -317,16 +302,6 @@ namespace OpenDDSharp {
 					OnPublicationLost(dataWriter, OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus(status));
 				};
 
-				delegate void onWriterConnectionDeletedDelegate(::DDS::DataWriter_ptr writer);
-				void onWriterConnectionDeleted(::DDS::DataWriter_ptr writer) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
-					OpenDDSharp::DDS::DataWriter^ dataWriter = nullptr;
-					if (entity != nullptr) {
-						dataWriter = static_cast<OpenDDSharp::DDS::DataWriter^>(entity);
-					}
-					
-					OnConnectionDeleted(dataWriter);
-				};
 
 				delegate void onInconsistentTopicDelegate(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 				void onInconsistentTopic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {

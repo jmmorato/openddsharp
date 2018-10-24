@@ -36,6 +36,5 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																 onSubscriptionDisconnectedFunctionCpp,
 																 onSubscriptionReconnectedFunctionCpp,
 																 onSubscriptionLostFunctionCpp,
-																 onBudgetExceededFunctionCpp,
-																 onConnectionDeletedFunctionCpp);
+																 onBudgetExceededFunctionCpp);
 }

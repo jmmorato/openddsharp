@@ -34,11 +34,6 @@ namespace OpenDDSharp.UnitTest.Listeners
         public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
         public Action<DataWriter, PublicationReconnectedStatus> PublicationReconnected;
 
-        public override void OnConnectionDeleted(DataWriter writer)
-        {
-            ConnectionDeleted?.Invoke(writer);
-        }
-
         public override void OnLivelinessLost(DataWriter writer, LivelinessLostStatus status)
         {
             LivelinessLost?.Invoke(writer, status);

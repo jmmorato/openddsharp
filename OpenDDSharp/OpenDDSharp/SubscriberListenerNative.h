@@ -45,8 +45,7 @@ namespace OpenDDSharp {
 			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> _onSubscriptionDisconnected;
 			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> _onSubscriptionReconnected;
 			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> _onSubscriptionLost;
-			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> _onBudgetExceeded;
-			std::function<void(::DDS::DataReader_ptr)> _onConnectionDeleted;
+			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> _onBudgetExceeded;			
 
 		public:
 			SubscriberListenerNative(std::function<void(::DDS::Subscriber_ptr)> onDataOnReaders,
@@ -60,8 +59,7 @@ namespace OpenDDSharp {
 									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> onSubscriptionDisconnected,
 									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> onSubscriptionReconnected,
 									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> onSubscriptionLost,
-									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded,
-									 std::function<void(::DDS::DataReader_ptr)> onConnectionDeleted);
+									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded);
 			
 			virtual ~SubscriberListenerNative(void);
 
@@ -88,9 +86,7 @@ namespace OpenDDSharp {
 			virtual void on_subscription_lost(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus & status);
 
 			virtual void on_budget_exceeded(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
-
-			virtual void on_connection_deleted(::DDS::DataReader_ptr);
-
+			
 		};
 	};
 };

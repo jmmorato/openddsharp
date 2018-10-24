@@ -26,6 +26,5 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																onPublicationMatchedFunctionCpp,
 																onPublicationDisconnectedFunctionCpp,
 																onPublicationReconnectedFunctionCpp,
-																onPublicationLostFunctionCpp,
-																onConnectionDeletedFunctionCpp);
+																onPublicationLostFunctionCpp);
 }

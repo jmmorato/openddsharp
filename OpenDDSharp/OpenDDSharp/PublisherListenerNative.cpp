@@ -25,16 +25,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																	 std::function<void(::DDS::DataWriter_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
 																	 std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationDisconnectedStatus)> onPublicationDisconnected,
 																	 std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationReconnectedStatus)> onPublicationReconnected,
-																	 std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationLostStatus)> onPublicationLost,
-																	 std::function<void(::DDS::DataWriter_ptr)> onConnectionDeleted) { 
+																	 std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationLostStatus)> onPublicationLost) {
 	_onOfferedDeadlineMissed = onOfferedDeadlineMissed;
 	_onOfferedIncompatibleQos = onOfferedIncompatibleQos;
 	_onLivelinessLost = onLivelinessLost;
 	_onPublicationMatched = onPublicationMatched;
 	_onPublicationDisconnected = onPublicationDisconnected;
 	_onPublicationReconnected = onPublicationReconnected;
-	_onPublicationLost = onPublicationLost;
-	_onConnectionDeleted = onConnectionDeleted;
+	_onPublicationLost = onPublicationLost;	
 }
 
 ::OpenDDSharp::DDS::PublisherListenerNative::~PublisherListenerNative() {
@@ -44,8 +42,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onPublicationMatched = nullptr;
 	_onPublicationDisconnected = nullptr;
 	_onPublicationReconnected = nullptr;
-	_onPublicationLost = nullptr;
-	_onConnectionDeleted = nullptr;
+	_onPublicationLost = nullptr;	
 };
 
 void ::OpenDDSharp::DDS::PublisherListenerNative::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
@@ -82,8 +79,3 @@ void ::OpenDDSharp::DDS::PublisherListenerNative::on_publication_lost(::DDS::Dat
 	if (_onPublicationLost != nullptr)
 		_onPublicationLost(writer, status);
 };
-
-void ::OpenDDSharp::DDS::PublisherListenerNative::on_connection_deleted(::DDS::DataWriter_ptr writer) {
-	if (_onConnectionDeleted != nullptr)
-		_onConnectionDeleted(writer);
-}

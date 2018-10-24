@@ -55,18 +55,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	System::IntPtr ipPublicationLost = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpPublicationLost);	
 	onPublicationLostFunctionCpp = static_cast<onPublicationLostDeclaration>(ipPublicationLost.ToPointer());
 
-	onConnectionDeletedDelegate^ fpConnectionDeleted = gcnew onConnectionDeletedDelegate(this, &::OpenDDSharp::OpenDDS::DCPS::DataWriterListener::onConnectionDeleted);
-	System::Runtime::InteropServices::GCHandle gchConnectionDeleted = System::Runtime::InteropServices::GCHandle::Alloc(fpConnectionDeleted);
-	System::IntPtr ipConnectionDeleted = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpConnectionDeleted);	
-	onConnectionDeletedFunctionCpp = static_cast<onConnectionDeletedDeclaration>(ipConnectionDeleted.ToPointer());
-
-
 	impl_entity = new OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative(onOfferedDeadlineMissedFunctionCpp,
 																		   onOfferedIncompatibleQosFunctionCpp,
 																		   onLivelinessLostFunctionCpp,
 																		   onPublicationMatchedFunctionCpp,
 																		   onPublicationDisconnectedFunctionCpp,
 																		   onPublicationReconnectedFunctionCpp,
-																		   onPublicationLostFunctionCpp,
-																		   onConnectionDeletedFunctionCpp);
+																		   onPublicationLostFunctionCpp);
 }

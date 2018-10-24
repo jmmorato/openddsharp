@@ -80,11 +80,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	System::IntPtr ipBudgetExceeded = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpBudgetExceeded);
 	onBudgetExceededFunctionCpp = static_cast<onBudgetExceededDeclaration>(ipBudgetExceeded.ToPointer());
 
-	onReaderConnectionDeletedDelegate^ fpReaderConnectionDeleted = gcnew onReaderConnectionDeletedDelegate(this, &::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener::onReaderConnectionDeleted);
-	System::Runtime::InteropServices::GCHandle gchReaderConnectionDeleted = System::Runtime::InteropServices::GCHandle::Alloc(fpReaderConnectionDeleted);
-	System::IntPtr ipReaderConnectionDeleted = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpReaderConnectionDeleted);
-	onReaderConnectionDeletedFunctionCpp = static_cast<onReaderConnectionDeletedDeclaration>(ipReaderConnectionDeleted.ToPointer());
-
 	onOfferedDeadlineMissedDelegate^ fpOfferedDeadlineMissed = gcnew onOfferedDeadlineMissedDelegate(this, &::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener::onOfferedDeadlineMissed);
 	System::Runtime::InteropServices::GCHandle gchOfferedDeadlineMissed = System::Runtime::InteropServices::GCHandle::Alloc(fpOfferedDeadlineMissed);
 	System::IntPtr ipOfferedDeadlineMissed = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpOfferedDeadlineMissed);
@@ -120,11 +115,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	System::IntPtr ipPublicationLost = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpPublicationLost);
 	onPublicationLostFunctionCpp = static_cast<onPublicationLostDeclaration>(ipPublicationLost.ToPointer());
 
-	onWriterConnectionDeletedDelegate^ fpWriterConnectionDeleted = gcnew onWriterConnectionDeletedDelegate(this, &::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener::onWriterConnectionDeleted);
-	System::Runtime::InteropServices::GCHandle gchWriterConnectionDeleted = System::Runtime::InteropServices::GCHandle::Alloc(fpWriterConnectionDeleted);
-	System::IntPtr ipWriterConnectionDeleted = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpWriterConnectionDeleted);
-	onWriterConnectionDeletedFunctionCpp = static_cast<onWriterConnectionDeletedDeclaration>(ipWriterConnectionDeleted.ToPointer());
-
 	onInconsistentTopicDelegate^ fpInconsistentTopic = gcnew onInconsistentTopicDelegate(this, &::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListener::onInconsistentTopic);
 	System::Runtime::InteropServices::GCHandle gchInconsistentTopic = System::Runtime::InteropServices::GCHandle::Alloc(fpInconsistentTopic);
 	System::IntPtr ipInconsistentTopic = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpInconsistentTopic);
@@ -141,15 +131,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																				  onSubscriptionDisconnectedFunctionCpp,
 																				  onSubscriptionReconnectedFunctionCpp,
 																				  onSubscriptionLostFunctionCpp,
-																				  onBudgetExceededFunctionCpp,
-																				  onReaderConnectionDeletedFunctionCpp,
+																				  onBudgetExceededFunctionCpp,																				  
 																				  onOfferedDeadlineMissedFunctionCpp,
 																				  onOfferedIncompatibleQosFunctionCpp,
 																				  onLivelinessLostFunctionCpp,
 																				  onPublicationMatchedFunctionCpp,
 																				  onPublicationDisconnectedFunctionCpp,
 																				  onPublicationReconnectedFunctionCpp,
-																				  onPublicationLostFunctionCpp,
-																				  onWriterConnectionDeletedFunctionCpp,
+																				  onPublicationLostFunctionCpp,																				  
 																				  onInconsistentTopicFunctionCpp);
 }
