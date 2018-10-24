@@ -17,6 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
@@ -399,13 +400,21 @@ namespace OpenDDSharp.UnitTest
         [TestCategory("DataReader")]
         public void TestGetSampleRejectedStatus()
         {
-            // TODO: I don't know how to simulate samples rejected.
-            // For the moment just call the method and check the default values.
-
             // Initialize entities
-            DataReader reader = _subscriber.CreateDataReader(_topic);
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            drQos.ResourceLimits.MaxInstances = 1;
+            drQos.ResourceLimits.MaxSamples = 1;
+            drQos.ResourceLimits.MaxSamplesPerInstance = 1;
+            DataReader reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
+            Publisher publisher = _participant.CreatePublisher();
+            DataWriterQos dwQos = new DataWriterQos();
+            DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
+            Assert.IsNotNull(writer);
+            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+        
             // Call sample rejected status
             SampleRejectedStatus status = new SampleRejectedStatus();
             ReturnCode result = reader.GetSampleRejectedStatus(ref status);
@@ -415,6 +424,30 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.TotalCountChange);
             Assert.AreEqual(SampleRejectedStatusKind.NotRejected, status.LastReason);
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
+
+            // Write two samples of the same instances
+            for (int i = 1; i <= 2; i++)
+            {
+                result = dataWriter.Write(new TestStruct
+                {
+                    Id = 1
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
+
+            System.Threading.Thread.Sleep(100);
+
+            // Call sample rejected status
+            result = reader.GetSampleRejectedStatus(ref status);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(status);
+            Assert.AreEqual(1, status.TotalCount);
+            Assert.AreEqual(1, status.TotalCountChange);
+            Assert.AreEqual(SampleRejectedStatusKind.RejectedBySamplesPerInstanceLimit, status.LastReason);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
         }
 
         [TestMethod]
@@ -542,14 +575,14 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.Policies.Count());
             Assert.AreEqual(0, status.LastPolicyId);
 
-            // Create a not compatible reader
+            // Create a not compatible writer
             Publisher publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
             DataWriterQos dwQos = new DataWriterQos();
             dwQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
             DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
-            Assert.IsNotNull(reader);
+            Assert.IsNotNull(writer);
 
             // Wait for discovery and check the status
             System.Threading.Thread.Sleep(100);
@@ -626,12 +659,20 @@ namespace OpenDDSharp.UnitTest
         [TestCategory("DataReader")]
         public void TestGetSampleLostStatus()
         {
-            // TODO: I don't know how to simulate samples lost.
-            // For the moment just call the method and check the default values.
-
             // Initialize entities
-            DataReader reader = _subscriber.CreateDataReader(_topic);
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+            drQos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
+            drQos.History.Kind = HistoryQosPolicyKind.KeepLastHistoryQos;
+            drQos.History.Depth = 1;
+            DataReader reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
+
+            Publisher publisher = _participant.CreatePublisher();
+            DataWriterQos dwQos = new DataWriterQos();
+            DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
+            Assert.IsNotNull(writer);
+            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Call sample lost status
             SampleLostStatus status = new SampleLostStatus();
@@ -640,6 +681,29 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(status);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
+
+            // Write two samples of the same instances
+            InstanceHandle handle = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+
+            Timestamp time = DateTime.Now.ToTimestamp();
+            result = dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            System.Threading.Thread.Sleep(100);
+
+            time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
+            result = dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            System.Threading.Thread.Sleep(100);
+
+            // Call sample lost status
+            result = reader.GetSampleLostStatus(ref status);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(status);
+            Assert.AreEqual(1, status.TotalCount);
+            Assert.AreEqual(1, status.TotalCountChange);
         }
 
         [TestMethod]
