@@ -69,6 +69,7 @@
     <Compile Include="DataWriterListenerTest.cs" />
     <Compile Include="DataWriterTest.cs" />
     <Compile Include="DomainParticipantFactoryTest.cs" />
+    <Compile Include="DomainParticipantListenerTest.cs" />
     <Compile Include="DomainParticipantTest.cs" />
     <Compile Include="Listeners\MyDataReaderListener.cs" />
     <Compile Include="Listeners\MyDataWriterListener.cs" />
