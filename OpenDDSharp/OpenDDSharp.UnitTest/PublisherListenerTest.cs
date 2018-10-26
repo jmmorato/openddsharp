@@ -286,30 +286,6 @@ namespace OpenDDSharp.UnitTest
             result = _publisher.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
-
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnPublicationDisconnected()
-        {
-            // Only working with TCP transport?
-            // TODO: Implement it when the TransportConfig is wrapped
-        }
-
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnPublicationReconnected()
-        {
-            // Only working with TCP transport?
-            // TODO: Implement it when the TransportConfig is wrapped
-        }
-
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnPublicationLost()
-        {
-            // Only working with TCP transport?
-            // TODO: Implement it when the TransportConfig is wrapped
-        }
         #endregion
     }
 }

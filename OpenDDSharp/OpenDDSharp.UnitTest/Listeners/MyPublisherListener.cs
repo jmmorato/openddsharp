@@ -29,10 +29,7 @@ namespace OpenDDSharp.UnitTest.Listeners
         public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
         public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
         public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
-        public Action<DataWriter, PublicationDisconnectedStatus> PublicationDisconnected;
-        public Action<DataWriter, PublicationLostStatus> PublicationLost;
-        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
-        public Action<DataWriter, PublicationReconnectedStatus> PublicationReconnected;
+        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;       
 
         public override void OnLivelinessLost(DataWriter writer, LivelinessLostStatus status)
         {
@@ -49,24 +46,9 @@ namespace OpenDDSharp.UnitTest.Listeners
             OfferedIncompatibleQos?.Invoke(writer, status);
         }
 
-        public override void OnPublicationDisconnected(DataWriter writer, PublicationDisconnectedStatus status)
-        {
-            PublicationDisconnected?.Invoke(writer, status);
-        }
-
-        public override void OnPublicationLost(DataWriter writer, PublicationLostStatus status)
-        {
-            PublicationLost?.Invoke(writer, status);
-        }
-
         public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
         {
             PublicationMatched?.Invoke(writer, status);
-        }
-
-        public override void OnPublicationReconnected(DataWriter writer, PublicationReconnectedStatus status)
-        {
-            PublicationReconnected?.Invoke(writer, status);
         }
     }
 }
