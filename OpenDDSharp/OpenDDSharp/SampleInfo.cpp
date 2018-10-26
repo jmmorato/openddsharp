@@ -84,22 +84,3 @@ void OpenDDSharp::DDS::SampleInfo::FromNative(::DDS::SampleInfo native) {
 	generation_rank = native.generation_rank;
 	absolute_generation_rank = native.absolute_generation_rank;
 }
-
-::DDS::SampleInfo OpenDDSharp::DDS::SampleInfo::ToNative() {
-	::DDS::SampleInfo ret;
-
-	ret.valid_data = valid_data;
-	ret.sample_state = sample_state;
-	ret.view_state = view_state;
-	ret.instance_state = instance_state;
-	ret.source_timestamp = source_timestamp.ToNative();
-	ret.instance_handle = instance_handle;
-	ret.publication_handle = publication_handle;
-	ret.disposed_generation_count = disposed_generation_count;
-	ret.no_writers_generation_count = no_writers_generation_count;
-	ret.sample_rank = sample_rank;
-	ret.generation_rank = generation_rank;
-	ret.absolute_generation_rank = absolute_generation_rank;
-
-	return ret;
-}

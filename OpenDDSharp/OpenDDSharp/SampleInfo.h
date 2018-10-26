@@ -160,9 +160,6 @@ namespace OpenDDSharp {
 		public:
 			/// <exclude />
 			void FromNative(::DDS::SampleInfo native);
-
-			/// <exclude />
-			::DDS::SampleInfo ToNative();
 		};
 	};
 };

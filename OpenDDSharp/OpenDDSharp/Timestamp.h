@@ -55,7 +55,6 @@ namespace OpenDDSharp {
 			};
 
 		internal:
-			::DDS::Time_t ToNative();
 			void FromNative(::DDS::Time_t qos);
 		};
 
