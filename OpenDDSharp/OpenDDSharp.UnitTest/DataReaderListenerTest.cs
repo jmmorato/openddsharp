@@ -309,7 +309,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
-            _reader.SetListener(null);
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -380,7 +381,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
-            _reader.SetListener(null);
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -439,7 +441,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
-            _reader.SetListener(null);
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -495,7 +498,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
-            _reader.SetListener(null);
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -558,11 +562,12 @@ namespace OpenDDSharp.UnitTest
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(500);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
-            _reader.SetListener(null);
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }
