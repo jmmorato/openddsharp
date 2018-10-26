@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="DataReaderListenerTest.cs" />
     <Compile Include="DataReaderTest.cs" />
+    <Compile Include="DataWriterListenerTest.cs" />
     <Compile Include="DataWriterTest.cs" />
     <Compile Include="DomainParticipantFactoryTest.cs" />
     <Compile Include="DomainParticipantTest.cs" />
