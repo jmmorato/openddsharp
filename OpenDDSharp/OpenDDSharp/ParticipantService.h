@@ -24,13 +24,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/Discovery.h>
 #include <dds/DCPS/RTPS/RtpsDiscovery.h>
 #include "dds/DCPS/Message_Block_Ptr.h"
-
-#include <dds/DCPS/RTPS/RtpsDiscovery.h>
 #include <dds/DCPS/transport/framework/TransportRegistry.h>
-
 #include "dds/DCPS/StaticIncludes.h"
 #include <dds/DCPS/transport/rtps_udp/RtpsUdp.h>
-
 #include <dds/DCPS/transport/rtps_udp/RtpsUdpInst.h>
 #include <dds/DCPS/transport/rtps_udp/RtpsUdpInst_rch.h>
 
