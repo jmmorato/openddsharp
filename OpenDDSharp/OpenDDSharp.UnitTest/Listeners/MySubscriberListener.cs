@@ -19,13 +19,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using OpenDDSharp.DDS;
-using OpenDDSharp.OpenDDS.DCPS;
 
 namespace OpenDDSharp.UnitTest.Listeners
 {
     public class MySubscriberListener : SubscriberListener
-    {
-        public Action<DataReader, BudgetExceededStatus> BudgetExceeded;
+    {       
         public Action<DataReader> ConnectionDeleted;
         public Action<DataReader> DataAvailable;
         public Action<Subscriber> DataOnReaders;
@@ -34,15 +32,7 @@ namespace OpenDDSharp.UnitTest.Listeners
         public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos;
         public Action<DataReader, SampleLostStatus> SampleLost;
         public Action<DataReader, SampleRejectedStatus> SampleRejected;
-        public Action<DataReader, SubscriptionDisconnectedStatus> SubscriptionDisconnected;
-        public Action<DataReader, SubscriptionLostStatus> SubscriptionLost;
-        public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched;
-        public Action<DataReader, SubscriptionReconnectedStatus> SubscriptionReconnected;
-
-        public override void OnBudgetExceeded(DataReader reader, BudgetExceededStatus status)
-        {
-            BudgetExceeded?.Invoke(reader, status);
-        }
+        public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched;        
 
         public override void OnDataAvailable(DataReader reader)
         {
@@ -79,24 +69,9 @@ namespace OpenDDSharp.UnitTest.Listeners
             SampleRejected?.Invoke(reader, status);
         }
 
-        public override void OnSubscriptionDisconnected(DataReader reader, SubscriptionDisconnectedStatus status)
-        {
-            SubscriptionDisconnected?.Invoke(reader, status);
-        }
-
-        public override void OnSubscriptionLost(DataReader reader, SubscriptionLostStatus status)
-        {
-            SubscriptionLost?.Invoke(reader, status);
-        }
-
         public override void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status)
         {
             SubscriptionMatched?.Invoke(reader, status);
-        }
-
-        public override void OnSubscriptionReconnected(DataReader reader, SubscriptionReconnectedStatus status)
-        {
-            SubscriptionReconnected?.Invoke(reader, status);
         }
     }
 }

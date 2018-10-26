@@ -41,11 +41,7 @@ namespace OpenDDSharp {
 			std::function<void(::DDS::DataReader_ptr, ::DDS::SampleRejectedStatus)> _onSampleRejected;
 			std::function<void(::DDS::DataReader_ptr, ::DDS::LivelinessChangedStatus)> _onLivelinessChanged;
 			std::function<void(::DDS::DataReader_ptr, ::DDS::SubscriptionMatchedStatus)> _onSubscriptionMatched;
-			std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> _onSampleLost;
-			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> _onSubscriptionDisconnected;
-			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> _onSubscriptionReconnected;
-			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> _onSubscriptionLost;
-			std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> _onBudgetExceeded;			
+			std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> _onSampleLost;	
 
 		public:
 			SubscriberListenerNative(std::function<void(::DDS::Subscriber_ptr)> onDataOnReaders,
@@ -55,11 +51,7 @@ namespace OpenDDSharp {
 									 std::function<void(::DDS::DataReader_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
 									 std::function<void(::DDS::DataReader_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
 									 std::function<void(::DDS::DataReader_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-									 std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> onSampleLost,
-									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> onSubscriptionDisconnected,
-									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> onSubscriptionReconnected,
-									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> onSubscriptionLost,
-									 std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded);
+									 std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> onSampleLost);
 			
 			virtual ~SubscriberListenerNative(void);
 
@@ -78,14 +70,6 @@ namespace OpenDDSharp {
 			virtual void on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus & status);
 
 			virtual void on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
-
-			virtual void on_subscription_disconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus & status);
-
-			virtual void on_subscription_reconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus & status);
-
-			virtual void on_subscription_lost(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus & status);
-
-			virtual void on_budget_exceeded(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
 			
 		};
 	};
