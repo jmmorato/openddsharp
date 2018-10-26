@@ -356,7 +356,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
-            _subscriber.SetListener(null);
+            result = _subscriber.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -427,7 +428,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
-            _subscriber.SetListener(null);
+            result = _subscriber.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -486,7 +488,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
-            _subscriber.SetListener(null);
+            result = _subscriber.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -542,7 +545,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
-            _subscriber.SetListener(null);
+            result = _subscriber.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }
