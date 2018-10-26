@@ -143,7 +143,7 @@ namespace OpenDDSharp.UnitTest
             bool found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
-            // Write some instnaces
+            // Write some instances
             for (int i = 1; i <= 5; i++)
             {
                 result = _dataWriter.Write(new TestStruct
