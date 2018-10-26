@@ -104,7 +104,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteReadCondition(O
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::DeleteContainedEntities() {
     ::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 
-    if (ret != ::DDS::RETCODE_OK) {
+    if (ret == ::DDS::RETCODE_OK) {
         ClearContainedEntities();
     }
 
@@ -142,10 +142,10 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::SetListener(OpenDDSha
 	_listener = listener;
 
 	if (_listener != nullptr) {
-		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(listener->impl_entity, (System::UInt32)mask);
+		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(listener->impl_entity, (::DDS::StatusMask)mask);
 	}
 	else {
-		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(NULL, (System::UInt32)mask);
+		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(NULL, (::DDS::StatusMask)mask);
 	}
 }
 
