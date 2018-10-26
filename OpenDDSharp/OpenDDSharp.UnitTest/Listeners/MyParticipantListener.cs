@@ -25,8 +25,7 @@ namespace OpenDDSharp.UnitTest.Listeners
 {
     public class MyParticipantListener : DomainParticipantListener
     {
-        public Action<Topic, InconsistentTopicStatus> InconsistentTopic;
-        public Action<DataReader, BudgetExceededStatus> BudgetExceeded;
+        public Action<Topic, InconsistentTopicStatus> InconsistentTopic;        
         public Action<DataReader> ConnectionDataReaderDeleted;
         public Action<DataReader> DataAvailable;
         public Action<Subscriber> DataOnReaders;
@@ -35,28 +34,17 @@ namespace OpenDDSharp.UnitTest.Listeners
         public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos;
         public Action<DataReader, SampleLostStatus> SampleLost;
         public Action<DataReader, SampleRejectedStatus> SampleRejected;
-        public Action<DataReader, SubscriptionDisconnectedStatus> SubscriptionDisconnected;
-        public Action<DataReader, SubscriptionLostStatus> SubscriptionLost;
-        public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched;
-        public Action<DataReader, SubscriptionReconnectedStatus> SubscriptionReconnected;        
+        public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched;        
         public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
         public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
         public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
-        public Action<DataWriter, PublicationDisconnectedStatus> PublicationDisconnected;
-        public Action<DataWriter, PublicationLostStatus> PublicationLost;
-        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
-        public Action<DataWriter, PublicationReconnectedStatus> PublicationReconnected;
+        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;        
         public Action<DataWriter> ConnectionDataWriterDeleted;
 
         public override void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)
         {
             InconsistentTopic?.Invoke(topic, status);
         }        
-
-        public override void OnBudgetExceeded(DataReader reader, BudgetExceededStatus status)
-        {
-            BudgetExceeded?.Invoke(reader, status);
-        }
 
         public override void OnConnectionDeleted(DataReader reader)
         {
@@ -98,25 +86,10 @@ namespace OpenDDSharp.UnitTest.Listeners
             SampleRejected?.Invoke(reader, status);
         }
 
-        public override void OnSubscriptionDisconnected(DataReader reader, SubscriptionDisconnectedStatus status)
-        {
-            SubscriptionDisconnected?.Invoke(reader, status);
-        }
-
-        public override void OnSubscriptionLost(DataReader reader, SubscriptionLostStatus status)
-        {
-            SubscriptionLost?.Invoke(reader, status);
-        }
-
         public override void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status)
         {
             SubscriptionMatched?.Invoke(reader, status);
-        }
-
-        public override void OnSubscriptionReconnected(DataReader reader, SubscriptionReconnectedStatus status)
-        {
-            SubscriptionReconnected?.Invoke(reader, status);
-        }       
+        }   
 
         public override void OnLivelinessLost(DataWriter writer, LivelinessLostStatus status)
         {
@@ -133,25 +106,10 @@ namespace OpenDDSharp.UnitTest.Listeners
             OfferedIncompatibleQos?.Invoke(writer, status);
         }
 
-        public override void OnPublicationDisconnected(DataWriter writer, PublicationDisconnectedStatus status)
-        {
-            PublicationDisconnected?.Invoke(writer, status);
-        }
-
-        public override void OnPublicationLost(DataWriter writer, PublicationLostStatus status)
-        {
-            PublicationLost?.Invoke(writer, status);
-        }
-
         public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
         {
             PublicationMatched?.Invoke(writer, status);
-        }
-
-        public override void OnPublicationReconnected(DataWriter writer, PublicationReconnectedStatus status)
-        {
-            PublicationReconnected?.Invoke(writer, status);
-        }
+        }        
 
         public override void OnConnectionDeleted(DataWriter writer)
         {

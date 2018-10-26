@@ -26,18 +26,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																							   std::function<void(::DDS::DataReader_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
 																							   std::function<void(::DDS::DataReader_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
 																							   std::function<void(::DDS::DataReader_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-																							   std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> onSampleLost,
-																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionDisconnectedStatus)> onSubscriptionDisconnected,
-																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> onSubscriptionReconnected,
-																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> onSubscriptionLost,
-																							   std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded,																							   
+																							   std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> onSampleLost,																							  
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
 																							   std::function<void(::DDS::DataWriter_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
-																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationDisconnectedStatus)> onPublicationDisconnected,
-																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationReconnectedStatus)> onPublicationReconnected,
-																							   std::function<void(::DDS::DataWriter_ptr, ::OpenDDS::DCPS::PublicationLostStatus)> onPublicationLost,																							   
 																							   std::function<void(::DDS::Topic_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
 	_onDataOnReaders = onDataOnReaders;
 	_onDataAvalaible = onDataAvalaible;
@@ -47,17 +40,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onLivelinessChanged = onLivelinessChanged;
 	_onSubscriptionMatched = onSubscriptionMatched;
 	_onSampleLost = onSampleLost;
-	_onSubscriptionDisconnected = onSubscriptionDisconnected;
-	_onSubscriptionReconnected = onSubscriptionReconnected;
-	_onSubscriptionLost = onSubscriptionLost;
-	_onBudgetExceeded = onBudgetExceeded;	
 	_onOfferedDeadlineMissed = onOfferedDeadlineMissed;
 	_onOfferedIncompatibleQos = onOfferedIncompatibleQos;
 	_onLivelinessLost = onLivelinessLost;
 	_onPublicationMatched = onPublicationMatched;
-	_onPublicationDisconnected = onPublicationDisconnected;
-	_onPublicationReconnected = onPublicationReconnected;
-	_onPublicationLost = onPublicationLost;	
 	_onInconsistentTopic = onInconsistentTopic;
 }
 
@@ -70,17 +56,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onLivelinessChanged = nullptr;
 	_onSubscriptionMatched = nullptr;
 	_onSampleLost = nullptr;
-	_onSubscriptionDisconnected = nullptr;
-	_onSubscriptionReconnected = nullptr;
-	_onSubscriptionLost = nullptr;
-	_onBudgetExceeded = nullptr;	
 	_onOfferedDeadlineMissed = nullptr;
 	_onOfferedIncompatibleQos = nullptr;
 	_onLivelinessLost = nullptr;
 	_onPublicationMatched = nullptr;
-	_onPublicationDisconnected = nullptr;
-	_onPublicationReconnected = nullptr;
-	_onPublicationLost = nullptr;	
 	_onInconsistentTopic = nullptr;
 };
 
@@ -124,26 +103,6 @@ void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_sample_lo
 		_onSampleLost(reader, status);
 }
 
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_subscription_disconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status) {
-	if (_onSubscriptionDisconnected != nullptr)
-		_onSubscriptionDisconnected(reader, status);
-}
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_subscription_reconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status) {
-	if (_onSubscriptionReconnected != nullptr)
-		_onSubscriptionReconnected(reader, status);
-}
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_subscription_lost(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status) {
-	if (_onSubscriptionLost != nullptr)
-		_onSubscriptionLost(reader, status);
-}
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_budget_exceeded(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status) {
-	if (_onBudgetExceeded != nullptr)
-		_onBudgetExceeded(reader, status);
-}
-
 void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
 	if (_onOfferedDeadlineMissed != nullptr)
 		_onOfferedDeadlineMissed(writer, status);
@@ -162,21 +121,6 @@ void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_livelines
 void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus & status) {
 	if (_onPublicationMatched != nullptr)
 		_onPublicationMatched(writer, status);
-};
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_publication_disconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationDisconnectedStatus & status) {
-	if (_onPublicationDisconnected != nullptr)
-		_onPublicationDisconnected(writer, status);
-};
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_publication_reconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationReconnectedStatus & status) {
-	if (_onPublicationReconnected != nullptr)
-		_onPublicationReconnected(writer, status);
-};
-
-void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_publication_lost(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationLostStatus & status) {
-	if (_onPublicationLost != nullptr)
-		_onPublicationLost(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DomainParticipantListenerNative::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus & status) {

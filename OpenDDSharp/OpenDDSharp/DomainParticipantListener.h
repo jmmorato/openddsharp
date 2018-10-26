@@ -54,17 +54,10 @@ namespace OpenDDSharp {
 			typedef void(__stdcall *onLivelinessChangedDeclaration)(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status);
 			typedef void(__stdcall *onSubscriptionMatchedDeclaration)(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
 			typedef void(__stdcall *onSampleLostDeclaration)(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
-			typedef void(__stdcall *onSubscriptionDisconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status);
-			typedef void(__stdcall *onSubscriptionReconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status);
-			typedef void(__stdcall *onSubscriptionLostDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status);
-			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);			
 			typedef void(__stdcall *onOfferedDeadlineMissedDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
 			typedef void(__stdcall *onOfferedIncompatibleQosDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status);
 			typedef void(__stdcall *onLivelinessLostDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status);
 			typedef void(__stdcall *onPublicationMatchedDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status);
-			typedef void(__stdcall *onPublicationDisconnectedDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationDisconnectedStatus& status);
-			typedef void(__stdcall *onPublicationReconnectedDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status);
-			typedef void(__stdcall *onPublicationLostDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationLostStatus& status);			
 			typedef void(__stdcall *onInconsistentTopicDeclaration)(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 
 			internal:
@@ -79,17 +72,10 @@ namespace OpenDDSharp {
 				onLivelinessChangedDeclaration onLivelinessChangedFunctionCpp;
 				onSubscriptionMatchedDeclaration onSubscriptionMatchedFunctionCpp;
 				onSampleLostDeclaration onSampleLostFunctionCpp;
-				onSubscriptionDisconnectedDeclaration onSubscriptionDisconnectedFunctionCpp;
-				onSubscriptionReconnectedDeclaration onSubscriptionReconnectedFunctionCpp;
-				onSubscriptionLostDeclaration onSubscriptionLostFunctionCpp;
-				onBudgetExceededDeclaration onBudgetExceededFunctionCpp;				
 				onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissedFunctionCpp;
 				onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQosFunctionCpp;
 				onLivelinessLostDeclaration onLivelinessLostFunctionCpp;
 				onPublicationMatchedDeclaration onPublicationMatchedFunctionCpp;
-				onPublicationDisconnectedDeclaration onPublicationDisconnectedFunctionCpp;
-				onPublicationReconnectedDeclaration onPublicationReconnectedFunctionCpp;
-				onPublicationLostDeclaration onPublicationLostFunctionCpp;				
 				onInconsistentTopicDeclaration onInconsistentTopicFunctionCpp;
 
 			private:
@@ -181,50 +167,6 @@ namespace OpenDDSharp {
 					OnSampleLost(dataReader, OpenDDSharp::DDS::SampleLostStatus(status));
 				};
 
-				delegate void onSubscriptionDisconnectedDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status);
-				void onSubscriptionDisconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
-					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
-					if (entity != nullptr) {
-						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-					}
-					
-					OnSubscriptionDisconnected(dataReader, OpenDDSharp::OpenDDS::DCPS::SubscriptionDisconnectedStatus(status));
-				};
-
-				delegate void onSubscriptionReconnectedDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status);
-				void onSubscriptionReconnected(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
-					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
-					if (entity != nullptr) {
-						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-					}
-					
-					OnSubscriptionReconnected(dataReader, OpenDDSharp::OpenDDS::DCPS::SubscriptionReconnectedStatus(status));
-				};
-
-				delegate void onSubscriptionLostDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status);
-				void onSubscriptionLost(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
-					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
-					if (entity != nullptr) {
-						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-					}
-					
-					OnSubscriptionLost(dataReader, OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus(status));
-				};
-
-				delegate void onBudgetExceededDelegate(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
-				void onBudgetExceeded(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(reader);
-					OpenDDSharp::DDS::DataReader^ dataReader = nullptr;
-					if (entity != nullptr) {
-						dataReader = static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-					}
-					
-					OnBudgetExceeded(dataReader, OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus(status));
-				};
-
 				delegate void onOfferedDeadlineMissedDelegate(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status);
 				void onOfferedDeadlineMissed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -268,40 +210,6 @@ namespace OpenDDSharp {
 
 					OnPublicationMatched(dataWriter, OpenDDSharp::DDS::PublicationMatchedStatus(status));
 				};
-
-				delegate void onPublicationDisconnectedDelegate(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationDisconnectedStatus& status);
-				void onPublicationDisconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationDisconnectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
-					OpenDDSharp::DDS::DataWriter^ dataWriter = nullptr;
-					if (entity != nullptr) {
-						dataWriter = static_cast<OpenDDSharp::DDS::DataWriter^>(entity);
-					}
-					
-					OnPublicationDisconnected(dataWriter, OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus(status));
-				};
-
-				delegate void onPublicationReconnectedDelegate(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status);
-				void onPublicationReconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
-					OpenDDSharp::DDS::DataWriter^ dataWriter = nullptr;
-					if (entity != nullptr) {
-						dataWriter = static_cast<OpenDDSharp::DDS::DataWriter^>(entity);
-					}
-					
-					OnPublicationReconnected(dataWriter, OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus(status));
-				};
-
-				delegate void onPublicationLostDelegate(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationLostStatus& status);
-				void onPublicationLost(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationLostStatus& status) {
-					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
-					OpenDDSharp::DDS::DataWriter^ dataWriter = nullptr;
-					if (entity != nullptr) {
-						dataWriter = static_cast<OpenDDSharp::DDS::DataWriter^>(entity);
-					}
-					
-					OnPublicationLost(dataWriter, OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus(status));
-				};
-
 
 				delegate void onInconsistentTopicDelegate(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 				void onInconsistentTopic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
@@ -393,36 +301,6 @@ namespace OpenDDSharp {
 				virtual void OnSampleLost(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::DDS::SampleLostStatus status) = 0;
 
 				/// <summary>
-				/// Called when a subscription connection failure has been detected and there are still associations using the connection
-				/// after the configurable graceful_disconnected_period.
-				/// </summary>
-				/// <param name="reader">The <see cref="OpenDDSharp::DDS::DataReader" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::SubscriptionDisconnectedStatus" />.</param>
-				virtual void OnSubscriptionDisconnected(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::SubscriptionDisconnectedStatus status) = 0;
-
-				/// <summary>
-				/// Called when a disconnected subscription connection has been reconnected.
-				/// </summary>
-				/// <param name="reader">The <see cref="OpenDDSharp::DDS::DataReader" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::SubscriptionReconnectedStatus" />.</param>
-				virtual void OnSubscriptionReconnected(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::SubscriptionReconnectedStatus status) = 0;
-
-				/// <summary>
-				/// Called when a subscription connection is lost and hence one or more associations from this publication to some subscribers have been lost.
-				/// A connection is "lost" when the retry attempts have been exhausted.
-				/// </summary>
-				/// <param name="reader">The <see cref="OpenDDSharp::DDS::DataReader" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus" />.</param>
-				virtual void OnSubscriptionLost(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::SubscriptionLostStatus status) = 0;
-
-				/// <summary>
-				/// Allow reporting delays in excess of the	policy duration setting.
-				/// </summary>
-				/// <param name="reader">The <see cref="OpenDDSharp::DDS::DataReader" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus" />.</param>
-				virtual void OnBudgetExceeded(OpenDDSharp::DDS::DataReader^ reader, OpenDDSharp::OpenDDS::DCPS::BudgetExceededStatus status) = 0;
-
-				/// <summary>
 				/// Called when the connection object is cleaned up and the reconnect thread exits.
 				/// </summary>
 				/// <param name="reader">The <see cref="OpenDDSharp::DDS::DataReader" /> that triggered the event.</param>
@@ -464,30 +342,7 @@ namespace OpenDDSharp {
 				/// </summary>
 				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
 				/// <param name="status">The current <see cref="OpenDDSharp::DDS::PublicationMatchedStatus" />.</param>
-				virtual void OnPublicationMatched(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::PublicationMatchedStatus status) = 0;
-
-				/// <summary>
-			    /// Called when a publication connection failure has been detected and there are still associations using the connection
-				/// after the configurable graceful_disconnected_period.
-				/// </summary>
-				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus" />.</param>
-				virtual void OnPublicationDisconnected(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus status) = 0;
-
-				/// <summary>
-				/// Called when a disconnected publication connection has been reconnected.
-				/// </summary>
-				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus" />.</param>
-				virtual void OnPublicationReconnected(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus status) = 0;
-
-				/// <summary>
-				/// Called when a publication connection is lost and hence one or more associations from this publication to some subscribers have been lost.
-				/// A connection is "lost" when the retry attempts have been exhausted.
-				/// </summary>
-				/// <param name="writer">The <see cref="OpenDDSharp::DDS::DataWriter" /> that triggered the event.</param>
-				/// <param name="status">The current <see cref="OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus" />.</param>
-				virtual void OnPublicationLost(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::OpenDDS::DCPS::PublicationLostStatus status) = 0;
+				virtual void OnPublicationMatched(OpenDDSharp::DDS::DataWriter^ writer, OpenDDSharp::DDS::PublicationMatchedStatus status) = 0;				
 
 				/// <summary>
 				/// Called when the publication connection object is cleaned up and the reconnect thread exits.
