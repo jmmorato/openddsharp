@@ -39,12 +39,7 @@ System::String^ OpenDDSharp::DDS::ContentFilteredTopic::GetFilterExpression() {
 	msclr::interop::marshal_context context;
 
 	const char* filter = impl_entity->get_filter_expression();
-	if (filter != NULL) {
-		return context.marshal_as<System::String^>(filter);
-	}
-	else {
-		return nullptr;
-	}
+	return context.marshal_as<System::String^>(filter);	
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::ContentFilteredTopic::GetExpressionParameters(IList<System::String^>^ params) {
@@ -92,10 +87,5 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::ContentFilteredTopic::GetRelatedTopic
 	::DDS::Topic_ptr topic = impl_entity->get_related_topic();
 
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::Topic^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	return static_cast<OpenDDSharp::DDS::Topic^>(entity);	
 }
