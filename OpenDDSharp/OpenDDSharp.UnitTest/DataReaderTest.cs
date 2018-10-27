@@ -1215,7 +1215,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, data.First().ShortType);
 
             // Read instance with mask parameters
-            result = dataReader.ReadInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+            result = dataReader.ReadInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateKind.NewViewState | ViewStateKind.NotNewViewState, InstanceStateKind.AliveInstanceState | InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState);
             Assert.AreEqual(ReturnCode.NoData, result);
             Assert.IsNotNull(data);
             Assert.IsNotNull(sampleInfos);

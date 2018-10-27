@@ -727,7 +727,7 @@ namespace OpenDDSharp.UnitTest
 
             System.Threading.Thread.Sleep(100);
             
-            result = subscriber.GetDataReaders(list, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+            result = subscriber.GetDataReaders(list, SampleStateKind.NotReadSampleState | SampleStateKind.ReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(2, list.Count);
 
