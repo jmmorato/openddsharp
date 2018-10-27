@@ -95,6 +95,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = subscriber.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriberQos(qos);
+
+            // Test GetQos with null parameter
+            result = subscriber.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -177,6 +181,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+
+            // Test SetQos with null parameter
+            result = subscriber.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -254,6 +262,10 @@ namespace OpenDDSharp.UnitTest
             result = subscriber.GetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
+
+            // Test GetDefaultDataReaderQos with null parametr
+            result = subscriber.GetDefaultDataReaderQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -320,6 +332,10 @@ namespace OpenDDSharp.UnitTest
             };
             result = subscriber.SetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.InconsistentPolicy, result);
+
+            // Test SetDefaultDataReaderQos with null parametr
+            result = subscriber.SetDefaultDataReaderQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -515,6 +531,10 @@ namespace OpenDDSharp.UnitTest
             // Try to remove it again
             result = subscriber.DeleteDataReader(datareader);
             Assert.AreEqual(ReturnCode.Error, result);
+
+            // Test with null parameter
+            result = subscriber.DeleteDataReader(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -540,7 +560,7 @@ namespace OpenDDSharp.UnitTest
             result = subscriber.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Create a DataWriter in the publisher
+            // Create a DataReader in the subscriber
             DataReader dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(subscriber);
 
@@ -554,6 +574,17 @@ namespace OpenDDSharp.UnitTest
 
             result = _participant.DeleteSubscriber(subscriber);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Create a DataReader with null parameter
+            DataReader nullDataReader = subscriber.CreateDataReader(null);
+            Assert.IsNull(nullDataReader);
+
+            // Create DataReader with incorrect qos
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.ResourceLimits.MaxSamples = 1;
+            drQos.ResourceLimits.MaxSamplesPerInstance = 2;
+            nullDataReader = subscriber.CreateDataReader(topic, drQos);
+            Assert.IsNull(nullDataReader);
         }
 
         [TestMethod]
@@ -713,6 +744,10 @@ namespace OpenDDSharp.UnitTest
             result = subscriber.GetDataReaders(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, list.Count);
+
+            // Test GetDataReaders with null parameter
+            result = subscriber.GetDataReaders(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]

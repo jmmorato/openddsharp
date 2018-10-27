@@ -94,6 +94,10 @@ namespace OpenDDSharp.UnitTest
             qos = new PublisherQos();
             ReturnCode result = publisher.GetQos(qos);
             TestHelper.TestNonDefaultPublisherQos(qos);
+
+            // Test with null parameter
+            result = publisher.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -176,6 +180,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+
+            // Test with null parameter
+            result = publisher.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -328,6 +336,17 @@ namespace OpenDDSharp.UnitTest
             result = datawriter6.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataWriterQos(qos);
+
+            // Test with null parameter
+            DataWriter nullDataWriter = publisher.CreateDataWriter(null);
+            Assert.IsNull(nullDataWriter);
+
+            // Test with wrong qos
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.ResourceLimits.MaxSamples = 1;
+            dwQos.ResourceLimits.MaxSamplesPerInstance = 2;
+            nullDataWriter = publisher.CreateDataWriter(topic, dwQos);
+            Assert.IsNull(nullDataWriter);
         }
 
         [TestMethod]
@@ -373,6 +392,10 @@ namespace OpenDDSharp.UnitTest
             // Try to remove it again
             result = publisher.DeleteDataWriter(datawriter);
             Assert.AreEqual(ReturnCode.Error, result);
+
+            // Test with null parameter
+            result = publisher.DeleteDataWriter(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -421,7 +444,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(datawriter == received || otherDatawriter == received);
 
             received = otherPublisher.LookupDataWriter(nameof(TestLookupDataWriter));
-            Assert.IsNull(received);
+            Assert.IsNull(received);            
         }
 
         [TestMethod]
@@ -486,7 +509,11 @@ namespace OpenDDSharp.UnitTest
             DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
             result = publisher.GetDefaultDataWriterQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestHelper.TestDefaultDataWriterQos(qos);            
+            TestHelper.TestDefaultDataWriterQos(qos);
+
+            // Test with null parameter
+            result = publisher.GetDefaultDataWriterQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -543,6 +570,10 @@ namespace OpenDDSharp.UnitTest
             result = otherWriter.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
+
+            // Test with null parameter
+            result = publisher.SetDefaultDataWriterQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]

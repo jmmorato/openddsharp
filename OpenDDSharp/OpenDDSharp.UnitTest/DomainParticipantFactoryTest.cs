@@ -30,14 +30,21 @@ namespace OpenDDSharp.UnitTest
     public class DomainParticipantFactoryTest
     {
         #region Fields
-        static DomainParticipantFactory _dpf;        
+        static DomainParticipantFactory _dpf;
         #endregion
 
         #region Initialization/Cleanup
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        [TestInitialize]
+        public void TestInitialize()
         {
             _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _dpf = null;
+            System.GC.Collect();
         }
         #endregion
 
@@ -60,10 +67,13 @@ namespace OpenDDSharp.UnitTest
             qos.EntityFactory.AutoenableCreatedEntities = false;            
 
             ReturnCode result = _dpf.GetQos(qos);
-
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(qos.EntityFactory);           
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
+
+            // Test with null parameter
+            result = _dpf.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -92,6 +102,10 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(qos.EntityFactory);            
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
+
+            // Test with null parameter
+            result = _dpf.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -103,6 +117,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = _dpf.GetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
+
+            // Test with null parameter
+            result = _dpf.GetDefaultDomainParticipantQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -127,6 +145,10 @@ namespace OpenDDSharp.UnitTest
             result = _dpf.GetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
+
+            // Test with null parameter
+            result = _dpf.SetDefaultDomainParticipantQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -266,6 +288,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _dpf.DeleteParticipant(participant);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _dpf.DeleteParticipant(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion

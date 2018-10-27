@@ -111,6 +111,10 @@ namespace OpenDDSharp.UnitTest
             result = topic.GetQos(getQos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultTopicQos(getQos);
+            
+            // Test GetQos with null parameter
+            result = topic.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -209,6 +213,10 @@ namespace OpenDDSharp.UnitTest
             result = otherTopic.SetQos(qos);
             Assert.AreEqual(ReturnCode.InconsistentPolicy, result);
 
+            // Test SetQos with null parameter
+            result = topic.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+
         }
 
         [TestMethod]
@@ -255,7 +263,7 @@ namespace OpenDDSharp.UnitTest
 
             // Create a listener, set it and check that is correctly setted
             listener = new MyTopicListener();
-            result = topic.SetListener(listener, StatusMask.AllStatusMask);
+            result = topic.SetListener(listener);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             MyTopicListener received = (MyTopicListener)topic.GetListener();

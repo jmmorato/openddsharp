@@ -117,6 +117,10 @@ namespace OpenDDSharp.UnitTest
             qos = new DataWriterQos();
             ReturnCode result = dataWriter.GetQos(qos);
             TestHelper.TestNonDefaultDataWriterQos(qos);
+
+            // Test GetQos with null parameter
+            result = dataWriter.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -176,6 +180,10 @@ namespace OpenDDSharp.UnitTest
             pubQos = new PublisherQos();
             _publisher.SetQos(pubQos);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test SetQos with null parameter
+            result = dataWriter.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -510,6 +518,10 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(otherReader.InstanceHandle, list.First());
+
+            // Test with null parameter
+            result = writer.GetMatchedSubscriptions(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]

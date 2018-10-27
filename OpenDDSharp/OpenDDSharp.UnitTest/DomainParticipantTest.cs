@@ -99,6 +99,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = _participant.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
+
+            // Test with null parameter
+            result = _participant.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -124,6 +128,10 @@ namespace OpenDDSharp.UnitTest
             result = _participant.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -215,6 +223,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = _participant.GetDefaultTopicQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultTopicQos(qos);
+
+            // Test with null parameter
+            result = _participant.GetDefaultTopicQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -230,6 +242,10 @@ namespace OpenDDSharp.UnitTest
             result = _participant.GetDefaultTopicQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultTopicQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetDefaultTopicQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -242,8 +258,9 @@ namespace OpenDDSharp.UnitTest
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(_participant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(ReturnCode.Ok, result);            
 
+            // Test with full parameters
             MyTopicListener listener = new MyTopicListener();
             Topic topic = _participant.CreateTopic(nameof(TestCreateTopic), typeName, qos, listener, StatusMask.DefaultStatusMask);
             Assert.IsNotNull(topic);
@@ -255,6 +272,32 @@ namespace OpenDDSharp.UnitTest
             result = topic.GetQos(getQos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(DurabilityQosPolicyKind.PersistentDurabilityQos, getQos.Durability.Kind);
+
+            // Test with only listener and status mask
+            Topic topic1 = _participant.CreateTopic(nameof(TestCreateTopic) + "1", typeName, qos, listener);
+            Assert.IsNotNull(topic1);
+            Assert.IsNotNull(topic1.GetListener());
+            Assert.AreEqual(nameof(TestCreateTopic) + "1", topic1.Name);
+            Assert.AreEqual(typeName, topic1.TypeName);
+
+            // Test with only listener and status mask
+            Topic topic2 = _participant.CreateTopic(nameof(TestCreateTopic) + "2", typeName, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            Assert.IsNotNull(topic2);
+            Assert.IsNotNull(topic2.GetListener());
+            Assert.AreEqual(nameof(TestCreateTopic) + "2", topic2.Name);
+            Assert.AreEqual(typeName, topic2.TypeName);
+
+            // Test with null topic name
+            Topic topic3 = _participant.CreateTopic(null, typeName, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            Assert.IsNull(topic3);
+
+            // Test with null type name
+            Topic topic4 = _participant.CreateTopic(nameof(TestCreateTopic) + "3", null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            Assert.IsNull(topic4);
+
+            // Test with wrong configuration
+            Topic topic5 = _participant.CreateTopic(nameof(TestCreateTopic), "OtherName", listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            Assert.IsNull(topic5);
         }
 
         [TestMethod]
@@ -291,8 +334,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(topic);
 
             ITopicDescription foundTopic = _participant.LookupTopicDescription(nameof(TestLookupTopicDescription));
-
             Assert.IsNotNull(foundTopic);
+
+            ITopicDescription notFoundTopic = _participant.LookupTopicDescription("NoFoundTopic");
+            Assert.IsNull(notFoundTopic);
         }
 
         [TestMethod]
@@ -329,7 +374,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = _participant.DeleteTopic(topic);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeleteTopic(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -349,6 +398,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = _participant.GetDefaultPublisherQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultPublisherQos(qos);
+
+            // Test with null parameter
+            result = _participant.GetDefaultPublisherQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -364,6 +417,10 @@ namespace OpenDDSharp.UnitTest
             result = _participant.GetDefaultPublisherQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultPublisherQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetDefaultPublisherQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -380,7 +437,13 @@ namespace OpenDDSharp.UnitTest
             PublisherQos getPublisherQos = new PublisherQos();
             ReturnCode result = publisher.GetQos(getPublisherQos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            TestHelper.TestNonDefaultPublisherQos(getPublisherQos);     
+            TestHelper.TestNonDefaultPublisherQos(getPublisherQos);
+
+            // Test with listener and status mask
+            Publisher publisher1 = _participant.CreatePublisher(listener, StatusMask.DefaultStatusMask);
+            Assert.IsNotNull(publisher1);
+            Assert.IsNotNull(publisher.GetListener());
+
         }
 
         [TestMethod]
@@ -409,7 +472,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = _participant.DeletePublisher(publisher);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeletePublisher(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -429,6 +496,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = _participant.GetDefaultSubscriberQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultSubscriberQos(qos);
+
+            result = _participant.GetDefaultSubscriberQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -444,6 +514,10 @@ namespace OpenDDSharp.UnitTest
             result = _participant.GetDefaultSubscriberQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriberQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetDefaultSubscriberQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -461,6 +535,11 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = subscriber.GetQos(getSubscriberQos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriberQos(qos);
+
+            // Test with listener and status mask parameters
+            subscriber = _participant.CreateSubscriber(listener, StatusMask.DefaultStatusMask);
+            Assert.IsNotNull(subscriber);
+            Assert.IsNotNull(subscriber.GetListener());
         }
 
         [TestMethod]
@@ -488,7 +567,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = _participant.DeleteSubscriber(subscriber);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeleteSubscriber(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -916,13 +999,40 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = _participant.DeleteContentFilteredTopic(filteredTopic);
-            Assert.AreEqual(ReturnCode.Ok, result);            
-
-            result = _participant.DeleteTopic(topic);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);                                    
             
             Assert.AreEqual(totalInstances, countReader);
-            Assert.AreEqual(filterCount, countFilteredReader);                     
+            Assert.AreEqual(filterCount, countFilteredReader);
+
+            // Test with null name
+            ContentFilteredTopic nullFilteredTopic = _participant.CreateContentFilteredTopic(null, topic, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test with null related topic
+            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test with null expression
+            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, null, filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test wrong topic creation (same name than other topic is not allowed)
+            nullFilteredTopic = _participant.CreateContentFilteredTopic(nameof(TestCreateContentFilteredTopic), topic, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test without expression parameters 
+            ContentFilteredTopic filteredTopic1 = _participant.CreateContentFilteredTopic("FilteredTopic1", topic, "(Id <= 1)");
+            Assert.IsNotNull(filteredTopic1);
+
+            // Test with null expression parameters 
+            ContentFilteredTopic filteredTopic2 = _participant.CreateContentFilteredTopic("FilteredTopic2", topic, "(Id <= 1)", null);
+            Assert.IsNotNull(filteredTopic2);
+
+            ContentFilteredTopic filteredTopic3 = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %1 AND Id <= %2)", filterCount.ToString(),  "2");
+            Assert.IsNull(nullFilteredTopic);
+
+            result = _participant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -954,7 +1064,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = _participant.DeleteContentFilteredTopic(filteredTopic);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeleteContentFilteredTopic(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -1066,7 +1180,31 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual("FirstName" + (i + 1).ToString(), receivedData[i].FirstName);
                 Assert.AreEqual("SecondName" + (i + 1).ToString(), receivedData[i].SecondName);
                 Assert.AreEqual("Country" + (i + 1).ToString(), receivedData[i].Country);
-            }            
+            }
+
+            // Test with null name
+            MultiTopic nullMultiTopic = _participant.CreateMultiTopic(null, athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNull(nullMultiTopic);
+
+            // Test with null type name
+            nullMultiTopic = _participant.CreateMultiTopic("AthleteResultTopic", null, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNull(nullMultiTopic);
+
+            // Test with null expression
+            nullMultiTopic = _participant.CreateMultiTopic("AthleteResultTopic", athleteResultTypeName, null);
+            Assert.IsNull(nullMultiTopic);
+
+            // Test wrong creation (same name than other topic is not allowed)
+            nullMultiTopic = _participant.CreateMultiTopic("AthleteTopic", athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNull(nullMultiTopic);
+
+            // Test with null expression parameters
+            MultiTopic multiTopic1 = _participant.CreateMultiTopic("AthleteResultTopic1", athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic", null);
+            Assert.IsNotNull(multiTopic1);
+
+            // Test with expression parameters
+            MultiTopic multiTopic2 = _participant.CreateMultiTopic("AthleteResultTopic2", athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic WHERE Id >= %0 AND Id <= %1", "0", "10");
+            Assert.IsNotNull(multiTopic2);
         }
 
         [TestMethod]
@@ -1110,7 +1248,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = _participant.DeleteMultiTopic(multiTopic);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeleteMultiTopic(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -1136,8 +1278,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
 
+            // Test with null parameter
+            result = _participant.GetDiscoveredParticipants(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);            
+
             result = _dpf.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
+
         }
 
         [TestMethod]

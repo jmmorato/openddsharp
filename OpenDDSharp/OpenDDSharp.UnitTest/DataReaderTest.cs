@@ -119,6 +119,10 @@ namespace OpenDDSharp.UnitTest
             qos = new DataReaderQos();
             ReturnCode result = dataReader.GetQos(qos);
             TestHelper.TestNonDefaultDataReaderQos(qos);
+
+            // Call GetQos with null parameter
+            result = dataReader.GetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -181,6 +185,10 @@ namespace OpenDDSharp.UnitTest
             pubQos = new SubscriberQos();
             _subscriber.SetQos(pubQos);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Call SetQos with null parameter
+            result = dataReader.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         [TestMethod]
@@ -348,6 +356,10 @@ namespace OpenDDSharp.UnitTest
             // Create other reader
             DataReader otherReader = _subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(otherReader);
+
+            // Delete read condition with null
+            result = otherReader.DeleteReadCondition(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
             // Delete the previous conditions with the other reader
             result = otherReader.DeleteReadCondition(queryCondition);
@@ -768,11 +780,15 @@ namespace OpenDDSharp.UnitTest
             DataReader reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(reader);
 
-            // Test matched subscriptions without any match
+            // Test matched publications without any match
             List<InstanceHandle> list = new List<InstanceHandle> { InstanceHandle.HandleNil };
             ReturnCode result = reader.GetMatchedPublications(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, list.Count);
+
+            // Test matched publications with null
+            result = reader.GetMatchedPublications(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Create a not compatible writer
             Publisher publisher = _participant.CreatePublisher();
