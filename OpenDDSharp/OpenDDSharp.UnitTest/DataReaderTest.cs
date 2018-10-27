@@ -768,6 +768,21 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, data.First().Id);
+            Assert.IsNotNull(sampleInfos);
+            Assert.AreEqual(1, sampleInfos.Count);
+            Assert.IsTrue(sampleInfos.First().ValidData);
+            Assert.AreEqual(0, sampleInfos.First().AbsoluteGenerationRank);
+            Assert.AreEqual(0, sampleInfos.First().DisposedGenerationCount);
+            Assert.AreEqual(0, sampleInfos.First().GenerationRank);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().InstanceHandle);
+            Assert.AreEqual(InstanceStateKind.AliveInstanceState, sampleInfos.First().InstanceState);
+            Assert.AreEqual(0, sampleInfos.First().NoWritersGenerationCount);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().PublicationHandle);
+            Assert.AreEqual(0, sampleInfos.First().SampleRank);
+            Assert.AreEqual(SampleStateKind.NotReadSampleState, sampleInfos.First().SampleState);
+            Assert.AreEqual(ViewStateKind.NewViewState, sampleInfos.First().ViewState);
+            Assert.IsNotNull(sampleInfos.First().SourceTimestamp);
+            Assert.IsTrue(sampleInfos.First().SourceTimestamp.Seconds > 0);
         }
 
         [TestMethod]
