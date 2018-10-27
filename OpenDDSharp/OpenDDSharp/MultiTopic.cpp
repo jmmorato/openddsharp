@@ -35,13 +35,8 @@ System::String^ OpenDDSharp::DDS::MultiTopic::SubscriptionExpression::get() {
 System::String^ OpenDDSharp::DDS::MultiTopic::GetSubscriptionExpression() {
 	msclr::interop::marshal_context context;
 
-	const char* expression = impl_entity->get_subscription_expression();
-	if (expression != NULL) {
-		return context.marshal_as<System::String^>(expression);
-	}
-	else {
-		return nullptr;
-	}
+	const char* expression = impl_entity->get_subscription_expression();	
+	return context.marshal_as<System::String^>(expression);	
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::MultiTopic::GetExpressionParameters(IList<System::String^>^ params) {
