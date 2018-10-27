@@ -41,13 +41,13 @@ Included items must then not match any entries in the exclude list to remain inc
               <Include>
                 <Function>^OpenDDSharp.*</Function>
               </Include>
-              <!--<Exclude>
+              <Exclude>
                 <Function>^std::.*</Function>
                 <Function>^ATL::.*</Function>
                 <Function>.*::__GetTestMethodInfo.*</Function>
                 <Function>^Microsoft::VisualStudio::CppCodeCoverageFramework::.*</Function>
                 <Function>^Microsoft::VisualStudio::CppUnitTestFramework::.*</Function>
-              </Exclude>-->
+              </Exclude>
             </Functions>
 
             <!-- Match attributes on any code element: -->
