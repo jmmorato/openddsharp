@@ -95,24 +95,22 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::GetConditions(ICollectio
 	::DDS::ConditionSeq seq;
 	::DDS::ReturnCode_t ret = impl_entity->get_conditions(seq);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		System::UInt32 i = 0;
-		while (i < seq.length()) {			
-			Condition^ cond = nullptr;
-			for each (Condition^ c in conditions) {
-				if (c->impl_entity == seq[i]) {
-					cond = c;
-					break;
-				}
+	System::UInt32 i = 0;
+	while (i < seq.length()) {			
+		Condition^ cond = nullptr;
+		for each (Condition^ c in conditions) {
+			if (c->impl_entity == seq[i]) {
+				cond = c;
+				break;
 			}
-
-			if (cond != nullptr) {
-				attachedConditions->Add(cond);
-			}
-			i++;
 		}
-	}
 
+		if (cond != nullptr) {
+			attachedConditions->Add(cond);
+		}
+		i++;
+	}
+	
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 	
 };
@@ -133,7 +131,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::DetachConditions(ICollec
 
 	::DDS::ReturnCode_t ret = impl_entity->detach_conditions(seq);
 	if (ret == ::DDS::RETCODE_OK) {
-		for each (Condition^ cond in conditions) {
+		for each (Condition^ cond in System::Linq::Enumerable::ToList(conditions)) {
 			conditions->Remove(cond);
 		}
 	}
