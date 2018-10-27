@@ -87,6 +87,7 @@
     <Compile Include="TestHelper.cs" />
     <Compile Include="TopicListenerTest.cs" />
     <Compile Include="TopicTest.cs" />
+    <Compile Include="WaitSetTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenDDSharp\OpenDDSharp.vcxproj">
