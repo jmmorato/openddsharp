@@ -63,9 +63,7 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::CreateDataWriter(Open
 		dwQos = qos->ToNative();
 	}
 	else {	
-		if (impl_entity->get_default_datawriter_qos(dwQos) != ::DDS::RETCODE_OK) {
-			dwQos = ::DATAWRITER_QOS_DEFAULT;
-		}
+        impl_entity->get_default_datawriter_qos(dwQos);
 	}
 
 	::DDS::DataWriterListener_var lst = NULL;
@@ -90,7 +88,7 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::CreateDataWriter(Open
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteDataWriter(OpenDDSharp::DDS::DataWriter^ datawriter) {
     if (datawriter == nullptr) {
-        return OpenDDSharp::DDS::ReturnCode::BadParameter;
+        return OpenDDSharp::DDS::ReturnCode::Ok;
     }
 
 	::DDS::ReturnCode_t ret = impl_entity->delete_datawriter(datawriter->impl_entity);
@@ -108,17 +106,12 @@ OpenDDSharp::DDS::DataWriter^ OpenDDSharp::DDS::Publisher::LookupDataWriter(Syst
 	::DDS::DataWriter_ptr dw = impl_entity->lookup_datawriter(context.marshal_as<const char *>(topicName));
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dw);
 
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::DataWriter^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	return static_cast<OpenDDSharp::DDS::DataWriter^>(entity);	
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::DeleteContainedEntities() {	
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
-	if (ret != ::DDS::RETCODE_OK) {
+	if (ret == ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
 			EntityManager::get_instance()->remove(e->impl_entity);
 		}	
@@ -194,12 +187,7 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Publisher::GetParticipant
 
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);
 
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);	
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::SetDefaultDataWriterQos(OpenDDSharp::DDS::DataWriterQos^ qos) {
@@ -218,9 +206,8 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Publisher::GetDefaultDataWriterQo
 	::DDS::DataWriterQos nativeQos;
 	::DDS::ReturnCode_t ret = impl_entity->get_default_datawriter_qos(nativeQos);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		qos->FromNative(nativeQos);
-	}
+    // OpenDDS always return OK, not neeed to check it
+	qos->FromNative(nativeQos);	
 
 	return (::OpenDDSharp::DDS::ReturnCode)ret;
 };

@@ -52,8 +52,6 @@ namespace OpenDDSharp {
 
 		internal:		
 			QosPolicyCount(::DDS::QosPolicyCount native);
-			::DDS::QosPolicyCount ToNative();
-			void FromNative(::DDS::QosPolicyCount native);
 		};
 	};
 };

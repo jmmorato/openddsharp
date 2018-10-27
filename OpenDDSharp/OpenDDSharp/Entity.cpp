@@ -46,12 +46,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Entity::Enable() {
 
 OpenDDSharp::DDS::StatusCondition^ OpenDDSharp::DDS::Entity::GetStatusCondition() {
 	::DDS::StatusCondition_ptr native = impl_entity->get_statuscondition();
-	if (native != NULL) {
-		return gcnew OpenDDSharp::DDS::StatusCondition(native, this);
-	} 
-	else {
-		return nullptr;
-	}
+	return gcnew OpenDDSharp::DDS::StatusCondition(native, this);	
 }
 
 OpenDDSharp::DDS::StatusMask OpenDDSharp::DDS::Entity::GetStatusChanges() {

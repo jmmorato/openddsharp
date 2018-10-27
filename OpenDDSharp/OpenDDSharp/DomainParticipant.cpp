@@ -69,9 +69,7 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::CreateTopic(System
 		tQos = qos->ToNative();
 	}
 	else {
-		if (impl_entity->get_default_topic_qos(tQos) != ::DDS::RETCODE_OK) {
-			tQos = ::TOPIC_QOS_DEFAULT;
-		}
+        impl_entity->get_default_topic_qos(tQos);
 	}
 
 	::DDS::TopicListener_var lst = NULL;
@@ -98,12 +96,15 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::CreateTopic(System
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDefaultTopicQos(OpenDDSharp::DDS::TopicQos^ qos) {
+    if (qos == nullptr) {
+        return OpenDDSharp::DDS::ReturnCode::BadParameter;
+    }
+
 	::DDS::TopicQos nativeQos;
 	::DDS::ReturnCode_t ret = impl_entity->get_default_topic_qos(nativeQos);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		qos->FromNative(nativeQos);
-	}
+    // OpenDDS always return OK, not neeed to check it
+	qos->FromNative(nativeQos);	
 
 	return (::OpenDDSharp::DDS::ReturnCode)ret;
 }
@@ -119,7 +120,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetDefaultTopi
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteTopic(OpenDDSharp::DDS::Topic^ topic) {
 	if (topic == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 			
 	::DDS::ReturnCode_t ret = impl_entity->delete_topic(topic->impl_entity);
@@ -157,9 +158,7 @@ OpenDDSharp::DDS::Publisher^ OpenDDSharp::DDS::DomainParticipant::CreatePublishe
 		pQos = qos->ToNative();
 	}
 	else {
-		if (impl_entity->get_default_publisher_qos(pQos) != ::DDS::RETCODE_OK) {
-			pQos = ::PUBLISHER_QOS_DEFAULT;
-		}
+        impl_entity->get_default_publisher_qos(pQos);
 	}
 
 	::DDS::PublisherListener_var lst = NULL;
@@ -184,12 +183,15 @@ OpenDDSharp::DDS::Publisher^ OpenDDSharp::DDS::DomainParticipant::CreatePublishe
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDefaultPublisherQos(OpenDDSharp::DDS::PublisherQos^ qos) {
+    if (qos == nullptr) {
+        return OpenDDSharp::DDS::ReturnCode::BadParameter;
+    }
+
 	::DDS::PublisherQos nativeQos;
 	::DDS::ReturnCode_t ret = impl_entity->get_default_publisher_qos(nativeQos);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		qos->FromNative(nativeQos);
-	}
+    // OpenDDS always return OK, not neeed to check it
+	qos->FromNative(nativeQos);	
 
 	return (::OpenDDSharp::DDS::ReturnCode)ret;
 };
@@ -205,7 +207,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetDefaultPubl
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeletePublisher(OpenDDSharp::DDS::Publisher^ pub) {
 	if (pub == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 	
 	::DDS::ReturnCode_t ret = impl_entity->delete_publisher(pub->impl_entity);
@@ -243,9 +245,7 @@ OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DomainParticipant::CreateSubscri
 		sQos = qos->ToNative();
 	}
 	else {
-		if (impl_entity->get_default_subscriber_qos(sQos) != ::DDS::RETCODE_OK) {
-			sQos = ::SUBSCRIBER_QOS_DEFAULT;
-		}
+        impl_entity->get_default_subscriber_qos(sQos);
 	}
 
 	::DDS::SubscriberListener_var lst = NULL;
@@ -270,22 +270,20 @@ OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DomainParticipant::CreateSubscri
 };
 
 OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DomainParticipant::GetBuiltinSubscriber() {
-	::DDS::Subscriber_ptr s = impl_entity->get_builtin_subscriber();
-	if (s != NULL) {
-		return gcnew ::OpenDDSharp::DDS::Subscriber(s);
-	}
-	else {
-		return nullptr;
-	}
+	::DDS::Subscriber_ptr s = impl_entity->get_builtin_subscriber();	
+	return gcnew ::OpenDDSharp::DDS::Subscriber(s);	
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDefaultSubscriberQos(OpenDDSharp::DDS::SubscriberQos^ qos) {
+    if (qos == nullptr) {
+        return OpenDDSharp::DDS::ReturnCode::BadParameter;
+    }
+
 	::DDS::SubscriberQos nativeQos;
 	::DDS::ReturnCode_t ret = impl_entity->get_default_subscriber_qos(nativeQos);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		qos->FromNative(nativeQos);
-	}
+    // OpenDDS always return OK, not neeed to check it
+	qos->FromNative(nativeQos);	
 
 	return (::OpenDDSharp::DDS::ReturnCode)ret;
 };
@@ -301,7 +299,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::SetDefaultSubs
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteSubscriber(OpenDDSharp::DDS::Subscriber^ sub) {
 	if (sub == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 		
 	::DDS::ReturnCode_t ret = impl_entity->delete_subscriber(sub->impl_entity);
@@ -314,11 +312,15 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteSubscrib
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetQos(OpenDDSharp::DDS::DomainParticipantQos^ qos) {
-	::DDS::DomainParticipantQos* nativeQos = new ::DDS::DomainParticipantQos();
-	::DDS::ReturnCode_t ret = impl_entity->get_qos(*nativeQos);
+    if (qos == nullptr) {
+        return ::OpenDDSharp::DDS::ReturnCode::BadParameter;
+    }
+
+    ::DDS::DomainParticipantQos nativeQos;
+	::DDS::ReturnCode_t ret = impl_entity->get_qos(nativeQos);
 
 	if (ret == ::DDS::RETCODE_OK) {
-		qos->FromNative(*nativeQos);
+		qos->FromNative(nativeQos);
 	}
 
 	return (::OpenDDSharp::DDS::ReturnCode)ret;
@@ -411,12 +413,7 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::FindTopic(System::
 	::DDS::Topic_ptr topic = impl_entity->find_topic(context.marshal_as<const char *>(topicName), timeout.ToNative());
 
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::Topic^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	return static_cast<OpenDDSharp::DDS::Topic^>(entity);	
 };
 
 OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DomainParticipant::LookupTopicDescription(System::String^ name) {
@@ -473,7 +470,7 @@ OpenDDSharp::DDS::ContentFilteredTopic^ OpenDDSharp::DDS::DomainParticipant::Cre
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteContentFilteredTopic(OpenDDSharp::DDS::ContentFilteredTopic^ contentFilteredTopic) {
 	if (contentFilteredTopic == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 
     ::DDS::ReturnCode_t ret = impl_entity->delete_contentfilteredtopic(contentFilteredTopic->impl_entity);    
@@ -523,7 +520,7 @@ OpenDDSharp::DDS::MultiTopic^ OpenDDSharp::DDS::DomainParticipant::CreateMultiTo
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::DeleteMultiTopic(OpenDDSharp::DDS::MultiTopic^ multitopic) {
 	if (multitopic == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 
     ::DDS::ReturnCode_t ret = impl_entity->delete_multitopic(multitopic->impl_entity);

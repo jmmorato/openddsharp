@@ -63,9 +63,7 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(Ope
 		drQos = qos->ToNative();
 	}
 	else {		
-		if (impl_entity->get_default_datareader_qos(drQos) != ::DDS::RETCODE_OK) {
-			drQos = ::DATAREADER_QOS_DEFAULT;
-		}
+        impl_entity->get_default_datareader_qos(drQos);
 	}
 
 	::DDS::DataReaderListener_var lst = NULL;
@@ -90,7 +88,7 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::CreateDataReader(Ope
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteDataReader(OpenDDSharp::DDS::DataReader^ datareader) {
 	if (datareader == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::Ok;
 	}
 	
 	::DDS::ReturnCode_t ret = impl_entity->delete_datareader(datareader->impl_entity);
@@ -105,7 +103,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteDataReader(Open
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::DeleteContainedEntities() {	
 	::DDS::ReturnCode_t ret = impl_entity->delete_contained_entities();
 
-	if (ret != ::DDS::RETCODE_OK) {
+	if (ret == ::DDS::RETCODE_OK) {
 		for each (Entity^ e in contained_entities) {
 			EntityManager::get_instance()->remove(e->impl_entity);
             e->ClearContainedEntities();            
@@ -122,12 +120,7 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::LookupDataReader(Sys
 	::DDS::DataReader_ptr dr = impl_entity->lookup_datareader(context.marshal_as<const char *>(topicName));
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dr);
 
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::DataReader^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	return static_cast<OpenDDSharp::DDS::DataReader^>(entity);	
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::GetDataReaders(IList<OpenDDSharp::DDS::DataReader^>^ readers) {
@@ -209,13 +202,8 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::EndAccess() {
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::Subscriber::GetParticipant() {
 	::DDS::DomainParticipant_ptr participant = impl_entity->get_participant();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);	
+	return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);	
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::SetDefaultDataReaderQos(OpenDDSharp::DDS::DataReaderQos^ qos) {
@@ -234,9 +222,8 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::Subscriber::GetDefaultDataReaderQ
 	::DDS::DataReaderQos nativeQos;
 	::DDS::ReturnCode_t ret = impl_entity->get_default_datareader_qos(nativeQos);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		qos->FromNative(nativeQos);
-	}
+    // OpenDDS always return OK, not neeed to check it
+	qos->FromNative(nativeQos);	
 
 	return (::OpenDDSharp::DDS::ReturnCode)ret;
 };

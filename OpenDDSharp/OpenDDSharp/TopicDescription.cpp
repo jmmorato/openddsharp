@@ -43,36 +43,21 @@ System::String^ OpenDDSharp::DDS::TopicDescription::GetTypeName() {
 	msclr::interop::marshal_context context;
 
 	const char * typeName = impl_entity->get_type_name();
-	if (typeName != NULL) {
-		return context.marshal_as<System::String^>(typeName);
-	}
-	else {
-		return nullptr;
-	}
+	return context.marshal_as<System::String^>(typeName);	
 }
 
 System::String^ OpenDDSharp::DDS::TopicDescription::GetName() {
 	msclr::interop::marshal_context context;
 
-	const char * name = impl_entity->get_name();
-	if (name != NULL) {
-		return context.marshal_as<System::String^>(name);
-	}
-	else {
-		return nullptr;
-	}
+	const char * name = impl_entity->get_name();	
+	return context.marshal_as<System::String^>(name);	
 }
 
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::TopicDescription::GetParticipant() {
 	::DDS::DomainParticipant_ptr participant = impl_entity->get_participant();
 
 	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(participant);
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	return static_cast<OpenDDSharp::DDS::DomainParticipant^>(entity);	
 }
 
 ::DDS::TopicDescription_ptr OpenDDSharp::DDS::TopicDescription::ToNative() {
