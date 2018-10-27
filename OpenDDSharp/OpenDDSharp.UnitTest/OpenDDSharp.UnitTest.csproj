@@ -64,6 +64,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentFilteredTopicTest.cs" />
     <Compile Include="DataReaderListenerTest.cs" />
     <Compile Include="DataReaderTest.cs" />
     <Compile Include="DataWriterListenerTest.cs" />
