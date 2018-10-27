@@ -192,6 +192,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSetExpressionParameters()
         {
+            // TODO: OpenDDS Issue: The correct number of expression parameters are not checked
+
             // Initialize
             AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
             string athleteResultTypeName = athleteResultSupport.GetTypeName();
