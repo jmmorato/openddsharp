@@ -875,6 +875,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.UserData.Value);
             Assert.AreEqual(1, data.UserData.Value.Count());
             Assert.AreEqual(0x42, data.UserData.Value.First());
+            Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.Key.Value);
 
             // Destroy the other participant
             result = otherParticipant.DeleteContainedEntities();

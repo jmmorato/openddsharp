@@ -1308,6 +1308,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.UserData.Value.Count());
             Assert.AreEqual(0x42, data.UserData.Value.First());
+            Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.Key.Value);
 
             result = _dpf.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
