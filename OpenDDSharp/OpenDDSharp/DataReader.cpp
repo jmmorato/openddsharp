@@ -47,10 +47,6 @@ OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadConditi
 
 OpenDDSharp::DDS::ReadCondition^ OpenDDSharp::DDS::DataReader::CreateReadCondition(OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
 	::DDS::ReadCondition_ptr native =  impl_entity->create_readcondition(sampleStates, viewStates, instanceStates);
-    if (native == NULL) {
-        return nullptr;
-    }	
-
     ReadCondition^ condition = gcnew OpenDDSharp::DDS::ReadCondition(native, this);
     conditions->Add(condition);
     return condition;
@@ -155,24 +151,15 @@ OpenDDSharp::OpenDDS::DCPS::DataReaderListener^ OpenDDSharp::DDS::DataReader::Ge
 
 OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DataReader::GetTopicDescription() {		
 	::DDS::TopicDescription_ptr desc = impl_entity->get_topicdescription();
-	if (desc != NULL) {
-		return gcnew OpenDDSharp::DDS::TopicDescription(desc);
-	}
-	else {
-		return nullptr;
-	}
+	
+	return gcnew OpenDDSharp::DDS::TopicDescription(desc);
 }
 
 OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DataReader::GetSubscriber() {
 	::DDS::Subscriber_ptr subscriber = impl_entity->get_subscriber();
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(subscriber);
-	if (entity != nullptr) {
-		return static_cast<OpenDDSharp::DDS::Subscriber^>(entity);
-	}
-	else {
-		return nullptr;
-	}
+	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(subscriber);	
+	return static_cast<OpenDDSharp::DDS::Subscriber^>(entity);	
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::GetSampleRejectedStatus(OpenDDSharp::DDS::SampleRejectedStatus% status) {
