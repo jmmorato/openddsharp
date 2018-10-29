@@ -82,6 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublisherListenerTest.cs" />
     <Compile Include="PublisherTest.cs" />
+    <Compile Include="QueryConditionTest.cs" />
     <Compile Include="SubscriberListenerTest.cs" />
     <Compile Include="SubscriberTest.cs" />
     <Compile Include="TestHelper.cs" />
