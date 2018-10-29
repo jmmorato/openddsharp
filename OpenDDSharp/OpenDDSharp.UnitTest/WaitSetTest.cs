@@ -17,13 +17,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System.Threading;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
 using OpenDDSharp.OpenDDS.DCPS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace OpenDDSharp.UnitTest
 {
@@ -116,12 +115,22 @@ namespace OpenDDSharp.UnitTest
             WaitSet waitSet = new WaitSet();
             GuardCondition guardCondition = new GuardCondition();
             ReturnCode result = waitSet.AttachCondition(guardCondition);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            List<Condition> conditions = new List<Condition>();
+            Assert.AreEqual(ReturnCode.Ok, result);            
 
             // Test with null conditions
             result = waitSet.Wait(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            // Attach again should return OK but not actually add another condition to the WaitSet
+            result = waitSet.AttachCondition(guardCondition);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            List<Condition> conditions = new List<Condition>();
+            result = waitSet.GetConditions(conditions);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(conditions);
+            Assert.AreEqual(1, conditions.Count);
+            Assert.AreEqual(guardCondition, conditions[0]);
 
             // Test thread wait infinite
             int count = 0;
@@ -155,7 +164,7 @@ namespace OpenDDSharp.UnitTest
             thread.Join();
             Assert.AreEqual(1, count);
 
-            // Test exit befor timeout
+            // Test exit before timeout
             count = 0;
             thread = new Thread(() =>
             {
@@ -164,6 +173,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsNotNull(conditions);
                 Assert.AreEqual(1, conditions.Count);
                 Assert.AreEqual(guardCondition, conditions[0]);
+                Assert.IsTrue(guardCondition.TriggerValue);
                 guardCondition.TriggerValue = false;
                 count++;
             });
@@ -189,6 +199,17 @@ namespace OpenDDSharp.UnitTest
             // Test with correct parameter
             result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Attach again should return OK but not actually add another condition to the WaitSet
+            result = waitSet.AttachCondition(guardCondition);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            List<Condition> conditions = new List<Condition>();
+            result = waitSet.GetConditions(conditions);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(conditions);
+            Assert.AreEqual(1, conditions.Count);
+            Assert.AreEqual(guardCondition, conditions[0]);
         }
 
         [TestMethod]
@@ -208,6 +229,10 @@ namespace OpenDDSharp.UnitTest
             // Test with correct parameter
             result = waitSet.DetachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test again the same condition
+            result = waitSet.DetachCondition(guardCondition);
+            Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
 
             // Detach a not attached condition
             GuardCondition notAttachedCondition = new GuardCondition();
