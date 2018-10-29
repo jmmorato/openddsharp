@@ -49,15 +49,14 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::QueryCondition::GetQueryParameter
 	::DDS::StringSeq seq;
 	::DDS::ReturnCode_t ret = impl_entity->get_query_parameters(seq);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		System::UInt32 i = 0;
-		while (i < seq.length()) {
-			const char * s = seq[i];
-			queryParameters->Add(context.marshal_as<System::String^>(s));
-			i++;
-		}
+    // get_query_parameters always returns OK, don't need to check it
+	System::UInt32 i = 0;
+	while (i < seq.length()) {
+		const char * s = seq[i];
+		queryParameters->Add(context.marshal_as<System::String^>(s));
+		i++;
 	}
-
+	
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 }
 
