@@ -28,6 +28,8 @@ OpenDDSharp::DDS::WaitSet::WaitSet(::DDS::WaitSet_ptr waitSet) {
 
 OpenDDSharp::DDS::WaitSet::!WaitSet() {
     impl_entity = NULL;
+    conditions->Clear();
+    conditions = nullptr;
 }
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::Wait(ICollection<Condition^>^ activeConditions) {
@@ -73,8 +75,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::AttachCondition(Conditio
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	conditions->Add(cond);
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->attach_condition(cond->impl_entity);
+    ::DDS::ReturnCode_t ret = impl_entity->attach_condition(cond->impl_entity);
+    if (ret == ::DDS::RETCODE_OK && !conditions->Contains(cond)) {
+        conditions->Add(cond);
+    }
+	
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::DetachCondition(Condition^ cond) {
@@ -82,8 +88,11 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::DetachCondition(Conditio
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	conditions->Remove(cond);
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->detach_condition(cond->impl_entity);
+    ::DDS::ReturnCode_t ret = impl_entity->detach_condition(cond->impl_entity);
+    if (ret == ::DDS::RETCODE_OK) {
+        conditions->Remove(cond);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::WaitSet::GetConditions(ICollection<Condition^>^ attachedConditions) {
