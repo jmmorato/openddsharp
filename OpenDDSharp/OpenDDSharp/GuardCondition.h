@@ -65,26 +65,6 @@ namespace OpenDDSharp {
 			/// </summary>
 			GuardCondition();
 
-		public:
-			/// <summary>
-			/// Attach the <see cref="GuardCondition" /> to a <see cref="WaitSet" />
-			/// </summary>
-			/// <param name="ws">The <see cref="WaitSet" /> to be attached.</param>
-			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-			OpenDDSharp::DDS::ReturnCode AttachToWaitSet(OpenDDSharp::DDS::WaitSet^ ws);
-
-			/// <summary>
-			/// Detach the <see cref="GuardCondition" /> from a <see cref="WaitSet" />
-			/// </summary>
-			/// <param name="ws">The <see cref="WaitSet" /> to be detached from.</param>
-			/// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-			OpenDDSharp::DDS::ReturnCode DetachFromWaitSet(OpenDDSharp::DDS::WaitSet^ ws);
-
-			/// <summary>
-			/// Send a signal to all the attached <see cref="WaitSet" />s. 
-			/// </summary>
-			void SignalAll();
-
 		};
 	};
 };
