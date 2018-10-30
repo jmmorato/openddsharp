@@ -462,7 +462,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0x5, qos.UserData.Value.First());
             Assert.AreEqual(5, qos.TransportPriority.Value);
             Assert.IsTrue(qos.WriterDataLifecycle.AutodisposeUnregisteredInstances);
-        }
+        }        
         #endregion
 
         #region DataReader QoS
@@ -619,6 +619,106 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(3, qos.TimeBasedFilter.MinimumSeparation.Seconds);
             Assert.AreEqual((uint)3, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.AreEqual(0x5, qos.UserData.Value.First());
+        }
+        #endregion
+
+        #region Builtin Data
+        public static void TestNonDefaultSubscriptionData(SubscriptionBuiltinTopicData data)
+        {
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(data.Deadline);
+            Assert.IsNotNull(data.DestinationOrder);
+            Assert.IsNotNull(data.Durability);
+            Assert.IsNotNull(data.LatencyBudget);
+            Assert.IsNotNull(data.Liveliness);
+            Assert.IsNotNull(data.Ownership);
+            Assert.IsNotNull(data.Reliability);
+            Assert.IsNotNull(data.TimeBasedFilter);
+            Assert.IsNotNull(data.UserData);
+            Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.ParticipantKey);
+            Assert.IsNotNull(data.GroupData);
+            Assert.IsNotNull(data.Partition);
+            Assert.IsNotNull(data.Presentation);
+            Assert.IsNotNull(data.TopicData);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(data.TopicName));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(data.TypeName));
+
+            Assert.IsNotNull(data.Deadline.Period);
+            Assert.AreEqual(5, data.Deadline.Period.Seconds);
+            Assert.AreEqual(Duration.ZeroNanoseconds, data.Deadline.Period.NanoSeconds);
+            Assert.AreEqual(DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos, data.DestinationOrder.Kind);
+            Assert.AreEqual(DurabilityQosPolicyKind.TransientLocalDurabilityQos, data.Durability.Kind);
+            Assert.IsNotNull(data.LatencyBudget.Duration);
+            Assert.AreEqual(5, data.LatencyBudget.Duration.Seconds);
+            Assert.AreEqual((uint)5, data.LatencyBudget.Duration.NanoSeconds);
+            Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, data.Liveliness.Kind);
+            Assert.IsNotNull(data.Liveliness.LeaseDuration);
+            Assert.AreEqual(5, data.Liveliness.LeaseDuration.Seconds);
+            Assert.AreEqual((uint)5, data.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, data.Ownership.Kind);
+            Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, data.Reliability.Kind);
+            Assert.IsNotNull(data.Reliability.MaxBlockingTime);
+            Assert.AreEqual(5, data.Reliability.MaxBlockingTime.Seconds);
+            Assert.AreEqual((uint)5, data.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(1, data.UserData.Value.Count());
+            Assert.IsNotNull(data.TimeBasedFilter.MinimumSeparation);
+            Assert.AreEqual(3, data.TimeBasedFilter.MinimumSeparation.Seconds);
+            Assert.AreEqual((uint)3, data.TimeBasedFilter.MinimumSeparation.NanoSeconds);
+            Assert.AreEqual(0x5, data.UserData.Value.First());
+        }
+
+        public static void TestNonDefaultPublicationData(PublicationBuiltinTopicData data)
+        {
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(data.Deadline);
+            Assert.IsNotNull(data.DestinationOrder);
+            Assert.IsNotNull(data.Durability);
+            Assert.IsNotNull(data.DurabilityService);
+            Assert.IsNotNull(data.LatencyBudget);
+            Assert.IsNotNull(data.Lifespan);
+            Assert.IsNotNull(data.Liveliness);
+            Assert.IsNotNull(data.Ownership);
+            Assert.IsNotNull(data.OwnershipStrength);
+            Assert.IsNotNull(data.Reliability);
+            Assert.IsNotNull(data.UserData);
+            Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.ParticipantKey);
+            Assert.IsNotNull(data.GroupData);
+            Assert.IsNotNull(data.Partition);
+            Assert.IsNotNull(data.Presentation);
+            Assert.IsNotNull(data.TopicData);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(data.TopicName));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(data.TypeName));
+
+            Assert.IsNotNull(data.Deadline.Period);
+            Assert.AreEqual(5, data.Deadline.Period.Seconds);
+            Assert.AreEqual(Duration.ZeroNanoseconds, data.Deadline.Period.NanoSeconds);
+            Assert.AreEqual(DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos, data.DestinationOrder.Kind);
+            Assert.AreEqual(DurabilityQosPolicyKind.TransientLocalDurabilityQos, data.Durability.Kind);
+            Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, data.DurabilityService.HistoryKind);
+            Assert.AreEqual(5, data.DurabilityService.HistoryDepth);
+            Assert.AreEqual(5, data.DurabilityService.MaxInstances);
+            Assert.AreEqual(5, data.DurabilityService.MaxSamples);
+            Assert.AreEqual(5, data.DurabilityService.MaxSamplesPerInstance);
+            Assert.IsNotNull(data.LatencyBudget.Duration);
+            Assert.AreEqual(5, data.LatencyBudget.Duration.Seconds);
+            Assert.AreEqual((uint)5, data.LatencyBudget.Duration.NanoSeconds);
+            Assert.IsNotNull(data.Lifespan.Duration);
+            Assert.AreEqual(5, data.Lifespan.Duration.Seconds);
+            Assert.AreEqual((uint)5, data.Lifespan.Duration.NanoSeconds);
+            Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, data.Liveliness.Kind);
+            Assert.IsNotNull(data.Liveliness.LeaseDuration);
+            Assert.AreEqual(5, data.Liveliness.LeaseDuration.Seconds);
+            Assert.AreEqual((uint)5, data.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, data.Ownership.Kind);
+            Assert.AreEqual(5, data.OwnershipStrength.Value);
+            Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, data.Reliability.Kind);
+            Assert.IsNotNull(data.Reliability.MaxBlockingTime);
+            Assert.AreEqual(5, data.Reliability.MaxBlockingTime.Seconds);
+            Assert.AreEqual((uint)5, data.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(1, data.UserData.Value.Count());
+            Assert.AreEqual(0x5, data.UserData.Value.First());
         }
         #endregion
 

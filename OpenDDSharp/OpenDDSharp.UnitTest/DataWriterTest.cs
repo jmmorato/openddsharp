@@ -529,7 +529,9 @@ namespace OpenDDSharp.UnitTest
         public void TestGetMatchedSubscriptionData()
         {
             // Initialize entities
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataWriter writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             // DCPSInfoRepo-based discovery generates Built-In Topic data once (inside the
@@ -557,9 +559,8 @@ namespace OpenDDSharp.UnitTest
             Subscriber subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.UserData.Value = new List<byte> { 0x42 };
-            DataReader reader = subscriber.CreateDataReader(otherTopic, qos);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();            
+            DataReader reader = subscriber.CreateDataReader(otherTopic, drQos);
             Assert.IsNotNull(reader);
 
             // Wait for subscriptions
@@ -575,13 +576,14 @@ namespace OpenDDSharp.UnitTest
             // Get the matched subscription data
             SubscriptionBuiltinTopicData data = new SubscriptionBuiltinTopicData();
             result = writer.GetMatchedSubscriptionData(list.First(), ref data);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(data.UserData);
-            Assert.IsNotNull(data.UserData.Value);
-            Assert.AreEqual(1, data.UserData.Value.Count());
-            Assert.AreEqual(0x42, data.UserData.Value.First());
-            Assert.IsNotNull(data.Key);
-            Assert.IsNotNull(data.Key.Value);
+            TestHelper.TestNonDefaultSubscriptionData(data);
+            //Assert.AreEqual(ReturnCode.Ok, result);
+            //Assert.IsNotNull(data.UserData);
+            //Assert.IsNotNull(data.UserData.Value);
+            //Assert.AreEqual(1, data.UserData.Value.Count());
+            //Assert.AreEqual(0x42, data.UserData.Value.First());
+            //Assert.IsNotNull(data.Key);
+            //Assert.IsNotNull(data.Key.Value);
 
             // Destroy the other participant
             result = otherParticipant.DeleteContainedEntities();

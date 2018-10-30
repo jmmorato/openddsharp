@@ -839,7 +839,9 @@ namespace OpenDDSharp.UnitTest
         public void TestGetMatchedPublicationData()
         {
             // Initialize entities
-            DataReader reader = _subscriber.CreateDataReader(_topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+            DataReader reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
             // DCPSInfoRepo-based discovery generates Built-In Topic data once (inside the
@@ -867,12 +869,11 @@ namespace OpenDDSharp.UnitTest
             Publisher publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos qos = new DataWriterQos();
-            qos.UserData.Value = new List<byte> { 0x42 };
-            DataWriter writer = publisher.CreateDataWriter(otherTopic, qos);
-            Assert.IsNotNull(reader);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();            
+            DataWriter writer = publisher.CreateDataWriter(otherTopic, dwQos);
+            Assert.IsNotNull(writer);
 
-            // Wait for subscriptions
+            // Wait for publications
             bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
@@ -882,16 +883,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
 
-            // Get the matched subscription data
+            // Get the matched publication data
             PublicationBuiltinTopicData data = new PublicationBuiltinTopicData();
             result = reader.GetMatchedPublicationData(list.First(), ref data);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(data.UserData);
-            Assert.IsNotNull(data.UserData.Value);
-            Assert.AreEqual(1, data.UserData.Value.Count());
-            Assert.AreEqual(0x42, data.UserData.Value.First());
-            Assert.IsNotNull(data.Key);
-            Assert.IsNotNull(data.Key.Value);
+            TestHelper.TestNonDefaultPublicationData(data);
 
             // Destroy the other participant
             result = otherParticipant.DeleteContainedEntities();
