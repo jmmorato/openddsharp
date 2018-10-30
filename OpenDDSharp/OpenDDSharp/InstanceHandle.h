@@ -70,7 +70,7 @@ namespace OpenDDSharp {
             /// <param name="y">The right value for the comparison.</param>
             /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
             static bool operator ==(InstanceHandle x, InstanceHandle y) {
-                return x.m_value == y.m_value;
+                return x.Equals(y);
             }
 
             /// <summary>
@@ -80,7 +80,7 @@ namespace OpenDDSharp {
             /// <param name="y">The right value for the comparison.</param>
             /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
             static bool operator !=(InstanceHandle x, InstanceHandle y) {
-                return x.m_value != y.m_value;
+                return !x.Equals(y);
             }
 
             /// <summary>

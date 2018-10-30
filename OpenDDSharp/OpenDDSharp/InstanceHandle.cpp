@@ -24,11 +24,23 @@ OpenDDSharp::DDS::InstanceHandle::InstanceHandle(System::Int32 value) {
 };
 
 bool OpenDDSharp::DDS::InstanceHandle::Equals(System::Object^ other) {
-    if (other == nullptr || GetType() != other->GetType())
+    if (other == nullptr) {        
         return false;
+    }
 
-    InstanceHandle i = (InstanceHandle)other;
-    return (m_value == i.m_value);
+    if (GetType() != other->GetType() && other->GetType() != System::Int32::typeid) {
+        return false;
+    }
+
+    InstanceHandle aux = InstanceHandle::HandleNil;
+    if (other->GetType() == System::Int32::typeid) {        
+        aux = (System::Int32)other;
+    }
+    else {
+        aux = (InstanceHandle)other;
+    }
+    
+    return (m_value == aux.m_value);
 }
 
 int OpenDDSharp::DDS::InstanceHandle::GetHashCode()
