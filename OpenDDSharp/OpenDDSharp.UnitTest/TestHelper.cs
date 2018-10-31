@@ -711,7 +711,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.Liveliness.LeaseDuration);
             Assert.AreEqual(5, data.Liveliness.LeaseDuration.Seconds);
             Assert.AreEqual((uint)5, data.Liveliness.LeaseDuration.NanoSeconds);
-            Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, data.Ownership.Kind);
+            Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, data.Ownership.Kind);
             Assert.AreEqual(5, data.OwnershipStrength.Value);
             Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, data.Reliability.Kind);
             Assert.IsNotNull(data.Reliability.MaxBlockingTime);

@@ -841,6 +841,12 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
             drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+
+            // OPENDDS ISSUE: Cannot use ExclusiveOwnership for the test because when calling delete_datareader
+            // the BitPubListenerImpl::on_data_available take_next_sample method enter in a infinite loop if we already called
+            // the GetMatchedPublicationData. It tries to take a not_read_sample but it doesn't exists because it is already marked
+            // as read in the GetMatchedPublicationData call.
+            drQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             DataReader reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
@@ -869,7 +875,8 @@ namespace OpenDDSharp.UnitTest
             Publisher publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();            
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             DataWriter writer = publisher.CreateDataWriter(otherTopic, dwQos);
             Assert.IsNotNull(writer);
 
