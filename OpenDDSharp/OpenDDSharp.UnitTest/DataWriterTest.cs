@@ -559,7 +559,7 @@ namespace OpenDDSharp.UnitTest
             Subscriber subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();            
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
             DataReader reader = subscriber.CreateDataReader(otherTopic, drQos);
             Assert.IsNotNull(reader);
 
@@ -577,13 +577,6 @@ namespace OpenDDSharp.UnitTest
             SubscriptionBuiltinTopicData data = new SubscriptionBuiltinTopicData();
             result = writer.GetMatchedSubscriptionData(list.First(), ref data);
             TestHelper.TestNonDefaultSubscriptionData(data);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-            //Assert.IsNotNull(data.UserData);
-            //Assert.IsNotNull(data.UserData.Value);
-            //Assert.AreEqual(1, data.UserData.Value.Count());
-            //Assert.AreEqual(0x42, data.UserData.Value.First());
-            //Assert.IsNotNull(data.Key);
-            //Assert.IsNotNull(data.Key.Value);
 
             // Destroy the other participant
             result = otherParticipant.DeleteContainedEntities();
