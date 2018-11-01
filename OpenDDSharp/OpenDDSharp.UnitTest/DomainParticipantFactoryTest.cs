@@ -17,12 +17,13 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace OpenDDSharp.UnitTest
 {

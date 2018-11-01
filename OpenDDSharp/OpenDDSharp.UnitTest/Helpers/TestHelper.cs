@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenDDSharp.UnitTest
+namespace OpenDDSharp.UnitTest.Helpers
 {
     internal static class TestHelper
     {

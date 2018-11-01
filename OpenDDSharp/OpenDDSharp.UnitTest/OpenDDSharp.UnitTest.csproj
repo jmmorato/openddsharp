@@ -87,7 +87,7 @@
     <Compile Include="QueryConditionTest.cs" />
     <Compile Include="SubscriberListenerTest.cs" />
     <Compile Include="SubscriberTest.cs" />
-    <Compile Include="TestHelper.cs" />
+    <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="TopicListenerTest.cs" />
     <Compile Include="TopicTest.cs" />
     <Compile Include="WaitSetTest.cs" />
