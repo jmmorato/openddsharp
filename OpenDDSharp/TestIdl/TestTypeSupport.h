@@ -26,10 +26,14 @@ SUPPRESS_LNK4248_CORBA
 namespace OpenDDSharp {
 namespace Test {
 
-    enum PrimitiveEnum {
+    public enum class PrimitiveEnum {
         ENUM1 = ::Test::ENUM1,
         ENUM2 = ::Test::ENUM2,
         ENUM3 = ::Test::ENUM3
+    };
+
+    public enum class SupportTestKind {
+        InconsistentTopicTest = ::Test::InconsistentTopicTest
     };
 
     public ref class BasicTestStruct {

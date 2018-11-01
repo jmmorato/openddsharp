@@ -5,6 +5,10 @@ module Test {
 		ENUM3
 	};
 
+    enum SupportTestKind {
+        InconsistentTopicTest
+    };
+
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
 		long Id;
