@@ -31,6 +31,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDDSharp.IdlTemplates", "OpenDDSharp.IdlTemplates\OpenDDSharp.IdlTemplates.csproj", "{D7542094-F2B7-47F7-9A31-3CAAD97040EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDDSharp.UnitTest", "OpenDDSharp.UnitTest\OpenDDSharp.UnitTest.csproj", "{111A3811-D148-494C-9BFF-509E0B85144C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0} = {FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{DD4809A9-6F47-4686-8433-D8A10F3EB9E8}"
 EndProject
@@ -38,6 +41,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "OpenDDSharp.Doc", "OpenDDSh
 	ProjectSection(ProjectDependencies) = postProject
 		{1AADF375-9149-4000-82AB-AF4CD15144DA} = {1AADF375-9149-4000-82AB-AF4CD15144DA}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSupportProcess", "TestSupportProcess\TestSupportProcess.csproj", "{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,6 +175,16 @@ Global
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x64.ActiveCfg = Release|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x86.ActiveCfg = Release|Any CPU
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57}.Release|x86.Build.0 = Release|Any CPU
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Debug|x64.ActiveCfg = Debug|x64
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Debug|x64.Build.0 = Debug|x64
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Debug|x86.ActiveCfg = Debug|x86
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Debug|x86.Build.0 = Debug|x86
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Release|Any CPU.ActiveCfg = Release|x86
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Release|x64.ActiveCfg = Release|x64
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Release|x64.Build.0 = Release|x64
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Release|x86.ActiveCfg = Release|x86
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +197,7 @@ Global
 		{D7542094-F2B7-47F7-9A31-3CAAD97040EB} = {FC22C429-D8DB-453C-BFCB-C739F084B1A0}
 		{111A3811-D148-494C-9BFF-509E0B85144C} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
 		{67CCAF94-1A58-402A-AC85-A8EEC6ED6A57} = {DD4809A9-6F47-4686-8433-D8A10F3EB9E8}
+		{FAD8CDC7-2E8A-4708-B8AE-9C1E1C3D15F0} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F982C01-616F-4A76-9E24-30312AAD0A53}
