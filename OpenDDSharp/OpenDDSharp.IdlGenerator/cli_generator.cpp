@@ -161,7 +161,7 @@ bool cli_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AST_C
 
 bool cli_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std::vector<AST_EnumVal*>& contents, const char* repoid) {
 
-	be_global->header_ << "\n    enum " << name->last_component()->get_string() << " {\n";
+	be_global->header_ << "\n    public enum class " << name->last_component()->get_string() << " {\n";
 
 	for (unsigned int i = 0; i < contents.size(); i++) {
 		AST_EnumVal* val = contents[i];
