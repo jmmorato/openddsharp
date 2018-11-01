@@ -17,9 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System.Diagnostics;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
 using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -105,58 +107,36 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnInconsistentTopic()
         {
-            // TODO: Cannot be tested with only one process because it shares the discovery between participants
-            // and the creation of the otherTopic fails before the inconsistent_topic is checked.
-            // Try to spawn a support process for the test
+            // Attach to the event
+            int count = 0;
+            _listener.InconsistentTopic += (t, s) =>
+            {
+                Assert.AreEqual(_topic, t);
+                Assert.AreEqual(1, s.TotalCount);
+                Assert.AreEqual(1, s.TotalCountChange);
+                count++;
+            };
 
-            #region Commented code
-            //// Attach to the event
-            //int count = 0;
-            //_listener.InconsistentTopic += (t, s) =>
-            //{
-            //    Assert.AreEqual(_topic, t);
-            //    Assert.AreEqual(1, s.TotalCount);
-            //    Assert.AreEqual(1, s.TotalCountChange);
-            //    count++;
-            //};
+            // Enable entities
+            ReturnCode result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-            //// Enable entities
-            //ReturnCode result = _writer.Enable();
-            //Assert.AreEqual(ReturnCode.Ok, result);
+            SupportProcessHelper supportProcess = new SupportProcessHelper();
+            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
-            //// Create a inconsistent topic
-            //DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-            //DomainParticipant otherParticipant = dpf.CreateParticipant(DOMAIN_ID);
-            //Assert.IsNotNull(otherParticipant);
+            // Wait for discovery
+            System.Threading.Thread.Sleep(5000);            
 
-            //Subscriber subscriber = otherParticipant.CreateSubscriber();
-            //Assert.IsNotNull(subscriber);
+            // Kill the process
+            supportProcess.KillSupportProcess(process);
 
-            ////AthleteTypeSupport support = new AthleteTypeSupport();            
-            //TestStructTypeSupport tSupport = new TestStructTypeSupport();
-            //result = tSupport.RegisterType(otherParticipant, tSupport.GetTypeName());
-            //Assert.AreEqual(ReturnCode.Ok, result);
+            System.Threading.Thread.Sleep(100);
 
-            //Topic otherTopic = otherParticipant.CreateTopic(nameof(TestOnInconsistentTopic), "OtherName");
-            //Assert.IsNotNull(otherTopic);
+            Assert.AreEqual(1, count);
 
-            //DataReader reader = subscriber.CreateDataReader(otherTopic);
-            //Assert.IsNotNull(reader);
-
-            //// Wait for discovery
-            //System.Threading.Thread.Sleep(500);
-            //Assert.AreEqual(1, count);
-
-            //// Remove listener to avoid extra messages
-            //result = _topic.SetListener(null);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-
-            //result = otherParticipant.DeleteContainedEntities();
-            //Assert.AreEqual(ReturnCode.Ok, result);
-
-            //result = _dpf.DeleteParticipant(otherParticipant);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-            #endregion
+            // Remove listener to avoid extra messages
+            result = _topic.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }
