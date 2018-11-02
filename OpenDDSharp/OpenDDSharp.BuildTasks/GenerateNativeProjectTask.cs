@@ -60,7 +60,6 @@ namespace OpenDDSharp.BuildTasks
         #endregion
 
         #region Methods
-        [STAThread]
         public override bool Execute()
         {
             Log.LogMessage(MessageImportance.High, "Generating native IDL library...");            
@@ -130,7 +129,11 @@ namespace OpenDDSharp.BuildTasks
 
                     success = true;
                 }
+#if DEBUG
                 catch (Exception ex)
+#else
+                catch
+#endif
                 {
                     success = false;
                     retry--;
@@ -159,7 +162,11 @@ namespace OpenDDSharp.BuildTasks
                     _solution = (Solution4)_dte.Solution;
                     success = true;
                 }
+#if DEBUG
                 catch (Exception ex)
+#else
+                catch
+#endif
                 {
                     success = false;
                     retry--;
@@ -182,7 +189,8 @@ namespace OpenDDSharp.BuildTasks
 
         private void GenerateProjectFile()
         {
-            AddProjectTemplate();            
+            AddProjectTemplate();
+            GetCreatedProject();
 
             int retry = 100;
             bool success = false;
@@ -234,7 +242,11 @@ namespace OpenDDSharp.BuildTasks
                     doc.Save(_project.FullName);
                     success = true;
                 }
-                catch (COMException ex)
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
                 {
                     success = false;
                     retry--;
@@ -264,15 +276,52 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    if (_solution.Projects.Count == 0)
+                    _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
+
+                    success = true;
+                }
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
                     {
-                        _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }            
+        }
+
+        private void GetCreatedProject()
+        {
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
                     _project = _solution.Projects.Item(1);
 
                     success = true;
                 }
+#if DEBUG
                 catch (Exception ex)
+#else
+                catch
+#endif
                 {
                     success = false;
                     retry--;
@@ -293,7 +342,9 @@ namespace OpenDDSharp.BuildTasks
             }
 
             if (_project == null)
+            {
                 throw new ApplicationException("The project couldn't be created.");
+            }
         }
 
         private void CopyIdlFiles()
@@ -338,7 +389,11 @@ namespace OpenDDSharp.BuildTasks
                     _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
                     success = true;
                 }
-                catch (COMException ex)
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
                 {
                     success = false;
                     retry--;
