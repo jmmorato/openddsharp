@@ -23,9 +23,13 @@ OpenDDSharp::OpenDDS::DCPS::TransportInst::TransportInst(::OpenDDS::DCPS::Transp
     impl_entity = native;
 };
 
+System::String^ OpenDDSharp::OpenDDS::DCPS::TransportInst::TransportType::get() {
+    msclr::interop::marshal_context context;
+    return context.marshal_as<System::String^>(impl_entity->transport_type_.c_str());   
+};
+
 System::String^ OpenDDSharp::OpenDDS::DCPS::TransportInst::Name::get() {
     msclr::interop::marshal_context context;
-
     return context.marshal_as<System::String^>(impl_entity->name().c_str());
 };
 
@@ -51,6 +55,14 @@ System::UInt32 OpenDDSharp::OpenDDS::DCPS::TransportInst::MaxPacketSize::get() {
 
 void OpenDDSharp::OpenDDS::DCPS::TransportInst::MaxPacketSize::set(System::UInt32 value) {
     impl_entity->max_packet_size_ = value;
+};
+
+size_t OpenDDSharp::OpenDDS::DCPS::TransportInst::MaxSamplesPerPacket::get() {
+    return impl_entity->max_samples_per_packet_;
+};
+
+void OpenDDSharp::OpenDDS::DCPS::TransportInst::MaxSamplesPerPacket::set(size_t value) {
+    impl_entity->max_samples_per_packet_ = value;
 };
 
 System::UInt32 OpenDDSharp::OpenDDS::DCPS::TransportInst::OptimumPacketSize::get() {

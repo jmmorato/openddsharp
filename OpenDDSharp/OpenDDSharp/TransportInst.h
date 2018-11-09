@@ -50,6 +50,14 @@ namespace OpenDDSharp {
 
             public:
                 /// <summary>
+                /// Type of the transport; tcp, udp, multicast,
+                /// shmem, and rtps_udp are included with OpenDDSharp.
+                /// </summary>
+                property System::String^ TransportType {
+                    System::String^ get();
+                };
+
+                /// <summary>
                 /// Gets the configuration's name.
                 /// </summary>
                 property System::String^ Name {
@@ -58,24 +66,35 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// Number of pre-created link (list) objects per pool for the
-                /// "send queue" of each DataLink.
+                /// "send queue" of each DataLink. The default value is 10.
                 /// </summary>
+                /// <remarks>
+                /// When backpressure is detected, messages to be
+                /// sent are queued.When the message queue must
+                /// grow, it grows by this number.                 
+                /// </remarks>
                 property size_t QueueMessagesPerPool {
                     size_t get();
                     void set(size_t value);
                 };
 
                 /// <summary>
-                /// Initial number of pre-allocated pools of link (list) objects
-                /// for the "send queue" of each DataLink.
+                /// The initial number of pools for the backpressure
+                /// queue. The default value is 5.
                 /// </summary>
+                /// <remarks>
+                /// The default settings of the two backpressure queue values
+                /// preallocate space for 50 messages(5 pools of 10 messages).                 
+                /// </remarks>
                 property size_t QueueInitialPools {
                     size_t get();
                     void set(size_t value);
                 };
 
                 /// <summary>
-                /// Max size (in bytes) of a packet (packet header + sample(s)).
+                /// The maximum size of a transport packet, including
+                /// its transport header, sample header, and sample data.
+                /// The default value is 2147481599.
                 /// </summary>
                 property System::UInt32 MaxPacketSize {
                     System::UInt32 get();
@@ -83,17 +102,40 @@ namespace OpenDDSharp {
                 };
 
                 /// <summary>
-                /// Optimum size (in bytes) of a packet (packet header + sample(s)).
+                /// Maximum number of samples in a transport packet.
+                /// The default value is 10.
                 /// </summary>
+                property size_t MaxSamplesPerPacket {
+                    size_t get();
+                    void set(size_t value);
+                };
+
+                /// <summary>
+                /// Optimum size (in bytes) of a packet (packet header + sample(s)).
+                /// The default value is 4096.
+                /// </summary>
+                /// <remarks>
+                /// Transport packets greater than this size will be sent over the wire even if there are still queued
+                /// samples to be sent. This value may impact performance depending on your network
+                /// confguration and application nature.
+                /// </remarks>
                 property System::UInt32 OptimumPacketSize {
                     System::UInt32 get();
                     void set(System::UInt32 value);
                 };
 
                 /// <summary>
-                /// Flag for whether a new thread is needed for connection to
-                /// send without backpressure.
+                /// Enable or disable the thread per connection send
+                /// strategy. By default, this option is disabled (false).
                 /// </summary>
+                /// <remarks>
+                /// Enabling the ThreadPerConnection option will increase performance when writing to
+                /// multiple data readers on diferent process as long as the overhead of thread context
+                /// switching does not outweigh the benefts of parallel writes.This balance of network
+                /// performance to context switching overhead is best determined by experimenting. If a
+                /// machine has multiple network cards, it may improve performance by creating a transport
+                /// for each network card.
+                /// </remarks>
                 property System::Boolean ThreadPerConnection {
                     System::Boolean get();
                     void set(System::Boolean value);
@@ -103,6 +145,11 @@ namespace OpenDDSharp {
                 /// Delay in milliseconds that the datalink should be released after all
                 /// associations are removed. The default value is 10 seconds.
                 /// </summary>
+                /// <remarks>
+                /// The DatalinkReleaseDelay is the delay for datalink release after no associations.
+                /// Increasing this value may reduce the overhead of re-establishment when reader/writer
+                /// associations are added and removed frequently.
+                /// </remarks>
                 property long DatalinkReleaseDelay {
                     long get();
                     void set(long value);
