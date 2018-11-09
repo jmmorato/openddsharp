@@ -126,7 +126,7 @@ namespace OpenDDSharp.UnitTest
             Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
             // Wait for discovery
-            System.Threading.Thread.Sleep(5000);            
+            System.Threading.Thread.Sleep(10000);            
 
             // Kill the process
             supportProcess.KillSupportProcess(process);
