@@ -21,16 +21,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #pragma unmanaged 
 #include <dds/DCPS/Service_Participant.h>
-#include <dds/DCPS/Discovery.h>
-#include <dds/DCPS/RTPS/RtpsDiscovery.h>
-#include "dds/DCPS/Message_Block_Ptr.h"
-#include <dds/DCPS/transport/framework/TransportRegistry.h>
-#include "dds/DCPS/StaticIncludes.h"
-#include <dds/DCPS/transport/rtps_udp/RtpsUdp.h>
-#include <dds/DCPS/transport/rtps_udp/RtpsUdpInst.h>
-#include <dds/DCPS/transport/rtps_udp/RtpsUdpInst_rch.h>
-
+#include <dds/DCPS/RcHandle_T.h>
 #pragma managed
+
+#include "Discovery.h"
+#include "RtpsDiscovery.h"
 
 #pragma make_public(DDS::SampleInfo)
 
@@ -54,9 +49,17 @@ namespace OpenDDSharp {
 
 			public:
 				/// <summary>
-				/// Gets the singleton instance
+				/// Gets the singleton instance.
 				/// </summary>
 				static property ParticipantService^ Instance { ParticipantService^ get(); }
+
+                /// <summary>
+                /// Gets or sets the default discovery.
+                /// </summary>
+                property System::String^ DefaultDiscovery {
+                    System::String^ get();
+                    void set(System::String^ value);
+                }
 
 			private:
 				ParticipantService();
@@ -74,7 +77,12 @@ namespace OpenDDSharp {
 				/// </summary>
 				/// <param name="argv">The array of parameters to be consumed (i.e. -DCPS* and -ORB* options).</param>
 				/// <returns> The <see cref="OpenDDSharp::DDS::DomainParticipantFactory" />.</returns>
-				OpenDDSharp::DDS::DomainParticipantFactory^ GetDomainParticipantFactory(array<System::String^>^ argv);
+				OpenDDSharp::DDS::DomainParticipantFactory^ GetDomainParticipantFactory(...array<System::String^>^ argv);
+
+                /// <summary>
+                /// Add a new <see cref="::OpenDDSharp::OpenDDS::DCPS::Discovery" />
+                /// </summary>
+                void AddDiscovery(::OpenDDSharp::OpenDDS::DCPS::Discovery^ discovery);
 
 				/// <summary>
 				/// Stop being a participant in the service.

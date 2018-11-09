@@ -63,33 +63,16 @@ OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory:
 	}
 
 	::DDS::DomainParticipant_ptr participant = this->impl_entity->create_participant(domainId, dpQos, lst, (System::UInt32)statusMask);
+    if (participant == NULL) {
+        return nullptr;
+    }
 
-	if (participant != NULL) {
-		char id_string[32];
-		sprintf(id_string, "%d", ++OpenDDSharp::OpenDDS::DCPS::ParticipantService::Instance->counter);
-		char config_name[64] = "openddsharp_rtps_interop_";
-		char inst_name[64] = "internal_openddsharp_rtps_transport_";
-		strcat(config_name, id_string);
-		strcat(inst_name, id_string);
+    OpenDDSharp::DDS::DomainParticipant^ p = gcnew OpenDDSharp::DDS::DomainParticipant(participant);
+    p->m_listener = listener;
 
-        ::OpenDDS::DCPS::TransportRegistry* transportRegistry = ::OpenDDS::DCPS::TransportRegistry::instance();
-		::OpenDDS::DCPS::TransportConfig_rch config = transportRegistry->create_config(config_name);
-		::OpenDDS::DCPS::TransportInst_rch inst = transportRegistry->create_inst(inst_name, "rtps_udp");
-		::OpenDDS::DCPS::RtpsUdpInst_rch rui = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::RtpsUdpInst>(inst);
-		config->instances_.push_back(inst);		
+    EntityManager::get_instance()->add(participant, p);
 
-        transportRegistry->bind_config(config_name, participant);
-
-		OpenDDSharp::DDS::DomainParticipant^ p = gcnew OpenDDSharp::DDS::DomainParticipant(participant);
-		p->m_listener = listener;
-
-		EntityManager::get_instance()->add(participant, p);
-
-		return p;
-	}
-	else {
-		return nullptr;
-	}
+    return p;
 };
 
 OpenDDSharp::DDS::DomainParticipant^ OpenDDSharp::DDS::DomainParticipantFactory::LookupParticipant(System::Int32 domainId) {
