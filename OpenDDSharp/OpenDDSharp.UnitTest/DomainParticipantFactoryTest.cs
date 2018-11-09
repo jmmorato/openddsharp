@@ -250,6 +250,7 @@ namespace OpenDDSharp.UnitTest
         {
             DomainParticipant participant = _dpf.CreateParticipant(42);
             Assert.IsNotNull(participant);
+            participant.BindRtpsUdpTransportConfig();
 
             DomainParticipant lookupParticipant = _dpf.LookupParticipant(42);
             Assert.IsNotNull(participant);
@@ -257,6 +258,7 @@ namespace OpenDDSharp.UnitTest
 
             DomainParticipant otherParticipant = _dpf.CreateParticipant(42);
             Assert.IsNotNull(otherParticipant);
+            otherParticipant.BindRtpsUdpTransportConfig();
 
             lookupParticipant = _dpf.LookupParticipant(42);
             Assert.IsNotNull(lookupParticipant);

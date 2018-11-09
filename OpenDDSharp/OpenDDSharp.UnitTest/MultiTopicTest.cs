@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
 using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest
@@ -63,6 +64,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = _dpf.CreateParticipant(DOMAIN_ID);
             Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();
 
             AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
             string athleteTypeName = athleteSupport.GetTypeName();

@@ -21,6 +21,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest.Helpers
@@ -761,6 +762,20 @@ namespace OpenDDSharp.UnitTest.Helpers
             }
 
             return true;
+        }
+
+        public static void BindRtpsUdpTransportConfig(this DomainParticipant participant)
+        {
+            long ticks = DateTime.Now.Ticks;
+            string configName = "openddsharp_rtps_interop_" + ticks.ToString();
+            string instName = "internal_openddsharp_rtps_transport_" + ticks.ToString();
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
+            RtpsUdpInst rui = new RtpsUdpInst(inst);
+            config.Insert(inst);
+
+            TransportRegistry.Instance.BindConfig(configName, participant);
         }
 
         public static DateTime ToDateTime(this Timestamp timestamp)

@@ -66,6 +66,7 @@ namespace OpenDDSharp.UnitTest
             _listener = new MyParticipantListener();
             _participant = _dpf.CreateParticipant(DOMAIN_ID, _listener);
             Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();
 
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();

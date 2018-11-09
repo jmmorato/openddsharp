@@ -27,6 +27,7 @@ using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace OpenDDSharp.UnitTest
 {
@@ -613,6 +614,7 @@ namespace OpenDDSharp.UnitTest
             DomainParticipant otherParticipant = _dpf.CreateParticipant(OTHER_DOMAIN_ID);
             Assert.IsNotNull(otherParticipant);
             Assert.AreNotEqual(otherParticipant.InstanceHandle, _participant.InstanceHandle);
+            otherParticipant.BindRtpsUdpTransportConfig();
 
             result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -679,6 +681,7 @@ namespace OpenDDSharp.UnitTest
         {
             DomainParticipant other = _dpf.CreateParticipant(OTHER_DOMAIN_ID);
             Assert.IsNotNull(other);
+            other.BindRtpsUdpTransportConfig();
 
             ReturnCode result = _participant.IgnoreParticipant(other.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1267,6 +1270,7 @@ namespace OpenDDSharp.UnitTest
 
             DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID);
             Assert.IsNotNull(otherParticipant);
+            otherParticipant.BindRtpsUdpTransportConfig();
 
             Thread.Sleep(500);
 
@@ -1285,7 +1289,6 @@ namespace OpenDDSharp.UnitTest
 
             result = _dpf.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
-
         }
 
         [TestMethod]
@@ -1296,6 +1299,7 @@ namespace OpenDDSharp.UnitTest
             qos.UserData.Value = new List<byte> { 0x42 };
             DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID, qos);
             Assert.IsNotNull(otherParticipant);
+            otherParticipant.BindRtpsUdpTransportConfig();
 
             Thread.Sleep(500);
 
@@ -1321,13 +1325,13 @@ namespace OpenDDSharp.UnitTest
         public void TestGetDiscoveredTopics()
         {
             #region OpenDDS ISSUE
-            // The handles are not updated till calling get_instance_handle.
-            // Perhaps, creating a datareader or datawriter also activate it.
-            // Workaround: After create_new_topic call
-            //if (new_topic) {
-            //  TopicImpl* the_topic_servant = dynamic_cast<TopicImpl*>(new_topic);
-            //  this->id_to_handle(the_topic_servant->get_id());
-            //}
+            //// The handles are not updated till calling get_instance_handle.
+            //// Perhaps, creating a datareader or datawriter also activate it.
+            //// Workaround: After create_new_topic call
+            ////if (new_topic) {
+            ////  TopicImpl* the_topic_servant = dynamic_cast<TopicImpl*>(new_topic);
+            ////  this->id_to_handle(the_topic_servant->get_id());
+            ////}
 
             //List<InstanceHandle> handles = new List<InstanceHandle>();
             //ReturnCode result = _participant.GetDiscoveredTopics(handles);
@@ -1340,33 +1344,45 @@ namespace OpenDDSharp.UnitTest
             //Assert.AreEqual(ReturnCode.Ok, result);
 
             //Topic topic = _participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
-            //Assert.IsNotNull(topic);
+            //Assert.IsNotNull(topic);                        
 
             //Thread.Sleep(100);
 
             //result = _participant.GetDiscoveredTopics(handles);
             //Assert.AreEqual(ReturnCode.Ok, result);
             //Assert.AreEqual(5, handles.Count);
+            #endregion
+
+            #region OpenDDS ISSUE
+            //// OpenDDS only returns local topics. The specification mention all the topics in the domain.
 
             //DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID);
             //Assert.IsNotNull(otherParticipant);
 
             //result = support.RegisterType(otherParticipant, typeName);
             //Assert.AreEqual(ReturnCode.Ok, result);
-            #endregion
+          
+            //Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestGetDiscoveredTopics), typeName);
+            //Assert.IsNotNull(otherTopic);
 
-            #region OpenDDS ISSUE
-            // OpenDDS only returns local topics. The specification mention all the topics in the domain.
+            //Subscriber subscriber = otherParticipant.CreateSubscriber();
+            //Assert.IsNotNull(subscriber);
 
-            // Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestGetDiscoveredTopics), typeName);
-            // Assert.IsNotNull(otherTopic);
+            //DataReader reader = subscriber.CreateDataReader(otherTopic);
+            //Assert.IsNotNull(reader);            
 
-            //Thread.Sleep(500);
+            //Thread.Sleep(5000);
 
             //handles = new List<InstanceHandle>();
             //result = _participant.GetDiscoveredTopics(handles);
             //Assert.AreEqual(ReturnCode.Ok, result);
             //Assert.AreEqual(6, handles.Count);
+
+            //result = otherParticipant.DeleteContainedEntities();
+            //Assert.AreEqual(ReturnCode.Ok, result);
+
+            //result = _dpf.DeleteParticipant(otherParticipant);
+            //Assert.AreEqual(ReturnCode.Ok, result);
             #endregion
         }
 

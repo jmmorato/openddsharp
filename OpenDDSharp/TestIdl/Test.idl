@@ -6,7 +6,8 @@ module Test {
 	};
 
     enum SupportTestKind {
-        InconsistentTopicTest
+        InconsistentTopicTest,
+        GetDiscoveredTopicsTest
     };
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    

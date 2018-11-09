@@ -33,7 +33,8 @@ namespace Test {
     };
 
     public enum class SupportTestKind {
-        InconsistentTopicTest = ::Test::InconsistentTopicTest
+        InconsistentTopicTest = ::Test::InconsistentTopicTest,
+        GetDiscoveredTopicsTest = ::Test::GetDiscoveredTopicsTest
     };
 
     public ref class BasicTestStruct {

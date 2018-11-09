@@ -63,6 +63,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = _dpf.CreateParticipant(DOMAIN_ID);
             Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();
 
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
