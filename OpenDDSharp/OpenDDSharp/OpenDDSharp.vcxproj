@@ -124,7 +124,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>.\;$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_Rtps_Udpd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_InfoRepoDiscoveryd.lib;OpenDDS_Rtps_Udpd.lib;OpenDDS_Shmemd.lib;OpenDDS_Tcpd.lib;OpenDDS_Udpd.lib;OpenDDS_Multicastd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
     </Link>
     <ProjectReference>
@@ -146,7 +146,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x64;$(DDS_ROOT)\lib_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_Rtps_Udpd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_InfoRepoDiscoveryd.lib;OpenDDS_Rtps_Udpd.lib;OpenDDS_Shmemd.lib;OpenDDS_Tcpd.lib;OpenDDS_Udpd.lib;OpenDDS_Multicastd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
       <AdditionalOptions>/machine:AMD64 %(AdditionalOptions)</AdditionalOptions>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -179,7 +179,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ACE.lib;TAO.lib;OpenDDS_Dcps.lib;OpenDDS_Rtps.lib;OpenDDS_Rtps_Udp.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ACE.lib;TAO.lib;OpenDDS_Dcps.lib;OpenDDS_Rtps.lib;OpenDDS_InfoRepoDiscovery.lib;OpenDDS_Rtps_Udp.lib;OpenDDS_Shmem.lib;OpenDDS_Tcp.lib;OpenDDS_Udp.lib;OpenDDS_Multicast.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AssemblyDebug>
       </AssemblyDebug>
@@ -216,7 +216,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ACE.lib;TAO.lib;OpenDDS_Dcps.lib;OpenDDS_Rtps.lib;OpenDDS_Rtps_Udp.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ACE.lib;TAO.lib;OpenDDS_Dcps.lib;OpenDDS_Rtps.lib;OpenDDS_InfoRepoDiscovery.lib;OpenDDS_Rtps_Udp.lib;OpenDDS_Shmem.lib;OpenDDS_Tcp.lib;OpenDDS_Udp.lib;OpenDDS_Multicast.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x64;$(DDS_ROOT)\lib_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AssemblyDebug>
       </AssemblyDebug>
@@ -266,6 +266,7 @@
     <ClCompile Include="GuardCondition.cpp" />
     <ClCompile Include="HistoryQosPolicy.cpp" />
     <ClCompile Include="InconsistentTopicStatus.cpp" />
+    <ClCompile Include="InfoRepoDiscovery.cpp" />
     <ClCompile Include="InstanceHandle.cpp" />
     <ClCompile Include="InstanceStateKind.cpp" />
     <ClCompile Include="InstanceStateMask.cpp" />
@@ -274,6 +275,7 @@
     <ClCompile Include="LivelinessChangedStatus.cpp" />
     <ClCompile Include="LivelinessLostStatus.cpp" />
     <ClCompile Include="LivelinessQosPolicy.cpp" />
+    <ClCompile Include="MulticastInst.cpp" />
     <ClCompile Include="MultiTopic.cpp" />
     <ClCompile Include="OfferedDeadlineMissedStatus.cpp" />
     <ClCompile Include="OfferedIncompatibleQosStatus.cpp" />
@@ -300,11 +302,14 @@
     <ClCompile Include="RequestedDeadlineMissedStatus.cpp" />
     <ClCompile Include="RequestedIncompatibleQosStatus.cpp" />
     <ClCompile Include="ResourceLimitsQosPolicy.cpp" />
+    <ClCompile Include="RtpsDiscovery.cpp" />
+    <ClCompile Include="RtpsUdpInst.cpp" />
     <ClCompile Include="SampleInfo.cpp" />
     <ClCompile Include="SampleLostStatus.cpp" />
     <ClCompile Include="SampleRejectedStatus.cpp" />
     <ClCompile Include="SampleStateKind.cpp" />
     <ClCompile Include="SampleStateMask.cpp" />
+    <ClCompile Include="ShmemInst.cpp" />
     <ClCompile Include="StatusCondition.cpp" />
     <ClCompile Include="StatusKind.cpp" />
     <ClCompile Include="StatusMask.cpp" />
@@ -317,6 +322,7 @@
     <ClCompile Include="SubscriptionLostStatus.cpp" />
     <ClCompile Include="SubscriptionMatchedStatus.cpp" />
     <ClCompile Include="SubscriptionReconnectedStatus.cpp" />
+    <ClCompile Include="TcpInst.cpp" />
     <ClCompile Include="TimeBasedFilterQosPolicy.cpp" />
     <ClCompile Include="Timestamp.cpp" />
     <ClCompile Include="Topic.cpp" />
@@ -326,7 +332,13 @@
     <ClCompile Include="TopicListener.cpp" />
     <ClCompile Include="TopicListenerNative.cpp" />
     <ClCompile Include="TopicQos.cpp" />
+    <ClCompile Include="TransportConfig.cpp" />
+    <ClCompile Include="TransportConfigManager.cpp" />
+    <ClCompile Include="TransportInst.cpp" />
+    <ClCompile Include="TransportInstManager.cpp" />
     <ClCompile Include="TransportPriorityQosPolicy.cpp" />
+    <ClCompile Include="TransportRegistry.cpp" />
+    <ClCompile Include="UdpInst.cpp" />
     <ClCompile Include="UserDataQosPolicy.cpp" />
     <ClCompile Include="ViewStateKind.cpp" />
     <ClCompile Include="ViewStateMask.cpp" />
@@ -350,6 +362,7 @@
     <ClInclude Include="DeadlineQosPolicy.h" />
     <ClInclude Include="DestinationOrderQosPolicy.h" />
     <ClInclude Include="DestinationOrderQosPolicyKind.h" />
+    <ClInclude Include="Discovery.h" />
     <ClInclude Include="DomainParticipant.h" />
     <ClInclude Include="DomainParticipantFactory.h" />
     <ClInclude Include="DomainParticipantFactoryQos.h" />
@@ -368,6 +381,7 @@
     <ClInclude Include="HistoryQosPolicy.h" />
     <ClInclude Include="HistoryQosPolicyKind.h" />
     <ClInclude Include="InconsistentTopicStatus.h" />
+    <ClInclude Include="InfoRepoDiscovery.h" />
     <ClInclude Include="InstanceHandle.h" />
     <ClInclude Include="InstanceStateKind.h" />
     <ClInclude Include="InstanceStateMask.h" />
@@ -378,6 +392,7 @@
     <ClInclude Include="LivelinessQosPolicy.h" />
     <ClInclude Include="LivelinessQosPolicyKind.h" />
     <ClInclude Include="LNK4248.h" />
+    <ClInclude Include="MulticastInst.h" />
     <ClInclude Include="MultiTopic.h" />
     <ClInclude Include="OfferedDeadlineMissedStatus.h" />
     <ClInclude Include="OfferedIncompatibleQosStatus.h" />
@@ -409,12 +424,15 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceLimitsQosPolicy.h" />
     <ClInclude Include="ReturnCode.h" />
+    <ClInclude Include="RtpsDiscovery.h" />
+    <ClInclude Include="RtpsUdpInst.h" />
     <ClInclude Include="SampleInfo.h" />
     <ClInclude Include="SampleLostStatus.h" />
     <ClInclude Include="SampleRejectedStatus.h" />
     <ClInclude Include="SampleRejectedStatusKind.h" />
     <ClInclude Include="SampleStateKind.h" />
     <ClInclude Include="SampleStateMask.h" />
+    <ClInclude Include="ShmemInst.h" />
     <ClInclude Include="StatusCondition.h" />
     <ClInclude Include="StatusKind.h" />
     <ClInclude Include="StatusMask.h" />
@@ -427,8 +445,10 @@
     <ClInclude Include="SubscriptionLostStatus.h" />
     <ClInclude Include="SubscriptionMatchedStatus.h" />
     <ClInclude Include="SubscriptionReconnectedStatus.h" />
+    <ClInclude Include="TcpInst.h" />
     <ClInclude Include="TimeBasedFilterQosPolicy.h" />
     <ClInclude Include="Timestamp.h" />
+    <ClInclude Include="TimeValue.h" />
     <ClInclude Include="Topic.h" />
     <ClInclude Include="TopicBuiltinTopicData.h" />
     <ClInclude Include="TopicDataQosPolicy.h" />
@@ -437,7 +457,13 @@
     <ClInclude Include="TopicListener.h" />
     <ClInclude Include="TopicListenerNative.h" />
     <ClInclude Include="TopicQos.h" />
+    <ClInclude Include="TransportConfig.h" />
+    <ClInclude Include="TransportConfigManager.h" />
+    <ClInclude Include="TransportInst.h" />
+    <ClInclude Include="TransportInstManager.h" />
     <ClInclude Include="TransportPriorityQosPolicy.h" />
+    <ClInclude Include="TransportRegistry.h" />
+    <ClInclude Include="UdpInst.h" />
     <ClInclude Include="UserDataQosPolicy.h" />
     <ClInclude Include="ViewStateKind.h" />
     <ClInclude Include="ViewStateMask.h" />
