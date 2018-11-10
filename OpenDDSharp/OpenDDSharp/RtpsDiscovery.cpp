@@ -85,11 +85,11 @@ void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::DX::set(System::UInt16 value) {
     impl_entity->dx(value);
 };
 
-System::Byte OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::TTL::get() {
+System::Byte OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::Ttl::get() {
     return impl_entity->ttl();
 };
 
-void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::TTL::set(System::Byte value) {
+void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::Ttl::set(System::Byte value) {
     impl_entity->ttl(value);
 };
 
