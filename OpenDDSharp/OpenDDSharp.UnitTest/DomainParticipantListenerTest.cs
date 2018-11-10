@@ -738,7 +738,7 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            SupportProcessHelper supportProcess = new SupportProcessHelper();
+            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
             Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
             // Wait for discovery

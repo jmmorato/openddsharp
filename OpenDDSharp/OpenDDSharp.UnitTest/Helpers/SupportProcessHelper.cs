@@ -22,6 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using System.ComponentModel;
 using OpenDDSharp.Test;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest.Helpers
 {
@@ -39,11 +40,13 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Fields
         private string _platformFolder;
         private string _targetFolder;
+        private TestContext _testContext;
         #endregion
 
         #region Constructors
-        public SupportProcessHelper()
+        public SupportProcessHelper(TestContext testContext)
         {
+            _testContext = testContext;
             _platformFolder = SIXTY_FOUR_PLATFORM_FOLDER;
             _targetFolder = RELEASE_TARGET_FOLDER;
             SetEightySixPlatform();
@@ -117,12 +120,12 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         private void SupportProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            // Do nothing
+            _testContext.WriteLine(e.Data);
         }
 
         private void SupportProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            // Do nothing
+            _testContext.WriteLine(e.Data);
         }
 
         [Conditional("X86")]
