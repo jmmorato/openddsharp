@@ -33,7 +33,7 @@ namespace OpenDDSharp {
         namespace DCPS {
 
             /// <summary>
-            /// Provides access to the confgurable options for the IP Multicast transport.
+            /// Provides access to the configurable options for the IP Multicast transport.
             /// </summary>
             /// <remarks>
             /// <para>
@@ -194,7 +194,7 @@ namespace OpenDDSharp {
                 }
 
                 /// <summary>
-                /// The value of the time-to-live (ttl) feld of any
+                /// The value of the time-to-live (ttl) field of any
                 /// datagrams sent. The default value of one means
                 /// that all data is restricted to the local network.                
                 /// </summary>

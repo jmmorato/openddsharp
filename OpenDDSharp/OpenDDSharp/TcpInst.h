@@ -33,7 +33,7 @@ namespace OpenDDSharp {
         namespace DCPS {
 
             /// <summary>
-            /// Provides access to the confgurable options for the TCP/IP transport.
+            /// Provides access to the configurable options for the TCP/IP transport.
             /// </summary>
             /// <remarks>
             /// A properly confgured transport provides added resilience to underlying stack disturbances.Almost all of the

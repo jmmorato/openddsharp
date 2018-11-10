@@ -37,7 +37,7 @@ namespace OpenDDSharp {
         namespace DCPS {
             
             /// <summary>
-            /// Provides access to the confgurable options for the RTPS UDP transport.
+            /// Provides access to the configurable options for the RTPS UDP transport.
             /// </summary>
             /// <remarks>
             /// The RTPS UDP transport is one of the pluggable transports available to a developer and is necessary 
@@ -105,7 +105,7 @@ namespace OpenDDSharp {
                 };
 
                 /// <summary>
-                /// The value of the time-to-live (ttl) feld of any
+                /// The value of the time-to-live (ttl) field of any
                 /// multicast datagrams sent. This value specifes the
                 /// number of hops the datagram will traverse before
                 /// being discarded by the network. The default value

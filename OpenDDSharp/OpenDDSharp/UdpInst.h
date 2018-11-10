@@ -33,7 +33,7 @@ namespace OpenDDSharp {
         namespace DCPS {
 
             /// <summary>
-            /// Provides access to the confgurable options for the UDP/IP transport.
+            /// Provides access to the configurable options for the UDP/IP transport.
             /// </summary>
             /// <remarks>
             /// The UDP transport is a bare bones transport that supports best-efort delivery only.

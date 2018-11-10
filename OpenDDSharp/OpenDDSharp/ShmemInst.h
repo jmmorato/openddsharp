@@ -33,7 +33,7 @@ namespace OpenDDSharp {
         namespace DCPS {
             
             /// <summary>
-            /// Provides access to the confgurable options for the Shared Memory transport.
+            /// Provides access to the configurable options for the Shared Memory transport.
             /// </summary>
             /// <remarks>
             /// The shared memory transport type can only provide communication between transport instances on the same host. 
