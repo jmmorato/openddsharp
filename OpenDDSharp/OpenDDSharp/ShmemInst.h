@@ -26,24 +26,37 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma managed
 
 #include "TransportInst.h"
+#include "TransportRegistry.h"
 
 namespace OpenDDSharp {
     namespace OpenDDS {
         namespace DCPS {
             
+            /// <summary>
+            /// Provides access to the confgurable options for the Shared Memory transport.
+            /// </summary>
+            /// <remarks>
+            /// The shared memory transport type can only provide communication between transport instances on the same host. 
+            /// As part of transport negotiation, if there are multiple transport instances available for
+            /// communication between hosts, the shared memory transport instances will be skipped so
+            /// that other types can be used.
+            /// </remarks>
             public ref class ShmemInst : public TransportInst {
 
             internal:
                 ::OpenDDS::DCPS::ShmemInst* impl_entity;
 
             public:
+                /// <summary>
+                /// Indicates whether the transport is reliable or not.
+                /// </summary>
                 property System::Boolean IsReliable {
                     System::Boolean get();
                 };
 
                 /// <summary>
                 /// Size (in bytes) of the single shared-memory pool allocated by this
-                /// transport instance.  Defaults to 16 megabytes.
+                /// transport instance. Defaults to 16 megabytes.
                 /// </summary>
                 property size_t PoolSize {
                     size_t get();
@@ -60,15 +73,25 @@ namespace OpenDDSharp {
                     void set(size_t value);
                 }
 
+                /// <summary>
+                /// Gets the host name.
+                /// </summary>
                 property System::String^ HostName {
                     System::String^ get();
                 }
 
+                /// <summary>
+                /// Gets the pool name.
+                /// </summary>
                 property System::String^ PoolName {
                     System::String^ get();
                 }
 
             public:
+                /// <summary>
+                /// Creates a new instance of <see cref="ShmemInst" />.
+                /// </summary>
+                /// <param name="inst">The base <see cref="TransportInst" /> object created with the <see cref="TransportRegistry" />.</param>
                 ShmemInst(TransportInst^ inst);
 
             /*public:

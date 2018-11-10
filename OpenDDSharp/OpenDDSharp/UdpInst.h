@@ -26,37 +26,69 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma managed
 
 #include "TransportInst.h"
+#include "TransportRegistry.h"
 
 namespace OpenDDSharp {
     namespace OpenDDS {
         namespace DCPS {
 
+            /// <summary>
+            /// Provides access to the confgurable options for the UDP/IP transport.
+            /// </summary>
+            /// <remarks>
+            /// The UDP transport is a bare bones transport that supports best-efort delivery only.
+            /// </remarks>
             public ref class UdpInst : public TransportInst {
 
             internal:
                 ::OpenDDS::DCPS::UdpInst* impl_entity;
 
             public:
+                /// <summary>
+                /// Indicates whether the transport is reliable or not.
+                /// </summary>
                 property System::Boolean IsReliable {
                     System::Boolean get();
                 }
 
+                /// <summary>
+                /// Total send bufer size in bytes for UDP payload.
+                /// The default value is the platform value of
+                /// ACE_DEFAULT_MAX_SOCKET_BUFSIZ.
+                /// </summary>
                 property System::Int32 SendBufferSize {
                     System::Int32 get();
                     void set(System::Int32 value);
                 }
 
+                /// <summary>
+                /// Total receive bufer size in bytes for UDP payload.
+                /// The default value is the platform value of
+                /// ACE_DEFAULT_MAX_SOCKET_BUFSIZ.
+                /// </summary>
                 property System::Int32 RcvBufferSize {
                     System::Int32 get();
                     void set(System::Int32 value);
                 }
 
+                /// <summary>
+                /// Hostname and port of the listening socket.
+                /// Defaults to a value picked by the underlying OS.
+                /// </summary>
+                /// <remarks>
+                /// If only the host is specifed and the port number is omitted, 
+                /// the ':' is still required on the host specifer. 
+                /// </remarks>
                 property System::String^ LocalAddress {
                     System::String^ get();
                     void set(System::String^ value);
                 }
 
             public:
+                /// <summary>
+                /// Creates a new instance of <see cref="UdpInst" />.
+                /// </summary>
+                /// <param name="inst">The base <see cref="TransportInst" /> object created with the <see cref="TransportRegistry" />.</param>
                 UdpInst(TransportInst^ inst);
 
                 /*public:

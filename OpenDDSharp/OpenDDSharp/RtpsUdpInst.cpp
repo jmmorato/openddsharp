@@ -107,11 +107,11 @@ void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::UseMulticast::set(System::Boolean 
     impl_entity->use_multicast_ = value;
 };
 
-System::Byte OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::TTL::get() {
+System::Byte OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::Ttl::get() {
     return impl_entity->ttl_;
 };
 
-void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::TTL::set(System::Byte value) {
+void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::Ttl::set(System::Byte value) {
     impl_entity->ttl_ = value;
 };
 

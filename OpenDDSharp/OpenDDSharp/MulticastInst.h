@@ -32,6 +32,25 @@ namespace OpenDDSharp {
     namespace OpenDDS {
         namespace DCPS {
 
+            /// <summary>
+            /// Provides access to the confgurable options for the IP Multicast transport.
+            /// </summary>
+            /// <remarks>
+            /// <para>
+            /// The multicast transport provides unifed support for best-efort and reliable delivery based
+            /// on a transport confguration parameter.
+            /// </para>
+            /// <para>
+            /// Best-efort delivery imposes the least amount of overhead as data is exchanged between
+            /// peers, however it does not provide any guarantee of delivery. Data may be lost due to
+            /// unresponsive or unreachable peers or received in duplicate.
+            /// </para>
+            /// <para>
+            /// Reliable delivery provides for guaranteed delivery of data to associated peers with no
+            /// duplication at the cost of additional processing and bandwidth. Reliable delivery is achieved
+            /// through two primary mechanisms: 2-way peer handshaking and negative acknowledgment of missing data.
+            /// </para>
+            /// </remarks>
             public ref class MulticastInst : public TransportInst {
 
             internal:
@@ -46,9 +65,11 @@ namespace OpenDDSharp {
                 }
 
                 /// <summary>
-                /// Enables reliable communication. This option will eventually
-                /// be deprecated. The default value is: true.
+                /// Enables reliable communication. The default value is true.
                 /// </summary>
+                /// <remarks>
+                /// This option will eventually be deprecated.
+                /// </remarks>
                 property System::Boolean Reliable {
                     System::Boolean get();
                     void set(System::Boolean value);
@@ -56,7 +77,7 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// Enables IPv6 default group address selection.
-                /// The default value is: false.
+                /// By default, this option is disabled (false).
                 /// </summary>
                 property System::Boolean DefaultToIpv6 {
                     System::Boolean get();
@@ -65,8 +86,13 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// The default port number (when <see cref="GroupAddress" /> is not set)
-                /// The default value is: 49152 [IANA 2009-11-16].
+                /// The default value is 49152 [IANA 2009-11-16].
                 /// </summary>
+                /// <remarks>
+                /// When a group address is specifed, the port number within it is used. 
+                /// If no group address is specifed, the port offset is used as a port number.
+                /// This value should not be set less than 49152.
+                /// </remarks>
                 property System::UInt16 PortOffset {
                     System::UInt16 get();
                     void set(System::UInt16 value);
@@ -84,9 +110,8 @@ namespace OpenDDSharp {
                 }
 
                 /// <summary>
-                /// If non-empty, the address to pass to ACE which indicates the
-                /// local network interface which should be used for joining the
-                /// multicast group.
+                /// If non-empty, address of a local network interface which 
+                /// is used to join the multicast group.
                 /// </summary>
                 property System::String^ LocalAddress {
                     System::String^ get();
@@ -96,7 +121,7 @@ namespace OpenDDSharp {
                 /// <summary>
                 /// The exponential base used during handshake retries; smaller
                 /// values yield shorter delays between attempts.
-                /// The default value is: 2.0.
+                /// The default value is 2.0.
                 /// </summary>
                 property System::Double SynBackoff {
                     System::Double get();
@@ -105,7 +130,7 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// The minimum number of milliseconds to wait between handshake
-                /// attempts during association. The default value is: 250.
+                /// attempts during association. The default value is 250.
                 /// </summary>
                 property TimeValue SynInterval {
                     TimeValue get();
@@ -115,7 +140,7 @@ namespace OpenDDSharp {
                 /// <summary>
                 /// The maximum number of milliseconds to wait before giving up
                 /// on a handshake response during association.
-                /// The default value is: 30000 (30 seconds).
+                /// The default value is 30000 (30 seconds).
                 /// </summary>
                 property TimeValue SynTimeout {
                     TimeValue get();
@@ -124,7 +149,7 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// The number of datagrams to retain in order to service repair
-                /// requests (reliable only). The default value is: 32.
+                /// requests (reliable only). The default value is 32.
                 /// </summary>
                 property size_t NakDepth {
                     size_t get();
@@ -133,7 +158,7 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// The minimum number of milliseconds to wait between repair
-                /// requests (reliable only). The default value is: 500.
+                /// requests (reliable only). The default value is 500.
                 /// </summary>
                 property TimeValue NakInterval {
                     TimeValue get();
@@ -141,8 +166,8 @@ namespace OpenDDSharp {
                 }
 
                 /// <summary>
-                /// The number of interval's between nak's for a sample
-                /// (after initial nak). The default value is: 4.
+                /// The number of intervals between nak's for a sample
+                /// after initial nak. The default value is 4.
                 /// </summary>
                 property size_t NakDelayIntervals {
                     size_t get();
@@ -169,17 +194,18 @@ namespace OpenDDSharp {
                 }
 
                 /// <summary>
-                /// Time-To-Live.
-                /// The default value is: 1 (in same subnet)
+                /// The value of the time-to-live (ttl) feld of any
+                /// datagrams sent. The default value of one means
+                /// that all data is restricted to the local network.                
                 /// </summary>
-                property System::Byte TTL {
+                property System::Byte Ttl {
                     System::Byte get();
                     void set(System::Byte value);
                 };
 
                 /// <summary>
                 /// The size of the socket receive buffer.
-                /// The default value is: ACE_DEFAULT_MAX_SOCKET_BUFSIZ if it's defined,
+                /// The default value is ACE_DEFAULT_MAX_SOCKET_BUFSIZ if it's defined,
                 /// otherwise, 0. If the value is 0, the system default value is used.
                 /// </summary>
                 property size_t RcvBufferSize {
@@ -189,16 +215,22 @@ namespace OpenDDSharp {
 
                 /// <summary>
                 /// Sending using asynchronous I/O on Windows platforms that support it.
-                /// The default value is: false.
+                /// The default value is false.
+                /// </summary>
+                /// <remarks>
                 /// This parameter has no effect on non-Windows platforms and Windows platforms
                 /// that don't support asynchronous I/O.
-                /// </summary>
+                /// </remarks>
                 property System::Boolean AsyncSend {
                     System::Boolean get();
                     void set(System::Boolean value);
                 }
 
             public:
+                /// <summary>
+                /// Creates a new instance of <see cref="MulticastInst" />.
+                /// </summary>
+                /// <param name="inst">The base <see cref="TransportInst" /> object created with the <see cref="TransportRegistry" />.</param>
                 MulticastInst(TransportInst^ inst);
 
                 /*public:

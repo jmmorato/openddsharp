@@ -146,11 +146,11 @@ void OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakTimeout::set(OpenDDSharp::Tim
     impl_entity->nak_timeout_ = value;
 };
 
-System::Byte OpenDDSharp::OpenDDS::DCPS::MulticastInst::TTL::get() {
+System::Byte OpenDDSharp::OpenDDS::DCPS::MulticastInst::Ttl::get() {
     return impl_entity->ttl_;
 };
 
-void OpenDDSharp::OpenDDS::DCPS::MulticastInst::TTL::set(System::Byte value) {
+void OpenDDSharp::OpenDDS::DCPS::MulticastInst::Ttl::set(System::Byte value) {
     impl_entity->ttl_ = value;
 };
 

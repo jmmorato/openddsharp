@@ -26,21 +26,42 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma managed
 
 #include "TransportInst.h"
+#include "TransportRegistry.h"
 
 namespace OpenDDSharp {
     namespace OpenDDS {
         namespace DCPS {
 
+            /// <summary>
+            /// Provides access to the confgurable options for the TCP/IP transport.
+            /// </summary>
+            /// <remarks>
+            /// A properly confgured transport provides added resilience to underlying stack disturbances.Almost all of the
+            /// options available to customize the connection and reconnection strategies have reasonable
+            /// defaults, but ultimately these values should to be chosen based upon a careful study of the
+            /// quality of the network and the desired QoS in the specifc DDS application and target environment.
+            /// </remarks>
             public ref class TcpInst : public TransportInst {
 
             internal:
                 ::OpenDDS::DCPS::TcpInst* impl_entity;
 
             public:
+                /// <summary>
+                /// Indicates whether the transport is reliable or not.
+                /// </summary>
                 property System::Boolean IsReliable {
                     System::Boolean get();
                 };
 
+                /// <summary>
+                /// Enable or disable the Nagle’s algorithm. 
+                /// By default, it is disabled (false).                    
+                /// </summary>
+                /// <remarks>
+                /// Enabling the Nagle’s algorithm may increase
+                /// throughput at the expense of increased latency.
+                /// </remarks>
                 property System::Boolean EnableNagleAlgorithm {
                     System::Boolean get();
                     void set(System::Boolean value);
@@ -60,7 +81,7 @@ namespace OpenDDSharp {
                 /// <summary>
                 /// The backoff multiplier for reconnection strategy.
                 /// The third and so on reconnect will be this value * the previous delay.
-                /// Hence with conn_retry_initial_delay=500 and conn_retry_backoff_multiplier=1.5
+                /// Hence with ConnRetryInitialDelay=500 and ConnRetryBackoffMultiplier=1.5
                 /// the second reconnect attempt will be at 0.5 seconds after first retry connect
                 /// fails; the third attempt will be 0.75 seconds after the second retry connect
                 /// fails; the fourth attempt will be 1.125 seconds after the third retry connect
@@ -85,8 +106,8 @@ namespace OpenDDSharp {
                 /// Maximum period (in milliseconds) of not being able to send queued
                 /// messages. If there are samples queued and no output for longer
                 /// than this period then the connection will be closed and on_*_lost()
-                /// callbacks will be called. If the value is zero, the default, then
-                /// this check will not be made.
+                /// callbacks will be called. If the value is 0, the default, then
+                /// this check will not be made. The default value is 0.
                 /// </summary>
                 property System::Int32 MaxOutputPausePeriod {
                     System::Int32 get();
@@ -106,21 +127,38 @@ namespace OpenDDSharp {
                 };
 
                 /// <summary>
-                /// The public address is our publicly advertised address.
+                /// Override the address sent to peers with the confgured string.                
+                /// </summary>
+                /// <remarks>
                 /// Usually this is the same as the local address, but if
                 /// a public address is explicitly specified, use that.
-                /// </summary>
+                /// This can be used for frewall traversal and other advanced 
+                /// network confgurations.
+                /// </remarks>
                 property System::String^ PublicAddress {
                     System::String^ get();
                     void set(System::String^ value);
                 }
 
+                /// <summary>
+                /// Hostname and port of the connection acceptor. The
+                /// default value is the FQDN and port 0, which means
+                /// the OS will choose the port.                
+                /// </summary>
+                /// <remarks>
+                /// If only the host is specifed and the port number is omitted, 
+                /// the ':' is still required on the host specifer. 
+                /// </remarks>
                 property System::String^ LocalAddress {
                     System::String^ get();
                     void set(System::String^ value);
                 }
 
             public:
+                /// <summary>
+                /// Creates a new instance of <see cref="TcpInst" />.
+                /// </summary>
+                /// <param name="inst">The base <see cref="TransportInst" /> object created with the <see cref="TransportRegistry" />.</param>
                 TcpInst(TransportInst^ inst);
 
             /*public:
