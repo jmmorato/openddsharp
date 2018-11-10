@@ -29,6 +29,7 @@ install:
   - git apply C:\projects\openddsharp\Patches\MultiTopicDataReaderBase.cpp.patch
   - git apply C:\projects\openddsharp\Patches\SubscriberImpl.cpp.patch
   - git apply C:\projects\openddsharp\Patches\DataWriterImpl.cpp.patch
+  - git apply C:\projects\openddsharp\Patches\configure.patch
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_x64 /s /i
