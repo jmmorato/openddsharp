@@ -22,7 +22,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 namespace OpenDDSharp {
 
     /// <summary>
-    /// Structure for timestamp representation
+    /// Structure for time value representation
     /// </summary>
     public value struct TimeValue {
 
@@ -32,7 +32,7 @@ namespace OpenDDSharp {
 
     public:
         /// <summary>
-        /// The seconds 
+        /// The seconds.
         /// </summary>
         property System::Int64 Seconds {
             System::Int64 get() { return sec; }
@@ -40,7 +40,7 @@ namespace OpenDDSharp {
         };
 
         /// <summary>
-        /// The microseconds 
+        /// The microseconds.
         /// </summary>
         property long MicroSeconds {
             long get() { return microsec; }
