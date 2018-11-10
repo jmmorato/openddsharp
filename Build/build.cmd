@@ -28,6 +28,7 @@ set DDS_ROOT=%CD%
 set PATH=%PATH%;%ACE_ROOT%\bin;%DDS_ROOT%\bin;%ACE_ROOT%\lib;%DDS_ROOT%\lib
 
 REM Call OpenDDS configure script
+git apply %CD%\..\..\Patches\configure.patch
 call configure --no-tests
 xcopy %CD%\..\..\Build\ACE.vcxproj %ACE_ROOT%\ace /y
 
