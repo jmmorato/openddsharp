@@ -25,8 +25,23 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig::TransportConfig(::OpenDDS::DCPS::Tr
 
 System::String^ OpenDDSharp::OpenDDS::DCPS::TransportConfig::Name::get() {
     msclr::interop::marshal_context context;
-
     return context.marshal_as<System::String^>(impl_entity->name().c_str());
+};
+
+System::Collections::Generic::IReadOnlyCollection<OpenDDSharp::OpenDDS::DCPS::TransportInst^>^ OpenDDSharp::OpenDDS::DCPS::TransportConfig::Transports::get() {
+    List<TransportInst^>^ list = gcnew List<TransportInst^>();
+    for (auto inst = impl_entity->instances_.begin(); inst != impl_entity->instances_.end(); ++inst) {
+        TransportInst^ managed = TransportInstManager::get_instance()->find(inst->in());
+        if (managed == nullptr) {
+            ::OpenDDS::DCPS::TransportInst* pointer = inst->in();
+            pointer->_add_ref();
+            managed = gcnew TransportInst(pointer);
+            TransportInstManager::get_instance()->add(pointer, managed);
+        }
+
+        list->Add(managed);
+    }
+    return list->AsReadOnly();    
 };
 
 System::Boolean OpenDDSharp::OpenDDS::DCPS::TransportConfig::SwapBytes::get() {

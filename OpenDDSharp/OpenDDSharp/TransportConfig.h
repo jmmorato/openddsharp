@@ -25,13 +25,23 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma managed
 
 #include "TransportInst.h"
-
+#include "TransportInstManager.h"
 #include <vcclr.h>
 #include <msclr/marshal.h>
+
+#using <System.Core.dll>
+#using <System.Linq.dll>
+
+using namespace System::Linq;
+using namespace System::Collections::Generic;
 
 namespace OpenDDSharp {
     namespace OpenDDS {
         namespace DCPS {
+
+            /// <summary>
+            /// Represents a transport configuration.
+            /// </summary>
             public ref class TransportConfig {
 
             public:
@@ -42,14 +52,30 @@ namespace OpenDDSharp {
 
             public:
                 /// <summary>
-                /// Gets the configuration's name.
+                /// Gets the configuration unique name.
                 /// </summary>
                 property System::String^ Name {
                     System::String^ get();
                 };
 
                 /// <summary>
-                /// Gets or sets the swap bytes configuration
+                /// The ordered list of transport instances that
+                /// this configuration will utilize.
+                /// </summary>
+                property IReadOnlyCollection<TransportInst^>^ Transports {
+                    IReadOnlyCollection<TransportInst^>^ get();
+                };
+
+                /// <summary>
+                /// A value of false causes DDS to serialize data in the
+                /// source machine's native endianness; a value of true
+                /// causes DDS to serialize data in the opposite
+                /// endianness. The receiving side will adjust the data
+                /// for its endianness so there is no need to match
+                /// this option between machines. The purpose of this
+                /// option is to allow the developer to decide which
+                /// side will make the endian adjustment, if necessary.
+                /// The default value is false.
                 /// </summary>
                 property System::Boolean SwapBytes {
                     System::Boolean get();
@@ -57,9 +83,10 @@ namespace OpenDDSharp {
                 };
 
                 /// <summary>
-                /// The time period in milliseconds for the acceptor side
-                /// of a connection to wait for the connection.
-                /// The default is 60 seconds
+                /// Timeout (milliseconds) for initial passive
+                /// connection establishment. By default, this option
+                /// waits for 60 seconds. A value of zero would wait
+                /// indefnitely (not recommended).
                 /// </summary>
                 property System::UInt32 PassiveConnectDuration {
                     System::UInt32 get();
