@@ -27,6 +27,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include "TransportInst.h"
 #include "TimeValue.h"
+#include "TransportRegistry.h"
 
 namespace OpenDDSharp {
     namespace OpenDDS {
