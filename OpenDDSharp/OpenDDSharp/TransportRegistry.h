@@ -57,31 +57,100 @@ namespace OpenDDSharp {
                 /// </summary>
                 static property TransportRegistry^ Instance { TransportRegistry^ get(); }
 
+                /// <summary>
+                /// Indicates whether the <see cref="TransportRegistry" /> has been released or not.
+                /// </summary>
                 property System::Boolean Released {
                     System::Boolean get();
                 }
 
+                /// <summary>
+                /// Gets or sets the global <see cref="TransportConfig" />.
+                /// </summary>
                 property TransportConfig^ GlobalConfig {
                     TransportConfig^ get();
                     void set(TransportConfig^ value);
                 }
 
             public:
+                /// <summary>
+                /// Close the singleton instance of this class.
+                /// </summary>
                 static void Close();
+
+                /// <summary>
+                /// This will shutdown all TransportImpl objects.
+                /// Client Application calls this method to tear down the transport framework.
+                /// </summary>
                 void Release();
 
+                /// <summary>
+                /// Creates a new <see cref="TransportInstance" />.
+                /// </summary>
+                /// <param name="name">A unique name for the transport instance.</param>
+                /// <param name="transportType">The transport type for the instance. It should be one of the included transports (i.e. tcp, udp, multicast, shmem, and rtps_udp).</param>
+                /// <returns>The newly created <see cref="TransportInstance" /> or null if failed.</returns>
                 TransportInst^ CreateInst(System::String^ name, System::String^ transportType);
+
+                /// <summary>
+                /// Gets an already created <see cref="TransportInstance" />.
+                /// </summary>
+                /// <param name="name">The name given to the <see cref="TransportInstance" /> during the creation.</param>
+                /// <returns>The <see cref="TransportInstance" /> or null if not found.</returns>
                 TransportInst^ GetInst(System::String^ name);
+
+                /// <summary>
+                /// Removes a <see cref="TransportInstance" />.
+                /// </summary>
+                /// <param name="inst">The <see cref="TransportInstance" /> to be removed.</param>
                 void RemoveInst(TransportInst^ inst);
 
+                /// <summary>
+                /// Creates a new <see cref="TransportConfig" />.
+                /// </summary>
+                /// <param name="name">A unique name for the config.</param>
+                /// <returns>The newly created <see cref="TransportConfig" /> or null if failed.</returns>
                 TransportConfig^ CreateConfig(System::String^ name);
+
+                /// <summary>
+                /// Gets an already created <see cref="TransportConfig" />.
+                /// </summary>
+                /// <param name="name">The name given to the <see cref="TransportConfig" /> during the creation.</param>
+                /// <returns>The <see cref="TransportConfig" /> or null if not found.</returns>
                 TransportConfig^ GetConfig(System::String^ name);
+
+                /// <summary>
+                /// Removes a <see cref="TransportConfig" />. 
+                /// </summary>
+                /// <param name="cfg">The <see cref="TransportConfig" /> to be removed.</param>
                 void RemoveConfig(TransportConfig^ cfg);
 
+                /// <summary>
+                /// Gets the specific domain default <see cref="TransportConfig" />. 
+                /// </summary>
+                /// <param name="domain">The requested default <see cref="TransportConfig" /> domain id.</param>
+                /// <returns>The default <see cref="TransportConfig" /> domain id if found, otherwise null.</returns>
                 TransportConfig^ GetDomainDefaultConfig(System::Int32 domain);
+
+                /// <summary>
+                /// Sets the specific domain default <see cref="TransportConfig" />.  
+                /// </summary>
+                /// <param name="domain">The domain id where the default <see cref="TransportConfig" /> will be applied.</param>
+                /// <param name="cfg">The <see cref="TransportConfig" /> to be set.</param>
                 void SetDomainDefaultConfig(System::Int32 domain, TransportConfig^ cfg);
 
+                /// <summary>
+                /// Binds a <see cref="TransportConfig" /> to a <see cref="Entity" />.
+                /// </summary>
+                /// <param name="name">The name given to the <see cref="TransportConfig" /> during the creation.</param>
+                /// <param name="entity">The <see cref="Entity" /> to be bound.</param>
                 void BindConfig(System::String^ name, ::OpenDDSharp::DDS::Entity^ entity);
+
+                /// <summary>
+                /// Binds a <see cref="TransportConfig" /> to a <see cref="Entity" />.
+                /// </summary>
+                /// <param name="cfg">The <see cref="TransportConfig" /> to be applied.</param>
+                /// <param name="entity">The <see cref="Entity" /> to be bound.</param>
                 void BindConfig(TransportConfig^ cfg, ::OpenDDSharp::DDS::Entity^ entity);
 
             private:
