@@ -30,11 +30,7 @@ namespace OpenDDSharp.UnitTest
 {
     [TestClass]
     public class TopicTest
-    {
-        #region Constants
-        private const int DOMAIN_ID = 42;
-        #endregion
-
+    {       
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -50,7 +46,7 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(DOMAIN_ID);
+            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
         }

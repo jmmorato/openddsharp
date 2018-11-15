@@ -32,10 +32,6 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DataWriterTest
     {
-        #region Constants
-        private const int DOMAIN_ID = 42;
-        #endregion
-
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -57,7 +53,7 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(DOMAIN_ID);
+            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
@@ -547,7 +543,7 @@ namespace OpenDDSharp.UnitTest
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
             // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
             // WORKAROUND: Create another particpant for the DataReader.
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID);
+            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 

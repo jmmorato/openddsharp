@@ -248,23 +248,23 @@ namespace OpenDDSharp.UnitTest
         [TestCategory("DomainParticipantFactory")]
         public void TestLookupParticipant()
         {
-            DomainParticipant participant = _dpf.CreateParticipant(42);
+            DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(participant);
             participant.BindRtpsUdpTransportConfig();
 
-            DomainParticipant lookupParticipant = _dpf.LookupParticipant(42);
+            DomainParticipant lookupParticipant = _dpf.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(participant);
             Assert.AreEqual(participant, lookupParticipant);
 
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(42);
+            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            lookupParticipant = _dpf.LookupParticipant(42);
+            lookupParticipant = _dpf.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(lookupParticipant);
             Assert.IsTrue(lookupParticipant == participant || lookupParticipant == otherParticipant);
 
-            lookupParticipant = _dpf.LookupParticipant(23);
+            lookupParticipant = _dpf.LookupParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNull(lookupParticipant);
 
             ReturnCode result = _dpf.DeleteParticipant(participant);

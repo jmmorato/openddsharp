@@ -29,8 +29,7 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class QueryConditionTest
     {
-        #region Constants
-        private const int DOMAIN_ID = 42;
+        #region Constants        
         private const string TEST_CATEGORY = "QueryCondition";
         #endregion
 
@@ -59,7 +58,7 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(DOMAIN_ID);
+            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 

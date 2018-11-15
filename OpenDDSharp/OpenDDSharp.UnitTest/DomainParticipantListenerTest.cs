@@ -33,8 +33,7 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DomainParticipantListenerTest
     {
-        #region Constants
-        private const int DOMAIN_ID = 42;
+        #region Constants        
         private const string TEST_CATEGORY = "DomainParticipantListener";
         #endregion
 
@@ -65,7 +64,7 @@ namespace OpenDDSharp.UnitTest
         public void TestInitialize()
         {
             _listener = new MyParticipantListener();
-            _participant = _dpf.CreateParticipant(DOMAIN_ID, _listener);
+            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, _listener);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 

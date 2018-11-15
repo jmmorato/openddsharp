@@ -33,11 +33,6 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DomainParticipantTest
     {
-        #region Constants
-        private const int DOMAIN_ID = 42;
-        private const int OTHER_DOMAIN_ID = 43;
-        #endregion
-
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -53,7 +48,7 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(DOMAIN_ID);
+            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
         }
 
@@ -80,7 +75,7 @@ namespace OpenDDSharp.UnitTest
         public void TestDomainId()
         {
             Assert.IsNotNull(_participant);
-            Assert.AreEqual(DOMAIN_ID, _participant.DomainId);
+            Assert.AreEqual(AssemblyInitializer.RTPS_DOMAIN, _participant.DomainId);
         }
 
         [TestMethod]
@@ -143,7 +138,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNull(listener);
 
             MyParticipantListener otherListener = new MyParticipantListener();
-            DomainParticipant other = _dpf.CreateParticipant(OTHER_DOMAIN_ID, otherListener);
+            DomainParticipant other = _dpf.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN, otherListener);
             Assert.IsNotNull(other);
 
             listener = other.GetListener();
@@ -610,7 +605,7 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
 
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(OTHER_DOMAIN_ID);
+            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             Assert.AreNotEqual(otherParticipant.InstanceHandle, _participant.InstanceHandle);
             otherParticipant.BindRtpsUdpTransportConfig();
@@ -678,7 +673,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory("DomainParticipant")]
         public void TestIgnoreParticipant()
         {
-            DomainParticipant other = _dpf.CreateParticipant(DOMAIN_ID);
+            DomainParticipant other = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(other);
             other.BindRtpsUdpTransportConfig();
 
@@ -1270,7 +1265,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, handles.Count);
 
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID);
+            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -1299,7 +1294,7 @@ namespace OpenDDSharp.UnitTest
         {
             DomainParticipantQos qos = new DomainParticipantQos();
             qos.UserData.Value = new List<byte> { 0x42 };
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID, qos);
+            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
