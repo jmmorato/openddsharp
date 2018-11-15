@@ -17,6 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System.Threading;
 using System.Diagnostics;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
@@ -108,6 +109,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnInconsistentTopic()
         {
+            ManualResetEventSlim evt = new ManualResetEventSlim(false);
+
             // Attach to the event
             int count = 0;
             _listener.InconsistentTopic += (t, s) =>
@@ -116,6 +119,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(1, s.TotalCount);
                 Assert.AreEqual(1, s.TotalCountChange);
                 count++;
+                evt.Set();
             };
 
             // Enable entities
@@ -125,13 +129,12 @@ namespace OpenDDSharp.UnitTest
             SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
             Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
-            // Wait for discovery
-            System.Threading.Thread.Sleep(10000);            
+            // Wait the signal
+            bool wait = evt.Wait(20000);
+            Assert.IsTrue(wait);
 
             // Kill the process
-            supportProcess.KillSupportProcess(process);
-
-            System.Threading.Thread.Sleep(100);
+            supportProcess.KillProcess(process);
 
             Assert.AreEqual(1, count);
 
