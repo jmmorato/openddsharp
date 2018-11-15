@@ -36,6 +36,12 @@ namespace OpenDDSharp {
             typedef void(__stdcall *onLivelinessLostDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status);
             typedef void(__stdcall *onPublicationMatchedDeclaration)(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 
+        private:
+            System::Runtime::InteropServices::GCHandle gchOfferedDeadlineMissed;
+            System::Runtime::InteropServices::GCHandle gchOfferedIncompatibleQos;
+            System::Runtime::InteropServices::GCHandle gchLivelinessLost;
+            System::Runtime::InteropServices::GCHandle gchPublicationMatched;
+
 		internal:
 			::OpenDDSharp::DDS::PublisherListenerNative* impl_entity;
 
@@ -95,6 +101,9 @@ namespace OpenDDSharp {
 			/// Creates a new instance of <see cref="PublisherListener" />
 			/// </summary>
 			PublisherListener();
+
+        protected:
+            !PublisherListener();
 
         public:
             /// <summary>

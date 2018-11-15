@@ -49,6 +49,15 @@ namespace OpenDDSharp {
 			typedef void(__stdcall *onPublicationReconnectedDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status);
 			typedef void(__stdcall *onPublicationLostDeclaration)(::DDS::DataWriter_ptr reader, const ::OpenDDS::DCPS::PublicationLostStatus& status);			
 
+            private:
+                System::Runtime::InteropServices::GCHandle gchOfferedDeadlineMissed;
+                System::Runtime::InteropServices::GCHandle gchOfferedIncompatibleQos;
+                System::Runtime::InteropServices::GCHandle gchLivelinessLost;
+                System::Runtime::InteropServices::GCHandle gchPublicationMatched;
+                System::Runtime::InteropServices::GCHandle gchPublicationDisconnected;
+                System::Runtime::InteropServices::GCHandle gchPublicationReconnected;
+                System::Runtime::InteropServices::GCHandle gchPublicationLost;               
+
 			internal:
 				::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative* impl_entity;
 
@@ -61,7 +70,7 @@ namespace OpenDDSharp {
 				onPublicationReconnectedDeclaration onPublicationReconnectedFunctionCpp;
 				onPublicationLostDeclaration onPublicationLostFunctionCpp;				
 
-			private:
+			private:                
 				delegate void onOfferedDeadlineMissedDelegate(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status);
 				void onOfferedDeadlineMissed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -72,7 +81,7 @@ namespace OpenDDSharp {
 
 					OnOfferedDeadlineMissed(dataWriter, OpenDDSharp::DDS::OfferedDeadlineMissedStatus(status));
 				};
-
+                
 				delegate void onOfferedIncompatibleQosDelegate(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus & status);
 				void onOfferedIncompatibleQos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus & status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -83,7 +92,7 @@ namespace OpenDDSharp {
 
 					OnOfferedIncompatibleQos(dataWriter, OpenDDSharp::DDS::OfferedIncompatibleQosStatus(status));
 				};
-
+                
 				delegate void onLivelinessLostDelegate(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus & status);
 				void onLivelinessLost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus & status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -94,7 +103,7 @@ namespace OpenDDSharp {
 
 					OnLivelinessLost(dataWriter, OpenDDSharp::DDS::LivelinessLostStatus(status));
 				};
-
+                
 				delegate void onPublicationMatchedDelegate(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus & status);
 				void onPublicationMatched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus & status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -105,7 +114,7 @@ namespace OpenDDSharp {
 
 					OnPublicationMatched(dataWriter, OpenDDSharp::DDS::PublicationMatchedStatus(status));
 				};
-
+                
 				delegate void onPublicationDisconnectedDelegate(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationDisconnectedStatus& status);
 				void onPublicationDisconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationDisconnectedStatus& status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -116,7 +125,7 @@ namespace OpenDDSharp {
 
 					OnPublicationDisconnected(dataWriter, OpenDDSharp::OpenDDS::DCPS::PublicationDisconnectedStatus(status));
 				};
-
+                
 				delegate void onPublicationReconnectedDelegate(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status);
 				void onPublicationReconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationReconnectedStatus& status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -127,7 +136,7 @@ namespace OpenDDSharp {
 
 					OnPublicationReconnected(dataWriter, OpenDDSharp::OpenDDS::DCPS::PublicationReconnectedStatus(status));
 				};
-
+                
 				delegate void onPublicationLostDelegate(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationLostStatus& status);
 				void onPublicationLost(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationLostStatus& status) {
 					OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(writer);
@@ -141,9 +150,12 @@ namespace OpenDDSharp {
 
 			public:
 				/// <summary>
-				/// Creates a new instance of <see cref="DataWriterListener" />
+				/// Creates a new instance of <see cref="DataWriterListener" />.
 				/// </summary>
 				DataWriterListener();
+
+            protected:
+                !DataWriterListener();
 
 			public:
 				/// <summary>

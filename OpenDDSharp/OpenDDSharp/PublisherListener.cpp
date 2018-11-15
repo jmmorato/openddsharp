@@ -21,22 +21,22 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 ::OpenDDSharp::DDS::PublisherListener::PublisherListener() {
     onOfferedDeadlineMissedDelegate^ fpOfferedDeadlineMissed = gcnew onOfferedDeadlineMissedDelegate(this, &::OpenDDSharp::DDS::PublisherListener::onOfferedDeadlineMissed);
-    System::Runtime::InteropServices::GCHandle gchOfferedDeadlineMissed = System::Runtime::InteropServices::GCHandle::Alloc(fpOfferedDeadlineMissed);
+    gchOfferedDeadlineMissed = System::Runtime::InteropServices::GCHandle::Alloc(fpOfferedDeadlineMissed);
     System::IntPtr ipOfferedDeadlineMissed = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpOfferedDeadlineMissed);
     onOfferedDeadlineMissedFunctionCpp = static_cast<onOfferedDeadlineMissedDeclaration>(ipOfferedDeadlineMissed.ToPointer());
 
     onOfferedIncompatibleQosDelegate^ fpOfferedIncompatibleQos = gcnew onOfferedIncompatibleQosDelegate(this, &::OpenDDSharp::DDS::PublisherListener::onOfferedIncompatibleQos);
-    System::Runtime::InteropServices::GCHandle gchOfferedIncompatibleQos = System::Runtime::InteropServices::GCHandle::Alloc(fpOfferedIncompatibleQos);
+    gchOfferedIncompatibleQos = System::Runtime::InteropServices::GCHandle::Alloc(fpOfferedIncompatibleQos);
     System::IntPtr ipOfferedIncompatibleQos = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpOfferedIncompatibleQos);
     onOfferedIncompatibleQosFunctionCpp = static_cast<onOfferedIncompatibleQosDeclaration>(ipOfferedIncompatibleQos.ToPointer());
 
     onLivelinessLostDelegate^ fpLivelinessLost = gcnew onLivelinessLostDelegate(this, &::OpenDDSharp::DDS::PublisherListener::onLivelinessLost);
-    System::Runtime::InteropServices::GCHandle gchLivelinessLost = System::Runtime::InteropServices::GCHandle::Alloc(fpLivelinessLost);
+    gchLivelinessLost = System::Runtime::InteropServices::GCHandle::Alloc(fpLivelinessLost);
     System::IntPtr ipLivelinessLost = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpLivelinessLost);
     onLivelinessLostFunctionCpp = static_cast<onLivelinessLostDeclaration>(ipLivelinessLost.ToPointer());
 
     onPublicationMatchedDelegate^ fpPublicationMatched = gcnew onPublicationMatchedDelegate(this, &::OpenDDSharp::DDS::PublisherListener::onPublicationMatched);
-    System::Runtime::InteropServices::GCHandle gchPublicationMatched = System::Runtime::InteropServices::GCHandle::Alloc(fpPublicationMatched);
+    gchPublicationMatched = System::Runtime::InteropServices::GCHandle::Alloc(fpPublicationMatched);
     System::IntPtr ipPublicationMatched = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(fpPublicationMatched);
     onPublicationMatchedFunctionCpp = static_cast<onPublicationMatchedDeclaration>(ipPublicationMatched.ToPointer());
 
@@ -45,4 +45,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 																onLivelinessLostFunctionCpp,
 																onPublicationMatchedFunctionCpp);
 
+}
+
+::OpenDDSharp::DDS::PublisherListener::!PublisherListener() {
+    gchOfferedDeadlineMissed.Free();
+    gchOfferedIncompatibleQos.Free();
+    gchLivelinessLost.Free();
+    gchPublicationMatched.Free();
 }

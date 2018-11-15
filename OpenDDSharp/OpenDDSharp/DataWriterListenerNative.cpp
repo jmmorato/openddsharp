@@ -37,46 +37,46 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 
 ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::~DataWriterListenerNative() {
-	_onOfferedDeadlineMissed = nullptr;
-	_onOfferedIncompatibleQos = nullptr;
-	_onLivelinessLost = nullptr;
-	_onPublicationMatched = nullptr;
-	_onPublicationDisconnected = nullptr;
-	_onPublicationReconnected = nullptr;
-	_onPublicationLost = nullptr;	
+	_onOfferedDeadlineMissed = NULL;
+	_onOfferedIncompatibleQos = NULL;
+	_onLivelinessLost = NULL;
+	_onPublicationMatched = NULL;
+	_onPublicationDisconnected = NULL;
+	_onPublicationReconnected = NULL;
+	_onPublicationLost = NULL;
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
-	if (_onOfferedDeadlineMissed != nullptr)
+	if (_onOfferedDeadlineMissed != NULL)
 		_onOfferedDeadlineMissed(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus & status) {
-	if (_onOfferedIncompatibleQos != nullptr)
+	if (_onOfferedIncompatibleQos != NULL)
 		_onOfferedIncompatibleQos(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus & status) {
-	if (_onLivelinessLost != nullptr)
+	if (_onLivelinessLost != NULL)
 		_onLivelinessLost(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus & status) {
-	if (_onPublicationMatched != nullptr)
+	if (_onPublicationMatched != NULL)
 		_onPublicationMatched(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_publication_disconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationDisconnectedStatus & status) {
-	if (_onPublicationDisconnected != nullptr)
+	if (_onPublicationDisconnected != NULL)
 		_onPublicationDisconnected(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_publication_reconnected(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationReconnectedStatus & status) {
-	if (_onPublicationReconnected != nullptr)
+	if (_onPublicationReconnected != NULL)
 		_onPublicationReconnected(writer, status);
 };
 
 void ::OpenDDSharp::OpenDDS::DCPS::DataWriterListenerNative::on_publication_lost(::DDS::DataWriter_ptr writer, const ::OpenDDS::DCPS::PublicationLostStatus & status) {
-	if (_onPublicationLost != nullptr)
+	if (_onPublicationLost != NULL)
 		_onPublicationLost(writer, status);
 };

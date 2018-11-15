@@ -24,10 +24,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::OpenDDSharp::DDS::TopicListenerNative::~TopicListenerNative() {
-	_onInconsistentTopic = nullptr;
+	_onInconsistentTopic = NULL;
 };
 
 void ::OpenDDSharp::DDS::TopicListenerNative::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus & status) {
-	if (_onInconsistentTopic != nullptr)
+	if (_onInconsistentTopic != NULL)
 		_onInconsistentTopic(topic, status);
 };

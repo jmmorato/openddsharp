@@ -59,7 +59,20 @@ namespace OpenDDSharp {
 			typedef void(__stdcall *onSubscriptionDisconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionDisconnectedStatus& status);
 			typedef void(__stdcall *onSubscriptionReconnectedDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionReconnectedStatus& status);
 			typedef void(__stdcall *onSubscriptionLostDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::SubscriptionLostStatus& status);
-			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);			
+			typedef void(__stdcall *onBudgetExceededDeclaration)(::DDS::DataReader_ptr reader, const ::OpenDDS::DCPS::BudgetExceededStatus& status);
+
+            private:
+                System::Runtime::InteropServices::GCHandle gchDataAvailable;
+                System::Runtime::InteropServices::GCHandle gchRequestedDeadlineMissed;
+                System::Runtime::InteropServices::GCHandle gchRequestedIncompatibleQos;
+                System::Runtime::InteropServices::GCHandle gchSampleRejected;
+                System::Runtime::InteropServices::GCHandle gchLivelinessChanged;
+                System::Runtime::InteropServices::GCHandle gchSubscriptionMatched;
+                System::Runtime::InteropServices::GCHandle gchSampleLost;
+                System::Runtime::InteropServices::GCHandle gchSubscriptionDisconnected;
+                System::Runtime::InteropServices::GCHandle gchSubscriptionReconnected;
+                System::Runtime::InteropServices::GCHandle gchSubscriptionLost;
+                System::Runtime::InteropServices::GCHandle gchBudgetExceeded;
 
 			internal:
 				::OpenDDSharp::OpenDDS::DCPS::DataReaderListenerNative* impl_entity;
@@ -201,9 +214,12 @@ namespace OpenDDSharp {
 
 			public:
 				/// <summary>
-				/// Creates a new instance of <see cref="DataReaderListener" />
+				/// Creates a new instance of <see cref="DataReaderListener" />.
 				/// </summary>
 				DataReaderListener();
+
+            protected:
+                !DataReaderListener();
 
 			public:
 				/// <summary>

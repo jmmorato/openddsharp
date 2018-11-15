@@ -40,8 +40,10 @@ namespace OpenDDSharp {
 									std::function<void(::DDS::DataWriter_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
 									std::function<void(::DDS::DataWriter_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched);
 
-			virtual ~PublisherListenerNative(void);
+        protected:
+            virtual ~PublisherListenerNative();
 
+        public:
 			virtual void on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status);
 
 			virtual void on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus & status);

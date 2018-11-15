@@ -70,8 +70,10 @@ namespace OpenDDSharp {
 												std::function<void(::DDS::DataWriter_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,											
 												std::function<void(::DDS::Topic_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic);
 
-				virtual ~DomainParticipantListenerNative(void);
+            protected:
+				virtual ~DomainParticipantListenerNative();
 
+            public:
 				/* Subscriber methods */
 				virtual void on_data_on_readers(::DDS::Subscriber_ptr subscriber);
 

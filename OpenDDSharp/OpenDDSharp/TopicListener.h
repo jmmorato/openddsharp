@@ -36,6 +36,9 @@ namespace OpenDDSharp {
 
 		typedef void(__stdcall *onInconsistentTopicDeclaration)(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 
+        private:
+            System::Runtime::InteropServices::GCHandle gchInconsistentTopic;
+
 		internal:
 			::OpenDDSharp::DDS::TopicListenerNative* impl_entity;
 
@@ -59,6 +62,9 @@ namespace OpenDDSharp {
 			/// Creates a new instance of <see cref="TopicListener" />
 			/// </summary>
 			TopicListener();
+
+        protected:
+            !TopicListener();
 
 		public:
 			/// <summary>

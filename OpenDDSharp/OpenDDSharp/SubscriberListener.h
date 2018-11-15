@@ -41,6 +41,16 @@ namespace OpenDDSharp {
         typedef void(__stdcall *onSubscriptionMatchedDeclaration)(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
         typedef void(__stdcall *onSampleLostDeclaration)(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
 
+        private:
+            System::Runtime::InteropServices::GCHandle gchDataOnReaders;
+            System::Runtime::InteropServices::GCHandle gchDataAvailable;
+            System::Runtime::InteropServices::GCHandle gchRequestedDeadlineMissed;
+            System::Runtime::InteropServices::GCHandle gchRequestedIncompatibleQos;
+            System::Runtime::InteropServices::GCHandle gchSampleRejected;
+            System::Runtime::InteropServices::GCHandle gchLivelinessChanged;
+            System::Runtime::InteropServices::GCHandle gchSubscriptionMatched;
+            System::Runtime::InteropServices::GCHandle gchSampleLost;
+
 		internal:
 			::OpenDDSharp::DDS::SubscriberListenerNative* impl_entity;
 
@@ -149,6 +159,9 @@ namespace OpenDDSharp {
 			/// Creates a new instance of <see cref="SubscriberListener" />
 			/// </summary>
 			SubscriberListener();
+
+        protected:
+            !SubscriberListener();
 
 		public:
 			/// <summary>

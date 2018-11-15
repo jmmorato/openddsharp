@@ -59,9 +59,10 @@ namespace OpenDDSharp {
 									     std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionReconnectedStatus)> onSubscriptionReconnected,
 									     std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::SubscriptionLostStatus)> onSubscriptionLost,
 									     std::function<void(::DDS::DataReader_ptr, ::OpenDDS::DCPS::BudgetExceededStatus)> onBudgetExceeded);
+            protected:
+				virtual ~DataReaderListenerNative();
 
-				virtual ~DataReaderListenerNative(void);
-
+            public:
 				virtual void on_data_available(::DDS::DataReader_ptr reader);
 
 				virtual void on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus & status);

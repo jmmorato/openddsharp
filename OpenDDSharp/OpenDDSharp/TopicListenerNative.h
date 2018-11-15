@@ -34,8 +34,10 @@ namespace OpenDDSharp {
 		public:
 			TopicListenerNative(std::function<void(::DDS::Topic_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic);
 
-			virtual ~TopicListenerNative(void);
+        protected:
+			virtual ~TopicListenerNative();
 
+        public:
 			virtual void on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus & status);
 		};
 	};

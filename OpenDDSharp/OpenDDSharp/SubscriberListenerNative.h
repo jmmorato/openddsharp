@@ -53,8 +53,10 @@ namespace OpenDDSharp {
 									 std::function<void(::DDS::DataReader_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
 									 std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> onSampleLost);
 			
-			virtual ~SubscriberListenerNative(void);
+        protected:
+			virtual ~SubscriberListenerNative();
 
+        public:
 			virtual void on_data_on_readers(::DDS::Subscriber_ptr subscriber);
 
 			virtual void on_data_available(::DDS::DataReader_ptr reader);

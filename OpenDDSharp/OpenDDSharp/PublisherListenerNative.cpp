@@ -30,29 +30,29 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::OpenDDSharp::DDS::PublisherListenerNative::~PublisherListenerNative() {
-	_onOfferedDeadlineMissed = nullptr;
-	_onOfferedIncompatibleQos = nullptr;
-	_onLivelinessLost = nullptr;
-	_onPublicationMatched = nullptr;
+	_onOfferedDeadlineMissed = NULL;
+	_onOfferedIncompatibleQos = NULL;
+	_onLivelinessLost = NULL;
+	_onPublicationMatched = NULL;
 };
 
 void ::OpenDDSharp::DDS::PublisherListenerNative::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus & status) {
-	if (_onOfferedDeadlineMissed != nullptr)
+	if (_onOfferedDeadlineMissed != NULL)
 		_onOfferedDeadlineMissed(writer, status);
 };
 
 void ::OpenDDSharp::DDS::PublisherListenerNative::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus & status) {
-	if (_onOfferedIncompatibleQos != nullptr)
+	if (_onOfferedIncompatibleQos != NULL)
 		_onOfferedIncompatibleQos(writer, status);
 };
 
 void ::OpenDDSharp::DDS::PublisherListenerNative::on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus & status) {
-	if (_onLivelinessLost != nullptr)
+	if (_onLivelinessLost != NULL)
 		_onLivelinessLost(writer, status);
 };
 
 void ::OpenDDSharp::DDS::PublisherListenerNative::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus & status) {
-	if (_onPublicationMatched != nullptr)
+	if (_onPublicationMatched != NULL)
 		_onPublicationMatched(writer, status);
 };
 
