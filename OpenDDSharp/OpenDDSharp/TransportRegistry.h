@@ -85,24 +85,24 @@ namespace OpenDDSharp {
                 void Release();
 
                 /// <summary>
-                /// Creates a new <see cref="TransportInstance" />.
+                /// Creates a new <see cref="TransportInst" />.
                 /// </summary>
                 /// <param name="name">A unique name for the transport instance.</param>
                 /// <param name="transportType">The transport type for the instance. It should be one of the included transports (i.e. tcp, udp, multicast, shmem, and rtps_udp).</param>
-                /// <returns>The newly created <see cref="TransportInstance" /> or null if failed.</returns>
+                /// <returns>The newly created <see cref="TransportInst" /> or null if failed.</returns>
                 TransportInst^ CreateInst(System::String^ name, System::String^ transportType);
 
                 /// <summary>
-                /// Gets an already created <see cref="TransportInstance" />.
+                /// Gets an already created <see cref="TransportInst" />.
                 /// </summary>
-                /// <param name="name">The name given to the <see cref="TransportInstance" /> during the creation.</param>
-                /// <returns>The <see cref="TransportInstance" /> or null if not found.</returns>
+                /// <param name="name">The name given to the <see cref="TransportInst" /> during the creation.</param>
+                /// <returns>The <see cref="TransportInst" /> or null if not found.</returns>
                 TransportInst^ GetInst(System::String^ name);
 
                 /// <summary>
-                /// Removes a <see cref="TransportInstance" />.
+                /// Removes a <see cref="TransportInst" />.
                 /// </summary>
-                /// <param name="inst">The <see cref="TransportInstance" /> to be removed.</param>
+                /// <param name="inst">The <see cref="TransportInst" /> to be removed.</param>
                 void RemoveInst(TransportInst^ inst);
 
                 /// <summary>
@@ -140,17 +140,17 @@ namespace OpenDDSharp {
                 void SetDomainDefaultConfig(System::Int32 domain, TransportConfig^ cfg);
 
                 /// <summary>
-                /// Binds a <see cref="TransportConfig" /> to a <see cref="Entity" />.
+                /// Binds a <see cref="TransportConfig" /> to a <see cref="::OpenDDSharp::DDS::Entity" />.
                 /// </summary>
                 /// <param name="name">The name given to the <see cref="TransportConfig" /> during the creation.</param>
-                /// <param name="entity">The <see cref="Entity" /> to be bound.</param>
+                /// <param name="entity">The <see cref="::OpenDDSharp::DDS::Entity" /> to be bound.</param>
                 void BindConfig(System::String^ name, ::OpenDDSharp::DDS::Entity^ entity);
 
                 /// <summary>
-                /// Binds a <see cref="TransportConfig" /> to a <see cref="Entity" />.
+                /// Binds a <see cref="TransportConfig" /> to a <see cref="::OpenDDSharp::DDS::Entity" />.
                 /// </summary>
                 /// <param name="cfg">The <see cref="TransportConfig" /> to be applied.</param>
-                /// <param name="entity">The <see cref="Entity" /> to be bound.</param>
+                /// <param name="entity">The <see cref="::OpenDDSharp::DDS::Entity" /> to be bound.</param>
                 void BindConfig(TransportConfig^ cfg, ::OpenDDSharp::DDS::Entity^ entity);
 
             private:
