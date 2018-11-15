@@ -29,15 +29,17 @@ OpenDDSharp::OpenDDS::DCPS::ParticipantService::ParticipantService() {
 	impl_entity = ::OpenDDS::DCPS::Service_Participant::instance();
 };
 
+System::Boolean OpenDDSharp::OpenDDS::DCPS::ParticipantService::IsShutdown::get() {
+    return impl_entity->is_shut_down();
+}
+
 System::String^ OpenDDSharp::OpenDDS::DCPS::ParticipantService::DefaultDiscovery::get() {
     msclr::interop::marshal_context context;
-
     return context.marshal_as<System::String^>(impl_entity->get_default_discovery().c_str());
 }
 
 void OpenDDSharp::OpenDDS::DCPS::ParticipantService::DefaultDiscovery::set(System::String^ value) {
     msclr::interop::marshal_context context;
-
     impl_entity->set_default_discovery(context.marshal_as<const char *>(value)) ;
 }
 
@@ -52,7 +54,7 @@ OpenDDSharp::DDS::DomainParticipantFactory^  OpenDDSharp::OpenDDS::DCPS::Partici
 	int argc = args->Length + 1;
 	char **argv = new char *[argc];
 
-	// don't need the program name (can't be NULL though, else ACE_Arg_Shifter fails)
+	// Don't need the program name (can't be NULL though, else ACE_Arg_Shifter fails)
 	argv[0] = "";  
 	for (int i = 0; i < args->Length; i++)
 		argv[i + 1] = _strdup(context.marshal_as<const char*>(args[i]));
@@ -65,6 +67,15 @@ OpenDDSharp::DDS::DomainParticipantFactory^  OpenDDSharp::OpenDDS::DCPS::Partici
 void OpenDDSharp::OpenDDS::DCPS::ParticipantService::AddDiscovery(::OpenDDSharp::OpenDDS::DCPS::Discovery^ discovery) {
     ::OpenDDS::DCPS::Discovery_rch disc = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::Discovery>(discovery->impl_entity);
     impl_entity->add_discovery(disc);
+}
+
+void OpenDDSharp::OpenDDS::DCPS::ParticipantService::SetRepoDomain(System::Int32 domain, System::String^ repo) {
+    SetRepoDomain(domain, repo, true);
+}
+
+void OpenDDSharp::OpenDDS::DCPS::ParticipantService::SetRepoDomain(System::Int32 domain, System::String^ repo, bool attachParticipant) {
+    msclr::interop::marshal_context context;
+    impl_entity->set_repo_domain(domain, context.marshal_as<const char*>(repo), attachParticipant);
 }
 
 void OpenDDSharp::OpenDDS::DCPS::ParticipantService::Shutdown() {

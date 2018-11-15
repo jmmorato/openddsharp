@@ -51,7 +51,17 @@ namespace OpenDDSharp {
 				/// <summary>
 				/// Gets the singleton instance.
 				/// </summary>
-				static property ParticipantService^ Instance { ParticipantService^ get(); }
+                static property ParticipantService^ Instance
+                { 
+                    ParticipantService^ get();
+                }
+
+                /// <summary>
+                /// Indicates if the participant has been shutdown.
+                /// </summary>
+                property System::Boolean IsShutdown {
+                    System::Boolean get();                    
+                }
 
                 /// <summary>
                 /// Gets or sets the default discovery.
@@ -83,6 +93,21 @@ namespace OpenDDSharp {
                 /// Add a new <see cref="::OpenDDSharp::OpenDDS::DCPS::Discovery" />
                 /// </summary>
                 void AddDiscovery(::OpenDDSharp::OpenDDS::DCPS::Discovery^ discovery);
+
+                /// <summary>
+                /// Set the discovery repository for a specifi domain id.
+                /// </summary>
+                /// <param name="domain">The domain id.</param>
+                /// <param name="repo">The repository key.</param>
+                void SetRepoDomain(System::Int32 domain, System::String^ repo);
+
+                /// <summary>
+                /// Set the discovery repository for a specifi domain id.
+                /// </summary>
+                /// <param name="domain">The domain id.</param>
+                /// <param name="repo">The repository key.</param>
+                /// <param name="attachParticipant">Indicates if the current participant should be attached to the new repository.</param>
+                void SetRepoDomain(System::Int32 domain,  System::String^ repo, bool attachParticipant);
 
 				/// <summary>
 				/// Stop being a participant in the service.
