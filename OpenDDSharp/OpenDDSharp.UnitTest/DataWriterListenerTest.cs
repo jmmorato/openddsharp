@@ -18,6 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Linq;
+using System.Threading;
+using System.Diagnostics;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
 using OpenDDSharp.OpenDDS.DCPS;
@@ -55,7 +57,7 @@ namespace OpenDDSharp.UnitTest
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _dpf = ParticipantService.Instance.GetDomainParticipantFactory(new string[] { "-DCPSDebugLevel", "10" });
+            _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
         }
 
         [TestInitialize]
@@ -156,11 +158,11 @@ namespace OpenDDSharp.UnitTest
             _dataWriter.Write(new TestStruct { Id = 1 });
 
             // After half second deadline should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(0, count);
 
             // After one second and a half one deadline should be lost
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -207,7 +209,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
         }
 
@@ -237,11 +239,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // After half second liveliness should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(0, count);
 
             // After one second and a half one liveliness should be lost
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -277,7 +279,7 @@ namespace OpenDDSharp.UnitTest
             bool found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -289,24 +291,125 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnPublicationDisconnected()
         {
-            // Only working with TCP transport?
-            // TODO: Implement it when the TransportConfig is wrapped
+            ManualResetEventSlim evt = new ManualResetEventSlim(false);
+            DomainParticipant domainParticipant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(domainParticipant);
+            domainParticipant.BindTcpTransportConfig();
+
+            Publisher publisher = domainParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(domainParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = domainParticipant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
+            Assert.IsNotNull(topic);
+
+            MyDataWriterListener listener = new MyDataWriterListener();
+            DataWriter writer = publisher.CreateDataWriter(topic, listener);
+
+            int count = 0;
+            listener.PublicationDisconnected += (w, s) =>
+            {
+                Assert.AreEqual(writer, w);
+                Assert.AreEqual(1, s.SubscriptionHandles.Count());
+                Assert.AreNotEqual(InstanceHandle.HandleNil, s.SubscriptionHandles.First());
+                count++;
+                evt.Set();
+            };
+
+            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.PublicationDisconnectedTest);
+            try
+            {
+                // Wait for discovery
+                bool found = writer.WaitForSubscriptions(1, 5000);
+                Assert.IsTrue(found);
+            }
+            finally
+            {
+                supportProcess.KillProcess(process);
+            }
+
+            bool resp = evt.Wait(10000);
+            Assert.IsTrue(resp);
+            Assert.AreEqual(1, count);
+
+            // Remove the listener to avoid extra messages
+            result = writer.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            domainParticipant.DeleteContainedEntities();
+            _dpf.DeleteParticipant(domainParticipant);                       
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnPublicationReconnected()
         {
-            // Only working with TCP transport?
-            // TODO: Implement it when the TransportConfig is wrapped
+            // TODO: How to simulate reconnect?
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnPublicationLost()
         {
-            // Only working with TCP transport?
-            // TODO: Implement it when the TransportConfig is wrapped
+            ManualResetEventSlim evt = new ManualResetEventSlim(false);
+            DomainParticipant domainParticipant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(domainParticipant);
+            domainParticipant.BindTcpTransportConfig();
+
+            Publisher publisher = domainParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(domainParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = domainParticipant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
+            Assert.IsNotNull(topic);
+
+            MyDataWriterListener listener = new MyDataWriterListener();
+            DataWriter writer = publisher.CreateDataWriter(topic, listener);
+
+            int count = 0;
+            listener.PublicationLost += (w, s) =>
+            {
+                Assert.AreEqual(writer, w);
+                Assert.AreEqual(1, s.SubscriptionHandles.Count());
+                Assert.AreNotEqual(InstanceHandle.HandleNil, s.SubscriptionHandles.First());
+                count++;
+                evt.Set();
+            };
+
+            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.PublicationLostTest);
+            try
+            {
+                // Wait for discovery
+                bool found = writer.WaitForSubscriptions(1, 5000);
+                Assert.IsTrue(found);
+            }
+            finally
+            {
+                supportProcess.KillProcess(process);
+            }
+
+            bool resp = evt.Wait(20000);
+            Assert.IsTrue(resp);
+            Assert.AreEqual(1, count);
+
+            // Remove the listener to avoid extra messages
+            result = writer.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            domainParticipant.DeleteContainedEntities();
+            _dpf.DeleteParticipant(domainParticipant);
+
+            evt.Dispose();
         }
         #endregion
     }
