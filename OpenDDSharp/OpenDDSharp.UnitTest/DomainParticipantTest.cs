@@ -27,7 +27,6 @@ using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 
 namespace OpenDDSharp.UnitTest
 {
@@ -36,7 +35,7 @@ namespace OpenDDSharp.UnitTest
     {
         #region Constants
         private const int DOMAIN_ID = 42;
-        private const int OTHER_DOMAIN_ID = 23;
+        private const int OTHER_DOMAIN_ID = 43;
         #endregion
 
         #region Fields
@@ -679,7 +678,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory("DomainParticipant")]
         public void TestIgnoreParticipant()
         {
-            DomainParticipant other = _dpf.CreateParticipant(OTHER_DOMAIN_ID);
+            DomainParticipant other = _dpf.CreateParticipant(DOMAIN_ID);
             Assert.IsNotNull(other);
             other.BindRtpsUdpTransportConfig();
 
@@ -687,6 +686,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // TODO: Test that actually is ignored
+
+            result = _dpf.DeleteParticipant(other);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
