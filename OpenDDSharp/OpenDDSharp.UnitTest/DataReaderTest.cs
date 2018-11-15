@@ -32,6 +32,10 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DataReaderTest
     {
+        #region Constants        
+        private const string TEST_CATEGORY = "DataReader";
+        #endregion
+
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -91,7 +95,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestProperties()
         {
             // Create a DataReader and check the TopicDescription and Subscriber properties
@@ -104,7 +108,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             // Create a non-default QoS and create a datareader with it
@@ -124,7 +128,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Create a new DataReader using the default QoS
@@ -190,7 +194,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetListener()
         {
             // Create a new DataReader with a listener
@@ -205,7 +209,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
             // Create a new DataReader without listener
@@ -233,7 +237,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateReadCondition()
         {
             // Initialize entities
@@ -261,7 +265,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateQueryCondition()
         {
             // Initialize entities
@@ -314,7 +318,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteReadCondition()
         {
             // Initialize entities
@@ -376,7 +380,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContainedEntities()
         {
             // Initialize entities
@@ -407,7 +411,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetSampleRejectedStatus()
         {
             // Initialize entities
@@ -461,7 +465,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetLivelinessChangedStatus()
         {
             // Check the status when no writers are matched
@@ -521,7 +525,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetRequestedDeadlineMissedStatus()
         {
             // Initialize entities
@@ -566,7 +570,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetRequestedIncompatibleQosStatus()
         {
             // Initialize entities
@@ -610,7 +614,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetSubscriptionMatchedStatus()
         {
             // Initialize entities
@@ -666,7 +670,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetSampleLostStatus()
         {
             // Initialize entities
@@ -717,7 +721,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestWaitForHistoricalData()
         {
             // Initialize entities
@@ -784,7 +788,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetMatchedPublications()
         {
             // Initialize entities  
@@ -833,7 +837,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetMatchedPublicationData()
         {
             // Initialize entities
@@ -904,7 +908,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestRead()
         {
             // Initialize entities
@@ -1005,7 +1009,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestTake()
         {
             // Initialize entities
@@ -1131,7 +1135,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestReadInstance()
         {
             // Initialize entities
@@ -1240,7 +1244,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestTakeInstance()
         {
             // Initialize entities
@@ -1357,7 +1361,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestReadNextInstance()
         {
             // Initialize entities
@@ -1453,7 +1457,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestTakeNextInstance()
         {
             // Initialize entities
@@ -1549,7 +1553,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestReadNextSample()
         {
             // Initialize entities
@@ -1630,7 +1634,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestTakeNextSample()
         {
             // Initialize entities
@@ -1711,7 +1715,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetKeyValue()
         {
             // Initialize entities
@@ -1761,7 +1765,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataReader")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestLookupInstance()
         {
             // Initialize entities

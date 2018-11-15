@@ -32,6 +32,10 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DataWriterTest
     {
+        #region Constants
+        private const string TEST_CATEGORY = "DataWriter";
+        #endregion
+
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -91,7 +95,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestProperties()
         {            
             // Create a DataWriter and check the Topic and Participant properties
@@ -102,7 +106,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             // Create a non-default QoS and create a datawriter with it
@@ -122,7 +126,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Create a new DataWriter using the default QoS
@@ -185,7 +189,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetListener()
         {
             // Create a new DataWriter with a listener
@@ -200,7 +204,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
             // Create a new DataWriter without listener
@@ -228,7 +232,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestWaitForAcknowledgments()
         {
             // Initialize entities
@@ -259,7 +263,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetLivelinessLostStatus()
         {
             // Initialize entities
@@ -292,7 +296,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetOfferedDeadlineMissedStatus()
         {
             // Initialize entities
@@ -341,7 +345,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetOfferedIncompatibleQosStatus()
         {
             // Initialize entities
@@ -385,7 +389,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetPublicationMatchedStatus()
         {
             // Initialize entities
@@ -441,7 +445,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestAssertLiveliness()
         {
             // Initialize entities
@@ -471,7 +475,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetMatchedSubscriptions()
         {
             // Initialize entities  
@@ -523,7 +527,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetMatchedSubscriptionData()
         {
             // Initialize entities
@@ -586,7 +590,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestRegisterInstance()
         {
             // Initialize entities
@@ -605,7 +609,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestUnregisterInstance()
         {
             // Initialize entities
@@ -646,7 +650,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestWrite()
         {
             // Initialize entities
@@ -742,7 +746,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDispose()
         {
             // Initialize entities
@@ -863,7 +867,7 @@ namespace OpenDDSharp.UnitTest
         }        
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetKeyValue()
         {
             // Initialize entities
@@ -889,7 +893,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DataWriter")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestLookupInstance()
         {
             // Initialize entities

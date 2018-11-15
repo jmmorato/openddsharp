@@ -33,6 +33,10 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DomainParticipantTest
     {
+        #region Constants
+        private const string TEST_CATEGORY = "DomainParticipant";
+        #endregion
+
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -71,7 +75,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDomainId()
         {
             Assert.IsNotNull(_participant);
@@ -79,7 +83,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewParticipantQos()
         {
             DomainParticipantQos qos = new DomainParticipantQos();
@@ -87,7 +91,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
@@ -102,7 +106,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Creates a non-default QoS, set it an check it
@@ -131,7 +135,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetListener()
         {
             DomainParticipantListener listener = _participant.GetListener();
@@ -149,7 +153,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
             DomainParticipantListener listener = _participant.GetListener();
@@ -170,7 +174,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContainedEntities()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -203,7 +207,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewTopicQos()
         {
             TopicQos qos = new TopicQos();
@@ -211,7 +215,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultTopicQos()
         {
             TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
@@ -226,7 +230,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultTopicQos()
         {
             TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
@@ -245,7 +249,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateTopic()
         {
             TopicQos qos = new TopicQos();
@@ -297,7 +301,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestFindTopic()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -318,7 +322,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestLookupTopicDescription()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -337,7 +341,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteTopic()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -378,7 +382,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewPublisherQos()
         {
             PublisherQos qos = new PublisherQos();
@@ -386,7 +390,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultPublisherQos()
         {
             PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
@@ -401,7 +405,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultPulisherQos()
         {
             PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
@@ -420,7 +424,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreatePublisher()
         {
             PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
@@ -443,7 +447,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeletePublisher()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -476,7 +480,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewSubscriberQos()
         {
             SubscriberQos qos = new SubscriberQos();
@@ -484,7 +488,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultSubscriberQos()
         {
             SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
@@ -498,7 +502,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultSubscriberQos()
         {
             SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
@@ -517,7 +521,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateSubscriber()
         {
             SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
@@ -539,7 +543,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteSubscriber()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -571,7 +575,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetBuiltinSubscriber()
         {
             Subscriber subscriber = _participant.GetBuiltinSubscriber();
@@ -579,7 +583,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestContainsEntity()
         {
             Subscriber builtin = _participant.GetBuiltinSubscriber();
@@ -670,7 +674,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestIgnoreParticipant()
         {
             DomainParticipant other = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
@@ -687,7 +691,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestIgnoreTopic()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -705,7 +709,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestIgnorePublication()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -729,7 +733,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestIgnoreSubscription()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -753,7 +757,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestAssertLiveliness()
         {
             ReturnCode result = _participant.AssertLiveliness();
@@ -761,7 +765,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetCurrentTimestamp()
         {
             Timestamp ts = new Timestamp()
@@ -789,7 +793,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateContentFilteredTopic()
         {           
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -1037,7 +1041,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContentFilteredTopic()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -1073,7 +1077,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateMultiTopic()
         {
             AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
@@ -1209,7 +1213,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteMultiTopic()
         {
             AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
@@ -1257,7 +1261,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredParticipants()
         {
             List<InstanceHandle> handles = new List<InstanceHandle>();
@@ -1289,7 +1293,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredParticipantData()
         {
             DomainParticipantQos qos = new DomainParticipantQos();
@@ -1318,7 +1322,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
         {
             #region OpenDDS ISSUE
@@ -1384,7 +1388,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipant")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
         {
             #region OpenDDS ISSUE

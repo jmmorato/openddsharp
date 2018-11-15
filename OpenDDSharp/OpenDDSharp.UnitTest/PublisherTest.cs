@@ -31,6 +31,10 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class PublisherTest
     {
+        #region Constants        
+        private const string TEST_CATEGORY = "Publisher";
+        #endregion
+
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -70,7 +74,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetParticipant()
         {
             Publisher publisher = _participant.CreatePublisher();
@@ -79,7 +83,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             // Create a non-default QoS and create a publisher with it
@@ -99,7 +103,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Create a new Publisher using the default QoS
@@ -185,7 +189,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetListener()
         {
             // Create a new Publisher with a listener
@@ -200,7 +204,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
             // Create a new Publisher without listener
@@ -228,7 +232,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewDataWriterQos()
         {
             DataWriterQos qos = new DataWriterQos();
@@ -236,7 +240,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateDataWriter()
         {
             // Initialize entities
@@ -348,7 +352,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteDataWriter()
         {
             // Initialize entities
@@ -397,7 +401,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestLookupDataWriter()
         {
             // Initialize entities
@@ -446,7 +450,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContainedEntities()
         {
             // Initialize entities
@@ -485,7 +489,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultDataWriterQos()
         {
             // Initialize entities
@@ -515,7 +519,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultDataWriterQos()
         {
             // Initialize entities
@@ -575,7 +579,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestWaitForAcknowledgments()
         {
             // Initialize entities
@@ -635,7 +639,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSuspendResumePublications()
         {
             // Initialize entities
@@ -720,7 +724,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Publisher")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestBeginEndCoherentChanges()
         {
             // Initialize entities

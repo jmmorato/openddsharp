@@ -30,7 +30,11 @@ namespace OpenDDSharp.UnitTest
 {
     [TestClass]
     public class TopicTest
-    {       
+    {
+        #region Constants        
+        private const string TEST_CATEGORY = "Topic";
+        #endregion
+
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -70,7 +74,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("Topic")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestProperties()
         {
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -86,7 +90,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Topic")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             // Create a non-default QoS
@@ -116,7 +120,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Topic")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Create a new Topic using the default QoS
@@ -218,7 +222,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Topic")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetListener()
         {
             // Create a new Topic with a listener
@@ -241,7 +245,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Topic")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
             // Create a new Topic without listener
@@ -277,7 +281,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Topic")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetInconsistentTopicStatus()
         {
             // Create a new Topic and call GetInconsistentTopicStatus

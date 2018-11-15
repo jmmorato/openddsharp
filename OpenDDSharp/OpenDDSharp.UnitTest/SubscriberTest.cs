@@ -31,6 +31,10 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class SubscriberTest
     {
+        #region Constants        
+        private const string TEST_CATEGORY = "Subscriber";
+        #endregion
+
         #region Fields
         private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
@@ -70,7 +74,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetParticipant()
         {
             Subscriber subscriber = _participant.CreateSubscriber();
@@ -79,7 +83,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             // Create a non-default QoS and create a subscriber with it
@@ -100,7 +104,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Create a new Subscriber using the default QoS
@@ -186,7 +190,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetListener()
         {
             // Create a new Subscriber with a listener
@@ -201,7 +205,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
             // Create a new Subscriber without listener
@@ -229,7 +233,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewDataReaderQos()
         {
             DataReaderQos qos = new DataReaderQos();
@@ -237,7 +241,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultDataReaderQos()
         {
             // Initialize entities
@@ -267,7 +271,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultDataReaderQos()
         {
             // Initialize entities
@@ -337,7 +341,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestLookupDataReader()
         {
             // Initialize entities
@@ -386,7 +390,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateDataReaderr()
         {
             // Initialize entities
@@ -487,7 +491,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteDataReader()
         {
             // Initialize entities
@@ -536,7 +540,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContainedEntities()
         {
             // Initialize entities
@@ -586,7 +590,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNotifyDataReaders()
         {
             // Initialize entities
@@ -654,7 +658,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDataReaders()
         {
             // Initialize entities
@@ -749,7 +753,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("Subscriber")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestBeginEndAccess()
         {
             // OpenDDS Issue: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.

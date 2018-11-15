@@ -30,6 +30,10 @@ namespace OpenDDSharp.UnitTest
     [TestClass]
     public class DomainParticipantFactoryTest
     {
+        #region Constants
+        private const string TEST_CATEGORY = "DomainParticipantFactory";
+        #endregion
+
         #region Fields
         static DomainParticipantFactory _dpf;
         #endregion
@@ -51,7 +55,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Methods
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestNewParticipantFactoryQos()
         {
             DomainParticipantFactoryQos qos = new DomainParticipantFactoryQos();
@@ -61,7 +65,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             DomainParticipantFactoryQos qos = new DomainParticipantFactoryQos();
@@ -78,7 +82,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
             // Creates a non-default QoS, set it an check it
@@ -110,7 +114,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultDomainParticipantQos()
         {
             DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
@@ -125,7 +129,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultDomainParticipantQos()
         {
             // Creates a non-default QoS, set it an check it
@@ -153,7 +157,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestCreateParticipant()
         {
             // Test simplest overload
@@ -245,7 +249,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestLookupParticipant()
         {
             DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
@@ -275,7 +279,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory("DomainParticipantFactory")]
+        [TestCategory(TEST_CATEGORY)]
         public void TestDeleteParticipant()
         {
             DomainParticipant participant = _dpf.CreateParticipant(42);
