@@ -34,7 +34,12 @@ namespace Test {
 
     public enum class SupportTestKind {
         InconsistentTopicTest = ::Test::InconsistentTopicTest,
-        GetDiscoveredTopicsTest = ::Test::GetDiscoveredTopicsTest
+        PublicationDisconnectedTest = ::Test::PublicationDisconnectedTest,
+        PublicationLostTest = ::Test::PublicationLostTest,
+        PublicationReconnectedTest = ::Test::PublicationReconnectedTest,
+        SubscriptionDisconnectedTest = ::Test::SubscriptionDisconnectedTest,
+        SubscriptionLostTest = ::Test::SubscriptionLostTest,
+        SubscriptionReconnectedTest = ::Test::SubscriptionReconnectedTest
     };
 
     public ref class BasicTestStruct {

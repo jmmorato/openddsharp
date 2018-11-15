@@ -28,6 +28,10 @@ namespace TestSupportProcess
     class Program
     {
         private const string RTPS_DISCOVERY = "RtpsDiscovery";
+        private const string INFOREPO_DISCOVERY = "InfoRepo";
+        private const string INFOREPO_IOR = "repo.ior";
+        private const int INFOREPO_DOMAIN = 23;
+        private const int RTPS_DOMAIN = 42;
 
         static void Main(string[] args)
         {
@@ -40,6 +44,10 @@ namespace TestSupportProcess
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
 
+            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
+            ParticipantService.Instance.AddDiscovery(infoRepo);
+            ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);            
+
             if (Enum.TryParse(args[0], out SupportTestKind testKind))
             {
                 switch (testKind)
@@ -47,11 +55,16 @@ namespace TestSupportProcess
                     case SupportTestKind.InconsistentTopicTest:
                         TestOnInconsistentTopic();
                         break;
-                    case SupportTestKind.GetDiscoveredTopicsTest:
-                        TestGetDiscoveredTopics();
+                    case SupportTestKind.PublicationDisconnectedTest:
+                    case SupportTestKind.PublicationLostTest:
+                        TestOnPublicationLostDisconnected();
+                        break;
+                    case SupportTestKind.SubscriptionDisconnectedTest:
+                    case SupportTestKind.SubscriptionLostTest:
+                        TestOnSubscriptionLostDisconnected();
                         break;
                     default:
-                        throw new ApplicationException("Unkwnon test requested.");
+                        throw new ApplicationException("Unkwnon test requested." + testKind.ToString());
                 }
             }
             else
@@ -60,24 +73,23 @@ namespace TestSupportProcess
             }
         }
 
-        private static void TestGetDiscoveredTopics()
+        private static void TestOnSubscriptionLostDisconnected()
         {
             DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-            DomainParticipant participant = dpf.CreateParticipant(42);
+            DomainParticipant participant = dpf.CreateParticipant(INFOREPO_DOMAIN);
             if (participant == null)
             {
                 throw new ApplicationException("Failed to create the participant.");
             }
+            BindTcpTransportConfig(participant);
 
-            BindRtpsUdpTransportConfig(participant);
-
-            Subscriber subscriber = participant.CreateSubscriber();
-            if (subscriber == null)
+            Publisher publisher = participant.CreatePublisher();
+            if (publisher == null)
             {
-                throw new ApplicationException("Failed to create the subscriber.");
+                throw new ApplicationException("Failed to create the publisher.");
             }
 
-            AthleteTypeSupport support = new AthleteTypeSupport();
+            TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(participant, typeName);
             if (result != ReturnCode.Ok)
@@ -85,7 +97,49 @@ namespace TestSupportProcess
                 throw new ApplicationException("Failed to register the type." + result.ToString());
             }
 
-            Topic topic = participant.CreateTopic(nameof(TestOnInconsistentTopic), typeName);
+            Topic topic = participant.CreateTopic("TestOnSubscriptionLostDisconnected", typeName);
+            if (topic == null)
+            {
+                throw new ApplicationException("Failed to create the topic.");
+            }
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            if (writer == null)
+            {
+                throw new ApplicationException("Failed to create the writer.");
+            }
+
+            while (true)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+        }
+
+        private static void TestOnPublicationLostDisconnected()
+        {
+            DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+            DomainParticipant participant = dpf.CreateParticipant(INFOREPO_DOMAIN);
+            if (participant == null)
+            {
+                throw new ApplicationException("Failed to create the participant.");
+            }
+            BindTcpTransportConfig(participant);            
+
+            Subscriber subscriber = participant.CreateSubscriber();
+            if (subscriber == null)
+            {
+                throw new ApplicationException("Failed to create the subscriber.");
+            }
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(participant, typeName);            
+            if (result != ReturnCode.Ok)
+            {
+                throw new ApplicationException("Failed to register the type." + result.ToString());
+            }
+
+            Topic topic = participant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
             if (topic == null)
             {
                 throw new ApplicationException("Failed to create the topic.");
@@ -95,7 +149,7 @@ namespace TestSupportProcess
             if (reader == null)
             {
                 throw new ApplicationException("Failed to create the reader.");
-            }
+            }            
 
             while (true)
             {
@@ -106,7 +160,7 @@ namespace TestSupportProcess
         private static void TestOnInconsistentTopic()
         {           
             DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-            DomainParticipant participant = dpf.CreateParticipant(42);
+            DomainParticipant participant = dpf.CreateParticipant(RTPS_DOMAIN);
             if (participant == null)
             {
                 throw new ApplicationException("Failed to create the participant.");
@@ -158,6 +212,22 @@ namespace TestSupportProcess
             config.Insert(inst);
 
             TransportRegistry.Instance.BindConfig(configName, participant);
+        }
+
+        private static TcpInst BindTcpTransportConfig(Entity entity)
+        {
+            long ticks = DateTime.Now.Ticks;
+            string configName = "openddsharp_tcp_" + ticks.ToString();
+            string instName = "internal_openddsharp_tcp_transport_" + ticks.ToString();
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
+            TcpInst tcpi = new TcpInst(inst);                    
+            config.Insert(inst);
+
+            TransportRegistry.Instance.BindConfig(config, entity);
+
+            return tcpi;
         }
     }
 }
