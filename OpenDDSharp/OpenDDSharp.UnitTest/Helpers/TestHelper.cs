@@ -764,7 +764,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             return true;
         }
 
-        public static void BindRtpsUdpTransportConfig(this DomainParticipant participant)
+        public static void BindRtpsUdpTransportConfig(this Entity entity)
         {
             long ticks = DateTime.Now.Ticks;
             string configName = "openddsharp_rtps_interop_" + ticks.ToString();
@@ -775,7 +775,21 @@ namespace OpenDDSharp.UnitTest.Helpers
             RtpsUdpInst rui = new RtpsUdpInst(inst);
             config.Insert(inst);
 
-            TransportRegistry.Instance.BindConfig(configName, participant);
+            TransportRegistry.Instance.BindConfig(configName, entity);
+        }
+
+        public static void BindTcpTransportConfig(this Entity entity)
+        {
+            long ticks = DateTime.Now.Ticks;
+            string configName = "openddsharp_tcp_" + ticks.ToString();
+            string instName = "internal_openddsharp_tcp_transport_" + ticks.ToString();
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
+            TcpInst tcpi = new TcpInst(inst);
+            config.Insert(inst);
+
+            TransportRegistry.Instance.BindConfig(config, entity);
         }
 
         public static DateTime ToDateTime(this Timestamp timestamp)
