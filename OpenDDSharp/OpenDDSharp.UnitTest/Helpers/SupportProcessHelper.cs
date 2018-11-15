@@ -35,10 +35,11 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86\";
         private const string TEST_SUPPORT_PROCESS_PATH = @"..\..\..\..\TestSupportProcess\bin\";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.exe";
+        private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
         #endregion
 
         #region Fields
-        private string _platformFolder;
+        private string _platformFolder;        
         private string _targetFolder;
         private TestContext _testContext;
         #endregion
@@ -50,7 +51,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             _platformFolder = SIXTY_FOUR_PLATFORM_FOLDER;
             _targetFolder = RELEASE_TARGET_FOLDER;
             SetEightySixPlatform();
-            SetDebugInfo();
+            SetDebugTarget();
         }
         #endregion
 
@@ -63,36 +64,53 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
             }
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(supportProcessPath)
+            return SpawnProcess(supportProcessPath, teskKind.ToString());            
+        }
+
+        public Process SpawnDCPSInfoRepo()
+        {
+            string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
+            string infoRepoPath = Path.Combine(ddsPath, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
+            if (!File.Exists(infoRepoPath))
             {
-                Arguments = teskKind.ToString(),
+                throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
+            }
+
+            return SpawnProcess(infoRepoPath, string.Empty);
+        }
+
+        private Process SpawnProcess(string path, string arguments)
+        {
+            ProcessStartInfo processInfo = new ProcessStartInfo(path)
+            {
+                Arguments = arguments,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true,
                 UseShellExecute = false,
             };
 
-            Process supportProcess = new Process
+            Process infoRepoProcess = new Process
             {
                 StartInfo = processInfo,
                 EnableRaisingEvents = true
             };
 
-            supportProcess.OutputDataReceived += SupportProcessOnOutputDataReceived;
-            supportProcess.ErrorDataReceived += SupportProcessOnErrorDataReceived;
+            infoRepoProcess.OutputDataReceived += SupportProcessOnOutputDataReceived;
+            infoRepoProcess.ErrorDataReceived += SupportProcessOnErrorDataReceived;
 
             bool processStarted = false;
             try
             {
-                processStarted = supportProcess.Start();
+                processStarted = infoRepoProcess.Start();
             }
             catch (Win32Exception e)
             {
-                if (File.Exists(supportProcessPath))
+                if (File.Exists(path))
                 {
-                    throw new FileNotFoundException($"The support process executable at {supportProcessPath} could not be executed.", e);
+                    throw new FileNotFoundException($"The support process executable at {path} could not be executed.", e);
                 }
-                throw new InvalidOperationException($"The support process executable can not be located at {supportProcessPath}.", e);
+                throw new InvalidOperationException($"The support process executable can not be located at {path}.", e);
             }
 
             if (!processStarted)
@@ -100,32 +118,38 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new InvalidOperationException("Support process could not be started.");
             }
 
-            supportProcess.BeginOutputReadLine();
-            supportProcess.BeginErrorReadLine();
+            infoRepoProcess.BeginOutputReadLine();
+            infoRepoProcess.BeginErrorReadLine();
 
-            return supportProcess;
+            return infoRepoProcess;
         }
 
-        public void KillSupportProcess(Process supportProcess)
+        public void KillProcess(Process process)
         {
-            if (!supportProcess.HasExited)
+            if (!process.HasExited)
             {                
-                supportProcess.Kill();
+                process.Kill();
             }
 
-            supportProcess.OutputDataReceived -= SupportProcessOnOutputDataReceived;
-            supportProcess.ErrorDataReceived -= SupportProcessOnErrorDataReceived;
-            supportProcess.Dispose();
+            process.OutputDataReceived -= SupportProcessOnOutputDataReceived;
+            process.ErrorDataReceived -= SupportProcessOnErrorDataReceived;
+            process.Dispose();
         }
 
         private void SupportProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            _testContext.WriteLine(e.Data);
+            if (!string.IsNullOrWhiteSpace(e.Data))
+            {
+                _testContext.WriteLine(e.Data);
+            }
         }
 
         private void SupportProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            _testContext.WriteLine(e.Data);
+            if (!string.IsNullOrWhiteSpace(e.Data))
+            {
+                _testContext.WriteLine(e.Data);
+            }
         }
 
         [Conditional("X86")]
@@ -135,7 +159,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         }
 
         [Conditional("DEBUG")]
-        private void SetDebugInfo()
+        private void SetDebugTarget()
         {
             _targetFolder = DEBUG_TARGET_FOLDER;
         }
