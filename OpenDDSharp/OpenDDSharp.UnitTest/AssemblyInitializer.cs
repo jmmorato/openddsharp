@@ -17,8 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System.IO;
+using System.Diagnostics;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
+using OpenDDSharp.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest
@@ -27,18 +30,40 @@ namespace OpenDDSharp.UnitTest
     public sealed class AssemblyInitializer
     {
         private const string RTPS_DISCOVERY = "RtpsDiscovery";
+        private const string INFOREPO_DISCOVERY = "InfoRepo";
+        private const string INFOREPO_IOR = "repo.ior";
+        internal const int INFOREPO_DOMAIN = 23;
+        internal const int RTPS_DOMAIN = 42;
+        internal const int RTPS_OTHER_DOMAIN = 43;
+
+        private static SupportProcessHelper _supportProcess;
+        private static Process _infoProcess;
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
-            ParticipantService.Instance.AddDiscovery(disc);
+            ParticipantService.Instance.AddDiscovery(disc);            
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+
+            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
+            ParticipantService.Instance.AddDiscovery(infoRepo);
+            ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
+
+            _supportProcess = new SupportProcessHelper(context);
+            _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
+            System.Threading.Thread.Sleep(1000);
         }
 
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
+            _supportProcess.KillProcess(_infoProcess);
+            if (File.Exists(INFOREPO_IOR))
+            {
+                File.Delete(INFOREPO_IOR);
+            }
+
             TransportRegistry.Instance.Release();
             ParticipantService.Instance.Shutdown();            
         }
