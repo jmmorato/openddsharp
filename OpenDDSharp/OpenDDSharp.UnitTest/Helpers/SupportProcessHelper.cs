@@ -61,6 +61,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, TEST_SUPPORT_PROCESS_EXE_NAME);
             if (!File.Exists(supportProcessPath))
             {
+                _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
                 throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
             }
 
@@ -73,6 +74,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             string infoRepoPath = Path.Combine(ddsPath, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
             if (!File.Exists(infoRepoPath))
             {
+                _testContext.WriteLine($"The support process executable could not be located at {infoRepoPath}.");
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
 
@@ -108,8 +110,10 @@ namespace OpenDDSharp.UnitTest.Helpers
             {
                 if (File.Exists(path))
                 {
+                    _testContext.WriteLine($"The support process executable at {path} could not be executed.");
                     throw new FileNotFoundException($"The support process executable at {path} could not be executed.", e);
                 }
+                _testContext.WriteLine($"The support process executable can not be located at {path}.");
                 throw new InvalidOperationException($"The support process executable can not be located at {path}.", e);
             }
 
