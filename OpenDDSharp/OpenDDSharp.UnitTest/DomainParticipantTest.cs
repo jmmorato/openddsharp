@@ -42,6 +42,10 @@ namespace OpenDDSharp.UnitTest
         private DomainParticipant _participant;
         #endregion
 
+        #region Properties
+        public TestContext TestContext { get; set; }
+        #endregion
+
         #region Initialization/Cleanup
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -1325,76 +1329,87 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
         {
-            #region OpenDDS ISSUE
-            //// The handles are not updated till calling get_instance_handle.
-            //// Perhaps, creating a datareader or datawriter also activate it.
-            //// Workaround: After create_new_topic call
-            ////if (new_topic) {
-            ////  TopicImpl* the_topic_servant = dynamic_cast<TopicImpl*>(new_topic);
-            ////  this->id_to_handle(the_topic_servant->get_id());
-            ////}
+            // OPENDDS ISSUE: Not working correctly with RTPS
+            // OPENDDS ISSUE: Only discover local topics
 
-            //List<InstanceHandle> handles = new List<InstanceHandle>();
-            //ReturnCode result = _participant.GetDiscoveredTopics(handles);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-            //Assert.AreEqual(4, handles.Count);
+            DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
 
-            //TestStructTypeSupport support = new TestStructTypeSupport();
-            //string typeName = support.GetTypeName();
-            //result = support.RegisterType(_participant, typeName);
-            //Assert.AreEqual(ReturnCode.Ok, result);
+            // By default, the 4 built-in topics must be found.
+            List<InstanceHandle> handles = new List<InstanceHandle>();
+            ReturnCode result = participant.GetDiscoveredTopics(handles);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(4, handles.Count);
 
-            //Topic topic = _participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
-            //Assert.IsNotNull(topic);                        
+            // Create a new topic  and check that is discovered
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            result = support.RegisterType(participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-            //Thread.Sleep(100);
+            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
+            Assert.IsNotNull(topic);
 
-            //result = _participant.GetDiscoveredTopics(handles);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-            //Assert.AreEqual(5, handles.Count);
-            #endregion
+            Thread.Sleep(100);
 
-            #region OpenDDS ISSUE
-            //// OpenDDS only returns local topics. The specification mention all the topics in the domain.
+            result = participant.GetDiscoveredTopics(handles);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(5, handles.Count);
 
-            //DomainParticipant otherParticipant = _dpf.CreateParticipant(DOMAIN_ID);
-            //Assert.IsNotNull(otherParticipant);
+            // Test with null parameter
+            result = participant.GetDiscoveredTopics(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
 
-            //result = support.RegisterType(otherParticipant, typeName);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-          
-            //Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestGetDiscoveredTopics), typeName);
-            //Assert.IsNotNull(otherTopic);
-
-            //Subscriber subscriber = otherParticipant.CreateSubscriber();
-            //Assert.IsNotNull(subscriber);
-
-            //DataReader reader = subscriber.CreateDataReader(otherTopic);
-            //Assert.IsNotNull(reader);            
-
-            //Thread.Sleep(5000);
-
-            //handles = new List<InstanceHandle>();
-            //result = _participant.GetDiscoveredTopics(handles);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-            //Assert.AreEqual(6, handles.Count);
-
-            //result = otherParticipant.DeleteContainedEntities();
-            //Assert.AreEqual(ReturnCode.Ok, result);
-
-            //result = _dpf.DeleteParticipant(otherParticipant);
-            //Assert.AreEqual(ReturnCode.Ok, result);
-            #endregion
+            // Remove the participant
+            participant.DeleteContainedEntities();
+            _dpf.DeleteParticipant(participant);
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
         {
-            #region OpenDDS ISSUE
-            // See TestGetDiscoveredTopics issues.
-            // This unit test will be implemented after fix them.
-            #endregion
+            DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
+
+            // By default, the 4 built-in topics must be found.
+            List<InstanceHandle> handles = new List<InstanceHandle>();
+            ReturnCode result = participant.GetDiscoveredTopics(handles);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(4, handles.Count);
+
+            // Create a new topic  and check that is discovered
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            result = support.RegisterType(participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+            Assert.IsNotNull(topic);
+
+            Thread.Sleep(100);
+
+            result = participant.GetDiscoveredTopics(handles);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(5, handles.Count);            
+
+            foreach (InstanceHandle handle in handles)
+            {
+                TopicBuiltinTopicData data = new TopicBuiltinTopicData();
+                result = participant.GetDiscoveredTopicData(ref data, handle);
+                // OPENDDS ISSUE: No data returned for built-in topics (BadParameter)
+                if (data.Name == nameof(TestGetDiscoveredTopicData))
+                {
+                    TestHelper.TestNonDefaultTopicData(data);
+                }
+            }
+
+            // Remove the participant
+            participant.DeleteContainedEntities();
+            _dpf.DeleteParticipant(participant);           
         }
         #endregion
     }
