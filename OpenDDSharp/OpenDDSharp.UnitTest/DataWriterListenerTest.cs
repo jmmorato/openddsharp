@@ -324,7 +324,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 // Wait for discovery
-                bool found = writer.WaitForSubscriptions(1, 5000);
+                bool found = writer.WaitForSubscriptions(1, 20000);
                 Assert.IsTrue(found);
             }
             finally
@@ -389,7 +389,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 // Wait for discovery
-                bool found = writer.WaitForSubscriptions(1, 5000);
+                bool found = writer.WaitForSubscriptions(1, 20000);
                 Assert.IsTrue(found);
             }
             finally

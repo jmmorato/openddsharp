@@ -543,7 +543,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 // Wait for discovery
-                bool found = reader.WaitForPublications(1, 5000);
+                bool found = reader.WaitForPublications(1, 20000);
                 Assert.IsTrue(found);
             }
             finally
@@ -608,7 +608,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 // Wait for discovery
-                bool found = reader.WaitForPublications(1, 5000);
+                bool found = reader.WaitForPublications(1, 20000);
                 Assert.IsTrue(found);
             }
             finally
