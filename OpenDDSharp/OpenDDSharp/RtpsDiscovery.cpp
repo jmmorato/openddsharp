@@ -20,6 +20,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "RtpsDiscovery.h"
 
 OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::RtpsDiscovery(System::String^ name) : Discovery() {
+    if (System::String::IsNullOrWhiteSpace(name)) {
+        throw gcnew System::ArgumentNullException("name", "The discovery name cannot be null or an empty string");
+    }
     msclr::interop::marshal_context context;
 
     impl_entity = new ::OpenDDS::RTPS::RtpsDiscovery(context.marshal_as<const char*>(name));
