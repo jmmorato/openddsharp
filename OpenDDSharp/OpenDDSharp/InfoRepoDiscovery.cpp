@@ -20,6 +20,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "InfoRepoDiscovery.h"
 
 OpenDDSharp::OpenDDS::DCPS::InfoRepoDiscovery::InfoRepoDiscovery(System::String^ key, System::String^ ior) : Discovery() {
+    if (System::String::IsNullOrWhiteSpace(key)) {
+        throw gcnew System::ArgumentNullException("key", "The key cannot be null or an empty string");
+    }
+
+    if (System::String::IsNullOrWhiteSpace(ior)) {
+        throw gcnew System::ArgumentNullException("ior", "The ior cannot be null or an empty string");
+    }
+
     msclr::interop::marshal_context context;
 
     impl_entity = new ::OpenDDS::DCPS::InfoRepoDiscovery(context.marshal_as<const char*>(key), context.marshal_as<const char*>(ior));
