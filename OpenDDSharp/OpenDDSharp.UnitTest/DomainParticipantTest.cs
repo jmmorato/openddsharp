@@ -1334,15 +1334,13 @@ namespace OpenDDSharp.UnitTest
 
             DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
 
-            // By default, the 4 built-in topics must be found.
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(4, handles.Count);
+            Assert.AreEqual(0, handles.Count);
 
-            // Create a new topic  and check that is discovered
+            // Create a new topic and check that is discovered
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             result = support.RegisterType(participant, typeName);
@@ -1355,7 +1353,7 @@ namespace OpenDDSharp.UnitTest
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(5, handles.Count);
+            Assert.AreEqual(1, handles.Count);
 
             // Test with null parameter
             result = participant.GetDiscoveredTopics(null);
@@ -1372,13 +1370,11 @@ namespace OpenDDSharp.UnitTest
         {
             DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
 
-            // By default, the 4 built-in topics must be found.
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(4, handles.Count);
+            Assert.AreEqual(0, handles.Count);
 
             // Create a new topic  and check that is discovered
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -1394,18 +1390,14 @@ namespace OpenDDSharp.UnitTest
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(5, handles.Count);            
+            Assert.AreEqual(1, handles.Count);
 
-            foreach (InstanceHandle handle in handles)
-            {
-                TopicBuiltinTopicData data = new TopicBuiltinTopicData();
-                result = participant.GetDiscoveredTopicData(ref data, handle);
-                // OPENDDS ISSUE: No data returned for built-in topics (BadParameter)
-                if (data.Name == nameof(TestGetDiscoveredTopicData))
-                {
-                    TestHelper.TestNonDefaultTopicData(data);
-                }
-            }
+            TopicBuiltinTopicData data = new TopicBuiltinTopicData();
+            result = participant.GetDiscoveredTopicData(ref data, handles.First());
+            Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
+            Assert.AreEqual(typeName, data.TypeName);
+            Assert.IsNotNull(data.Key);
+            TestHelper.TestNonDefaultTopicData(data);
 
             // Remove the participant
             participant.DeleteContainedEntities();
