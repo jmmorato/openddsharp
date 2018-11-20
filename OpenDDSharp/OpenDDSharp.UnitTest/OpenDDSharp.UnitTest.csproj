@@ -74,6 +74,7 @@
     <Compile Include="DomainParticipantListenerTest.cs" />
     <Compile Include="DomainParticipantTest.cs" />
     <Compile Include="Helpers\SupportProcessHelper.cs" />
+    <Compile Include="InfoRepoDiscoveryTest.cs" />
     <Compile Include="InstanceHandleTest.cs" />
     <Compile Include="Listeners\MyDataReaderListener.cs" />
     <Compile Include="Listeners\MyDataWriterListener.cs" />
