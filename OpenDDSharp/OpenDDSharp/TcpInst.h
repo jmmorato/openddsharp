@@ -106,8 +106,8 @@ namespace OpenDDSharp {
                 /// Maximum period (in milliseconds) of not being able to send queued
                 /// messages. If there are samples queued and no output for longer
                 /// than this period then the connection will be closed and on_*_lost()
-                /// callbacks will be called. If the value is 0, the default, then
-                /// this check will not be made. The default value is 0.
+                /// callbacks will be called. If the value is -1, the default, then
+                /// this check will not be made.
                 /// </summary>
                 property System::Int32 MaxOutputPausePeriod {
                     System::Int32 get();
