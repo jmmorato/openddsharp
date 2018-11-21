@@ -45,6 +45,7 @@ namespace OpenDDSharp.UnitTest
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
             ParticipantService.Instance.AddDiscovery(disc);            
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+            Assert.AreEqual(RTPS_DISCOVERY, ParticipantService.Instance.DefaultDiscovery);
 
             InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
             ParticipantService.Instance.AddDiscovery(infoRepo);
@@ -53,6 +54,8 @@ namespace OpenDDSharp.UnitTest
             _supportProcess = new SupportProcessHelper(context);
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
+
+            Assert.IsFalse(ParticipantService.Instance.IsShutdown);
         }
 
         [AssemblyCleanup]
@@ -65,7 +68,8 @@ namespace OpenDDSharp.UnitTest
             }
 
             TransportRegistry.Instance.Release();
-            ParticipantService.Instance.Shutdown();            
+            ParticipantService.Instance.Shutdown();
+            Assert.IsTrue(ParticipantService.Instance.IsShutdown);
         }
     }
 }
