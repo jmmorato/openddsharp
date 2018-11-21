@@ -93,6 +93,7 @@
     <Compile Include="SubscriberListenerTest.cs" />
     <Compile Include="SubscriberTest.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
+    <Compile Include="TcpInstTest.cs" />
     <Compile Include="TopicListenerTest.cs" />
     <Compile Include="TopicTest.cs" />
     <Compile Include="WaitSetTest.cs" />
