@@ -96,6 +96,7 @@
     <Compile Include="TcpInstTest.cs" />
     <Compile Include="TopicListenerTest.cs" />
     <Compile Include="TopicTest.cs" />
+    <Compile Include="UdpInstTest.cs" />
     <Compile Include="WaitSetTest.cs" />
   </ItemGroup>
   <ItemGroup>
