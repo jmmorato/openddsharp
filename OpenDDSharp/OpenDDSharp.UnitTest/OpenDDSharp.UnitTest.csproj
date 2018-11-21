@@ -90,6 +90,7 @@
     <Compile Include="QueryConditionTest.cs" />
     <Compile Include="RtpsDiscoveryTest.cs" />
     <Compile Include="RtpsUdpInstTest.cs" />
+    <Compile Include="ShmemInstTest.cs" />
     <Compile Include="SubscriberListenerTest.cs" />
     <Compile Include="SubscriberTest.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
