@@ -55,6 +55,7 @@ namespace OpenDDSharp.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
 
+            Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
         }
 
@@ -68,6 +69,8 @@ namespace OpenDDSharp.UnitTest
             }
 
             TransportRegistry.Instance.Release();
+            Assert.IsTrue(TransportRegistry.Instance.Released);
+            TransportRegistry.Close();
             ParticipantService.Instance.Shutdown();
             Assert.IsTrue(ParticipantService.Instance.IsShutdown);
         }
