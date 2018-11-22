@@ -632,6 +632,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnBudgetExceeded()
         {
+            ManualResetEventSlim evt = new ManualResetEventSlim(false);
             // Attach to the event
             int count = 0;
             _listener.BudgetExceeded += (r, s) =>
@@ -642,12 +643,19 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreNotEqual(InstanceHandle.HandleNil, s.LastInstanceHandle);
 
                 count++;
+                evt.Set();
             };
 
             // Prepare QoS for the test
             DataReaderQos drQos = new DataReaderQos();            
-            drQos.LatencyBudget.Duration = new Duration { NanoSeconds = 1U };           
+            drQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
             ReturnCode result = _reader.SetQos(drQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
+            result = _writer.SetQos(dwQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Enable entities
@@ -657,6 +665,10 @@ namespace OpenDDSharp.UnitTest
             result = _reader.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            // Wait for discovery
+            bool found = _writer.WaitForSubscriptions(1, 5000);
+            Assert.IsTrue(found);
+
             // Write a sample
             InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
@@ -664,12 +676,18 @@ namespace OpenDDSharp.UnitTest
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(500);
+            result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            bool ret = evt.Wait(5000);
+            Assert.IsTrue(ret);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
             result = _reader.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            evt.Dispose();
         }
         #endregion
     }
