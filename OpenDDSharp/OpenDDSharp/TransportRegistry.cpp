@@ -51,6 +51,9 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::Transpo
 };
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::GlobalConfig::set(OpenDDSharp::OpenDDS::DCPS::TransportConfig^ value) {
+    if (value == nullptr) {
+        throw gcnew System::ArgumentNullException("value", "The GlobalConfig cannot be null");
+    }
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(value->impl_entity);
     impl_entity->global_config(rch);
 };
@@ -64,6 +67,9 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::Release() {
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::CreateInst(System::String^ name, System::String^ transportType) {
+    if (System::String::IsNullOrWhiteSpace(name)) {
+        throw gcnew System::ArgumentNullException("name", "The transport instance's name cannot be null or an empty string.");
+    }
     msclr::interop::marshal_context context;
 
     ::OpenDDS::DCPS::TransportInst_rch native = impl_entity->create_inst(context.marshal_as<const char*>(name), context.marshal_as<const char*>(transportType));
@@ -80,6 +86,10 @@ OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::Transport
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::GetInst(System::String^ name) {
+    if (System::String::IsNullOrWhiteSpace(name)) {
+        return nullptr;
+    }
+
     msclr::interop::marshal_context context;
     ::OpenDDS::DCPS::TransportInst_rch native = impl_entity->get_inst(context.marshal_as<const char*>(name));
     if (native.is_nil()) {
@@ -98,14 +108,22 @@ OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::Transport
 }
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::RemoveInst(TransportInst^ inst) {
+    if (inst == nullptr) {
+        return;
+    }
+
     ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst->impl_entity);
     impl_entity->remove_inst(rch);
     TransportInstManager::get_instance()->remove(inst->impl_entity);
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::CreateConfig(System::String^ name) {
-    msclr::interop::marshal_context context;
+    if (System::String::IsNullOrWhiteSpace(name)) {
+        throw gcnew System::ArgumentNullException("name", "The transport config's name cannot be null or an empty string.");
+    }
 
+    msclr::interop::marshal_context context;
+    
     ::OpenDDS::DCPS::TransportConfig_rch native = impl_entity->create_config(context.marshal_as<const char*>(name));
     if (native.is_nil()) {
         return nullptr;
@@ -120,6 +138,10 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::Transpo
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::GetConfig(System::String^ name) {
+    if (System::String::IsNullOrWhiteSpace(name)) {
+        return nullptr;
+    }
+
     msclr::interop::marshal_context context;
 
     ::OpenDDS::DCPS::TransportConfig_rch native = impl_entity->get_config(context.marshal_as<const char*>(name));
@@ -139,6 +161,10 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::Transpo
 }
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::RemoveConfig(TransportConfig^ cfg) {
+    if (cfg == nullptr) {
+        return;
+    }
+
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg->impl_entity);
     impl_entity->remove_config(rch);
     TransportConfigManager::get_instance()->remove(cfg->impl_entity);
@@ -162,16 +188,40 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::Transpo
 };
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::SetDomainDefaultConfig(System::Int32 domain, TransportConfig^ cfg) {
+    if (domain < 0) {
+        throw gcnew System::ArgumentOutOfRangeException("domain", "The domain must be greater or equal to zero.");
+    }
+
+    if (cfg == nullptr) {
+        throw gcnew System::ArgumentNullException("cfg", "The transport configuration cannot be null.");
+    }
+
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg->impl_entity);
     impl_entity->domain_default_config(domain, rch);
 }
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::BindConfig(System::String^ name, ::OpenDDSharp::DDS::Entity^ entity) {
+    if (System::String::IsNullOrWhiteSpace(name)) {
+        throw gcnew System::ArgumentNullException("name", "The transport config's name cannot be null or an empty string.");
+    }
+
+    if (entity == nullptr) {
+        throw gcnew System::ArgumentNullException("entity", "The entity parameter cannot be null");
+    }
+
     msclr::interop::marshal_context context;
     impl_entity->bind_config(context.marshal_as<const char*>(name), entity->impl_entity);
 }
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::BindConfig(TransportConfig^ cfg, ::OpenDDSharp::DDS::Entity^ entity) {
+    if (cfg == nullptr) {
+        throw gcnew System::ArgumentNullException("entity", "The transport config parameter cannot be null");
+    }
+
+    if (entity == nullptr) {
+        throw gcnew System::ArgumentNullException("entity", "The entity parameter cannot be null");
+    }
+
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg->impl_entity);
     impl_entity->bind_config(rch, entity->impl_entity);
 }
