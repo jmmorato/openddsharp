@@ -61,11 +61,19 @@ void OpenDDSharp::OpenDDS::DCPS::TransportConfig::PassiveConnectDuration::set(Sy
 };
 
 void OpenDDSharp::OpenDDS::DCPS::TransportConfig::Insert(TransportInst^ inst) {
+    if (inst == nullptr) {
+        throw gcnew System::ArgumentNullException("inst", "Transport instance parameter cannot be null");
+    }
+
     ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst->impl_entity);    
     impl_entity->instances_.push_back(rch);
 };
 
 void OpenDDSharp::OpenDDS::DCPS::TransportConfig::SortedInsert(TransportInst^ inst) {
+    if (inst == nullptr) {
+        throw gcnew System::ArgumentNullException("inst", "Transport instance parameter cannot be null");
+    }
+
     ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst->impl_entity);
     impl_entity->sorted_insert(rch);
 };
