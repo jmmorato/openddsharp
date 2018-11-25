@@ -94,9 +94,9 @@ namespace demo {
 		OpenDDSharp::DDS::ReturnCode Write(ShapeType^ data);
         OpenDDSharp::DDS::ReturnCode Write(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle);
         OpenDDSharp::DDS::ReturnCode Write(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
-		OpenDDSharp::DDS::ReturnCode Delete(ShapeType^ data);
-		OpenDDSharp::DDS::ReturnCode Delete(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle);
-        OpenDDSharp::DDS::ReturnCode Delete(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(ShapeType^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
         OpenDDSharp::DDS::ReturnCode GetKeyValue(ShapeType^ data, OpenDDSharp::DDS::InstanceHandle handle);
         System::Int32 LookupInstance(ShapeType^ instance);
 	};
@@ -197,22 +197,22 @@ namespace demo {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -220,22 +220,22 @@ namespace demo {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<ShapeType^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<ShapeType^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,

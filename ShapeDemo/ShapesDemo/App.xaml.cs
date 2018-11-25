@@ -5,9 +5,9 @@ namespace OpenDDSharp.ShapesDemo
 {
     /// <summary>
     /// Interaction logic for App.xaml
-    /// </summary>
+    /// </summary>    
     public partial class App : Application
-    {
+    {        
         private void ApplicationExit(object sender, ExitEventArgs e)
         {
             ViewModelLocator.Cleanup();

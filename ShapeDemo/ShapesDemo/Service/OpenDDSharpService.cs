@@ -6,12 +6,14 @@ using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.ShapesDemo.Model;
 using OpenDDSharp.org.omg.dds.demo;
 using CommonServiceLocator;
+using OpenDDSharp.OpenDDS.RTPS;
 
 namespace OpenDDSharp.ShapesDemo.Service
 {
-    public class OpenDDSharpService : IOpenDDSharpService
+    public sealed class OpenDDSharpService : IOpenDDSharpService
     {
         #region Constants
+        private const string RTPS_DISCOVERY = "RtpsDiscovery";
         private const string TYPE_NAME = "ShapeType";
         private const string SQUARE_TOPIC_NAME = "Square";
         private const string CIRCLE_TOPIC_NAME = "Circle";
@@ -29,7 +31,6 @@ namespace OpenDDSharp.ShapesDemo.Service
         #region Fields
         private bool _disposed;
         private IConfigurationService _config;
-        private ParticipantService _participantService;
         private DomainParticipantFactory _domainFactory;
         private DomainParticipant _participant;
         private Publisher _publisher;
@@ -42,6 +43,10 @@ namespace OpenDDSharp.ShapesDemo.Service
         private int _cfCircleCount;
         private int _cfSquareCount;
         private int _cfTriangleCount;
+        private RtpsDiscovery _disc;
+        private TransportConfig _tConfig;
+        private TransportInst _inst;
+        private RtpsUdpInst _rui;
         #endregion
 
         #region Constructors
@@ -49,9 +54,21 @@ namespace OpenDDSharp.ShapesDemo.Service
         {
             _config = ServiceLocator.Current.GetInstance<IConfigurationService>();
 
-            _participantService = ParticipantService.Instance;
-            string[] args = { "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10" };
-            _domainFactory = _participantService.GetDomainParticipantFactory(args);
+            _disc = new RtpsDiscovery(RTPS_DISCOVERY);
+            ParticipantService.Instance.AddDiscovery(_disc);
+            ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+
+            long ticks = DateTime.Now.Ticks;
+            string configName = "openddsharp_rtps_interop";
+            string instName = "internal_openddsharp_rtps_transport";
+
+            _tConfig = TransportRegistry.Instance.CreateConfig(configName);
+            _inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
+            _rui = new RtpsUdpInst(_inst);
+            _tConfig.Insert(_inst);
+            TransportRegistry.Instance.GlobalConfig = _tConfig;
+
+            _domainFactory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
 
             _participant = _domainFactory.CreateParticipant(0);
             if (_participant == null)
@@ -403,6 +420,7 @@ namespace OpenDDSharp.ShapesDemo.Service
         #endregion
 
         #region IDisposable Members
+        [System.STAThread]
         public void Dispose()
         {
             if (!_disposed)
@@ -420,13 +438,10 @@ namespace OpenDDSharp.ShapesDemo.Service
                 if (_participant != null)
                 {
                     _participant.DeleteContainedEntities();
-                    _domainFactory.DeleteParticipant(_participant);
+                    _domainFactory.DeleteParticipant(_participant);                    
                 }
-
-                if (_participantService != null)
-                {
-                    _participantService.Shutdown();
-                }
+                
+                ParticipantService.Instance.Shutdown();
 
                 _disposed = true;
             }

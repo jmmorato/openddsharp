@@ -29,7 +29,6 @@ namespace OpenDDSharp.ShapesDemo.ViewModel
             // ViewModels
             SimpleIoc.Default.Register<MainWindowViewModel>();            
 
-
             // Services            
             SimpleIoc.Default.Register<IOpenDDSharpService, OpenDDSharpService>();
             SimpleIoc.Default.Register<IConfigurationService, ConfigurationService>();
@@ -46,7 +45,7 @@ namespace OpenDDSharp.ShapesDemo.ViewModel
         public static void Cleanup()
         {
             ServiceLocator.Current.GetInstance<MainWindowViewModel>().Cleanup();
-            ServiceLocator.Current.GetInstance<IOpenDDSharpService>().Dispose();
+            ServiceLocator.Current.GetInstance<IOpenDDSharpService>().Dispose();                     
             ServiceLocator.Current.GetInstance<IViewService>().Dispose();
         }
         #endregion
