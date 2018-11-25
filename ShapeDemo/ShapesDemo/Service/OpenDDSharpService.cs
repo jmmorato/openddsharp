@@ -59,8 +59,8 @@ namespace OpenDDSharp.ShapesDemo.Service
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
 
             long ticks = DateTime.Now.Ticks;
-            string configName = "openddsharp_rtps_interop";
-            string instName = "internal_openddsharp_rtps_transport";
+            string configName = "openddsharp_rtps_interop_" + ticks.ToString(); ;
+            string instName = "internal_openddsharp_rtps_transport_" + ticks.ToString(); ;
 
             _tConfig = TransportRegistry.Instance.CreateConfig(configName);
             _inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
