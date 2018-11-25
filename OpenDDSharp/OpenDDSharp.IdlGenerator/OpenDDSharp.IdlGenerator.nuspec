@@ -9,9 +9,9 @@
     <projectUrl>http://www.openddsharp.com</projectUrl>
     <iconUrl>http://www.openddsharp.com/favicon.png</iconUrl>
     <licenseUrl>http://www.openddsharp.com/Home/License</licenseUrl>
+    <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>OpenDDSharp IDL Generator</description>
-    <releaseNotes>OpenDDSharp IDL Generator v.0.3.0</releaseNotes>
+    <description>OpenDDSharp IDL Generator</description>    
     <copyright>Jose Morato</copyright>
     <tags>OpenDDSharp OpenDDS DDS IDL CodeGenerator</tags>
     <references>
