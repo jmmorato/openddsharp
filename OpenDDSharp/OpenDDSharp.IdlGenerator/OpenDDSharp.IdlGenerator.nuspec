@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OpenDDSharp.IdlGenerator</id>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
@@ -11,7 +11,7 @@
     <licenseUrl>http://www.openddsharp.com/Home/License</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenDDSharp IDL Generator</description>
-    <releaseNotes>OpenDDSharp IDL Generator v.0.2.1</releaseNotes>
+    <releaseNotes>OpenDDSharp IDL Generator v.0.3.0</releaseNotes>
     <copyright>Jose Morato</copyright>
     <tags>OpenDDSharp OpenDDS DDS IDL CodeGenerator</tags>
     <references>
