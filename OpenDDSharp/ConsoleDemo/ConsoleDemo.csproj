@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProjectGuid>{BCC37DF6-D8F2-4A65-8C74-890D77BE6341}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ConsoleDemo</RootNamespace>
@@ -11,26 +11,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+  </PropertyGroup>  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
@@ -113,16 +94,16 @@
   </PropertyGroup>
   <Target Name="AfterBuild">
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAOd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Dcpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps_Udpd.dll" />
+      <Dlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAOd.dll;$(ACE_ROOT)\lib_x86\TAO_CodecFactoryd.dll;$(ACE_ROOT)\lib_x86\TAO_AnyTypeCoded.dll;$(ACE_ROOT)\lib_x86\TAO_BiDirGIOPd.dll;$(ACE_ROOT)\lib_x86\TAO_PId.dll;$(ACE_ROOT)\lib_x86\TAO_PortableServerd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Dcpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtpsd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps_Udpd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Shmemd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Tcpd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Multicastd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Udpd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="$(ACE_ROOT)\lib_x86\ACE.dll;$(ACE_ROOT)\lib_x86\TAO.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Dcps.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps_Udp.dll" />
+      <Dlls Include="$(ACE_ROOT)\lib_x86\ACE.dll;$(ACE_ROOT)\lib_x86\TAO.dll;$(ACE_ROOT)\lib_x86\TAO_CodecFactory.dll;$(ACE_ROOT)\lib_x86\TAO_AnyTypeCode.dll;$(ACE_ROOT)\lib_x86\TAO_BiDirGIOP.dll;$(ACE_ROOT)\lib_x86\TAO_PI.dll;$(ACE_ROOT)\lib_x86\TAO_PortableServer.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Dcps.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Rtps_Udp.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Shmem.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Tcp.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Multicast.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Udp.dll;$(DDS_ROOT)\lib_x86\OpenDDS_InfoRepoDiscovery.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="$(ACE_ROOT)\lib_x64\ACEd.dll;$(ACE_ROOT)\lib_x64\TAOd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Dcpsd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtpsd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtps_Udpd.dll" />
+      <Dlls Include="$(ACE_ROOT)\lib_x64\ACEd.dll;$(ACE_ROOT)\lib_x64\TAOd.dll;$(ACE_ROOT)\lib_x64\TAO_CodecFactoryd.dll;$(ACE_ROOT)\lib_x64\TAO_AnyTypeCoded.dll;$(ACE_ROOT)\lib_x64\TAO_BiDirGIOPd.dll;$(ACE_ROOT)\lib_x64\TAO_PId.dll;$(ACE_ROOT)\lib_x64\TAO_PortableServerd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Dcpsd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtpsd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtps_Udpd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Shmemd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Tcpd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Multicastd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Udpd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_InfoRepoDiscoveryd.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Dcps.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtps.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtps_Udp.dll" />
+      <Dlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO.dll;$(ACE_ROOT)\lib_x64\TAO_CodecFactory.dll;$(ACE_ROOT)\lib_x64\TAO_AnyTypeCode.dll;$(ACE_ROOT)\lib_x64\TAO_BiDirGIOP.dll;$(ACE_ROOT)\lib_x64\TAO_PI.dll;$(ACE_ROOT)\lib_x64\TAO_PortableServer.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Dcps.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtps.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Rtps_Udp.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Shmem.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Tcp.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Multicast.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Udp.dll;$(DDS_ROOT)\lib_x64\OpenDDS_InfoRepoDiscovery.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
