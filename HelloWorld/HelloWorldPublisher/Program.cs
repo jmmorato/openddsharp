@@ -9,7 +9,7 @@ namespace OpenDDSharp.HelloWorldPublisher
     {
         static void Main(string[] args)
         {
-            DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+            DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
             DomainParticipant participant = dpf.CreateParticipant(42);
             if (participant == null)
             {

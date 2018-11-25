@@ -78,7 +78,12 @@ OpenDDSharp::DDS::InstanceHandle OpenDDSharp::HelloWorld::MessageDataWriter::Reg
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::UnregisterInstance(Message^ data) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), ::DDS::HANDLE_NIL);
+	::HelloWorld::Message native = data->ToNative();
+    ::DDS::InstanceHandle_t handle = impl_entity->lookup_instance(native);
+    if (handle == ::DDS::HANDLE_NIL) {
+        return OpenDDSharp::DDS::ReturnCode::PreconditionNotMet;
+    }
+	return (OpenDDSharp::DDS::ReturnCode)impl_entity->unregister_instance(data->ToNative(), handle);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::UnregisterInstance(Message^ data, OpenDDSharp::DDS::InstanceHandle handle) {
@@ -109,15 +114,15 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Write(M
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->write_w_timestamp(data->ToNative(), handle, time);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Delete(Message^ data) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Dispose(Message^ data) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), ::DDS::HANDLE_NIL);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Delete(Message^ data, OpenDDSharp::DDS::InstanceHandle handle) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Dispose(Message^ data, OpenDDSharp::DDS::InstanceHandle handle) {
 	return (OpenDDSharp::DDS::ReturnCode)impl_entity->dispose(data->ToNative(), handle);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Delete(Message^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Dispose(Message^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp) {
 	::DDS::Time_t time;
 	time.sec = timestamp.Seconds;
 	time.nanosec = timestamp.NanoSeconds;
@@ -126,7 +131,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::Delete(
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataWriter::GetKeyValue(Message^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::HelloWorld::Message aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 System::Int32 OpenDDSharp::HelloWorld::MessageDataWriter::LookupInstance(Message^ instance) {
@@ -140,11 +150,11 @@ OpenDDSharp::HelloWorld::MessageDataReader::MessageDataReader(::OpenDDSharp::DDS
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Read(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo) {
-	return OpenDDSharp::HelloWorld::MessageDataReader::Read(receivedData, receivedInfo, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return OpenDDSharp::HelloWorld::MessageDataReader::Read(receivedData, receivedInfo, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Read(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples) {
-	return OpenDDSharp::HelloWorld::MessageDataReader::Read(receivedData, receivedInfo, maxSamples, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return OpenDDSharp::HelloWorld::MessageDataReader::Read(receivedData, receivedInfo, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Read(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
@@ -152,7 +162,33 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Read(Li
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::HelloWorld::MessageDataReader::Read(receivedData, receivedInfo, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
+	if (receivedData == nullptr || receivedInfo == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+    receivedData->Clear();
+	receivedInfo->Clear();
+    
+	::HelloWorld::MessageSeq received_data;
+	::DDS::SampleInfoSeq info_seq;
+	::DDS::ReturnCode_t ret = impl_entity->read_w_condition(received_data, info_seq, maxSamples, condition->impl_entity);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		for (unsigned int i = 0; i < received_data.length(); i++) {
+			Message^ data = gcnew Message();
+			::OpenDDSharp::DDS::SampleInfo^ sampleInfo = gcnew ::OpenDDSharp::DDS::SampleInfo();
+
+			data->FromNative(received_data[i]);
+			sampleInfo->FromNative(info_seq[i]);
+
+			receivedData->Add(data);
+			receivedInfo->Add(sampleInfo);
+		}
+	}
+
+    impl_entity->return_loan(received_data, info_seq);
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Read(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -198,7 +234,33 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Take(Li
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::HelloWorld::MessageDataReader::Take(receivedData, receivedInfo, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
+	if (receivedData == nullptr || receivedInfo == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+    receivedData->Clear();
+	receivedInfo->Clear();
+
+	::HelloWorld::MessageSeq received_data;
+	::DDS::SampleInfoSeq info_seq;
+	::DDS::ReturnCode_t ret = impl_entity->take_w_condition(received_data, info_seq, maxSamples, condition->impl_entity);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		for (unsigned int i = 0; i < received_data.length(); i++) {
+			Message^ data = gcnew Message();
+			::OpenDDSharp::DDS::SampleInfo^ sampleInfo = gcnew ::OpenDDSharp::DDS::SampleInfo();
+
+			data->FromNative(received_data[i]);
+			sampleInfo->FromNative(info_seq[i]);
+
+			receivedData->Add(data);
+			receivedInfo->Add(sampleInfo);
+		}
+	}
+
+    impl_entity->return_loan(received_data, info_seq);
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Take(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -232,11 +294,11 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::Take(Li
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle) {
-	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(receivedData, receivedInfo, handle, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(receivedData, receivedInfo, handle, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples) {
-	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
@@ -244,7 +306,33 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadIns
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
+	if (receivedData == nullptr || receivedInfo == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+	receivedData->Clear();
+	receivedInfo->Clear();
+
+	::HelloWorld::MessageSeq received_data;
+	::DDS::SampleInfoSeq info_seq;
+	::DDS::ReturnCode_t ret = impl_entity->read_instance_w_condition(received_data, info_seq, maxSamples, handle, condition->impl_entity);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		for (unsigned int i = 0; i < received_data.length(); i++) {
+			Message^ data = gcnew Message();
+			::OpenDDSharp::DDS::SampleInfo^ sampleInfo = gcnew ::OpenDDSharp::DDS::SampleInfo();
+
+			data->FromNative(received_data[i]);
+			sampleInfo->FromNative(info_seq[i]);
+
+			receivedData->Add(data);
+			receivedInfo->Add(sampleInfo);
+		}
+	}
+
+    impl_entity->return_loan(received_data, info_seq);
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -290,7 +378,33 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeIns
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::HelloWorld::MessageDataReader::TakeInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
+	if (receivedData == nullptr || receivedInfo == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+    receivedData->Clear();
+	receivedInfo->Clear();
+
+	::HelloWorld::MessageSeq received_data;
+	::DDS::SampleInfoSeq info_seq;
+	::DDS::ReturnCode_t ret = impl_entity->take_instance_w_condition(received_data, info_seq, maxSamples, handle, condition->impl_entity);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		for (unsigned int i = 0; i < received_data.length(); i++) {
+			Message^ data = gcnew Message();
+			::OpenDDSharp::DDS::SampleInfo^ sampleInfo = gcnew ::OpenDDSharp::DDS::SampleInfo();
+
+			data->FromNative(received_data[i]);
+			sampleInfo->FromNative(info_seq[i]);
+
+			receivedData->Add(data);
+			receivedInfo->Add(sampleInfo);
+		}
+	}
+
+    impl_entity->return_loan(received_data, info_seq);
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
@@ -323,24 +437,20 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeIns
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle) {
-	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(receivedData, receivedInfo, handle, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle) {
+	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(receivedData, receivedInfo, previousHandle, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples) {
-	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(receivedData, receivedInfo, handle, maxSamples, OpenDDSharp::DDS::SampleStateKind::NotReadSampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle, System::Int32 maxSamples) {
+	return  OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(receivedData, receivedInfo, previousHandle, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
 	if (condition == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
-	return OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
-};
-
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
-    if (receivedData == nullptr || receivedInfo == nullptr) {
+	if (receivedData == nullptr || receivedInfo == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
@@ -349,7 +459,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNex
 
 	::HelloWorld::MessageSeq received_data;
 	::DDS::SampleInfoSeq info_seq;
-	::DDS::ReturnCode_t ret = impl_entity->read_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_instance_w_condition(received_data, info_seq, maxSamples, previousHandle, condition->impl_entity);
 
 	if (ret == ::DDS::RETCODE_OK) {
 		for (unsigned int i = 0; i < received_data.length(); i++) {
@@ -369,23 +479,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNex
 	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle) {
-	return  OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(receivedData, receivedInfo, handle, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
-};
-
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples) {
-	return  OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(receivedData, receivedInfo, handle, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
-};
-
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
-	if (condition == nullptr) {
-		return OpenDDSharp::DDS::ReturnCode::BadParameter;
-	}
-
-	return OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(receivedData, receivedInfo, handle, maxSamples, condition->SampleStateMask, condition->ViewStateMask, condition->InstanceStateMask);
-};
-
-OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle handle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::ReadNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
     if (receivedData == nullptr || receivedInfo == nullptr) {
 		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
@@ -395,7 +489,79 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNex
 
 	::HelloWorld::MessageSeq received_data;
 	::DDS::SampleInfoSeq info_seq;
-	::DDS::ReturnCode_t ret = impl_entity->take_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_instance(received_data, info_seq, maxSamples, previousHandle, sampleStates, viewStates, instanceStates);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		for (unsigned int i = 0; i < received_data.length(); i++) {
+			Message^ data = gcnew Message();
+			::OpenDDSharp::DDS::SampleInfo^ sampleInfo = gcnew ::OpenDDSharp::DDS::SampleInfo();
+
+			data->FromNative(received_data[i]);
+			sampleInfo->FromNative(info_seq[i]);
+
+			receivedData->Add(data);
+			receivedInfo->Add(sampleInfo);
+		}
+	}
+
+    impl_entity->return_loan(received_data, info_seq);
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle) {
+	return  OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(receivedData, receivedInfo, previousHandle, ::DDS::LENGTH_UNLIMITED, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle, System::Int32 maxSamples) {
+	return  OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(receivedData, receivedInfo, previousHandle, maxSamples, OpenDDSharp::DDS::SampleStateMask::AnySampleState, OpenDDSharp::DDS::ViewStateMask::AnyViewState, OpenDDSharp::DDS::InstanceStateMask::AnyInstanceState);
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle, System::Int32 maxSamples, OpenDDSharp::DDS::ReadCondition^ condition) {
+	if (condition == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+	if (receivedData == nullptr || receivedInfo == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+    receivedData->Clear();
+	receivedInfo->Clear();
+
+	::HelloWorld::MessageSeq received_data;
+	::DDS::SampleInfoSeq info_seq;
+	::DDS::ReturnCode_t ret = impl_entity->take_next_instance_w_condition(received_data, info_seq, maxSamples, previousHandle, condition->impl_entity);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		for (unsigned int i = 0; i < received_data.length(); i++) {
+			Message^ data = gcnew Message();
+			::OpenDDSharp::DDS::SampleInfo^ sampleInfo = gcnew ::OpenDDSharp::DDS::SampleInfo();
+
+			data->FromNative(received_data[i]);
+			sampleInfo->FromNative(info_seq[i]);
+
+			receivedData->Add(data);
+			receivedInfo->Add(sampleInfo);
+		}
+	}
+
+    impl_entity->return_loan(received_data, info_seq);
+
+	return (OpenDDSharp::DDS::ReturnCode)ret;
+};
+
+OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNextInstance(List<Message^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, OpenDDSharp::DDS::InstanceHandle previousHandle, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
+    if (receivedData == nullptr || receivedInfo == nullptr) {
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
+	}
+
+    receivedData->Clear();
+	receivedInfo->Clear();
+
+	::HelloWorld::MessageSeq received_data;
+	::DDS::SampleInfoSeq info_seq;
+	::DDS::ReturnCode_t ret = impl_entity->take_next_instance(received_data, info_seq, maxSamples, previousHandle, sampleStates, viewStates, instanceStates);
 
 	if (ret == ::DDS::RETCODE_OK) {
 		for (unsigned int i = 0; i < received_data.length(); i++) {
@@ -442,7 +608,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::TakeNex
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::HelloWorld::MessageDataReader::GetKeyValue(Message^ data, OpenDDSharp::DDS::InstanceHandle handle) {
-	return (OpenDDSharp::DDS::ReturnCode)impl_entity->get_key_value(data->ToNative(), handle);
+	::HelloWorld::Message aux;
+    ::DDS::ReturnCode_t ret = impl_entity->get_key_value(aux, handle);
+    if (ret == ::DDS::RETCODE_OK) {
+        data->FromNative(aux);
+    }
+	return (OpenDDSharp::DDS::ReturnCode)ret;
 };
 
 OpenDDSharp::DDS::InstanceHandle OpenDDSharp::HelloWorld::MessageDataReader::LookupInstance(Message^ instance) {

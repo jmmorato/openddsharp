@@ -76,9 +76,9 @@ namespace HelloWorld {
 		OpenDDSharp::DDS::ReturnCode Write(Message^ data);
         OpenDDSharp::DDS::ReturnCode Write(Message^ data, OpenDDSharp::DDS::InstanceHandle handle);
         OpenDDSharp::DDS::ReturnCode Write(Message^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
-		OpenDDSharp::DDS::ReturnCode Delete(Message^ data);
-		OpenDDSharp::DDS::ReturnCode Delete(Message^ data, OpenDDSharp::DDS::InstanceHandle handle);
-        OpenDDSharp::DDS::ReturnCode Delete(Message^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
+		OpenDDSharp::DDS::ReturnCode Dispose(Message^ data);
+		OpenDDSharp::DDS::ReturnCode Dispose(Message^ data, OpenDDSharp::DDS::InstanceHandle handle);
+        OpenDDSharp::DDS::ReturnCode Dispose(Message^ data, OpenDDSharp::DDS::InstanceHandle handle, OpenDDSharp::DDS::Timestamp timestamp);
         OpenDDSharp::DDS::ReturnCode GetKeyValue(Message^ data, OpenDDSharp::DDS::InstanceHandle handle);
         System::Int32 LookupInstance(Message^ instance);
 	};
@@ -179,22 +179,22 @@ namespace HelloWorld {
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle);
+												      OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode ReadNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
@@ -202,22 +202,22 @@ namespace HelloWorld {
 
          OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Message^>^ receivedData,
 												       List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												       OpenDDSharp::DDS::InstanceHandle handle);
+												       OpenDDSharp::DDS::InstanceHandle previousHandle);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples);
 
 		OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::ReadCondition^ condition);
 
         OpenDDSharp::DDS::ReturnCode TakeNextInstance(List<Message^>^ receivedData,
 												      List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo,
-												      OpenDDSharp::DDS::InstanceHandle handle,
+												      OpenDDSharp::DDS::InstanceHandle previousHandle,
 												      System::Int32 maxSamples,
 												      OpenDDSharp::DDS::SampleStateMask sampleStates,
 												      OpenDDSharp::DDS::ViewStateMask viewStates,
