@@ -54,6 +54,8 @@ namespace OpenDDSharp {
 		public ref class Entity abstract {
 
 		public:
+            /// <exclude />
+            [System::ComponentModel::EditorBrowsable(System::ComponentModel::EditorBrowsableState::Never)]
 			::DDS::Entity_ptr impl_entity;        
 
         internal:

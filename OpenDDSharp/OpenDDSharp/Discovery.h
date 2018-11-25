@@ -30,17 +30,32 @@ namespace OpenDDSharp {
     namespace OpenDDS {
         namespace DCPS {
 
+            /// <summary>
+            /// Discovery base class.
+            /// </summary>
             public ref class Discovery {
 
             internal:
                 ::OpenDDS::DCPS::Discovery* impl_entity;
 
             public:
+                /// <summary>
+                /// The InfoRepo discovery default key.
+                /// </summary>
                 static const System::String^ DEFAULT_REPO = "DEFAULT_REPO";
+                /// <summary>
+                /// The RTPS discovery default key.
+                /// </summary>
                 static const System::String^ DEFAULT_RTPS = "DEFAULT_RTPS";
+                /// <summary>
+                /// The static discovery default key.
+                /// </summary>
                 static const System::String^ DEFAULT_STATIC = "DEFAULT_STATIC";
 
             public:
+                /// <summary>
+                /// The discovery unique key
+                /// </summary>
                 property System::String^ Key {
                     System::String^ get() {
                         msclr::interop::marshal_context context;

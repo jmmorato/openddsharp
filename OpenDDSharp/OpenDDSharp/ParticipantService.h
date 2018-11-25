@@ -92,6 +92,7 @@ namespace OpenDDSharp {
                 /// <summary>
                 /// Add a new <see cref="::OpenDDSharp::OpenDDS::DCPS::Discovery" />
                 /// </summary>
+                /// <param name="discovery">The <see cref="Discovery" /> to be added.</param>
                 void AddDiscovery(::OpenDDSharp::OpenDDS::DCPS::Discovery^ discovery);
 
                 /// <summary>

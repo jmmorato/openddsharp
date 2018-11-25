@@ -102,8 +102,8 @@ namespace OpenDDSharp {
                 /// <summary>
                 /// The multicast group to join to send/receive data.
                 /// The default value is:
-                ///   224.0.0.128:<port> [IANA 2009-11-17], or
-                ///    [FF01::80]:<port> [IANA 2009-08-28]
+                ///   224.0.0.128:port [IANA 2009-11-17], or
+                ///    [FF01::80]:port [IANA 2009-08-28]
                 /// </summary>
                 property System::String^ GroupAddress {
                     System::String^ get();

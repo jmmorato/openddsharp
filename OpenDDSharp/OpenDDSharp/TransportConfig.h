@@ -45,6 +45,9 @@ namespace OpenDDSharp {
             public ref class TransportConfig {
 
             public:
+                /// <summary>
+                /// The default passive connection duration
+                /// </summary>
                 static const System::UInt32 DEFAULT_PASSIVE_CONNECT_DURATION = ::OpenDDS::DCPS::TransportConfig::DEFAULT_PASSIVE_CONNECT_DURATION;
 
             internal:
@@ -98,15 +101,17 @@ namespace OpenDDSharp {
 
             public:
                 /// <summary>
-                /// Insert the TransportInst in the instances list.
+                /// Insert the <see cref="TransportInst" /> in the instances list.
                 /// </summary>
+                /// <param name="inst">The <see cref="TransportInst" /> to be inserted.</param>
                 void Insert(TransportInst^ inst);
 
                 /// <summary>
-                /// Insert the TransportInst in sorted order (by name) in the instances_ list.
+                /// Insert the <see cref="TransportInst" /> in sorted order (by name) in the instances_ list.
                 /// Use when the names of the TransportInst objects are specifically assigned
                 /// to have the sorted order make sense.
                 /// </summary>
+                /// <param name="inst">The <see cref="TransportInst" /> to be inserted.</param>
                 void SortedInsert(TransportInst^ inst);
 
             };
