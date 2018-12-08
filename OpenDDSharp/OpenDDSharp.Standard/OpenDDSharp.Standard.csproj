@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>OpenDDSharp</AssemblyName>
+    <RootNamespace>OpenDDSharp</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="CopyNative" AfterTargets="AfterBuild">    
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
