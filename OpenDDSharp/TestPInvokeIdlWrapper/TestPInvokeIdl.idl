@@ -1,0 +1,9 @@
+module Test {
+
+	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
+	struct BasicTestStruct {
+		long Id;
+        string Message;
+	};
+
+};
