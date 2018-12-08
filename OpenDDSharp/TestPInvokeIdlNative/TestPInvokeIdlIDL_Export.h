@@ -1,0 +1,56 @@
+// -*- C++ -*-
+// $Id$
+// Definition for Win32 Export directives.
+// This file is generated automatically by export_file_generator.exe TestPInvokeIdlIDL
+// ------------------------------
+#ifndef TESTPINVOKEIDLIDL_EXPORT_H
+#define TESTPINVOKEIDLIDL_EXPORT_H
+
+#include "ace/config-all.h"
+
+#if defined (ACE_AS_STATIC_LIBS) && !defined (TESTPINVOKEIDLIDL_HAS_DLL)
+#  define TESTPINVOKEIDLIDL_HAS_DLL 0
+#endif /* ACE_AS_STATIC_LIBS && TESTPINVOKEIDLIDL_HAS_DLL */
+
+#if !defined (TESTPINVOKEIDLIDL_HAS_DLL)
+#  define TESTPINVOKEIDLIDL_HAS_DLL 1
+#endif /* ! TESTPINVOKEIDLIDL_HAS_DLL */
+
+#if defined (TESTPINVOKEIDLIDL_HAS_DLL) && (TESTPINVOKEIDLIDL_HAS_DLL == 1)
+#  if defined (TESTPINVOKEIDLIDL_BUILD_DLL)
+#    define TestPInvokeIdlIDL_Export ACE_Proper_Export_Flag
+#    define TESTPINVOKEIDLIDL_SINGLETON_DECLARATION(T) ACE_EXPORT_SINGLETON_DECLARATION (T)
+#    define TESTPINVOKEIDLIDL_SINGLETON_DECLARE(SINGLETON_TYPE, CLASS, LOCK) ACE_EXPORT_SINGLETON_DECLARE(SINGLETON_TYPE, CLASS, LOCK)
+#  else /* TESTPINVOKEIDLIDL_BUILD_DLL */
+#    define TestPInvokeIdlIDL_Export ACE_Proper_Import_Flag
+#    define TESTPINVOKEIDLIDL_SINGLETON_DECLARATION(T) ACE_IMPORT_SINGLETON_DECLARATION (T)
+#    define TESTPINVOKEIDLIDL_SINGLETON_DECLARE(SINGLETON_TYPE, CLASS, LOCK) ACE_IMPORT_SINGLETON_DECLARE(SINGLETON_TYPE, CLASS, LOCK)
+#    endif /* TESTPINVOKEIDLIDL_BUILD_DLL */
+#else /* TESTPINVOKEIDLIDL_HAS_DLL == 1 */
+#  define TestPInvokeIdlIDL_Export
+#  define TESTPINVOKEIDLIDL_SINGLETON_DECLARATION(T)
+#  define TESTPINVOKEIDLIDL_SINGLETON_DECLARE(SINGLETON_TYPE, CLASS, LOCK)
+#endif /* TESTPINVOKEIDLIDL_HAS_DLL == 1 */
+
+// Set TESTPINVOKEIDLIDL_NTRACE = 0 to turn on library specific tracing even if
+// tracing is turned off for ACE.
+#if !defined (TESTPINVOKEIDLIDL_NTRACE)
+#  if (ACE_NTRACE == 1)
+#    define TESTPINVOKEIDLIDL_NTRACE 1
+#  else /* (ACE_NTRACE == 1) */
+#    define TESTPINVOKEIDLIDL_NTRACE 0
+#  endif /* (ACE_NTRACE == 1) */
+#endif /* !TESTPINVOKEIDLIDL_NTRACE */
+
+#if (TESTPINVOKEIDLIDL_NTRACE == 1)
+#  define TESTPINVOKEIDLIDL_TRACE(X)
+#else /* (TESTPINVOKEIDLIDL_NTRACE == 1) */
+#  if !defined (ACE_HAS_TRACE)
+#    define ACE_HAS_TRACE
+#  endif /* ACE_HAS_TRACE */
+#  define TESTPINVOKEIDLIDL_TRACE(X) ACE_TRACE_IMPL(X)
+#include "ace/Trace.h"
+#endif /* (TESTPINVOKEIDLIDL_NTRACE == 1) */
+
+#endif /* TESTPINVOKEIDLIDL_EXPORT_H */
+// End of auto generated file.

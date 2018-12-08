@@ -1,0 +1,14 @@
+#include <tao/orb.idl> // Workaround for the error C2961: inconsistent explicit instantiations, a previous explicit instantiation did not specify '__declspec(dllimport)'
+
+module Test {
+
+    typedef sequence<long> LongList;
+
+	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
+	struct BasicTestStruct {
+		long Id;
+        string Message;
+        LongList LongSequence;
+	};
+
+};
