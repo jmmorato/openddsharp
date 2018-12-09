@@ -3,12 +3,14 @@
 module Test {
 
     typedef sequence<long> LongList;
+    typedef sequence<string> StringList;
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
 		long Id;
         string Message;
         LongList LongSequence;
+        StringList StringSequence;
 	};
 
 };

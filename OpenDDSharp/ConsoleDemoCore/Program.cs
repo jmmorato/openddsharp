@@ -87,7 +87,15 @@ namespace ConsoleDemoCore
             {
                 Id = 1,
                 Message = "Hello, I love you, won't you tell me your name?",
-                LongSequence = new List<int> { 1, 2, 3, 100 }
+                LongSequence = new List<int> { 1, 2, 3, 100 },
+                StringSequence = new List<string>
+                {
+                    "In every life we have some trouble, ",
+                    "but when you worry you make it double. ",
+                    "Don't worry. ",
+                    "Be happy. ",
+                    "Be happy now."
+                }
             };
             dataWriter.Write(data);
 
@@ -107,10 +115,23 @@ namespace ConsoleDemoCore
             ret = dataReader.ReadNextSample(received);
             if (ret == ReturnCode.Ok)
             {
-                Console.WriteLine("Message: " + received.Message);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("Id:");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.Id);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("Message:");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.Message);
+                Console.WriteLine();
+
                 if (received.LongSequence.Count > 0)
                 {
-                    Console.Write(nameof(received.LongSequence) + ": ");
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     for (int i = 0; i < received.LongSequence.Count; i++)
                     {
                         Console.Write(received.LongSequence[i]);
@@ -120,6 +141,19 @@ namespace ConsoleDemoCore
                         }
                     }
                     Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.StringSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StringSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.StringSequence.Count; i++)
+                    {
+                        Console.WriteLine(received.StringSequence[i]);
+                    }
+                    Console.WriteLine();
                 }
             }
             else
@@ -127,6 +161,7 @@ namespace ConsoleDemoCore
                 Console.WriteLine("Data not received. ReadNextSample call returned: " + ret.ToString());
             }
 
+            Console.ResetColor();
             Console.ReadKey();
         }
     }

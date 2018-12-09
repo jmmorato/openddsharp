@@ -77,6 +77,40 @@ Test::LongList::~LongList (void)
 #endif /* end #if !defined */
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_STRINGLIST_CS_)
+#define _TEST_STRINGLIST_CS_
+
+Test::StringList::StringList (void)
+{}
+
+Test::StringList::StringList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_basic_string_sequence<char> (max)
+{}
+
+Test::StringList::StringList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::Char * * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_basic_string_sequence<char>
+    (max, length, buffer, release)
+{}
+
+Test::StringList::StringList (
+    const StringList &seq)
+  : ::TAO::unbounded_basic_string_sequence<char> (seq)
+{}
+
+Test::StringList::~StringList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
 #if !defined _TAO_CDR_OP_Test_LongList_CPP_
 #define _TAO_CDR_OP_Test_LongList_CPP_
@@ -103,6 +137,32 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 #endif /* _TAO_CDR_OP_Test_LongList_CPP_ */
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_StringList_CPP_
+#define _TAO_CDR_OP_Test_StringList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::StringList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::StringList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_StringList_CPP_ */
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -114,7 +174,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
-    (strm << _tao_aggregate.LongSequence);
+    (strm << _tao_aggregate.LongSequence) &&
+    (strm << _tao_aggregate.StringSequence);
 }
 
 ::CORBA::Boolean operator>> (
@@ -124,7 +185,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
-    (strm >> _tao_aggregate.LongSequence);
+    (strm >> _tao_aggregate.LongSequence) &&
+    (strm >> _tao_aggregate.StringSequence);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL

@@ -23,6 +23,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     int Id;
     char* Message;    
     void* LongSequence;
+    void* StringSequence;
 };
 
 EXTERN_METHOD_EXPORT void BasicTestStructWrapper_release(BasicTestStructWrapper* obj);

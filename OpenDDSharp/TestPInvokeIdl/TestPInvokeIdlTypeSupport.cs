@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -19,6 +18,7 @@ namespace Test
 
         public static void PtrToUnboundedSequence<T>(IntPtr ptr, ref IList<T> sequence)
         {
+            // Ensure a not null empty list to populate
             if (sequence == null)
                 sequence = new List<T>();
             else
@@ -28,42 +28,95 @@ namespace Test
                 return;            
 
             // Start by reading the size of the array
-            int length = Marshal.ReadInt32(ptr);
-            // Create the managed array that will be added to the list
-            T[] array = new T[length];
+            int length = Marshal.ReadInt32(ptr);            
             // For efficiency, only compute the element size once
             int elSiz = Marshal.SizeOf<T>();
-            // Populate the array
+            // Populate the list
             for (int i = 0; i < length; i++)
             {
-                array[i] = Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i));
+                sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
             }
-
-            ((List<T>)sequence).AddRange(array);
         }
 
         public static void UnboundedSequenceToPtr<T>(IList<T> sequence, ref IntPtr ptr)
         {
-            if (sequence == null)
+            if (sequence == null || sequence.Count == 0)
             {
+                // No structures in the list. Write 0 and return
+                ptr = Marshal.AllocHGlobal(sizeof(int));
                 Marshal.WriteInt32(ptr, 0);
                 return;
             }
 
-            T[] array = sequence.ToArray();
             int elSiz = Marshal.SizeOf<T>();
             // Get the total size of unmanaged memory that is needed (length + elements)
-            int size = sizeof(int) + (elSiz * array.Length);
+            int size = sizeof(int) + (elSiz * sequence.Count);
             // Allocate unmanaged space.
             ptr = Marshal.AllocHGlobal(size);
             // Write the "Length" field first
-            Marshal.WriteInt32(ptr, array.Length);
-            // Write the array data
-            for (int i = 0; i < array.Length; i++)
+            Marshal.WriteInt32(ptr, sequence.Count);
+            // Write the list data
+            for (int i = 0; i < sequence.Count; i++)
             {   
                 // Newly-allocated space has no existing object, so the last param is false
-                Marshal.StructureToPtr(array[i], ptr + sizeof(int) + (elSiz * i), false);
+                Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
             }
+        }
+
+        public static void PtrToUnboundedBasicStringSequence(IntPtr ptr, ref IList<string> sequence)
+        {
+            // Ensure a not null empty list to populate
+            if (sequence == null)
+                sequence = new List<string>();
+            else
+                sequence.Clear();
+
+            if (ptr == IntPtr.Zero)
+                return;
+
+            // Start by reading the size of the array
+            int length = Marshal.ReadInt32(ptr);
+
+            // Populate the array
+            for (int i = 0; i < length; i++)
+            {
+                // Get the unmanaged pointer
+                IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + sizeof(int) + (IntPtr.Size * i));
+                // Convert the pointer in a string
+                sequence.Add(Marshal.PtrToStringAnsi(pointer));
+            }
+        }
+
+        public static List<IntPtr> UnboundedBasicStringSequenceToPtr(IList<string> sequence, ref IntPtr ptr)
+        {            
+            List<IntPtr> toRelease = new List<IntPtr>();
+            
+            if (sequence == null || sequence.Count == 0)
+            {
+                // No string in the list. Write 0 and return
+                ptr = Marshal.AllocHGlobal(sizeof(int));
+                Marshal.WriteInt32(ptr, 0);
+                return toRelease;
+            }
+
+            // Get the total size of unmanaged memory that is needed (length + elements)
+            int size = sizeof(int) + (IntPtr.Size * sequence.Count);
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+            // Write the "Length" field first
+            Marshal.WriteInt32(ptr, sequence.Count);
+            // Write the pointers to the string data
+            for (int i = 0; i < sequence.Count; i++)
+            {
+                // Create a pointer to the string in unmanaged memory
+                IntPtr sPtr = Marshal.StringToHGlobalAnsi(sequence[i]);
+                // Add to pointer to the list of pointers to release
+                toRelease.Add(sPtr);
+                // Write the pointer location in ptr
+                Marshal.StructureToPtr(sPtr, ptr + sizeof(int) + (i * IntPtr.Size), false);
+            }
+
+            return toRelease;
         }
     }
 
@@ -71,6 +124,7 @@ namespace Test
     {
         #region Fields
         private IList<int> _longSequence;
+        private IList<string> _stringSequence;
         #endregion
 
         #region Properties
@@ -83,22 +137,34 @@ namespace Test
             get { return _longSequence; }
             set { _longSequence = value; }
         }
+
+        public IList<string> StringSequence
+        {
+            get { return _stringSequence; }
+            set { _stringSequence = value; }
+        }
         #endregion
 
         #region Constructors
         public BasicTestStruct()
         {
-            LongSequence = new List<int>();
+            _longSequence = new List<int>();
+            _stringSequence = new List<string>();
         }
         #endregion
 
         #region Methods
-        internal BasicTestStructWrapper ToNative()
+        internal BasicTestStructWrapper ToNative(List<IntPtr> toFree)
         {
             BasicTestStructWrapper wrapper = new BasicTestStructWrapper();
             wrapper.Id = Id;
             wrapper.Message = Marshal.StringToHGlobalAnsi(Message);
+
             Helper.UnboundedSequenceToPtr(LongSequence, ref wrapper.LongSequence);
+            toFree.Add(wrapper.LongSequence);
+
+            toFree.AddRange(Helper.UnboundedBasicStringSequenceToPtr(StringSequence, ref wrapper.StringSequence));
+            toFree.Add(wrapper.StringSequence);
 
             return wrapper;
         }
@@ -108,7 +174,8 @@ namespace Test
             Id = wrapper.Id;
             Message = Marshal.PtrToStringAnsi(wrapper.Message);
 
-            Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);            
+            Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);
+            Helper.PtrToUnboundedBasicStringSequence(wrapper.StringSequence, ref _stringSequence);
         }
         #endregion
     }
@@ -123,6 +190,9 @@ namespace Test
 
         // Sequences need to be treated with a custom marshaler             
         public IntPtr LongSequence;
+
+        // Sequences need to be treated with a custom marshaler             
+        public IntPtr StringSequence;
     }
 
     public class BasicTestStructTypeSupport
@@ -247,7 +317,8 @@ namespace Test
             }
 
             ReturnCode ret = ReturnCode.Error;
-            BasicTestStructWrapper wrapper = data.ToNative();
+            List<IntPtr> toFree = new List<IntPtr>();
+            BasicTestStructWrapper wrapper = data.ToNative(toFree);
             if (Environment.Is64BitProcess)
             {                                
                 ret = (ReturnCode)Write64(_native, ref wrapper, 0);
@@ -258,8 +329,10 @@ namespace Test
             }
 
             // Always free the unmanaged memory.
-            Marshal.FreeHGlobal(wrapper.Message);
-            Marshal.FreeHGlobal(wrapper.LongSequence);
+            foreach(IntPtr ptr in toFree)
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
 
             return ret;
         }

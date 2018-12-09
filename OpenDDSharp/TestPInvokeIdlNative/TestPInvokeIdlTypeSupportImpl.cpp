@@ -554,6 +554,92 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: LongList */
 
 
+/* Begin TYPEDEF: StringList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::StringList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    find_size_ulong(size, padding);
+    if (seq[i]) {
+      size += ACE_OS::strlen(seq[i]) + 1;
+    }
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::StringList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::StringList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq.get_buffer()[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::StringList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  for (ACE_CDR::ULong i = 0; i < length; ++i) {
+    ACE_CDR::ULong strlength;
+    if (!(ser >> strlength)) return false;
+    if (!ser.skip(static_cast<ACE_UINT16>(strlength))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: StringList */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -571,6 +657,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   find_size_ulong(size, padding);
   size += ACE_OS::strlen(stru.Message.in()) + 1;
   gen_find_size(stru.LongSequence, size, padding);
+  gen_find_size(stru.StringSequence, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -579,7 +666,8 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   ACE_UNUSED_ARG(stru);
   return (strm << stru.Id)
     && (strm << stru.Message.in())
-    && (strm << stru.LongSequence);
+    && (strm << stru.LongSequence)
+    && (strm << stru.StringSequence);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -588,7 +676,8 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   ACE_UNUSED_ARG(stru);
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
-    && (strm >> stru.LongSequence);
+    && (strm >> stru.LongSequence)
+    && (strm >> stru.StringSequence);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -744,6 +833,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::LongList*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (!gen_skip_over(ser, static_cast<Test::StringList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -765,7 +857,7 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "LongSequence", 0};
+    static const char* names[] = {"Id", "Message", "LongSequence", "StringSequence", 0};
     return names;
   }
 
@@ -779,6 +871,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "LongSequence") == 0) {
       return &static_cast<const T*>(stru)->LongSequence;
+    }
+    if (std::strcmp(field, "StringSequence") == 0) {
+      return &static_cast<const T*>(stru)->StringSequence;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -801,6 +896,10 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "LongSequence") == 0) {
       static_cast<T*>(lhs)->LongSequence = *static_cast<const Test::LongList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "StringSequence") == 0) {
+      static_cast<T*>(lhs)->StringSequence = *static_cast<const Test::StringList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");

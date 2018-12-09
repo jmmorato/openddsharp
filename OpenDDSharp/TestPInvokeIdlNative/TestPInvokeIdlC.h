@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_SAEGTZ_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_SAEGTZ_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_LC7DWC_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_LC7DWC_H_
 
 #include /**/ "ace/pre.h"
 
@@ -148,6 +148,52 @@ namespace Test
 #endif /* end #if !defined */
 
   // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_STRINGLIST_CH_)
+#define _TEST_STRINGLIST_CH_
+
+  class StringList;
+
+  typedef
+    ::TAO_VarSeq_Var_T<
+        StringList
+      >
+    StringList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        StringList
+      >
+    StringList_out;
+
+  class TestPInvokeIdlIDL_Export StringList
+    : public
+        ::TAO::unbounded_basic_string_sequence<char>
+  {
+  public:
+    StringList (void);
+    StringList ( ::CORBA::ULong max);
+    StringList (
+      ::CORBA::ULong max,
+      ::CORBA::ULong length,
+      ::CORBA::Char ** buffer,
+      ::CORBA::Boolean release = false);
+    StringList (const StringList &);
+    virtual ~StringList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef StringList_var _var_type;
+    typedef StringList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:261
 
   struct BasicTestStruct;
@@ -180,6 +226,7 @@ namespace Test
     ::CORBA::Long Id;
     ::TAO::String_Manager Message;
     Test::LongList LongSequence;
+    Test::StringList StringSequence;
   };
 
 // TAO_IDL - Generated from
@@ -205,6 +252,19 @@ namespace TAO
     : public
         Var_Size_Arg_Traits_T<
             ::Test::LongList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::StringList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::StringList,
             TAO::Any_Insert_Policy_Noop
           >
   {
@@ -261,6 +321,27 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 #endif /* _TAO_CDR_OP_Test_LongList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_StringList_H_
+#define _TAO_CDR_OP_Test_StringList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::StringList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::StringList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_StringList_H_ */
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_ch.cpp:46

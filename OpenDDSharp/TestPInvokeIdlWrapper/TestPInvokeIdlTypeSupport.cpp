@@ -2,8 +2,9 @@
 
 void BasicTestStructWrapper_release(BasicTestStructWrapper* obj)
 {
-    CORBA::string_free(obj->Message);    
-    delete[] obj->LongSequence;
+    CORBA::string_free(obj->Message);
+    delete obj->LongSequence;
+    marshal::release_unbounded_basic_string_sequence_ptr(obj->StringSequence);
 }
 
 Test::BasicTestStructTypeSupport_ptr BasicTestStructTypeSupport_new()
@@ -37,21 +38,8 @@ int BasicTestStructDataWriter_Write(Test::BasicTestStructDataWriter_ptr dw, Basi
     nativeData.Id = data->Id;        
     nativeData.Message = CORBA::string_dup(data->Message);
 
-    //char* bytes = (char*)data->LongSequence;
-    //// First 4 bytes are the length of the array
-    //ACE_UINT32 length = 0;
-    //std::memcpy(&length, bytes, sizeof length);
-    //nativeData.LongSequence.length(length);
-    //   
-    //// The rest of the memory is the structures aligned one after the other
-    //const ACE_UINT64 structs_offset = sizeof length;
-    //const ACE_UINT64 struct_size = sizeof int32_t;
-    //for (int i = 0; i < length; i++)
-    //{
-    //    std::memcpy(&nativeData.LongSequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
-    //}    
-
     marshal::ptr_to_unbounded_sequence(data->LongSequence, nativeData.LongSequence);
+    marshal::ptr_to_unbounded_basic_string_sequence(data->StringSequence, nativeData.StringSequence);
 
     return dw->write(nativeData, DDS::HANDLE_NIL);
 }
@@ -71,27 +59,8 @@ int BasicTestStructDataReader_ReadNextSample(Test::BasicTestStructDataReader_ptr
         data->Id = nativeData.Id;
         data->Message = CORBA::string_dup(nativeData.Message);
 
-        marshal::unbounded_sequence_to_ptr<CORBA::Long>(nativeData.LongSequence, data->LongSequence);
-        //ACE_UINT32 length = nativeData.LongSequence.length();        
-        //const ACE_UINT64 buffer_size = (length * sizeof(int)) + sizeof length;
-        //char* bytes = new char[buffer_size];
-        //std::memcpy(bytes, &length, sizeof int32_t);
-        //
-        //if (length > 0)
-        //{
-        //    const ACE_UINT64 struct_size = sizeof nativeData.LongSequence[0];
-        //    for (int i = 0; i < length; i++)
-        //    {
-        //        std::memcpy(&bytes[(i * struct_size) + sizeof length], &nativeData.LongSequence[i], struct_size);
-        //    }
-        //}
-
-        //// Alloc memory for the poninter
-        //ACE_NEW_RETURN(data->LongSequence, char[buffer_size], 0);
-        //// Copy the bytes in the pointer
-        //ACE_OS::memcpy(data->LongSequence, bytes, buffer_size);
-        //// Free the temporal allocated memory
-        //delete[] bytes;
+        marshal::unbounded_sequence_to_ptr(nativeData.LongSequence, data->LongSequence);
+        marshal::unbounded_basic_string_sequence_to_ptr(nativeData.StringSequence, data->StringSequence);
     }
 
     return (int)ret;
