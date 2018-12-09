@@ -21,7 +21,8 @@
 EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 {
     int Id;
-    char* Message;    
+    char* Message;
+    wchar_t* WMessage;
     void* LongSequence;
     void* StringSequence;
 };

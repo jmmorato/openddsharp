@@ -9,6 +9,7 @@ module Test {
 	struct BasicTestStruct {
 		long Id;
         string Message;
+        wstring WMessage;
         LongList LongSequence;
         StringList StringSequence;
 	};

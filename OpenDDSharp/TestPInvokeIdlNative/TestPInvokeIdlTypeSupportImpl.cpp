@@ -656,6 +656,8 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   size += gen_max_marshaled_size(stru.Id);
   find_size_ulong(size, padding);
   size += ACE_OS::strlen(stru.Message.in()) + 1;
+  find_size_ulong(size, padding);
+  size += ACE_OS::strlen(stru.WMessage.in()) * OpenDDS::DCPS::Serializer::WCHAR_SIZE;
   gen_find_size(stru.LongSequence, size, padding);
   gen_find_size(stru.StringSequence, size, padding);
 }
@@ -666,6 +668,7 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   ACE_UNUSED_ARG(stru);
   return (strm << stru.Id)
     && (strm << stru.Message.in())
+    && (strm << stru.WMessage.in())
     && (strm << stru.LongSequence)
     && (strm << stru.StringSequence);
 }
@@ -676,6 +679,7 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   ACE_UNUSED_ARG(stru);
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
+    && (strm >> stru.WMessage.out())
     && (strm >> stru.LongSequence)
     && (strm >> stru.StringSequence);
 }
@@ -798,6 +802,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "Message") == 0) {
       return typed.Message.in();
     }
+    if (std::strcmp(field, "WMessage") == 0) {
+      return typed.WMessage.in();
+    }
     ACE_UNUSED_ARG(typed);
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -830,6 +837,21 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
         throw std::runtime_error("String 'Message' contents could not be skipped");
       }
     }
+    if (std::strcmp(field, "WMessage") == 0) {
+      TAO::WString_Manager val;
+      if (!(ser >> val.out())) {
+        throw std::runtime_error("Field 'WMessage' could not be deserialized");
+      }
+      return val;
+    } else {
+      ACE_CDR::ULong len;
+      if (!(ser >> len)) {
+        throw std::runtime_error("String 'WMessage' length could not be deserialized");
+      }
+      if (!ser.skip(static_cast<ACE_UINT16>(len))) {
+        throw std::runtime_error("String 'WMessage' contents could not be skipped");
+      }
+    }
     if (!gen_skip_over(ser, static_cast<Test::LongList*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
@@ -851,13 +873,16 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "Message") == 0) {
       return make_field_cmp(&T::Message, next);
     }
+    if (std::strcmp(field, "WMessage") == 0) {
+      return make_field_cmp(&T::WMessage, next);
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "LongSequence", "StringSequence", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", 0};
     return names;
   }
 
@@ -868,6 +893,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "Message") == 0) {
       return &static_cast<const T*>(stru)->Message;
+    }
+    if (std::strcmp(field, "WMessage") == 0) {
+      return &static_cast<const T*>(stru)->WMessage;
     }
     if (std::strcmp(field, "LongSequence") == 0) {
       return &static_cast<const T*>(stru)->LongSequence;
@@ -894,6 +922,10 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
       static_cast<T*>(lhs)->Message = *static_cast<const TAO::String_Manager*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
     }
+    if (std::strcmp(field, "WMessage") == 0) {
+      static_cast<T*>(lhs)->WMessage = *static_cast<const TAO::WString_Manager*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
     if (std::strcmp(field, "LongSequence") == 0) {
       static_cast<T*>(lhs)->LongSequence = *static_cast<const Test::LongList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
@@ -916,6 +948,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "Message") == 0) {
       return 0 == ACE_OS::strcmp(static_cast<const T*>(lhs)->Message.in(), static_cast<const T*>(rhs)->Message.in());
+    }
+    if (std::strcmp(field, "WMessage") == 0) {
+      return 0 == ACE_OS::strcmp(static_cast<const T*>(lhs)->WMessage.in(), static_cast<const T*>(rhs)->WMessage.in());
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }

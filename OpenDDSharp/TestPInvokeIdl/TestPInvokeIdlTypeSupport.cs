@@ -132,6 +132,8 @@ namespace Test
         
         public string Message { get; set; }
 
+        public string WMessage { get; set; }
+
         public IList<int> LongSequence
         {
             get { return _longSequence; }
@@ -157,8 +159,20 @@ namespace Test
         internal BasicTestStructWrapper ToNative(List<IntPtr> toFree)
         {
             BasicTestStructWrapper wrapper = new BasicTestStructWrapper();
+
             wrapper.Id = Id;
-            wrapper.Message = Marshal.StringToHGlobalAnsi(Message);
+
+            if (Message != null)
+            {
+                wrapper.Message = Marshal.StringToHGlobalAnsi(Message);
+                toFree.Add(wrapper.Message);
+            }
+
+            if (WMessage != null)
+            {
+                wrapper.WMessage = Marshal.StringToHGlobalUni(WMessage);
+                toFree.Add(wrapper.WMessage);
+            }
 
             Helper.UnboundedSequenceToPtr(LongSequence, ref wrapper.LongSequence);
             toFree.Add(wrapper.LongSequence);
@@ -173,6 +187,7 @@ namespace Test
         {
             Id = wrapper.Id;
             Message = Marshal.PtrToStringAnsi(wrapper.Message);
+            WMessage = Marshal.PtrToStringUni(wrapper.WMessage);
 
             Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);
             Helper.PtrToUnboundedBasicStringSequence(wrapper.StringSequence, ref _stringSequence);
@@ -187,6 +202,9 @@ namespace Test
 
         // Strings need to be treated as a IntPtr to avoid memory relase issues
         public IntPtr Message;
+
+        // WStrings need to be treated as a IntPtr to avoid memory relase issues
+        public IntPtr WMessage;
 
         // Sequences need to be treated with a custom marshaler             
         public IntPtr LongSequence;

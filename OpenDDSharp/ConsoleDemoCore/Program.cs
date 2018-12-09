@@ -87,6 +87,7 @@ namespace ConsoleDemoCore
             {
                 Id = 1,
                 Message = "Hello, I love you, won't you tell me your name?",
+                WMessage = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
                 LongSequence = new List<int> { 1, 2, 3, 100 },
                 StringSequence = new List<string>
                 {
@@ -125,6 +126,12 @@ namespace ConsoleDemoCore
                 Console.WriteLine("Message:");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine(received.Message);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("WMessage:");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.WMessage);
                 Console.WriteLine();
 
                 if (received.LongSequence.Count > 0)

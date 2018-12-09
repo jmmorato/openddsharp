@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_LC7DWC_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_LC7DWC_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_JDU7ZD_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_JDU7ZD_H_
 
 #include /**/ "ace/pre.h"
 
@@ -225,6 +225,7 @@ namespace Test
     
     ::CORBA::Long Id;
     ::TAO::String_Manager Message;
+    ::TAO::WString_Manager WMessage;
     Test::LongList LongSequence;
     Test::StringList StringSequence;
   };

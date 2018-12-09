@@ -174,6 +174,7 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
+    (strm << _tao_aggregate.WMessage.in ()) &&
     (strm << _tao_aggregate.LongSequence) &&
     (strm << _tao_aggregate.StringSequence);
 }
@@ -185,6 +186,7 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
+    (strm >> _tao_aggregate.WMessage.out ()) &&
     (strm >> _tao_aggregate.LongSequence) &&
     (strm >> _tao_aggregate.StringSequence);
 }

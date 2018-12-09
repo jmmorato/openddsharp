@@ -2,7 +2,10 @@
 
 void BasicTestStructWrapper_release(BasicTestStructWrapper* obj)
 {
-    CORBA::string_free(obj->Message);
+    if (obj->Message != NULL)
+        CORBA::string_free(obj->Message);
+    if (obj->WMessage)
+        CORBA::wstring_free(obj->WMessage);
     delete obj->LongSequence;
     marshal::release_unbounded_basic_string_sequence_ptr(obj->StringSequence);
 }
@@ -35,8 +38,11 @@ Test::BasicTestStructDataWriter_ptr BasicTestStructDataWriter_Narrow(DDS::DataWr
 int BasicTestStructDataWriter_Write(Test::BasicTestStructDataWriter_ptr dw, BasicTestStructWrapper* data, int handle)
 {
     Test::BasicTestStruct nativeData;
-    nativeData.Id = data->Id;        
-    nativeData.Message = CORBA::string_dup(data->Message);
+    nativeData.Id = data->Id;
+    if (data->Message != NULL)
+        nativeData.Message = CORBA::string_dup(data->Message);
+    if (data->WMessage)
+        nativeData.WMessage = CORBA::wstring_dup(data->WMessage);
 
     marshal::ptr_to_unbounded_sequence(data->LongSequence, nativeData.LongSequence);
     marshal::ptr_to_unbounded_basic_string_sequence(data->StringSequence, nativeData.StringSequence);
@@ -58,6 +64,7 @@ int BasicTestStructDataReader_ReadNextSample(Test::BasicTestStructDataReader_ptr
     {
         data->Id = nativeData.Id;
         data->Message = CORBA::string_dup(nativeData.Message);
+        data->WMessage = CORBA::wstring_dup(nativeData.WMessage);
 
         marshal::unbounded_sequence_to_ptr(nativeData.LongSequence, data->LongSequence);
         marshal::unbounded_basic_string_sequence_to_ptr(nativeData.StringSequence, data->StringSequence);
