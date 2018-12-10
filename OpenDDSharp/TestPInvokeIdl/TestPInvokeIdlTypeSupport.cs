@@ -120,6 +120,42 @@ namespace Test
         }
     }
 
+    public class NestedTestStruct
+    {
+        public int Id { get; set; }
+
+        public string Message { get; set; }
+
+        internal NestedTestStructWrapper ToNative(List<IntPtr> toRelease)
+        {
+            NestedTestStructWrapper wrapper = new NestedTestStructWrapper();
+
+            wrapper.Id = Id;
+
+            if (Message != null)
+            {
+                wrapper.Message = Marshal.StringToHGlobalAnsi(Message);
+                toRelease.Add(wrapper.Message);
+            }
+
+            return wrapper;
+        }
+
+        internal void FromNative(NestedTestStructWrapper wrapper)
+        {
+            Id = wrapper.Id;
+            Message = Marshal.PtrToStringAnsi(wrapper.Message);
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct NestedTestStructWrapper
+    {
+        public int Id;
+        
+        public IntPtr Message;
+    }
+
     public class BasicTestStruct
     {
         #region Fields
@@ -151,6 +187,8 @@ namespace Test
         public string[] StringArray { get; set; }
 
         public string[] WStringArray { get; set; }
+
+        public NestedTestStruct StructTest { get; set; }
         #endregion
 
         #region Constructors
@@ -161,6 +199,7 @@ namespace Test
             LongArray = new int[5];
             StringArray = new string[10];
             WStringArray = new string[4];
+            StructTest = new NestedTestStruct();
         }
         #endregion
 
@@ -211,6 +250,7 @@ namespace Test
                 }
             }
 
+            wrapper.StructTest = StructTest.ToNative(toRelease);
             return wrapper;
         }
 
@@ -230,6 +270,8 @@ namespace Test
 
             for (int i = 0; i < 4; i++)
                 WStringArray[i] = Marshal.PtrToStringUni(wrapper.WStringArray[i]);
+
+            StructTest.FromNative(wrapper.StructTest);
         }
         #endregion
     }
@@ -259,6 +301,9 @@ namespace Test
 
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.SysInt, SizeConst = 4)]
         public IntPtr[] WStringArray;
+
+        [MarshalAs(UnmanagedType.Struct)]
+        public NestedTestStructWrapper StructTest;
     }
 
     public class BasicTestStructTypeSupport

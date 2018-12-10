@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_DARTPG_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_DARTPG_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_K6RZNW_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_K6RZNW_H_
 
 #include /**/ "ace/pre.h"
 
@@ -82,6 +82,19 @@ namespace TAO
 {
 
   // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
+
+  template<>
+  class SArg_Traits< ::Test::NestedTestStruct>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::NestedTestStruct,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
 
   template<>
@@ -102,6 +115,19 @@ namespace TAO
     : public
         Var_Size_SArg_Traits_T<
             ::Test::StringList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::StructList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::StructList,
             TAO::Any_Insert_Policy_Noop
           >
   {

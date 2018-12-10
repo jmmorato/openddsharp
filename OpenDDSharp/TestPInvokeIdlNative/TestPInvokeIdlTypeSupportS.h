@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_DNTI31_H_
-#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_DNTI31_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_N5YPWS_H_
+#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_N5YPWS_H_
 
 #include /**/ "ace/pre.h"
 
@@ -65,6 +65,18 @@ namespace TAO
 TAO_END_VERSIONED_NAMESPACE_DECL
 
 
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_sh.cpp:38
+
+namespace POA_Test
+{
+  
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_sh.cpp:69
+
+} // module Test
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_sh.cpp:38

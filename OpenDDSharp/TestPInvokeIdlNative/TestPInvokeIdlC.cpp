@@ -111,6 +111,46 @@ Test::StringList::~StringList (void)
 #endif /* end #if !defined */
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_STRUCTLIST_CS_)
+#define _TEST_STRUCTLIST_CS_
+
+Test::StructList::StructList (void)
+{}
+
+Test::StructList::StructList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_value_sequence<
+        NestedTestStruct
+      > (max)
+{}
+
+Test::StructList::StructList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    Test::NestedTestStruct * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_value_sequence<
+        NestedTestStruct
+      >
+    (max, length, buffer, release)
+{}
+
+Test::StructList::StructList (
+    const StructList &seq)
+  : ::TAO::unbounded_value_sequence<
+        NestedTestStruct
+      > (seq)
+{}
+
+Test::StructList::~StructList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
 
 Test::ArrayLong_slice *
@@ -246,6 +286,33 @@ Test::ArrayWString_copy (
 }
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::NestedTestStruct &_tao_aggregate)
+{
+  return
+    (strm << _tao_aggregate.Id) &&
+    (strm << _tao_aggregate.Message.in ());
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::NestedTestStruct &_tao_aggregate)
+{
+  return
+    (strm >> _tao_aggregate.Id) &&
+    (strm >> _tao_aggregate.Message.out ());
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
 #if !defined _TAO_CDR_OP_Test_LongList_CPP_
 #define _TAO_CDR_OP_Test_LongList_CPP_
@@ -296,6 +363,32 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 TAO_END_VERSIONED_NAMESPACE_DECL
 
 #endif /* _TAO_CDR_OP_Test_StringList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_StructList_CPP_
+#define _TAO_CDR_OP_Test_StructList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::StructList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::StructList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_StructList_CPP_ */
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
@@ -450,7 +543,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate.StringSequence) &&
     (strm << _tao_aggregate_LongArray) &&
     (strm << _tao_aggregate_StringArray) &&
-    (strm << _tao_aggregate_WStringArray);
+    (strm << _tao_aggregate_WStringArray) &&
+    (strm << _tao_aggregate.StructTest);
 }
 
 ::CORBA::Boolean operator>> (
@@ -495,7 +589,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate.StringSequence) &&
     (strm >> _tao_aggregate_LongArray) &&
     (strm >> _tao_aggregate_StringArray) &&
-    (strm >> _tao_aggregate_WStringArray);
+    (strm >> _tao_aggregate_WStringArray) &&
+    (strm >> _tao_aggregate.StructTest);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL

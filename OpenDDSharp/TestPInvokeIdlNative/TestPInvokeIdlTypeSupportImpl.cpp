@@ -485,6 +485,283 @@
 
 
 
+/* Begin STRUCT: NestedTestStruct */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::NestedTestStruct& stru, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(stru);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 4) {
+    padding += 4 - ((size + padding) % 4);
+  }
+  size += gen_max_marshaled_size(stru.Id);
+  find_size_ulong(size, padding);
+  size += ACE_OS::strlen(stru.Message.in()) + 1;
+}
+
+bool operator<<(Serializer& strm, const Test::NestedTestStruct& stru)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(stru);
+  return (strm << stru.Id)
+    && (strm << stru.Message.in());
+}
+
+bool operator>>(Serializer& strm, Test::NestedTestStruct& stru)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(stru);
+  return (strm >> stru.Id)
+    && (strm >> stru.Message.out());
+}
+
+size_t gen_max_marshaled_size(const Test::NestedTestStruct& stru, bool align)
+{
+  ACE_UNUSED_ARG(stru);
+  ACE_UNUSED_ARG(align);
+  return 0;
+}
+
+size_t gen_max_marshaled_size(KeyOnly<const Test::NestedTestStruct> stru, bool align)
+{
+  ACE_UNUSED_ARG(stru);
+  ACE_UNUSED_ARG(align);
+  return 0;
+}
+
+void gen_find_size(KeyOnly<const Test::NestedTestStruct> stru, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(stru);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+}
+
+bool operator<<(Serializer& strm, KeyOnly<const Test::NestedTestStruct> stru)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(stru);
+  return true;
+}
+
+bool operator>>(Serializer& strm, KeyOnly<Test::NestedTestStruct> stru)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(stru);
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+
+namespace Test {
+::DDS::DataWriter_ptr NestedTestStructTypeSupportImpl::create_datawriter()
+{
+  typedef OpenDDS::DCPS::DataWriterImpl_T<NestedTestStruct> DataWriterImplType;
+  ::DDS::DataWriter_ptr writer_impl = ::DDS::DataWriter::_nil();
+  ACE_NEW_NORETURN(writer_impl,
+                   DataWriterImplType());
+  return writer_impl;
+}
+
+::DDS::DataReader_ptr NestedTestStructTypeSupportImpl::create_datareader()
+{
+  typedef OpenDDS::DCPS::DataReaderImpl_T<NestedTestStruct> DataReaderImplType;
+  ::DDS::DataReader_ptr reader_impl = ::DDS::DataReader::_nil();
+  ACE_NEW_NORETURN(reader_impl,
+                   DataReaderImplType());
+  return reader_impl;
+}
+
+#ifndef OPENDDS_NO_MULTI_TOPIC
+::DDS::DataReader_ptr NestedTestStructTypeSupportImpl::create_multitopic_datareader()
+{
+  typedef OpenDDS::DCPS::DataReaderImpl_T<NestedTestStruct> DataReaderImplType;
+  typedef OpenDDS::DCPS::MultiTopicDataReader_T<NestedTestStruct, DataReaderImplType> MultiTopicDataReaderImplType;
+  ::DDS::DataReader_ptr multitopic_reader_impl = ::DDS::DataReader::_nil();
+  ACE_NEW_NORETURN(multitopic_reader_impl,
+                   MultiTopicDataReaderImplType());
+  return multitopic_reader_impl;
+}
+#endif /* !OPENDDS_NO_MULTI_TOPIC */
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+const OpenDDS::DCPS::MetaStruct& NestedTestStructTypeSupportImpl::getMetaStructForType()
+{
+  return OpenDDS::DCPS::getMetaStruct<NestedTestStruct>();
+}
+#endif /* !OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE */
+
+bool NestedTestStructTypeSupportImpl::has_dcps_key()
+{
+  return TraitsType::gen_has_key ();
+}
+
+const char* NestedTestStructTypeSupportImpl::default_type_name() const
+{
+  return TraitsType::type_name();
+}
+
+NestedTestStructTypeSupport::_ptr_type NestedTestStructTypeSupportImpl::_narrow(CORBA::Object_ptr obj)
+{
+  return TypeSupportType::_narrow(obj);
+}
+}
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+template<>
+struct MetaStructImpl<Test::NestedTestStruct> : MetaStruct {
+  typedef Test::NestedTestStruct T;
+
+#ifndef OPENDDS_NO_MULTI_TOPIC
+  void* allocate() const { return new T; }
+
+  void deallocate(void* stru) const { delete static_cast<T*>(stru); }
+
+  size_t numDcpsKeys() const { return 0; }
+#endif /* OPENDDS_NO_MULTI_TOPIC */
+
+  Value getValue(const void* stru, const char* field) const
+  {
+    const Test::NestedTestStruct& typed = *static_cast<const Test::NestedTestStruct*>(stru);
+    if (std::strcmp(field, "Id") == 0) {
+      return typed.Id;
+    }
+    if (std::strcmp(field, "Message") == 0) {
+      return typed.Message.in();
+    }
+    ACE_UNUSED_ARG(typed);
+    throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::NestedTestStruct)");
+  }
+
+  Value getValue(Serializer& ser, const char* field) const
+  {
+    if (std::strcmp(field, "Id") == 0) {
+      ACE_CDR::Long val;
+      if (!(ser >> val)) {
+        throw std::runtime_error("Field 'Id' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 4)) {
+        throw std::runtime_error("Field 'Id' could not be skipped");
+      }
+    }
+    if (std::strcmp(field, "Message") == 0) {
+      TAO::String_Manager val;
+      if (!(ser >> val.out())) {
+        throw std::runtime_error("Field 'Message' could not be deserialized");
+      }
+      return val;
+    } else {
+      ACE_CDR::ULong len;
+      if (!(ser >> len)) {
+        throw std::runtime_error("String 'Message' length could not be deserialized");
+      }
+      if (!ser.skip(static_cast<ACE_UINT16>(len))) {
+        throw std::runtime_error("String 'Message' contents could not be skipped");
+      }
+    }
+    if (!field[0]) {
+      return 0;
+    }
+    throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not valid for struct Test::NestedTestStruct");
+  }
+
+  ComparatorBase::Ptr create_qc_comparator(const char* field, ComparatorBase::Ptr next) const
+  {
+    ACE_UNUSED_ARG(next);
+    if (std::strcmp(field, "Id") == 0) {
+      return make_field_cmp(&T::Id, next);
+    }
+    if (std::strcmp(field, "Message") == 0) {
+      return make_field_cmp(&T::Message, next);
+    }
+    throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::NestedTestStruct)");
+  }
+
+#ifndef OPENDDS_NO_MULTI_TOPIC
+  const char** getFieldNames() const
+  {
+    static const char* names[] = {"Id", "Message", 0};
+    return names;
+  }
+
+  const void* getRawField(const void* stru, const char* field) const
+  {
+    if (std::strcmp(field, "Id") == 0) {
+      return &static_cast<const T*>(stru)->Id;
+    }
+    if (std::strcmp(field, "Message") == 0) {
+      return &static_cast<const T*>(stru)->Message;
+    }
+    throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::NestedTestStruct)");
+  }
+
+  void assign(void* lhs, const char* field, const void* rhs,
+    const char* rhsFieldSpec, const MetaStruct& rhsMeta) const
+  {
+    ACE_UNUSED_ARG(lhs);
+    ACE_UNUSED_ARG(field);
+    ACE_UNUSED_ARG(rhs);
+    ACE_UNUSED_ARG(rhsFieldSpec);
+    ACE_UNUSED_ARG(rhsMeta);
+    if (std::strcmp(field, "Id") == 0) {
+      static_cast<T*>(lhs)->Id = *static_cast<const CORBA::Long*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "Message") == 0) {
+      static_cast<T*>(lhs)->Message = *static_cast<const TAO::String_Manager*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::NestedTestStruct)");
+  }
+#endif /* OPENDDS_NO_MULTI_TOPIC */
+
+  bool compare(const void* lhs, const void* rhs, const char* field) const
+  {
+    ACE_UNUSED_ARG(lhs);
+    ACE_UNUSED_ARG(field);
+    ACE_UNUSED_ARG(rhs);
+    if (std::strcmp(field, "Id") == 0) {
+      return static_cast<const T*>(lhs)->Id == static_cast<const T*>(rhs)->Id;
+    }
+    if (std::strcmp(field, "Message") == 0) {
+      return 0 == ACE_OS::strcmp(static_cast<const T*>(lhs)->Message.in(), static_cast<const T*>(rhs)->Message.in());
+    }
+    throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::NestedTestStruct)");
+  }
+};
+
+template<>
+const MetaStruct& getMetaStruct<Test::NestedTestStruct>()
+{
+  static MetaStructImpl<Test::NestedTestStruct> msi;
+  return msi;
+}
+
+bool gen_skip_over(Serializer& ser, Test::NestedTestStruct*)
+{
+  ACE_UNUSED_ARG(ser);
+  MetaStructImpl<Test::NestedTestStruct>().getValue(ser, "");
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End STRUCT: NestedTestStruct */
+
+
 /* Begin TYPEDEF: LongList */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -638,6 +915,87 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 #endif
 
 /* End TYPEDEF: StringList */
+
+
+/* Begin TYPEDEF: StructList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::StructList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    gen_find_size(seq[i], size, padding);
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::StructList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::StructList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::StructList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  for (ACE_CDR::ULong i = 0; i < length; ++i) {
+    if (!gen_skip_over(ser, static_cast<Test::NestedTestStruct*>(0))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: StructList */
 
 
 /* Begin TYPEDEF: ArrayLong */
@@ -849,6 +1207,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru_LongArray, size, padding);
   gen_find_size(stru_StringArray, size, padding);
   gen_find_size(stru_WStringArray, size, padding);
+  gen_find_size(stru.StructTest, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -865,7 +1224,8 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru.StringSequence)
     && (strm << stru_LongArray)
     && (strm << stru_StringArray)
-    && (strm << stru_WStringArray);
+    && (strm << stru_WStringArray)
+    && (strm << stru.StructTest);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -882,7 +1242,8 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru.StringSequence)
     && (strm >> stru_LongArray)
     && (strm >> stru_StringArray)
-    && (strm >> stru_WStringArray);
+    && (strm >> stru_WStringArray)
+    && (strm >> stru.StructTest);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -1006,6 +1367,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "WMessage") == 0) {
       return typed.WMessage.in();
     }
+    if (std::strncmp(field, "StructTest.", 11) == 0) {
+      return getMetaStruct<Test::NestedTestStruct>().getValue(&typed.StructTest, field + 11);
+    }
     ACE_UNUSED_ARG(typed);
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -1068,6 +1432,13 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::ArrayWString_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (std::strncmp(field, "StructTest.", 11) == 0) {
+      return getMetaStruct<Test::NestedTestStruct>().getValue(ser, field + 11);
+    } else {
+      if (!gen_skip_over(ser, static_cast<Test::NestedTestStruct*>(0))) {
+        throw std::runtime_error("Field 'StructTest' could not be skipped");
+      }
+    }
     if (!field[0]) {
       return 0;
     }
@@ -1086,13 +1457,16 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "WMessage") == 0) {
       return make_field_cmp(&T::WMessage, next);
     }
+    if (std::strncmp(field, "StructTest.", 11) == 0) {
+      return make_struct_cmp(&T::StructTest, getMetaStruct<Test::NestedTestStruct>().create_qc_comparator(field + 11), next);
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", 0};
     return names;
   }
 
@@ -1121,6 +1495,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "WStringArray") == 0) {
       return &static_cast<const T*>(stru)->WStringArray;
+    }
+    if (std::strcmp(field, "StructTest") == 0) {
+      return &static_cast<const T*>(stru)->StructTest;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -1175,6 +1552,10 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
       for (CORBA::ULong i0 = 0; i0 < 4; ++i0) {
         (*lhsArr)[i0] = (*rhsArr)[i0];
       }
+      return;
+    }
+    if (std::strcmp(field, "StructTest") == 0) {
+      static_cast<T*>(lhs)->StructTest = *static_cast<const Test::NestedTestStruct*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");

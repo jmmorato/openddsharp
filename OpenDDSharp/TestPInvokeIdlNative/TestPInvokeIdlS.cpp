@@ -29,8 +29,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:652
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_G7DE2P_CPP_
-#define _TAO_IDL_TESTPINVOKEIDLS_G7DE2P_CPP_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_PI6TIT_CPP_
+#define _TAO_IDL_TESTPINVOKEIDLS_PI6TIT_CPP_
 
 
 #include "TestPInvokeIdlS.h"

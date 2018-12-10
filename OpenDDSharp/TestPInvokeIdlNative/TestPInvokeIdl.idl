@@ -2,8 +2,15 @@
 
 module Test {
 
+    #pragma DCPS_DATA_TYPE "Test::NestedTestStruct"    
+    struct NestedTestStruct {
+        long Id;
+        string Message;
+    };
+
     typedef sequence<long> LongList;
     typedef sequence<string> StringList;
+    typedef sequence<NestedTestStruct> StructList;
     typedef long ArrayLong[5];
     typedef string ArrayString[10];
     typedef wstring ArrayWString[4];
@@ -17,7 +24,9 @@ module Test {
         StringList StringSequence;
         ArrayLong LongArray;
         ArrayString StringArray;
-        ArrayWString WStringArray;
+        ArrayWString WStringArray;        
+        NestedTestStruct StructTest;
+        //StructList StructSequence;
 	};
 
 };

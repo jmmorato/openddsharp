@@ -117,6 +117,11 @@ namespace ConsoleDemoCore
                     "Rebel Rebel, your face is a mess",
                     "Rebel Rebel, how could they know?",
                     "Hot tramp, I love you so!"
+                },
+                StructTest = new NestedTestStruct
+                {
+                    Id = 42,
+                    Message = "Do androids dream of electric sheep?"
                 }
             };
             dataWriter.Write(data);
@@ -214,6 +219,12 @@ namespace ConsoleDemoCore
                 {
                     Console.WriteLine(s);
                 }
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.StructTest) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(string.Format("{0}: {1}", received.StructTest.Id, received.StructTest.Message));
                 Console.WriteLine();
             }
             else

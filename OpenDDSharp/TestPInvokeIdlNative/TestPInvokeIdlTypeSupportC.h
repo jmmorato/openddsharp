@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_ZHYT1E_H_
-#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_ZHYT1E_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_VM6BQA_H_
+#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_VM6BQA_H_
 
 #include /**/ "ace/pre.h"
 
@@ -79,6 +79,385 @@
 #undef TAO_EXPORT_MACRO
 #endif
 #define TAO_EXPORT_MACRO TestPInvokeIdlIDL_Export
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_ch.cpp:38
+
+namespace Test
+{
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+  typedef ::TAO::DCPS::ZeroCopyDataSeq< Test::NestedTestStruct, DCPS_ZERO_COPY_SEQ_DEFAULT_SIZE> NestedTestStructSeq;
+  
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_interface.cpp:751
+
+#if !defined (_TEST_NESTEDTESTSTRUCTTYPESUPPORT__VAR_OUT_CH_)
+#define _TEST_NESTEDTESTSTRUCTTYPESUPPORT__VAR_OUT_CH_
+
+  class NestedTestStructTypeSupport;
+  typedef NestedTestStructTypeSupport *NestedTestStructTypeSupport_ptr;
+
+  typedef
+    TAO_Objref_Var_T<
+        NestedTestStructTypeSupport
+      >
+    NestedTestStructTypeSupport_var;
+  
+  typedef
+    TAO_Objref_Out_T<
+        NestedTestStructTypeSupport
+      >
+    NestedTestStructTypeSupport_out;
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_ch.cpp:43
+
+  class TestPInvokeIdlIDL_Export NestedTestStructTypeSupport
+    : public virtual ::OpenDDS::DCPS::TypeSupport
+  
+  {
+  public:
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    typedef NestedTestStructTypeSupport_ptr _ptr_type;
+    typedef NestedTestStructTypeSupport_var _var_type;
+    typedef NestedTestStructTypeSupport_out _out_type;
+
+    // The static operations.
+    static NestedTestStructTypeSupport_ptr _duplicate (NestedTestStructTypeSupport_ptr obj);
+
+    static void _tao_release (NestedTestStructTypeSupport_ptr obj);
+
+    static NestedTestStructTypeSupport_ptr _narrow (::CORBA::Object_ptr obj);
+    static NestedTestStructTypeSupport_ptr _unchecked_narrow (::CORBA::Object_ptr obj);
+    static NestedTestStructTypeSupport_ptr _nil (void);
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_ch.cpp:140
+
+    virtual ::CORBA::Boolean _is_a (const char *type_id);
+    virtual const char* _interface_repository_id (void) const;
+    virtual ::CORBA::Boolean marshal (TAO_OutputCDR &cdr);
+  
+  protected:
+    // Abstract or local interface only.
+    NestedTestStructTypeSupport (void);
+
+    
+
+    virtual ~NestedTestStructTypeSupport (void);
+  
+  private:
+    // Private and unimplemented for concrete interfaces.
+    NestedTestStructTypeSupport (const NestedTestStructTypeSupport &);
+
+    void operator= (const NestedTestStructTypeSupport &);
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_interface.cpp:751
+
+#if !defined (_TEST_NESTEDTESTSTRUCTDATAWRITER__VAR_OUT_CH_)
+#define _TEST_NESTEDTESTSTRUCTDATAWRITER__VAR_OUT_CH_
+
+  class NestedTestStructDataWriter;
+  typedef NestedTestStructDataWriter *NestedTestStructDataWriter_ptr;
+
+  typedef
+    TAO_Objref_Var_T<
+        NestedTestStructDataWriter
+      >
+    NestedTestStructDataWriter_var;
+  
+  typedef
+    TAO_Objref_Out_T<
+        NestedTestStructDataWriter
+      >
+    NestedTestStructDataWriter_out;
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_ch.cpp:43
+
+  class TestPInvokeIdlIDL_Export NestedTestStructDataWriter
+    : public virtual ::DDS::DataWriter
+  
+  {
+  public:
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    typedef NestedTestStructDataWriter_ptr _ptr_type;
+    typedef NestedTestStructDataWriter_var _var_type;
+    typedef NestedTestStructDataWriter_out _out_type;
+
+    // The static operations.
+    static NestedTestStructDataWriter_ptr _duplicate (NestedTestStructDataWriter_ptr obj);
+
+    static void _tao_release (NestedTestStructDataWriter_ptr obj);
+
+    static NestedTestStructDataWriter_ptr _narrow (::CORBA::Object_ptr obj);
+    static NestedTestStructDataWriter_ptr _unchecked_narrow (::CORBA::Object_ptr obj);
+    static NestedTestStructDataWriter_ptr _nil (void);
+
+    virtual ::DDS::InstanceHandle_t register_instance (
+      const ::Test::NestedTestStruct & instance) = 0;
+
+    virtual ::DDS::InstanceHandle_t register_instance_w_timestamp (
+      const ::Test::NestedTestStruct & instance,
+      const ::DDS::Time_t & timestamp) = 0;
+
+    virtual ::DDS::ReturnCode_t unregister_instance (
+      const ::Test::NestedTestStruct & instance,
+      ::DDS::InstanceHandle_t handle) = 0;
+
+    virtual ::DDS::ReturnCode_t unregister_instance_w_timestamp (
+      const ::Test::NestedTestStruct & instance,
+      ::DDS::InstanceHandle_t handle,
+      const ::DDS::Time_t & timestamp) = 0;
+
+    virtual ::DDS::ReturnCode_t write (
+      const ::Test::NestedTestStruct & instance_data,
+      ::DDS::InstanceHandle_t handle) = 0;
+
+    virtual ::DDS::ReturnCode_t write_w_timestamp (
+      const ::Test::NestedTestStruct & instance_data,
+      ::DDS::InstanceHandle_t handle,
+      const ::DDS::Time_t & source_timestamp) = 0;
+
+    virtual ::DDS::ReturnCode_t dispose (
+      const ::Test::NestedTestStruct & instance_data,
+      ::DDS::InstanceHandle_t instance_handle) = 0;
+
+    virtual ::DDS::ReturnCode_t dispose_w_timestamp (
+      const ::Test::NestedTestStruct & instance_data,
+      ::DDS::InstanceHandle_t instance_handle,
+      const ::DDS::Time_t & source_timestamp) = 0;
+
+    virtual ::DDS::ReturnCode_t get_key_value (
+      ::Test::NestedTestStruct & key_holder,
+      ::DDS::InstanceHandle_t handle) = 0;
+
+    virtual ::DDS::InstanceHandle_t lookup_instance (
+      const ::Test::NestedTestStruct & instance_data) = 0;
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_ch.cpp:140
+
+    virtual ::CORBA::Boolean _is_a (const char *type_id);
+    virtual const char* _interface_repository_id (void) const;
+    virtual ::CORBA::Boolean marshal (TAO_OutputCDR &cdr);
+  
+  protected:
+    // Abstract or local interface only.
+    NestedTestStructDataWriter (void);
+
+    
+
+    virtual ~NestedTestStructDataWriter (void);
+  
+  private:
+    // Private and unimplemented for concrete interfaces.
+    NestedTestStructDataWriter (const NestedTestStructDataWriter &);
+
+    void operator= (const NestedTestStructDataWriter &);
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_interface.cpp:751
+
+#if !defined (_TEST_NESTEDTESTSTRUCTDATAREADER__VAR_OUT_CH_)
+#define _TEST_NESTEDTESTSTRUCTDATAREADER__VAR_OUT_CH_
+
+  class NestedTestStructDataReader;
+  typedef NestedTestStructDataReader *NestedTestStructDataReader_ptr;
+
+  typedef
+    TAO_Objref_Var_T<
+        NestedTestStructDataReader
+      >
+    NestedTestStructDataReader_var;
+  
+  typedef
+    TAO_Objref_Out_T<
+        NestedTestStructDataReader
+      >
+    NestedTestStructDataReader_out;
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_ch.cpp:43
+
+  class TestPInvokeIdlIDL_Export NestedTestStructDataReader
+    : public virtual ::OpenDDS::DCPS::DataReaderEx
+  
+  {
+  public:
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    typedef NestedTestStructDataReader_ptr _ptr_type;
+    typedef NestedTestStructDataReader_var _var_type;
+    typedef NestedTestStructDataReader_out _out_type;
+
+    // The static operations.
+    static NestedTestStructDataReader_ptr _duplicate (NestedTestStructDataReader_ptr obj);
+
+    static void _tao_release (NestedTestStructDataReader_ptr obj);
+
+    static NestedTestStructDataReader_ptr _narrow (::CORBA::Object_ptr obj);
+    static NestedTestStructDataReader_ptr _unchecked_narrow (::CORBA::Object_ptr obj);
+    static NestedTestStructDataReader_ptr _nil (void);
+
+    virtual ::DDS::ReturnCode_t read (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq,
+      ::CORBA::Long max_samples,
+      ::DDS::SampleStateMask sample_states,
+      ::DDS::ViewStateMask view_states,
+      ::DDS::InstanceStateMask instance_states) = 0;
+
+    virtual ::DDS::ReturnCode_t take (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq,
+      ::CORBA::Long max_samples,
+      ::DDS::SampleStateMask sample_states,
+      ::DDS::ViewStateMask view_states,
+      ::DDS::InstanceStateMask instance_states) = 0;
+
+    virtual ::DDS::ReturnCode_t read_w_condition (
+      ::Test::NestedTestStructSeq & data_values,
+      ::DDS::SampleInfoSeq & sample_infos,
+      ::CORBA::Long max_samples,
+      ::DDS::ReadCondition_ptr a_condition) = 0;
+
+    virtual ::DDS::ReturnCode_t take_w_condition (
+      ::Test::NestedTestStructSeq & data_values,
+      ::DDS::SampleInfoSeq & sample_infos,
+      ::CORBA::Long max_samples,
+      ::DDS::ReadCondition_ptr a_condition) = 0;
+
+    virtual ::DDS::ReturnCode_t read_next_sample (
+      ::Test::NestedTestStruct & received_data,
+      ::DDS::SampleInfo & sample_info) = 0;
+
+    virtual ::DDS::ReturnCode_t take_next_sample (
+      ::Test::NestedTestStruct & received_data,
+      ::DDS::SampleInfo & sample_info) = 0;
+
+    virtual ::DDS::ReturnCode_t read_instance (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t a_handle,
+      ::DDS::SampleStateMask sample_states,
+      ::DDS::ViewStateMask view_states,
+      ::DDS::InstanceStateMask instance_states) = 0;
+
+    virtual ::DDS::ReturnCode_t take_instance (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t a_handle,
+      ::DDS::SampleStateMask sample_states,
+      ::DDS::ViewStateMask view_states,
+      ::DDS::InstanceStateMask instance_states) = 0;
+
+    virtual ::DDS::ReturnCode_t read_instance_w_condition (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & sample_infos,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t a_handle,
+      ::DDS::ReadCondition_ptr a_condition) = 0;
+
+    virtual ::DDS::ReturnCode_t take_instance_w_condition (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & sample_infos,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t a_handle,
+      ::DDS::ReadCondition_ptr a_condition) = 0;
+
+    virtual ::DDS::ReturnCode_t read_next_instance (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t a_handle,
+      ::DDS::SampleStateMask sample_states,
+      ::DDS::ViewStateMask view_states,
+      ::DDS::InstanceStateMask instance_states) = 0;
+
+    virtual ::DDS::ReturnCode_t take_next_instance (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t a_handle,
+      ::DDS::SampleStateMask sample_states,
+      ::DDS::ViewStateMask view_states,
+      ::DDS::InstanceStateMask instance_states) = 0;
+
+    virtual ::DDS::ReturnCode_t read_next_instance_w_condition (
+      ::Test::NestedTestStructSeq & data_values,
+      ::DDS::SampleInfoSeq & sample_infos,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t previous_handle,
+      ::DDS::ReadCondition_ptr a_condition) = 0;
+
+    virtual ::DDS::ReturnCode_t take_next_instance_w_condition (
+      ::Test::NestedTestStructSeq & data_values,
+      ::DDS::SampleInfoSeq & sample_infos,
+      ::CORBA::Long max_samples,
+      ::DDS::InstanceHandle_t previous_handle,
+      ::DDS::ReadCondition_ptr a_condition) = 0;
+
+    virtual ::DDS::ReturnCode_t return_loan (
+      ::Test::NestedTestStructSeq & received_data,
+      ::DDS::SampleInfoSeq & info_seq) = 0;
+
+    virtual ::DDS::ReturnCode_t get_key_value (
+      ::Test::NestedTestStruct & key_holder,
+      ::DDS::InstanceHandle_t handle) = 0;
+
+    virtual ::DDS::InstanceHandle_t lookup_instance (
+      const ::Test::NestedTestStruct & instance_data) = 0;
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_ch.cpp:140
+
+    virtual ::CORBA::Boolean _is_a (const char *type_id);
+    virtual const char* _interface_repository_id (void) const;
+    virtual ::CORBA::Boolean marshal (TAO_OutputCDR &cdr);
+  
+  protected:
+    // Abstract or local interface only.
+    NestedTestStructDataReader (void);
+
+    
+
+    virtual ~NestedTestStructDataReader (void);
+  
+  private:
+    // Private and unimplemented for concrete interfaces.
+    NestedTestStructDataReader (const NestedTestStructDataReader &);
+
+    void operator= (const NestedTestStructDataReader &);
+  };
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_ch.cpp:67
+
+} // module Test
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_ch.cpp:38
@@ -482,6 +861,60 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 // Traits specializations.
 namespace TAO
 {
+
+#if !defined (_TEST_NESTEDTESTSTRUCTTYPESUPPORT__TRAITS_)
+#define _TEST_NESTEDTESTSTRUCTTYPESUPPORT__TRAITS_
+
+  template<>
+  struct TestPInvokeIdlIDL_Export Objref_Traits< ::Test::NestedTestStructTypeSupport>
+  {
+    static ::Test::NestedTestStructTypeSupport_ptr duplicate (
+        ::Test::NestedTestStructTypeSupport_ptr p);
+    static void release (
+        ::Test::NestedTestStructTypeSupport_ptr p);
+    static ::Test::NestedTestStructTypeSupport_ptr nil (void);
+    static ::CORBA::Boolean marshal (
+        const ::Test::NestedTestStructTypeSupport_ptr p,
+        TAO_OutputCDR & cdr);
+  };
+
+#endif /* end #if !defined */
+
+#if !defined (_TEST_NESTEDTESTSTRUCTDATAWRITER__TRAITS_)
+#define _TEST_NESTEDTESTSTRUCTDATAWRITER__TRAITS_
+
+  template<>
+  struct TestPInvokeIdlIDL_Export Objref_Traits< ::Test::NestedTestStructDataWriter>
+  {
+    static ::Test::NestedTestStructDataWriter_ptr duplicate (
+        ::Test::NestedTestStructDataWriter_ptr p);
+    static void release (
+        ::Test::NestedTestStructDataWriter_ptr p);
+    static ::Test::NestedTestStructDataWriter_ptr nil (void);
+    static ::CORBA::Boolean marshal (
+        const ::Test::NestedTestStructDataWriter_ptr p,
+        TAO_OutputCDR & cdr);
+  };
+
+#endif /* end #if !defined */
+
+#if !defined (_TEST_NESTEDTESTSTRUCTDATAREADER__TRAITS_)
+#define _TEST_NESTEDTESTSTRUCTDATAREADER__TRAITS_
+
+  template<>
+  struct TestPInvokeIdlIDL_Export Objref_Traits< ::Test::NestedTestStructDataReader>
+  {
+    static ::Test::NestedTestStructDataReader_ptr duplicate (
+        ::Test::NestedTestStructDataReader_ptr p);
+    static void release (
+        ::Test::NestedTestStructDataReader_ptr p);
+    static ::Test::NestedTestStructDataReader_ptr nil (void);
+    static ::CORBA::Boolean marshal (
+        const ::Test::NestedTestStructDataReader_ptr p,
+        TAO_OutputCDR & cdr);
+  };
+
+#endif /* end #if !defined */
 
 #if !defined (_TEST_BASICTESTSTRUCTTYPESUPPORT__TRAITS_)
 #define _TEST_BASICTESTSTRUCTTYPESUPPORT__TRAITS_

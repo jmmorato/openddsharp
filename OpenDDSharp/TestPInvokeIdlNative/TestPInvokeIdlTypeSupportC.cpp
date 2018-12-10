@@ -40,6 +40,385 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_cs.cpp:51
 
+// Traits specializations for Test::NestedTestStructTypeSupport.
+
+Test::NestedTestStructTypeSupport_ptr
+TAO::Objref_Traits<Test::NestedTestStructTypeSupport>::duplicate (
+    Test::NestedTestStructTypeSupport_ptr p)
+{
+  return Test::NestedTestStructTypeSupport::_duplicate (p);
+}
+
+void
+TAO::Objref_Traits<Test::NestedTestStructTypeSupport>::release (
+    Test::NestedTestStructTypeSupport_ptr p)
+{
+  ::CORBA::release (p);
+}
+
+Test::NestedTestStructTypeSupport_ptr
+TAO::Objref_Traits<Test::NestedTestStructTypeSupport>::nil (void)
+{
+  return Test::NestedTestStructTypeSupport::_nil ();
+}
+
+::CORBA::Boolean
+TAO::Objref_Traits<Test::NestedTestStructTypeSupport>::marshal (
+    const Test::NestedTestStructTypeSupport_ptr p,
+    TAO_OutputCDR & cdr)
+{
+  return ::CORBA::Object::marshal (p, cdr);
+}
+
+Test::NestedTestStructTypeSupport::NestedTestStructTypeSupport (void)
+{}
+
+Test::NestedTestStructTypeSupport::~NestedTestStructTypeSupport (void)
+{
+}
+
+Test::NestedTestStructTypeSupport_ptr
+Test::NestedTestStructTypeSupport::_narrow (
+    ::CORBA::Object_ptr _tao_objref)
+{
+  return NestedTestStructTypeSupport::_duplicate (
+      dynamic_cast<NestedTestStructTypeSupport_ptr> (_tao_objref)
+    );
+}
+
+Test::NestedTestStructTypeSupport_ptr
+Test::NestedTestStructTypeSupport::_unchecked_narrow (
+    ::CORBA::Object_ptr _tao_objref)
+{
+  return NestedTestStructTypeSupport::_duplicate (
+      dynamic_cast<NestedTestStructTypeSupport_ptr> (_tao_objref)
+    );
+}
+
+Test::NestedTestStructTypeSupport_ptr
+Test::NestedTestStructTypeSupport::_nil (void)
+{
+  return 0;
+}
+
+Test::NestedTestStructTypeSupport_ptr
+Test::NestedTestStructTypeSupport::_duplicate (NestedTestStructTypeSupport_ptr obj)
+{
+  if (! ::CORBA::is_nil (obj))
+    {
+      obj->_add_ref ();
+    }
+  return obj;
+}
+
+void
+Test::NestedTestStructTypeSupport::_tao_release (NestedTestStructTypeSupport_ptr obj)
+{
+  ::CORBA::release (obj);
+}
+
+::CORBA::Boolean
+Test::NestedTestStructTypeSupport::_is_a (const char *value)
+{
+  if (
+      ACE_OS::strcmp (
+          value,
+          "IDL:DDS/TypeSupport:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:OpenDDS/DCPS/TypeSupport:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:Test/NestedTestStructTypeSupport:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:omg.org/CORBA/LocalObject:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:omg.org/CORBA/Object:1.0"
+        ) == 0
+    )
+    {
+      return true; // success using local knowledge
+    }
+  else
+    {
+      return false;
+    }
+}
+
+const char* Test::NestedTestStructTypeSupport::_interface_repository_id (void) const
+{
+  return "IDL:Test/NestedTestStructTypeSupport:1.0";
+}
+
+::CORBA::Boolean
+Test::NestedTestStructTypeSupport::marshal (TAO_OutputCDR & /* cdr */)
+{
+  return false;
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_cs.cpp:51
+
+// Traits specializations for Test::NestedTestStructDataWriter.
+
+Test::NestedTestStructDataWriter_ptr
+TAO::Objref_Traits<Test::NestedTestStructDataWriter>::duplicate (
+    Test::NestedTestStructDataWriter_ptr p)
+{
+  return Test::NestedTestStructDataWriter::_duplicate (p);
+}
+
+void
+TAO::Objref_Traits<Test::NestedTestStructDataWriter>::release (
+    Test::NestedTestStructDataWriter_ptr p)
+{
+  ::CORBA::release (p);
+}
+
+Test::NestedTestStructDataWriter_ptr
+TAO::Objref_Traits<Test::NestedTestStructDataWriter>::nil (void)
+{
+  return Test::NestedTestStructDataWriter::_nil ();
+}
+
+::CORBA::Boolean
+TAO::Objref_Traits<Test::NestedTestStructDataWriter>::marshal (
+    const Test::NestedTestStructDataWriter_ptr p,
+    TAO_OutputCDR & cdr)
+{
+  return ::CORBA::Object::marshal (p, cdr);
+}
+
+Test::NestedTestStructDataWriter::NestedTestStructDataWriter (void)
+{}
+
+Test::NestedTestStructDataWriter::~NestedTestStructDataWriter (void)
+{
+}
+
+Test::NestedTestStructDataWriter_ptr
+Test::NestedTestStructDataWriter::_narrow (
+    ::CORBA::Object_ptr _tao_objref)
+{
+  return NestedTestStructDataWriter::_duplicate (
+      dynamic_cast<NestedTestStructDataWriter_ptr> (_tao_objref)
+    );
+}
+
+Test::NestedTestStructDataWriter_ptr
+Test::NestedTestStructDataWriter::_unchecked_narrow (
+    ::CORBA::Object_ptr _tao_objref)
+{
+  return NestedTestStructDataWriter::_duplicate (
+      dynamic_cast<NestedTestStructDataWriter_ptr> (_tao_objref)
+    );
+}
+
+Test::NestedTestStructDataWriter_ptr
+Test::NestedTestStructDataWriter::_nil (void)
+{
+  return 0;
+}
+
+Test::NestedTestStructDataWriter_ptr
+Test::NestedTestStructDataWriter::_duplicate (NestedTestStructDataWriter_ptr obj)
+{
+  if (! ::CORBA::is_nil (obj))
+    {
+      obj->_add_ref ();
+    }
+  return obj;
+}
+
+void
+Test::NestedTestStructDataWriter::_tao_release (NestedTestStructDataWriter_ptr obj)
+{
+  ::CORBA::release (obj);
+}
+
+::CORBA::Boolean
+Test::NestedTestStructDataWriter::_is_a (const char *value)
+{
+  if (
+      ACE_OS::strcmp (
+          value,
+          "IDL:DDS/Entity:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:DDS/DataWriter:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:Test/NestedTestStructDataWriter:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:omg.org/CORBA/LocalObject:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:omg.org/CORBA/Object:1.0"
+        ) == 0
+    )
+    {
+      return true; // success using local knowledge
+    }
+  else
+    {
+      return false;
+    }
+}
+
+const char* Test::NestedTestStructDataWriter::_interface_repository_id (void) const
+{
+  return "IDL:Test/NestedTestStructDataWriter:1.0";
+}
+
+::CORBA::Boolean
+Test::NestedTestStructDataWriter::marshal (TAO_OutputCDR & /* cdr */)
+{
+  return false;
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_cs.cpp:51
+
+// Traits specializations for Test::NestedTestStructDataReader.
+
+Test::NestedTestStructDataReader_ptr
+TAO::Objref_Traits<Test::NestedTestStructDataReader>::duplicate (
+    Test::NestedTestStructDataReader_ptr p)
+{
+  return Test::NestedTestStructDataReader::_duplicate (p);
+}
+
+void
+TAO::Objref_Traits<Test::NestedTestStructDataReader>::release (
+    Test::NestedTestStructDataReader_ptr p)
+{
+  ::CORBA::release (p);
+}
+
+Test::NestedTestStructDataReader_ptr
+TAO::Objref_Traits<Test::NestedTestStructDataReader>::nil (void)
+{
+  return Test::NestedTestStructDataReader::_nil ();
+}
+
+::CORBA::Boolean
+TAO::Objref_Traits<Test::NestedTestStructDataReader>::marshal (
+    const Test::NestedTestStructDataReader_ptr p,
+    TAO_OutputCDR & cdr)
+{
+  return ::CORBA::Object::marshal (p, cdr);
+}
+
+Test::NestedTestStructDataReader::NestedTestStructDataReader (void)
+{}
+
+Test::NestedTestStructDataReader::~NestedTestStructDataReader (void)
+{
+}
+
+Test::NestedTestStructDataReader_ptr
+Test::NestedTestStructDataReader::_narrow (
+    ::CORBA::Object_ptr _tao_objref)
+{
+  return NestedTestStructDataReader::_duplicate (
+      dynamic_cast<NestedTestStructDataReader_ptr> (_tao_objref)
+    );
+}
+
+Test::NestedTestStructDataReader_ptr
+Test::NestedTestStructDataReader::_unchecked_narrow (
+    ::CORBA::Object_ptr _tao_objref)
+{
+  return NestedTestStructDataReader::_duplicate (
+      dynamic_cast<NestedTestStructDataReader_ptr> (_tao_objref)
+    );
+}
+
+Test::NestedTestStructDataReader_ptr
+Test::NestedTestStructDataReader::_nil (void)
+{
+  return 0;
+}
+
+Test::NestedTestStructDataReader_ptr
+Test::NestedTestStructDataReader::_duplicate (NestedTestStructDataReader_ptr obj)
+{
+  if (! ::CORBA::is_nil (obj))
+    {
+      obj->_add_ref ();
+    }
+  return obj;
+}
+
+void
+Test::NestedTestStructDataReader::_tao_release (NestedTestStructDataReader_ptr obj)
+{
+  ::CORBA::release (obj);
+}
+
+::CORBA::Boolean
+Test::NestedTestStructDataReader::_is_a (const char *value)
+{
+  if (
+      ACE_OS::strcmp (
+          value,
+          "IDL:DDS/Entity:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:DDS/DataReader:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:OpenDDS/DCPS/DataReaderEx:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:Test/NestedTestStructDataReader:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:omg.org/CORBA/LocalObject:1.0"
+        ) == 0 ||
+      ACE_OS::strcmp (
+          value,
+          "IDL:omg.org/CORBA/Object:1.0"
+        ) == 0
+    )
+    {
+      return true; // success using local knowledge
+    }
+  else
+    {
+      return false;
+    }
+}
+
+const char* Test::NestedTestStructDataReader::_interface_repository_id (void) const
+{
+  return "IDL:Test/NestedTestStructDataReader:1.0";
+}
+
+::CORBA::Boolean
+Test::NestedTestStructDataReader::marshal (TAO_OutputCDR & /* cdr */)
+{
+  return false;
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_interface\interface_cs.cpp:51
+
 // Traits specializations for Test::BasicTestStructTypeSupport.
 
 Test::BasicTestStructTypeSupport_ptr
