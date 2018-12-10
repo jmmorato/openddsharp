@@ -4,6 +4,9 @@ module Test {
 
     typedef sequence<long> LongList;
     typedef sequence<string> StringList;
+    typedef long ArrayLong[5];
+    typedef string ArrayString[10];
+    typedef wstring ArrayWString[4];
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -12,6 +15,9 @@ module Test {
         wstring WMessage;
         LongList LongSequence;
         StringList StringSequence;
+        ArrayLong LongArray;
+        ArrayString StringArray;
+        ArrayWString WStringArray;
 	};
 
 };

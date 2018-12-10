@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_QWVAVI_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_QWVAVI_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_DARTPG_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_DARTPG_H_
 
 #include /**/ "ace/pre.h"
 
@@ -63,6 +63,8 @@
 #include "tao/PortableServer/Var_Size_SArgument_T.h"
 #include "tao/PortableServer/Object_SArg_Traits.h"
 #include "tao/PortableServer/UB_String_SArguments.h"
+#include "tao/PortableServer/Fixed_Array_SArgument_T.h"
+#include "tao/PortableServer/Var_Array_SArgument_T.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once
@@ -100,6 +102,39 @@ namespace TAO
     : public
         Var_Size_SArg_Traits_T<
             ::Test::StringList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayLong_var,
+            ::Test::ArrayLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayString_tag>
+    : public
+        Var_Array_SArg_Traits_T<
+            ::Test::ArrayString_out,
+            ::Test::ArrayString_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayWString_tag>
+    : public
+        Var_Array_SArg_Traits_T<
+            ::Test::ArrayWString_out,
+            ::Test::ArrayWString_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

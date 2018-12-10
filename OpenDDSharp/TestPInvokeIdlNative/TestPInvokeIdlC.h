@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_JDU7ZD_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_JDU7ZD_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_ZE0NOC_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_ZE0NOC_H_
 
 #include /**/ "ace/pre.h"
 
@@ -49,6 +49,7 @@
 #include "tao/Seq_Var_T.h"
 #include "tao/Seq_Out_T.h"
 #include "tao/VarOut_T.h"
+#include "tao/Array_VarOut_T.h"
 #include "tao/Arg_Traits_T.h"
 #include "tao/Basic_Arguments.h"
 #include "tao/Special_Basic_Arguments.h"
@@ -57,6 +58,8 @@
 #include "tao/Var_Size_Argument_T.h"
 #include "tao/Object_Argument_T.h"
 #include "tao/UB_String_Arguments.h"
+#include "tao/Fixed_Array_Argument_T.h"
+#include "tao/Var_Array_Argument_T.h"
 #include /**/ "tao/Version.h"
 #include /**/ "tao/Versioned_Namespace.h"
 
@@ -194,6 +197,148 @@ namespace Test
 #endif /* end #if !defined */
 
   // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ch.cpp:54
+
+  typedef ::CORBA::Long ArrayLong[5];
+  typedef ::CORBA::Long ArrayLong_slice;
+  struct ArrayLong_tag {};
+  
+
+  typedef
+    TAO_FixedArray_Var_T<
+        ArrayLong,
+        ArrayLong_slice,
+        ArrayLong_tag
+      >
+    ArrayLong_var;
+
+  typedef
+    ArrayLong
+    ArrayLong_out;
+
+  typedef
+    TAO_Array_Forany_T<
+        ArrayLong,
+        ArrayLong_slice,
+        ArrayLong_tag
+      >
+    ArrayLong_forany;
+
+  TAO_NAMESPACE_STORAGE_CLASS ArrayLong_slice *
+  ArrayLong_alloc (void);
+
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayLong_free (
+      ArrayLong_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS ArrayLong_slice *
+  ArrayLong_dup (
+      const ArrayLong_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayLong_copy (
+      ArrayLong_slice *_tao_to,
+      const ArrayLong_slice *_tao_from);
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ch.cpp:54
+
+  typedef ::TAO::String_Manager ArrayString[10];
+  typedef ::TAO::String_Manager ArrayString_slice;
+  struct ArrayString_tag {};
+  
+
+  typedef
+    TAO_VarArray_Var_T<
+        ArrayString,
+        ArrayString_slice,
+        ArrayString_tag
+      >
+    ArrayString_var;
+
+  typedef
+    TAO_Array_Out_T<
+        ArrayString,
+        ArrayString_var,
+        ArrayString_slice,
+        ArrayString_tag
+      >
+    ArrayString_out;
+
+  typedef
+    TAO_Array_Forany_T<
+        ArrayString,
+        ArrayString_slice,
+        ArrayString_tag
+      >
+    ArrayString_forany;
+
+  TAO_NAMESPACE_STORAGE_CLASS ArrayString_slice *
+  ArrayString_alloc (void);
+
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayString_free (
+      ArrayString_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS ArrayString_slice *
+  ArrayString_dup (
+      const ArrayString_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayString_copy (
+      ArrayString_slice *_tao_to,
+      const ArrayString_slice *_tao_from);
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ch.cpp:54
+
+  typedef ::TAO::WString_Manager ArrayWString[4];
+  typedef ::TAO::WString_Manager ArrayWString_slice;
+  struct ArrayWString_tag {};
+  
+
+  typedef
+    TAO_VarArray_Var_T<
+        ArrayWString,
+        ArrayWString_slice,
+        ArrayWString_tag
+      >
+    ArrayWString_var;
+
+  typedef
+    TAO_Array_Out_T<
+        ArrayWString,
+        ArrayWString_var,
+        ArrayWString_slice,
+        ArrayWString_tag
+      >
+    ArrayWString_out;
+
+  typedef
+    TAO_Array_Forany_T<
+        ArrayWString,
+        ArrayWString_slice,
+        ArrayWString_tag
+      >
+    ArrayWString_forany;
+
+  TAO_NAMESPACE_STORAGE_CLASS ArrayWString_slice *
+  ArrayWString_alloc (void);
+
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayWString_free (
+      ArrayWString_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS ArrayWString_slice *
+  ArrayWString_dup (
+      const ArrayWString_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayWString_copy (
+      ArrayWString_slice *_tao_to,
+      const ArrayWString_slice *_tao_from);
+
+  // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:261
 
   struct BasicTestStruct;
@@ -228,6 +373,9 @@ namespace Test
     ::TAO::WString_Manager WMessage;
     Test::LongList LongSequence;
     Test::StringList StringSequence;
+    Test::ArrayLong LongArray;
+    Test::ArrayString StringArray;
+    Test::ArrayWString WStringArray;
   };
 
 // TAO_IDL - Generated from
@@ -271,6 +419,39 @@ namespace TAO
   {
   };
 
+  template<>
+  class Arg_Traits< ::Test::ArrayLong_tag>
+    : public
+        Fixed_Array_Arg_Traits_T<
+            ::Test::ArrayLong_var,
+            ::Test::ArrayLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class Arg_Traits< ::Test::ArrayString_tag>
+    : public
+        Var_Array_Arg_Traits_T<
+            ::Test::ArrayString_out,
+            ::Test::ArrayString_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class Arg_Traits< ::Test::ArrayWString_tag>
+    : public
+        Var_Array_Arg_Traits_T<
+            ::Test::ArrayWString_out,
+            ::Test::ArrayWString_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
   // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
 
@@ -297,6 +478,54 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 // Traits specializations.
 namespace TAO
 {
+  template<>
+  struct TestPInvokeIdlIDL_Export Array_Traits<
+      Test::ArrayLong_forany
+    >
+  {
+    static void free (
+        Test::ArrayLong_slice * _tao_slice);
+    static Test::ArrayLong_slice * dup (
+        const Test::ArrayLong_slice * _tao_slice);
+    static void copy (
+        Test::ArrayLong_slice * _tao_to,
+        const Test::ArrayLong_slice * _tao_from);
+    static Test::ArrayLong_slice * alloc (void);
+    static void zero (
+        Test::ArrayLong_slice * _tao_slice);
+  };
+  template<>
+  struct TestPInvokeIdlIDL_Export Array_Traits<
+      Test::ArrayString_forany
+    >
+  {
+    static void free (
+        Test::ArrayString_slice * _tao_slice);
+    static Test::ArrayString_slice * dup (
+        const Test::ArrayString_slice * _tao_slice);
+    static void copy (
+        Test::ArrayString_slice * _tao_to,
+        const Test::ArrayString_slice * _tao_from);
+    static Test::ArrayString_slice * alloc (void);
+    static void zero (
+        Test::ArrayString_slice * _tao_slice);
+  };
+  template<>
+  struct TestPInvokeIdlIDL_Export Array_Traits<
+      Test::ArrayWString_forany
+    >
+  {
+    static void free (
+        Test::ArrayWString_slice * _tao_slice);
+    static Test::ArrayWString_slice * dup (
+        const Test::ArrayWString_slice * _tao_slice);
+    static void copy (
+        Test::ArrayWString_slice * _tao_to,
+        const Test::ArrayWString_slice * _tao_from);
+    static Test::ArrayWString_slice * alloc (void);
+    static void zero (
+        Test::ArrayWString_slice * _tao_slice);
+  };
 }
 TAO_END_VERSIONED_NAMESPACE_DECL
 
@@ -343,6 +572,42 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 #endif /* _TAO_CDR_OP_Test_StringList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_ch.cpp:102
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::ArrayLong_forany &_tao_array);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::ArrayLong_forany &_tao_array);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_ch.cpp:102
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::ArrayString_forany &_tao_array);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::ArrayString_forany &_tao_array);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_ch.cpp:102
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::ArrayWString_forany &_tao_array);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::ArrayWString_forany &_tao_array);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_ch.cpp:46

@@ -25,6 +25,9 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     wchar_t* WMessage;
     void* LongSequence;
     void* StringSequence;
+    int LongArray[5];
+    char* StringArray[10];
+    wchar_t* WStringArray[4];
 };
 
 EXTERN_METHOD_EXPORT void BasicTestStructWrapper_release(BasicTestStructWrapper* obj);

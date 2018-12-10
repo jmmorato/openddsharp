@@ -7,7 +7,18 @@ void BasicTestStructWrapper_release(BasicTestStructWrapper* obj)
     if (obj->WMessage)
         CORBA::wstring_free(obj->WMessage);
     delete obj->LongSequence;
-    marshal::release_unbounded_basic_string_sequence_ptr(obj->StringSequence);
+    marshal::release_unbounded_basic_string_sequence_ptr(obj->StringSequence);    
+    for (int i = 0; i < 10; i++)
+    {
+        if (obj->StringArray[i] != NULL)
+            CORBA::string_free(obj->StringArray[i]);
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (obj->WStringArray[i] != NULL)
+            CORBA::wstring_free(obj->WStringArray[i]);
+    }
 }
 
 Test::BasicTestStructTypeSupport_ptr BasicTestStructTypeSupport_new()
@@ -47,7 +58,16 @@ int BasicTestStructDataWriter_Write(Test::BasicTestStructDataWriter_ptr dw, Basi
     marshal::ptr_to_unbounded_sequence(data->LongSequence, nativeData.LongSequence);
     marshal::ptr_to_unbounded_basic_string_sequence(data->StringSequence, nativeData.StringSequence);
 
-    return dw->write(nativeData, DDS::HANDLE_NIL);
+    for(int i = 0; i < 5; i++)
+        nativeData.LongArray[i] = data->LongArray[i];
+
+    for (int i = 0; i < 10; i++)
+        nativeData.StringArray[i] = CORBA::string_dup(data->StringArray[i]);
+
+    for (int i = 0; i < 4; i++)
+        nativeData.WStringArray[i] = CORBA::wstring_dup(data->WStringArray[i]);
+
+    return dw->write(nativeData, DDS::HANDLE_NIL);    
 }
 
 Test::BasicTestStructDataReader_ptr BasicTestStructDataReader_Narrow(DDS::DataReader_ptr dr)
@@ -68,6 +88,27 @@ int BasicTestStructDataReader_ReadNextSample(Test::BasicTestStructDataReader_ptr
 
         marshal::unbounded_sequence_to_ptr(nativeData.LongSequence, data->LongSequence);
         marshal::unbounded_basic_string_sequence_to_ptr(nativeData.StringSequence, data->StringSequence);
+
+        for (int i = 0; i < 5; i++)
+        {
+            data->LongArray[i] = nativeData.LongArray[i];
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (nativeData.StringArray[i] != NULL)
+            {
+                data->StringArray[i] = CORBA::string_dup(nativeData.StringArray[i]);
+            }
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (nativeData.WStringArray[i] != NULL)
+            {
+                data->WStringArray[i] = CORBA::wstring_dup(nativeData.WStringArray[i]);
+            }
+        }
     }
 
     return (int)ret;

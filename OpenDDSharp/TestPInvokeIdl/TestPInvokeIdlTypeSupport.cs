@@ -145,6 +145,12 @@ namespace Test
             get { return _stringSequence; }
             set { _stringSequence = value; }
         }
+
+        public int[] LongArray { get; set; }
+
+        public string[] StringArray { get; set; }
+
+        public string[] WStringArray { get; set; }
         #endregion
 
         #region Constructors
@@ -152,11 +158,14 @@ namespace Test
         {
             _longSequence = new List<int>();
             _stringSequence = new List<string>();
+            LongArray = new int[5];
+            StringArray = new string[10];
+            WStringArray = new string[4];
         }
         #endregion
 
         #region Methods
-        internal BasicTestStructWrapper ToNative(List<IntPtr> toFree)
+        internal BasicTestStructWrapper ToNative(List<IntPtr> toRelease)
         {
             BasicTestStructWrapper wrapper = new BasicTestStructWrapper();
 
@@ -165,20 +174,42 @@ namespace Test
             if (Message != null)
             {
                 wrapper.Message = Marshal.StringToHGlobalAnsi(Message);
-                toFree.Add(wrapper.Message);
+                toRelease.Add(wrapper.Message);
             }
 
             if (WMessage != null)
             {
                 wrapper.WMessage = Marshal.StringToHGlobalUni(WMessage);
-                toFree.Add(wrapper.WMessage);
+                toRelease.Add(wrapper.WMessage);
             }
 
             Helper.UnboundedSequenceToPtr(LongSequence, ref wrapper.LongSequence);
-            toFree.Add(wrapper.LongSequence);
+            toRelease.Add(wrapper.LongSequence);
 
-            toFree.AddRange(Helper.UnboundedBasicStringSequenceToPtr(StringSequence, ref wrapper.StringSequence));
-            toFree.Add(wrapper.StringSequence);
+            toRelease.AddRange(Helper.UnboundedBasicStringSequenceToPtr(StringSequence, ref wrapper.StringSequence));
+            toRelease.Add(wrapper.StringSequence);
+
+            wrapper.LongArray = LongArray;
+
+            wrapper.StringArray = new IntPtr[10];
+            for (int i = 0; i < 10; i++)
+            {
+                if (StringArray[i] != null)
+                {
+                    wrapper.StringArray[i] = Marshal.StringToHGlobalAnsi(StringArray[i]);
+                    toRelease.Add(wrapper.StringArray[i]);
+                }
+            }
+
+            wrapper.WStringArray = new IntPtr[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (WStringArray[i] != null)
+                {
+                    wrapper.WStringArray[i] = Marshal.StringToHGlobalUni(WStringArray[i]);
+                    toRelease.Add(wrapper.WStringArray[i]);
+                }
+            }
 
             return wrapper;
         }
@@ -191,6 +222,14 @@ namespace Test
 
             Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);
             Helper.PtrToUnboundedBasicStringSequence(wrapper.StringSequence, ref _stringSequence);
+
+            LongArray = wrapper.LongArray;
+            
+            for (int i = 0; i < 10; i++)
+                StringArray[i] = Marshal.PtrToStringAnsi(wrapper.StringArray[i]);
+
+            for (int i = 0; i < 4; i++)
+                WStringArray[i] = Marshal.PtrToStringUni(wrapper.WStringArray[i]);
         }
         #endregion
     }
@@ -211,6 +250,15 @@ namespace Test
 
         // Sequences need to be treated with a custom marshaler             
         public IntPtr StringSequence;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 5)]
+        public int[] LongArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.SysInt, SizeConst = 10)]
+        public IntPtr[] StringArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.SysInt, SizeConst = 4)]
+        public IntPtr[] WStringArray;
     }
 
     public class BasicTestStructTypeSupport
@@ -335,8 +383,9 @@ namespace Test
             }
 
             ReturnCode ret = ReturnCode.Error;
-            List<IntPtr> toFree = new List<IntPtr>();
-            BasicTestStructWrapper wrapper = data.ToNative(toFree);
+            List<IntPtr> toRelease = new List<IntPtr>();
+
+            BasicTestStructWrapper wrapper = data.ToNative(toRelease);
             if (Environment.Is64BitProcess)
             {                                
                 ret = (ReturnCode)Write64(_native, ref wrapper, 0);
@@ -347,7 +396,7 @@ namespace Test
             }
 
             // Always free the unmanaged memory.
-            foreach(IntPtr ptr in toFree)
+            foreach(IntPtr ptr in toRelease)
             {
                 Marshal.FreeHGlobal(ptr);
             }

@@ -26,3 +26,159 @@
  **/
 
 
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayLong_forany>::free (
+    Test::ArrayLong_slice * _tao_slice
+  )
+{
+  Test::ArrayLong_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayLong_slice *
+TAO::Array_Traits<Test::ArrayLong_forany>::dup (
+    const Test::ArrayLong_slice * _tao_slice
+  )
+{
+  return Test::ArrayLong_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayLong_forany>::copy (
+    Test::ArrayLong_slice * _tao_to,
+    const Test::ArrayLong_slice * _tao_from
+  )
+{
+  Test::ArrayLong_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayLong_forany>::zero (
+    Test::ArrayLong_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_slice[i0] = ::CORBA::Long ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayLong_slice *
+TAO::Array_Traits<Test::ArrayLong_forany>::alloc (void)
+{
+  return Test::ArrayLong_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayString_forany>::free (
+    Test::ArrayString_slice * _tao_slice
+  )
+{
+  Test::ArrayString_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayString_slice *
+TAO::Array_Traits<Test::ArrayString_forany>::dup (
+    const Test::ArrayString_slice * _tao_slice
+  )
+{
+  return Test::ArrayString_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayString_forany>::copy (
+    Test::ArrayString_slice * _tao_to,
+    const Test::ArrayString_slice * _tao_from
+  )
+{
+  Test::ArrayString_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayString_forany>::zero (
+    Test::ArrayString_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 10; ++i0)
+    {
+      _tao_slice[i0] = ::TAO::String_Manager ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayString_slice *
+TAO::Array_Traits<Test::ArrayString_forany>::alloc (void)
+{
+  return Test::ArrayString_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayWString_forany>::free (
+    Test::ArrayWString_slice * _tao_slice
+  )
+{
+  Test::ArrayWString_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayWString_slice *
+TAO::Array_Traits<Test::ArrayWString_forany>::dup (
+    const Test::ArrayWString_slice * _tao_slice
+  )
+{
+  return Test::ArrayWString_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayWString_forany>::copy (
+    Test::ArrayWString_slice * _tao_to,
+    const Test::ArrayWString_slice * _tao_from
+  )
+{
+  Test::ArrayWString_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayWString_forany>::zero (
+    Test::ArrayWString_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 4; ++i0)
+    {
+      _tao_slice[i0] = ::TAO::WString_Manager ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayWString_slice *
+TAO::Array_Traits<Test::ArrayWString_forany>::alloc (void)
+{
+  return Test::ArrayWString_alloc ();
+}
+
+

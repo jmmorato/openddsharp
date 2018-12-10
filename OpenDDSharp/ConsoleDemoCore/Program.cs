@@ -96,6 +96,27 @@ namespace ConsoleDemoCore
                     "Don't worry. ",
                     "Be happy. ",
                     "Be happy now."
+                },
+                LongArray = new int[] {42, 23, 69, 1024, 25 },
+                StringArray = new string[]
+                {
+                    "You've got your mother in a whirl",
+                    "She's not sure if you're a boy or a girl",
+                    "Hey babe! your hair's alright",
+                    "Hey babe! let's go out tonight",
+                    "You like me, and I like it all",
+                    "We like dancing and we look divine",
+                    "You love bands when they're playing hard",
+                    "You want more and you want it fast",
+                    "They put you down, they say I'm wrong",
+                    "You tacky thing, you put them on"
+                },
+                WStringArray = new string[]
+                {
+                    "Rebel Rebel, you've turn your dress",
+                    "Rebel Rebel, your face is a mess",
+                    "Rebel Rebel, how could they know?",
+                    "Hot tramp, I love you so!"
                 }
             };
             dataWriter.Write(data);
@@ -162,6 +183,38 @@ namespace ConsoleDemoCore
                     }
                     Console.WriteLine();
                 }
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.LongArray) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                for (int i = 0; i < received.LongArray.Length; i++)
+                {
+                    Console.Write(received.LongArray[i]);
+                    if (i + 1 < received.LongArray.Length)
+                    {
+                        Console.Write(", ");
+                    }
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.StringArray) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                foreach(string s in received.StringArray)
+                {
+                    Console.WriteLine(s);
+                }
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.WStringArray) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                foreach (string s in received.WStringArray)
+                {
+                    Console.WriteLine(s);
+                }
+                Console.WriteLine();
             }
             else
             {
