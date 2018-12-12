@@ -544,7 +544,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate_LongArray) &&
     (strm << _tao_aggregate_StringArray) &&
     (strm << _tao_aggregate_WStringArray) &&
-    (strm << _tao_aggregate.StructTest);
+    (strm << _tao_aggregate.StructTest) &&
+    (strm << _tao_aggregate.StructSequence);
 }
 
 ::CORBA::Boolean operator>> (
@@ -590,7 +591,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate_LongArray) &&
     (strm >> _tao_aggregate_StringArray) &&
     (strm >> _tao_aggregate_WStringArray) &&
-    (strm >> _tao_aggregate.StructTest);
+    (strm >> _tao_aggregate.StructTest) &&
+    (strm >> _tao_aggregate.StructSequence);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL

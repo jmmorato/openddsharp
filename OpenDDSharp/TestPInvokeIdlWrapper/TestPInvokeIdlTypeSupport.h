@@ -15,13 +15,13 @@
     #define EXTERN_CLASS_EXPORT extern "C" class
 #endif
 
-EXTERN_STRUCT_EXPORT NestedTestStruct
+EXTERN_STRUCT_EXPORT NestedTestStructWrapper
 {
     int Id;
     char* Message;
 
     Test::NestedTestStruct to_native()
-    {
+    {        
         Test::NestedTestStruct nativeData;
         nativeData.Id = Id;
         if (Message != NULL)
@@ -56,10 +56,11 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     int LongArray[5];
     char* StringArray[10];
     wchar_t* WStringArray[4];
-    NestedTestStruct StructTest;
+    NestedTestStructWrapper StructTest;
+    void* StructSequence;
 
     Test::BasicTestStruct to_native()
-    {
+    {        
         Test::BasicTestStruct nativeData;
         nativeData.Id = Id;
         if (Message != NULL)
@@ -80,6 +81,18 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             nativeData.WStringArray[i] = CORBA::wstring_dup(WStringArray[i]);
         
         nativeData.StructTest = StructTest.to_native();
+
+        // Sequence of structures need to be retrieved with the wrapper struct and then casted to the native struct.
+        // In the generated code, the aux and length variable will be suffixed with the field name
+        // in order to ensure the names are unique.
+        TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
+        marshal::ptr_to_unbounded_sequence(StructSequence, aux);
+        ACE_UINT32 length = aux.length();
+        nativeData.StructSequence.length(length);
+        for (ACE_UINT32 i = 0; i < length; i++)
+        {
+            nativeData.StructSequence[i] = aux[i].to_native();
+        }
 
         return nativeData;
     }
@@ -115,6 +128,18 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         }
 
         StructTest.from_native(nativeData.StructTest);
+
+        // Sequence of structures need to be casted to the wrapper struct and then used to marshal the pointer.
+        // In the generated code, the aux and length variable will be suffixed with the field name
+        // in order to ensure the names are unique.
+        TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
+        ACE_UINT32 length = nativeData.StructSequence.length();
+        aux.length(length);
+        for (ACE_UINT32 i = 0; i < length; i++)
+        {
+            aux[i].from_native(nativeData.StructSequence[i]);
+        }
+        marshal::unbounded_sequence_to_ptr(aux, StructSequence);
     }
 
     void release() 
@@ -137,7 +162,9 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
                 CORBA::wstring_free(WStringArray[i]);
         }
 
-        //StructTest.release();
+        StructTest.release();     
+
+        delete StructSequence;
     }
 };
 

@@ -9,6 +9,11 @@ public:
     template <typename T>
     static void ptr_to_unbounded_sequence(void* ptr, TAO::unbounded_value_sequence<T> & sequence)
     {
+        if (ptr == NULL)
+        {
+            return;
+        }
+
         char* bytes = (char*)ptr;
 
         // First 4 bytes are the length of the array
@@ -22,7 +27,7 @@ public:
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
-        }
+        }        
     }
 
     template <typename T>
@@ -50,6 +55,11 @@ public:
 
     static void ptr_to_unbounded_basic_string_sequence(void* ptr, TAO::unbounded_basic_string_sequence<char> & sequence)
     {
+        if (ptr == NULL)
+        {
+            return;
+        }
+
         char* bytes = (char*)ptr;
 
         // First 4 bytes are the length of the array
@@ -58,16 +68,16 @@ public:
         sequence.length(length);
 
         const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(char*);        
+        const ACE_UINT64 struct_size = sizeof(char*);
         char** pointers = new char*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             ACE_OS::memcpy(&pointers[i], &bytes[(i * struct_size) + structs_offset], struct_size);
-            
+
             sequence[i] = CORBA::string_dup(pointers[i]);
         }
 
-        delete[] pointers;
+        delete[] pointers;        
     }
 
     static void unbounded_basic_string_sequence_to_ptr(TAO::unbounded_basic_string_sequence<char> & sequence, void* & ptr)
@@ -95,6 +105,11 @@ public:
 
     static void release_unbounded_basic_string_sequence_ptr(void* & ptr)
     {
+        if (ptr == NULL)
+        {
+            return;
+        }
+
         char* bytes = (char*)ptr;
 
         // First 4 bytes are the length of the array

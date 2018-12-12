@@ -1208,6 +1208,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru_StringArray, size, padding);
   gen_find_size(stru_WStringArray, size, padding);
   gen_find_size(stru.StructTest, size, padding);
+  gen_find_size(stru.StructSequence, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -1225,7 +1226,8 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru_LongArray)
     && (strm << stru_StringArray)
     && (strm << stru_WStringArray)
-    && (strm << stru.StructTest);
+    && (strm << stru.StructTest)
+    && (strm << stru.StructSequence);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -1243,7 +1245,8 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru_LongArray)
     && (strm >> stru_StringArray)
     && (strm >> stru_WStringArray)
-    && (strm >> stru.StructTest);
+    && (strm >> stru.StructTest)
+    && (strm >> stru.StructSequence);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -1439,6 +1442,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
         throw std::runtime_error("Field 'StructTest' could not be skipped");
       }
     }
+    if (!gen_skip_over(ser, static_cast<Test::StructList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -1466,7 +1472,7 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", 0};
     return names;
   }
 
@@ -1498,6 +1504,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StructTest") == 0) {
       return &static_cast<const T*>(stru)->StructTest;
+    }
+    if (std::strcmp(field, "StructSequence") == 0) {
+      return &static_cast<const T*>(stru)->StructSequence;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -1556,6 +1565,10 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StructTest") == 0) {
       static_cast<T*>(lhs)->StructTest = *static_cast<const Test::NestedTestStruct*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "StructSequence") == 0) {
+      static_cast<T*>(lhs)->StructSequence = *static_cast<const Test::StructList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");

@@ -144,15 +144,15 @@ namespace Test
         internal void FromNative(NestedTestStructWrapper wrapper)
         {
             Id = wrapper.Id;
-            Message = Marshal.PtrToStringAnsi(wrapper.Message);
+            Message = Marshal.PtrToStringAnsi(wrapper.Message);            
         }
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct NestedTestStructWrapper
-    {
+    {        
         public int Id;
-        
+               
         public IntPtr Message;
     }
 
@@ -161,6 +161,7 @@ namespace Test
         #region Fields
         private IList<int> _longSequence;
         private IList<string> _stringSequence;
+        private IList<NestedTestStruct> _structSequence;
         #endregion
 
         #region Properties
@@ -189,6 +190,12 @@ namespace Test
         public string[] WStringArray { get; set; }
 
         public NestedTestStruct StructTest { get; set; }
+
+        public IList<NestedTestStruct> StructSequence
+        {
+            get { return _structSequence; }
+            set { _structSequence = value; }
+        }
         #endregion
 
         #region Constructors
@@ -200,6 +207,7 @@ namespace Test
             StringArray = new string[10];
             WStringArray = new string[4];
             StructTest = new NestedTestStruct();
+            _structSequence = new List<NestedTestStruct>();
         }
         #endregion
 
@@ -251,6 +259,18 @@ namespace Test
             }
 
             wrapper.StructTest = StructTest.ToNative(toRelease);
+
+            // We need to use the wrapper struct to marshal the pointer
+            // In the generated code, the aux variable will be suffixed with the field name
+            List<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
+            foreach(NestedTestStruct s in StructSequence)
+            {
+                aux.Add(s.ToNative(toRelease));
+            }
+            Helper.UnboundedSequenceToPtr(aux, ref wrapper.StructSequence);
+
+            toRelease.Add(wrapper.StructSequence);
+
             return wrapper;
         }
 
@@ -272,6 +292,17 @@ namespace Test
                 WStringArray[i] = Marshal.PtrToStringUni(wrapper.WStringArray[i]);
 
             StructTest.FromNative(wrapper.StructTest);
+
+            // We need to use the wrapper struct to receive the structures
+            // In the generated code, the aux variable will be suffixed with the field name
+            IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
+            Helper.PtrToUnboundedSequence(wrapper.StructSequence, ref aux);
+            foreach(NestedTestStructWrapper native in aux)
+            {
+                NestedTestStruct s = new NestedTestStruct();
+                s.FromNative(native);
+                StructSequence.Add(s);
+            }
         }
         #endregion
     }
@@ -304,6 +335,8 @@ namespace Test
 
         [MarshalAs(UnmanagedType.Struct)]
         public NestedTestStructWrapper StructTest;
+
+        public IntPtr StructSequence;
     }
 
     public class BasicTestStructTypeSupport
