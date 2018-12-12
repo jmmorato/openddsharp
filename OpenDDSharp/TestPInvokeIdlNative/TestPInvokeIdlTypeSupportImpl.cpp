@@ -1181,6 +1181,69 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: ArrayWString */
 
 
+/* Begin TYPEDEF: ArrayStruct */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayStruct_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+    gen_find_size(arr[i0], size, padding);
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayStruct_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+    if (!(strm << arr[i0])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::ArrayStruct_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+    if (!(strm >> arr[i0])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayStruct_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  for (ACE_CDR::ULong i = 0; i < 5; ++i) {
+    if (!gen_skip_over(ser, static_cast<Test::NestedTestStruct*>(0))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayStruct */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -1194,6 +1257,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   Test::ArrayLong_forany stru_LongArray(const_cast<Test::ArrayLong_slice*>(stru.LongArray));
   Test::ArrayString_forany stru_StringArray(const_cast<Test::ArrayString_slice*>(stru.StringArray));
   Test::ArrayWString_forany stru_WStringArray(const_cast<Test::ArrayWString_slice*>(stru.WStringArray));
+  Test::ArrayStruct_forany stru_StructArray(const_cast<Test::ArrayStruct_slice*>(stru.StructArray));
   if ((size + padding) % 4) {
     padding += 4 - ((size + padding) % 4);
   }
@@ -1209,6 +1273,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru_WStringArray, size, padding);
   gen_find_size(stru.StructTest, size, padding);
   gen_find_size(stru.StructSequence, size, padding);
+  gen_find_size(stru_StructArray, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -1218,6 +1283,7 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   Test::ArrayLong_forany stru_LongArray(const_cast<Test::ArrayLong_slice*>(stru.LongArray));
   Test::ArrayString_forany stru_StringArray(const_cast<Test::ArrayString_slice*>(stru.StringArray));
   Test::ArrayWString_forany stru_WStringArray(const_cast<Test::ArrayWString_slice*>(stru.WStringArray));
+  Test::ArrayStruct_forany stru_StructArray(const_cast<Test::ArrayStruct_slice*>(stru.StructArray));
   return (strm << stru.Id)
     && (strm << stru.Message.in())
     && (strm << stru.WMessage.in())
@@ -1227,7 +1293,8 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru_StringArray)
     && (strm << stru_WStringArray)
     && (strm << stru.StructTest)
-    && (strm << stru.StructSequence);
+    && (strm << stru.StructSequence)
+    && (strm << stru_StructArray);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -1237,6 +1304,7 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   Test::ArrayLong_forany stru_LongArray(const_cast<Test::ArrayLong_slice*>(stru.LongArray));
   Test::ArrayString_forany stru_StringArray(const_cast<Test::ArrayString_slice*>(stru.StringArray));
   Test::ArrayWString_forany stru_WStringArray(const_cast<Test::ArrayWString_slice*>(stru.WStringArray));
+  Test::ArrayStruct_forany stru_StructArray(const_cast<Test::ArrayStruct_slice*>(stru.StructArray));
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
     && (strm >> stru.WMessage.out())
@@ -1246,7 +1314,8 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru_StringArray)
     && (strm >> stru_WStringArray)
     && (strm >> stru.StructTest)
-    && (strm >> stru.StructSequence);
+    && (strm >> stru.StructSequence)
+    && (strm >> stru_StructArray);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -1445,6 +1514,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::StructList*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayStruct_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -1472,7 +1544,7 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", 0};
     return names;
   }
 
@@ -1507,6 +1579,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StructSequence") == 0) {
       return &static_cast<const T*>(stru)->StructSequence;
+    }
+    if (std::strcmp(field, "StructArray") == 0) {
+      return &static_cast<const T*>(stru)->StructArray;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -1569,6 +1644,14 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StructSequence") == 0) {
       static_cast<T*>(lhs)->StructSequence = *static_cast<const Test::StructList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "StructArray") == 0) {
+      Test::ArrayStruct* lhsArr = &static_cast<T*>(lhs)->StructArray;
+      const Test::ArrayStruct* rhsArr = static_cast<const Test::ArrayStruct*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
       return;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");

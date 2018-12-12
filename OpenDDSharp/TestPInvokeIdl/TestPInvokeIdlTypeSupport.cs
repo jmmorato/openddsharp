@@ -196,6 +196,8 @@ namespace Test
             get { return _structSequence; }
             set { _structSequence = value; }
         }
+
+        public NestedTestStruct[] StructArray { get; set; }
         #endregion
 
         #region Constructors
@@ -208,6 +210,7 @@ namespace Test
             WStringArray = new string[4];
             StructTest = new NestedTestStruct();
             _structSequence = new List<NestedTestStruct>();
+            StructArray = new NestedTestStruct[5];
         }
         #endregion
 
@@ -268,8 +271,16 @@ namespace Test
                 aux.Add(s.ToNative(toRelease));
             }
             Helper.UnboundedSequenceToPtr(aux, ref wrapper.StructSequence);
-
             toRelease.Add(wrapper.StructSequence);
+
+            wrapper.StructArray = new NestedTestStructWrapper[5];
+            for (int i = 0; i < 5; i++)
+            {
+                if (StructArray[i] != null)
+                {
+                    wrapper.StructArray[i] = StructArray[i].ToNative(toRelease);
+                }
+            }
 
             return wrapper;
         }
@@ -284,12 +295,22 @@ namespace Test
             Helper.PtrToUnboundedBasicStringSequence(wrapper.StringSequence, ref _stringSequence);
 
             LongArray = wrapper.LongArray;
-            
+
             for (int i = 0; i < 10; i++)
-                StringArray[i] = Marshal.PtrToStringAnsi(wrapper.StringArray[i]);
+            {
+                if (wrapper.StringArray[i] != null)
+                {
+                    StringArray[i] = Marshal.PtrToStringAnsi(wrapper.StringArray[i]);
+                }
+            }
 
             for (int i = 0; i < 4; i++)
-                WStringArray[i] = Marshal.PtrToStringUni(wrapper.WStringArray[i]);
+            {
+                if (wrapper.WStringArray[i] != null)
+                {
+                    WStringArray[i] = Marshal.PtrToStringUni(wrapper.WStringArray[i]);
+                }
+            }
 
             StructTest.FromNative(wrapper.StructTest);
 
@@ -302,6 +323,12 @@ namespace Test
                 NestedTestStruct s = new NestedTestStruct();
                 s.FromNative(native);
                 StructSequence.Add(s);
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                StructArray[i] = new NestedTestStruct();
+                StructArray[i].FromNative(wrapper.StructArray[i]);                
             }
         }
         #endregion
@@ -337,6 +364,9 @@ namespace Test
         public NestedTestStructWrapper StructTest;
 
         public IntPtr StructSequence;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 5)]
+        public NestedTestStructWrapper[] StructArray;
     }
 
     public class BasicTestStructTypeSupport

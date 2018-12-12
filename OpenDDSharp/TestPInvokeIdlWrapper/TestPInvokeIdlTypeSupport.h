@@ -58,9 +58,10 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     wchar_t* WStringArray[4];
     NestedTestStructWrapper StructTest;
     void* StructSequence;
+    NestedTestStructWrapper StructArray[5];
 
     Test::BasicTestStruct to_native()
-    {        
+    {
         Test::BasicTestStruct nativeData;
         nativeData.Id = Id;
         if (Message != NULL)
@@ -72,14 +73,26 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         marshal::ptr_to_unbounded_basic_string_sequence(StringSequence, nativeData.StringSequence);
 
         for (int i = 0; i < 5; i++)
+        {
             nativeData.LongArray[i] = LongArray[i];
+        }
 
         for (int i = 0; i < 10; i++)
-            nativeData.StringArray[i] = CORBA::string_dup(StringArray[i]);
+        {
+            if (StringArray[i] != NULL)
+            {
+                nativeData.StringArray[i] = CORBA::string_dup(StringArray[i]);
+            }
+        }
 
         for (int i = 0; i < 4; i++)
-            nativeData.WStringArray[i] = CORBA::wstring_dup(WStringArray[i]);
-        
+        {
+            if (WStringArray[i] != NULL)
+            {
+                nativeData.WStringArray[i] = CORBA::wstring_dup(WStringArray[i]);
+            }
+        }
+
         nativeData.StructTest = StructTest.to_native();
 
         // Sequence of structures need to be retrieved with the wrapper struct and then casted to the native struct.
@@ -92,6 +105,11 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             nativeData.StructSequence[i] = aux[i].to_native();
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            nativeData.StructArray[i] = StructArray[i].to_native();
         }
 
         return nativeData;
@@ -140,31 +158,49 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             aux[i].from_native(nativeData.StructSequence[i]);
         }
         marshal::unbounded_sequence_to_ptr(aux, StructSequence);
+
+        for (int i = 0; i < 5; i++)
+        {            
+            StructArray[i].from_native(nativeData.StructArray[i]);
+        }
     }
 
     void release() 
     {
         if (Message != NULL)
+        {
             CORBA::string_free(Message);
+        }
         if (WMessage)
+        {
             CORBA::wstring_free(WMessage);
+        }
         delete LongSequence;
         marshal::release_unbounded_basic_string_sequence_ptr(StringSequence);
         for (int i = 0; i < 10; i++)
         {
             if (StringArray[i] != NULL)
+            {
                 CORBA::string_free(StringArray[i]);
+            }
         }
 
         for (int i = 0; i < 4; i++)
         {
             if (WStringArray[i] != NULL)
+            {
                 CORBA::wstring_free(WStringArray[i]);
+            }
         }
 
         StructTest.release();     
 
         delete StructSequence;
+
+        for (int i = 0; i < 5; i++)
+        {
+            StructArray[i].release();
+        }        
     }
 };
 

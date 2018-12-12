@@ -131,6 +131,14 @@ namespace ConsoleDemoCore
                     new NestedTestStruct { Id = 4, Message = "But there's nothing in it" },                    
                     new NestedTestStruct { Id = 5, Message = "And you'll ask yourself" },
                     new NestedTestStruct { Id = 6, Message = "Where is my mind?" },
+                },
+                StructArray = new NestedTestStruct[5]
+                {
+                    new NestedTestStruct { Id = 1, Message = "Well, you've got your diamonds" },
+                    new NestedTestStruct { Id = 2, Message = "And you've got your pretty clothes" },
+                    new NestedTestStruct { Id = 3, Message = "And the chauffer drives your car" },
+                    new NestedTestStruct { Id = 4, Message = "You let everybody know" },
+                    new NestedTestStruct { Id = 5, Message = "But don't play with me, 'cause you're playing with fire" },
                 }
             };
             dataWriter.Write(data);
@@ -242,6 +250,18 @@ namespace ConsoleDemoCore
                     Console.WriteLine(nameof(received.StructSequence) + ":");
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     foreach (NestedTestStruct s in received.StructSequence)
+                    {
+                        Console.WriteLine(string.Format("{0}: {1}", s.Id, s.Message));
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.StructArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StructArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    foreach (NestedTestStruct s in received.StructArray)
                     {
                         Console.WriteLine(string.Format("{0}: {1}", s.Id, s.Message));
                     }

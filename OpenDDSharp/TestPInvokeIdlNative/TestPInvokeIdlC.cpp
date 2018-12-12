@@ -286,6 +286,51 @@ Test::ArrayWString_copy (
 }
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::ArrayStruct_slice *
+Test::ArrayStruct_dup (const Test::ArrayStruct_slice *_tao_src_array)
+{
+  Test::ArrayStruct_slice *_tao_dup_array =
+    Test::ArrayStruct_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::ArrayStruct_slice *> (0);
+    }
+  
+  Test::ArrayStruct_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::ArrayStruct_slice *
+Test::ArrayStruct_alloc (void)
+{
+  Test::ArrayStruct_slice *retval = 0;
+  ACE_NEW_RETURN (retval, Test::NestedTestStruct[5], 0);
+  return retval;
+}
+
+void
+Test::ArrayStruct_free (
+    Test::ArrayStruct_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::ArrayStruct_copy (
+    Test::ArrayStruct_slice * _tao_to,
+    const Test::ArrayStruct_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_to[i0] = _tao_from[i0];
+    }
+}
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -497,6 +542,44 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::ArrayStruct_forany &_tao_array)
+{
+  CORBA::Boolean _tao_marshal_flag = true;
+  
+  for ( ::CORBA::ULong i0 = 0; i0 < 5 && _tao_marshal_flag; ++i0)
+    {
+      _tao_marshal_flag = (strm << _tao_array [i0]);
+    }
+
+  return _tao_marshal_flag;
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::ArrayStruct_forany &_tao_array)
+{
+  CORBA::Boolean _tao_marshal_flag = true;
+  
+  for ( ::CORBA::ULong i0 = 0; i0 < 5 && _tao_marshal_flag; ++i0)
+    {
+      _tao_marshal_flag = (strm >> _tao_array [i0]);
+    }
+
+  return _tao_marshal_flag;
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -535,6 +618,16 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.WStringArray
         )
     );
+  Test::ArrayStruct_forany _tao_aggregate_StructArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayStruct_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayStruct_slice*> (
+      #endif
+          _tao_aggregate.StructArray
+        )
+    );
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
@@ -545,7 +638,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate_StringArray) &&
     (strm << _tao_aggregate_WStringArray) &&
     (strm << _tao_aggregate.StructTest) &&
-    (strm << _tao_aggregate.StructSequence);
+    (strm << _tao_aggregate.StructSequence) &&
+    (strm << _tao_aggregate_StructArray);
 }
 
 ::CORBA::Boolean operator>> (
@@ -582,6 +676,16 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.WStringArray
         )
     );
+  Test::ArrayStruct_forany _tao_aggregate_StructArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayStruct_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayStruct_slice*> (
+      #endif
+          _tao_aggregate.StructArray
+        )
+    );
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
@@ -592,7 +696,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate_StringArray) &&
     (strm >> _tao_aggregate_WStringArray) &&
     (strm >> _tao_aggregate.StructTest) &&
-    (strm >> _tao_aggregate.StructSequence);
+    (strm >> _tao_aggregate.StructSequence) &&
+    (strm >> _tao_aggregate_StructArray);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL
