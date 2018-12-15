@@ -59,8 +59,8 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     NestedTestStructWrapper StructTest;
     void* StructSequence;
     NestedTestStructWrapper StructArray[5];
-    //int LongMultiArray[3][4];
     void* LongMultiArray;
+    void* StringMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -128,8 +128,15 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             nativeData.StructArray[i] = StructArray[i].to_native();
         }
 
-        // Multidimensional array of primitives 
-        ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(int) * 24);        
+        // Multi-dimensional array of primitives 
+        ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(int) * 24);
+
+        // Multi-dimensional array of strings
+        char** arr = new char*[24];
+        marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr, 24);
+        ACE_OS::memcpy(nativeData.StringMultiArray, arr, sizeof(char*) * 24);
+
+        delete[] arr;
 
         return nativeData;
     }
@@ -199,6 +206,12 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Multi-dimensional array of primitives
         LongMultiArray = ACE_OS::malloc(sizeof(int) * 24);
         ACE_OS::memcpy(LongMultiArray, nativeData.LongMultiArray, sizeof(int) * 24);
+
+        // Multi-dimensional array of strings
+        char** arr = new char*[24];
+        ACE_OS::memcpy(arr, nativeData.StringMultiArray, sizeof(char*) * 24);
+        marshal::basic_string_multi_array_to_ptr(arr, StringMultiArray, 24);       
+        delete[] arr;
     }
 
     void release() 
@@ -215,8 +228,8 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             CORBA::wstring_free(WMessage);
         }
 
-        // Delete the pointer of the sequences
-        delete LongSequence;
+        // Release the pointer of the sequences
+        ACE_OS::free(LongSequence);
 
         // Release the strings in the sequence
         marshal::release_unbounded_basic_string_sequence_ptr(StringSequence);
@@ -242,17 +255,20 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Release the structures to ensure the needed fields are released
         StructTest.release();     
 
-        // Delete the pointer of the sequences
-        delete StructSequence;
+        // Release the pointer of the sequences
+        ACE_OS::free(StructSequence);
 
-        // Delete the structures in the array
+        // Release the structures in the array
         for (int i = 0; i < 5; i++)
         {
             StructArray[i].release();
         }
 
-        // Release pointer to the multi-dimensional array
+        // Release pointer to the multi-dimensional array of primitives
         ACE_OS::free(LongMultiArray);
+
+        // Release pointer to the multi-dimensional array of strings
+        marshal::release_basic_string_multi_array_ptr(StringMultiArray, 24);
     }
 };
 

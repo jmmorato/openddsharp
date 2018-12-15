@@ -130,4 +130,69 @@ public:
 
         delete ptr;
     }
+
+    static void ptr_to_basic_string_multi_array(void* ptr, char** & arr, int length)
+    {
+        if (ptr == NULL)
+        {
+            return;
+        }
+
+        char* bytes = (char*)ptr;
+
+        const ACE_UINT64 struct_size = sizeof(char*);
+        char** pointers = new char*[length];
+        for (ACE_INT32 i = 0; i < length; i++)
+        {
+            ACE_OS::memcpy(&pointers[i], &bytes[(i * struct_size)], struct_size);
+
+            arr[i] = CORBA::string_dup(pointers[i]);
+        }
+
+        delete[] pointers;
+    }
+
+    static void basic_string_multi_array_to_ptr(char** & arr, void* & ptr, int length)
+    {
+        const ACE_UINT64 struct_size = sizeof(char*);
+        const ACE_UINT64 buffer_size = length * struct_size;
+        char* bytes = new char[buffer_size];
+
+        for (ACE_INT32 i = 0; i < length; i++)
+        {
+            char* str = CORBA::string_dup(arr[i]);
+            ACE_OS::memcpy(&bytes[i * struct_size], &str, struct_size);
+        }
+
+        // Alloc memory for the poninter
+        ACE_NEW(ptr, char[buffer_size]);
+        // Copy the bytes in the pointer
+        ACE_OS::memcpy(ptr, bytes, buffer_size);
+
+        // Free temporally allocated memory
+        delete[] bytes;
+    }
+
+    static void release_basic_string_multi_array_ptr(void* & ptr, int length)
+    {
+        if (ptr == NULL)
+        {
+            return;
+        }
+
+        char* bytes = (char*)ptr;
+       
+        const ACE_UINT64 struct_size = sizeof(char*);
+        char** pointers = new char*[length];
+        for (ACE_INT32 i = 0; i < length; i++)
+        {
+            ACE_OS::memcpy(&pointers[i], &bytes[i * struct_size], struct_size);
+
+            CORBA::string_free(pointers[i]);
+        }
+
+        delete[] pointers;
+
+        delete ptr;
+    }
 };

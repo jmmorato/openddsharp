@@ -145,6 +145,12 @@ namespace ConsoleDemoCore
                     { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
                     { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
                     { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                },
+                StringMultiArray = new string[3, 4, 2]
+                {
+                    { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
+                    { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
+                    { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
                 }
             };
             dataWriter.Write(data);
@@ -287,6 +293,29 @@ namespace ConsoleDemoCore
                             {
                                 Console.Write(received.LongMultiArray[i, j, k].ToString("00"));
                                 if (j + 1 < received.LongMultiArray.GetLength(1) || k + 1 < received.LongMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.StringMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StringMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.StringMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.StringMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.StringMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.StringMultiArray[i, j, k]);
+                                if (j + 1 < received.StringMultiArray.GetLength(1) || k + 1 < received.StringMultiArray.GetLength(2))
                                 {
                                     Console.Write(", ");
                                 }

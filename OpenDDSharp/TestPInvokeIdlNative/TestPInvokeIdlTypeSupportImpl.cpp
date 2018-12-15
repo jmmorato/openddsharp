@@ -1295,6 +1295,84 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: MultiArrayLong */
 
 
+/* Begin TYPEDEF: MultiArrayString */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayString_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+    for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+      for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+        find_size_ulong(size, padding);
+        size += ACE_OS::strlen(arr[i0][i1][i2].in()) + 1;
+      }
+    }
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayString_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+    for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+      for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+        if (!(strm << arr[i0][i1][i2].in())) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayString_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+    for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+      for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+        if (!(strm >> arr[i0][i1][i2].out())) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayString_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  for (ACE_CDR::ULong i = 0; i < 24; ++i) {
+    ACE_CDR::ULong strlength;
+    if (!(ser >> strlength)) return false;
+    if (!ser.skip(static_cast<ACE_UINT16>(strlength))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayString */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -1310,6 +1388,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   Test::ArrayWString_forany stru_WStringArray(const_cast<Test::ArrayWString_slice*>(stru.WStringArray));
   Test::ArrayStruct_forany stru_StructArray(const_cast<Test::ArrayStruct_slice*>(stru.StructArray));
   Test::MultiArrayLong_forany stru_LongMultiArray(const_cast<Test::MultiArrayLong_slice*>(stru.LongMultiArray));
+  Test::MultiArrayString_forany stru_StringMultiArray(const_cast<Test::MultiArrayString_slice*>(stru.StringMultiArray));
   if ((size + padding) % 4) {
     padding += 4 - ((size + padding) % 4);
   }
@@ -1327,6 +1406,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru.StructSequence, size, padding);
   gen_find_size(stru_StructArray, size, padding);
   gen_find_size(stru_LongMultiArray, size, padding);
+  gen_find_size(stru_StringMultiArray, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -1338,6 +1418,7 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   Test::ArrayWString_forany stru_WStringArray(const_cast<Test::ArrayWString_slice*>(stru.WStringArray));
   Test::ArrayStruct_forany stru_StructArray(const_cast<Test::ArrayStruct_slice*>(stru.StructArray));
   Test::MultiArrayLong_forany stru_LongMultiArray(const_cast<Test::MultiArrayLong_slice*>(stru.LongMultiArray));
+  Test::MultiArrayString_forany stru_StringMultiArray(const_cast<Test::MultiArrayString_slice*>(stru.StringMultiArray));
   return (strm << stru.Id)
     && (strm << stru.Message.in())
     && (strm << stru.WMessage.in())
@@ -1349,7 +1430,8 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru.StructTest)
     && (strm << stru.StructSequence)
     && (strm << stru_StructArray)
-    && (strm << stru_LongMultiArray);
+    && (strm << stru_LongMultiArray)
+    && (strm << stru_StringMultiArray);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -1361,6 +1443,7 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   Test::ArrayWString_forany stru_WStringArray(const_cast<Test::ArrayWString_slice*>(stru.WStringArray));
   Test::ArrayStruct_forany stru_StructArray(const_cast<Test::ArrayStruct_slice*>(stru.StructArray));
   Test::MultiArrayLong_forany stru_LongMultiArray(const_cast<Test::MultiArrayLong_slice*>(stru.LongMultiArray));
+  Test::MultiArrayString_forany stru_StringMultiArray(const_cast<Test::MultiArrayString_slice*>(stru.StringMultiArray));
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
     && (strm >> stru.WMessage.out())
@@ -1372,7 +1455,8 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru.StructTest)
     && (strm >> stru.StructSequence)
     && (strm >> stru_StructArray)
-    && (strm >> stru_LongMultiArray);
+    && (strm >> stru_LongMultiArray)
+    && (strm >> stru_StringMultiArray);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -1577,6 +1661,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::MultiArrayLong_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayString_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -1604,7 +1691,7 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", 0};
     return names;
   }
 
@@ -1645,6 +1732,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "LongMultiArray") == 0) {
       return &static_cast<const T*>(stru)->LongMultiArray;
+    }
+    if (std::strcmp(field, "StringMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->StringMultiArray;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -1720,6 +1810,18 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "LongMultiArray") == 0) {
       Test::MultiArrayLong* lhsArr = &static_cast<T*>(lhs)->LongMultiArray;
       const Test::MultiArrayLong* rhsArr = static_cast<const Test::MultiArrayLong*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
+    if (std::strcmp(field, "StringMultiArray") == 0) {
+      Test::MultiArrayString* lhsArr = &static_cast<T*>(lhs)->StringMultiArray;
+      const Test::MultiArrayString* rhsArr = static_cast<const Test::MultiArrayString*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
         for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
           for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {

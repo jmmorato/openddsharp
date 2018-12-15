@@ -138,20 +138,7 @@ namespace Test
             {
                 if (i > 0)
                 {
-                    dimensions[array.Rank - 1]++;
-                    if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
-                    {
-                        for (int j = array.Rank - 1; j > 0; j--)
-                        {
-                            dimensions[j - 1]++;
-                            dimensions[j] = 0;
-
-                            if (dimensions[j - 1] < array.GetLength(j - 1))
-                            {
-                                break;
-                            }
-                        }
-                    }
+                    UpdateDimensionsArray(array, dimensions);
                 }
                 array.SetValue(Marshal.PtrToStructure<T>(ptr + (elSiz * i)), dimensions);
             }
@@ -176,6 +163,85 @@ namespace Test
             {
                 Marshal.StructureToPtr((T)enumerator.Current, ptr + (elSiz * i), false);
                 i++;
+            }
+        }
+
+        public static List<IntPtr> StringMultiArrayToPtr(Array array, ref IntPtr ptr)
+        {
+            List<IntPtr> toRelease = new List<IntPtr>();
+
+            if (array == null || array.Length == 0)
+            {
+                return toRelease;
+            }
+
+            int elSiz = IntPtr.Size;
+            // Get the total size of unmanaged memory that is needed
+            int size = elSiz * array.Length;
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+
+            System.Collections.IEnumerator enumerator = array.GetEnumerator();
+            int i = 0;
+            while (enumerator.MoveNext())
+            {
+                // Create a pointer to the string in unmanaged memory
+                IntPtr sPtr = Marshal.StringToHGlobalAnsi((string)enumerator.Current);
+                // Add to pointer to the list of pointers to release
+                toRelease.Add(sPtr);
+                // Write the pointer location in ptr
+                Marshal.StructureToPtr(sPtr, ptr + (i * IntPtr.Size), false);
+
+                i++;
+            }
+
+            return toRelease;
+        }
+
+        public static void PtrToStringMultiArray(IntPtr ptr, Array array)
+        {
+            // We need to ensure that the array is not null before the call 
+            if (array == null)
+                return;
+
+            int elSiz = IntPtr.Size;
+            int length = 1;
+            for (int i = 0; i < array.Rank; i++)
+            {
+                length *= array.GetLength(i);
+            }
+
+            int[] dimensions = new int[array.Rank];
+            int[] dIndex = new int[array.Rank];
+            for (int i = 0; i < length; i++)
+            {
+                if (i > 0)
+                {
+                    UpdateDimensionsArray(array, dimensions);
+                }
+
+                // Get the unmanaged pointer
+                IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + (IntPtr.Size * i));
+                // Convert the pointer in a string
+                array.SetValue(Marshal.PtrToStringAnsi(pointer), dimensions);
+            }
+        }
+
+        private static void UpdateDimensionsArray(Array array, int[] dimensions)
+        {
+            dimensions[array.Rank - 1]++;
+            if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
+            {
+                for (int j = array.Rank - 1; j > 0; j--)
+                {
+                    dimensions[j - 1]++;
+                    dimensions[j] = 0;
+
+                    if (dimensions[j - 1] < array.GetLength(j - 1))
+                    {
+                        break;
+                    }
+                }
             }
         }
     }
@@ -260,6 +326,8 @@ namespace Test
         public NestedTestStruct[] StructArray { get; set; }
 
         public int[,,] LongMultiArray { get; set; }
+
+        public string[,,] StringMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -274,6 +342,7 @@ namespace Test
             _structSequence = new List<NestedTestStruct>();
             StructArray = new NestedTestStruct[5];
             LongMultiArray = new int[3, 4, 2];
+            StringMultiArray = new string[3, 4, 2];
         }
         #endregion
 
@@ -348,6 +417,10 @@ namespace Test
             Helper.MultiArrayToPtr<int>(LongMultiArray, ref wrapper.LongMultiArray);
             toRelease.Add(wrapper.LongMultiArray);
 
+            // Multi-dimensional array of strings
+            toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray));
+            toRelease.Add(wrapper.StringMultiArray);
+
             return wrapper;
         }
 
@@ -397,11 +470,19 @@ namespace Test
                 StructArray[i].FromNative(wrapper.StructArray[i]);                
             }
 
+            // Multi-dimensional array of primitives
             if (LongMultiArray == null)
             {
                 LongMultiArray = new int[3, 4, 2];
             }
             Helper.PtrToMultiArray<int>(wrapper.LongMultiArray, LongMultiArray);
+
+            // Multi-dimensional array of strings
+            if (StringMultiArray == null)
+            {
+                StringMultiArray = new string[3, 4, 2];
+            }
+            Helper.PtrToStringMultiArray(wrapper.StringMultiArray, StringMultiArray);
         }
         #endregion
     }
@@ -440,8 +521,9 @@ namespace Test
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 5)]
         public NestedTestStructWrapper[] StructArray;
 
-        //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 12)]
         public IntPtr LongMultiArray;
+
+        public IntPtr StringMultiArray;
     }
 
     public class BasicTestStructTypeSupport

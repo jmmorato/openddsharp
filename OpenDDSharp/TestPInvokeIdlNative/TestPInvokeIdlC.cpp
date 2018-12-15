@@ -382,6 +382,57 @@ Test::MultiArrayLong_copy (
 }
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayString_slice *
+Test::MultiArrayString_dup (const Test::MultiArrayString_slice *_tao_src_array)
+{
+  Test::MultiArrayString_slice *_tao_dup_array =
+    Test::MultiArrayString_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayString_slice *> (0);
+    }
+  
+  Test::MultiArrayString_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayString_slice *
+Test::MultiArrayString_alloc (void)
+{
+  Test::MultiArrayString_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::TAO::String_Manager[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayString_free (
+    Test::MultiArrayString_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayString_copy (
+    Test::MultiArrayString_slice * _tao_to,
+    const Test::MultiArrayString_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -661,6 +712,56 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayString_forany &_tao_array)
+{
+  CORBA::Boolean _tao_marshal_flag = true;
+  
+  for ( ::CORBA::ULong i0 = 0; i0 < 3 && _tao_marshal_flag; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4 && _tao_marshal_flag; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2 && _tao_marshal_flag; ++i2)
+            {
+              _tao_marshal_flag = (strm << _tao_array [i0][i1][i2].in ());
+            }
+        }
+    }
+
+  return _tao_marshal_flag;
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayString_forany &_tao_array)
+{
+  CORBA::Boolean _tao_marshal_flag = true;
+  
+  for ( ::CORBA::ULong i0 = 0; i0 < 3 && _tao_marshal_flag; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4 && _tao_marshal_flag; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2 && _tao_marshal_flag; ++i2)
+            {
+              _tao_marshal_flag = (strm >> _tao_array [i0][i1][i2].out ());
+            }
+        }
+    }
+
+  return _tao_marshal_flag;
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -719,6 +820,16 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.LongMultiArray
         )
     );
+  Test::MultiArrayString_forany _tao_aggregate_StringMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayString_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayString_slice*> (
+      #endif
+          _tao_aggregate.StringMultiArray
+        )
+    );
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
@@ -731,7 +842,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate.StructTest) &&
     (strm << _tao_aggregate.StructSequence) &&
     (strm << _tao_aggregate_StructArray) &&
-    (strm << _tao_aggregate_LongMultiArray);
+    (strm << _tao_aggregate_LongMultiArray) &&
+    (strm << _tao_aggregate_StringMultiArray);
 }
 
 ::CORBA::Boolean operator>> (
@@ -788,6 +900,16 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.LongMultiArray
         )
     );
+  Test::MultiArrayString_forany _tao_aggregate_StringMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayString_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayString_slice*> (
+      #endif
+          _tao_aggregate.StringMultiArray
+        )
+    );
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
@@ -800,7 +922,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate.StructTest) &&
     (strm >> _tao_aggregate.StructSequence) &&
     (strm >> _tao_aggregate_StructArray) &&
-    (strm >> _tao_aggregate_LongMultiArray);
+    (strm >> _tao_aggregate_LongMultiArray) &&
+    (strm >> _tao_aggregate_StringMultiArray);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL
