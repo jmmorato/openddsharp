@@ -17,6 +17,7 @@ module Test {
     typedef NestedTestStruct ArrayStruct[5];
     typedef long MultiArrayLong[3][4][2];
     typedef string MultiArrayString[3][4][2];
+    typedef wstring MultiArrayWString[3][4][2];
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -33,6 +34,7 @@ module Test {
         ArrayStruct StructArray;
         MultiArrayLong LongMultiArray;
         MultiArrayString StringMultiArray;
+        MultiArrayWString WStringMultiArray;
 	};
 
 };

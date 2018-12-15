@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_MONJVG_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_MONJVG_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_AUKOZU_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_AUKOZU_H_
 
 #include /**/ "ace/pre.h"
 
@@ -563,6 +563,55 @@ namespace Test
       const MultiArrayString_slice *_tao_from);
 
   // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ch.cpp:54
+
+  typedef ::TAO::WString_Manager MultiArrayWString[3][4][2];
+  typedef ::TAO::WString_Manager MultiArrayWString_slice[4][2];
+  struct MultiArrayWString_tag {};
+  
+
+  typedef
+    TAO_VarArray_Var_T<
+        MultiArrayWString,
+        MultiArrayWString_slice,
+        MultiArrayWString_tag
+      >
+    MultiArrayWString_var;
+
+  typedef
+    TAO_Array_Out_T<
+        MultiArrayWString,
+        MultiArrayWString_var,
+        MultiArrayWString_slice,
+        MultiArrayWString_tag
+      >
+    MultiArrayWString_out;
+
+  typedef
+    TAO_Array_Forany_T<
+        MultiArrayWString,
+        MultiArrayWString_slice,
+        MultiArrayWString_tag
+      >
+    MultiArrayWString_forany;
+
+  TAO_NAMESPACE_STORAGE_CLASS MultiArrayWString_slice *
+  MultiArrayWString_alloc (void);
+
+  TAO_NAMESPACE_STORAGE_CLASS void
+  MultiArrayWString_free (
+      MultiArrayWString_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS MultiArrayWString_slice *
+  MultiArrayWString_dup (
+      const MultiArrayWString_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS void
+  MultiArrayWString_copy (
+      MultiArrayWString_slice *_tao_to,
+      const MultiArrayWString_slice *_tao_from);
+
+  // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:261
 
   struct BasicTestStruct;
@@ -605,6 +654,7 @@ namespace Test
     Test::ArrayStruct StructArray;
     Test::MultiArrayLong LongMultiArray;
     Test::MultiArrayString StringMultiArray;
+    Test::MultiArrayWString WStringMultiArray;
   };
 
 // TAO_IDL - Generated from
@@ -740,6 +790,17 @@ namespace TAO
   {
   };
 
+  template<>
+  class Arg_Traits< ::Test::MultiArrayWString_tag>
+    : public
+        Var_Array_Arg_Traits_T<
+            ::Test::MultiArrayWString_out,
+            ::Test::MultiArrayWString_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
   // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
 
@@ -861,6 +922,22 @@ namespace TAO
     static Test::MultiArrayString_slice * alloc (void);
     static void zero (
         Test::MultiArrayString_slice * _tao_slice);
+  };
+  template<>
+  struct TestPInvokeIdlIDL_Export Array_Traits<
+      Test::MultiArrayWString_forany
+    >
+  {
+    static void free (
+        Test::MultiArrayWString_slice * _tao_slice);
+    static Test::MultiArrayWString_slice * dup (
+        const Test::MultiArrayWString_slice * _tao_slice);
+    static void copy (
+        Test::MultiArrayWString_slice * _tao_to,
+        const Test::MultiArrayWString_slice * _tao_from);
+    static Test::MultiArrayWString_slice * alloc (void);
+    static void zero (
+        Test::MultiArrayWString_slice * _tao_slice);
   };
 }
 TAO_END_VERSIONED_NAMESPACE_DECL
@@ -1011,6 +1088,18 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 
 TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::MultiArrayString_forany &_tao_array);
 TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::MultiArrayString_forany &_tao_array);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_ch.cpp:102
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::MultiArrayWString_forany &_tao_array);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::MultiArrayWString_forany &_tao_array);
 
 TAO_END_VERSIONED_NAMESPACE_DECL
 

@@ -61,6 +61,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     NestedTestStructWrapper StructArray[5];
     void* LongMultiArray;
     void* StringMultiArray;
+    void* WStringMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -84,10 +85,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         marshal::ptr_to_unbounded_basic_string_sequence(StringSequence, nativeData.StringSequence);
 
         // Array of primitives
-        for (int i = 0; i < 5; i++)
-        {
-            nativeData.LongArray[i] = LongArray[i];
-        }
+        ACE_OS::memcpy(nativeData.LongArray, LongArray, sizeof(int) * 5);
 
         // Array of string
         for (int i = 0; i < 10; i++)
@@ -132,11 +130,16 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(int) * 24);
 
         // Multi-dimensional array of strings
-        char** arr = new char*[24];
-        marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr, 24);
-        ACE_OS::memcpy(nativeData.StringMultiArray, arr, sizeof(char*) * 24);
+        char** arr_StringMultiArray = new char*[24];
+        marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr_StringMultiArray, 24);
+        ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(char*) * 24);
+        delete[] arr_StringMultiArray;
 
-        delete[] arr;
+        // Multi-dimensional array of wstrings
+        wchar_t** arr_WStringMultiArray = new wchar_t*[24];
+        marshal::ptr_to_wide_string_multi_array(WStringMultiArray, arr_WStringMultiArray, 24);       
+        ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(wchar_t*) * 24);
+        delete[] arr_WStringMultiArray;        
 
         return nativeData;
     }
@@ -159,10 +162,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         marshal::unbounded_basic_string_sequence_to_ptr(nativeData.StringSequence, StringSequence);
 
         // Arrays of primitives
-        for (int i = 0; i < 5; i++)
-        {
-            LongArray[i] = nativeData.LongArray[i];
-        }
+        ACE_OS::memcpy(LongArray, nativeData.LongArray, sizeof(int) * 5);
 
         // Arrays of strings
         for (int i = 0; i < 10; i++)
@@ -208,10 +208,16 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         ACE_OS::memcpy(LongMultiArray, nativeData.LongMultiArray, sizeof(int) * 24);
 
         // Multi-dimensional array of strings
-        char** arr = new char*[24];
-        ACE_OS::memcpy(arr, nativeData.StringMultiArray, sizeof(char*) * 24);
-        marshal::basic_string_multi_array_to_ptr(arr, StringMultiArray, 24);       
-        delete[] arr;
+        char** arr_StringMultiArray = new char*[24];
+        ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(char*) * 24);
+        marshal::basic_string_multi_array_to_ptr(arr_StringMultiArray, StringMultiArray, 24);
+        delete[] arr_StringMultiArray;
+
+        // Multi-dimensional array of strings
+        wchar_t** arr_WStringMultiArray = new wchar_t*[24];
+        ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(wchar_t*) * 24);
+        marshal::wide_string_multi_array_to_ptr(arr_WStringMultiArray, WStringMultiArray, 24);
+        delete[] arr_WStringMultiArray;
     }
 
     void release() 

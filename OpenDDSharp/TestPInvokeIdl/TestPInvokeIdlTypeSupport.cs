@@ -166,7 +166,7 @@ namespace Test
             }
         }
 
-        public static List<IntPtr> StringMultiArrayToPtr(Array array, ref IntPtr ptr)
+        public static List<IntPtr> StringMultiArrayToPtr(Array array, ref IntPtr ptr, bool isUnicode)
         {
             List<IntPtr> toRelease = new List<IntPtr>();
 
@@ -186,7 +186,12 @@ namespace Test
             while (enumerator.MoveNext())
             {
                 // Create a pointer to the string in unmanaged memory
-                IntPtr sPtr = Marshal.StringToHGlobalAnsi((string)enumerator.Current);
+                IntPtr sPtr = IntPtr.Zero;
+                if (isUnicode)
+                    sPtr = Marshal.StringToHGlobalUni((string)enumerator.Current);
+                else
+                    sPtr = Marshal.StringToHGlobalAnsi((string)enumerator.Current);
+
                 // Add to pointer to the list of pointers to release
                 toRelease.Add(sPtr);
                 // Write the pointer location in ptr
@@ -198,7 +203,7 @@ namespace Test
             return toRelease;
         }
 
-        public static void PtrToStringMultiArray(IntPtr ptr, Array array)
+        public static void PtrToStringMultiArray(IntPtr ptr, Array array, bool isUnicode)
         {
             // We need to ensure that the array is not null before the call 
             if (array == null)
@@ -223,7 +228,10 @@ namespace Test
                 // Get the unmanaged pointer
                 IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + (IntPtr.Size * i));
                 // Convert the pointer in a string
-                array.SetValue(Marshal.PtrToStringAnsi(pointer), dimensions);
+                if (isUnicode)
+                    array.SetValue(Marshal.PtrToStringUni(pointer), dimensions);
+                else
+                    array.SetValue(Marshal.PtrToStringAnsi(pointer), dimensions);
             }
         }
 
@@ -328,6 +336,8 @@ namespace Test
         public int[,,] LongMultiArray { get; set; }
 
         public string[,,] StringMultiArray { get; set; }
+
+        public string[,,] WStringMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -418,8 +428,12 @@ namespace Test
             toRelease.Add(wrapper.LongMultiArray);
 
             // Multi-dimensional array of strings
-            toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray));
+            toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray, false));
             toRelease.Add(wrapper.StringMultiArray);
+
+            // Multi-dimensional array of wstrings
+            toRelease.AddRange(Helper.StringMultiArrayToPtr(WStringMultiArray, ref wrapper.WStringMultiArray, true));
+            toRelease.Add(wrapper.WStringMultiArray);
 
             return wrapper;
         }
@@ -482,7 +496,14 @@ namespace Test
             {
                 StringMultiArray = new string[3, 4, 2];
             }
-            Helper.PtrToStringMultiArray(wrapper.StringMultiArray, StringMultiArray);
+            Helper.PtrToStringMultiArray(wrapper.StringMultiArray, StringMultiArray, false);
+
+            // Multi-dimensional array of wstrings
+            if (WStringMultiArray == null)
+            {
+                WStringMultiArray = new string[3, 4, 2];
+            }
+            Helper.PtrToStringMultiArray(wrapper.WStringMultiArray, WStringMultiArray, true);
         }
         #endregion
     }
@@ -524,6 +545,8 @@ namespace Test
         public IntPtr LongMultiArray;
 
         public IntPtr StringMultiArray;
+
+        public IntPtr WStringMultiArray;
     }
 
     public class BasicTestStructTypeSupport
