@@ -25,10 +25,10 @@ namespace Test
                 sequence.Clear();
 
             if (ptr == IntPtr.Zero)
-                return;            
+                return;
 
             // Start by reading the size of the array
-            int length = Marshal.ReadInt32(ptr);            
+            int length = Marshal.ReadInt32(ptr);
             // For efficiency, only compute the element size once
             int elSiz = Marshal.SizeOf<T>();
             // Populate the list
@@ -57,7 +57,7 @@ namespace Test
             Marshal.WriteInt32(ptr, sequence.Count);
             // Write the list data
             for (int i = 0; i < sequence.Count; i++)
-            {   
+            {
                 // Newly-allocated space has no existing object, so the last param is false
                 Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
             }
@@ -88,9 +88,9 @@ namespace Test
         }
 
         public static List<IntPtr> UnboundedBasicStringSequenceToPtr(IList<string> sequence, ref IntPtr ptr)
-        {            
+        {
             List<IntPtr> toRelease = new List<IntPtr>();
-            
+
             if (sequence == null || sequence.Count == 0)
             {
                 // No string in the list. Write 0 and return
@@ -117,6 +117,66 @@ namespace Test
             }
 
             return toRelease;
+        }
+
+        public static void PtrToMultiArray<T>(IntPtr ptr, Array array)
+        {
+            // We need to ensure that the array is not null before the call 
+            if (array == null)
+                return;
+
+            int elSiz = Marshal.SizeOf<T>();
+            int length = 1;
+            for (int i = 0; i < array.Rank; i++)
+            {
+                length *= array.GetLength(i);
+            }
+
+            int[] dimensions = new int[array.Rank];
+            int[] dIndex = new int[array.Rank];
+            for (int i = 0; i < length; i++)
+            {
+                if (i > 0)
+                {
+                    dimensions[array.Rank - 1]++;
+                    if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
+                    {
+                        for (int j = array.Rank - 1; j > 0; j--)
+                        {
+                            dimensions[j - 1]++;
+                            dimensions[j] = 0;
+
+                            if (dimensions[j - 1] < array.GetLength(j - 1))
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                array.SetValue(Marshal.PtrToStructure<T>(ptr + (elSiz * i)), dimensions);
+            }
+        }
+
+        public static void MultiArrayToPtr<T>(Array array, ref IntPtr ptr)
+        {
+            if (array == null || array.Length == 0)
+            {
+                return;
+            }
+
+            int elSiz = Marshal.SizeOf<T>();
+            // Get the total size of unmanaged memory that is needed
+            int size = elSiz * array.Length;
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+
+            System.Collections.IEnumerator enumerator = array.GetEnumerator();
+            int i = 0;
+            while (enumerator.MoveNext())
+            {
+                Marshal.StructureToPtr((T)enumerator.Current, ptr + (elSiz * i), false);
+                i++;
+            }
         }
     }
 
@@ -198,6 +258,8 @@ namespace Test
         }
 
         public NestedTestStruct[] StructArray { get; set; }
+
+        public int[,,] LongMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -211,6 +273,7 @@ namespace Test
             StructTest = new NestedTestStruct();
             _structSequence = new List<NestedTestStruct>();
             StructArray = new NestedTestStruct[5];
+            LongMultiArray = new int[3, 4, 2];
         }
         #endregion
 
@@ -282,6 +345,9 @@ namespace Test
                 }
             }
 
+            Helper.MultiArrayToPtr<int>(LongMultiArray, ref wrapper.LongMultiArray);
+            toRelease.Add(wrapper.LongMultiArray);
+
             return wrapper;
         }
 
@@ -330,6 +396,12 @@ namespace Test
                 StructArray[i] = new NestedTestStruct();
                 StructArray[i].FromNative(wrapper.StructArray[i]);                
             }
+
+            if (LongMultiArray == null)
+            {
+                LongMultiArray = new int[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<int>(wrapper.LongMultiArray, LongMultiArray);
         }
         #endregion
     }
@@ -367,6 +439,9 @@ namespace Test
 
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 5)]
         public NestedTestStructWrapper[] StructArray;
+
+        //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 12)]
+        public IntPtr LongMultiArray;
     }
 
     public class BasicTestStructTypeSupport

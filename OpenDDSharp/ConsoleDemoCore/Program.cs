@@ -139,6 +139,12 @@ namespace ConsoleDemoCore
                     new NestedTestStruct { Id = 3, Message = "And the chauffer drives your car" },
                     new NestedTestStruct { Id = 4, Message = "You let everybody know" },
                     new NestedTestStruct { Id = 5, Message = "But don't play with me, 'cause you're playing with fire" },
+                },
+                LongMultiArray = new int[3, 4, 2]
+                {
+                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
+                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
+                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
                 }
             };
             dataWriter.Write(data);
@@ -264,6 +270,29 @@ namespace ConsoleDemoCore
                     foreach (NestedTestStruct s in received.StructArray)
                     {
                         Console.WriteLine(string.Format("{0}: {1}", s.Id, s.Message));
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.LongMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.LongMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.LongMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.LongMultiArray[i, j, k].ToString("00"));
+                                if (j + 1 < received.LongMultiArray.GetLength(1) || k + 1 < received.LongMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
                     }
                     Console.WriteLine();
                 }

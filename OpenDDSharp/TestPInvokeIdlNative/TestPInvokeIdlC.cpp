@@ -331,6 +331,57 @@ Test::ArrayStruct_copy (
 }
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayLong_slice *
+Test::MultiArrayLong_dup (const Test::MultiArrayLong_slice *_tao_src_array)
+{
+  Test::MultiArrayLong_slice *_tao_dup_array =
+    Test::MultiArrayLong_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayLong_slice *> (0);
+    }
+  
+  Test::MultiArrayLong_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayLong_slice *
+Test::MultiArrayLong_alloc (void)
+{
+  Test::MultiArrayLong_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Long[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayLong_free (
+    Test::MultiArrayLong_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayLong_copy (
+    Test::MultiArrayLong_slice * _tao_to,
+    const Test::MultiArrayLong_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -580,6 +631,36 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayLong_forany &_tao_array)
+{
+  return
+    strm.write_long_array (
+        reinterpret_cast <const ACE_CDR::Long *> (_tao_array.in ()),
+        3*4*2);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayLong_forany &_tao_array)
+{
+  return
+    strm.read_long_array (
+        reinterpret_cast <ACE_CDR::Long *> (_tao_array.out ()),
+        3*4*2);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -628,6 +709,16 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.StructArray
         )
     );
+  Test::MultiArrayLong_forany _tao_aggregate_LongMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayLong_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayLong_slice*> (
+      #endif
+          _tao_aggregate.LongMultiArray
+        )
+    );
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
@@ -639,7 +730,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate_WStringArray) &&
     (strm << _tao_aggregate.StructTest) &&
     (strm << _tao_aggregate.StructSequence) &&
-    (strm << _tao_aggregate_StructArray);
+    (strm << _tao_aggregate_StructArray) &&
+    (strm << _tao_aggregate_LongMultiArray);
 }
 
 ::CORBA::Boolean operator>> (
@@ -686,6 +778,16 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.StructArray
         )
     );
+  Test::MultiArrayLong_forany _tao_aggregate_LongMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayLong_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayLong_slice*> (
+      #endif
+          _tao_aggregate.LongMultiArray
+        )
+    );
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
@@ -697,7 +799,8 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate_WStringArray) &&
     (strm >> _tao_aggregate.StructTest) &&
     (strm >> _tao_aggregate.StructSequence) &&
-    (strm >> _tao_aggregate_StructArray);
+    (strm >> _tao_aggregate_StructArray) &&
+    (strm >> _tao_aggregate_LongMultiArray);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL
