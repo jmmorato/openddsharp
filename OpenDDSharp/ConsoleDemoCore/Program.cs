@@ -97,6 +97,14 @@ namespace ConsoleDemoCore
                     "Be happy. ",
                     "Be happy now."
                 },
+                WStringSequence = new List<string>
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets"
+                },
                 LongArray = new int[] {42, 23, 69, 1024, 25 },
                 StringArray = new string[]
                 {
@@ -220,6 +228,18 @@ namespace ConsoleDemoCore
                     for (int i = 0; i < received.StringSequence.Count; i++)
                     {
                         Console.WriteLine(received.StringSequence[i]);
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.WStringSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.WStringSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.WStringSequence.Count; i++)
+                    {
+                        Console.WriteLine(received.WStringSequence[i]);
                     }
                     Console.WriteLine();
                 }

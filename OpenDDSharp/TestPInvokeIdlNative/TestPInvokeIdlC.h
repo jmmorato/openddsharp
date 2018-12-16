@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_AUKOZU_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_AUKOZU_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_01Y85B_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_01Y85B_H_
 
 #include /**/ "ace/pre.h"
 
@@ -226,6 +226,52 @@ namespace Test
     
     typedef StringList_var _var_type;
     typedef StringList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_WSTRINGLIST_CH_)
+#define _TEST_WSTRINGLIST_CH_
+
+  class WStringList;
+
+  typedef
+    ::TAO_VarSeq_Var_T<
+        WStringList
+      >
+    WStringList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        WStringList
+      >
+    WStringList_out;
+
+  class TestPInvokeIdlIDL_Export WStringList
+    : public
+        ::TAO::unbounded_basic_string_sequence<CORBA::WChar>
+  {
+  public:
+    WStringList (void);
+    WStringList ( ::CORBA::ULong max);
+    WStringList (
+      ::CORBA::ULong max,
+      ::CORBA::ULong length,
+      ::CORBA::WChar ** buffer,
+      ::CORBA::Boolean release = false);
+    WStringList (const WStringList &);
+    virtual ~WStringList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef WStringList_var _var_type;
+    typedef WStringList_out _out_type;
   };
 
 #endif /* end #if !defined */
@@ -646,6 +692,7 @@ namespace Test
     ::TAO::WString_Manager WMessage;
     Test::LongList LongSequence;
     Test::StringList StringSequence;
+    Test::WStringList WStringSequence;
     Test::ArrayLong LongArray;
     Test::ArrayString StringArray;
     Test::ArrayWString WStringArray;
@@ -706,6 +753,19 @@ namespace TAO
     : public
         Var_Size_Arg_Traits_T<
             ::Test::StringList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::WStringList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::WStringList,
             TAO::Any_Insert_Policy_Noop
           >
   {
@@ -998,6 +1058,27 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 #endif /* _TAO_CDR_OP_Test_StringList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_WStringList_H_
+#define _TAO_CDR_OP_Test_WStringList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::WStringList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::WStringList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_WStringList_H_ */
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68

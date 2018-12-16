@@ -10,6 +10,7 @@ module Test {
 
     typedef sequence<long> LongList;
     typedef sequence<string> StringList;
+    typedef sequence<wstring> WStringList;
     typedef sequence<NestedTestStruct> StructList;
     typedef long ArrayLong[5];
     typedef string ArrayString[10];
@@ -26,6 +27,7 @@ module Test {
         wstring WMessage;
         LongList LongSequence;
         StringList StringSequence;
+        WStringList WStringSequence;
         ArrayLong LongArray;
         ArrayString StringArray;
         ArrayWString WStringArray;        

@@ -53,6 +53,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     wchar_t* WMessage;
     void* LongSequence;
     void* StringSequence;
+    void* WStringSequence;
     int LongArray[5];
     char* StringArray[10];
     wchar_t* WStringArray[4];
@@ -83,6 +84,9 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 
         // Sequence of strings
         marshal::ptr_to_unbounded_basic_string_sequence(StringSequence, nativeData.StringSequence);
+
+        // Sequence of wstrings
+        marshal::ptr_to_unbounded_wide_string_sequence(WStringSequence, nativeData.WStringSequence);
 
         // Array of primitives
         ACE_OS::memcpy(nativeData.LongArray, LongArray, sizeof(int) * 5);
@@ -160,6 +164,9 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 
         // Sequence of string
         marshal::unbounded_basic_string_sequence_to_ptr(nativeData.StringSequence, StringSequence);
+
+        // Sequence of wstring
+        marshal::unbounded_wide_string_sequence_to_ptr(nativeData.WStringSequence, WStringSequence);
 
         // Arrays of primitives
         ACE_OS::memcpy(LongArray, nativeData.LongArray, sizeof(int) * 5);
@@ -239,6 +246,9 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 
         // Release the strings in the sequence
         marshal::release_unbounded_basic_string_sequence_ptr(StringSequence);
+
+        // Release the wstrings in the sequence
+        marshal::release_unbounded_wide_string_sequence_ptr(WStringSequence);
 
         // Release the strings in the array 
         for (int i = 0; i < 10; i++)

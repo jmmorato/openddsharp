@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_QEYCXU_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_QEYCXU_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_FDAT1Z_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_FDAT1Z_H_
 
 #include /**/ "ace/pre.h"
 
@@ -115,6 +115,19 @@ namespace TAO
     : public
         Var_Size_SArg_Traits_T<
             ::Test::StringList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::WStringList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::WStringList,
             TAO::Any_Insert_Policy_Noop
           >
   {

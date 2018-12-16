@@ -63,7 +63,7 @@ namespace Test
             }
         }
 
-        public static void PtrToUnboundedBasicStringSequence(IntPtr ptr, ref IList<string> sequence)
+        public static void PtrToUnboundedStringSequence(IntPtr ptr, ref IList<string> sequence, bool isUnicode)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
@@ -82,12 +82,16 @@ namespace Test
             {
                 // Get the unmanaged pointer
                 IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + sizeof(int) + (IntPtr.Size * i));
+
                 // Convert the pointer in a string
-                sequence.Add(Marshal.PtrToStringAnsi(pointer));
+                if (isUnicode)
+                    sequence.Add(Marshal.PtrToStringUni(pointer));
+                else
+                    sequence.Add(Marshal.PtrToStringAnsi(pointer));
             }
         }
 
-        public static List<IntPtr> UnboundedBasicStringSequenceToPtr(IList<string> sequence, ref IntPtr ptr)
+        public static List<IntPtr> UnboundedStringSequenceToPtr(IList<string> sequence, ref IntPtr ptr, bool isUnicode)
         {
             List<IntPtr> toRelease = new List<IntPtr>();
 
@@ -109,9 +113,15 @@ namespace Test
             for (int i = 0; i < sequence.Count; i++)
             {
                 // Create a pointer to the string in unmanaged memory
-                IntPtr sPtr = Marshal.StringToHGlobalAnsi(sequence[i]);
+                IntPtr sPtr = IntPtr.Zero;
+                if (isUnicode)
+                    sPtr = Marshal.StringToHGlobalUni(sequence[i]);
+                else
+                    sPtr = Marshal.StringToHGlobalAnsi(sequence[i]);
+
                 // Add to pointer to the list of pointers to release
                 toRelease.Add(sPtr);
+
                 // Write the pointer location in ptr
                 Marshal.StructureToPtr(sPtr, ptr + sizeof(int) + (i * IntPtr.Size), false);
             }
@@ -194,6 +204,7 @@ namespace Test
 
                 // Add to pointer to the list of pointers to release
                 toRelease.Add(sPtr);
+
                 // Write the pointer location in ptr
                 Marshal.StructureToPtr(sPtr, ptr + (i * IntPtr.Size), false);
 
@@ -295,6 +306,7 @@ namespace Test
         #region Fields
         private IList<int> _longSequence;
         private IList<string> _stringSequence;
+        private IList<string> _wstringSequence;
         private IList<NestedTestStruct> _structSequence;
         #endregion
 
@@ -315,6 +327,12 @@ namespace Test
         {
             get { return _stringSequence; }
             set { _stringSequence = value; }
+        }
+
+        public IList<string> WStringSequence
+        {
+            get { return _wstringSequence; }
+            set { _wstringSequence = value; }
         }
 
         public int[] LongArray { get; set; }
@@ -345,6 +363,7 @@ namespace Test
         {
             _longSequence = new List<int>();
             _stringSequence = new List<string>();
+            _wstringSequence = new List<string>();
             LongArray = new int[5];
             StringArray = new string[10];
             WStringArray = new string[4];
@@ -378,8 +397,11 @@ namespace Test
             Helper.UnboundedSequenceToPtr(LongSequence, ref wrapper.LongSequence);
             toRelease.Add(wrapper.LongSequence);
 
-            toRelease.AddRange(Helper.UnboundedBasicStringSequenceToPtr(StringSequence, ref wrapper.StringSequence));
+            toRelease.AddRange(Helper.UnboundedStringSequenceToPtr(StringSequence, ref wrapper.StringSequence, false));
             toRelease.Add(wrapper.StringSequence);
+
+            toRelease.AddRange(Helper.UnboundedStringSequenceToPtr(WStringSequence, ref wrapper.WStringSequence, true));
+            toRelease.Add(wrapper.WStringSequence);
 
             wrapper.LongArray = LongArray;
 
@@ -445,7 +467,8 @@ namespace Test
             WMessage = Marshal.PtrToStringUni(wrapper.WMessage);
 
             Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);
-            Helper.PtrToUnboundedBasicStringSequence(wrapper.StringSequence, ref _stringSequence);
+            Helper.PtrToUnboundedStringSequence(wrapper.StringSequence, ref _stringSequence, false);
+            Helper.PtrToUnboundedStringSequence(wrapper.WStringSequence, ref _wstringSequence, true);
 
             LongArray = wrapper.LongArray;
 
@@ -524,6 +547,9 @@ namespace Test
 
         // Sequences need to be treated with a custom marshaler             
         public IntPtr StringSequence;
+
+        // Sequences need to be treated with a custom marshaler             
+        public IntPtr WStringSequence;
 
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 5)]
         public int[] LongArray;

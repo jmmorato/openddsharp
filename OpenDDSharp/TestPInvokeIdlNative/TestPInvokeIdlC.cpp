@@ -113,6 +113,40 @@ Test::StringList::~StringList (void)
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
 
+#if !defined (_TEST_WSTRINGLIST_CS_)
+#define _TEST_WSTRINGLIST_CS_
+
+Test::WStringList::WStringList (void)
+{}
+
+Test::WStringList::WStringList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_basic_string_sequence<CORBA::WChar> (max)
+{}
+
+Test::WStringList::WStringList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::WChar * * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_basic_string_sequence<CORBA::WChar>
+    (max, length, buffer, release)
+{}
+
+Test::WStringList::WStringList (
+    const WStringList &seq)
+  : ::TAO::unbounded_basic_string_sequence<CORBA::WChar> (seq)
+{}
+
+Test::WStringList::~WStringList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
 #if !defined (_TEST_STRUCTLIST_CS_)
 #define _TEST_STRUCTLIST_CS_
 
@@ -564,6 +598,32 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_WStringList_CPP_
+#define _TAO_CDR_OP_Test_WStringList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::WStringList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::WStringList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_WStringList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
 #if !defined _TAO_CDR_OP_Test_StructList_CPP_
 #define _TAO_CDR_OP_Test_StructList_CPP_
 
@@ -947,6 +1007,7 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate.WMessage.in ()) &&
     (strm << _tao_aggregate.LongSequence) &&
     (strm << _tao_aggregate.StringSequence) &&
+    (strm << _tao_aggregate.WStringSequence) &&
     (strm << _tao_aggregate_LongArray) &&
     (strm << _tao_aggregate_StringArray) &&
     (strm << _tao_aggregate_WStringArray) &&
@@ -1038,6 +1099,7 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate.WMessage.out ()) &&
     (strm >> _tao_aggregate.LongSequence) &&
     (strm >> _tao_aggregate.StringSequence) &&
+    (strm >> _tao_aggregate.WStringSequence) &&
     (strm >> _tao_aggregate_LongArray) &&
     (strm >> _tao_aggregate_StringArray) &&
     (strm >> _tao_aggregate_WStringArray) &&

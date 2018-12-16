@@ -917,6 +917,92 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: StringList */
 
 
+/* Begin TYPEDEF: WStringList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::WStringList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    find_size_ulong(size, padding);
+    if (seq[i]) {
+      size += ACE_OS::strlen(seq[i]) * OpenDDS::DCPS::Serializer::WCHAR_SIZE;
+    }
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::WStringList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::WStringList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq.get_buffer()[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::WStringList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  for (ACE_CDR::ULong i = 0; i < length; ++i) {
+    ACE_CDR::ULong strlength;
+    if (!(ser >> strlength)) return false;
+    if (!ser.skip(static_cast<ACE_UINT16>(strlength))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: WStringList */
+
+
 /* Begin TYPEDEF: StructList */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -1478,6 +1564,7 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   size += ACE_OS::strlen(stru.WMessage.in()) * OpenDDS::DCPS::Serializer::WCHAR_SIZE;
   gen_find_size(stru.LongSequence, size, padding);
   gen_find_size(stru.StringSequence, size, padding);
+  gen_find_size(stru.WStringSequence, size, padding);
   gen_find_size(stru_LongArray, size, padding);
   gen_find_size(stru_StringArray, size, padding);
   gen_find_size(stru_WStringArray, size, padding);
@@ -1505,6 +1592,7 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru.WMessage.in())
     && (strm << stru.LongSequence)
     && (strm << stru.StringSequence)
+    && (strm << stru.WStringSequence)
     && (strm << stru_LongArray)
     && (strm << stru_StringArray)
     && (strm << stru_WStringArray)
@@ -1532,6 +1620,7 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru.WMessage.out())
     && (strm >> stru.LongSequence)
     && (strm >> stru.StringSequence)
+    && (strm >> stru.WStringSequence)
     && (strm >> stru_LongArray)
     && (strm >> stru_StringArray)
     && (strm >> stru_WStringArray)
@@ -1720,6 +1809,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::StringList*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (!gen_skip_over(ser, static_cast<Test::WStringList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!gen_skip_over(ser, static_cast<Test::ArrayLong_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
@@ -1778,7 +1870,7 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", 0};
     return names;
   }
 
@@ -1798,6 +1890,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StringSequence") == 0) {
       return &static_cast<const T*>(stru)->StringSequence;
+    }
+    if (std::strcmp(field, "WStringSequence") == 0) {
+      return &static_cast<const T*>(stru)->WStringSequence;
     }
     if (std::strcmp(field, "LongArray") == 0) {
       return &static_cast<const T*>(stru)->LongArray;
@@ -1855,6 +1950,10 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StringSequence") == 0) {
       static_cast<T*>(lhs)->StringSequence = *static_cast<const Test::StringList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "WStringSequence") == 0) {
+      static_cast<T*>(lhs)->WStringSequence = *static_cast<const Test::WStringList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
     }
     if (std::strcmp(field, "LongArray") == 0) {
