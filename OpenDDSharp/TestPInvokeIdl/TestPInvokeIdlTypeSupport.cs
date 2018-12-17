@@ -246,7 +246,7 @@ namespace Test
             }
         }
 
-        private static void UpdateDimensionsArray(Array array, int[] dimensions)
+        internal static void UpdateDimensionsArray(Array array, int[] dimensions)
         {
             dimensions[array.Rank - 1]++;
             if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
@@ -356,6 +356,8 @@ namespace Test
         public string[,,] StringMultiArray { get; set; }
 
         public string[,,] WStringMultiArray { get; set; }
+
+        public NestedTestStruct[,,] StructMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -372,6 +374,7 @@ namespace Test
             StructArray = new NestedTestStruct[5];
             LongMultiArray = new int[3, 4, 2];
             StringMultiArray = new string[3, 4, 2];
+            StructMultiArray = new NestedTestStruct[3, 4, 2];
         }
         #endregion
 
@@ -457,14 +460,47 @@ namespace Test
             toRelease.AddRange(Helper.StringMultiArrayToPtr(WStringMultiArray, ref wrapper.WStringMultiArray, true));
             toRelease.Add(wrapper.WStringMultiArray);
 
+            // Multi-dimensional array of structs
+            if (StructMultiArray != null)
+            {
+                NestedTestStructWrapper[] aux_StructMultiArray = new NestedTestStructWrapper[24];
+                int index = 0;
+                foreach (NestedTestStruct s in StructMultiArray)
+                {
+                    if (s != null)
+                        aux_StructMultiArray[index] = s.ToNative(toRelease);
+
+                    index++;
+                }
+
+                Helper.MultiArrayToPtr<NestedTestStructWrapper>(aux_StructMultiArray, ref wrapper.StructMultiArray);
+                toRelease.Add(wrapper.StructMultiArray);
+            }
+
             return wrapper;
         }
 
         internal void FromNative(BasicTestStructWrapper wrapper)
         {
             Id = wrapper.Id;
-            Message = Marshal.PtrToStringAnsi(wrapper.Message);
-            WMessage = Marshal.PtrToStringUni(wrapper.WMessage);
+
+            if (wrapper.Message != IntPtr.Zero)
+            {
+                Message = Marshal.PtrToStringAnsi(wrapper.Message);
+            }
+            else
+            {
+                Message = null;
+            }
+
+            if (wrapper.WMessage != IntPtr.Zero)
+            {
+                WMessage = Marshal.PtrToStringUni(wrapper.WMessage);
+            }
+            else
+            {
+                WMessage = null;
+            }
 
             Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);
             Helper.PtrToUnboundedStringSequence(wrapper.StringSequence, ref _stringSequence, false);
@@ -492,13 +528,16 @@ namespace Test
 
             // We need to use the wrapper struct to receive the structures
             // In the generated code, the aux variable will be suffixed with the field name
-            IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
-            Helper.PtrToUnboundedSequence(wrapper.StructSequence, ref aux);
-            foreach(NestedTestStructWrapper native in aux)
+            if (wrapper.StructSequence != IntPtr.Zero)
             {
-                NestedTestStruct s = new NestedTestStruct();
-                s.FromNative(native);
-                StructSequence.Add(s);
+                IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
+                Helper.PtrToUnboundedSequence(wrapper.StructSequence, ref aux);
+                foreach (NestedTestStructWrapper native in aux)
+                {
+                    NestedTestStruct s = new NestedTestStruct();
+                    s.FromNative(native);
+                    StructSequence.Add(s);
+                }
             }
 
             for (int i = 0; i < 5; i++)
@@ -527,6 +566,30 @@ namespace Test
                 WStringMultiArray = new string[3, 4, 2];
             }
             Helper.PtrToStringMultiArray(wrapper.WStringMultiArray, WStringMultiArray, true);
+
+            // Multi-dimensional array of structs
+            if (wrapper.StructMultiArray != null)
+            {
+                if (StructMultiArray == null)
+                {
+                    StructMultiArray = new NestedTestStruct[3, 4, 2];
+                }
+
+                NestedTestStructWrapper[] aux_StructMultiArray = new NestedTestStructWrapper[24];
+                Helper.PtrToMultiArray<NestedTestStructWrapper>(wrapper.StructMultiArray, aux_StructMultiArray);
+                int[] dimensions = new int[StructMultiArray.Rank];
+                for (int i = 0; i < 24; i++)
+                {
+                    if (i > 0)
+                    {
+                        Helper.UpdateDimensionsArray(StructMultiArray, dimensions);
+                    }
+
+                    NestedTestStruct aux = new NestedTestStruct();
+                    aux.FromNative(aux_StructMultiArray[i]);
+                    StructMultiArray.SetValue(aux, dimensions);
+                }
+            }
         }
         #endregion
     }
@@ -573,6 +636,8 @@ namespace Test
         public IntPtr StringMultiArray;
 
         public IntPtr WStringMultiArray;
+
+        public IntPtr StructMultiArray;
     }
 
     public class BasicTestStructTypeSupport

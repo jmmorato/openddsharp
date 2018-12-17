@@ -408,3 +408,61 @@ TAO::Array_Traits<Test::MultiArrayWString_forany>::alloc (void)
 }
 
 
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayStruct_forany>::free (
+    Test::MultiArrayStruct_slice * _tao_slice
+  )
+{
+  Test::MultiArrayStruct_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::MultiArrayStruct_slice *
+TAO::Array_Traits<Test::MultiArrayStruct_forany>::dup (
+    const Test::MultiArrayStruct_slice * _tao_slice
+  )
+{
+  return Test::MultiArrayStruct_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayStruct_forany>::copy (
+    Test::MultiArrayStruct_slice * _tao_to,
+    const Test::MultiArrayStruct_slice * _tao_from
+  )
+{
+  Test::MultiArrayStruct_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayStruct_forany>::zero (
+    Test::MultiArrayStruct_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_slice[i0][i1][i2] = Test::NestedTestStruct ();
+            }
+        }
+    }
+}
+
+ACE_INLINE
+Test::MultiArrayStruct_slice *
+TAO::Array_Traits<Test::MultiArrayStruct_forany>::alloc (void)
+{
+  return Test::MultiArrayStruct_alloc ();
+}
+
+

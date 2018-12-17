@@ -165,6 +165,12 @@ namespace ConsoleDemoCore
                     { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
                     { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
                     { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
+                },
+                StructMultiArray = new NestedTestStruct[3, 4, 2]
+                {
+                    { { new  NestedTestStruct{ Id = 1, Message = "01" }, new  NestedTestStruct{ Id = 2, Message = "02" } }, { new  NestedTestStruct{ Id = 3, Message = "03" }, new  NestedTestStruct{ Id = 4, Message = "04" } }, { new  NestedTestStruct{ Id = 5, Message = "05" }, new  NestedTestStruct{ Id = 6, Message = "06" } }, { new  NestedTestStruct{ Id = 7, Message = "07" }, new  NestedTestStruct{ Id = 8, Message = "08" } } },
+                    { { new  NestedTestStruct{ Id = 9, Message = "09" }, new  NestedTestStruct{ Id = 10, Message = "10" } }, { new  NestedTestStruct{ Id = 11, Message = "11" }, new  NestedTestStruct{ Id = 12, Message = "12" } }, { new  NestedTestStruct{ Id = 13, Message = "13" }, new  NestedTestStruct{ Id = 14, Message = "14" } }, { new  NestedTestStruct{ Id = 15, Message = "15" }, new  NestedTestStruct{ Id = 16, Message = "16" } } },
+                    { { new  NestedTestStruct{ Id = 17, Message = "17" }, new  NestedTestStruct{ Id = 18, Message = "18" } }, { new  NestedTestStruct{ Id = 19, Message = "19" }, new  NestedTestStruct{ Id = 20, Message = "20" } }, { new  NestedTestStruct{ Id = 21, Message = "21" }, new  NestedTestStruct{ Id = 22, Message = "22" } }, { new  NestedTestStruct{ Id = 23, Message = "23" }, new  NestedTestStruct{ Id = 24, Message = "24" } } },
                 }
             };
             dataWriter.Write(data);
@@ -365,6 +371,29 @@ namespace ConsoleDemoCore
                             {
                                 Console.Write(received.WStringMultiArray[i, j, k]);
                                 if (j + 1 < received.WStringMultiArray.GetLength(1) || k + 1 < received.WStringMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.StructMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StructMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.StructMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.StructMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.StructMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.StructMultiArray[i, j, k].Message);
+                                if (j + 1 < received.StructMultiArray.GetLength(1) || k + 1 < received.StructMultiArray.GetLength(2))
                                 {
                                     Console.Write(", ");
                                 }

@@ -63,6 +63,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     void* LongMultiArray;
     void* StringMultiArray;
     void* WStringMultiArray;
+    void* StructMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -73,77 +74,129 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 
         // String
         if (Message != NULL)
+        {
             nativeData.Message = CORBA::string_dup(Message);
+        }
 
         // WString
         if (WMessage)
+        {
             nativeData.WMessage = CORBA::wstring_dup(WMessage);
+        }
 
         // Sequence of primitives
-        marshal::ptr_to_unbounded_sequence(LongSequence, nativeData.LongSequence);
+        if (LongSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(LongSequence, nativeData.LongSequence);
+        }
 
         // Sequence of strings
-        marshal::ptr_to_unbounded_basic_string_sequence(StringSequence, nativeData.StringSequence);
+        if (StringSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_basic_string_sequence(StringSequence, nativeData.StringSequence);
+        }
 
         // Sequence of wstrings
-        marshal::ptr_to_unbounded_wide_string_sequence(WStringSequence, nativeData.WStringSequence);
+        if (WStringSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_wide_string_sequence(WStringSequence, nativeData.WStringSequence);
+        }
 
         // Array of primitives
-        ACE_OS::memcpy(nativeData.LongArray, LongArray, sizeof(int) * 5);
+        if (LongArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.LongArray, LongArray, sizeof(int) * 5);
+        }
 
         // Array of string
-        for (int i = 0; i < 10; i++)
+        if (StringArray != NULL)
         {
-            if (StringArray[i] != NULL)
+            for (int i = 0; i < 10; i++)
             {
-                nativeData.StringArray[i] = CORBA::string_dup(StringArray[i]);
+                if (StringArray[i] != NULL)
+                {
+                    nativeData.StringArray[i] = CORBA::string_dup(StringArray[i]);
+                }
             }
         }
 
         // Array of wstring
-        for (int i = 0; i < 4; i++)
+        if (WStringArray != NULL)
         {
-            if (WStringArray[i] != NULL)
+            for (int i = 0; i < 4; i++)
             {
-                nativeData.WStringArray[i] = CORBA::wstring_dup(WStringArray[i]);
+                if (WStringArray[i] != NULL)
+                {
+                    nativeData.WStringArray[i] = CORBA::wstring_dup(WStringArray[i]);
+                }
             }
         }
 
-        // Structure
+        // Structure        
         nativeData.StructTest = StructTest.to_native();
 
         // Sequence of structures need to be retrieved with the wrapper struct and then casted to the native struct.
-        // In the generated code, the aux and length variable will be suffixed with the field name
-        // in order to ensure the names are unique.
-        TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
-        marshal::ptr_to_unbounded_sequence(StructSequence, aux);
-        ACE_UINT32 length = aux.length();
-        nativeData.StructSequence.length(length);
-        for (ACE_UINT32 i = 0; i < length; i++)
+        if (StructSequence != NULL)
         {
-            nativeData.StructSequence[i] = aux[i].to_native();
+            TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
+            marshal::ptr_to_unbounded_sequence(StructSequence, aux);
+            ACE_UINT32 length = aux.length();
+            nativeData.StructSequence.length(length);
+            for (ACE_UINT32 i = 0; i < length; i++)
+            {
+                nativeData.StructSequence[i] = aux[i].to_native();
+            }
         }
 
         // Arrays of structs
-        for (int i = 0; i < 5; i++)
+        if (StructArray != NULL)
         {
-            nativeData.StructArray[i] = StructArray[i].to_native();
+            for (int i = 0; i < 5; i++)
+            {
+                nativeData.StructArray[i] = StructArray[i].to_native();
+            }
         }
 
         // Multi-dimensional array of primitives 
-        ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(int) * 24);
+        if (LongMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(int) * 24);
+        }
 
         // Multi-dimensional array of strings
-        char** arr_StringMultiArray = new char*[24];
-        marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr_StringMultiArray, 24);
-        ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(char*) * 24);
-        delete[] arr_StringMultiArray;
+        if (StringMultiArray != NULL)
+        {
+            char** arr_StringMultiArray = new char*[24];
+            marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr_StringMultiArray, 24);
+            ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(char*) * 24);
+            delete[] arr_StringMultiArray;
+        }
 
         // Multi-dimensional array of wstrings
-        wchar_t** arr_WStringMultiArray = new wchar_t*[24];
-        marshal::ptr_to_wide_string_multi_array(WStringMultiArray, arr_WStringMultiArray, 24);       
-        ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(wchar_t*) * 24);
-        delete[] arr_WStringMultiArray;        
+        if (WStringMultiArray != NULL)
+        {
+            wchar_t** arr_WStringMultiArray = new wchar_t*[24];
+            marshal::ptr_to_wide_string_multi_array(WStringMultiArray, arr_WStringMultiArray, 24);
+            ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(wchar_t*) * 24);
+            delete[] arr_WStringMultiArray;
+        }
+
+        // Multi-dimensional array of structs
+        if (StructMultiArray != NULL)
+        {
+            NestedTestStructWrapper arr_StructMultiArray[24];
+            ACE_OS::memcpy(arr_StructMultiArray, StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+
+            int i = 0;
+            for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
+                for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
+                    for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
+                        nativeData.StructMultiArray[i0][i1][i2] = arr_StructMultiArray[i].to_native();
+                        i++;
+                    }
+                }
+            }
+        }
 
         return nativeData;
     }
@@ -154,77 +207,122 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         Id = nativeData.Id;
 
         // String
-        Message = CORBA::string_dup(nativeData.Message);
+        if (nativeData.Message != NULL)
+        {
+            Message = CORBA::string_dup(nativeData.Message);
+        }
 
         // WString
-        WMessage = CORBA::wstring_dup(nativeData.WMessage);
+        if (nativeData.WMessage != NULL)
+        {
+            WMessage = CORBA::wstring_dup(nativeData.WMessage);
+        }
 
         // Sequence of primitives
         marshal::unbounded_sequence_to_ptr(nativeData.LongSequence, LongSequence);
 
-        // Sequence of string
+        // Sequence of string        
         marshal::unbounded_basic_string_sequence_to_ptr(nativeData.StringSequence, StringSequence);
 
         // Sequence of wstring
         marshal::unbounded_wide_string_sequence_to_ptr(nativeData.WStringSequence, WStringSequence);
 
         // Arrays of primitives
-        ACE_OS::memcpy(LongArray, nativeData.LongArray, sizeof(int) * 5);
+        if (nativeData.LongArray != NULL)
+        {
+            ACE_OS::memcpy(LongArray, nativeData.LongArray, sizeof(int) * 5);
+        }
 
         // Arrays of strings
-        for (int i = 0; i < 10; i++)
+        if (nativeData.StringArray != NULL)
         {
-            if (nativeData.StringArray[i] != NULL)
+            for (int i = 0; i < 10; i++)
             {
-                StringArray[i] = CORBA::string_dup(nativeData.StringArray[i]);
+                if (nativeData.StringArray[i] != NULL)
+                {
+                    StringArray[i] = CORBA::string_dup(nativeData.StringArray[i]);
+                }
             }
         }
 
         // Arrays of wstrings
-        for (int i = 0; i < 4; i++)
+        if (nativeData.WStringArray != NULL)
         {
-            if (nativeData.WStringArray[i] != NULL)
+            for (int i = 0; i < 4; i++)
             {
-                WStringArray[i] = CORBA::wstring_dup(nativeData.WStringArray[i]);
+                if (nativeData.WStringArray[i] != NULL)
+                {
+                    WStringArray[i] = CORBA::wstring_dup(nativeData.WStringArray[i]);
+                }
             }
         }
 
-        // Structures
+        // Structures        
         StructTest.from_native(nativeData.StructTest);
 
         // Sequence of structures need to be casted to the wrapper struct and then used to marshal the pointer.
-        // In the generated code, the aux and length variable will be suffixed with the field name
-        // in order to ensure the names are unique.
-        TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
-        ACE_UINT32 length = nativeData.StructSequence.length();
-        aux.length(length);
-        for (ACE_UINT32 i = 0; i < length; i++)
         {
-            aux[i].from_native(nativeData.StructSequence[i]);
+            TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
+            ACE_UINT32 length = nativeData.StructSequence.length();
+            aux.length(length);
+            for (ACE_UINT32 i = 0; i < length; i++)
+            {
+                aux[i].from_native(nativeData.StructSequence[i]);
+            }
+            marshal::unbounded_sequence_to_ptr(aux, StructSequence);
         }
-        marshal::unbounded_sequence_to_ptr(aux, StructSequence);
 
         // Arrays of structructures
-        for (ACE_UINT32 i = 0; i < 5; i++)
-        {            
-            StructArray[i].from_native(nativeData.StructArray[i]);
+        if (nativeData.StructArray != NULL)
+        {
+            for (ACE_UINT32 i = 0; i < 5; i++)
+            {
+                StructArray[i].from_native(nativeData.StructArray[i]);
+            }
         }
 
         // Multi-dimensional array of primitives
-        LongMultiArray = ACE_OS::malloc(sizeof(int) * 24);
-        ACE_OS::memcpy(LongMultiArray, nativeData.LongMultiArray, sizeof(int) * 24);
+        if (nativeData.LongMultiArray != NULL)
+        {
+            LongMultiArray = ACE_OS::malloc(sizeof(int) * 24);
+            ACE_OS::memcpy(LongMultiArray, nativeData.LongMultiArray, sizeof(int) * 24);
+        }
 
         // Multi-dimensional array of strings
-        char** arr_StringMultiArray = new char*[24];
-        ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(char*) * 24);
-        marshal::basic_string_multi_array_to_ptr(arr_StringMultiArray, StringMultiArray, 24);
-        delete[] arr_StringMultiArray;
+        if (nativeData.StringMultiArray != NULL)
+        {
+            char** arr_StringMultiArray = new char*[24];
+            ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(char*) * 24);
+            marshal::basic_string_multi_array_to_ptr(arr_StringMultiArray, StringMultiArray, 24);
+            delete[] arr_StringMultiArray;
+        }
 
         // Multi-dimensional array of strings
-        wchar_t** arr_WStringMultiArray = new wchar_t*[24];
-        ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(wchar_t*) * 24);
-        marshal::wide_string_multi_array_to_ptr(arr_WStringMultiArray, WStringMultiArray, 24);
-        delete[] arr_WStringMultiArray;
+        if (nativeData.WStringMultiArray != NULL)
+        {
+            wchar_t** arr_WStringMultiArray = new wchar_t*[24];
+            ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(wchar_t*) * 24);
+            marshal::wide_string_multi_array_to_ptr(arr_WStringMultiArray, WStringMultiArray, 24);
+            delete[] arr_WStringMultiArray;
+        }
+
+        // Multi-dimensional array of structs
+        if (nativeData.StructMultiArray != NULL)
+        {
+            NestedTestStructWrapper arr_StructMultiArray[24];
+            int i = 0;
+            for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
+                for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
+                    for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
+                        arr_StructMultiArray[i].from_native(nativeData.StructMultiArray[i0][i1][i2]);
+                        i++;
+                    }
+                }
+            }
+
+            StructMultiArray = ACE_OS::malloc(sizeof(NestedTestStructWrapper) * 24);
+            ACE_OS::memcpy(StructMultiArray, arr_StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+        }
     }
 
     void release() 
@@ -236,35 +334,50 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         }
 
         // WStrings need to be released
-        if (WMessage)
+        if (WMessage != NULL)
         {
             CORBA::wstring_free(WMessage);
         }
 
         // Release the pointer of the sequences
-        ACE_OS::free(LongSequence);
+        if (LongSequence != NULL)
+        {
+            ACE_OS::free(LongSequence);
+        }
 
         // Release the strings in the sequence
-        marshal::release_unbounded_basic_string_sequence_ptr(StringSequence);
+        if (StringSequence != NULL)
+        {
+            marshal::release_unbounded_basic_string_sequence_ptr(StringSequence);
+        }
 
         // Release the wstrings in the sequence
-        marshal::release_unbounded_wide_string_sequence_ptr(WStringSequence);
+        if (WStringSequence != NULL)
+        {
+            marshal::release_unbounded_wide_string_sequence_ptr(WStringSequence);
+        }
 
         // Release the strings in the array 
-        for (int i = 0; i < 10; i++)
+        if (StringArray != NULL)
         {
-            if (StringArray[i] != NULL)
+            for (int i = 0; i < 10; i++)
             {
-                CORBA::string_free(StringArray[i]);
+                if (StringArray[i] != NULL)
+                {
+                    CORBA::string_free(StringArray[i]);
+                }
             }
         }
 
-        // Release the wstrings in the array 
-        for (int i = 0; i < 4; i++)
+        if (WStringArray != NULL)
         {
-            if (WStringArray[i] != NULL)
+            // Release the wstrings in the array 
+            for (int i = 0; i < 4; i++)
             {
-                CORBA::wstring_free(WStringArray[i]);
+                if (WStringArray[i] != NULL)
+                {
+                    CORBA::wstring_free(WStringArray[i]);
+                }
             }
         }
 
@@ -272,19 +385,49 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         StructTest.release();     
 
         // Release the pointer of the sequences
-        ACE_OS::free(StructSequence);
+        if (StructSequence != NULL)
+        {
+            ACE_OS::free(StructSequence);
+        }
 
         // Release the structures in the array
-        for (int i = 0; i < 5; i++)
+        if (StructArray != NULL)
         {
-            StructArray[i].release();
+            for (int i = 0; i < 5; i++)
+            {
+                StructArray[i].release();
+            }
         }
 
         // Release pointer to the multi-dimensional array of primitives
-        ACE_OS::free(LongMultiArray);
+        if (LongMultiArray != NULL)
+        {
+            ACE_OS::free(LongMultiArray);
+        }
 
         // Release pointer to the multi-dimensional array of strings
-        marshal::release_basic_string_multi_array_ptr(StringMultiArray, 24);
+        if (StringMultiArray != NULL)
+        {
+            marshal::release_basic_string_multi_array_ptr(StringMultiArray, 24);
+        }
+
+        // Release pointer to the multi-dimensional array of wstrings
+        if (WStringMultiArray != NULL)
+        {
+            marshal::release_wide_string_multi_array_ptr(WStringMultiArray, 24);
+        }
+
+        // Release pointer to the multi-dimensional array of structs
+        if (StructMultiArray != NULL)
+        {
+            NestedTestStructWrapper arr_StructMultiArray[24];
+            ACE_OS::memcpy(arr_StructMultiArray, StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+            for (int i = 0; i < 24; i++)
+            {
+                arr_StructMultiArray[i].release();
+            }
+            ACE_OS::free(StructMultiArray);
+        }
     }
 };
 

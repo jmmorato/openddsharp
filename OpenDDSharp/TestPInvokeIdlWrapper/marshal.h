@@ -315,4 +315,27 @@ public:
 
         delete ptr;
     }
+
+    static void release_wide_string_multi_array_ptr(void* & ptr, int length)
+    {
+        if (ptr == NULL)
+        {
+            return;
+        }
+
+        char* bytes = (char*)ptr;
+
+        const ACE_UINT64 struct_size = sizeof(wchar_t*);
+        wchar_t** pointers = new wchar_t*[length];
+        for (ACE_INT32 i = 0; i < length; i++)
+        {
+            ACE_OS::memcpy(&pointers[i], &bytes[i * struct_size], struct_size);
+
+            CORBA::wstring_free(pointers[i]);
+        }
+
+        delete[] pointers;
+
+        delete ptr;
+    }
 };

@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_FDAT1Z_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_FDAT1Z_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_REKQEE_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_REKQEE_H_
 
 #include /**/ "ace/pre.h"
 
@@ -218,6 +218,17 @@ namespace TAO
         Var_Array_SArg_Traits_T<
             ::Test::MultiArrayWString_out,
             ::Test::MultiArrayWString_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayStruct_tag>
+    : public
+        Var_Array_SArg_Traits_T<
+            ::Test::MultiArrayStruct_out,
+            ::Test::MultiArrayStruct_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

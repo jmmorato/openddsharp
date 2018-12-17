@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_OO6AQF_H_
-#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_OO6AQF_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_JKD3UT_H_
+#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTC_JKD3UT_H_
 
 #include /**/ "ace/pre.h"
 
