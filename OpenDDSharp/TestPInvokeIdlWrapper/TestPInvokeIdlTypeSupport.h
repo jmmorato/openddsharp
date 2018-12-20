@@ -76,6 +76,14 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     void* FloatMultiArray;
     void* DoubleMultiArray;
     void* LongDoubleMultiArray;
+    CORBA::Char CharType;
+    CORBA::WChar WCharType;
+    CORBA::Char CharArray[5];
+    CORBA::WChar WCharArray[5];
+    void* CharSequence;
+    void* WCharSequence;
+    void* CharMultiArray;
+    void* WCharMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -281,6 +289,40 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             }
         }
 
+        // Char types
+        nativeData.CharType = CharType;
+        nativeData.WCharType = WCharType;
+
+        if (CharArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.CharArray, CharArray, sizeof(CORBA::Char) * 5);
+        }
+
+        if (WCharArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.WCharArray, WCharArray, sizeof(CORBA::WChar) * 5);
+        }
+
+        if (CharSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(CharSequence, nativeData.CharSequence);
+        }
+
+        if (WCharSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(WCharSequence, nativeData.WCharSequence);
+        }
+
+        if (CharMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.CharMultiArray, CharMultiArray, sizeof(CORBA::Char) * 24);
+        }
+
+        if (WCharMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.WCharMultiArray, WCharMultiArray, sizeof(CORBA::WChar) * 24);
+        }
+
         return nativeData;
     }
 
@@ -470,6 +512,35 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             LongDoubleMultiArray = ACE_OS::malloc(sizeof(double) * 24);            
             ACE_OS::memcpy(LongDoubleMultiArray, aux, sizeof(double) * 24);
         }
+
+        // Char types
+        CharType = nativeData.CharType;
+        WCharType = nativeData.WCharType;
+
+        if (nativeData.CharArray != NULL)
+        {
+            ACE_OS::memcpy(CharArray, nativeData.CharArray, sizeof(CORBA::Char) * 5);
+        }
+
+        if (nativeData.WCharArray != NULL)
+        {
+            ACE_OS::memcpy(WCharArray, nativeData.WCharArray, sizeof(CORBA::WChar) * 5);
+        }
+
+        marshal::unbounded_sequence_to_ptr(nativeData.CharSequence, CharSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.WCharSequence, WCharSequence);
+
+        if (nativeData.CharMultiArray != NULL)
+        {
+            CharMultiArray = ACE_OS::malloc(sizeof(CORBA::Char) * 24);
+            ACE_OS::memcpy(CharMultiArray, nativeData.CharMultiArray, sizeof(CORBA::Char) * 24);
+        }
+
+        if (nativeData.CharMultiArray != NULL)
+        {
+            WCharMultiArray = ACE_OS::malloc(sizeof(CORBA::WChar) * 24);
+            ACE_OS::memcpy(WCharMultiArray, nativeData.WCharMultiArray, sizeof(CORBA::WChar) * 24);
+        }
     }
 
     void release() 
@@ -610,6 +681,30 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         if (LongDoubleMultiArray != NULL)
         {
             ACE_OS::free(LongDoubleMultiArray);
+        }
+
+        // Release the pointer of the char sequence
+        if (CharSequence != NULL)
+        {
+            ACE_OS::free(CharSequence);
+        }
+
+        // Release the pointer of the wchar sequence
+        if (WCharSequence != NULL)
+        {
+            ACE_OS::free(WCharSequence);
+        }
+
+        // Release pointer to the char multi array
+        if (CharMultiArray != NULL)
+        {
+            ACE_OS::free(CharMultiArray);
+        }
+
+        // Release pointer to the wchar multi array
+        if (WCharMultiArray != NULL)
+        {
+            ACE_OS::free(WCharMultiArray);
         }
     }
 };

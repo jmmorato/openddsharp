@@ -796,3 +796,223 @@ TAO::Array_Traits<Test::MultiArrayLongDouble_forany>::alloc (void)
 }
 
 
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayChar_forany>::free (
+    Test::ArrayChar_slice * _tao_slice
+  )
+{
+  Test::ArrayChar_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayChar_slice *
+TAO::Array_Traits<Test::ArrayChar_forany>::dup (
+    const Test::ArrayChar_slice * _tao_slice
+  )
+{
+  return Test::ArrayChar_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayChar_forany>::copy (
+    Test::ArrayChar_slice * _tao_to,
+    const Test::ArrayChar_slice * _tao_from
+  )
+{
+  Test::ArrayChar_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayChar_forany>::zero (
+    Test::ArrayChar_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_slice[i0] = ::CORBA::Char ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayChar_slice *
+TAO::Array_Traits<Test::ArrayChar_forany>::alloc (void)
+{
+  return Test::ArrayChar_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayWChar_forany>::free (
+    Test::ArrayWChar_slice * _tao_slice
+  )
+{
+  Test::ArrayWChar_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayWChar_slice *
+TAO::Array_Traits<Test::ArrayWChar_forany>::dup (
+    const Test::ArrayWChar_slice * _tao_slice
+  )
+{
+  return Test::ArrayWChar_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayWChar_forany>::copy (
+    Test::ArrayWChar_slice * _tao_to,
+    const Test::ArrayWChar_slice * _tao_from
+  )
+{
+  Test::ArrayWChar_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayWChar_forany>::zero (
+    Test::ArrayWChar_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_slice[i0] = ::CORBA::WChar ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayWChar_slice *
+TAO::Array_Traits<Test::ArrayWChar_forany>::alloc (void)
+{
+  return Test::ArrayWChar_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayChar_forany>::free (
+    Test::MultiArrayChar_slice * _tao_slice
+  )
+{
+  Test::MultiArrayChar_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::MultiArrayChar_slice *
+TAO::Array_Traits<Test::MultiArrayChar_forany>::dup (
+    const Test::MultiArrayChar_slice * _tao_slice
+  )
+{
+  return Test::MultiArrayChar_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayChar_forany>::copy (
+    Test::MultiArrayChar_slice * _tao_to,
+    const Test::MultiArrayChar_slice * _tao_from
+  )
+{
+  Test::MultiArrayChar_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayChar_forany>::zero (
+    Test::MultiArrayChar_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_slice[i0][i1][i2] = ::CORBA::Char ();
+            }
+        }
+    }
+}
+
+ACE_INLINE
+Test::MultiArrayChar_slice *
+TAO::Array_Traits<Test::MultiArrayChar_forany>::alloc (void)
+{
+  return Test::MultiArrayChar_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayWChar_forany>::free (
+    Test::MultiArrayWChar_slice * _tao_slice
+  )
+{
+  Test::MultiArrayWChar_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::MultiArrayWChar_slice *
+TAO::Array_Traits<Test::MultiArrayWChar_forany>::dup (
+    const Test::MultiArrayWChar_slice * _tao_slice
+  )
+{
+  return Test::MultiArrayWChar_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayWChar_forany>::copy (
+    Test::MultiArrayWChar_slice * _tao_to,
+    const Test::MultiArrayWChar_slice * _tao_from
+  )
+{
+  Test::MultiArrayWChar_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayWChar_forany>::zero (
+    Test::MultiArrayWChar_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_slice[i0][i1][i2] = ::CORBA::WChar ();
+            }
+        }
+    }
+}
+
+ACE_INLINE
+Test::MultiArrayWChar_slice *
+TAO::Array_Traits<Test::MultiArrayWChar_forany>::alloc (void)
+{
+  return Test::MultiArrayWChar_alloc ();
+}
+
+

@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_VVO17N_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_VVO17N_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_QMT2RB_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_QMT2RB_H_
 
 #include /**/ "ace/pre.h"
 
@@ -334,6 +334,76 @@ namespace TAO
         Fixed_Array_SArg_Traits_T<
             ::Test::MultiArrayLongDouble_var,
             ::Test::MultiArrayLongDouble_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayChar_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayChar_var,
+            ::Test::ArrayChar_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayWChar_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayWChar_var,
+            ::Test::ArrayWChar_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::CharList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::CharList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::WCharList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::WCharList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayChar_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayChar_var,
+            ::Test::MultiArrayChar_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayWChar_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayWChar_var,
+            ::Test::MultiArrayWChar_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -171,7 +172,15 @@ namespace Test
             int i = 0;
             while (enumerator.MoveNext())
             {
-                Marshal.StructureToPtr((T)enumerator.Current, ptr + (elSiz * i), false);
+                if (enumerator.Current is char && elSiz == 1)
+                {
+                    byte aux = Convert.ToByte(enumerator.Current);
+                    Marshal.StructureToPtr(aux, ptr + (elSiz * i), false);
+                }
+                else
+                {
+                    Marshal.StructureToPtr((T)enumerator.Current, ptr + (elSiz * i), false);
+                }
                 i++;
             }
         }
@@ -311,6 +320,8 @@ namespace Test
         private IList<float> _floatSequence;
         private IList<double> _doubleSequence;
         private IList<double> _longDoubleSequence;
+        private IList<char> _charSequence;
+        private IList<char> _wcharSequence;
         #endregion
 
         #region Properties
@@ -397,6 +408,30 @@ namespace Test
         public double[,,] DoubleMultiArray { get; set; }
 
         public double[,,] LongDoubleMultiArray { get; set; }
+
+        public char CharType { get; set; }
+
+        public char WCharType { get; set; }
+
+        public char[] CharArray { get; set; }
+
+        public char[] WCharArray { get; set; }
+
+        public IList<char> CharSequence
+        {
+            get { return _charSequence; }
+            set { _charSequence = value; }
+        }
+
+        public IList<char> WCharSequence
+        {
+            get { return _wcharSequence; }
+            set { _wcharSequence = value; }
+        }
+
+        public char[,,] CharMultiArray { get; set; }
+
+        public char[,,] WCharMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -423,6 +458,12 @@ namespace Test
             FloatMultiArray = new float[3, 4, 2];
             DoubleMultiArray = new double[3, 4, 2];
             LongDoubleMultiArray = new double[3, 4, 2];
+            CharArray = new char[5];
+            WCharArray = new char[5];
+            CharSequence = new List<char>();
+            WCharSequence = new List<char>();
+            CharMultiArray = new char[3, 4, 2];
+            WCharMultiArray = new char[3, 4, 2];
         }
         #endregion
 
@@ -583,6 +624,38 @@ namespace Test
                 toRelease.Add(wrapper.LongDoubleMultiArray);
             }
 
+            // Char types
+            wrapper.CharType = CharType;
+            wrapper.WCharType = WCharType;
+
+            wrapper.CharArray = CharArray;
+            wrapper.WCharArray = WCharArray;
+
+            if (CharSequence != null)
+            {
+                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(CharSequence.ToArray()).ToList();
+                Helper.UnboundedSequenceToPtr(aux, ref wrapper.CharSequence);
+                toRelease.Add(wrapper.CharSequence);
+            }
+
+            if (WCharSequence != null)
+            {
+                Helper.UnboundedSequenceToPtr(WCharSequence, ref wrapper.WCharSequence);
+                toRelease.Add(wrapper.WCharSequence);
+            }
+
+            if (CharMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<byte>(CharMultiArray, ref wrapper.CharMultiArray);
+                toRelease.Add(wrapper.CharMultiArray);
+            }
+
+            if (WCharMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<char>(WCharMultiArray, ref wrapper.WCharMultiArray);
+                toRelease.Add(wrapper.WCharMultiArray);
+            }
+
             return wrapper;
         }
 
@@ -726,6 +799,28 @@ namespace Test
                 LongDoubleMultiArray = new double[3, 4, 2];
             }
             Helper.PtrToMultiArray<double>(wrapper.LongDoubleMultiArray, LongDoubleMultiArray);
+
+            // Char types
+            CharType = wrapper.CharType;
+            WCharType = wrapper.WCharType;
+
+            CharArray = wrapper.CharArray;
+            WCharArray = wrapper.WCharArray;
+
+            Helper.PtrToUnboundedSequence(wrapper.CharSequence, ref _charSequence);
+            Helper.PtrToUnboundedSequence(wrapper.WCharSequence, ref _wcharSequence);
+
+            if (CharMultiArray == null)
+            {
+                CharMultiArray = new char[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<byte>(wrapper.CharMultiArray, CharMultiArray);
+
+            if (WCharMultiArray == null)
+            {
+                WCharMultiArray = new char[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<char>(wrapper.WCharMultiArray, WCharMultiArray);
         }
         #endregion
     }
@@ -801,6 +896,26 @@ namespace Test
         public IntPtr DoubleMultiArray;
 
         public IntPtr LongDoubleMultiArray;
+                
+        [MarshalAs(UnmanagedType.I1)]
+        public char CharType;
+
+        [MarshalAs(UnmanagedType.I2)]
+        public char WCharType;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 5)]
+        public char[] CharArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I2, SizeConst = 5)]
+        public char[] WCharArray;
+
+        public IntPtr CharSequence;
+
+        public IntPtr WCharSequence;
+
+        public IntPtr CharMultiArray;
+
+        public IntPtr WCharMultiArray;
     }
 
     public class BasicTestStructTypeSupport

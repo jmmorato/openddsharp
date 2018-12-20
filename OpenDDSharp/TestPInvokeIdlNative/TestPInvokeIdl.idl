@@ -29,6 +29,12 @@ module Test {
     typedef float MultiArrayFloat[3][4][2];
     typedef double MultiArrayDouble[3][4][2];
     typedef long double MultiArrayLongDouble[3][4][2];
+    typedef char ArrayChar[5];
+    typedef wchar ArrayWChar[5];
+    typedef sequence<char> CharList;
+    typedef sequence<wchar> WCharList;
+    typedef char MultiArrayChar[3][4][2];
+    typedef wchar MultiArrayWChar[3][4][2];
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -60,6 +66,14 @@ module Test {
         MultiArrayFloat FloatMultiArray;
         MultiArrayDouble DoubleMultiArray;
         MultiArrayLongDouble LongDoubleMultiArray;
+        char CharType;
+        wchar WCharType;
+        ArrayChar CharArray;
+        ArrayWChar WCharArray;
+        CharList CharSequence;
+        WCharList WCharSequence;
+        MultiArrayChar CharMultiArray;
+        MultiArrayWChar WCharMultiArray;
 	};
 
 };
