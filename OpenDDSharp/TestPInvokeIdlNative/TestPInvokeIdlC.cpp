@@ -569,6 +569,414 @@ Test::MultiArrayStruct_copy (
 }
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::ArrayFloat_slice *
+Test::ArrayFloat_dup (const Test::ArrayFloat_slice *_tao_src_array)
+{
+  Test::ArrayFloat_slice *_tao_dup_array =
+    Test::ArrayFloat_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::ArrayFloat_slice *> (0);
+    }
+  
+  Test::ArrayFloat_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::ArrayFloat_slice *
+Test::ArrayFloat_alloc (void)
+{
+  Test::ArrayFloat_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Float[5], 0);
+  return retval;
+}
+
+void
+Test::ArrayFloat_free (
+    Test::ArrayFloat_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::ArrayFloat_copy (
+    Test::ArrayFloat_slice * _tao_to,
+    const Test::ArrayFloat_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_to[i0] = _tao_from[i0];
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::ArrayDouble_slice *
+Test::ArrayDouble_dup (const Test::ArrayDouble_slice *_tao_src_array)
+{
+  Test::ArrayDouble_slice *_tao_dup_array =
+    Test::ArrayDouble_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::ArrayDouble_slice *> (0);
+    }
+  
+  Test::ArrayDouble_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::ArrayDouble_slice *
+Test::ArrayDouble_alloc (void)
+{
+  Test::ArrayDouble_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Double[5], 0);
+  return retval;
+}
+
+void
+Test::ArrayDouble_free (
+    Test::ArrayDouble_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::ArrayDouble_copy (
+    Test::ArrayDouble_slice * _tao_to,
+    const Test::ArrayDouble_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_to[i0] = _tao_from[i0];
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::ArrayLongDouble_slice *
+Test::ArrayLongDouble_dup (const Test::ArrayLongDouble_slice *_tao_src_array)
+{
+  Test::ArrayLongDouble_slice *_tao_dup_array =
+    Test::ArrayLongDouble_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::ArrayLongDouble_slice *> (0);
+    }
+  
+  Test::ArrayLongDouble_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::ArrayLongDouble_slice *
+Test::ArrayLongDouble_alloc (void)
+{
+  Test::ArrayLongDouble_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::LongDouble[5], 0);
+  return retval;
+}
+
+void
+Test::ArrayLongDouble_free (
+    Test::ArrayLongDouble_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::ArrayLongDouble_copy (
+    Test::ArrayLongDouble_slice * _tao_to,
+    const Test::ArrayLongDouble_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_to[i0] = _tao_from[i0];
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_FLOATLIST_CS_)
+#define _TEST_FLOATLIST_CS_
+
+Test::FloatList::FloatList (void)
+{}
+
+Test::FloatList::FloatList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Float
+      > (max)
+{}
+
+Test::FloatList::FloatList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::Float * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Float
+      >
+    (max, length, buffer, release)
+{}
+
+Test::FloatList::FloatList (
+    const FloatList &seq)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Float
+      > (seq)
+{}
+
+Test::FloatList::~FloatList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_DOUBLELIST_CS_)
+#define _TEST_DOUBLELIST_CS_
+
+Test::DoubleList::DoubleList (void)
+{}
+
+Test::DoubleList::DoubleList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Double
+      > (max)
+{}
+
+Test::DoubleList::DoubleList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::Double * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Double
+      >
+    (max, length, buffer, release)
+{}
+
+Test::DoubleList::DoubleList (
+    const DoubleList &seq)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Double
+      > (seq)
+{}
+
+Test::DoubleList::~DoubleList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_LONGDOUBLELIST_CS_)
+#define _TEST_LONGDOUBLELIST_CS_
+
+Test::LongDoubleList::LongDoubleList (void)
+{}
+
+Test::LongDoubleList::LongDoubleList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::LongDouble
+      > (max)
+{}
+
+Test::LongDoubleList::LongDoubleList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::LongDouble * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::LongDouble
+      >
+    (max, length, buffer, release)
+{}
+
+Test::LongDoubleList::LongDoubleList (
+    const LongDoubleList &seq)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::LongDouble
+      > (seq)
+{}
+
+Test::LongDoubleList::~LongDoubleList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayFloat_slice *
+Test::MultiArrayFloat_dup (const Test::MultiArrayFloat_slice *_tao_src_array)
+{
+  Test::MultiArrayFloat_slice *_tao_dup_array =
+    Test::MultiArrayFloat_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayFloat_slice *> (0);
+    }
+  
+  Test::MultiArrayFloat_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayFloat_slice *
+Test::MultiArrayFloat_alloc (void)
+{
+  Test::MultiArrayFloat_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Float[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayFloat_free (
+    Test::MultiArrayFloat_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayFloat_copy (
+    Test::MultiArrayFloat_slice * _tao_to,
+    const Test::MultiArrayFloat_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayDouble_slice *
+Test::MultiArrayDouble_dup (const Test::MultiArrayDouble_slice *_tao_src_array)
+{
+  Test::MultiArrayDouble_slice *_tao_dup_array =
+    Test::MultiArrayDouble_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayDouble_slice *> (0);
+    }
+  
+  Test::MultiArrayDouble_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayDouble_slice *
+Test::MultiArrayDouble_alloc (void)
+{
+  Test::MultiArrayDouble_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Double[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayDouble_free (
+    Test::MultiArrayDouble_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayDouble_copy (
+    Test::MultiArrayDouble_slice * _tao_to,
+    const Test::MultiArrayDouble_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayLongDouble_slice *
+Test::MultiArrayLongDouble_dup (const Test::MultiArrayLongDouble_slice *_tao_src_array)
+{
+  Test::MultiArrayLongDouble_slice *_tao_dup_array =
+    Test::MultiArrayLongDouble_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayLongDouble_slice *> (0);
+    }
+  
+  Test::MultiArrayLongDouble_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayLongDouble_slice *
+Test::MultiArrayLongDouble_alloc (void)
+{
+  Test::MultiArrayLongDouble_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::LongDouble[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayLongDouble_free (
+    Test::MultiArrayLongDouble_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayLongDouble_copy (
+    Test::MultiArrayLongDouble_slice * _tao_to,
+    const Test::MultiArrayLongDouble_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -1024,6 +1432,264 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::ArrayFloat_forany &_tao_array)
+{
+  return
+    strm.write_float_array (
+        reinterpret_cast <const ACE_CDR::Float *> (_tao_array.in ()),
+        5);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::ArrayFloat_forany &_tao_array)
+{
+  return
+    strm.read_float_array (
+        reinterpret_cast <ACE_CDR::Float *> (_tao_array.out ()),
+        5);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::ArrayDouble_forany &_tao_array)
+{
+  return
+    strm.write_double_array (
+        reinterpret_cast <const ACE_CDR::Double *> (_tao_array.in ()),
+        5);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::ArrayDouble_forany &_tao_array)
+{
+  return
+    strm.read_double_array (
+        reinterpret_cast <ACE_CDR::Double *> (_tao_array.out ()),
+        5);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::ArrayLongDouble_forany &_tao_array)
+{
+  return
+    strm.write_longdouble_array (
+        reinterpret_cast <const ACE_CDR::LongDouble *> (_tao_array.in ()),
+        5);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::ArrayLongDouble_forany &_tao_array)
+{
+  return
+    strm.read_longdouble_array (
+        reinterpret_cast <ACE_CDR::LongDouble *> (_tao_array.out ()),
+        5);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_FloatList_CPP_
+#define _TAO_CDR_OP_Test_FloatList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::FloatList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::FloatList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_FloatList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_DoubleList_CPP_
+#define _TAO_CDR_OP_Test_DoubleList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::DoubleList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::DoubleList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_DoubleList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_LongDoubleList_CPP_
+#define _TAO_CDR_OP_Test_LongDoubleList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::LongDoubleList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::LongDoubleList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_LongDoubleList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayFloat_forany &_tao_array)
+{
+  return
+    strm.write_float_array (
+        reinterpret_cast <const ACE_CDR::Float *> (_tao_array.in ()),
+        3*4*2);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayFloat_forany &_tao_array)
+{
+  return
+    strm.read_float_array (
+        reinterpret_cast <ACE_CDR::Float *> (_tao_array.out ()),
+        3*4*2);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayDouble_forany &_tao_array)
+{
+  return
+    strm.write_double_array (
+        reinterpret_cast <const ACE_CDR::Double *> (_tao_array.in ()),
+        3*4*2);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayDouble_forany &_tao_array)
+{
+  return
+    strm.read_double_array (
+        reinterpret_cast <ACE_CDR::Double *> (_tao_array.out ()),
+        3*4*2);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayLongDouble_forany &_tao_array)
+{
+  return
+    strm.write_longdouble_array (
+        reinterpret_cast <const ACE_CDR::LongDouble *> (_tao_array.in ()),
+        3*4*2);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayLongDouble_forany &_tao_array)
+{
+  return
+    strm.read_longdouble_array (
+        reinterpret_cast <ACE_CDR::LongDouble *> (_tao_array.out ()),
+        3*4*2);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -1112,6 +1778,66 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.StructMultiArray
         )
     );
+  Test::ArrayFloat_forany _tao_aggregate_FloatArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayFloat_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayFloat_slice*> (
+      #endif
+          _tao_aggregate.FloatArray
+        )
+    );
+  Test::ArrayDouble_forany _tao_aggregate_DoubleArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayDouble_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayDouble_slice*> (
+      #endif
+          _tao_aggregate.DoubleArray
+        )
+    );
+  Test::ArrayLongDouble_forany _tao_aggregate_LongDoubleArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayLongDouble_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayLongDouble_slice*> (
+      #endif
+          _tao_aggregate.LongDoubleArray
+        )
+    );
+  Test::MultiArrayFloat_forany _tao_aggregate_FloatMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayFloat_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayFloat_slice*> (
+      #endif
+          _tao_aggregate.FloatMultiArray
+        )
+    );
+  Test::MultiArrayDouble_forany _tao_aggregate_DoubleMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayDouble_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayDouble_slice*> (
+      #endif
+          _tao_aggregate.DoubleMultiArray
+        )
+    );
+  Test::MultiArrayLongDouble_forany _tao_aggregate_LongDoubleMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayLongDouble_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayLongDouble_slice*> (
+      #endif
+          _tao_aggregate.LongDoubleMultiArray
+        )
+    );
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
@@ -1128,7 +1854,19 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate_LongMultiArray) &&
     (strm << _tao_aggregate_StringMultiArray) &&
     (strm << _tao_aggregate_WStringMultiArray) &&
-    (strm << _tao_aggregate_StructMultiArray);
+    (strm << _tao_aggregate_StructMultiArray) &&
+    (strm << _tao_aggregate.FloatType) &&
+    (strm << _tao_aggregate.DoubleType) &&
+    (strm << _tao_aggregate.LongDoubleType) &&
+    (strm << _tao_aggregate_FloatArray) &&
+    (strm << _tao_aggregate_DoubleArray) &&
+    (strm << _tao_aggregate_LongDoubleArray) &&
+    (strm << _tao_aggregate.FloatSequence) &&
+    (strm << _tao_aggregate.DoubleSequence) &&
+    (strm << _tao_aggregate.LongDoubleSequence) &&
+    (strm << _tao_aggregate_FloatMultiArray) &&
+    (strm << _tao_aggregate_DoubleMultiArray) &&
+    (strm << _tao_aggregate_LongDoubleMultiArray);
 }
 
 ::CORBA::Boolean operator>> (
@@ -1215,6 +1953,66 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.StructMultiArray
         )
     );
+  Test::ArrayFloat_forany _tao_aggregate_FloatArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayFloat_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayFloat_slice*> (
+      #endif
+          _tao_aggregate.FloatArray
+        )
+    );
+  Test::ArrayDouble_forany _tao_aggregate_DoubleArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayDouble_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayDouble_slice*> (
+      #endif
+          _tao_aggregate.DoubleArray
+        )
+    );
+  Test::ArrayLongDouble_forany _tao_aggregate_LongDoubleArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayLongDouble_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayLongDouble_slice*> (
+      #endif
+          _tao_aggregate.LongDoubleArray
+        )
+    );
+  Test::MultiArrayFloat_forany _tao_aggregate_FloatMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayFloat_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayFloat_slice*> (
+      #endif
+          _tao_aggregate.FloatMultiArray
+        )
+    );
+  Test::MultiArrayDouble_forany _tao_aggregate_DoubleMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayDouble_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayDouble_slice*> (
+      #endif
+          _tao_aggregate.DoubleMultiArray
+        )
+    );
+  Test::MultiArrayLongDouble_forany _tao_aggregate_LongDoubleMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayLongDouble_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayLongDouble_slice*> (
+      #endif
+          _tao_aggregate.LongDoubleMultiArray
+        )
+    );
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
@@ -1231,7 +2029,19 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate_LongMultiArray) &&
     (strm >> _tao_aggregate_StringMultiArray) &&
     (strm >> _tao_aggregate_WStringMultiArray) &&
-    (strm >> _tao_aggregate_StructMultiArray);
+    (strm >> _tao_aggregate_StructMultiArray) &&
+    (strm >> _tao_aggregate.FloatType) &&
+    (strm >> _tao_aggregate.DoubleType) &&
+    (strm >> _tao_aggregate.LongDoubleType) &&
+    (strm >> _tao_aggregate_FloatArray) &&
+    (strm >> _tao_aggregate_DoubleArray) &&
+    (strm >> _tao_aggregate_LongDoubleArray) &&
+    (strm >> _tao_aggregate.FloatSequence) &&
+    (strm >> _tao_aggregate.DoubleSequence) &&
+    (strm >> _tao_aggregate.LongDoubleSequence) &&
+    (strm >> _tao_aggregate_FloatMultiArray) &&
+    (strm >> _tao_aggregate_DoubleMultiArray) &&
+    (strm >> _tao_aggregate_LongDoubleMultiArray);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL

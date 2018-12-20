@@ -308,6 +308,9 @@ namespace Test
         private IList<string> _stringSequence;
         private IList<string> _wstringSequence;
         private IList<NestedTestStruct> _structSequence;
+        private IList<float> _floatSequence;
+        private IList<double> _doubleSequence;
+        private IList<double> _longDoubleSequence;
         #endregion
 
         #region Properties
@@ -358,6 +361,42 @@ namespace Test
         public string[,,] WStringMultiArray { get; set; }
 
         public NestedTestStruct[,,] StructMultiArray { get; set; }
+
+        public float FloatType { get; set; }
+
+        public double DoubleType { get; set; }
+
+        public double LongDoubleType { get; set; }
+
+        public float[] FloatArray { get; set; }
+
+        public double[] DoubleArray { get; set; }
+
+        public double[] LongDoubleArray { get; set; }
+
+        public IList<float> FloatSequence
+        {
+            get { return _floatSequence; }
+            set { _floatSequence = value; }
+        }
+
+        public IList<double> DoubleSequence
+        {
+            get { return _doubleSequence; }
+            set { _doubleSequence = value; }
+        }
+
+        public IList<double> LongDoubleSequence
+        {
+            get { return _longDoubleSequence; }
+            set { _longDoubleSequence = value; }
+        }
+
+        public float[,,] FloatMultiArray { get; set; }
+
+        public double[,,] DoubleMultiArray { get; set; }
+
+        public double[,,] LongDoubleMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -375,6 +414,15 @@ namespace Test
             LongMultiArray = new int[3, 4, 2];
             StringMultiArray = new string[3, 4, 2];
             StructMultiArray = new NestedTestStruct[3, 4, 2];
+            FloatArray = new float[5];
+            DoubleArray = new double[5];
+            LongDoubleArray = new double[5];
+            _floatSequence = new List<float>();
+            _doubleSequence = new List<double>();
+            _longDoubleSequence = new List<double>();
+            FloatMultiArray = new float[3, 4, 2];
+            DoubleMultiArray = new double[3, 4, 2];
+            LongDoubleMultiArray = new double[3, 4, 2];
         }
         #endregion
 
@@ -408,73 +456,131 @@ namespace Test
 
             wrapper.LongArray = LongArray;
 
-            wrapper.StringArray = new IntPtr[10];
-            for (int i = 0; i < 10; i++)
+            if (StringArray != null)
             {
-                if (StringArray[i] != null)
+                wrapper.StringArray = new IntPtr[10];
+                for (int i = 0; i < 10; i++)
                 {
-                    wrapper.StringArray[i] = Marshal.StringToHGlobalAnsi(StringArray[i]);
-                    toRelease.Add(wrapper.StringArray[i]);
+                    if (StringArray[i] != null)
+                    {
+                        wrapper.StringArray[i] = Marshal.StringToHGlobalAnsi(StringArray[i]);
+                        toRelease.Add(wrapper.StringArray[i]);
+                    }
                 }
             }
 
-            wrapper.WStringArray = new IntPtr[4];
-            for (int i = 0; i < 4; i++)
+            if (WStringArray != null)
             {
-                if (WStringArray[i] != null)
+                wrapper.WStringArray = new IntPtr[4];
+                for (int i = 0; i < 4; i++)
                 {
-                    wrapper.WStringArray[i] = Marshal.StringToHGlobalUni(WStringArray[i]);
-                    toRelease.Add(wrapper.WStringArray[i]);
+                    if (WStringArray[i] != null)
+                    {
+                        wrapper.WStringArray[i] = Marshal.StringToHGlobalUni(WStringArray[i]);
+                        toRelease.Add(wrapper.WStringArray[i]);
+                    }
                 }
             }
 
-            wrapper.StructTest = StructTest.ToNative(toRelease);
+            if (StructTest != null)
+            {
+                wrapper.StructTest = StructTest.ToNative(toRelease);
+            }
 
             // We need to use the wrapper struct to marshal the pointer
-            // In the generated code, the aux variable will be suffixed with the field name
-            List<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
-            foreach(NestedTestStruct s in StructSequence)
+            if (StructSequence != null)
             {
-                aux.Add(s.ToNative(toRelease));
-            }
-            Helper.UnboundedSequenceToPtr(aux, ref wrapper.StructSequence);
-            toRelease.Add(wrapper.StructSequence);
-
-            wrapper.StructArray = new NestedTestStructWrapper[5];
-            for (int i = 0; i < 5; i++)
-            {
-                if (StructArray[i] != null)
+                List<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
+                foreach (NestedTestStruct s in StructSequence)
                 {
-                    wrapper.StructArray[i] = StructArray[i].ToNative(toRelease);
+                    aux.Add(s.ToNative(toRelease));
+                }
+                Helper.UnboundedSequenceToPtr(aux, ref wrapper.StructSequence);
+                toRelease.Add(wrapper.StructSequence);
+            }
+
+            if (StructArray != null)
+            {
+                wrapper.StructArray = new NestedTestStructWrapper[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    if (StructArray[i] != null)
+                    {
+                        wrapper.StructArray[i] = StructArray[i].ToNative(toRelease);
+                    }
                 }
             }
 
-            Helper.MultiArrayToPtr<int>(LongMultiArray, ref wrapper.LongMultiArray);
-            toRelease.Add(wrapper.LongMultiArray);
+            if (LongMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<int>(LongMultiArray, ref wrapper.LongMultiArray);
+                toRelease.Add(wrapper.LongMultiArray);
+            }
 
             // Multi-dimensional array of strings
-            toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray, false));
-            toRelease.Add(wrapper.StringMultiArray);
+            if (StringMultiArray != null)
+            {
+                toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray, false));
+                toRelease.Add(wrapper.StringMultiArray);
+            }
 
             // Multi-dimensional array of wstrings
-            toRelease.AddRange(Helper.StringMultiArrayToPtr(WStringMultiArray, ref wrapper.WStringMultiArray, true));
-            toRelease.Add(wrapper.WStringMultiArray);
+            if (WStringMultiArray != null)
+            {
+                toRelease.AddRange(Helper.StringMultiArrayToPtr(WStringMultiArray, ref wrapper.WStringMultiArray, true));
+                toRelease.Add(wrapper.WStringMultiArray);
+            }
 
             // Multi-dimensional array of structs
             if (StructMultiArray != null)
             {
-                NestedTestStructWrapper[] aux_StructMultiArray = new NestedTestStructWrapper[24];
-                int index = 0;
+                NestedTestStructWrapper[] aux = new NestedTestStructWrapper[24];
+                int i = 0;
                 foreach (NestedTestStruct s in StructMultiArray)
                 {
                     if (s != null)
-                        aux_StructMultiArray[index] = s.ToNative(toRelease);
+                        aux[i] = s.ToNative(toRelease);
 
-                    index++;
+                    i++;
                 }
 
-                Helper.MultiArrayToPtr<NestedTestStructWrapper>(aux_StructMultiArray, ref wrapper.StructMultiArray);
+                Helper.MultiArrayToPtr<NestedTestStructWrapper>(aux, ref wrapper.StructMultiArray);
                 toRelease.Add(wrapper.StructMultiArray);
+            }
+
+            wrapper.FloatType = FloatType;
+            wrapper.DoubleType = DoubleType;
+            wrapper.LongDoubleType = LongDoubleType;
+
+            wrapper.FloatArray = FloatArray;
+            wrapper.DoubleArray = DoubleArray;
+            wrapper.LongDoubleArray = LongDoubleArray;
+
+            Helper.UnboundedSequenceToPtr(FloatSequence, ref wrapper.FloatSequence);
+            toRelease.Add(wrapper.FloatSequence);
+
+            Helper.UnboundedSequenceToPtr(DoubleSequence, ref wrapper.DoubleSequence);
+            toRelease.Add(wrapper.DoubleSequence);
+
+            Helper.UnboundedSequenceToPtr(LongDoubleSequence, ref wrapper.LongDoubleSequence);
+            toRelease.Add(wrapper.LongDoubleSequence);
+
+            if (FloatMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<float>(FloatMultiArray, ref wrapper.FloatMultiArray);
+                toRelease.Add(wrapper.FloatMultiArray);
+            }
+
+            if (DoubleMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<double>(DoubleMultiArray, ref wrapper.DoubleMultiArray);
+                toRelease.Add(wrapper.DoubleMultiArray);
+            }
+
+            if (LongDoubleMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<double>(LongDoubleMultiArray, ref wrapper.LongDoubleMultiArray);
+                toRelease.Add(wrapper.LongDoubleMultiArray);
             }
 
             return wrapper;
@@ -590,6 +696,36 @@ namespace Test
                     StructMultiArray.SetValue(aux, dimensions);
                 }
             }
+
+            FloatType = wrapper.FloatType;
+            DoubleType = wrapper.DoubleType;
+            LongDoubleType = wrapper.LongDoubleType;
+
+            FloatArray = wrapper.FloatArray;
+            DoubleArray = wrapper.DoubleArray;
+            LongDoubleArray = wrapper.LongDoubleArray;
+
+            Helper.PtrToUnboundedSequence(wrapper.FloatSequence, ref _floatSequence);
+            Helper.PtrToUnboundedSequence(wrapper.DoubleSequence, ref _doubleSequence);
+            Helper.PtrToUnboundedSequence(wrapper.LongDoubleSequence, ref _longDoubleSequence);
+
+            if (FloatMultiArray == null)
+            {
+                FloatMultiArray = new float[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<float>(wrapper.FloatMultiArray, FloatMultiArray);
+
+            if (DoubleMultiArray == null)
+            {
+                DoubleMultiArray = new double[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<double>(wrapper.DoubleMultiArray, DoubleMultiArray);
+
+            if (LongDoubleMultiArray == null)
+            {
+                LongDoubleMultiArray = new double[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<double>(wrapper.LongDoubleMultiArray, LongDoubleMultiArray);
         }
         #endregion
     }
@@ -638,6 +774,33 @@ namespace Test
         public IntPtr WStringMultiArray;
 
         public IntPtr StructMultiArray;
+
+        public float FloatType;
+
+        public double DoubleType;
+
+        public double LongDoubleType;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 5)]
+        public float[] FloatArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R8, SizeConst = 5)]
+        public double[] DoubleArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R8, SizeConst = 5)]
+        public double[] LongDoubleArray;
+
+        public IntPtr FloatSequence;
+
+        public IntPtr DoubleSequence;
+
+        public IntPtr LongDoubleSequence;
+
+        public IntPtr FloatMultiArray;
+
+        public IntPtr DoubleMultiArray;
+
+        public IntPtr LongDoubleMultiArray;
     }
 
     public class BasicTestStructTypeSupport

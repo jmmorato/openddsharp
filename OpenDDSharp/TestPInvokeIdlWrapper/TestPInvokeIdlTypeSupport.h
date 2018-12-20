@@ -64,11 +64,23 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     void* StringMultiArray;
     void* WStringMultiArray;
     void* StructMultiArray;
+    CORBA::Float FloatType;
+    CORBA::Double DoubleType;
+    CORBA::Double LongDoubleType;
+    CORBA::Float FloatArray[5];
+    CORBA::Double DoubleArray[5];
+    CORBA::Double LongDoubleArray[5];
+    void* FloatSequence;
+    void* DoubleSequence;
+    void* LongDoubleSequence;
+    void* FloatMultiArray;
+    void* DoubleMultiArray;
+    void* LongDoubleMultiArray;
 
     Test::BasicTestStruct to_native()
     {
-        Test::BasicTestStruct nativeData;
-
+        Test::BasicTestStruct nativeData;   
+        
         // Primitives
         nativeData.Id = Id;
 
@@ -192,6 +204,77 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
                 for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
                     for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
                         nativeData.StructMultiArray[i0][i1][i2] = arr_StructMultiArray[i].to_native();
+                        i++;
+                    }
+                }
+            }
+        }
+        
+        // Floating-point types
+        nativeData.FloatType = FloatType;
+        nativeData.DoubleType = DoubleType;          
+        nativeData.LongDoubleType.assign(static_cast<long double>(LongDoubleType));        
+        if (FloatArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.FloatArray, FloatArray, sizeof(CORBA::Float) * 5);
+        }
+
+        if (DoubleArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.DoubleArray, DoubleArray, sizeof(CORBA::Double) * 5);
+        }
+
+        if (LongDoubleArray != NULL)
+        {            
+            for (int i = 0; i < 5; i++)
+            {
+                nativeData.LongDoubleArray[i].assign(static_cast<long double>(LongDoubleArray[i]));
+            }
+        }
+
+        if (FloatSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(FloatSequence, nativeData.FloatSequence);
+        }
+
+        if (DoubleSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(DoubleSequence, nativeData.DoubleSequence);
+        }
+
+        if (LongDoubleSequence != NULL)
+        {
+            TAO::unbounded_value_sequence<CORBA::Double> aux;
+            marshal::ptr_to_unbounded_sequence(LongDoubleSequence, aux);
+
+            int length = aux.length();
+            nativeData.LongDoubleSequence.length(length);
+            for (int i = 0; i < length; i++)
+            {
+                nativeData.LongDoubleSequence[i].assign(aux[i]);
+            }
+        }
+
+        if (FloatMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.FloatMultiArray, FloatMultiArray, sizeof(CORBA::Float) * 24);
+        }
+
+        if (DoubleMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.DoubleMultiArray, DoubleMultiArray, sizeof(CORBA::Double) * 24);
+        }
+
+        if (LongDoubleMultiArray != NULL)
+        {
+            CORBA::Double aux[24];
+            ACE_OS::memcpy(aux, LongDoubleMultiArray, sizeof(CORBA::Double) * 24);
+
+            int i = 0;
+            for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
+                for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
+                    for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
+                        nativeData.LongDoubleMultiArray[i0][i1][i2].assign(aux[i]);
                         i++;
                     }
                 }
@@ -323,6 +406,70 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             StructMultiArray = ACE_OS::malloc(sizeof(NestedTestStructWrapper) * 24);
             ACE_OS::memcpy(StructMultiArray, arr_StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
         }
+        
+        // Floating point types
+        FloatType = nativeData.FloatType;
+        DoubleType = nativeData.DoubleType;
+        LongDoubleType = nativeData.LongDoubleType;
+
+        if (nativeData.FloatArray != NULL)
+        {
+            ACE_OS::memcpy(FloatArray, nativeData.FloatArray, sizeof(CORBA::Float) * 5);
+        }
+
+        if (nativeData.DoubleArray != NULL)
+        {
+            ACE_OS::memcpy(DoubleArray, nativeData.DoubleArray, sizeof(CORBA::Double) * 5);
+        }
+
+        if (nativeData.LongDoubleArray != NULL)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                LongDoubleArray[i] = nativeData.LongDoubleArray[i];
+            }
+        }
+
+        marshal::unbounded_sequence_to_ptr(nativeData.FloatSequence, FloatSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.DoubleSequence, DoubleSequence);
+        
+        {
+            int length = nativeData.LongDoubleSequence.length();
+            TAO::unbounded_value_sequence<CORBA::Double> aux;
+            aux.length(length);
+            for (int i = 0; i < length; i++)
+            {
+                aux[i] = nativeData.LongDoubleSequence[i];
+            }
+            marshal::unbounded_sequence_to_ptr(aux, LongDoubleSequence);
+        }
+
+        if (nativeData.FloatMultiArray != NULL)
+        {
+            FloatMultiArray = ACE_OS::malloc(sizeof(float) * 24);
+            ACE_OS::memcpy(FloatMultiArray, nativeData.FloatMultiArray, sizeof(float) * 24);
+        }
+
+        if (nativeData.DoubleMultiArray != NULL)
+        {
+            DoubleMultiArray = ACE_OS::malloc(sizeof(double) * 24);
+            ACE_OS::memcpy(DoubleMultiArray, nativeData.DoubleMultiArray, sizeof(double) * 24);
+        }
+
+        if (nativeData.LongDoubleMultiArray != NULL)
+        {
+            CORBA::Double aux[3][4][2];
+            for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
+                for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
+                    for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
+                        aux[i0][i1][i2] = nativeData.LongDoubleMultiArray[i0][i1][i2];
+                    }
+                }
+            }
+
+            LongDoubleMultiArray = ACE_OS::malloc(sizeof(double) * 24);            
+            ACE_OS::memcpy(LongDoubleMultiArray, aux, sizeof(double) * 24);
+        }
     }
 
     void release() 
@@ -427,6 +574,42 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
                 arr_StructMultiArray[i].release();
             }
             ACE_OS::free(StructMultiArray);
+        }
+
+        // Release pointer to the float sequence
+        if (FloatSequence != NULL)
+        {
+            ACE_OS::free(FloatSequence);
+        }
+
+        // Release pointer to the double sequence
+        if (DoubleSequence != NULL)
+        {
+            ACE_OS::free(DoubleSequence);
+        }
+
+        // Release pointer to the long double sequence
+        if (LongDoubleSequence != NULL)
+        {
+            ACE_OS::free(LongDoubleSequence);
+        }
+
+        // Release pointer to the float multi array
+        if (FloatMultiArray != NULL)
+        {
+            ACE_OS::free(FloatMultiArray);
+        }
+
+        // Release pointer to the double multi array
+        if (DoubleMultiArray != NULL)
+        {
+            ACE_OS::free(DoubleMultiArray);
+        }
+
+        // Release pointer to the long double multi array
+        if (LongDoubleMultiArray != NULL)
+        {
+            ACE_OS::free(LongDoubleMultiArray);
         }
     }
 };

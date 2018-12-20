@@ -171,6 +171,33 @@ namespace ConsoleDemoCore
                     { { new  NestedTestStruct{ Id = 1, Message = "01" }, new  NestedTestStruct{ Id = 2, Message = "02" } }, { new  NestedTestStruct{ Id = 3, Message = "03" }, new  NestedTestStruct{ Id = 4, Message = "04" } }, { new  NestedTestStruct{ Id = 5, Message = "05" }, new  NestedTestStruct{ Id = 6, Message = "06" } }, { new  NestedTestStruct{ Id = 7, Message = "07" }, new  NestedTestStruct{ Id = 8, Message = "08" } } },
                     { { new  NestedTestStruct{ Id = 9, Message = "09" }, new  NestedTestStruct{ Id = 10, Message = "10" } }, { new  NestedTestStruct{ Id = 11, Message = "11" }, new  NestedTestStruct{ Id = 12, Message = "12" } }, { new  NestedTestStruct{ Id = 13, Message = "13" }, new  NestedTestStruct{ Id = 14, Message = "14" } }, { new  NestedTestStruct{ Id = 15, Message = "15" }, new  NestedTestStruct{ Id = 16, Message = "16" } } },
                     { { new  NestedTestStruct{ Id = 17, Message = "17" }, new  NestedTestStruct{ Id = 18, Message = "18" } }, { new  NestedTestStruct{ Id = 19, Message = "19" }, new  NestedTestStruct{ Id = 20, Message = "20" } }, { new  NestedTestStruct{ Id = 21, Message = "21" }, new  NestedTestStruct{ Id = 22, Message = "22" } }, { new  NestedTestStruct{ Id = 23, Message = "23" }, new  NestedTestStruct{ Id = 24, Message = "24" } } },
+                },
+                FloatType = 42.42f,
+                DoubleType = 23.23,
+                LongDoubleType = 69.69,
+                FloatArray = new float[] { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f },
+                DoubleArray = new double[] { 1.1, 2.2, 3.3, 4.4, 5.5 },
+                LongDoubleArray = new double[] { 1.1, 2.2, 3.3, 4.4, 5.5 },
+                FloatSequence = new List<float> { 1.1f, 2.2f, 3.3f},
+                DoubleSequence = new List<double> { 1.1, 2.2, 3.3, 4.4 },
+                LongDoubleSequence = new List<double> { 1.1, 2.2, 3.3, 4.4, 5.5 },
+                FloatMultiArray = new float[3, 4, 2]
+                {
+                    { { 01.01f, 02.02f }, { 03.03f, 04.04f }, { 05.05f, 06.06f }, { 07.07f, 08.08f } },
+                    { { 09.09f, 10.10f }, { 11.11f, 12.12f }, { 13.13f, 14.14f }, { 15.15f, 16.16f } },
+                    { { 17.17f, 18.18f }, { 19.19f, 20.20f }, { 21.21f, 22.22f }, { 23.23f, 24.24f } }
+                },
+                DoubleMultiArray = new double[3, 4, 2]
+                {
+                    { { 01.01, 02.02 }, { 03.03, 04.04 }, { 05.05, 06.06 }, { 07.07, 08.08 } },
+                    { { 09.09, 10.10 }, { 11.11, 12.12 }, { 13.13, 14.14 }, { 15.15, 16.16 } },
+                    { { 17.17, 18.18 }, { 19.19, 20.20 }, { 21.21, 22.22 }, { 23.23, 24.24 } }
+                },
+                LongDoubleMultiArray = new double[3, 4, 2]
+                {
+                    { { 01.01, 02.02 }, { 03.03, 04.04 }, { 05.05, 06.06 }, { 07.07, 08.08 } },
+                    { { 09.09, 10.10 }, { 11.11, 12.12 }, { 13.13, 14.14 }, { 15.15, 16.16 } },
+                    { { 17.17, 18.18 }, { 19.19, 20.20 }, { 21.21, 22.22 }, { 23.23, 24.24 } }
                 }
             };
             dataWriter.Write(data);
@@ -197,19 +224,25 @@ namespace ConsoleDemoCore
                 Console.WriteLine(received.Id);
                 Console.WriteLine();
 
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("Message:");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine(received.Message);
-                Console.WriteLine();
+                if (received.Message != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("Message:");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(received.Message);
+                    Console.WriteLine();
+                }
 
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("WMessage:");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine(received.WMessage);
-                Console.WriteLine();
+                if (received.WMessage != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("WMessage:");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(received.WMessage);
+                    Console.WriteLine();
+                }
 
-                if (received.LongSequence.Count > 0)
+                if (received.LongSequence != null && received.LongSequence.Count > 0)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine(nameof(received.LongSequence) + ":");
@@ -226,7 +259,7 @@ namespace ConsoleDemoCore
                     Console.WriteLine();
                 }
 
-                if (received.StringSequence.Count > 0)
+                if (received.StringSequence != null && received.StringSequence.Count > 0)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine(nameof(received.StringSequence) + ":");
@@ -238,7 +271,7 @@ namespace ConsoleDemoCore
                     Console.WriteLine();
                 }
 
-                if (received.WStringSequence.Count > 0)
+                if (received.WStringSequence != null && received.WStringSequence.Count > 0)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine(nameof(received.WStringSequence) + ":");
@@ -250,37 +283,46 @@ namespace ConsoleDemoCore
                     Console.WriteLine();
                 }
 
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(nameof(received.LongArray) + ":");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                for (int i = 0; i < received.LongArray.Length; i++)
+                if (received.LongArray != null)
                 {
-                    Console.Write(received.LongArray[i]);
-                    if (i + 1 < received.LongArray.Length)
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongArray.Length; i++)
                     {
-                        Console.Write(", ");
+                        Console.Write(received.LongArray[i]);
+                        if (i + 1 < received.LongArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
                     }
+                    Console.WriteLine();
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
-                Console.WriteLine();
 
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(nameof(received.StringArray) + ":");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                foreach(string s in received.StringArray)
+                if (received.StringArray != null)
                 {
-                    Console.WriteLine(s);
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StringArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    foreach (string s in received.StringArray)
+                    {
+                        Console.WriteLine(s);
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
 
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(nameof(received.WStringArray) + ":");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                foreach (string s in received.WStringArray)
+                if (received.WStringArray != null)
                 {
-                    Console.WriteLine(s);
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.WStringArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    foreach (string s in received.WStringArray)
+                    {
+                        Console.WriteLine(s);
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
 
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine(nameof(received.StructTest) + ":");
@@ -403,6 +445,196 @@ namespace ConsoleDemoCore
                     }
                     Console.WriteLine();
                 }
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.FloatType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.FloatType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.DoubleType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.DoubleType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.LongDoubleType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.LongDoubleType);
+                Console.WriteLine();
+
+                if (received.FloatArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.FloatArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.FloatArray.Length; i++)
+                    {
+                        Console.Write(received.FloatArray[i]);
+                        if (i + 1 < received.FloatArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.DoubleArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.DoubleArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.DoubleArray.Length; i++)
+                    {
+                        Console.Write(received.DoubleArray[i]);
+                        if (i + 1 < received.DoubleArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.LongDoubleArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongDoubleArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongDoubleArray.Length; i++)
+                    {
+                        Console.Write(received.LongDoubleArray[i]);
+                        if (i + 1 < received.LongDoubleArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.FloatSequence != null && received.FloatSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.FloatSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.FloatSequence.Count; i++)
+                    {
+                        Console.Write(received.FloatSequence[i]);
+                        if (i < received.FloatSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.DoubleSequence != null && received.DoubleSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.DoubleSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.DoubleSequence.Count; i++)
+                    {
+                        Console.Write(received.DoubleSequence[i]);
+                        if (i < received.DoubleSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.LongDoubleSequence != null && received.LongDoubleSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongDoubleSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongDoubleSequence.Count; i++)
+                    {
+                        Console.Write(received.LongDoubleSequence[i]);
+                        if (i < received.LongDoubleSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.FloatMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.FloatMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.FloatMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.FloatMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.FloatMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.FloatMultiArray[i, j, k].ToString("00.00"));
+                                if (j + 1 < received.FloatMultiArray.GetLength(1) || k + 1 < received.FloatMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.DoubleMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.DoubleMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.DoubleMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.DoubleMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.DoubleMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.DoubleMultiArray[i, j, k].ToString("00.00"));
+                                if (j + 1 < received.DoubleMultiArray.GetLength(1) || k + 1 < received.DoubleMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.LongDoubleMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongDoubleMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongDoubleMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.LongDoubleMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.LongDoubleMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.LongDoubleMultiArray[i, j, k].ToString("00.00"));
+                                if (j + 1 < received.LongDoubleMultiArray.GetLength(1) || k + 1 < received.LongDoubleMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
             }
             else
             {

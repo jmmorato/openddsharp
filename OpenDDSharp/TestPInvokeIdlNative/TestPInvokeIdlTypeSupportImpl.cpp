@@ -3,6 +3,9 @@
 
 #include <cstring>
 #include <stdexcept>
+#include "dds/CorbaSeq/DoubleSeqTypeSupportImpl.h"
+#include "dds/CorbaSeq/FloatSeqTypeSupportImpl.h"
+#include "dds/CorbaSeq/LongDoubleSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/LongSeqTypeSupportImpl.h"
 #include "dds/DCPS/BuiltInTopicUtils.h"
 #include "dds/DCPS/ContentFilteredTopicImpl.h"
@@ -1612,6 +1615,525 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: MultiArrayStruct */
 
 
+/* Begin TYPEDEF: ArrayFloat */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayFloat_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 4) {
+    padding += 4 - ((size + padding) % 4);
+  }
+  size += 5 * gen_max_marshaled_size(CORBA::Float());
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayFloat_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_float_array(arr.in(), 5);
+}
+
+bool operator>>(Serializer& strm, Test::ArrayFloat_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_float_array(arr.out(), 5);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayFloat_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(5), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayFloat */
+
+
+/* Begin TYPEDEF: ArrayDouble */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayDouble_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 8) {
+    padding += 8 - ((size + padding) % 8);
+  }
+  size += 5 * gen_max_marshaled_size(CORBA::Double());
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_double_array(arr.in(), 5);
+}
+
+bool operator>>(Serializer& strm, Test::ArrayDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_double_array(arr.out(), 5);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayDouble_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(5), 8);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayDouble */
+
+
+/* Begin TYPEDEF: ArrayLongDouble */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayLongDouble_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 8) {
+    padding += 8 - ((size + padding) % 8);
+  }
+  size += 5 * gen_max_marshaled_size(CORBA::LongDouble());
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayLongDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_longdouble_array(arr.in(), 5);
+}
+
+bool operator>>(Serializer& strm, Test::ArrayLongDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_longdouble_array(arr.out(), 5);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayLongDouble_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(5), 16);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayLongDouble */
+
+
+/* Begin TYPEDEF: FloatList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::FloatList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * gen_max_marshaled_size(CORBA::Float());
+}
+
+bool operator<<(Serializer& strm, const Test::FloatList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_float_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::FloatList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_float_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::FloatList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: FloatList */
+
+
+/* Begin TYPEDEF: DoubleList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::DoubleList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  if ((size + padding) % 8) {
+    padding += 4;
+  }
+  size += seq.length() * gen_max_marshaled_size(CORBA::Double());
+}
+
+bool operator<<(Serializer& strm, const Test::DoubleList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_double_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::DoubleList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_double_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::DoubleList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 8);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: DoubleList */
+
+
+/* Begin TYPEDEF: LongDoubleList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::LongDoubleList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  if ((size + padding) % 8) {
+    padding += 4;
+  }
+  size += seq.length() * gen_max_marshaled_size(CORBA::LongDouble());
+}
+
+bool operator<<(Serializer& strm, const Test::LongDoubleList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_longdouble_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::LongDoubleList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_longdouble_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::LongDoubleList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 16);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: LongDoubleList */
+
+
+/* Begin TYPEDEF: MultiArrayFloat */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayFloat_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 4) {
+    padding += 4 - ((size + padding) % 4);
+  }
+  size += 24 * gen_max_marshaled_size(CORBA::Float());
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayFloat_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_float_array(arr.in()[0][0], 24);
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayFloat_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_float_array(arr.out()[0][0], 24);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayFloat_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(24), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayFloat */
+
+
+/* Begin TYPEDEF: MultiArrayDouble */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayDouble_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 8) {
+    padding += 8 - ((size + padding) % 8);
+  }
+  size += 24 * gen_max_marshaled_size(CORBA::Double());
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_double_array(arr.in()[0][0], 24);
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_double_array(arr.out()[0][0], 24);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayDouble_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(24), 8);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayDouble */
+
+
+/* Begin TYPEDEF: MultiArrayLongDouble */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayLongDouble_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  if ((size + padding) % 8) {
+    padding += 8 - ((size + padding) % 8);
+  }
+  size += 24 * gen_max_marshaled_size(CORBA::LongDouble());
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayLongDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_longdouble_array(arr.in()[0][0], 24);
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayLongDouble_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_longdouble_array(arr.out()[0][0], 24);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayLongDouble_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(24), 16);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayLongDouble */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -1630,6 +2152,12 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   Test::MultiArrayString_forany stru_StringMultiArray(const_cast<Test::MultiArrayString_slice*>(stru.StringMultiArray));
   Test::MultiArrayWString_forany stru_WStringMultiArray(const_cast<Test::MultiArrayWString_slice*>(stru.WStringMultiArray));
   Test::MultiArrayStruct_forany stru_StructMultiArray(const_cast<Test::MultiArrayStruct_slice*>(stru.StructMultiArray));
+  Test::ArrayFloat_forany stru_FloatArray(const_cast<Test::ArrayFloat_slice*>(stru.FloatArray));
+  Test::ArrayDouble_forany stru_DoubleArray(const_cast<Test::ArrayDouble_slice*>(stru.DoubleArray));
+  Test::ArrayLongDouble_forany stru_LongDoubleArray(const_cast<Test::ArrayLongDouble_slice*>(stru.LongDoubleArray));
+  Test::MultiArrayFloat_forany stru_FloatMultiArray(const_cast<Test::MultiArrayFloat_slice*>(stru.FloatMultiArray));
+  Test::MultiArrayDouble_forany stru_DoubleMultiArray(const_cast<Test::MultiArrayDouble_slice*>(stru.DoubleMultiArray));
+  Test::MultiArrayLongDouble_forany stru_LongDoubleMultiArray(const_cast<Test::MultiArrayLongDouble_slice*>(stru.LongDoubleMultiArray));
   if ((size + padding) % 4) {
     padding += 4 - ((size + padding) % 4);
   }
@@ -1651,6 +2179,27 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru_StringMultiArray, size, padding);
   gen_find_size(stru_WStringMultiArray, size, padding);
   gen_find_size(stru_StructMultiArray, size, padding);
+  if ((size + padding) % 4) {
+    padding += 4 - ((size + padding) % 4);
+  }
+  size += gen_max_marshaled_size(stru.FloatType);
+  if ((size + padding) % 8) {
+    padding += 8 - ((size + padding) % 8);
+  }
+  size += gen_max_marshaled_size(stru.DoubleType);
+  if ((size + padding) % 8) {
+    padding += 8 - ((size + padding) % 8);
+  }
+  size += gen_max_marshaled_size(stru.LongDoubleType);
+  gen_find_size(stru_FloatArray, size, padding);
+  gen_find_size(stru_DoubleArray, size, padding);
+  gen_find_size(stru_LongDoubleArray, size, padding);
+  gen_find_size(stru.FloatSequence, size, padding);
+  gen_find_size(stru.DoubleSequence, size, padding);
+  gen_find_size(stru.LongDoubleSequence, size, padding);
+  gen_find_size(stru_FloatMultiArray, size, padding);
+  gen_find_size(stru_DoubleMultiArray, size, padding);
+  gen_find_size(stru_LongDoubleMultiArray, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -1665,6 +2214,12 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   Test::MultiArrayString_forany stru_StringMultiArray(const_cast<Test::MultiArrayString_slice*>(stru.StringMultiArray));
   Test::MultiArrayWString_forany stru_WStringMultiArray(const_cast<Test::MultiArrayWString_slice*>(stru.WStringMultiArray));
   Test::MultiArrayStruct_forany stru_StructMultiArray(const_cast<Test::MultiArrayStruct_slice*>(stru.StructMultiArray));
+  Test::ArrayFloat_forany stru_FloatArray(const_cast<Test::ArrayFloat_slice*>(stru.FloatArray));
+  Test::ArrayDouble_forany stru_DoubleArray(const_cast<Test::ArrayDouble_slice*>(stru.DoubleArray));
+  Test::ArrayLongDouble_forany stru_LongDoubleArray(const_cast<Test::ArrayLongDouble_slice*>(stru.LongDoubleArray));
+  Test::MultiArrayFloat_forany stru_FloatMultiArray(const_cast<Test::MultiArrayFloat_slice*>(stru.FloatMultiArray));
+  Test::MultiArrayDouble_forany stru_DoubleMultiArray(const_cast<Test::MultiArrayDouble_slice*>(stru.DoubleMultiArray));
+  Test::MultiArrayLongDouble_forany stru_LongDoubleMultiArray(const_cast<Test::MultiArrayLongDouble_slice*>(stru.LongDoubleMultiArray));
   return (strm << stru.Id)
     && (strm << stru.Message.in())
     && (strm << stru.WMessage.in())
@@ -1680,7 +2235,19 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru_LongMultiArray)
     && (strm << stru_StringMultiArray)
     && (strm << stru_WStringMultiArray)
-    && (strm << stru_StructMultiArray);
+    && (strm << stru_StructMultiArray)
+    && (strm << stru.FloatType)
+    && (strm << stru.DoubleType)
+    && (strm << stru.LongDoubleType)
+    && (strm << stru_FloatArray)
+    && (strm << stru_DoubleArray)
+    && (strm << stru_LongDoubleArray)
+    && (strm << stru.FloatSequence)
+    && (strm << stru.DoubleSequence)
+    && (strm << stru.LongDoubleSequence)
+    && (strm << stru_FloatMultiArray)
+    && (strm << stru_DoubleMultiArray)
+    && (strm << stru_LongDoubleMultiArray);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -1695,6 +2262,12 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   Test::MultiArrayString_forany stru_StringMultiArray(const_cast<Test::MultiArrayString_slice*>(stru.StringMultiArray));
   Test::MultiArrayWString_forany stru_WStringMultiArray(const_cast<Test::MultiArrayWString_slice*>(stru.WStringMultiArray));
   Test::MultiArrayStruct_forany stru_StructMultiArray(const_cast<Test::MultiArrayStruct_slice*>(stru.StructMultiArray));
+  Test::ArrayFloat_forany stru_FloatArray(const_cast<Test::ArrayFloat_slice*>(stru.FloatArray));
+  Test::ArrayDouble_forany stru_DoubleArray(const_cast<Test::ArrayDouble_slice*>(stru.DoubleArray));
+  Test::ArrayLongDouble_forany stru_LongDoubleArray(const_cast<Test::ArrayLongDouble_slice*>(stru.LongDoubleArray));
+  Test::MultiArrayFloat_forany stru_FloatMultiArray(const_cast<Test::MultiArrayFloat_slice*>(stru.FloatMultiArray));
+  Test::MultiArrayDouble_forany stru_DoubleMultiArray(const_cast<Test::MultiArrayDouble_slice*>(stru.DoubleMultiArray));
+  Test::MultiArrayLongDouble_forany stru_LongDoubleMultiArray(const_cast<Test::MultiArrayLongDouble_slice*>(stru.LongDoubleMultiArray));
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
     && (strm >> stru.WMessage.out())
@@ -1710,7 +2283,19 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru_LongMultiArray)
     && (strm >> stru_StringMultiArray)
     && (strm >> stru_WStringMultiArray)
-    && (strm >> stru_StructMultiArray);
+    && (strm >> stru_StructMultiArray)
+    && (strm >> stru.FloatType)
+    && (strm >> stru.DoubleType)
+    && (strm >> stru.LongDoubleType)
+    && (strm >> stru_FloatArray)
+    && (strm >> stru_DoubleArray)
+    && (strm >> stru_LongDoubleArray)
+    && (strm >> stru.FloatSequence)
+    && (strm >> stru.DoubleSequence)
+    && (strm >> stru.LongDoubleSequence)
+    && (strm >> stru_FloatMultiArray)
+    && (strm >> stru_DoubleMultiArray)
+    && (strm >> stru_LongDoubleMultiArray);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -1837,6 +2422,15 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strncmp(field, "StructTest.", 11) == 0) {
       return getMetaStruct<Test::NestedTestStruct>().getValue(&typed.StructTest, field + 11);
     }
+    if (std::strcmp(field, "FloatType") == 0) {
+      return typed.FloatType;
+    }
+    if (std::strcmp(field, "DoubleType") == 0) {
+      return typed.DoubleType;
+    }
+    if (std::strcmp(field, "LongDoubleType") == 0) {
+      return typed.LongDoubleType;
+    }
     ACE_UNUSED_ARG(typed);
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -1927,6 +2521,66 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::MultiArrayStruct_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (std::strcmp(field, "FloatType") == 0) {
+      ACE_CDR::Float val;
+      if (!(ser >> val)) {
+        throw std::runtime_error("Field 'FloatType' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 4)) {
+        throw std::runtime_error("Field 'FloatType' could not be skipped");
+      }
+    }
+    if (std::strcmp(field, "DoubleType") == 0) {
+      ACE_CDR::Double val;
+      if (!(ser >> val)) {
+        throw std::runtime_error("Field 'DoubleType' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 8)) {
+        throw std::runtime_error("Field 'DoubleType' could not be skipped");
+      }
+    }
+    if (std::strcmp(field, "LongDoubleType") == 0) {
+      ACE_CDR::LongDouble val;
+      if (!(ser >> val)) {
+        throw std::runtime_error("Field 'LongDoubleType' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 16)) {
+        throw std::runtime_error("Field 'LongDoubleType' could not be skipped");
+      }
+    }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayFloat_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayDouble_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayLongDouble_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::FloatList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::DoubleList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::LongDoubleList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayFloat_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayDouble_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayLongDouble_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -1948,13 +2602,22 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strncmp(field, "StructTest.", 11) == 0) {
       return make_struct_cmp(&T::StructTest, getMetaStruct<Test::NestedTestStruct>().create_qc_comparator(field + 11), next);
     }
+    if (std::strcmp(field, "FloatType") == 0) {
+      return make_field_cmp(&T::FloatType, next);
+    }
+    if (std::strcmp(field, "DoubleType") == 0) {
+      return make_field_cmp(&T::DoubleType, next);
+    }
+    if (std::strcmp(field, "LongDoubleType") == 0) {
+      return make_field_cmp(&T::LongDoubleType, next);
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", 0};
     return names;
   }
 
@@ -2007,6 +2670,42 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "StructMultiArray") == 0) {
       return &static_cast<const T*>(stru)->StructMultiArray;
+    }
+    if (std::strcmp(field, "FloatType") == 0) {
+      return &static_cast<const T*>(stru)->FloatType;
+    }
+    if (std::strcmp(field, "DoubleType") == 0) {
+      return &static_cast<const T*>(stru)->DoubleType;
+    }
+    if (std::strcmp(field, "LongDoubleType") == 0) {
+      return &static_cast<const T*>(stru)->LongDoubleType;
+    }
+    if (std::strcmp(field, "FloatArray") == 0) {
+      return &static_cast<const T*>(stru)->FloatArray;
+    }
+    if (std::strcmp(field, "DoubleArray") == 0) {
+      return &static_cast<const T*>(stru)->DoubleArray;
+    }
+    if (std::strcmp(field, "LongDoubleArray") == 0) {
+      return &static_cast<const T*>(stru)->LongDoubleArray;
+    }
+    if (std::strcmp(field, "FloatSequence") == 0) {
+      return &static_cast<const T*>(stru)->FloatSequence;
+    }
+    if (std::strcmp(field, "DoubleSequence") == 0) {
+      return &static_cast<const T*>(stru)->DoubleSequence;
+    }
+    if (std::strcmp(field, "LongDoubleSequence") == 0) {
+      return &static_cast<const T*>(stru)->LongDoubleSequence;
+    }
+    if (std::strcmp(field, "FloatMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->FloatMultiArray;
+    }
+    if (std::strcmp(field, "DoubleMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->DoubleMultiArray;
+    }
+    if (std::strcmp(field, "LongDoubleMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->LongDoubleMultiArray;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -2131,6 +2830,90 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
       }
       return;
     }
+    if (std::strcmp(field, "FloatType") == 0) {
+      static_cast<T*>(lhs)->FloatType = *static_cast<const CORBA::Float*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "DoubleType") == 0) {
+      static_cast<T*>(lhs)->DoubleType = *static_cast<const CORBA::Double*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "LongDoubleType") == 0) {
+      static_cast<T*>(lhs)->LongDoubleType = *static_cast<const CORBA::LongDouble*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "FloatArray") == 0) {
+      Test::ArrayFloat* lhsArr = &static_cast<T*>(lhs)->FloatArray;
+      const Test::ArrayFloat* rhsArr = static_cast<const Test::ArrayFloat*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
+      return;
+    }
+    if (std::strcmp(field, "DoubleArray") == 0) {
+      Test::ArrayDouble* lhsArr = &static_cast<T*>(lhs)->DoubleArray;
+      const Test::ArrayDouble* rhsArr = static_cast<const Test::ArrayDouble*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
+      return;
+    }
+    if (std::strcmp(field, "LongDoubleArray") == 0) {
+      Test::ArrayLongDouble* lhsArr = &static_cast<T*>(lhs)->LongDoubleArray;
+      const Test::ArrayLongDouble* rhsArr = static_cast<const Test::ArrayLongDouble*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
+      return;
+    }
+    if (std::strcmp(field, "FloatSequence") == 0) {
+      static_cast<T*>(lhs)->FloatSequence = *static_cast<const Test::FloatList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "DoubleSequence") == 0) {
+      static_cast<T*>(lhs)->DoubleSequence = *static_cast<const Test::DoubleList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "LongDoubleSequence") == 0) {
+      static_cast<T*>(lhs)->LongDoubleSequence = *static_cast<const Test::LongDoubleList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "FloatMultiArray") == 0) {
+      Test::MultiArrayFloat* lhsArr = &static_cast<T*>(lhs)->FloatMultiArray;
+      const Test::MultiArrayFloat* rhsArr = static_cast<const Test::MultiArrayFloat*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
+    if (std::strcmp(field, "DoubleMultiArray") == 0) {
+      Test::MultiArrayDouble* lhsArr = &static_cast<T*>(lhs)->DoubleMultiArray;
+      const Test::MultiArrayDouble* rhsArr = static_cast<const Test::MultiArrayDouble*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
+    if (std::strcmp(field, "LongDoubleMultiArray") == 0) {
+      Test::MultiArrayLongDouble* lhsArr = &static_cast<T*>(lhs)->LongDoubleMultiArray;
+      const Test::MultiArrayLongDouble* rhsArr = static_cast<const Test::MultiArrayLongDouble*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 #endif /* OPENDDS_NO_MULTI_TOPIC */
@@ -2148,6 +2931,15 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "WMessage") == 0) {
       return 0 == ACE_OS::strcmp(static_cast<const T*>(lhs)->WMessage.in(), static_cast<const T*>(rhs)->WMessage.in());
+    }
+    if (std::strcmp(field, "FloatType") == 0) {
+      return static_cast<const T*>(lhs)->FloatType == static_cast<const T*>(rhs)->FloatType;
+    }
+    if (std::strcmp(field, "DoubleType") == 0) {
+      return static_cast<const T*>(lhs)->DoubleType == static_cast<const T*>(rhs)->DoubleType;
+    }
+    if (std::strcmp(field, "LongDoubleType") == 0) {
+      return static_cast<const T*>(lhs)->LongDoubleType == static_cast<const T*>(rhs)->LongDoubleType;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }

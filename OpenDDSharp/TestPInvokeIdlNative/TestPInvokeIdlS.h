@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_REKQEE_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_REKQEE_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_VVO17N_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_VVO17N_H_
 
 #include /**/ "ace/pre.h"
 
@@ -229,6 +229,111 @@ namespace TAO
         Var_Array_SArg_Traits_T<
             ::Test::MultiArrayStruct_out,
             ::Test::MultiArrayStruct_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayFloat_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayFloat_var,
+            ::Test::ArrayFloat_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayDouble_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayDouble_var,
+            ::Test::ArrayDouble_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayLongDouble_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayLongDouble_var,
+            ::Test::ArrayLongDouble_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::FloatList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::FloatList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::DoubleList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::DoubleList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::LongDoubleList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::LongDoubleList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayFloat_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayFloat_var,
+            ::Test::MultiArrayFloat_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayDouble_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayDouble_var,
+            ::Test::MultiArrayDouble_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayLongDouble_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayLongDouble_var,
+            ::Test::MultiArrayLongDouble_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

@@ -45,7 +45,7 @@ public:
         }        
 
         // Alloc memory for the poninter
-        ACE_NEW(ptr, char[buffer_size]);
+        ptr = ACE_OS::malloc(buffer_size);        
         // Copy the bytes in the pointer
         ACE_OS::memcpy(ptr, bytes, buffer_size);
 
@@ -122,7 +122,7 @@ public:
         }
 
         // Alloc memory for the poninter
-        ACE_NEW(ptr, char[buffer_size]);
+        ptr = ACE_OS::malloc(buffer_size);        
         // Copy the bytes in the pointer
         ACE_OS::memcpy(ptr, bytes, buffer_size);
 
@@ -145,7 +145,7 @@ public:
         }
 
         // Alloc memory for the poninter
-        ACE_NEW(ptr, char[buffer_size]);
+        ptr = ACE_OS::malloc(buffer_size);        
         // Copy the bytes in the pointer
         ACE_OS::memcpy(ptr, bytes, buffer_size);
 
@@ -264,7 +264,7 @@ public:
         }
 
         // Alloc memory for the poninter
-        ACE_NEW(ptr, char[buffer_size]);
+        ptr = ACE_OS::malloc(buffer_size);        
         // Copy the bytes in the pointer
         ACE_OS::memcpy(ptr, bytes, buffer_size);
 
@@ -285,7 +285,7 @@ public:
         }
 
         // Alloc memory for the poninter
-        ACE_NEW(ptr, wchar_t[buffer_size]);
+        ptr = ACE_OS::malloc(buffer_size);        
         // Copy the bytes in the pointer
         ACE_OS::memcpy(ptr, bytes, buffer_size);
 
