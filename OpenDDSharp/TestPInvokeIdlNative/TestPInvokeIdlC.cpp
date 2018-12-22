@@ -31,6 +31,7 @@
 
 #include "TestPInvokeIdlC.h"
 #include "tao/CDR.h"
+#include "tao/ORB_Core.h"
 
 #if !defined (__ACE_INLINE__)
 #include "TestPInvokeIdlC.inl"
@@ -1929,6 +1930,278 @@ Test::MultiArrayUnsignedLongLong_copy (
 }
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::ArrayBoolean_slice *
+Test::ArrayBoolean_dup (const Test::ArrayBoolean_slice *_tao_src_array)
+{
+  Test::ArrayBoolean_slice *_tao_dup_array =
+    Test::ArrayBoolean_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::ArrayBoolean_slice *> (0);
+    }
+  
+  Test::ArrayBoolean_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::ArrayBoolean_slice *
+Test::ArrayBoolean_alloc (void)
+{
+  Test::ArrayBoolean_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Boolean[5], 0);
+  return retval;
+}
+
+void
+Test::ArrayBoolean_free (
+    Test::ArrayBoolean_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::ArrayBoolean_copy (
+    Test::ArrayBoolean_slice * _tao_to,
+    const Test::ArrayBoolean_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_to[i0] = _tao_from[i0];
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::ArrayOctet_slice *
+Test::ArrayOctet_dup (const Test::ArrayOctet_slice *_tao_src_array)
+{
+  Test::ArrayOctet_slice *_tao_dup_array =
+    Test::ArrayOctet_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::ArrayOctet_slice *> (0);
+    }
+  
+  Test::ArrayOctet_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::ArrayOctet_slice *
+Test::ArrayOctet_alloc (void)
+{
+  Test::ArrayOctet_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Octet[5], 0);
+  return retval;
+}
+
+void
+Test::ArrayOctet_free (
+    Test::ArrayOctet_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::ArrayOctet_copy (
+    Test::ArrayOctet_slice * _tao_to,
+    const Test::ArrayOctet_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_to[i0] = _tao_from[i0];
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_BOOLEANLIST_CS_)
+#define _TEST_BOOLEANLIST_CS_
+
+Test::BooleanList::BooleanList (void)
+{}
+
+Test::BooleanList::BooleanList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Boolean
+      > (max)
+{}
+
+Test::BooleanList::BooleanList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::Boolean * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Boolean
+      >
+    (max, length, buffer, release)
+{}
+
+Test::BooleanList::BooleanList (
+    const BooleanList &seq)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Boolean
+      > (seq)
+{}
+
+Test::BooleanList::~BooleanList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_cs.cpp:73
+
+#if !defined (_TEST_OCTETLIST_CS_)
+#define _TEST_OCTETLIST_CS_
+
+Test::OctetList::OctetList (void)
+{}
+
+Test::OctetList::OctetList (
+    ::CORBA::ULong max)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Octet
+      > (max)
+{}
+
+Test::OctetList::OctetList (
+    ::CORBA::ULong max,
+    ::CORBA::ULong length,
+    ::CORBA::Octet * buffer,
+    ::CORBA::Boolean release
+  )
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Octet
+      >
+    (max, length, buffer, release)
+{}
+
+Test::OctetList::OctetList (
+    const OctetList &seq)
+  : ::TAO::unbounded_value_sequence<
+        ::CORBA::Octet
+      > (seq)
+{}
+
+Test::OctetList::~OctetList (void)
+{}
+
+#endif /* end #if !defined */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayBoolean_slice *
+Test::MultiArrayBoolean_dup (const Test::MultiArrayBoolean_slice *_tao_src_array)
+{
+  Test::MultiArrayBoolean_slice *_tao_dup_array =
+    Test::MultiArrayBoolean_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayBoolean_slice *> (0);
+    }
+  
+  Test::MultiArrayBoolean_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayBoolean_slice *
+Test::MultiArrayBoolean_alloc (void)
+{
+  Test::MultiArrayBoolean_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Boolean[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayBoolean_free (
+    Test::MultiArrayBoolean_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayBoolean_copy (
+    Test::MultiArrayBoolean_slice * _tao_to,
+    const Test::MultiArrayBoolean_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_cs.cpp:97
+
+Test::MultiArrayOctet_slice *
+Test::MultiArrayOctet_dup (const Test::MultiArrayOctet_slice *_tao_src_array)
+{
+  Test::MultiArrayOctet_slice *_tao_dup_array =
+    Test::MultiArrayOctet_alloc ();
+  
+  if (!_tao_dup_array)
+    {
+      return static_cast <Test::MultiArrayOctet_slice *> (0);
+    }
+  
+  Test::MultiArrayOctet_copy (_tao_dup_array, _tao_src_array);
+  return _tao_dup_array;
+}
+
+Test::MultiArrayOctet_slice *
+Test::MultiArrayOctet_alloc (void)
+{
+  Test::MultiArrayOctet_slice *retval = 0;
+  ACE_NEW_RETURN (retval, ::CORBA::Octet[3][4][2], 0);
+  return retval;
+}
+
+void
+Test::MultiArrayOctet_free (
+    Test::MultiArrayOctet_slice *_tao_slice)
+{
+  delete [] _tao_slice;
+}
+
+void
+Test::MultiArrayOctet_copy (
+    Test::MultiArrayOctet_slice * _tao_to,
+    const Test::MultiArrayOctet_slice *_tao_from)
+{
+  // Copy each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_to[i0][i1][i2] = _tao_from[i0][i1][i2];
+            }
+        }
+    }
+}
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -3244,6 +3517,178 @@ TAO_END_VERSIONED_NAMESPACE_DECL
 
 
 // TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::ArrayBoolean_forany &_tao_array)
+{
+  return
+    strm.write_boolean_array (
+        reinterpret_cast <const ACE_CDR::Boolean *> (_tao_array.in ()),
+        5);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::ArrayBoolean_forany &_tao_array)
+{
+  return
+    strm.read_boolean_array (
+        reinterpret_cast <ACE_CDR::Boolean *> (_tao_array.out ()),
+        5);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::ArrayOctet_forany &_tao_array)
+{
+  return
+    strm.write_octet_array (
+        reinterpret_cast <const ACE_CDR::Octet *> (_tao_array.in ()),
+        5);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::ArrayOctet_forany &_tao_array)
+{
+  return
+    strm.read_octet_array (
+        reinterpret_cast <ACE_CDR::Octet *> (_tao_array.out ()),
+        5);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_BooleanList_CPP_
+#define _TAO_CDR_OP_Test_BooleanList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::BooleanList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::BooleanList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_BooleanList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_cs.cpp:96
+#if !defined _TAO_CDR_OP_Test_OctetList_CPP_
+#define _TAO_CDR_OP_Test_OctetList_CPP_
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::OctetList &_tao_sequence)
+{
+  return TAO::marshal_sequence(strm, _tao_sequence);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::OctetList &_tao_sequence)
+{
+  return TAO::demarshal_sequence(strm, _tao_sequence);
+}
+
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+#endif /* _TAO_CDR_OP_Test_OctetList_CPP_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayBoolean_forany &_tao_array)
+{
+  return
+    strm.write_boolean_array (
+        reinterpret_cast <const ACE_CDR::Boolean *> (_tao_array.in ()),
+        3*4*2);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayBoolean_forany &_tao_array)
+{
+  return
+    strm.read_boolean_array (
+        reinterpret_cast <ACE_CDR::Boolean *> (_tao_array.out ()),
+        3*4*2);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_cs.cpp:166
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::MultiArrayOctet_forany &_tao_array)
+{
+  return
+    strm.write_octet_array (
+        reinterpret_cast <const ACE_CDR::Octet *> (_tao_array.in ()),
+        3*4*2);
+}
+
+::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::MultiArrayOctet_forany &_tao_array)
+{
+  return
+    strm.read_octet_array (
+        reinterpret_cast <ACE_CDR::Octet *> (_tao_array.out ()),
+        3*4*2);
+}
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_cs.cpp:52
 
 TAO_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -3532,6 +3977,46 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.UnsignedLongLongMultiArray
         )
     );
+  Test::ArrayBoolean_forany _tao_aggregate_BooleanArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayBoolean_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayBoolean_slice*> (
+      #endif
+          _tao_aggregate.BooleanArray
+        )
+    );
+  Test::ArrayOctet_forany _tao_aggregate_OctetArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayOctet_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayOctet_slice*> (
+      #endif
+          _tao_aggregate.OctetArray
+        )
+    );
+  Test::MultiArrayBoolean_forany _tao_aggregate_BooleanMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayBoolean_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayBoolean_slice*> (
+      #endif
+          _tao_aggregate.BooleanMultiArray
+        )
+    );
+  Test::MultiArrayOctet_forany _tao_aggregate_OctetMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayOctet_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayOctet_slice*> (
+      #endif
+          _tao_aggregate.OctetMultiArray
+        )
+    );
   return
     (strm << _tao_aggregate.Id) &&
     (strm << _tao_aggregate.Message.in ()) &&
@@ -3588,7 +4073,15 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm << _tao_aggregate_LongLongMultiArray) &&
     (strm << _tao_aggregate_UnsignedShortMultiArray) &&
     (strm << _tao_aggregate_UnsignedLongMultiArray) &&
-    (strm << _tao_aggregate_UnsignedLongLongMultiArray);
+    (strm << _tao_aggregate_UnsignedLongLongMultiArray) &&
+    (strm << ::ACE_OutputCDR::from_boolean (_tao_aggregate.BooleanType)) &&
+    (strm << ::ACE_OutputCDR::from_octet (_tao_aggregate.OctetType)) &&
+    (strm << _tao_aggregate_BooleanArray) &&
+    (strm << _tao_aggregate_OctetArray) &&
+    (strm << _tao_aggregate.BooleanSequence) &&
+    (strm << _tao_aggregate.OctetSequence) &&
+    (strm << _tao_aggregate_BooleanMultiArray) &&
+    (strm << _tao_aggregate_OctetMultiArray);
 }
 
 ::CORBA::Boolean operator>> (
@@ -3875,6 +4368,46 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
           _tao_aggregate.UnsignedLongLongMultiArray
         )
     );
+  Test::ArrayBoolean_forany _tao_aggregate_BooleanArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayBoolean_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayBoolean_slice*> (
+      #endif
+          _tao_aggregate.BooleanArray
+        )
+    );
+  Test::ArrayOctet_forany _tao_aggregate_OctetArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::ArrayOctet_slice*) (
+      #else
+      (const_cast<
+          Test::ArrayOctet_slice*> (
+      #endif
+          _tao_aggregate.OctetArray
+        )
+    );
+  Test::MultiArrayBoolean_forany _tao_aggregate_BooleanMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayBoolean_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayBoolean_slice*> (
+      #endif
+          _tao_aggregate.BooleanMultiArray
+        )
+    );
+  Test::MultiArrayOctet_forany _tao_aggregate_OctetMultiArray
+      #if defined __IBMCPP__ && __IBMCPP__ <= 800
+      ((Test::MultiArrayOctet_slice*) (
+      #else
+      (const_cast<
+          Test::MultiArrayOctet_slice*> (
+      #endif
+          _tao_aggregate.OctetMultiArray
+        )
+    );
   return
     (strm >> _tao_aggregate.Id) &&
     (strm >> _tao_aggregate.Message.out ()) &&
@@ -3931,7 +4464,15 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
     (strm >> _tao_aggregate_LongLongMultiArray) &&
     (strm >> _tao_aggregate_UnsignedShortMultiArray) &&
     (strm >> _tao_aggregate_UnsignedLongMultiArray) &&
-    (strm >> _tao_aggregate_UnsignedLongLongMultiArray);
+    (strm >> _tao_aggregate_UnsignedLongLongMultiArray) &&
+    (strm >> ::ACE_InputCDR::to_boolean (_tao_aggregate.BooleanType)) &&
+    (strm >> ::ACE_InputCDR::to_octet (_tao_aggregate.OctetType)) &&
+    (strm >> _tao_aggregate_BooleanArray) &&
+    (strm >> _tao_aggregate_OctetArray) &&
+    (strm >> _tao_aggregate.BooleanSequence) &&
+    (strm >> _tao_aggregate.OctetSequence) &&
+    (strm >> _tao_aggregate_BooleanMultiArray) &&
+    (strm >> _tao_aggregate_OctetMultiArray);
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL

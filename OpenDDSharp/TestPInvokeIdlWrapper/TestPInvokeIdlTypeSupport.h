@@ -104,6 +104,14 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     void* UnsignedShortMultiArray;
     void* UnsignedLongMultiArray;
     void* UnsignedLongLongMultiArray;
+    CORBA::Boolean BooleanType;
+    CORBA::Octet OctetType;
+    CORBA::Boolean BooleanArray[5];
+    CORBA::Octet OctetArray[5];
+    void* BooleanSequence;
+    void* OctetSequence;
+    void* BooleanMultiArray;
+    void* OctetMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -425,6 +433,40 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             ACE_OS::memcpy(nativeData.UnsignedLongLongMultiArray, UnsignedLongLongMultiArray, sizeof(CORBA::ULongLong) * 24);
         }
 
+        // Other primitives types
+        nativeData.BooleanType = BooleanType;
+        nativeData.OctetType = OctetType;
+
+        if (BooleanArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.BooleanArray, BooleanArray, sizeof(CORBA::Boolean) * 5);
+        }
+
+        if (OctetArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.OctetArray, OctetArray, sizeof(CORBA::Octet) * 5);
+        }
+
+        if (BooleanSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(BooleanSequence, nativeData.BooleanSequence);                             
+        }
+
+        if (OctetSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(OctetSequence, nativeData.OctetSequence);
+        }
+
+        if (BooleanMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.BooleanMultiArray, BooleanMultiArray, sizeof(CORBA::Boolean) * 24);
+        }
+
+        if (OctetMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.OctetMultiArray, OctetMultiArray, sizeof(CORBA::Octet) * 24);
+        }
+
         return nativeData;
     }
 
@@ -457,7 +499,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Arrays of primitives
         if (nativeData.LongArray != NULL)
         {
-            ACE_OS::memcpy(LongArray, nativeData.LongArray, sizeof(int) * 5);
+            ACE_OS::memcpy(LongArray, nativeData.LongArray, sizeof(CORBA::Long) * 5);
         }
 
         // Arrays of strings
@@ -590,14 +632,14 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 
         if (nativeData.FloatMultiArray != NULL)
         {
-            FloatMultiArray = ACE_OS::malloc(sizeof(float) * 24);
-            ACE_OS::memcpy(FloatMultiArray, nativeData.FloatMultiArray, sizeof(float) * 24);
+            FloatMultiArray = ACE_OS::malloc(sizeof(CORBA::Float) * 24);
+            ACE_OS::memcpy(FloatMultiArray, nativeData.FloatMultiArray, sizeof(CORBA::Float) * 24);
         }
 
         if (nativeData.DoubleMultiArray != NULL)
         {
-            DoubleMultiArray = ACE_OS::malloc(sizeof(double) * 24);
-            ACE_OS::memcpy(DoubleMultiArray, nativeData.DoubleMultiArray, sizeof(double) * 24);
+            DoubleMultiArray = ACE_OS::malloc(sizeof(CORBA::Double) * 24);
+            ACE_OS::memcpy(DoubleMultiArray, nativeData.DoubleMultiArray, sizeof(CORBA::Double) * 24);
         }
 
         if (nativeData.LongDoubleMultiArray != NULL)
@@ -611,8 +653,8 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
                 }
             }
 
-            LongDoubleMultiArray = ACE_OS::malloc(sizeof(double) * 24);            
-            ACE_OS::memcpy(LongDoubleMultiArray, aux, sizeof(double) * 24);
+            LongDoubleMultiArray = ACE_OS::malloc(sizeof(CORBA::Double) * 24);            
+            ACE_OS::memcpy(LongDoubleMultiArray, aux, sizeof(CORBA::Double) * 24);
         }
 
         // Char types
@@ -710,6 +752,35 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         {
             UnsignedLongLongMultiArray = ACE_OS::malloc(sizeof(CORBA::ULongLong) * 24);
             ACE_OS::memcpy(UnsignedLongLongMultiArray, nativeData.UnsignedLongLongMultiArray, sizeof(CORBA::ULongLong) * 24);
+        }
+
+        // Other primitives types
+        BooleanType = nativeData.BooleanType;
+        OctetType = nativeData.OctetType;
+
+        if (nativeData.BooleanArray != NULL)
+        {
+            ACE_OS::memcpy(BooleanArray, nativeData.BooleanArray, sizeof(CORBA::Boolean) * 5);
+        }
+
+        if (nativeData.OctetArray != NULL)
+        {
+            ACE_OS::memcpy(OctetArray, nativeData.OctetArray, sizeof(CORBA::Octet) * 5);
+        }
+
+        marshal::unbounded_sequence_to_ptr(nativeData.BooleanSequence, BooleanSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.OctetSequence, OctetSequence);
+
+        if (nativeData.BooleanMultiArray != NULL)
+        {
+            BooleanMultiArray = ACE_OS::malloc(sizeof(CORBA::Boolean) * 24);
+            ACE_OS::memcpy(BooleanMultiArray, nativeData.BooleanMultiArray, sizeof(CORBA::Boolean) * 24);
+        }
+
+        if (nativeData.OctetMultiArray != NULL)
+        {
+            OctetMultiArray = ACE_OS::malloc(sizeof(CORBA::Octet) * 24);
+            ACE_OS::memcpy(OctetMultiArray, nativeData.OctetMultiArray, sizeof(CORBA::Octet) * 24);
         }
     }
 
@@ -930,6 +1001,26 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         if (UnsignedLongLongMultiArray != NULL)
         {
             ACE_OS::free(UnsignedLongLongMultiArray);
+        }
+
+        if (BooleanSequence != NULL)
+        {
+            ACE_OS::free(BooleanSequence);
+        }
+
+        if (OctetSequence != NULL)
+        {
+            ACE_OS::free(OctetSequence);
+        }
+
+        if (BooleanMultiArray != NULL)
+        {
+            ACE_OS::free(BooleanMultiArray);
+        }
+
+        if (OctetMultiArray != NULL)
+        {
+            ACE_OS::free(OctetMultiArray);
         }
     }
 };

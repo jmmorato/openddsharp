@@ -50,6 +50,12 @@ module Test {
     typedef unsigned short MultiArrayUnsignedShort[3][4][2];
     typedef unsigned long MultiArrayUnsignedLong[3][4][2];
     typedef unsigned long long MultiArrayUnsignedLongLong[3][4][2];
+    typedef boolean ArrayBoolean[5];
+    typedef octet ArrayOctet[5];
+    typedef sequence<boolean> BooleanList;
+    typedef sequence<octet> OctetList;
+    typedef boolean MultiArrayBoolean[3][4][2];
+    typedef octet MultiArrayOctet[3][4][2];
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -109,6 +115,14 @@ module Test {
         MultiArrayUnsignedShort UnsignedShortMultiArray;
         MultiArrayUnsignedLong UnsignedLongMultiArray;
         MultiArrayUnsignedLongLong UnsignedLongLongMultiArray;
+        boolean BooleanType;
+        octet OctetType;
+        ArrayBoolean BooleanArray;
+        ArrayOctet OctetArray;
+        BooleanList BooleanSequence;
+        OctetList OctetSequence;
+        MultiArrayBoolean BooleanMultiArray;
+        MultiArrayOctet OctetMultiArray;
 	};
 
 };

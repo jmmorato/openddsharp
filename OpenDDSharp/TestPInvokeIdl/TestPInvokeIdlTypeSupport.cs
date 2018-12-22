@@ -35,7 +35,7 @@ namespace Test
             // Populate the list
             for (int i = 0; i < length; i++)
             {
-                sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
+                sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));                
             }
         }
 
@@ -48,8 +48,59 @@ namespace Test
                 Marshal.WriteInt32(ptr, 0);
                 return;
             }
+            
+            int elSiz = Marshal.SizeOf<T>();            
+            // Get the total size of unmanaged memory that is needed (length + elements)
+            int size = sizeof(int) + (elSiz * sequence.Count);
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+            // Write the "Length" field first
+            Marshal.WriteInt32(ptr, sequence.Count);
+            // Write the list data
+            for (int i = 0; i < sequence.Count; i++)
+            {                   
+                // Newly-allocated space has no existing object, so the last param is false 
+                Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
+            }
+        }
 
-            int elSiz = Marshal.SizeOf<T>();
+        public static void PtrToBooleanUnboundedSequence(IntPtr ptr, ref IList<bool> sequence)
+        {
+            // Ensure a not null empty list to populate
+            if (sequence == null)
+                sequence = new List<bool>();
+            else
+                sequence.Clear();
+
+            if (ptr == IntPtr.Zero)
+                return;
+
+            // Start by reading the size of the array
+            int length = Marshal.ReadInt32(ptr);
+
+            // Structure size is one byte for C++ bool type
+            int elSiz = 1;
+
+            // Populate the list
+            for (int i = 0; i < length; i++)
+            {
+                byte aux = Marshal.PtrToStructure<byte>(ptr + sizeof(int) + (elSiz * i));
+                sequence.Add(aux == 1 ? true : false);                
+            }
+        }
+
+        public static void BooleanUnboundedSequenceToPtr(IList<bool> sequence, ref IntPtr ptr)
+        {
+            if (sequence == null || sequence.Count == 0)
+            {
+                // No structures in the list. Write 0 and return
+                ptr = Marshal.AllocHGlobal(sizeof(int));
+                Marshal.WriteInt32(ptr, 0);
+                return;
+            }
+
+            // Structure size is one byte for C++ bool type
+            int elSiz = 1;
             // Get the total size of unmanaged memory that is needed (length + elements)
             int size = sizeof(int) + (elSiz * sequence.Count);
             // Allocate unmanaged space.
@@ -59,8 +110,10 @@ namespace Test
             // Write the list data
             for (int i = 0; i < sequence.Count; i++)
             {
-                // Newly-allocated space has no existing object, so the last param is false
-                Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
+                byte aux = Convert.ToBoolean(sequence[i]) ? (byte)0x01 : (byte)0x00;
+
+                // Newly-allocated space has no existing object, so the last param is false 
+                Marshal.StructureToPtr(aux, ptr + sizeof(int) + (elSiz * i), false);                
             }
         }
 
@@ -181,6 +234,54 @@ namespace Test
                 {
                     Marshal.StructureToPtr((T)enumerator.Current, ptr + (elSiz * i), false);
                 }
+                i++;
+            }
+        }
+
+        public static void PtrToBooleanMultiArray(IntPtr ptr, Array array)
+        {
+            // We need to ensure that the array is not null before the call 
+            if (array == null)
+                return;
+
+            int length = 1;
+            for (int i = 0; i < array.Rank; i++)
+            {
+                length *= array.GetLength(i);
+            }
+
+            int[] dimensions = new int[array.Rank];
+            int[] dIndex = new int[array.Rank];
+            for (int i = 0; i < length; i++)
+            {
+                if (i > 0)
+                {
+                    UpdateDimensionsArray(array, dimensions);
+                }
+
+                byte aux = Marshal.PtrToStructure<byte>(ptr + i);
+                array.SetValue(aux == 1 ? true : false, dimensions);
+            }
+        }
+
+        public static void BooleanMultiArrayToPtr(Array array, ref IntPtr ptr)
+        {
+            if (array == null || array.Length == 0)
+            {
+                return;
+            }
+
+            // Get the total size of unmanaged memory that is needed
+            int size = array.Length;
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+
+            System.Collections.IEnumerator enumerator = array.GetEnumerator();
+            int i = 0;
+            while (enumerator.MoveNext())
+            {
+                byte aux = (bool)enumerator.Current ? (byte)1 : (byte)0;
+                Marshal.StructureToPtr(aux, ptr +  i, false);
                 i++;
             }
         }
@@ -327,6 +428,8 @@ namespace Test
         private IList<ushort> _ushortSequence;
         private IList<uint> _ulongSequence;
         private IList<ulong> _ulonglongSequence;
+        private IList<bool> _booleanSequence;
+        private IList<byte> _octetSequence;
         #endregion
 
         #region Properties
@@ -497,6 +600,30 @@ namespace Test
         public uint[,,] UnsignedLongMultiArray { get; set; }
 
         public ulong[,,] UnsignedLongLongMultiArray { get; set; }
+
+        public bool BooleanType { get; set; }
+
+        public byte OctetType { get; set; }
+
+        public bool[] BooleanArray { get; set; }
+
+        public byte[] OctetArray { get; set; }
+
+        public IList<bool> BooleanSequence
+        {
+            get { return _booleanSequence; }
+            set { _booleanSequence = value; }
+        }
+
+        public IList<byte> OctetSequence
+        {
+            get { return _octetSequence; }
+            set { _octetSequence = value; }
+        }
+
+        public bool[,,] BooleanMultiArray { get; set; }
+
+        public byte[,,] OctetMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -544,6 +671,12 @@ namespace Test
             UnsignedShortMultiArray = new ushort[3, 4, 2];
             UnsignedLongMultiArray = new uint[3, 4, 2];
             UnsignedLongLongMultiArray = new ulong[3, 4, 2];
+            BooleanArray = new bool[5];
+            OctetArray = new byte[5];
+            _booleanSequence = new List<bool>();
+            _octetSequence = new List<byte>();
+            BooleanMultiArray = new bool[3, 4, 2];
+            OctetMultiArray = new byte[3, 4, 2];
         }
         #endregion
 
@@ -794,6 +927,31 @@ namespace Test
                 toRelease.Add(wrapper.UnsignedLongLongMultiArray);
             }
 
+            // Other primitive types
+            wrapper.BooleanType = BooleanType;
+            wrapper.OctetType = OctetType;
+
+            wrapper.BooleanArray = BooleanArray;
+            wrapper.OctetArray = OctetArray;
+
+            Helper.BooleanUnboundedSequenceToPtr(BooleanSequence, ref wrapper.BooleanSequence);
+            toRelease.Add(wrapper.BooleanSequence);
+
+            Helper.UnboundedSequenceToPtr(OctetSequence, ref wrapper.OctetSequence);
+            toRelease.Add(wrapper.OctetSequence);
+
+            if (BooleanMultiArray != null)
+            {
+                Helper.BooleanMultiArrayToPtr(BooleanMultiArray, ref wrapper.BooleanMultiArray);
+                toRelease.Add(wrapper.BooleanMultiArray);
+            }
+
+            if (OctetMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<byte>(OctetMultiArray, ref wrapper.OctetMultiArray);
+                toRelease.Add(wrapper.OctetMultiArray);
+            }
+
             return wrapper;
         }
 
@@ -1008,6 +1166,28 @@ namespace Test
                 UnsignedLongLongMultiArray = new ulong[3, 4, 2];
             }
             Helper.PtrToMultiArray<ulong>(wrapper.UnsignedLongLongMultiArray, UnsignedLongLongMultiArray);
+
+            // Other primitives types
+            BooleanType = wrapper.BooleanType;
+            OctetType = wrapper.OctetType;
+
+            BooleanArray = wrapper.BooleanArray;
+            OctetArray = wrapper.OctetArray;
+
+            Helper.PtrToBooleanUnboundedSequence(wrapper.BooleanSequence, ref _booleanSequence);
+            Helper.PtrToUnboundedSequence(wrapper.OctetSequence, ref _octetSequence);
+
+            if (BooleanMultiArray == null)
+            {
+                BooleanMultiArray = new bool[3, 4, 2];
+            }
+            Helper.PtrToBooleanMultiArray(wrapper.BooleanMultiArray, BooleanMultiArray);
+
+            if (OctetMultiArray == null)
+            {
+                OctetMultiArray = new byte[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<byte>(wrapper.OctetMultiArray, OctetMultiArray);
         }
         #endregion
     }
@@ -1148,6 +1328,28 @@ namespace Test
         public IntPtr UnsignedLongMultiArray;
 
         public IntPtr UnsignedLongLongMultiArray;
+
+        // The default marshalling for a bool will expand it to 4 bytes. 
+        // It need to be adapted to C++ bool than expand to 1 byte.
+        [MarshalAs(UnmanagedType.I1)]
+        public bool BooleanType;
+
+        [MarshalAs(UnmanagedType.U1)]
+        public byte OctetType;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 5)]
+        public bool[] BooleanArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U1, SizeConst = 5)]
+        public byte[] OctetArray;
+
+        public IntPtr BooleanSequence;
+
+        public IntPtr OctetSequence;
+
+        public IntPtr BooleanMultiArray;
+
+        public IntPtr OctetMultiArray;
     }
 
     public class BasicTestStructTypeSupport

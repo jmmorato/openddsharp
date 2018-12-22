@@ -3,12 +3,14 @@
 
 #include <cstring>
 #include <stdexcept>
+#include "dds/CorbaSeq/BooleanSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/CharSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/DoubleSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/FloatSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/LongDoubleSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/LongLongSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/LongSeqTypeSupportImpl.h"
+#include "dds/CorbaSeq/OctetSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/ShortSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/ULongLongSeqTypeSupportImpl.h"
 #include "dds/CorbaSeq/ULongSeqTypeSupportImpl.h"
@@ -3347,6 +3349,336 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: MultiArrayUnsignedLongLong */
 
 
+/* Begin TYPEDEF: ArrayBoolean */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayBoolean_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  size += 5 * max_marshaled_size_boolean();
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayBoolean_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_boolean_array(arr.in(), 5);
+}
+
+bool operator>>(Serializer& strm, Test::ArrayBoolean_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_boolean_array(arr.out(), 5);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayBoolean_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(5), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayBoolean */
+
+
+/* Begin TYPEDEF: ArrayOctet */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayOctet_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  size += 5 * max_marshaled_size_octet();
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayOctet_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_octet_array(arr.in(), 5);
+}
+
+bool operator>>(Serializer& strm, Test::ArrayOctet_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_octet_array(arr.out(), 5);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayOctet_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(5), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayOctet */
+
+
+/* Begin TYPEDEF: BooleanList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::BooleanList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * max_marshaled_size_boolean();
+}
+
+bool operator<<(Serializer& strm, const Test::BooleanList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_boolean_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::BooleanList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_boolean_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::BooleanList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: BooleanList */
+
+
+/* Begin TYPEDEF: OctetList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::OctetList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * max_marshaled_size_octet();
+}
+
+bool operator<<(Serializer& strm, const Test::OctetList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_octet_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::OctetList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_octet_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::OctetList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: OctetList */
+
+
+/* Begin TYPEDEF: MultiArrayBoolean */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayBoolean_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  size += 24 * max_marshaled_size_boolean();
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayBoolean_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_boolean_array(arr.in()[0][0], 24);
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayBoolean_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_boolean_array(arr.out()[0][0], 24);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayBoolean_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(24), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayBoolean */
+
+
+/* Begin TYPEDEF: MultiArrayOctet */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayOctet_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  size += 24 * max_marshaled_size_octet();
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayOctet_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.write_octet_array(arr.in()[0][0], 24);
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayOctet_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  return strm.read_octet_array(arr.out()[0][0], 24);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayOctet_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(24), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayOctet */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -3385,6 +3717,10 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   Test::MultiArrayUnsignedShort_forany stru_UnsignedShortMultiArray(const_cast<Test::MultiArrayUnsignedShort_slice*>(stru.UnsignedShortMultiArray));
   Test::MultiArrayUnsignedLong_forany stru_UnsignedLongMultiArray(const_cast<Test::MultiArrayUnsignedLong_slice*>(stru.UnsignedLongMultiArray));
   Test::MultiArrayUnsignedLongLong_forany stru_UnsignedLongLongMultiArray(const_cast<Test::MultiArrayUnsignedLongLong_slice*>(stru.UnsignedLongLongMultiArray));
+  Test::ArrayBoolean_forany stru_BooleanArray(const_cast<Test::ArrayBoolean_slice*>(stru.BooleanArray));
+  Test::ArrayOctet_forany stru_OctetArray(const_cast<Test::ArrayOctet_slice*>(stru.OctetArray));
+  Test::MultiArrayBoolean_forany stru_BooleanMultiArray(const_cast<Test::MultiArrayBoolean_slice*>(stru.BooleanMultiArray));
+  Test::MultiArrayOctet_forany stru_OctetMultiArray(const_cast<Test::MultiArrayOctet_slice*>(stru.OctetMultiArray));
   if ((size + padding) % 4) {
     padding += 4 - ((size + padding) % 4);
   }
@@ -3470,6 +3806,14 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru_UnsignedShortMultiArray, size, padding);
   gen_find_size(stru_UnsignedLongMultiArray, size, padding);
   gen_find_size(stru_UnsignedLongLongMultiArray, size, padding);
+  size += gen_max_marshaled_size(ACE_OutputCDR::from_boolean(stru.BooleanType));
+  size += gen_max_marshaled_size(ACE_OutputCDR::from_octet(stru.OctetType));
+  gen_find_size(stru_BooleanArray, size, padding);
+  gen_find_size(stru_OctetArray, size, padding);
+  gen_find_size(stru.BooleanSequence, size, padding);
+  gen_find_size(stru.OctetSequence, size, padding);
+  gen_find_size(stru_BooleanMultiArray, size, padding);
+  gen_find_size(stru_OctetMultiArray, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -3504,6 +3848,10 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   Test::MultiArrayUnsignedShort_forany stru_UnsignedShortMultiArray(const_cast<Test::MultiArrayUnsignedShort_slice*>(stru.UnsignedShortMultiArray));
   Test::MultiArrayUnsignedLong_forany stru_UnsignedLongMultiArray(const_cast<Test::MultiArrayUnsignedLong_slice*>(stru.UnsignedLongMultiArray));
   Test::MultiArrayUnsignedLongLong_forany stru_UnsignedLongLongMultiArray(const_cast<Test::MultiArrayUnsignedLongLong_slice*>(stru.UnsignedLongLongMultiArray));
+  Test::ArrayBoolean_forany stru_BooleanArray(const_cast<Test::ArrayBoolean_slice*>(stru.BooleanArray));
+  Test::ArrayOctet_forany stru_OctetArray(const_cast<Test::ArrayOctet_slice*>(stru.OctetArray));
+  Test::MultiArrayBoolean_forany stru_BooleanMultiArray(const_cast<Test::MultiArrayBoolean_slice*>(stru.BooleanMultiArray));
+  Test::MultiArrayOctet_forany stru_OctetMultiArray(const_cast<Test::MultiArrayOctet_slice*>(stru.OctetMultiArray));
   return (strm << stru.Id)
     && (strm << stru.Message.in())
     && (strm << stru.WMessage.in())
@@ -3559,7 +3907,15 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru_LongLongMultiArray)
     && (strm << stru_UnsignedShortMultiArray)
     && (strm << stru_UnsignedLongMultiArray)
-    && (strm << stru_UnsignedLongLongMultiArray);
+    && (strm << stru_UnsignedLongLongMultiArray)
+    && (strm << ACE_OutputCDR::from_boolean(stru.BooleanType))
+    && (strm << ACE_OutputCDR::from_octet(stru.OctetType))
+    && (strm << stru_BooleanArray)
+    && (strm << stru_OctetArray)
+    && (strm << stru.BooleanSequence)
+    && (strm << stru.OctetSequence)
+    && (strm << stru_BooleanMultiArray)
+    && (strm << stru_OctetMultiArray);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -3594,6 +3950,10 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   Test::MultiArrayUnsignedShort_forany stru_UnsignedShortMultiArray(const_cast<Test::MultiArrayUnsignedShort_slice*>(stru.UnsignedShortMultiArray));
   Test::MultiArrayUnsignedLong_forany stru_UnsignedLongMultiArray(const_cast<Test::MultiArrayUnsignedLong_slice*>(stru.UnsignedLongMultiArray));
   Test::MultiArrayUnsignedLongLong_forany stru_UnsignedLongLongMultiArray(const_cast<Test::MultiArrayUnsignedLongLong_slice*>(stru.UnsignedLongLongMultiArray));
+  Test::ArrayBoolean_forany stru_BooleanArray(const_cast<Test::ArrayBoolean_slice*>(stru.BooleanArray));
+  Test::ArrayOctet_forany stru_OctetArray(const_cast<Test::ArrayOctet_slice*>(stru.OctetArray));
+  Test::MultiArrayBoolean_forany stru_BooleanMultiArray(const_cast<Test::MultiArrayBoolean_slice*>(stru.BooleanMultiArray));
+  Test::MultiArrayOctet_forany stru_OctetMultiArray(const_cast<Test::MultiArrayOctet_slice*>(stru.OctetMultiArray));
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
     && (strm >> stru.WMessage.out())
@@ -3649,7 +4009,15 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru_LongLongMultiArray)
     && (strm >> stru_UnsignedShortMultiArray)
     && (strm >> stru_UnsignedLongMultiArray)
-    && (strm >> stru_UnsignedLongLongMultiArray);
+    && (strm >> stru_UnsignedLongLongMultiArray)
+    && (strm >> ACE_InputCDR::to_boolean(stru.BooleanType))
+    && (strm >> ACE_InputCDR::to_octet(stru.OctetType))
+    && (strm >> stru_BooleanArray)
+    && (strm >> stru_OctetArray)
+    && (strm >> stru.BooleanSequence)
+    && (strm >> stru.OctetSequence)
+    && (strm >> stru_BooleanMultiArray)
+    && (strm >> stru_OctetMultiArray);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -3805,6 +4173,12 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "UnsignedLongLongType") == 0) {
       return typed.UnsignedLongLongType;
+    }
+    if (std::strcmp(field, "BooleanType") == 0) {
+      return typed.BooleanType;
+    }
+    if (std::strcmp(field, "OctetType") == 0) {
+      return typed.OctetType;
     }
     ACE_UNUSED_ARG(typed);
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
@@ -4100,6 +4474,46 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::MultiArrayUnsignedLongLong_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (std::strcmp(field, "BooleanType") == 0) {
+      ACE_CDR::Boolean val;
+      if (!(ser >> ACE_InputCDR::to_boolean(val))) {
+        throw std::runtime_error("Field 'BooleanType' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 1)) {
+        throw std::runtime_error("Field 'BooleanType' could not be skipped");
+      }
+    }
+    if (std::strcmp(field, "OctetType") == 0) {
+      ACE_CDR::Octet val;
+      if (!(ser >> ACE_InputCDR::to_octet(val))) {
+        throw std::runtime_error("Field 'OctetType' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 1)) {
+        throw std::runtime_error("Field 'OctetType' could not be skipped");
+      }
+    }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayBoolean_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayOctet_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::BooleanList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::OctetList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayBoolean_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayOctet_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -4151,13 +4565,19 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "UnsignedLongLongType") == 0) {
       return make_field_cmp(&T::UnsignedLongLongType, next);
     }
+    if (std::strcmp(field, "BooleanType") == 0) {
+      return make_field_cmp(&T::BooleanType, next);
+    }
+    if (std::strcmp(field, "OctetType") == 0) {
+      return make_field_cmp(&T::OctetType, next);
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", "CharType", "WCharType", "CharArray", "WCharArray", "CharSequence", "WCharSequence", "CharMultiArray", "WCharMultiArray", "ShortType", "LongLongType", "UnsignedShortType", "UnsignedLongType", "UnsignedLongLongType", "ShortArray", "LongLongArray", "UnsignedShortArray", "UnsignedLongArray", "UnsignedLongLongArray", "ShortSequence", "LongLongSequence", "UnsignedShortSequence", "UnsignedLongSequence", "UnsignedLongLongSequence", "ShortMultiArray", "LongLongMultiArray", "UnsignedShortMultiArray", "UnsignedLongMultiArray", "UnsignedLongLongMultiArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", "CharType", "WCharType", "CharArray", "WCharArray", "CharSequence", "WCharSequence", "CharMultiArray", "WCharMultiArray", "ShortType", "LongLongType", "UnsignedShortType", "UnsignedLongType", "UnsignedLongLongType", "ShortArray", "LongLongArray", "UnsignedShortArray", "UnsignedLongArray", "UnsignedLongLongArray", "ShortSequence", "LongLongSequence", "UnsignedShortSequence", "UnsignedLongSequence", "UnsignedLongLongSequence", "ShortMultiArray", "LongLongMultiArray", "UnsignedShortMultiArray", "UnsignedLongMultiArray", "UnsignedLongLongMultiArray", "BooleanType", "OctetType", "BooleanArray", "OctetArray", "BooleanSequence", "OctetSequence", "BooleanMultiArray", "OctetMultiArray", 0};
     return names;
   }
 
@@ -4330,6 +4750,30 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "UnsignedLongLongMultiArray") == 0) {
       return &static_cast<const T*>(stru)->UnsignedLongLongMultiArray;
+    }
+    if (std::strcmp(field, "BooleanType") == 0) {
+      return &static_cast<const T*>(stru)->BooleanType;
+    }
+    if (std::strcmp(field, "OctetType") == 0) {
+      return &static_cast<const T*>(stru)->OctetType;
+    }
+    if (std::strcmp(field, "BooleanArray") == 0) {
+      return &static_cast<const T*>(stru)->BooleanArray;
+    }
+    if (std::strcmp(field, "OctetArray") == 0) {
+      return &static_cast<const T*>(stru)->OctetArray;
+    }
+    if (std::strcmp(field, "BooleanSequence") == 0) {
+      return &static_cast<const T*>(stru)->BooleanSequence;
+    }
+    if (std::strcmp(field, "OctetSequence") == 0) {
+      return &static_cast<const T*>(stru)->OctetSequence;
+    }
+    if (std::strcmp(field, "BooleanMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->BooleanMultiArray;
+    }
+    if (std::strcmp(field, "OctetMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->OctetMultiArray;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -4734,6 +5178,62 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
       }
       return;
     }
+    if (std::strcmp(field, "BooleanType") == 0) {
+      static_cast<T*>(lhs)->BooleanType = *static_cast<const CORBA::Boolean*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "OctetType") == 0) {
+      static_cast<T*>(lhs)->OctetType = *static_cast<const CORBA::Octet*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "BooleanArray") == 0) {
+      Test::ArrayBoolean* lhsArr = &static_cast<T*>(lhs)->BooleanArray;
+      const Test::ArrayBoolean* rhsArr = static_cast<const Test::ArrayBoolean*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
+      return;
+    }
+    if (std::strcmp(field, "OctetArray") == 0) {
+      Test::ArrayOctet* lhsArr = &static_cast<T*>(lhs)->OctetArray;
+      const Test::ArrayOctet* rhsArr = static_cast<const Test::ArrayOctet*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
+      return;
+    }
+    if (std::strcmp(field, "BooleanSequence") == 0) {
+      static_cast<T*>(lhs)->BooleanSequence = *static_cast<const Test::BooleanList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "OctetSequence") == 0) {
+      static_cast<T*>(lhs)->OctetSequence = *static_cast<const Test::OctetList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "BooleanMultiArray") == 0) {
+      Test::MultiArrayBoolean* lhsArr = &static_cast<T*>(lhs)->BooleanMultiArray;
+      const Test::MultiArrayBoolean* rhsArr = static_cast<const Test::MultiArrayBoolean*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
+    if (std::strcmp(field, "OctetMultiArray") == 0) {
+      Test::MultiArrayOctet* lhsArr = &static_cast<T*>(lhs)->OctetMultiArray;
+      const Test::MultiArrayOctet* rhsArr = static_cast<const Test::MultiArrayOctet*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 #endif /* OPENDDS_NO_MULTI_TOPIC */
@@ -4781,6 +5281,12 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "UnsignedLongLongType") == 0) {
       return static_cast<const T*>(lhs)->UnsignedLongLongType == static_cast<const T*>(rhs)->UnsignedLongLongType;
+    }
+    if (std::strcmp(field, "BooleanType") == 0) {
+      return static_cast<const T*>(lhs)->BooleanType == static_cast<const T*>(rhs)->BooleanType;
+    }
+    if (std::strcmp(field, "OctetType") == 0) {
+      return static_cast<const T*>(lhs)->OctetType == static_cast<const T*>(rhs)->OctetType;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }

@@ -1566,3 +1566,223 @@ TAO::Array_Traits<Test::MultiArrayUnsignedLongLong_forany>::alloc (void)
 }
 
 
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayBoolean_forany>::free (
+    Test::ArrayBoolean_slice * _tao_slice
+  )
+{
+  Test::ArrayBoolean_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayBoolean_slice *
+TAO::Array_Traits<Test::ArrayBoolean_forany>::dup (
+    const Test::ArrayBoolean_slice * _tao_slice
+  )
+{
+  return Test::ArrayBoolean_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayBoolean_forany>::copy (
+    Test::ArrayBoolean_slice * _tao_to,
+    const Test::ArrayBoolean_slice * _tao_from
+  )
+{
+  Test::ArrayBoolean_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayBoolean_forany>::zero (
+    Test::ArrayBoolean_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_slice[i0] = ::CORBA::Boolean ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayBoolean_slice *
+TAO::Array_Traits<Test::ArrayBoolean_forany>::alloc (void)
+{
+  return Test::ArrayBoolean_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayOctet_forany>::free (
+    Test::ArrayOctet_slice * _tao_slice
+  )
+{
+  Test::ArrayOctet_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayOctet_slice *
+TAO::Array_Traits<Test::ArrayOctet_forany>::dup (
+    const Test::ArrayOctet_slice * _tao_slice
+  )
+{
+  return Test::ArrayOctet_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayOctet_forany>::copy (
+    Test::ArrayOctet_slice * _tao_to,
+    const Test::ArrayOctet_slice * _tao_from
+  )
+{
+  Test::ArrayOctet_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayOctet_forany>::zero (
+    Test::ArrayOctet_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_slice[i0] = ::CORBA::Octet ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayOctet_slice *
+TAO::Array_Traits<Test::ArrayOctet_forany>::alloc (void)
+{
+  return Test::ArrayOctet_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayBoolean_forany>::free (
+    Test::MultiArrayBoolean_slice * _tao_slice
+  )
+{
+  Test::MultiArrayBoolean_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::MultiArrayBoolean_slice *
+TAO::Array_Traits<Test::MultiArrayBoolean_forany>::dup (
+    const Test::MultiArrayBoolean_slice * _tao_slice
+  )
+{
+  return Test::MultiArrayBoolean_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayBoolean_forany>::copy (
+    Test::MultiArrayBoolean_slice * _tao_to,
+    const Test::MultiArrayBoolean_slice * _tao_from
+  )
+{
+  Test::MultiArrayBoolean_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayBoolean_forany>::zero (
+    Test::MultiArrayBoolean_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_slice[i0][i1][i2] = ::CORBA::Boolean ();
+            }
+        }
+    }
+}
+
+ACE_INLINE
+Test::MultiArrayBoolean_slice *
+TAO::Array_Traits<Test::MultiArrayBoolean_forany>::alloc (void)
+{
+  return Test::MultiArrayBoolean_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayOctet_forany>::free (
+    Test::MultiArrayOctet_slice * _tao_slice
+  )
+{
+  Test::MultiArrayOctet_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::MultiArrayOctet_slice *
+TAO::Array_Traits<Test::MultiArrayOctet_forany>::dup (
+    const Test::MultiArrayOctet_slice * _tao_slice
+  )
+{
+  return Test::MultiArrayOctet_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayOctet_forany>::copy (
+    Test::MultiArrayOctet_slice * _tao_to,
+    const Test::MultiArrayOctet_slice * _tao_from
+  )
+{
+  Test::MultiArrayOctet_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayOctet_forany>::zero (
+    Test::MultiArrayOctet_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_slice[i0][i1][i2] = ::CORBA::Octet ();
+            }
+        }
+    }
+}
+
+ACE_INLINE
+Test::MultiArrayOctet_slice *
+TAO::Array_Traits<Test::MultiArrayOctet_forany>::alloc (void)
+{
+  return Test::MultiArrayOctet_alloc ();
+}
+
+

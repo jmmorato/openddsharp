@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_RH8U1X_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_RH8U1X_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_BPLACM_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_BPLACM_H_
 
 #include /**/ "ace/pre.h"
 
@@ -579,6 +579,76 @@ namespace TAO
         Fixed_Array_SArg_Traits_T<
             ::Test::MultiArrayUnsignedLongLong_var,
             ::Test::MultiArrayUnsignedLongLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayBoolean_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayBoolean_var,
+            ::Test::ArrayBoolean_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayOctet_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayOctet_var,
+            ::Test::ArrayOctet_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::BooleanList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::BooleanList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::OctetList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::OctetList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayBoolean_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayBoolean_var,
+            ::Test::MultiArrayBoolean_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayOctet_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayOctet_var,
+            ::Test::MultiArrayOctet_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

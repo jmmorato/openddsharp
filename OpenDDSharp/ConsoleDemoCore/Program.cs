@@ -262,6 +262,24 @@ namespace ConsoleDemoCore
                     { { 57, 58 }, { 59, 60 }, { 61, 62 }, { 63, 64 } },
                     { { 65, 66 }, { 67, 68 }, { 69, 70 }, { 71, 72 } }
                 },
+                BooleanType = true,
+                OctetType = 0x42,
+                BooleanArray = new bool[] { true, false, true, false, true},
+                OctetArray = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 },
+                BooleanSequence = { true, false, true, false, true},
+                OctetSequence = { 0x01, 0x02, 0x03, 0x04, 0x05 },
+                BooleanMultiArray = new bool[3, 4, 2]
+                {
+                    { { true, false }, { true, false }, { true, false }, { true, false } },
+                    { { true, false }, { true, false }, { true, false }, { true, false } },
+                    { { true, false }, { true, false }, { true, false }, { true, false } }
+                },
+                OctetMultiArray = new byte[3, 4, 2]
+                {
+                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
+                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
+                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                }
             };
             dataWriter.Write(data);
 
@@ -1129,6 +1147,132 @@ namespace ConsoleDemoCore
                             {
                                 Console.Write(received.UnsignedLongLongMultiArray[i, j, k].ToString("00"));
                                 if (j + 1 < received.UnsignedLongLongMultiArray.GetLength(1) || k + 1 < received.UnsignedLongLongMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.BooleanType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.BooleanType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.OctetType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(string.Format("0x{0:X2}", received.OctetType));
+                Console.WriteLine();
+
+                if (received.BooleanArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.BooleanArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.BooleanArray.Length; i++)
+                    {
+                        Console.Write(received.BooleanArray[i]);
+                        if (i + 1 < received.BooleanArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.OctetArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.OctetArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.OctetArray.Length; i++)
+                    {
+                        Console.Write(string.Format("0x{0:X2}", received.OctetArray[i]));
+                        if (i + 1 < received.OctetArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if(received.BooleanSequence != null && received.BooleanSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.BooleanSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.BooleanSequence.Count; i++)
+                    {
+                        Console.Write(received.BooleanSequence[i]);
+                        if (i < received.BooleanSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.OctetSequence != null && received.OctetSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.OctetSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.OctetSequence.Count; i++)
+                    {
+                        Console.Write(string.Format("0x{0:X2}", received.OctetSequence[i]));
+                        if (i < received.OctetSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.BooleanMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.BooleanMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.BooleanMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.BooleanMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.BooleanMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.BooleanMultiArray[i, j, k]);
+                                if (j + 1 < received.BooleanMultiArray.GetLength(1) || k + 1 < received.BooleanMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.OctetMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.OctetMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.OctetMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.OctetMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.OctetMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(string.Format("0x{0:X2}", received.OctetMultiArray[i, j, k]));
+                                if (j + 1 < received.OctetMultiArray.GetLength(1) || k + 1 < received.OctetMultiArray.GetLength(2))
                                 {
                                     Console.Write(", ");
                                 }
