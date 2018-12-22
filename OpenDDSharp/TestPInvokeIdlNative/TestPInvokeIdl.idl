@@ -35,6 +35,21 @@ module Test {
     typedef sequence<wchar> WCharList;
     typedef char MultiArrayChar[3][4][2];
     typedef wchar MultiArrayWChar[3][4][2];
+    typedef short ArrayShort[5];
+    typedef long long ArrayLongLong[5];
+    typedef unsigned short ArrayUnsignedShort[5];
+    typedef unsigned long ArrayUnsignedLong[5];
+    typedef unsigned long long ArrayUnsignedLongLong[5];
+    typedef sequence<short> ShortList;
+    typedef sequence<long long> LongLongList;
+    typedef sequence<unsigned short> UnsignedShortList;
+    typedef sequence<unsigned long> UnsignedLongList;
+    typedef sequence<unsigned long long> UnsignedLongLongList;
+    typedef short MultiArrayShort[3][4][2];
+    typedef long long MultiArrayLongLong[3][4][2];
+    typedef unsigned short MultiArrayUnsignedShort[3][4][2];
+    typedef unsigned long MultiArrayUnsignedLong[3][4][2];
+    typedef unsigned long long MultiArrayUnsignedLongLong[3][4][2];
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -74,6 +89,26 @@ module Test {
         WCharList WCharSequence;
         MultiArrayChar CharMultiArray;
         MultiArrayWChar WCharMultiArray;
+        short ShortType;
+        long long LongLongType;
+        unsigned short UnsignedShortType;
+        unsigned long UnsignedLongType;
+        unsigned long long UnsignedLongLongType;
+        ArrayShort ShortArray;
+        ArrayLongLong LongLongArray;
+        ArrayUnsignedShort UnsignedShortArray;
+        ArrayUnsignedLong UnsignedLongArray;
+        ArrayUnsignedLongLong UnsignedLongLongArray;
+        ShortList ShortSequence;
+        LongLongList LongLongSequence;
+        UnsignedShortList UnsignedShortSequence;
+        UnsignedLongList UnsignedLongSequence;
+        UnsignedLongLongList UnsignedLongLongSequence;
+        MultiArrayShort ShortMultiArray;
+        MultiArrayLongLong LongLongMultiArray;
+        MultiArrayUnsignedShort UnsignedShortMultiArray;
+        MultiArrayUnsignedLong UnsignedLongMultiArray;
+        MultiArrayUnsignedLongLong UnsignedLongLongMultiArray;
 	};
 
 };

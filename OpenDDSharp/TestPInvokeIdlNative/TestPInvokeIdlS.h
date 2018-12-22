@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_QMT2RB_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_QMT2RB_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_RH8U1X_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_RH8U1X_H_
 
 #include /**/ "ace/pre.h"
 
@@ -404,6 +404,181 @@ namespace TAO
         Fixed_Array_SArg_Traits_T<
             ::Test::MultiArrayWChar_var,
             ::Test::MultiArrayWChar_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayShort_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayShort_var,
+            ::Test::ArrayShort_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayLongLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayLongLong_var,
+            ::Test::ArrayLongLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayUnsignedShort_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayUnsignedShort_var,
+            ::Test::ArrayUnsignedShort_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayUnsignedLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayUnsignedLong_var,
+            ::Test::ArrayUnsignedLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayUnsignedLongLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayUnsignedLongLong_var,
+            ::Test::ArrayUnsignedLongLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::ShortList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::ShortList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::LongLongList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::LongLongList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::UnsignedShortList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::UnsignedShortList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::UnsignedLongList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::UnsignedLongList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::UnsignedLongLongList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::UnsignedLongLongList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayShort_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayShort_var,
+            ::Test::MultiArrayShort_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayLongLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayLongLong_var,
+            ::Test::MultiArrayLongLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayUnsignedShort_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayUnsignedShort_var,
+            ::Test::MultiArrayUnsignedShort_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayUnsignedLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayUnsignedLong_var,
+            ::Test::MultiArrayUnsignedLong_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayUnsignedLongLong_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayUnsignedLongLong_var,
+            ::Test::MultiArrayUnsignedLongLong_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

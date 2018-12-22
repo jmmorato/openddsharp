@@ -48,15 +48,15 @@ EXTERN_STRUCT_EXPORT NestedTestStructWrapper
 /////////////////////////////////////////////////
 EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 {
-    int Id;
-    char* Message;
-    wchar_t* WMessage;
+    CORBA::Long Id;
+    CORBA::Char* Message;
+    CORBA::WChar* WMessage;
     void* LongSequence;
     void* StringSequence;
     void* WStringSequence;
-    int LongArray[5];
-    char* StringArray[10];
-    wchar_t* WStringArray[4];
+    CORBA::Long LongArray[5];
+    CORBA::Char* StringArray[10];
+    CORBA::WChar* WStringArray[4];
     NestedTestStructWrapper StructTest;
     void* StructSequence;
     NestedTestStructWrapper StructArray[5];
@@ -84,6 +84,26 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     void* WCharSequence;
     void* CharMultiArray;
     void* WCharMultiArray;
+    CORBA::Short ShortType;
+    CORBA::LongLong LongLongType;
+    CORBA::UShort UnsignedShortType;
+    CORBA::ULong UnsignedLongType;
+    CORBA::ULongLong UnsignedLongLongType;
+    CORBA::Short ShortArray[5];
+    CORBA::LongLong LongLongArray[5];
+    CORBA::UShort UnsignedShortArray[5];
+    CORBA::ULong UnsignedLongArray[5];
+    CORBA::ULongLong UnsignedLongLongArray[5];
+    void* ShortSequence;
+    void* LongLongSequence;
+    void* UnsignedShortSequence;
+    void* UnsignedLongSequence;
+    void* UnsignedLongLongSequence;
+    void* ShortMultiArray;
+    void* LongLongMultiArray;
+    void* UnsignedShortMultiArray;
+    void* UnsignedLongMultiArray;
+    void* UnsignedLongLongMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -125,7 +145,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Array of primitives
         if (LongArray != NULL)
         {
-            ACE_OS::memcpy(nativeData.LongArray, LongArray, sizeof(int) * 5);
+            ACE_OS::memcpy(nativeData.LongArray, LongArray, sizeof(CORBA::Long) * 5);
         }
 
         // Array of string
@@ -180,7 +200,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Multi-dimensional array of primitives 
         if (LongMultiArray != NULL)
         {
-            ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(int) * 24);
+            ACE_OS::memcpy(nativeData.LongMultiArray, LongMultiArray, sizeof(CORBA::Long) * 24);
         }
 
         // Multi-dimensional array of strings
@@ -188,7 +208,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         {
             char** arr_StringMultiArray = new char*[24];
             marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr_StringMultiArray, 24);
-            ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(char*) * 24);
+            ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(CORBA::Char*) * 24);
             delete[] arr_StringMultiArray;
         }
 
@@ -197,7 +217,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         {
             wchar_t** arr_WStringMultiArray = new wchar_t*[24];
             marshal::ptr_to_wide_string_multi_array(WStringMultiArray, arr_WStringMultiArray, 24);
-            ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(wchar_t*) * 24);
+            ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(CORBA::WChar*) * 24);
             delete[] arr_WStringMultiArray;
         }
 
@@ -323,6 +343,88 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             ACE_OS::memcpy(nativeData.WCharMultiArray, WCharMultiArray, sizeof(CORBA::WChar) * 24);
         }
 
+        // Integer types
+        nativeData.ShortType = ShortType;
+        nativeData.LongLongType = LongLongType;
+        nativeData.UnsignedShortType = UnsignedShortType;
+        nativeData.UnsignedLongType = UnsignedLongType;
+        nativeData.UnsignedLongLongType = UnsignedLongLongType;
+
+        if (ShortArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.ShortArray, ShortArray, sizeof(CORBA::Short) * 5);
+        }
+
+        if (LongLongArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.LongLongArray, LongLongArray, sizeof(CORBA::LongLong) * 5);
+        }
+
+        if (UnsignedShortArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.UnsignedShortArray, UnsignedShortArray, sizeof(CORBA::UShort) * 5);
+        }
+
+        if (UnsignedLongArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.UnsignedLongArray, UnsignedLongArray, sizeof(CORBA::ULong) * 5);
+        }
+
+        if (UnsignedLongLongArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.UnsignedLongLongArray, UnsignedLongLongArray, sizeof(CORBA::ULongLong) * 5);
+        }
+
+        if (ShortSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(ShortSequence, nativeData.ShortSequence);
+        }
+
+        if (LongLongSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(LongLongSequence, nativeData.LongLongSequence);
+        }
+
+        if (UnsignedShortSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(UnsignedShortSequence, nativeData.UnsignedShortSequence);
+        }
+
+        if (UnsignedLongSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(UnsignedLongSequence, nativeData.UnsignedLongSequence);
+        }
+
+        if (UnsignedLongLongSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(UnsignedLongLongSequence, nativeData.UnsignedLongLongSequence);
+        }
+
+        if (ShortMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.ShortMultiArray, ShortMultiArray, sizeof(CORBA::Short) * 24);
+        }
+
+        if (LongLongMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.LongLongMultiArray, LongLongMultiArray, sizeof(CORBA::LongLong) * 24);
+        }
+
+        if (UnsignedShortMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.UnsignedShortMultiArray, UnsignedShortMultiArray, sizeof(CORBA::UShort) * 24);
+        }
+
+        if (UnsignedLongMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.UnsignedLongMultiArray, UnsignedLongMultiArray, sizeof(CORBA::ULong) * 24);
+        }
+
+        if (UnsignedLongLongMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.UnsignedLongLongMultiArray, UnsignedLongLongMultiArray, sizeof(CORBA::ULongLong) * 24);
+        }
+
         return nativeData;
     }
 
@@ -409,15 +511,15 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Multi-dimensional array of primitives
         if (nativeData.LongMultiArray != NULL)
         {
-            LongMultiArray = ACE_OS::malloc(sizeof(int) * 24);
-            ACE_OS::memcpy(LongMultiArray, nativeData.LongMultiArray, sizeof(int) * 24);
+            LongMultiArray = ACE_OS::malloc(sizeof(CORBA::Long) * 24);
+            ACE_OS::memcpy(LongMultiArray, nativeData.LongMultiArray, sizeof(CORBA::Long) * 24);
         }
 
         // Multi-dimensional array of strings
         if (nativeData.StringMultiArray != NULL)
         {
-            char** arr_StringMultiArray = new char*[24];
-            ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(char*) * 24);
+            CORBA::Char** arr_StringMultiArray = new CORBA::Char*[24];
+            ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(CORBA::Char*) * 24);
             marshal::basic_string_multi_array_to_ptr(arr_StringMultiArray, StringMultiArray, 24);
             delete[] arr_StringMultiArray;
         }
@@ -425,8 +527,8 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Multi-dimensional array of strings
         if (nativeData.WStringMultiArray != NULL)
         {
-            wchar_t** arr_WStringMultiArray = new wchar_t*[24];
-            ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(wchar_t*) * 24);
+            CORBA::WChar** arr_WStringMultiArray = new CORBA::WChar*[24];
+            ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(CORBA::WChar*) * 24);
             marshal::wide_string_multi_array_to_ptr(arr_WStringMultiArray, WStringMultiArray, 24);
             delete[] arr_WStringMultiArray;
         }
@@ -540,6 +642,74 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         {
             WCharMultiArray = ACE_OS::malloc(sizeof(CORBA::WChar) * 24);
             ACE_OS::memcpy(WCharMultiArray, nativeData.WCharMultiArray, sizeof(CORBA::WChar) * 24);
+        }
+
+        // Integer types
+        ShortType = nativeData.ShortType;
+        LongLongType = nativeData.LongLongType;
+        UnsignedShortType = nativeData.UnsignedShortType;
+        UnsignedLongType = nativeData.UnsignedLongType;
+        UnsignedLongLongType = nativeData.UnsignedLongLongType;
+
+        if (nativeData.ShortArray != NULL)
+        {
+            ACE_OS::memcpy(ShortArray, nativeData.ShortArray, sizeof(CORBA::Short) * 5);
+        }
+
+        if (nativeData.LongLongArray != NULL)
+        {
+            ACE_OS::memcpy(LongLongArray, nativeData.LongLongArray, sizeof(CORBA::LongLong) * 5);
+        }
+
+        if (nativeData.UnsignedShortArray != NULL)
+        {
+            ACE_OS::memcpy(UnsignedShortArray, nativeData.UnsignedShortArray, sizeof(CORBA::UShort) * 5);
+        }
+
+        if (nativeData.UnsignedLongArray != NULL)
+        {
+            ACE_OS::memcpy(UnsignedLongArray, nativeData.UnsignedLongArray, sizeof(CORBA::ULong) * 5);
+        }
+
+        if (nativeData.UnsignedLongLongArray != NULL)
+        {
+            ACE_OS::memcpy(UnsignedLongLongArray, nativeData.UnsignedLongLongArray, sizeof(CORBA::ULongLong) * 5);
+        }
+
+        marshal::unbounded_sequence_to_ptr(nativeData.ShortSequence, ShortSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.LongLongSequence, LongLongSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.UnsignedShortSequence, UnsignedShortSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.UnsignedLongSequence, UnsignedLongSequence);
+        marshal::unbounded_sequence_to_ptr(nativeData.UnsignedLongLongSequence, UnsignedLongLongSequence);
+
+        if (nativeData.ShortMultiArray != NULL)
+        {
+            ShortMultiArray = ACE_OS::malloc(sizeof(CORBA::Short) * 24);
+            ACE_OS::memcpy(ShortMultiArray, nativeData.ShortMultiArray, sizeof(CORBA::Short) * 24);
+        }
+
+        if (nativeData.LongLongMultiArray != NULL)
+        {
+            LongLongMultiArray = ACE_OS::malloc(sizeof(CORBA::LongLong) * 24);
+            ACE_OS::memcpy(LongLongMultiArray, nativeData.LongLongMultiArray, sizeof(CORBA::LongLong) * 24);
+        }
+
+        if (nativeData.UnsignedShortMultiArray != NULL)
+        {
+            UnsignedShortMultiArray = ACE_OS::malloc(sizeof(CORBA::UShort) * 24);
+            ACE_OS::memcpy(UnsignedShortMultiArray, nativeData.UnsignedShortMultiArray, sizeof(CORBA::UShort) * 24);
+        }
+
+        if (nativeData.UnsignedLongMultiArray != NULL)
+        {
+            UnsignedLongMultiArray = ACE_OS::malloc(sizeof(CORBA::ULong) * 24);
+            ACE_OS::memcpy(UnsignedLongMultiArray, nativeData.UnsignedLongMultiArray, sizeof(CORBA::ULong) * 24);
+        }
+
+        if (nativeData.UnsignedLongLongMultiArray != NULL)
+        {
+            UnsignedLongLongMultiArray = ACE_OS::malloc(sizeof(CORBA::ULongLong) * 24);
+            ACE_OS::memcpy(UnsignedLongLongMultiArray, nativeData.UnsignedLongLongMultiArray, sizeof(CORBA::ULongLong) * 24);
         }
     }
 
@@ -705,6 +875,61 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         if (WCharMultiArray != NULL)
         {
             ACE_OS::free(WCharMultiArray);
+        }
+
+        // Release pointer to the short sequence
+        if (ShortSequence != NULL)
+        {
+            ACE_OS::free(ShortSequence);
+        }
+
+        // Release pointer to the long long sequence
+        if (LongLongSequence != NULL)
+        {
+            ACE_OS::free(LongLongSequence);
+        }
+
+        // Release pointer to the unsigned short sequence
+        if (UnsignedShortSequence != NULL)
+        {
+            ACE_OS::free(UnsignedShortSequence);
+        }
+
+        // Release pointer to the unsigned long sequence
+        if (UnsignedLongSequence != NULL)
+        {
+            ACE_OS::free(UnsignedLongSequence);
+        }
+
+        // Release pointer to the unsigned long long sequence
+        if (UnsignedLongLongSequence != NULL)
+        {
+            ACE_OS::free(UnsignedLongLongSequence);
+        }
+
+        if (ShortMultiArray != NULL)
+        {
+            ACE_OS::free(ShortMultiArray);
+        }
+
+        if (LongLongMultiArray != NULL)
+        {
+            ACE_OS::free(LongLongMultiArray);
+        }
+
+        if (UnsignedShortMultiArray != NULL)
+        {
+            ACE_OS::free(UnsignedShortMultiArray);
+        }
+
+        if (UnsignedLongMultiArray != NULL)
+        {
+            ACE_OS::free(UnsignedLongMultiArray);
+        }
+
+        if (UnsignedLongLongMultiArray != NULL)
+        {
+            ACE_OS::free(UnsignedLongLongMultiArray);
         }
     }
 };

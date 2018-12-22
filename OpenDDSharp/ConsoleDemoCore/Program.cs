@@ -217,6 +217,51 @@ namespace ConsoleDemoCore
                     { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
                     { { '7', '8' }, { '9', '0' }, { '1', '2' }, { '3', '4' } }
                 },
+                ShortType = -1,
+                LongLongType = -2,
+                UnsignedShortType = 1,
+                UnsignedLongType = 2,
+                UnsignedLongLongType = 3,
+                ShortArray = new short[] { -1, -2, -3, -4, -5 },
+                LongLongArray = new long[] { -6, -7, -8, -9, -10 },
+                UnsignedShortArray = new ushort[] { 1, 2, 3, 4, 5 },
+                UnsignedLongArray = new uint[] { 6, 7, 8, 9, 10 },
+                UnsignedLongLongArray = new ulong[] { 11, 12, 13, 14, 15 },
+                ShortSequence = { -1, -2, -3 },
+                LongLongSequence = { -4, -5, -6, -7, -8 },
+                UnsignedShortSequence = { 1, 2, 3, 4 },
+                UnsignedLongSequence = { 5, 6 },
+                UnsignedLongLongSequence = { 7 },
+                ShortMultiArray = new short[3, 4, 2]
+                {
+                    { { -01, -02 }, { -03, -04 }, { -05, -06 }, { -07, -08 } },
+                    { { -09, -10 }, { -11, -12 }, { -13, -14 }, { -15, -16 } },
+                    { { -17, -18 }, { -19, -20 }, { -21, -22 }, { -23, -24 } }
+                },
+                LongLongMultiArray = new long[3, 4, 2]
+                {
+                    { { -25, -26 }, { -27, -28 }, { -29, -30 }, { -31, -32 } },
+                    { { -33, -34 }, { -35, -36 }, { -37, -38 }, { -39, -40 } },
+                    { { -41, -42 }, { -43, -44 }, { -45, -46 }, { -47, -48 } }
+                },
+                UnsignedShortMultiArray = new ushort[3, 4, 2]
+                {
+                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
+                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
+                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                },
+                UnsignedLongMultiArray = new uint[3, 4, 2]
+                {
+                    { { 25, 26 }, { 27, 28 }, { 29, 30 }, { 31, 32 } },
+                    { { 33, 34 }, { 35, 36 }, { 37, 38 }, { 39, 40 } },
+                    { { 41, 42 }, { 43, 44 }, { 45, 46 }, { 47, 48 } }
+                },
+                UnsignedLongLongMultiArray = new ulong[3, 4, 2]
+                {
+                    { { 49, 50 }, { 51, 52 }, { 53, 54 }, { 55, 56 } },
+                    { { 57, 58 }, { 59, 60 }, { 61, 62 }, { 63, 64 } },
+                    { { 65, 66 }, { 67, 68 }, { 69, 70 }, { 71, 72 } }
+                },
             };
             dataWriter.Write(data);
 
@@ -769,6 +814,321 @@ namespace ConsoleDemoCore
                             {
                                 Console.Write(received.WCharMultiArray[i, j, k]);
                                 if (j + 1 < received.WCharMultiArray.GetLength(1) || k + 1 < received.WCharMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.ShortType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.ShortType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.LongLongType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.LongLongType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.UnsignedShortType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.UnsignedShortType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.UnsignedLongType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.UnsignedLongType);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.UnsignedLongLongType) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.UnsignedLongLongType);
+                Console.WriteLine();
+
+                if (received.ShortArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.ShortArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.ShortArray.Length; i++)
+                    {
+                        Console.Write(received.ShortArray[i]);
+                        if (i + 1 < received.ShortArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.LongLongArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongLongArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongLongArray.Length; i++)
+                    {
+                        Console.Write(received.LongLongArray[i]);
+                        if (i + 1 < received.LongLongArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedShortArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedShortArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedShortArray.Length; i++)
+                    {
+                        Console.Write(received.UnsignedShortArray[i]);
+                        if (i + 1 < received.UnsignedShortArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedLongArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedLongArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedLongArray.Length; i++)
+                    {
+                        Console.Write(received.UnsignedLongArray[i]);
+                        if (i + 1 < received.UnsignedLongArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedLongLongArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedLongLongArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedLongLongArray.Length; i++)
+                    {
+                        Console.Write(received.UnsignedLongLongArray[i]);
+                        if (i + 1 < received.UnsignedLongLongArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.ShortSequence != null && received.ShortSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.ShortSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.ShortSequence.Count; i++)
+                    {
+                        Console.Write(received.ShortSequence[i]);
+                        if (i < received.ShortSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.LongLongSequence != null && received.LongLongSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongLongSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongLongSequence.Count; i++)
+                    {
+                        Console.Write(received.LongLongSequence[i]);
+                        if (i < received.LongLongSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedShortSequence != null && received.UnsignedShortSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedShortSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedShortSequence.Count; i++)
+                    {
+                        Console.Write(received.UnsignedShortSequence[i]);
+                        if (i < received.UnsignedShortSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedLongSequence != null && received.UnsignedLongSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedLongSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedLongSequence.Count; i++)
+                    {
+                        Console.Write(received.UnsignedLongSequence[i]);
+                        if (i < received.UnsignedLongSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedLongLongSequence != null && received.UnsignedLongLongSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedLongLongSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedLongLongSequence.Count; i++)
+                    {
+                        Console.Write(received.UnsignedLongLongSequence[i]);
+                        if (i < received.UnsignedLongLongSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.ShortMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.ShortMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.ShortMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.ShortMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.ShortMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.ShortMultiArray[i, j, k].ToString("00"));
+                                if (j + 1 < received.ShortMultiArray.GetLength(1) || k + 1 < received.ShortMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.LongLongMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongLongMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongLongMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.LongLongMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.LongLongMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.LongLongMultiArray[i, j, k].ToString("00"));
+                                if (j + 1 < received.LongLongMultiArray.GetLength(1) || k + 1 < received.LongLongMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedShortMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedShortMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedShortMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.UnsignedShortMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.UnsignedShortMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.UnsignedShortMultiArray[i, j, k].ToString("00"));
+                                if (j + 1 < received.UnsignedShortMultiArray.GetLength(1) || k + 1 < received.UnsignedShortMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedLongMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedLongMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedLongMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.UnsignedLongMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.UnsignedLongMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.UnsignedLongMultiArray[i, j, k].ToString("00"));
+                                if (j + 1 < received.UnsignedLongMultiArray.GetLength(1) || k + 1 < received.UnsignedLongMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.UnsignedLongLongMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.UnsignedLongLongMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.UnsignedLongLongMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.UnsignedLongLongMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.UnsignedLongLongMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.UnsignedLongLongMultiArray[i, j, k].ToString("00"));
+                                if (j + 1 < received.UnsignedLongLongMultiArray.GetLength(1) || k + 1 < received.UnsignedLongLongMultiArray.GetLength(2))
                                 {
                                     Console.Write(", ");
                                 }

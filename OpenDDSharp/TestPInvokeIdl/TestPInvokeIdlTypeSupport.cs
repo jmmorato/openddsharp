@@ -322,6 +322,11 @@ namespace Test
         private IList<double> _longDoubleSequence;
         private IList<char> _charSequence;
         private IList<char> _wcharSequence;
+        private IList<short> _shortSequence;
+        private IList<long> _longlongSequence;
+        private IList<ushort> _ushortSequence;
+        private IList<uint> _ulongSequence;
+        private IList<ulong> _ulonglongSequence;
         #endregion
 
         #region Properties
@@ -432,6 +437,66 @@ namespace Test
         public char[,,] CharMultiArray { get; set; }
 
         public char[,,] WCharMultiArray { get; set; }
+
+        public short ShortType { get; set; }
+
+        public long LongLongType { get; set; }
+
+        public ushort UnsignedShortType { get; set; }
+
+        public uint UnsignedLongType { get; set; }
+
+        public ulong UnsignedLongLongType { get; set; }
+
+        public short[] ShortArray { get; set; }
+
+        public long[] LongLongArray { get; set; }
+
+        public ushort[] UnsignedShortArray { get; set; }
+
+        public uint[] UnsignedLongArray { get; set; }
+
+        public ulong[] UnsignedLongLongArray { get; set; }
+
+        public IList<short> ShortSequence
+        {
+            get { return _shortSequence; }
+            set { _shortSequence = value; }
+        }
+
+        public IList<long> LongLongSequence
+        {
+            get { return _longlongSequence; }
+            set { _longlongSequence = value; }
+        }
+
+        public IList<ushort> UnsignedShortSequence
+        {
+            get { return _ushortSequence; }
+            set { _ushortSequence = value; }
+        }
+
+        public IList<uint> UnsignedLongSequence
+        {
+            get { return _ulongSequence; }
+            set { _ulongSequence = value; }
+        }
+
+        public IList<ulong> UnsignedLongLongSequence
+        {
+            get { return _ulonglongSequence; }
+            set { _ulonglongSequence = value; }
+        }
+
+        public short[,,] ShortMultiArray { get; set; }
+
+        public long[,,] LongLongMultiArray { get; set; }
+
+        public ushort[,,] UnsignedShortMultiArray { get; set; }
+
+        public uint[,,] UnsignedLongMultiArray { get; set; }
+
+        public ulong[,,] UnsignedLongLongMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -464,6 +529,21 @@ namespace Test
             WCharSequence = new List<char>();
             CharMultiArray = new char[3, 4, 2];
             WCharMultiArray = new char[3, 4, 2];
+            ShortArray = new short[5];
+            LongLongArray = new long[5];
+            UnsignedShortArray = new ushort[5];
+            UnsignedLongArray = new uint[5];
+            UnsignedLongLongArray = new ulong[5];
+            _shortSequence = new List<short>();
+            _longlongSequence = new List<long>();
+            _ushortSequence = new List<ushort>();
+            _ulongSequence = new List<uint>();
+            _ulonglongSequence = new List<ulong>();
+            ShortMultiArray = new short[3, 4, 2];
+            LongLongMultiArray = new long[3, 4, 2];
+            UnsignedShortMultiArray = new ushort[3, 4, 2];
+            UnsignedLongMultiArray = new uint[3, 4, 2];
+            UnsignedLongLongMultiArray = new ulong[3, 4, 2];
         }
         #endregion
 
@@ -656,6 +736,64 @@ namespace Test
                 toRelease.Add(wrapper.WCharMultiArray);
             }
 
+            // Integer types
+            wrapper.ShortType = ShortType;
+            wrapper.LongLongType = LongLongType;
+            wrapper.UnsignedShortType = UnsignedShortType;
+            wrapper.UnsignedLongType = UnsignedLongType;
+            wrapper.UnsignedLongLongType = UnsignedLongLongType;
+
+            wrapper.ShortArray = ShortArray;
+            wrapper.LongLongArray = LongLongArray;
+            wrapper.UnsignedShortArray = UnsignedShortArray;
+            wrapper.UnsignedLongArray = UnsignedLongArray;
+            wrapper.UnsignedLongLongArray = UnsignedLongLongArray;
+
+            Helper.UnboundedSequenceToPtr(ShortSequence, ref wrapper.ShortSequence);
+            toRelease.Add(wrapper.ShortSequence);
+
+            Helper.UnboundedSequenceToPtr(LongLongSequence, ref wrapper.LongLongSequence);
+            toRelease.Add(wrapper.LongLongSequence);
+
+            Helper.UnboundedSequenceToPtr(UnsignedShortSequence, ref wrapper.UnsignedShortSequence);
+            toRelease.Add(wrapper.UnsignedShortSequence);
+
+            Helper.UnboundedSequenceToPtr(UnsignedLongSequence, ref wrapper.UnsignedLongSequence);
+            toRelease.Add(wrapper.UnsignedLongSequence);
+
+            Helper.UnboundedSequenceToPtr(UnsignedLongLongSequence, ref wrapper.UnsignedLongLongSequence);
+            toRelease.Add(wrapper.UnsignedLongLongSequence);
+
+            if (ShortMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<short>(ShortMultiArray, ref wrapper.ShortMultiArray);
+                toRelease.Add(wrapper.ShortMultiArray);
+            }
+
+            if (LongLongMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<long>(LongLongMultiArray, ref wrapper.LongLongMultiArray);
+                toRelease.Add(wrapper.LongLongMultiArray);
+            }
+
+            if (UnsignedShortMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<ushort>(UnsignedShortMultiArray, ref wrapper.UnsignedShortMultiArray);
+                toRelease.Add(wrapper.UnsignedShortMultiArray);
+            }
+
+            if (UnsignedLongMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<uint>(UnsignedLongMultiArray, ref wrapper.UnsignedLongMultiArray);
+                toRelease.Add(wrapper.UnsignedLongMultiArray);
+            }
+
+            if (UnsignedLongLongMultiArray != null)
+            {
+                Helper.MultiArrayToPtr<ulong>(UnsignedLongLongMultiArray, ref wrapper.UnsignedLongLongMultiArray);
+                toRelease.Add(wrapper.UnsignedLongLongMultiArray);
+            }
+
             return wrapper;
         }
 
@@ -821,6 +959,55 @@ namespace Test
                 WCharMultiArray = new char[3, 4, 2];
             }
             Helper.PtrToMultiArray<char>(wrapper.WCharMultiArray, WCharMultiArray);
+
+            // Integer types
+            ShortType = wrapper.ShortType;
+            LongLongType = wrapper.LongLongType;
+            UnsignedShortType = wrapper.UnsignedShortType;
+            UnsignedLongType = wrapper.UnsignedLongType;
+            UnsignedLongLongType = wrapper.UnsignedLongLongType;
+
+            ShortArray = wrapper.ShortArray;
+            LongLongArray = wrapper.LongLongArray;
+            UnsignedShortArray = wrapper.UnsignedShortArray;
+            UnsignedLongArray = wrapper.UnsignedLongArray;
+            UnsignedLongLongArray = wrapper.UnsignedLongLongArray;
+
+            Helper.PtrToUnboundedSequence(wrapper.ShortSequence, ref _shortSequence);
+            Helper.PtrToUnboundedSequence(wrapper.LongLongSequence, ref _longlongSequence);
+            Helper.PtrToUnboundedSequence(wrapper.UnsignedShortSequence, ref _ushortSequence);
+            Helper.PtrToUnboundedSequence(wrapper.UnsignedLongSequence, ref _ulongSequence);
+            Helper.PtrToUnboundedSequence(wrapper.UnsignedLongLongSequence, ref _ulonglongSequence);
+
+            if (ShortMultiArray == null)
+            {
+                ShortMultiArray = new short[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<short>(wrapper.ShortMultiArray, ShortMultiArray);
+
+            if (LongLongMultiArray == null)
+            {
+                LongLongMultiArray = new long[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<long>(wrapper.LongLongMultiArray, LongLongMultiArray);
+
+            if (UnsignedShortMultiArray == null)
+            {
+                UnsignedShortMultiArray = new ushort[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<ushort>(wrapper.UnsignedShortMultiArray, UnsignedShortMultiArray);
+
+            if (UnsignedLongMultiArray == null)
+            {
+                UnsignedLongMultiArray = new uint[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<uint>(wrapper.UnsignedLongMultiArray, UnsignedLongMultiArray);
+
+            if (UnsignedLongLongMultiArray == null)
+            {
+                UnsignedLongLongMultiArray = new ulong[3, 4, 2];
+            }
+            Helper.PtrToMultiArray<ulong>(wrapper.UnsignedLongLongMultiArray, UnsignedLongLongMultiArray);
         }
         #endregion
     }
@@ -916,6 +1103,51 @@ namespace Test
         public IntPtr CharMultiArray;
 
         public IntPtr WCharMultiArray;
+
+        public short ShortType;
+
+        public long LongLongType;
+
+        public ushort UnsignedShortType;
+
+        public uint UnsignedLongType;
+
+        public ulong UnsignedLongLongType;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I2, SizeConst = 5)]
+        public short[] ShortArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I8, SizeConst = 5)]
+        public long[] LongLongArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U2, SizeConst = 5)]
+        public ushort[] UnsignedShortArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U4, SizeConst = 5)]
+        public uint[] UnsignedLongArray;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U8, SizeConst = 5)]
+        public ulong[] UnsignedLongLongArray;
+
+        public IntPtr ShortSequence;
+
+        public IntPtr LongLongSequence;
+
+        public IntPtr UnsignedShortSequence;
+
+        public IntPtr UnsignedLongSequence;
+
+        public IntPtr UnsignedLongLongSequence;
+
+        public IntPtr ShortMultiArray;
+
+        public IntPtr LongLongMultiArray;
+
+        public IntPtr UnsignedShortMultiArray;
+
+        public IntPtr UnsignedLongMultiArray;
+
+        public IntPtr UnsignedLongLongMultiArray;
     }
 
     public class BasicTestStructTypeSupport
