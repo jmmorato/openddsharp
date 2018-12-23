@@ -74,6 +74,13 @@ module Test {
     typedef PrimitiveEnum ArrayEnum[5];
     typedef sequence<PrimitiveEnum> EnumList;
     typedef PrimitiveEnum MultiArrayEnum[3][4][2];
+    typedef sequence<long, 5> LongBoundedList;
+    typedef sequence<string, 5> StringBoundedList;
+    typedef sequence<wstring, 5> WStringBoundedList;
+    typedef sequence<NestedTestStruct, 5> StructBoundedList;
+    typedef sequence<long double, 5> LongDoubleBoundedList;
+    typedef sequence<boolean, 5> BooleanBoundedList;
+    typedef sequence<PrimitiveEnum, 5> EnumBoundedList;
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -145,6 +152,13 @@ module Test {
         ArrayEnum EnumArray;
         EnumList EnumSequence;
         MultiArrayEnum EnumMultiArray;
+        LongBoundedList LongBoundedSequence;
+        StringBoundedList StringBoundedSequence;
+        WStringBoundedList WStringBoundedSequence;
+        StructBoundedList StructBoundedSequence;
+        LongDoubleBoundedList LongDoubleBoundedSequence;
+        BooleanBoundedList BooleanBoundedSequence;
+        EnumBoundedList EnumBoundedSequence;
 	};
 
 };

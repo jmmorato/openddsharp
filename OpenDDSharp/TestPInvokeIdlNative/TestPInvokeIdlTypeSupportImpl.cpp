@@ -3934,6 +3934,566 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: MultiArrayEnum */
 
 
+/* Begin TYPEDEF: LongBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::LongBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * gen_max_marshaled_size(CORBA::Long());
+}
+
+bool operator<<(Serializer& strm, const Test::LongBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_long_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::LongBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_long_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::LongBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: LongBoundedList */
+
+
+/* Begin TYPEDEF: StringBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::StringBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    find_size_ulong(size, padding);
+    if (seq[i]) {
+      size += ACE_OS::strlen(seq[i]) + 1;
+    }
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::StringBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::StringBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq.get_buffer()[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::StringBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  for (ACE_CDR::ULong i = 0; i < length; ++i) {
+    ACE_CDR::ULong strlength;
+    if (!(ser >> strlength)) return false;
+    if (!ser.skip(static_cast<ACE_UINT16>(strlength))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: StringBoundedList */
+
+
+/* Begin TYPEDEF: WStringBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::WStringBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    find_size_ulong(size, padding);
+    if (seq[i]) {
+      size += ACE_OS::strlen(seq[i]) * OpenDDS::DCPS::Serializer::WCHAR_SIZE;
+    }
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::WStringBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::WStringBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq.get_buffer()[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::WStringBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  for (ACE_CDR::ULong i = 0; i < length; ++i) {
+    ACE_CDR::ULong strlength;
+    if (!(ser >> strlength)) return false;
+    if (!ser.skip(static_cast<ACE_UINT16>(strlength))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: WStringBoundedList */
+
+
+/* Begin TYPEDEF: StructBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::StructBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    gen_find_size(seq[i], size, padding);
+  }
+}
+
+bool operator<<(Serializer& strm, const Test::StructBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::StructBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::StructBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  for (ACE_CDR::ULong i = 0; i < length; ++i) {
+    if (!gen_skip_over(ser, static_cast<Test::NestedTestStruct*>(0))) return false;
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: StructBoundedList */
+
+
+/* Begin TYPEDEF: LongDoubleBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::LongDoubleBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  if ((size + padding) % 8) {
+    padding += 4;
+  }
+  size += seq.length() * gen_max_marshaled_size(CORBA::LongDouble());
+}
+
+bool operator<<(Serializer& strm, const Test::LongDoubleBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_longdouble_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::LongDoubleBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_longdouble_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::LongDoubleBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 16);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: LongDoubleBoundedList */
+
+
+/* Begin TYPEDEF: BooleanBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::BooleanBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * max_marshaled_size_boolean();
+}
+
+bool operator<<(Serializer& strm, const Test::BooleanBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  return strm.write_boolean_array(seq.get_buffer(), length);
+}
+
+bool operator>>(Serializer& strm, Test::BooleanBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  if (length == 0) {
+    return true;
+  }
+  return strm.read_boolean_array(seq.get_buffer(), length);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::BooleanBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 1);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: BooleanBoundedList */
+
+
+/* Begin TYPEDEF: EnumBoundedList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::EnumBoundedList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * max_marshaled_size_ulong();
+}
+
+bool operator<<(Serializer& strm, const Test::EnumBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::EnumBoundedList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  if (length > seq.maximum()) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::EnumBoundedList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: EnumBoundedList */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -4075,6 +4635,13 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru_EnumArray, size, padding);
   gen_find_size(stru.EnumSequence, size, padding);
   gen_find_size(stru_EnumMultiArray, size, padding);
+  gen_find_size(stru.LongBoundedSequence, size, padding);
+  gen_find_size(stru.StringBoundedSequence, size, padding);
+  gen_find_size(stru.WStringBoundedSequence, size, padding);
+  gen_find_size(stru.StructBoundedSequence, size, padding);
+  gen_find_size(stru.LongDoubleBoundedSequence, size, padding);
+  gen_find_size(stru.BooleanBoundedSequence, size, padding);
+  gen_find_size(stru.EnumBoundedSequence, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -4182,7 +4749,14 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru.TestEnum)
     && (strm << stru_EnumArray)
     && (strm << stru.EnumSequence)
-    && (strm << stru_EnumMultiArray);
+    && (strm << stru_EnumMultiArray)
+    && (strm << stru.LongBoundedSequence)
+    && (strm << stru.StringBoundedSequence)
+    && (strm << stru.WStringBoundedSequence)
+    && (strm << stru.StructBoundedSequence)
+    && (strm << stru.LongDoubleBoundedSequence)
+    && (strm << stru.BooleanBoundedSequence)
+    && (strm << stru.EnumBoundedSequence);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -4290,7 +4864,14 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru.TestEnum)
     && (strm >> stru_EnumArray)
     && (strm >> stru.EnumSequence)
-    && (strm >> stru_EnumMultiArray);
+    && (strm >> stru_EnumMultiArray)
+    && (strm >> stru.LongBoundedSequence)
+    && (strm >> stru.StringBoundedSequence)
+    && (strm >> stru.WStringBoundedSequence)
+    && (strm >> stru.StructBoundedSequence)
+    && (strm >> stru.LongDoubleBoundedSequence)
+    && (strm >> stru.BooleanBoundedSequence)
+    && (strm >> stru.EnumBoundedSequence);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -4810,6 +5391,27 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::MultiArrayEnum_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (!gen_skip_over(ser, static_cast<Test::LongBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::StringBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::WStringBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::StructBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::LongDoubleBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::BooleanBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::EnumBoundedList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -4876,7 +5478,7 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", "CharType", "WCharType", "CharArray", "WCharArray", "CharSequence", "WCharSequence", "CharMultiArray", "WCharMultiArray", "ShortType", "LongLongType", "UnsignedShortType", "UnsignedLongType", "UnsignedLongLongType", "ShortArray", "LongLongArray", "UnsignedShortArray", "UnsignedLongArray", "UnsignedLongLongArray", "ShortSequence", "LongLongSequence", "UnsignedShortSequence", "UnsignedLongSequence", "UnsignedLongLongSequence", "ShortMultiArray", "LongLongMultiArray", "UnsignedShortMultiArray", "UnsignedLongMultiArray", "UnsignedLongLongMultiArray", "BooleanType", "OctetType", "BooleanArray", "OctetArray", "BooleanSequence", "OctetSequence", "BooleanMultiArray", "OctetMultiArray", "TestEnum", "EnumArray", "EnumSequence", "EnumMultiArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", "CharType", "WCharType", "CharArray", "WCharArray", "CharSequence", "WCharSequence", "CharMultiArray", "WCharMultiArray", "ShortType", "LongLongType", "UnsignedShortType", "UnsignedLongType", "UnsignedLongLongType", "ShortArray", "LongLongArray", "UnsignedShortArray", "UnsignedLongArray", "UnsignedLongLongArray", "ShortSequence", "LongLongSequence", "UnsignedShortSequence", "UnsignedLongSequence", "UnsignedLongLongSequence", "ShortMultiArray", "LongLongMultiArray", "UnsignedShortMultiArray", "UnsignedLongMultiArray", "UnsignedLongLongMultiArray", "BooleanType", "OctetType", "BooleanArray", "OctetArray", "BooleanSequence", "OctetSequence", "BooleanMultiArray", "OctetMultiArray", "TestEnum", "EnumArray", "EnumSequence", "EnumMultiArray", "LongBoundedSequence", "StringBoundedSequence", "WStringBoundedSequence", "StructBoundedSequence", "LongDoubleBoundedSequence", "BooleanBoundedSequence", "EnumBoundedSequence", 0};
     return names;
   }
 
@@ -5085,6 +5687,27 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "EnumMultiArray") == 0) {
       return &static_cast<const T*>(stru)->EnumMultiArray;
+    }
+    if (std::strcmp(field, "LongBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->LongBoundedSequence;
+    }
+    if (std::strcmp(field, "StringBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->StringBoundedSequence;
+    }
+    if (std::strcmp(field, "WStringBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->WStringBoundedSequence;
+    }
+    if (std::strcmp(field, "StructBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->StructBoundedSequence;
+    }
+    if (std::strcmp(field, "LongDoubleBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->LongDoubleBoundedSequence;
+    }
+    if (std::strcmp(field, "BooleanBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->BooleanBoundedSequence;
+    }
+    if (std::strcmp(field, "EnumBoundedSequence") == 0) {
+      return &static_cast<const T*>(stru)->EnumBoundedSequence;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -5571,6 +6194,34 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
           }
         }
       }
+      return;
+    }
+    if (std::strcmp(field, "LongBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->LongBoundedSequence = *static_cast<const Test::LongBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "StringBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->StringBoundedSequence = *static_cast<const Test::StringBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "WStringBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->WStringBoundedSequence = *static_cast<const Test::WStringBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "StructBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->StructBoundedSequence = *static_cast<const Test::StructBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "LongDoubleBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->LongDoubleBoundedSequence = *static_cast<const Test::LongDoubleBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "BooleanBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->BooleanBoundedSequence = *static_cast<const Test::BooleanBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "EnumBoundedSequence") == 0) {
+      static_cast<T*>(lhs)->EnumBoundedSequence = *static_cast<const Test::EnumBoundedList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
       return;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");

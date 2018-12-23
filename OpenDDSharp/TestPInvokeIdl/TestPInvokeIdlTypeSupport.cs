@@ -17,11 +17,16 @@ namespace Test
         internal const string API_DLL_X86 = @"TestPInvokeIdlWrapper.x86.dll";
 #endif 
 
-        public static void PtrToUnboundedSequence<T>(IntPtr ptr, ref IList<T> sequence)
+        public static void PtrToSequence<T>(IntPtr ptr, ref IList<T> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
-                sequence = new List<T>();
+            {
+                if (capacity > 0)
+                    sequence = new List<T>(capacity);
+                else
+                    sequence = new List<T>();
+            }
             else
                 sequence.Clear();
 
@@ -39,7 +44,7 @@ namespace Test
             }
         }
 
-        public static void UnboundedSequenceToPtr<T>(IList<T> sequence, ref IntPtr ptr)
+        public static void SequenceToPtr<T>(IList<T> sequence, ref IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -64,16 +69,22 @@ namespace Test
             }
         }
 
-        public static void PtrToEnumUnboundedSequence<T>(IntPtr ptr, ref IList<T> sequence) where T : Enum
+        public static void PtrToEnumSequence<T>(IntPtr ptr, ref IList<T> sequence, int capacity = 0) where T : Enum
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
-                sequence = new List<T>();
+            {
+                if (capacity > 0)
+                    sequence = new List<T>(capacity);
+                else
+                    sequence = new List<T>();
+            }
             else
+            {
                 sequence.Clear();
+            }
 
-            if (ptr == IntPtr.Zero)
-                return;
+            if (ptr == IntPtr.Zero) return;
 
             // Start by reading the size of the array
             int length = Marshal.ReadInt32(ptr);
@@ -87,7 +98,7 @@ namespace Test
             }
         }
 
-        public static void EnumUnboundedSequenceToPtr<T>(IList<T> sequence, ref IntPtr ptr) where T : Enum
+        public static void EnumSequenceToPtr<T>(IList<T> sequence, ref IntPtr ptr) where T : Enum
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -116,13 +127,20 @@ namespace Test
             }
         }
 
-        public static void PtrToBooleanUnboundedSequence(IntPtr ptr, ref IList<bool> sequence)
+        public static void PtrToBooleanSequence(IntPtr ptr, ref IList<bool> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
-                sequence = new List<bool>();
+            {
+                if (capacity > 0)
+                    sequence = new List<bool>(capacity);
+                else
+                    sequence = new List<bool>();
+            }
             else
+            {
                 sequence.Clear();
+            }
 
             if (ptr == IntPtr.Zero)
                 return;
@@ -141,7 +159,7 @@ namespace Test
             }
         }
 
-        public static void BooleanUnboundedSequenceToPtr(IList<bool> sequence, ref IntPtr ptr)
+        public static void BooleanSequenceToPtr(IList<bool> sequence, ref IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -169,13 +187,20 @@ namespace Test
             }
         }
 
-        public static void PtrToUnboundedStringSequence(IntPtr ptr, ref IList<string> sequence, bool isUnicode)
+        public static void PtrToStringSequence(IntPtr ptr, ref IList<string> sequence, bool isUnicode, int capacity = 0)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
-                sequence = new List<string>();
+            {
+                if (capacity > 0)
+                    sequence = new List<string>(capacity);
+                else
+                    sequence = new List<string>();
+            }
             else
+            {
                 sequence.Clear();
+            }
 
             if (ptr == IntPtr.Zero)
                 return;
@@ -197,7 +222,7 @@ namespace Test
             }
         }
 
-        public static List<IntPtr> UnboundedStringSequenceToPtr(IList<string> sequence, ref IntPtr ptr, bool isUnicode)
+        public static List<IntPtr> StringSequenceToPtr(IList<string> sequence, ref IntPtr ptr, bool isUnicode)
         {
             List<IntPtr> toRelease = new List<IntPtr>();
 
@@ -538,7 +563,6 @@ namespace Test
         private IList<int> _longSequence;
         private IList<string> _stringSequence;
         private IList<string> _wstringSequence;
-        private IList<NestedTestStruct> _structSequence;
         private IList<float> _floatSequence;
         private IList<double> _doubleSequence;
         private IList<double> _longDoubleSequence;
@@ -552,6 +576,12 @@ namespace Test
         private IList<bool> _booleanSequence;
         private IList<byte> _octetSequence;
         private IList<PrimitiveEnum> _enumSequence;
+        private IList<int> _longBoundedSequence;
+        private IList<string> _stringBoundedSequence;
+        private IList<string> _wstringBoundedSequence;
+        private IList<double> _longDoubleBoundedSequence;
+        private IList<bool> _booleanBoundedSequence;
+        private IList<PrimitiveEnum> _enumBoundedSequence;
         #endregion
 
         #region Properties
@@ -587,11 +617,7 @@ namespace Test
 
         public NestedTestStruct StructTest { get; set; }
 
-        public IList<NestedTestStruct> StructSequence
-        {
-            get { return _structSequence; }
-            set { _structSequence = value; }
-        }
+        public IList<NestedTestStruct> StructSequence { get; set; }
 
         public NestedTestStruct[] StructArray { get; set; }
 
@@ -758,6 +784,44 @@ namespace Test
         }
 
         public PrimitiveEnum[,,] EnumMultiArray { get; set; }
+
+        public IList<int> LongBoundedSequence
+        {
+            get { return _longBoundedSequence; }
+            set { _longBoundedSequence = value; }
+        }
+
+        public IList<string> StringBoundedSequence
+        {
+            get { return _stringBoundedSequence; }
+            set { _stringBoundedSequence = value; }
+        }
+
+        public IList<string> WStringBoundedSequence
+        {
+            get { return _wstringBoundedSequence; }
+            set { _wstringBoundedSequence = value; }
+        }
+
+        public IList<NestedTestStruct> StructBoundedSequence { get; set; }
+
+        public IList<double> LongDoubleBoundedSequence
+        {
+            get { return _longDoubleBoundedSequence; }
+            set { _longDoubleBoundedSequence = value; }
+        }
+
+        public IList<bool> BooleanBoundedSequence
+        {
+            get { return _booleanBoundedSequence; }
+            set { _booleanBoundedSequence = value; }
+        }
+
+        public IList<PrimitiveEnum> EnumBoundedSequence
+        {
+            get { return _enumBoundedSequence; }
+            set { _enumBoundedSequence = value; }
+        }
         #endregion
 
         #region Constructors
@@ -770,7 +834,7 @@ namespace Test
             StringArray = new string[10];
             WStringArray = new string[4];
             StructTest = new NestedTestStruct();
-            _structSequence = new List<NestedTestStruct>();
+            StructSequence = new List<NestedTestStruct>();
             StructArray = new NestedTestStruct[5];
             LongMultiArray = new int[3, 4, 2];
             StringMultiArray = new string[3, 4, 2];
@@ -814,6 +878,13 @@ namespace Test
             EnumArray = new PrimitiveEnum[5];
             _enumSequence = new List<PrimitiveEnum>();
             EnumMultiArray = new PrimitiveEnum[3, 4, 2];
+            _longBoundedSequence = new List<int>(5);
+            _stringBoundedSequence = new List<string>(5);
+            _wstringBoundedSequence = new List<string>(5);
+            StructBoundedSequence = new List<NestedTestStruct>(5);
+            _longDoubleBoundedSequence = new List<double>(5);
+            _booleanBoundedSequence = new List<bool>(5);
+            _enumBoundedSequence = new List<PrimitiveEnum>(5);
         }
         #endregion
 
@@ -836,13 +907,13 @@ namespace Test
                 toRelease.Add(wrapper.WMessage);
             }
 
-            Helper.UnboundedSequenceToPtr(LongSequence, ref wrapper.LongSequence);
+            Helper.SequenceToPtr(LongSequence, ref wrapper.LongSequence);
             toRelease.Add(wrapper.LongSequence);
 
-            toRelease.AddRange(Helper.UnboundedStringSequenceToPtr(StringSequence, ref wrapper.StringSequence, false));
+            toRelease.AddRange(Helper.StringSequenceToPtr(StringSequence, ref wrapper.StringSequence, false));
             toRelease.Add(wrapper.StringSequence);
 
-            toRelease.AddRange(Helper.UnboundedStringSequenceToPtr(WStringSequence, ref wrapper.WStringSequence, true));
+            toRelease.AddRange(Helper.StringSequenceToPtr(WStringSequence, ref wrapper.WStringSequence, true));
             toRelease.Add(wrapper.WStringSequence);
 
             wrapper.LongArray = LongArray;
@@ -886,7 +957,7 @@ namespace Test
                 {
                     aux.Add(s.ToNative(toRelease));
                 }
-                Helper.UnboundedSequenceToPtr(aux, ref wrapper.StructSequence);
+                Helper.SequenceToPtr(aux, ref wrapper.StructSequence);
                 toRelease.Add(wrapper.StructSequence);
             }
 
@@ -947,13 +1018,13 @@ namespace Test
             wrapper.DoubleArray = DoubleArray;
             wrapper.LongDoubleArray = LongDoubleArray;
 
-            Helper.UnboundedSequenceToPtr(FloatSequence, ref wrapper.FloatSequence);
+            Helper.SequenceToPtr(FloatSequence, ref wrapper.FloatSequence);
             toRelease.Add(wrapper.FloatSequence);
 
-            Helper.UnboundedSequenceToPtr(DoubleSequence, ref wrapper.DoubleSequence);
+            Helper.SequenceToPtr(DoubleSequence, ref wrapper.DoubleSequence);
             toRelease.Add(wrapper.DoubleSequence);
 
-            Helper.UnboundedSequenceToPtr(LongDoubleSequence, ref wrapper.LongDoubleSequence);
+            Helper.SequenceToPtr(LongDoubleSequence, ref wrapper.LongDoubleSequence);
             toRelease.Add(wrapper.LongDoubleSequence);
 
             if (FloatMultiArray != null)
@@ -984,13 +1055,13 @@ namespace Test
             if (CharSequence != null)
             {
                 IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(CharSequence.ToArray()).ToList();
-                Helper.UnboundedSequenceToPtr(aux, ref wrapper.CharSequence);
+                Helper.SequenceToPtr(aux, ref wrapper.CharSequence);
                 toRelease.Add(wrapper.CharSequence);
             }
 
             if (WCharSequence != null)
             {
-                Helper.UnboundedSequenceToPtr(WCharSequence, ref wrapper.WCharSequence);
+                Helper.SequenceToPtr(WCharSequence, ref wrapper.WCharSequence);
                 toRelease.Add(wrapper.WCharSequence);
             }
 
@@ -1019,19 +1090,19 @@ namespace Test
             wrapper.UnsignedLongArray = UnsignedLongArray;
             wrapper.UnsignedLongLongArray = UnsignedLongLongArray;
 
-            Helper.UnboundedSequenceToPtr(ShortSequence, ref wrapper.ShortSequence);
+            Helper.SequenceToPtr(ShortSequence, ref wrapper.ShortSequence);
             toRelease.Add(wrapper.ShortSequence);
 
-            Helper.UnboundedSequenceToPtr(LongLongSequence, ref wrapper.LongLongSequence);
+            Helper.SequenceToPtr(LongLongSequence, ref wrapper.LongLongSequence);
             toRelease.Add(wrapper.LongLongSequence);
 
-            Helper.UnboundedSequenceToPtr(UnsignedShortSequence, ref wrapper.UnsignedShortSequence);
+            Helper.SequenceToPtr(UnsignedShortSequence, ref wrapper.UnsignedShortSequence);
             toRelease.Add(wrapper.UnsignedShortSequence);
 
-            Helper.UnboundedSequenceToPtr(UnsignedLongSequence, ref wrapper.UnsignedLongSequence);
+            Helper.SequenceToPtr(UnsignedLongSequence, ref wrapper.UnsignedLongSequence);
             toRelease.Add(wrapper.UnsignedLongSequence);
 
-            Helper.UnboundedSequenceToPtr(UnsignedLongLongSequence, ref wrapper.UnsignedLongLongSequence);
+            Helper.SequenceToPtr(UnsignedLongLongSequence, ref wrapper.UnsignedLongLongSequence);
             toRelease.Add(wrapper.UnsignedLongLongSequence);
 
             if (ShortMultiArray != null)
@@ -1071,10 +1142,10 @@ namespace Test
             wrapper.BooleanArray = BooleanArray;
             wrapper.OctetArray = OctetArray;
 
-            Helper.BooleanUnboundedSequenceToPtr(BooleanSequence, ref wrapper.BooleanSequence);
+            Helper.BooleanSequenceToPtr(BooleanSequence, ref wrapper.BooleanSequence);
             toRelease.Add(wrapper.BooleanSequence);
 
-            Helper.UnboundedSequenceToPtr(OctetSequence, ref wrapper.OctetSequence);
+            Helper.SequenceToPtr(OctetSequence, ref wrapper.OctetSequence);
             toRelease.Add(wrapper.OctetSequence);
 
             if (BooleanMultiArray != null)
@@ -1093,7 +1164,7 @@ namespace Test
             wrapper.TestEnum = TestEnum;
             wrapper.EnumArray = EnumArray;
 
-            Helper.EnumUnboundedSequenceToPtr(EnumSequence, ref wrapper.EnumSequence);
+            Helper.EnumSequenceToPtr(EnumSequence, ref wrapper.EnumSequence);
             toRelease.Add(wrapper.EnumSequence);
 
             if (EnumMultiArray != null)
@@ -1101,6 +1172,36 @@ namespace Test
                 Helper.EnumMultiArrayToPtr<PrimitiveEnum>(EnumMultiArray, ref wrapper.EnumMultiArray);
                 toRelease.Add(wrapper.EnumMultiArray);
             }
+
+            // Unbounded sequences
+            Helper.SequenceToPtr(LongBoundedSequence, ref wrapper.LongBoundedSequence);
+            toRelease.Add(wrapper.LongBoundedSequence);
+
+            toRelease.AddRange(Helper.StringSequenceToPtr(StringBoundedSequence, ref wrapper.StringBoundedSequence, false));
+            toRelease.Add(wrapper.StringBoundedSequence);
+
+            toRelease.AddRange(Helper.StringSequenceToPtr(WStringBoundedSequence, ref wrapper.WStringBoundedSequence, true));
+            toRelease.Add(wrapper.WStringBoundedSequence);
+
+            if (StructBoundedSequence != null)
+            {
+                List<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>(5);
+                foreach (NestedTestStruct s in StructBoundedSequence)
+                {
+                    aux.Add(s.ToNative(toRelease));
+                }
+                Helper.SequenceToPtr(aux, ref wrapper.StructBoundedSequence);
+                toRelease.Add(wrapper.StructBoundedSequence);
+            }
+
+            Helper.SequenceToPtr(LongDoubleBoundedSequence, ref wrapper.LongDoubleBoundedSequence);
+            toRelease.Add(wrapper.LongDoubleBoundedSequence);
+
+            Helper.BooleanSequenceToPtr(BooleanBoundedSequence, ref wrapper.BooleanBoundedSequence);
+            toRelease.Add(wrapper.BooleanBoundedSequence);
+
+            Helper.EnumSequenceToPtr(EnumBoundedSequence, ref wrapper.EnumBoundedSequence);
+            toRelease.Add(wrapper.EnumBoundedSequence);
 
             return wrapper;
         }
@@ -1127,9 +1228,9 @@ namespace Test
                 WMessage = null;
             }
 
-            Helper.PtrToUnboundedSequence(wrapper.LongSequence, ref _longSequence);
-            Helper.PtrToUnboundedStringSequence(wrapper.StringSequence, ref _stringSequence, false);
-            Helper.PtrToUnboundedStringSequence(wrapper.WStringSequence, ref _wstringSequence, true);
+            Helper.PtrToSequence(wrapper.LongSequence, ref _longSequence);
+            Helper.PtrToStringSequence(wrapper.StringSequence, ref _stringSequence, false);
+            Helper.PtrToStringSequence(wrapper.WStringSequence, ref _wstringSequence, true);
 
             LongArray = wrapper.LongArray;
 
@@ -1156,7 +1257,7 @@ namespace Test
             if (wrapper.StructSequence != IntPtr.Zero)
             {
                 IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
-                Helper.PtrToUnboundedSequence(wrapper.StructSequence, ref aux);
+                Helper.PtrToSequence(wrapper.StructSequence, ref aux);
                 foreach (NestedTestStructWrapper native in aux)
                 {
                     NestedTestStruct s = new NestedTestStruct();
@@ -1224,9 +1325,9 @@ namespace Test
             DoubleArray = wrapper.DoubleArray;
             LongDoubleArray = wrapper.LongDoubleArray;
 
-            Helper.PtrToUnboundedSequence(wrapper.FloatSequence, ref _floatSequence);
-            Helper.PtrToUnboundedSequence(wrapper.DoubleSequence, ref _doubleSequence);
-            Helper.PtrToUnboundedSequence(wrapper.LongDoubleSequence, ref _longDoubleSequence);
+            Helper.PtrToSequence(wrapper.FloatSequence, ref _floatSequence);
+            Helper.PtrToSequence(wrapper.DoubleSequence, ref _doubleSequence);
+            Helper.PtrToSequence(wrapper.LongDoubleSequence, ref _longDoubleSequence);
 
             if (FloatMultiArray == null)
             {
@@ -1253,8 +1354,8 @@ namespace Test
             CharArray = wrapper.CharArray;
             WCharArray = wrapper.WCharArray;
 
-            Helper.PtrToUnboundedSequence(wrapper.CharSequence, ref _charSequence);
-            Helper.PtrToUnboundedSequence(wrapper.WCharSequence, ref _wcharSequence);
+            Helper.PtrToSequence(wrapper.CharSequence, ref _charSequence);
+            Helper.PtrToSequence(wrapper.WCharSequence, ref _wcharSequence);
 
             if (CharMultiArray == null)
             {
@@ -1281,11 +1382,11 @@ namespace Test
             UnsignedLongArray = wrapper.UnsignedLongArray;
             UnsignedLongLongArray = wrapper.UnsignedLongLongArray;
 
-            Helper.PtrToUnboundedSequence(wrapper.ShortSequence, ref _shortSequence);
-            Helper.PtrToUnboundedSequence(wrapper.LongLongSequence, ref _longlongSequence);
-            Helper.PtrToUnboundedSequence(wrapper.UnsignedShortSequence, ref _ushortSequence);
-            Helper.PtrToUnboundedSequence(wrapper.UnsignedLongSequence, ref _ulongSequence);
-            Helper.PtrToUnboundedSequence(wrapper.UnsignedLongLongSequence, ref _ulonglongSequence);
+            Helper.PtrToSequence(wrapper.ShortSequence, ref _shortSequence);
+            Helper.PtrToSequence(wrapper.LongLongSequence, ref _longlongSequence);
+            Helper.PtrToSequence(wrapper.UnsignedShortSequence, ref _ushortSequence);
+            Helper.PtrToSequence(wrapper.UnsignedLongSequence, ref _ulongSequence);
+            Helper.PtrToSequence(wrapper.UnsignedLongLongSequence, ref _ulonglongSequence);
 
             if (ShortMultiArray == null)
             {
@@ -1324,8 +1425,8 @@ namespace Test
             BooleanArray = wrapper.BooleanArray;
             OctetArray = wrapper.OctetArray;
 
-            Helper.PtrToBooleanUnboundedSequence(wrapper.BooleanSequence, ref _booleanSequence);
-            Helper.PtrToUnboundedSequence(wrapper.OctetSequence, ref _octetSequence);
+            Helper.PtrToBooleanSequence(wrapper.BooleanSequence, ref _booleanSequence);
+            Helper.PtrToSequence(wrapper.OctetSequence, ref _octetSequence);
 
             if (BooleanMultiArray == null)
             {
@@ -1342,13 +1443,37 @@ namespace Test
             // Enumerations
             TestEnum = wrapper.TestEnum;
             EnumArray = wrapper.EnumArray;
-            Helper.PtrToEnumUnboundedSequence(wrapper.EnumSequence, ref _enumSequence);
+            Helper.PtrToEnumSequence(wrapper.EnumSequence, ref _enumSequence);
 
             if (EnumMultiArray == null)
             {
                 EnumMultiArray = new PrimitiveEnum[3, 4, 2];
             }
             Helper.PtrToEnumMultiArray<PrimitiveEnum>(wrapper.EnumMultiArray, EnumMultiArray);
+
+            // Bounded sequences
+            Helper.PtrToSequence(wrapper.LongBoundedSequence, ref _longBoundedSequence, 5);
+
+            Helper.PtrToStringSequence(wrapper.StringBoundedSequence, ref _stringBoundedSequence, false, 5);
+            Helper.PtrToStringSequence(wrapper.WStringBoundedSequence, ref _wstringBoundedSequence, true, 5);
+
+            if (wrapper.StructBoundedSequence != IntPtr.Zero)
+            {
+                IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>(5);
+                Helper.PtrToSequence(wrapper.StructBoundedSequence, ref aux, 5);
+                foreach (NestedTestStructWrapper native in aux)
+                {
+                    NestedTestStruct s = new NestedTestStruct();
+                    s.FromNative(native);
+                    StructBoundedSequence.Add(s);
+                }
+            }
+
+            Helper.PtrToSequence(wrapper.LongDoubleBoundedSequence, ref _longDoubleBoundedSequence, 5);
+
+            Helper.PtrToBooleanSequence(wrapper.BooleanBoundedSequence, ref _booleanBoundedSequence, 5);
+
+            Helper.PtrToEnumSequence(wrapper.EnumBoundedSequence, ref _enumBoundedSequence, 5);
         }
         #endregion
     }
@@ -1520,6 +1645,20 @@ namespace Test
         public IntPtr EnumSequence;
 
         public IntPtr EnumMultiArray;
+
+        public IntPtr LongBoundedSequence;
+
+        public IntPtr StringBoundedSequence;
+        
+        public IntPtr WStringBoundedSequence;
+
+        public IntPtr StructBoundedSequence;
+
+        public IntPtr LongDoubleBoundedSequence;
+
+        public IntPtr BooleanBoundedSequence;
+
+        public IntPtr EnumBoundedSequence;
     }
 
     public class BasicTestStructTypeSupport

@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_J7LXOT_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_J7LXOT_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_VXUZUJ_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_VXUZUJ_H_
 
 #include /**/ "ace/pre.h"
 
@@ -697,6 +697,97 @@ namespace TAO
         Fixed_Array_SArg_Traits_T<
             ::Test::MultiArrayEnum_var,
             ::Test::MultiArrayEnum_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::LongBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::LongBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::StringBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::StringBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::WStringBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::WStringBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::StructBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::StructBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::LongDoubleBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::LongDoubleBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::BooleanBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::BooleanBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::EnumBoundedList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::EnumBoundedList,
             TAO::Any_Insert_Policy_Noop
           >
   {

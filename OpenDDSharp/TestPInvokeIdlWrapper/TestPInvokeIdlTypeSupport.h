@@ -12,10 +12,6 @@
     #define EXTERN_STRUCT_EXPORT extern "C" struct
 #endif
 
-#ifndef EXTERN_CLASS_EXPORT
-    #define EXTERN_CLASS_EXPORT extern "C" class
-#endif
-
 EXTERN_STRUCT_EXPORT NestedTestStructWrapper
 {
     int Id;
@@ -117,6 +113,13 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     Test::PrimitiveEnum EnumArray[5];
     void* EnumSequence;
     void* EnumMultiArray;
+    void* LongBoundedSequence;
+    void* StringBoundedSequence;
+    void* WStringBoundedSequence;
+    void* StructBoundedSequence;
+    void* LongDoubleBoundedSequence;
+    void* BooleanBoundedSequence;
+    void* EnumBoundedSequence;
 
     Test::BasicTestStruct to_native()
     {
@@ -454,7 +457,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
 
         if (BooleanSequence != NULL)
         {
-            marshal::ptr_to_unbounded_sequence(BooleanSequence, nativeData.BooleanSequence);                             
+            marshal::ptr_to_unbounded_sequence(BooleanSequence, nativeData.BooleanSequence);
         }
 
         if (OctetSequence != NULL)
@@ -488,6 +491,57 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         if (EnumMultiArray != NULL)
         {
             ACE_OS::memcpy(nativeData.EnumMultiArray, EnumMultiArray, sizeof(Test::PrimitiveEnum) * 24);
+        }
+
+        // Bounded sequences
+        if (LongBoundedSequence != NULL)
+        {
+            marshal::ptr_to_bounded_sequence(LongBoundedSequence, nativeData.LongBoundedSequence);
+        }
+
+        if (StringBoundedSequence != NULL)
+        {
+            marshal::ptr_to_bounded_basic_string_sequence(StringBoundedSequence, nativeData.StringBoundedSequence);
+        }
+
+        if (WStringBoundedSequence != NULL)
+        {
+            marshal::ptr_to_bounded_wide_string_sequence(WStringBoundedSequence, nativeData.WStringBoundedSequence);
+        }
+
+        if (StructBoundedSequence != NULL)
+        {
+            TAO::bounded_value_sequence<NestedTestStructWrapper, 5> aux;
+            marshal::ptr_to_bounded_sequence(StructBoundedSequence, aux);
+            ACE_UINT32 length = aux.length();
+            nativeData.StructBoundedSequence.length(length);
+            for (ACE_UINT32 i = 0; i < length; i++)
+            {
+                nativeData.StructBoundedSequence[i] = aux[i].to_native();
+            }
+        }
+
+        if (LongDoubleBoundedSequence != NULL)
+        {
+            TAO::bounded_value_sequence<CORBA::Double, 5> aux;
+            marshal::ptr_to_bounded_sequence(LongDoubleBoundedSequence, aux);
+
+            int length = aux.length();
+            nativeData.LongDoubleBoundedSequence.length(length);
+            for (int i = 0; i < length; i++)
+            {
+                nativeData.LongDoubleBoundedSequence[i].assign(aux[i]);
+            }
+        }
+
+        if (BooleanBoundedSequence != NULL)
+        {
+            marshal::ptr_to_bounded_sequence(BooleanBoundedSequence, nativeData.BooleanBoundedSequence);
+        }
+
+        if (EnumBoundedSequence != NULL)
+        {
+            marshal::ptr_to_bounded_sequence(EnumBoundedSequence, nativeData.EnumBoundedSequence);
         }
 
         return nativeData;
@@ -821,6 +875,38 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         }
 
         marshal::unbounded_sequence_to_ptr(nativeData.EnumSequence, EnumSequence);
+
+        // Bounded sequences
+        marshal::bounded_sequence_to_ptr(nativeData.LongBoundedSequence, LongBoundedSequence);
+
+        marshal::bounded_basic_string_sequence_to_ptr(nativeData.StringBoundedSequence, StringBoundedSequence);
+        marshal::bounded_wide_string_sequence_to_ptr(nativeData.WStringBoundedSequence, WStringBoundedSequence);
+
+        {
+            TAO::bounded_value_sequence<NestedTestStructWrapper, 5> aux;
+            ACE_UINT32 length = nativeData.StructBoundedSequence.length();
+            aux.length(length);
+            for (ACE_UINT32 i = 0; i < length; i++)
+            {
+                aux[i].from_native(nativeData.StructBoundedSequence[i]);
+            }
+            marshal::bounded_sequence_to_ptr(aux, StructBoundedSequence);
+        }
+
+        {
+            int length = nativeData.LongDoubleBoundedSequence.length();
+            TAO::bounded_value_sequence<CORBA::Double, 5> aux;
+            aux.length(length);
+            for (int i = 0; i < length; i++)
+            {
+                aux[i] = nativeData.LongDoubleBoundedSequence[i];
+            }
+            marshal::bounded_sequence_to_ptr(aux, LongDoubleBoundedSequence);
+        }
+
+        marshal::bounded_sequence_to_ptr(nativeData.BooleanBoundedSequence, BooleanBoundedSequence);
+
+        marshal::bounded_sequence_to_ptr(nativeData.EnumBoundedSequence, EnumBoundedSequence);
     }
 
     void release() 
@@ -846,13 +932,13 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         // Release the strings in the sequence
         if (StringSequence != NULL)
         {
-            marshal::release_unbounded_basic_string_sequence_ptr(StringSequence);
+            marshal::release_basic_string_sequence_ptr(StringSequence);
         }
 
         // Release the wstrings in the sequence
         if (WStringSequence != NULL)
         {
-            marshal::release_unbounded_wide_string_sequence_ptr(WStringSequence);
+            marshal::release_wide_string_sequence_ptr(WStringSequence);
         }
 
         // Release the strings in the array 
@@ -883,10 +969,7 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         StructTest.release();     
 
         // Release the pointer of the sequences
-        if (StructSequence != NULL)
-        {
-            ACE_OS::free(StructSequence);
-        }
+        marshal::release_structure_sequence_ptr<NestedTestStructWrapper>(StructSequence);
 
         // Release the structures in the array
         if (StructArray != NULL)
@@ -1070,6 +1153,38 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         if (EnumMultiArray != NULL)
         {
             ACE_OS::free(EnumMultiArray);
+        }
+
+        if (LongBoundedSequence != NULL)
+        {
+            ACE_OS::free(LongBoundedSequence);
+        }
+
+        if (StringBoundedSequence != NULL)
+        {
+            marshal::release_basic_string_sequence_ptr(StringBoundedSequence);
+        }
+
+        if (WStringBoundedSequence != NULL)
+        {
+            marshal::release_wide_string_sequence_ptr(WStringBoundedSequence);
+        }
+
+        marshal::release_structure_sequence_ptr<NestedTestStructWrapper>(StructBoundedSequence);
+
+        if (LongDoubleBoundedSequence != NULL)
+        {
+            ACE_OS::free(LongDoubleBoundedSequence);
+        }
+
+        if (BooleanBoundedSequence != NULL)
+        {
+            ACE_OS::free(BooleanBoundedSequence);
+        }
+
+        if (EnumBoundedSequence != NULL)
+        {
+            ACE_OS::free(EnumBoundedSequence);
         }
     }
 };

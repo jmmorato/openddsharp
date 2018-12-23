@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_I6QEU7_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_I6QEU7_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_QARWRQ_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_QARWRQ_H_
 
 #include /**/ "ace/pre.h"
 
@@ -2507,6 +2507,329 @@ namespace Test
       const MultiArrayEnum_slice *_tao_from);
 
   // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_LONGBOUNDEDLIST_CH_)
+#define _TEST_LONGBOUNDEDLIST_CH_
+
+  class LongBoundedList;
+
+  typedef
+    ::TAO_FixedSeq_Var_T<
+        LongBoundedList
+      >
+    LongBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        LongBoundedList
+      >
+    LongBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export LongBoundedList
+    : public
+        ::TAO::bounded_value_sequence<
+            ::CORBA::Long,
+            5
+          >
+  {
+  public:
+    LongBoundedList (void);
+    LongBoundedList (
+      ::CORBA::ULong length,
+      ::CORBA::Long* buffer,
+      ::CORBA::Boolean release = false);
+    LongBoundedList (const LongBoundedList &);
+    virtual ~LongBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef LongBoundedList_var _var_type;
+    typedef LongBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_STRINGBOUNDEDLIST_CH_)
+#define _TEST_STRINGBOUNDEDLIST_CH_
+
+  class StringBoundedList;
+
+  typedef
+    ::TAO_VarSeq_Var_T<
+        StringBoundedList
+      >
+    StringBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        StringBoundedList
+      >
+    StringBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export StringBoundedList
+    : public
+        ::TAO::bounded_basic_string_sequence<char, 5>
+  {
+  public:
+    StringBoundedList (void);
+    StringBoundedList (
+      ::CORBA::ULong length,
+      ::CORBA::Char ** buffer,
+      ::CORBA::Boolean release = false);
+    StringBoundedList (const StringBoundedList &);
+    virtual ~StringBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef StringBoundedList_var _var_type;
+    typedef StringBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_WSTRINGBOUNDEDLIST_CH_)
+#define _TEST_WSTRINGBOUNDEDLIST_CH_
+
+  class WStringBoundedList;
+
+  typedef
+    ::TAO_VarSeq_Var_T<
+        WStringBoundedList
+      >
+    WStringBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        WStringBoundedList
+      >
+    WStringBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export WStringBoundedList
+    : public
+        ::TAO::bounded_basic_string_sequence<CORBA::WChar, 5>
+  {
+  public:
+    WStringBoundedList (void);
+    WStringBoundedList (
+      ::CORBA::ULong length,
+      ::CORBA::WChar ** buffer,
+      ::CORBA::Boolean release = false);
+    WStringBoundedList (const WStringBoundedList &);
+    virtual ~WStringBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef WStringBoundedList_var _var_type;
+    typedef WStringBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_STRUCTBOUNDEDLIST_CH_)
+#define _TEST_STRUCTBOUNDEDLIST_CH_
+
+  class StructBoundedList;
+
+  typedef
+    ::TAO_VarSeq_Var_T<
+        StructBoundedList
+      >
+    StructBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        StructBoundedList
+      >
+    StructBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export StructBoundedList
+    : public
+        ::TAO::bounded_value_sequence<
+            NestedTestStruct,
+            5
+          >
+  {
+  public:
+    StructBoundedList (void);
+    StructBoundedList (
+      ::CORBA::ULong length,
+      NestedTestStruct* buffer,
+      ::CORBA::Boolean release = false);
+    StructBoundedList (const StructBoundedList &);
+    virtual ~StructBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef StructBoundedList_var _var_type;
+    typedef StructBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_LONGDOUBLEBOUNDEDLIST_CH_)
+#define _TEST_LONGDOUBLEBOUNDEDLIST_CH_
+
+  class LongDoubleBoundedList;
+
+  typedef
+    ::TAO_FixedSeq_Var_T<
+        LongDoubleBoundedList
+      >
+    LongDoubleBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        LongDoubleBoundedList
+      >
+    LongDoubleBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export LongDoubleBoundedList
+    : public
+        ::TAO::bounded_value_sequence<
+            ::CORBA::LongDouble,
+            5
+          >
+  {
+  public:
+    LongDoubleBoundedList (void);
+    LongDoubleBoundedList (
+      ::CORBA::ULong length,
+      ::CORBA::LongDouble* buffer,
+      ::CORBA::Boolean release = false);
+    LongDoubleBoundedList (const LongDoubleBoundedList &);
+    virtual ~LongDoubleBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef LongDoubleBoundedList_var _var_type;
+    typedef LongDoubleBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_BOOLEANBOUNDEDLIST_CH_)
+#define _TEST_BOOLEANBOUNDEDLIST_CH_
+
+  class BooleanBoundedList;
+
+  typedef
+    ::TAO_FixedSeq_Var_T<
+        BooleanBoundedList
+      >
+    BooleanBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        BooleanBoundedList
+      >
+    BooleanBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export BooleanBoundedList
+    : public
+        ::TAO::bounded_value_sequence<
+            ::CORBA::Boolean,
+            5
+          >
+  {
+  public:
+    BooleanBoundedList (void);
+    BooleanBoundedList (
+      ::CORBA::ULong length,
+      ::CORBA::Boolean* buffer,
+      ::CORBA::Boolean release = false);
+    BooleanBoundedList (const BooleanBoundedList &);
+    virtual ~BooleanBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef BooleanBoundedList_var _var_type;
+    typedef BooleanBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_ENUMBOUNDEDLIST_CH_)
+#define _TEST_ENUMBOUNDEDLIST_CH_
+
+  class EnumBoundedList;
+
+  typedef
+    ::TAO_FixedSeq_Var_T<
+        EnumBoundedList
+      >
+    EnumBoundedList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        EnumBoundedList
+      >
+    EnumBoundedList_out;
+
+  class TestPInvokeIdlIDL_Export EnumBoundedList
+    : public
+        ::TAO::bounded_value_sequence<
+            PrimitiveEnum,
+            5
+          >
+  {
+  public:
+    EnumBoundedList (void);
+    EnumBoundedList (
+      ::CORBA::ULong length,
+      PrimitiveEnum* buffer,
+      ::CORBA::Boolean release = false);
+    EnumBoundedList (const EnumBoundedList &);
+    virtual ~EnumBoundedList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef EnumBoundedList_var _var_type;
+    typedef EnumBoundedList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:261
 
   struct BasicTestStruct;
@@ -2604,6 +2927,13 @@ namespace Test
     Test::ArrayEnum EnumArray;
     Test::EnumList EnumSequence;
     Test::MultiArrayEnum EnumMultiArray;
+    Test::LongBoundedList LongBoundedSequence;
+    Test::StringBoundedList StringBoundedSequence;
+    Test::WStringBoundedList WStringBoundedSequence;
+    Test::StructBoundedList StructBoundedSequence;
+    Test::LongDoubleBoundedList LongDoubleBoundedSequence;
+    Test::BooleanBoundedList BooleanBoundedSequence;
+    Test::EnumBoundedList EnumBoundedSequence;
   };
 
 // TAO_IDL - Generated from
@@ -3237,6 +3567,97 @@ namespace TAO
         Fixed_Array_Arg_Traits_T<
             ::Test::MultiArrayEnum_var,
             ::Test::MultiArrayEnum_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::LongBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::LongBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::StringBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::StringBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::WStringBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::WStringBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::StructBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::StructBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::LongDoubleBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::LongDoubleBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::BooleanBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::BooleanBoundedList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::EnumBoundedList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::EnumBoundedList,
             TAO::Any_Insert_Policy_Noop
           >
   {
@@ -4607,6 +5028,153 @@ TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::Mult
 
 TAO_END_VERSIONED_NAMESPACE_DECL
 
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_LongBoundedList_H_
+#define _TAO_CDR_OP_Test_LongBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::LongBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::LongBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_LongBoundedList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_StringBoundedList_H_
+#define _TAO_CDR_OP_Test_StringBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::StringBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::StringBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_StringBoundedList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_WStringBoundedList_H_
+#define _TAO_CDR_OP_Test_WStringBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::WStringBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::WStringBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_WStringBoundedList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_StructBoundedList_H_
+#define _TAO_CDR_OP_Test_StructBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::StructBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::StructBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_StructBoundedList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_LongDoubleBoundedList_H_
+#define _TAO_CDR_OP_Test_LongDoubleBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::LongDoubleBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::LongDoubleBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_LongDoubleBoundedList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_BooleanBoundedList_H_
+#define _TAO_CDR_OP_Test_BooleanBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::BooleanBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::BooleanBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_BooleanBoundedList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_EnumBoundedList_H_
+#define _TAO_CDR_OP_Test_EnumBoundedList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::EnumBoundedList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::EnumBoundedList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_EnumBoundedList_H_ */
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_structure\cdr_op_ch.cpp:46
