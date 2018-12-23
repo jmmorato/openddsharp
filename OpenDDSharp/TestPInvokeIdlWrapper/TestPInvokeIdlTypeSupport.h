@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TestPInvokeIdlTypeSupportImpl.h"
+#include "TestPInvokeIdlC.h"
 #include "marshal.h"
 
 #ifndef EXTERN_METHOD_EXPORT
@@ -112,6 +113,10 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
     void* OctetSequence;
     void* BooleanMultiArray;
     void* OctetMultiArray;
+    Test::PrimitiveEnum TestEnum;
+    Test::PrimitiveEnum EnumArray[5];
+    void* EnumSequence;
+    void* EnumMultiArray;
 
     Test::BasicTestStruct to_native()
     {
@@ -467,6 +472,24 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             ACE_OS::memcpy(nativeData.OctetMultiArray, OctetMultiArray, sizeof(CORBA::Octet) * 24);
         }
 
+        // Enumerations
+        nativeData.TestEnum = TestEnum;
+
+        if (EnumArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.EnumArray, EnumArray, sizeof(Test::PrimitiveEnum) * 5);
+        }
+
+        if (EnumSequence != NULL)
+        {
+            marshal::ptr_to_unbounded_sequence(EnumSequence, nativeData.EnumSequence);
+        }
+
+        if (EnumMultiArray != NULL)
+        {
+            ACE_OS::memcpy(nativeData.EnumMultiArray, EnumMultiArray, sizeof(Test::PrimitiveEnum) * 24);
+        }
+
         return nativeData;
     }
 
@@ -782,6 +805,22 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
             OctetMultiArray = ACE_OS::malloc(sizeof(CORBA::Octet) * 24);
             ACE_OS::memcpy(OctetMultiArray, nativeData.OctetMultiArray, sizeof(CORBA::Octet) * 24);
         }
+
+        // Enumerations
+        TestEnum = nativeData.TestEnum;
+
+        if (nativeData.EnumArray != NULL)
+        {
+            ACE_OS::memcpy(EnumArray, nativeData.EnumArray, sizeof(Test::PrimitiveEnum) * 5);
+        }
+
+        if (nativeData.EnumMultiArray != NULL)
+        {
+            EnumMultiArray = ACE_OS::malloc(sizeof(Test::PrimitiveEnum) * 24);
+            ACE_OS::memcpy(EnumMultiArray, nativeData.EnumMultiArray, sizeof(Test::PrimitiveEnum) * 24);
+        }
+
+        marshal::unbounded_sequence_to_ptr(nativeData.EnumSequence, EnumSequence);
     }
 
     void release() 
@@ -1021,6 +1060,16 @@ EXTERN_STRUCT_EXPORT BasicTestStructWrapper
         if (OctetMultiArray != NULL)
         {
             ACE_OS::free(OctetMultiArray);
+        }
+
+        if (EnumSequence != NULL)
+        {
+            ACE_OS::free(EnumSequence);
+        }
+
+        if (EnumMultiArray != NULL)
+        {
+            ACE_OS::free(EnumMultiArray);
         }
     }
 };

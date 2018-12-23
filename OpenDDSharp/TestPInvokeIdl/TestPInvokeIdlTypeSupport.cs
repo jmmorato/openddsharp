@@ -64,6 +64,58 @@ namespace Test
             }
         }
 
+        public static void PtrToEnumUnboundedSequence<T>(IntPtr ptr, ref IList<T> sequence) where T : Enum
+        {
+            // Ensure a not null empty list to populate
+            if (sequence == null)
+                sequence = new List<T>();
+            else
+                sequence.Clear();
+
+            if (ptr == IntPtr.Zero)
+                return;
+
+            // Start by reading the size of the array
+            int length = Marshal.ReadInt32(ptr);
+            // For efficiency, only compute the element size once
+            int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+            // Populate the list
+            for (int i = 0; i < length; i++)
+            {
+                int aux = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
+                sequence.Add((T)Enum.ToObject(typeof(T), aux));
+            }
+        }
+
+        public static void EnumUnboundedSequenceToPtr<T>(IList<T> sequence, ref IntPtr ptr) where T : Enum
+        {
+            if (sequence == null || sequence.Count == 0)
+            {
+                // No structures in the list. Write 0 and return
+                ptr = Marshal.AllocHGlobal(sizeof(int));
+                Marshal.WriteInt32(ptr, 0);
+                return;
+            }
+
+            int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+            // Get the total size of unmanaged memory that is needed (length + elements)
+            int size = sizeof(int) + (elSiz * sequence.Count);
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+            // Write the "Length" field first
+            Marshal.WriteInt32(ptr, sequence.Count);
+            // Write the list data
+            //Marshal.Copy(sequence.ToArray(), 0, ptr + sizeof(int), sequence.Count);
+            for (int i = 0; i < sequence.Count; i++)
+            {
+                // IDL only accept integer enumerations
+                int value = Convert.ToInt32(sequence[i]);
+                // Newly-allocated space has no existing object, so the last param is false 
+                Marshal.StructureToPtr(value, ptr + sizeof(int) + (elSiz * i), false);
+
+            }
+        }
+
         public static void PtrToBooleanUnboundedSequence(IntPtr ptr, ref IList<bool> sequence)
         {
             // Ensure a not null empty list to populate
@@ -238,6 +290,59 @@ namespace Test
             }
         }
 
+        public static void PtrToEnumMultiArray<T>(IntPtr ptr, Array array) where T : Enum
+        {
+            // We need to ensure that the array is not null before the call 
+            if (array == null)
+                return;
+
+            int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+            int length = 1;
+            for (int i = 0; i < array.Rank; i++)
+            {
+                length *= array.GetLength(i);
+            }
+
+            int[] dimensions = new int[array.Rank];
+            int[] dIndex = new int[array.Rank];
+            for (int i = 0; i < length; i++)
+            {
+                if (i > 0)
+                {
+                    UpdateDimensionsArray(array, dimensions);
+                }
+
+                int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
+                array.SetValue((T)Enum.ToObject(typeof(T), aux), dimensions);
+            }
+        }
+
+        public static void EnumMultiArrayToPtr<T>(Array array, ref IntPtr ptr) where T : Enum
+        {
+            if (array == null || array.Length == 0)
+            {
+                return;
+            }
+
+            int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+            // Get the total size of unmanaged memory that is needed
+            int size = elSiz * array.Length;
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+
+            System.Collections.IEnumerator enumerator = array.GetEnumerator();
+            int i = 0;
+            while (enumerator.MoveNext())
+            {
+                // IDL only accept integer enumerations
+                int value = Convert.ToInt32(enumerator.Current);
+                // Newly-allocated space has no existing object, so the last param is false 
+                Marshal.StructureToPtr(value, ptr + (elSiz * i), false);
+                
+                i++;
+            }
+        }
+
         public static void PtrToBooleanMultiArray(IntPtr ptr, Array array)
         {
             // We need to ensure that the array is not null before the call 
@@ -375,6 +480,22 @@ namespace Test
         }
     }
 
+    public enum PrimitiveEnum
+    {
+        ENUM1,
+        ENUM2,
+        ENUM3,
+        ENUM4,
+        ENUM5,
+        ENUM6,
+        ENUM7,
+        ENUM8,
+        ENUM9,
+        ENUM10,
+        ENUM11,
+        ENUM12
+    };
+
     public class NestedTestStruct
     {
         public int Id { get; set; }
@@ -430,6 +551,7 @@ namespace Test
         private IList<ulong> _ulonglongSequence;
         private IList<bool> _booleanSequence;
         private IList<byte> _octetSequence;
+        private IList<PrimitiveEnum> _enumSequence;
         #endregion
 
         #region Properties
@@ -624,6 +746,18 @@ namespace Test
         public bool[,,] BooleanMultiArray { get; set; }
 
         public byte[,,] OctetMultiArray { get; set; }
+
+        public PrimitiveEnum TestEnum { get; set; }
+
+        public PrimitiveEnum[] EnumArray { get; set; }
+
+        public IList<PrimitiveEnum> EnumSequence
+        {
+            get { return _enumSequence; }
+            set { _enumSequence = value; }
+        }
+
+        public PrimitiveEnum[,,] EnumMultiArray { get; set; }
         #endregion
 
         #region Constructors
@@ -677,6 +811,9 @@ namespace Test
             _octetSequence = new List<byte>();
             BooleanMultiArray = new bool[3, 4, 2];
             OctetMultiArray = new byte[3, 4, 2];
+            EnumArray = new PrimitiveEnum[5];
+            _enumSequence = new List<PrimitiveEnum>();
+            EnumMultiArray = new PrimitiveEnum[3, 4, 2];
         }
         #endregion
 
@@ -952,6 +1089,19 @@ namespace Test
                 toRelease.Add(wrapper.OctetMultiArray);
             }
 
+            // Enumerations
+            wrapper.TestEnum = TestEnum;
+            wrapper.EnumArray = EnumArray;
+
+            Helper.EnumUnboundedSequenceToPtr(EnumSequence, ref wrapper.EnumSequence);
+            toRelease.Add(wrapper.EnumSequence);
+
+            if (EnumMultiArray != null)
+            {
+                Helper.EnumMultiArrayToPtr<PrimitiveEnum>(EnumMultiArray, ref wrapper.EnumMultiArray);
+                toRelease.Add(wrapper.EnumMultiArray);
+            }
+
             return wrapper;
         }
 
@@ -1188,6 +1338,17 @@ namespace Test
                 OctetMultiArray = new byte[3, 4, 2];
             }
             Helper.PtrToMultiArray<byte>(wrapper.OctetMultiArray, OctetMultiArray);
+
+            // Enumerations
+            TestEnum = wrapper.TestEnum;
+            EnumArray = wrapper.EnumArray;
+            Helper.PtrToEnumUnboundedSequence(wrapper.EnumSequence, ref _enumSequence);
+
+            if (EnumMultiArray == null)
+            {
+                EnumMultiArray = new PrimitiveEnum[3, 4, 2];
+            }
+            Helper.PtrToEnumMultiArray<PrimitiveEnum>(wrapper.EnumMultiArray, EnumMultiArray);
         }
         #endregion
     }
@@ -1350,6 +1511,15 @@ namespace Test
         public IntPtr BooleanMultiArray;
 
         public IntPtr OctetMultiArray;
+
+        public PrimitiveEnum TestEnum;
+
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 5)]
+        public PrimitiveEnum[] EnumArray;
+
+        public IntPtr EnumSequence;
+
+        public IntPtr EnumMultiArray;
     }
 
     public class BasicTestStructTypeSupport

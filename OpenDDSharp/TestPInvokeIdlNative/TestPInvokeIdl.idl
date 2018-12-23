@@ -2,6 +2,21 @@
 
 module Test {
 
+    enum PrimitiveEnum {
+        ENUM1,
+        ENUM2,
+        ENUM3,
+        ENUM4,
+        ENUM5,
+        ENUM6,
+        ENUM7,
+        ENUM8,
+        ENUM9,
+        ENUM10,
+        ENUM11,
+        ENUM12
+    };
+
     #pragma DCPS_DATA_TYPE "Test::NestedTestStruct"    
     struct NestedTestStruct {
         long Id;
@@ -56,6 +71,9 @@ module Test {
     typedef sequence<octet> OctetList;
     typedef boolean MultiArrayBoolean[3][4][2];
     typedef octet MultiArrayOctet[3][4][2];
+    typedef PrimitiveEnum ArrayEnum[5];
+    typedef sequence<PrimitiveEnum> EnumList;
+    typedef PrimitiveEnum MultiArrayEnum[3][4][2];
 
 	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
 	struct BasicTestStruct {
@@ -123,6 +141,10 @@ module Test {
         OctetList OctetSequence;
         MultiArrayBoolean BooleanMultiArray;
         MultiArrayOctet OctetMultiArray;
+        PrimitiveEnum TestEnum;
+        ArrayEnum EnumArray;
+        EnumList EnumSequence;
+        MultiArrayEnum EnumMultiArray;
 	};
 
 };

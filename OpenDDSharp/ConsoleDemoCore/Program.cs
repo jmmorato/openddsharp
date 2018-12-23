@@ -105,7 +105,7 @@ namespace ConsoleDemoCore
                     "Splits a family in two",
                     "Puts people on streets"
                 },
-                LongArray = new int[] {42, 23, 69, 1024, 25 },
+                LongArray = new int[] { 42, 23, 69, 1024, 25 },
                 StringArray = new string[]
                 {
                     "You've got your mother in a whirl",
@@ -136,7 +136,7 @@ namespace ConsoleDemoCore
                     new NestedTestStruct { Id = 1, Message = "With your feet in the air and your head on the ground" },
                     new NestedTestStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
                     new NestedTestStruct { Id = 3, Message = "Your head will collapse" },
-                    new NestedTestStruct { Id = 4, Message = "But there's nothing in it" },                    
+                    new NestedTestStruct { Id = 4, Message = "But there's nothing in it" },
                     new NestedTestStruct { Id = 5, Message = "And you'll ask yourself" },
                     new NestedTestStruct { Id = 6, Message = "Where is my mind?" },
                 },
@@ -178,7 +178,7 @@ namespace ConsoleDemoCore
                 FloatArray = new float[] { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f },
                 DoubleArray = new double[] { 1.1, 2.2, 3.3, 4.4, 5.5 },
                 LongDoubleArray = new double[] { 1.1, 2.2, 3.3, 4.4, 5.5 },
-                FloatSequence = new List<float> { 1.1f, 2.2f, 3.3f},
+                FloatSequence = new List<float> { 1.1f, 2.2f, 3.3f },
                 DoubleSequence = new List<double> { 1.1, 2.2, 3.3, 4.4 },
                 LongDoubleSequence = new List<double> { 1.1, 2.2, 3.3, 4.4, 5.5 },
                 FloatMultiArray = new float[3, 4, 2]
@@ -264,9 +264,9 @@ namespace ConsoleDemoCore
                 },
                 BooleanType = true,
                 OctetType = 0x42,
-                BooleanArray = new bool[] { true, false, true, false, true},
+                BooleanArray = new bool[] { true, false, true, false, true },
                 OctetArray = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 },
-                BooleanSequence = { true, false, true, false, true},
+                BooleanSequence = { true, false, true, false, true },
                 OctetSequence = { 0x01, 0x02, 0x03, 0x04, 0x05 },
                 BooleanMultiArray = new bool[3, 4, 2]
                 {
@@ -279,6 +279,15 @@ namespace ConsoleDemoCore
                     { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
                     { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
                     { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                },
+                TestEnum = PrimitiveEnum.ENUM5,
+                EnumArray = new PrimitiveEnum[] { PrimitiveEnum.ENUM2, PrimitiveEnum.ENUM3, PrimitiveEnum.ENUM5, PrimitiveEnum.ENUM7, PrimitiveEnum.ENUM11 },
+                EnumSequence = { PrimitiveEnum.ENUM12, PrimitiveEnum.ENUM11, PrimitiveEnum.ENUM10 },
+                EnumMultiArray = new PrimitiveEnum[3, 4, 2]
+                {
+                    { { PrimitiveEnum.ENUM1, PrimitiveEnum.ENUM2 }, { PrimitiveEnum.ENUM3, PrimitiveEnum.ENUM4 }, { PrimitiveEnum.ENUM5, PrimitiveEnum.ENUM6 }, { PrimitiveEnum.ENUM7, PrimitiveEnum.ENUM8 } },
+                    { { PrimitiveEnum.ENUM9, PrimitiveEnum.ENUM10 }, { PrimitiveEnum.ENUM11, PrimitiveEnum.ENUM12 }, { PrimitiveEnum.ENUM1, PrimitiveEnum.ENUM2 }, { PrimitiveEnum.ENUM3, PrimitiveEnum.ENUM4 } },
+                    { { PrimitiveEnum.ENUM5, PrimitiveEnum.ENUM6 }, { PrimitiveEnum.ENUM7, PrimitiveEnum.ENUM8 }, { PrimitiveEnum.ENUM9, PrimitiveEnum.ENUM10 }, { PrimitiveEnum.ENUM11, PrimitiveEnum.ENUM12 } }
                 }
             };
             dataWriter.Write(data);
@@ -1273,6 +1282,69 @@ namespace ConsoleDemoCore
                             {
                                 Console.Write(string.Format("0x{0:X2}", received.OctetMultiArray[i, j, k]));
                                 if (j + 1 < received.OctetMultiArray.GetLength(1) || k + 1 < received.OctetMultiArray.GetLength(2))
+                                {
+                                    Console.Write(", ");
+                                }
+                            }
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(nameof(received.TestEnum) + ":");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(received.TestEnum);
+                Console.WriteLine();
+
+                if (received.EnumArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.EnumArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.EnumArray.Length; i++)
+                    {
+                        Console.Write(received.EnumArray[i]);
+                        if (i + 1 < received.EnumArray.Length)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.EnumSequence != null && received.EnumSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.EnumSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.EnumSequence.Count; i++)
+                    {
+                        Console.Write(received.EnumSequence[i]);
+                        if (i < received.EnumSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.EnumMultiArray != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.EnumMultiArray) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.EnumMultiArray.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < received.EnumMultiArray.GetLength(1); j++)
+                        {
+                            for (int k = 0; k < received.EnumMultiArray.GetLength(2); k++)
+                            {
+                                Console.Write(received.EnumMultiArray[i, j, k]);
+                                if (j + 1 < received.EnumMultiArray.GetLength(1) || k + 1 < received.EnumMultiArray.GetLength(2))
                                 {
                                     Console.Write(", ");
                                 }

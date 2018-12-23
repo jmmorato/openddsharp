@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLS_BPLACM_H_
-#define _TAO_IDL_TESTPINVOKEIDLS_BPLACM_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLS_J7LXOT_H_
+#define _TAO_IDL_TESTPINVOKEIDLS_J7LXOT_H_
 
 #include /**/ "ace/pre.h"
 
@@ -80,6 +80,19 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 // Arg traits specializations.
 namespace TAO
 {
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:904
+
+  template<>
+  class SArg_Traits< ::Test::PrimitiveEnum>
+    : public
+        Basic_SArg_Traits_T<
+            ::Test::PrimitiveEnum,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
 
   // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
@@ -649,6 +662,41 @@ namespace TAO
         Fixed_Array_SArg_Traits_T<
             ::Test::MultiArrayOctet_var,
             ::Test::MultiArrayOctet_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::ArrayEnum_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::ArrayEnum_var,
+            ::Test::ArrayEnum_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class SArg_Traits< ::Test::EnumList>
+    : public
+        Var_Size_SArg_Traits_T<
+            ::Test::EnumList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class SArg_Traits< ::Test::MultiArrayEnum_tag>
+    : public
+        Fixed_Array_SArg_Traits_T<
+            ::Test::MultiArrayEnum_var,
+            ::Test::MultiArrayEnum_forany,
             TAO::Any_Insert_Policy_Noop
           >
   {

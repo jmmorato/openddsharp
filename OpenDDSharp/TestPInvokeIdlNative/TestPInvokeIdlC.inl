@@ -1786,3 +1786,113 @@ TAO::Array_Traits<Test::MultiArrayOctet_forany>::alloc (void)
 }
 
 
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayEnum_forany>::free (
+    Test::ArrayEnum_slice * _tao_slice
+  )
+{
+  Test::ArrayEnum_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::ArrayEnum_slice *
+TAO::Array_Traits<Test::ArrayEnum_forany>::dup (
+    const Test::ArrayEnum_slice * _tao_slice
+  )
+{
+  return Test::ArrayEnum_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayEnum_forany>::copy (
+    Test::ArrayEnum_slice * _tao_to,
+    const Test::ArrayEnum_slice * _tao_from
+  )
+{
+  Test::ArrayEnum_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::ArrayEnum_forany>::zero (
+    Test::ArrayEnum_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 5; ++i0)
+    {
+      _tao_slice[i0] = Test::PrimitiveEnum ();
+    }
+}
+
+ACE_INLINE
+Test::ArrayEnum_slice *
+TAO::Array_Traits<Test::ArrayEnum_forany>::alloc (void)
+{
+  return Test::ArrayEnum_alloc ();
+}
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ci.cpp:150
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayEnum_forany>::free (
+    Test::MultiArrayEnum_slice * _tao_slice
+  )
+{
+  Test::MultiArrayEnum_free (_tao_slice);
+}
+
+ACE_INLINE
+Test::MultiArrayEnum_slice *
+TAO::Array_Traits<Test::MultiArrayEnum_forany>::dup (
+    const Test::MultiArrayEnum_slice * _tao_slice
+  )
+{
+  return Test::MultiArrayEnum_dup (_tao_slice);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayEnum_forany>::copy (
+    Test::MultiArrayEnum_slice * _tao_to,
+    const Test::MultiArrayEnum_slice * _tao_from
+  )
+{
+  Test::MultiArrayEnum_copy (_tao_to, _tao_from);
+}
+
+ACE_INLINE
+void
+TAO::Array_Traits<Test::MultiArrayEnum_forany>::zero (
+    Test::MultiArrayEnum_slice * _tao_slice
+  )
+{
+  // Zero each individual element.
+  for ( ::CORBA::ULong i0 = 0; i0 < 3; ++i0)
+    {
+      for ( ::CORBA::ULong i1 = 0; i1 < 4; ++i1)
+        {
+          for ( ::CORBA::ULong i2 = 0; i2 < 2; ++i2)
+            {
+              _tao_slice[i0][i1][i2] = Test::PrimitiveEnum ();
+            }
+        }
+    }
+}
+
+ACE_INLINE
+Test::MultiArrayEnum_slice *
+TAO::Array_Traits<Test::MultiArrayEnum_forany>::alloc (void)
+{
+  return Test::MultiArrayEnum_alloc ();
+}
+
+

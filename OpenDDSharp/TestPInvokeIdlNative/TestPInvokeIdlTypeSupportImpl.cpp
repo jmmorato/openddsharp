@@ -497,6 +497,59 @@
 
 
 
+/* Begin ENUM: PrimitiveEnum */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool operator<<(Serializer& strm, const Test::PrimitiveEnum& enumval)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(enumval);
+  return strm << static_cast<CORBA::ULong>(enumval);
+}
+
+bool operator>>(Serializer& strm, Test::PrimitiveEnum& enumval)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(enumval);
+  CORBA::ULong temp = 0;
+  if (strm >> temp) {
+    enumval = static_cast<Test::PrimitiveEnum>(temp);
+    return true;
+  }
+  return false;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+const char* gen_Test_PrimitiveEnum_names[] = {
+  "ENUM1",
+  "ENUM2",
+  "ENUM3",
+  "ENUM4",
+  "ENUM5",
+  "ENUM6",
+  "ENUM7",
+  "ENUM8",
+  "ENUM9",
+  "ENUM10",
+  "ENUM11",
+  "ENUM12"
+};
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End ENUM: PrimitiveEnum */
+
+
 /* Begin STRUCT: NestedTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -3679,6 +3732,208 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 /* End TYPEDEF: MultiArrayOctet */
 
 
+/* Begin TYPEDEF: ArrayEnum */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::ArrayEnum_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  size += 4 * max_marshaled_size_ulong();
+}
+
+bool operator<<(Serializer& strm, const Test::ArrayEnum_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+    if (!(strm << arr[i0])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::ArrayEnum_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+    if (!(strm >> arr[i0])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::ArrayEnum_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(5), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: ArrayEnum */
+
+
+/* Begin TYPEDEF: EnumList */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::EnumList& seq, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(seq);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  if (seq.length() == 0) {
+    return;
+  }
+  size += seq.length() * max_marshaled_size_ulong();
+}
+
+bool operator<<(Serializer& strm, const Test::EnumList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  const CORBA::ULong length = seq.length();
+  if (!(strm << length)) {
+    return false;
+  }
+  if (length == 0) {
+    return true;
+  }
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm << seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::EnumList& seq)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(seq);
+  CORBA::ULong length;
+  if (!(strm >> length)) {
+    return false;
+  }
+  seq.length(length);
+  for (CORBA::ULong i = 0; i < length; ++i) {
+    if (!(strm >> seq[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::EnumList*)
+{
+  ACE_UNUSED_ARG(ser);
+  ACE_CDR::ULong length;
+  if (!(ser >> length)) return false;
+  return ser.skip(static_cast<ACE_UINT16>(length), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: EnumList */
+
+
+/* Begin TYPEDEF: MultiArrayEnum */
+
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+void gen_find_size(const Test::MultiArrayEnum_forany& arr, size_t& size, size_t& padding)
+{
+  ACE_UNUSED_ARG(arr);
+  ACE_UNUSED_ARG(size);
+  ACE_UNUSED_ARG(padding);
+  find_size_ulong(size, padding);
+  size += 23 * max_marshaled_size_ulong();
+}
+
+bool operator<<(Serializer& strm, const Test::MultiArrayEnum_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+    for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+      for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+        if (!(strm << arr[i0][i1][i2])) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+bool operator>>(Serializer& strm, Test::MultiArrayEnum_forany& arr)
+{
+  ACE_UNUSED_ARG(strm);
+  ACE_UNUSED_ARG(arr);
+  for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+    for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+      for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+        if (!(strm >> arr[i0][i1][i2])) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
+OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
+namespace OpenDDS { namespace DCPS {
+
+bool gen_skip_over(Serializer& ser, Test::MultiArrayEnum_forany*)
+{
+  ACE_UNUSED_ARG(ser);
+  return ser.skip(static_cast<ACE_UINT16>(24), 4);
+}
+
+}  }
+OPENDDS_END_VERSIONED_NAMESPACE_DECL
+
+#endif
+
+/* End TYPEDEF: MultiArrayEnum */
+
+
 /* Begin STRUCT: BasicTestStruct */
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -3721,6 +3976,8 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   Test::ArrayOctet_forany stru_OctetArray(const_cast<Test::ArrayOctet_slice*>(stru.OctetArray));
   Test::MultiArrayBoolean_forany stru_BooleanMultiArray(const_cast<Test::MultiArrayBoolean_slice*>(stru.BooleanMultiArray));
   Test::MultiArrayOctet_forany stru_OctetMultiArray(const_cast<Test::MultiArrayOctet_slice*>(stru.OctetMultiArray));
+  Test::ArrayEnum_forany stru_EnumArray(const_cast<Test::ArrayEnum_slice*>(stru.EnumArray));
+  Test::MultiArrayEnum_forany stru_EnumMultiArray(const_cast<Test::MultiArrayEnum_slice*>(stru.EnumMultiArray));
   if ((size + padding) % 4) {
     padding += 4 - ((size + padding) % 4);
   }
@@ -3814,6 +4071,10 @@ void gen_find_size(const Test::BasicTestStruct& stru, size_t& size, size_t& padd
   gen_find_size(stru.OctetSequence, size, padding);
   gen_find_size(stru_BooleanMultiArray, size, padding);
   gen_find_size(stru_OctetMultiArray, size, padding);
+  find_size_ulong(size, padding);
+  gen_find_size(stru_EnumArray, size, padding);
+  gen_find_size(stru.EnumSequence, size, padding);
+  gen_find_size(stru_EnumMultiArray, size, padding);
 }
 
 bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
@@ -3852,6 +4113,8 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
   Test::ArrayOctet_forany stru_OctetArray(const_cast<Test::ArrayOctet_slice*>(stru.OctetArray));
   Test::MultiArrayBoolean_forany stru_BooleanMultiArray(const_cast<Test::MultiArrayBoolean_slice*>(stru.BooleanMultiArray));
   Test::MultiArrayOctet_forany stru_OctetMultiArray(const_cast<Test::MultiArrayOctet_slice*>(stru.OctetMultiArray));
+  Test::ArrayEnum_forany stru_EnumArray(const_cast<Test::ArrayEnum_slice*>(stru.EnumArray));
+  Test::MultiArrayEnum_forany stru_EnumMultiArray(const_cast<Test::MultiArrayEnum_slice*>(stru.EnumMultiArray));
   return (strm << stru.Id)
     && (strm << stru.Message.in())
     && (strm << stru.WMessage.in())
@@ -3915,7 +4178,11 @@ bool operator<<(Serializer& strm, const Test::BasicTestStruct& stru)
     && (strm << stru.BooleanSequence)
     && (strm << stru.OctetSequence)
     && (strm << stru_BooleanMultiArray)
-    && (strm << stru_OctetMultiArray);
+    && (strm << stru_OctetMultiArray)
+    && (strm << stru.TestEnum)
+    && (strm << stru_EnumArray)
+    && (strm << stru.EnumSequence)
+    && (strm << stru_EnumMultiArray);
 }
 
 bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
@@ -3954,6 +4221,8 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
   Test::ArrayOctet_forany stru_OctetArray(const_cast<Test::ArrayOctet_slice*>(stru.OctetArray));
   Test::MultiArrayBoolean_forany stru_BooleanMultiArray(const_cast<Test::MultiArrayBoolean_slice*>(stru.BooleanMultiArray));
   Test::MultiArrayOctet_forany stru_OctetMultiArray(const_cast<Test::MultiArrayOctet_slice*>(stru.OctetMultiArray));
+  Test::ArrayEnum_forany stru_EnumArray(const_cast<Test::ArrayEnum_slice*>(stru.EnumArray));
+  Test::MultiArrayEnum_forany stru_EnumMultiArray(const_cast<Test::MultiArrayEnum_slice*>(stru.EnumMultiArray));
   return (strm >> stru.Id)
     && (strm >> stru.Message.out())
     && (strm >> stru.WMessage.out())
@@ -4017,7 +4286,11 @@ bool operator>>(Serializer& strm, Test::BasicTestStruct& stru)
     && (strm >> stru.BooleanSequence)
     && (strm >> stru.OctetSequence)
     && (strm >> stru_BooleanMultiArray)
-    && (strm >> stru_OctetMultiArray);
+    && (strm >> stru_OctetMultiArray)
+    && (strm >> stru.TestEnum)
+    && (strm >> stru_EnumArray)
+    && (strm >> stru.EnumSequence)
+    && (strm >> stru_EnumMultiArray);
 }
 
 size_t gen_max_marshaled_size(const Test::BasicTestStruct& stru, bool align)
@@ -4179,6 +4452,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "OctetType") == 0) {
       return typed.OctetType;
+    }
+    if (std::strcmp(field, "TestEnum") == 0) {
+      return gen_Test_PrimitiveEnum_names[typed.TestEnum];
     }
     ACE_UNUSED_ARG(typed);
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
@@ -4514,6 +4790,26 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (!gen_skip_over(ser, static_cast<Test::MultiArrayOctet_forany*>(0))) {
       throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
     }
+    if (std::strcmp(field, "TestEnum") == 0) {
+      ACE_CDR::ULong val;
+      if (!(ser >> val)) {
+        throw std::runtime_error("Field 'TestEnum' could not be deserialized");
+      }
+      return val;
+    } else {
+      if (!ser.skip(1, 4)) {
+        throw std::runtime_error("Field 'TestEnum' could not be skipped");
+      }
+    }
+    if (!gen_skip_over(ser, static_cast<Test::ArrayEnum_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::EnumList*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
+    if (!gen_skip_over(ser, static_cast<Test::MultiArrayEnum_forany*>(0))) {
+      throw std::runtime_error("Field " + OPENDDS_STRING(field) + " could not be skipped");
+    }
     if (!field[0]) {
       return 0;
     }
@@ -4571,13 +4867,16 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     if (std::strcmp(field, "OctetType") == 0) {
       return make_field_cmp(&T::OctetType, next);
     }
+    if (std::strcmp(field, "TestEnum") == 0) {
+      return make_field_cmp(&T::TestEnum, next);
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 
 #ifndef OPENDDS_NO_MULTI_TOPIC
   const char** getFieldNames() const
   {
-    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", "CharType", "WCharType", "CharArray", "WCharArray", "CharSequence", "WCharSequence", "CharMultiArray", "WCharMultiArray", "ShortType", "LongLongType", "UnsignedShortType", "UnsignedLongType", "UnsignedLongLongType", "ShortArray", "LongLongArray", "UnsignedShortArray", "UnsignedLongArray", "UnsignedLongLongArray", "ShortSequence", "LongLongSequence", "UnsignedShortSequence", "UnsignedLongSequence", "UnsignedLongLongSequence", "ShortMultiArray", "LongLongMultiArray", "UnsignedShortMultiArray", "UnsignedLongMultiArray", "UnsignedLongLongMultiArray", "BooleanType", "OctetType", "BooleanArray", "OctetArray", "BooleanSequence", "OctetSequence", "BooleanMultiArray", "OctetMultiArray", 0};
+    static const char* names[] = {"Id", "Message", "WMessage", "LongSequence", "StringSequence", "WStringSequence", "LongArray", "StringArray", "WStringArray", "StructTest", "StructSequence", "StructArray", "LongMultiArray", "StringMultiArray", "WStringMultiArray", "StructMultiArray", "FloatType", "DoubleType", "LongDoubleType", "FloatArray", "DoubleArray", "LongDoubleArray", "FloatSequence", "DoubleSequence", "LongDoubleSequence", "FloatMultiArray", "DoubleMultiArray", "LongDoubleMultiArray", "CharType", "WCharType", "CharArray", "WCharArray", "CharSequence", "WCharSequence", "CharMultiArray", "WCharMultiArray", "ShortType", "LongLongType", "UnsignedShortType", "UnsignedLongType", "UnsignedLongLongType", "ShortArray", "LongLongArray", "UnsignedShortArray", "UnsignedLongArray", "UnsignedLongLongArray", "ShortSequence", "LongLongSequence", "UnsignedShortSequence", "UnsignedLongSequence", "UnsignedLongLongSequence", "ShortMultiArray", "LongLongMultiArray", "UnsignedShortMultiArray", "UnsignedLongMultiArray", "UnsignedLongLongMultiArray", "BooleanType", "OctetType", "BooleanArray", "OctetArray", "BooleanSequence", "OctetSequence", "BooleanMultiArray", "OctetMultiArray", "TestEnum", "EnumArray", "EnumSequence", "EnumMultiArray", 0};
     return names;
   }
 
@@ -4774,6 +5073,18 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "OctetMultiArray") == 0) {
       return &static_cast<const T*>(stru)->OctetMultiArray;
+    }
+    if (std::strcmp(field, "TestEnum") == 0) {
+      return &static_cast<const T*>(stru)->TestEnum;
+    }
+    if (std::strcmp(field, "EnumArray") == 0) {
+      return &static_cast<const T*>(stru)->EnumArray;
+    }
+    if (std::strcmp(field, "EnumSequence") == 0) {
+      return &static_cast<const T*>(stru)->EnumSequence;
+    }
+    if (std::strcmp(field, "EnumMultiArray") == 0) {
+      return &static_cast<const T*>(stru)->EnumMultiArray;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
@@ -5234,6 +5545,34 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
       }
       return;
     }
+    if (std::strcmp(field, "TestEnum") == 0) {
+      static_cast<T*>(lhs)->TestEnum = *static_cast<const Test::PrimitiveEnum*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "EnumArray") == 0) {
+      Test::ArrayEnum* lhsArr = &static_cast<T*>(lhs)->EnumArray;
+      const Test::ArrayEnum* rhsArr = static_cast<const Test::ArrayEnum*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 5; ++i0) {
+        (*lhsArr)[i0] = (*rhsArr)[i0];
+      }
+      return;
+    }
+    if (std::strcmp(field, "EnumSequence") == 0) {
+      static_cast<T*>(lhs)->EnumSequence = *static_cast<const Test::EnumList*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      return;
+    }
+    if (std::strcmp(field, "EnumMultiArray") == 0) {
+      Test::MultiArrayEnum* lhsArr = &static_cast<T*>(lhs)->EnumMultiArray;
+      const Test::MultiArrayEnum* rhsArr = static_cast<const Test::MultiArrayEnum*>(rhsMeta.getRawField(rhs, rhsFieldSpec));
+      for (CORBA::ULong i0 = 0; i0 < 3; ++i0) {
+        for (CORBA::ULong i1 = 0; i1 < 4; ++i1) {
+          for (CORBA::ULong i2 = 0; i2 < 2; ++i2) {
+            (*lhsArr)[i0][i1][i2] = (*rhsArr)[i0][i1][i2];
+          }
+        }
+      }
+      return;
+    }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }
 #endif /* OPENDDS_NO_MULTI_TOPIC */
@@ -5287,6 +5626,9 @@ struct MetaStructImpl<Test::BasicTestStruct> : MetaStruct {
     }
     if (std::strcmp(field, "OctetType") == 0) {
       return static_cast<const T*>(lhs)->OctetType == static_cast<const T*>(rhs)->OctetType;
+    }
+    if (std::strcmp(field, "TestEnum") == 0) {
+      return static_cast<const T*>(lhs)->TestEnum == static_cast<const T*>(rhs)->TestEnum;
     }
     throw std::runtime_error("Field " + OPENDDS_STRING(field) + " not found or its type is not supported (in struct Test::BasicTestStruct)");
   }

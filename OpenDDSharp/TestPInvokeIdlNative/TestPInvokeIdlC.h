@@ -28,8 +28,8 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:152
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLC_GTSY5J_H_
-#define _TAO_IDL_TESTPINVOKEIDLC_GTSY5J_H_
+#ifndef _TAO_IDL_TESTPINVOKEIDLC_I6QEU7_H_
+#define _TAO_IDL_TESTPINVOKEIDLC_I6QEU7_H_
 
 #include /**/ "ace/pre.h"
 
@@ -54,6 +54,7 @@
 #include "tao/Basic_Arguments.h"
 #include "tao/Special_Basic_Arguments.h"
 #include "tao/Any_Insert_Policy_T.h"
+#include "tao/Basic_Argument_T.h"
 #include "tao/Fixed_Size_Argument_T.h"
 #include "tao/Var_Size_Argument_T.h"
 #include "tao/Object_Argument_T.h"
@@ -101,6 +102,27 @@
 
 namespace Test
 {
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_enum\enum_ch.cpp:47
+
+  enum PrimitiveEnum
+  {
+    ENUM1,
+    ENUM2,
+    ENUM3,
+    ENUM4,
+    ENUM5,
+    ENUM6,
+    ENUM7,
+    ENUM8,
+    ENUM9,
+    ENUM10,
+    ENUM11,
+    ENUM12
+  };
+
+  typedef PrimitiveEnum &PrimitiveEnum_out;
 
   // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:261
@@ -2349,6 +2371,142 @@ namespace Test
       const MultiArrayOctet_slice *_tao_from);
 
   // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ch.cpp:54
+
+  typedef PrimitiveEnum ArrayEnum[5];
+  typedef PrimitiveEnum ArrayEnum_slice;
+  struct ArrayEnum_tag {};
+  
+
+  typedef
+    TAO_FixedArray_Var_T<
+        ArrayEnum,
+        ArrayEnum_slice,
+        ArrayEnum_tag
+      >
+    ArrayEnum_var;
+
+  typedef
+    ArrayEnum
+    ArrayEnum_out;
+
+  typedef
+    TAO_Array_Forany_T<
+        ArrayEnum,
+        ArrayEnum_slice,
+        ArrayEnum_tag
+      >
+    ArrayEnum_forany;
+
+  TAO_NAMESPACE_STORAGE_CLASS ArrayEnum_slice *
+  ArrayEnum_alloc (void);
+
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayEnum_free (
+      ArrayEnum_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS ArrayEnum_slice *
+  ArrayEnum_dup (
+      const ArrayEnum_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS void
+  ArrayEnum_copy (
+      ArrayEnum_slice *_tao_to,
+      const ArrayEnum_slice *_tao_from);
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\sequence_ch.cpp:102
+
+#if !defined (_TEST_ENUMLIST_CH_)
+#define _TEST_ENUMLIST_CH_
+
+  class EnumList;
+
+  typedef
+    ::TAO_FixedSeq_Var_T<
+        EnumList
+      >
+    EnumList_var;
+
+  typedef
+    ::TAO_Seq_Out_T<
+        EnumList
+      >
+    EnumList_out;
+
+  class TestPInvokeIdlIDL_Export EnumList
+    : public
+        ::TAO::unbounded_value_sequence<
+            PrimitiveEnum
+          >
+  {
+  public:
+    EnumList (void);
+    EnumList ( ::CORBA::ULong max);
+    EnumList (
+      ::CORBA::ULong max,
+      ::CORBA::ULong length,
+      PrimitiveEnum* buffer,
+      ::CORBA::Boolean release = false);
+    EnumList (const EnumList &);
+    virtual ~EnumList (void);
+    
+
+    // TAO_IDL - Generated from
+    // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:307
+
+    
+    typedef EnumList_var _var_type;
+    typedef EnumList_out _out_type;
+  };
+
+#endif /* end #if !defined */
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\array_ch.cpp:54
+
+  typedef PrimitiveEnum MultiArrayEnum[3][4][2];
+  typedef PrimitiveEnum MultiArrayEnum_slice[4][2];
+  struct MultiArrayEnum_tag {};
+  
+
+  typedef
+    TAO_FixedArray_Var_T<
+        MultiArrayEnum,
+        MultiArrayEnum_slice,
+        MultiArrayEnum_tag
+      >
+    MultiArrayEnum_var;
+
+  typedef
+    MultiArrayEnum
+    MultiArrayEnum_out;
+
+  typedef
+    TAO_Array_Forany_T<
+        MultiArrayEnum,
+        MultiArrayEnum_slice,
+        MultiArrayEnum_tag
+      >
+    MultiArrayEnum_forany;
+
+  TAO_NAMESPACE_STORAGE_CLASS MultiArrayEnum_slice *
+  MultiArrayEnum_alloc (void);
+
+  TAO_NAMESPACE_STORAGE_CLASS void
+  MultiArrayEnum_free (
+      MultiArrayEnum_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS MultiArrayEnum_slice *
+  MultiArrayEnum_dup (
+      const MultiArrayEnum_slice *_tao_slice);
+  
+  TAO_NAMESPACE_STORAGE_CLASS void
+  MultiArrayEnum_copy (
+      MultiArrayEnum_slice *_tao_to,
+      const MultiArrayEnum_slice *_tao_from);
+
+  // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_type.cpp:261
 
   struct BasicTestStruct;
@@ -2442,6 +2600,10 @@ namespace Test
     Test::OctetList OctetSequence;
     Test::MultiArrayBoolean BooleanMultiArray;
     Test::MultiArrayOctet OctetMultiArray;
+    Test::PrimitiveEnum TestEnum;
+    Test::ArrayEnum EnumArray;
+    Test::EnumList EnumSequence;
+    Test::MultiArrayEnum EnumMultiArray;
   };
 
 // TAO_IDL - Generated from
@@ -2458,6 +2620,19 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 // Arg traits specializations.
 namespace TAO
 {
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:904
+
+  template<>
+  class Arg_Traits< ::Test::PrimitiveEnum>
+    : public
+        Basic_Arg_Traits_T<
+            ::Test::PrimitiveEnum,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
 
   // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
@@ -3032,6 +3207,41 @@ namespace TAO
   {
   };
 
+  template<>
+  class Arg_Traits< ::Test::ArrayEnum_tag>
+    : public
+        Fixed_Array_Arg_Traits_T<
+            ::Test::ArrayEnum_var,
+            ::Test::ArrayEnum_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:685
+
+  template<>
+  class Arg_Traits< ::Test::EnumList>
+    : public
+        Var_Size_Arg_Traits_T<
+            ::Test::EnumList,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
+  template<>
+  class Arg_Traits< ::Test::MultiArrayEnum_tag>
+    : public
+        Fixed_Array_Arg_Traits_T<
+            ::Test::MultiArrayEnum_var,
+            ::Test::MultiArrayEnum_forany,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
+
   // TAO_IDL - Generated from
   // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
 
@@ -3570,7 +3780,52 @@ namespace TAO
     static void zero (
         Test::MultiArrayOctet_slice * _tao_slice);
   };
+  template<>
+  struct TestPInvokeIdlIDL_Export Array_Traits<
+      Test::ArrayEnum_forany
+    >
+  {
+    static void free (
+        Test::ArrayEnum_slice * _tao_slice);
+    static Test::ArrayEnum_slice * dup (
+        const Test::ArrayEnum_slice * _tao_slice);
+    static void copy (
+        Test::ArrayEnum_slice * _tao_to,
+        const Test::ArrayEnum_slice * _tao_from);
+    static Test::ArrayEnum_slice * alloc (void);
+    static void zero (
+        Test::ArrayEnum_slice * _tao_slice);
+  };
+  template<>
+  struct TestPInvokeIdlIDL_Export Array_Traits<
+      Test::MultiArrayEnum_forany
+    >
+  {
+    static void free (
+        Test::MultiArrayEnum_slice * _tao_slice);
+    static Test::MultiArrayEnum_slice * dup (
+        const Test::MultiArrayEnum_slice * _tao_slice);
+    static void copy (
+        Test::MultiArrayEnum_slice * _tao_to,
+        const Test::MultiArrayEnum_slice * _tao_from);
+    static Test::MultiArrayEnum_slice * alloc (void);
+    static void zero (
+        Test::MultiArrayEnum_slice * _tao_slice);
+  };
 }
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_enum\cdr_op_ch.cpp:37
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (TAO_OutputCDR &strm, Test::PrimitiveEnum _tao_enumerator);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &strm, Test::PrimitiveEnum &_tao_enumerator);
+
 TAO_END_VERSIONED_NAMESPACE_DECL
 
 
@@ -4304,6 +4559,51 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 
 TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::MultiArrayOctet_forany &_tao_array);
 TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::MultiArrayOctet_forany &_tao_array);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_ch.cpp:102
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::ArrayEnum_forany &_tao_array);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::ArrayEnum_forany &_tao_array);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_sequence\cdr_op_ch.cpp:68
+
+#if !defined _TAO_CDR_OP_Test_EnumList_H_
+#define _TAO_CDR_OP_Test_EnumList_H_
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator<< (
+    TAO_OutputCDR &strm,
+    const Test::EnumList &_tao_sequence);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (
+    TAO_InputCDR &strm,
+    Test::EnumList &_tao_sequence);
+
+TAO_END_VERSIONED_NAMESPACE_DECL
+
+
+
+#endif /* _TAO_CDR_OP_Test_EnumList_H_ */
+
+// TAO_IDL - Generated from
+// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_array\cdr_op_ch.cpp:102
+
+
+TAO_BEGIN_VERSIONED_NAMESPACE_DECL
+
+TestPInvokeIdlIDL_Export CORBA::Boolean operator<< (TAO_OutputCDR &strm, const Test::MultiArrayEnum_forany &_tao_array);
+TestPInvokeIdlIDL_Export ::CORBA::Boolean operator>> (TAO_InputCDR &, Test::MultiArrayEnum_forany &_tao_array);
 
 TAO_END_VERSIONED_NAMESPACE_DECL
 
