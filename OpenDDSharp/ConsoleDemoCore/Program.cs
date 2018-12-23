@@ -288,7 +288,35 @@ namespace ConsoleDemoCore
                     { { PrimitiveEnum.ENUM1, PrimitiveEnum.ENUM2 }, { PrimitiveEnum.ENUM3, PrimitiveEnum.ENUM4 }, { PrimitiveEnum.ENUM5, PrimitiveEnum.ENUM6 }, { PrimitiveEnum.ENUM7, PrimitiveEnum.ENUM8 } },
                     { { PrimitiveEnum.ENUM9, PrimitiveEnum.ENUM10 }, { PrimitiveEnum.ENUM11, PrimitiveEnum.ENUM12 }, { PrimitiveEnum.ENUM1, PrimitiveEnum.ENUM2 }, { PrimitiveEnum.ENUM3, PrimitiveEnum.ENUM4 } },
                     { { PrimitiveEnum.ENUM5, PrimitiveEnum.ENUM6 }, { PrimitiveEnum.ENUM7, PrimitiveEnum.ENUM8 }, { PrimitiveEnum.ENUM9, PrimitiveEnum.ENUM10 }, { PrimitiveEnum.ENUM11, PrimitiveEnum.ENUM12 } }
-                }
+                },
+                LongBoundedSequence = { 1, 2, 3, 4, 5 },
+                StringBoundedSequence = new List<string>(5)
+                {
+                    "In every life we have some trouble, ",
+                    "but when you worry you make it double. ",
+                    "Don't worry. ",
+                    "Be happy. ",
+                    "Be happy now."
+                },
+                WStringBoundedSequence = new List<string>(5)
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets"
+                },
+                StructBoundedSequence = new List<NestedTestStruct>(5)
+                {
+                    new NestedTestStruct { Id = 1, Message = "With your feet in the air and your head on the ground" },
+                    new NestedTestStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
+                    new NestedTestStruct { Id = 3, Message = "Your head will collapse" },
+                    new NestedTestStruct { Id = 4, Message = "But there's nothing in it" },
+                    new NestedTestStruct { Id = 5, Message = "And you'll ask yourself" }
+                },
+                LongDoubleBoundedSequence = new List<double>(5) { 1.1, 2.2, 3.3, 4.4, 5.5 },
+                BooleanBoundedSequence = { true, false, true, false },
+                EnumBoundedSequence = { PrimitiveEnum.ENUM1, PrimitiveEnum.ENUM2, PrimitiveEnum.ENUM3, PrimitiveEnum.ENUM4, PrimitiveEnum.ENUM5 },
             };
             dataWriter.Write(data);
 
@@ -1212,7 +1240,7 @@ namespace ConsoleDemoCore
                     Console.WriteLine();
                 }
 
-                if(received.BooleanSequence != null && received.BooleanSequence.Count > 0)
+                if (received.BooleanSequence != null && received.BooleanSequence.Count > 0)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine(nameof(received.BooleanSequence) + ":");
@@ -1352,6 +1380,110 @@ namespace ConsoleDemoCore
                         }
                         Console.WriteLine();
                     }
+                    Console.WriteLine();
+                }
+
+                if (received.LongBoundedSequence != null && received.LongBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongBoundedSequence.Count; i++)
+                    {
+                        Console.Write(received.LongBoundedSequence[i]);
+                        if (i < received.LongBoundedSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.StringBoundedSequence != null && received.StringBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StringBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.StringBoundedSequence.Count; i++)
+                    {
+                        Console.WriteLine(received.StringBoundedSequence[i]);
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.WStringBoundedSequence != null && received.WStringBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.WStringBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.WStringBoundedSequence.Count; i++)
+                    {
+                        Console.WriteLine(received.WStringBoundedSequence[i]);
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.StructBoundedSequence != null && received.StructBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.StructBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    foreach (NestedTestStruct s in received.StructBoundedSequence)
+                    {
+                        Console.WriteLine(string.Format("{0}: {1}", s.Id, s.Message));
+                    }
+                    Console.WriteLine();
+                }
+
+                if (received.LongDoubleBoundedSequence != null && received.LongDoubleBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.LongDoubleBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.LongDoubleBoundedSequence.Count; i++)
+                    {
+                        Console.Write(received.LongDoubleBoundedSequence[i]);
+                        if (i < received.LongDoubleBoundedSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.BooleanBoundedSequence != null && received.BooleanBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.BooleanBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.BooleanBoundedSequence.Count; i++)
+                    {
+                        Console.Write(received.BooleanBoundedSequence[i]);
+                        if (i < received.BooleanBoundedSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+
+                if (received.EnumBoundedSequence != null && received.EnumBoundedSequence.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(nameof(received.EnumBoundedSequence) + ":");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    for (int i = 0; i < received.EnumBoundedSequence.Count; i++)
+                    {
+                        Console.Write(received.EnumBoundedSequence[i]);
+                        if (i < received.EnumBoundedSequence.Count - 1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.WriteLine();
                     Console.WriteLine();
                 }
             }
