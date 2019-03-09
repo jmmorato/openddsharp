@@ -577,12 +577,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeN
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::ReadNextSample(BasicTestStruct^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::BasicTestStruct* aux = new ::Test::BasicTestStruct();
+    ::Test::BasicTestStruct aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -590,12 +590,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::ReadN
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::BasicTestStructDataReader::TakeNextSample(BasicTestStruct^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::BasicTestStruct* aux = new ::Test::BasicTestStruct();
+    ::Test::BasicTestStruct aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -1610,12 +1610,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeNextIn
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::ReadNextSample(TestStruct^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::TestStruct* aux = new ::Test::TestStruct();
+    ::Test::TestStruct aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -1623,12 +1623,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::ReadNextSa
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::TestStructDataReader::TakeNextSample(TestStruct^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::TestStruct* aux = new ::Test::TestStruct();
+    ::Test::TestStruct aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -2265,12 +2265,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataReader::TakeNextInsta
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataReader::ReadNextSample(Athlete^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::Athlete* aux = new ::Test::Athlete();
+    ::Test::Athlete aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -2278,12 +2278,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataReader::ReadNextSampl
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteDataReader::TakeNextSample(Athlete^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::Athlete* aux = new ::Test::Athlete();
+    ::Test::Athlete aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -2894,12 +2894,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataReader::TakeNextInstan
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataReader::ReadNextSample(Result^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::Result* aux = new ::Test::Result();
+    ::Test::Result aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -2907,12 +2907,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataReader::ReadNextSample
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::ResultDataReader::TakeNextSample(Result^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::Result* aux = new ::Test::Result();
+    ::Test::Result aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -3571,12 +3571,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataReader::TakeNex
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataReader::ReadNextSample(AthleteResult^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::AthleteResult* aux = new ::Test::AthleteResult();
+    ::Test::AthleteResult aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->read_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
@@ -3584,12 +3584,12 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataReader::ReadNex
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::Test::AthleteResultDataReader::TakeNextSample(AthleteResult^ data, ::OpenDDSharp::DDS::SampleInfo^ sampleInfo) {
-    ::Test::AthleteResult* aux = new ::Test::AthleteResult();
+    ::Test::AthleteResult aux;
     ::DDS::SampleInfo sample_info;
-	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(*aux, sample_info);
+	::DDS::ReturnCode_t ret = impl_entity->take_next_sample(aux, sample_info);
 
     if (ret == ::DDS::RETCODE_OK) {
-	    data->FromNative(*aux);
+	    data->FromNative(aux);
         sampleInfo->FromNative(sample_info);
     }
 
