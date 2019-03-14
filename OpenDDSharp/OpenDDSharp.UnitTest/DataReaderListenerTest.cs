@@ -159,7 +159,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
 
             Assert.AreEqual(5, count);
         }
