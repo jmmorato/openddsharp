@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OpenDDSharp.IdlGenerator</id>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
