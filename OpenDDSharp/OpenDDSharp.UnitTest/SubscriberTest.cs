@@ -35,22 +35,15 @@ namespace OpenDDSharp.UnitTest
         private const string TEST_CATEGORY = "Subscriber";
         #endregion
 
-        #region Fields
-        private static DomainParticipantFactory _dpf;
+        #region Fields        
         private DomainParticipant _participant;
         #endregion
 
-        #region Initialization/Cleanup
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-        }
-
+        #region Initialization/Cleanup       
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
         }
@@ -64,9 +57,9 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            if (_dpf != null)
+            if (AssemblyInitializer.Factory != null)
             {
-                ReturnCode result = _dpf.DeleteParticipant(_participant);
+                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
         }

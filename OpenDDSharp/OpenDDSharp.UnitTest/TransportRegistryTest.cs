@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenDDSharp.UnitTest
@@ -398,14 +399,13 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
+        [TestCategory(TEST_CATEGORY)]        
         public void TestBindConfig()
         {
             // Create a domain participant
-            DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-            Assert.IsNotNull(dpf);
-            DomainParticipant participant = dpf.CreateParticipant(69);
+            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindRtpsUdpTransportConfig();
 
             // Create a transport config
             TransportConfig config = TransportRegistry.Instance.CreateConfig(nameof(TestBindConfig));
@@ -506,7 +506,7 @@ namespace OpenDDSharp.UnitTest
                 exception = true;
                 Assert.IsTrue(ex.GetType() == typeof(ArgumentNullException));
             }
-            Assert.IsTrue(exception);
+            Assert.IsTrue(exception);            
         }
         #endregion
     }
