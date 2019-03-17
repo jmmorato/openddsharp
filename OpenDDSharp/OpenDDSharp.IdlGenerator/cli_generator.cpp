@@ -773,19 +773,11 @@ std::string cli_generator::get_field_to_native(AST_Type* type, const char * name
 			ret.append(" = m_");
 			ret.append(name);
 			ret.append(";\n");
-			ret.append("    CORBA::LongDouble* native_");
-			ret.append(name);
-			ret.append(" = new CORBA::LongDouble();\n");
-			ret.append("    native_");
-			ret.append(name);
-			ret.append("->assign(const_");
-			ret.append(name);
-			ret.append(");\n");
 			ret.append("    ret.");
 			ret.append(name);
-			ret.append(" = *native_");
+			ret.append(".assign(const_");
 			ret.append(name);
-			ret.append(";\n");
+			ret.append(");\n");			
 		}
 		break;
 	}
@@ -878,21 +870,13 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 	ret.append(field_name);
 	ret.append(" != nullptr) {\n");
 
-	ret.append("        ::");
-	ret.append(typedef_full_name);
-	ret.append("* seq_");
-	ret.append(field_name);
-	ret.append(" = new ::");
-	ret.append(typedef_full_name);
-	ret.append("();\n");
-
 	unsigned int bound = seq_type->max_size()->ev()->u.ulval;
 	if (bound > 0) {
 		ret.append("        int seq_");
 		ret.append(field_name);
-		ret.append("_length = System::Math::Min((int)seq_");
+		ret.append("_length = System::Math::Min((int)ret.");
 		ret.append(field_name);
-		ret.append("->maximum(), m_");
+		ret.append(".maximum(), m_");
 		ret.append(field_name);
 		ret.append("->Count);\n");
 	}
@@ -904,9 +888,9 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 		ret.append("->Count;\n");
 	}
 	
-	ret.append("        seq_");
+	ret.append("        ret.");
 	ret.append(field_name);
-	ret.append("->length(seq_");
+	ret.append(".length(seq_");
 	ret.append(field_name);
 	ret.append("_length);\n");
 
@@ -921,9 +905,9 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 	{
 		ret.append("            if (m_" + field_name + "[i] != nullptr) {\n");
 
-		ret.append("                (*seq_");
+		ret.append("                ret.");
 		ret.append(field_name);
-		ret.append(")[i] = ");
+		ret.append("[i] = ");
 		ret.append("m_");
 		ret.append(field_name);
 		ret.append("[i]->ToNative();\n");
@@ -934,13 +918,11 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 
 		ret.append("                ::");
 		ret.append(seq_type->base_type()->full_name());
-		ret.append("* aux = new ::");
-		ret.append(seq_type->base_type()->full_name());
-		ret.append("();\n");
+		ret.append(" aux = {};\n");
 
-		ret.append("                (*seq_");
+		ret.append("                ret.");
 		ret.append(field_name);
-		ret.append(")[i] = *aux;\n");
+		ret.append("[i] = aux;\n");
 
 		ret.append("            }\n");
 		break;
@@ -950,9 +932,9 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 	{		
 		ret.append("            if (m_" + field_name + "[i] != nullptr) {\n");
 
-		ret.append("                (*seq_");
+		ret.append("                ret.");
 		ret.append(field_name);
-		ret.append(")[i] = ");
+		ret.append("[i] = ");
 		if (seq_type->base_type()->node_type() == AST_Decl::NT_string) {
 			ret.append("context.marshal_as<const char*>(m_");
 		}
@@ -966,9 +948,9 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 
 		ret.append("            else {\n");
 
-		ret.append("                (*seq_");
+		ret.append("                ret.");
 		ret.append(field_name);
-		ret.append(")[i] = \"\";\n");
+		ret.append("[i] = \"\";\n");
 
 		ret.append("            }\n");
 		break;
@@ -977,9 +959,9 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
 		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
-			ret.append("            (*seq_");
+			ret.append("            ret.");
 			ret.append(field_name);
-			ret.append(")[i] = ");
+			ret.append("[i] = ");
 			ret.append("m_");
 			ret.append(field_name);
 			ret.append("[i];\n");
@@ -989,25 +971,15 @@ std::string cli_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, 
 			ret.append(field_name);
 			ret.append("[i];\n");
 
-			ret.append("            CORBA::LongDouble* aux = new CORBA::LongDouble();\n");
-			ret.append("            aux->assign(const_aux);\n");
-
-			ret.append("            (*seq_");
+			ret.append("            ret.");
 			ret.append(field_name);
-			ret.append(")[i] = *aux;\n");
+			ret.append("[i].assign(const_aux);\n");
 		}
 		break;
 	}
 	}	
 
 	ret.append("        }\n");
-
-	ret.append("        ret.");
-	ret.append(field_name);
-	ret.append(" = *");
-	ret.append("seq_");
-	ret.append(field_name);
-	ret.append(";\n");
 
 	ret.append("    }\n");
 	ret.append("    else {\n");
@@ -1146,15 +1118,13 @@ std::string cli_generator::get_typedef_array_to_native(AST_Typedef* typedef_type
 
 		ret.append("                ::");
 		ret.append(arr_type->base_type()->full_name());
-		ret.append("* aux = new ::");
-		ret.append(arr_type->base_type()->full_name());
-		ret.append("();\n");
+		ret.append(" aux = {};\n");
 
 		ret.append("                ret." + field_name);
 		for (unsigned int i = 0; i < n_dims; i++) {
 			ret.append("[i_dim" + std::to_string(i) + "]");
 		}
-		ret.append(" = *aux;\n");
+		ret.append(" = aux;\n");
 
 		ret.append("            }\n");
 		break;
@@ -1234,14 +1204,11 @@ std::string cli_generator::get_typedef_array_to_native(AST_Typedef* typedef_type
 			}
 			ret.append("];\n");
 
-			ret.append("            CORBA::LongDouble* aux = new CORBA::LongDouble();\n");
-			ret.append("            aux->assign(const_aux);\n");
-
 			ret.append("            ret." + field_name);
 			for (unsigned int i = 0; i < n_dims; i++) {
 				ret.append("[i_dim" + std::to_string(i) + "]");
 			}
-			ret.append(" = *aux;\n");
+			ret.append(".assign(const_aux);\n");
 		}
 		break;
 	}
