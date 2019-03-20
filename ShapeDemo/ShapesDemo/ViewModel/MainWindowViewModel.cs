@@ -101,7 +101,7 @@ namespace OpenDDSharp.ShapesDemo.ViewModel
             _publishedSquares = new ObservableCollection<SquareType>();
             _publishedCircles = new ObservableCollection<CircleType>();
             _publishedTriangles = new ObservableCollection<TriangleType>();
-            _subscribedSquares = new ObservableCollection<SquareType>();
+            _subscribedSquares = new ObservableCollection<SquareType>();            
             _subscribedCircles = new ObservableCollection<CircleType>();
             _subscribedTriangles = new ObservableCollection<TriangleType>();
 
@@ -121,7 +121,7 @@ namespace OpenDDSharp.ShapesDemo.ViewModel
             ReaderFilterCommand = new RelayCommand(ReaderFilter, () => true);            
             SubscribeShapeCommand = new RelayCommand(SubscribeShape, () => true);
 
-            _rect = new Rect(0, 0, 321, 361);
+            _rect = new Rect(0, 0, 321, 361);            
             _random = new Random();
             _selectedSubscriberShape = ShapeKind.Circle;
             _selectedPublisherShape = ShapeKind.Circle;
@@ -216,7 +216,7 @@ namespace OpenDDSharp.ShapesDemo.ViewModel
             if (square != null)
             {
                 square.X = e.X;
-                square.Y = e.Y;                
+                square.Y = e.Y;
             }
             else
             {

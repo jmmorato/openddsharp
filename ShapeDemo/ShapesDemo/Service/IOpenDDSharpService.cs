@@ -12,6 +12,10 @@ namespace OpenDDSharp.ShapesDemo.Service
         event EventHandler<TriangleType> TriangleUpdated;
         #endregion
 
+        #region Properties
+        InteroperatibilityProvider Provider { get; set; }
+        #endregion
+
         #region Methods
         void Publish(Shape shape, Rect constraint, int speed);
 
