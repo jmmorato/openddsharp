@@ -42,7 +42,7 @@ index d7c5ede9f..606ad0a3b 100644
 -      CheckLivelinessCommand c(this);
 -      execute_or_enqueue(c);
 -    }
-+	void check_liveliness();
++    void check_liveliness();
  
      void cancel_timer()
      {
