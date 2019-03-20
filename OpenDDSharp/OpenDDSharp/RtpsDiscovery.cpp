@@ -26,10 +26,7 @@ OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::RtpsDiscovery(System::String^ name) :
     msclr::interop::marshal_context context;
 
     impl_entity = new ::OpenDDS::RTPS::RtpsDiscovery(context.marshal_as<const char*>(name));
-    Discovery::impl_entity = dynamic_cast<::OpenDDS::RTPS::RtpsDiscovery*>(impl_entity);
-
-    // TODO: Wrap whole Serializer?
-    ::OpenDDS::DCPS::Serializer::set_use_rti_serialization(true);    
+    Discovery::impl_entity = dynamic_cast<::OpenDDS::RTPS::RtpsDiscovery*>(impl_entity);   
 }
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::ResendPeriod::get() {
