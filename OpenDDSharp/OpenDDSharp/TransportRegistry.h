@@ -48,8 +48,7 @@ namespace OpenDDSharp {
             public ref class TransportRegistry {
 
             private:
-                static TransportRegistry _instance;
-                ::OpenDDS::DCPS::TransportRegistry* impl_entity;        
+                static TransportRegistry _instance;      
             
             public:
                 /// <summary>
