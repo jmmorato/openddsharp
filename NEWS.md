@@ -1,3 +1,15 @@
+# Version 0.4.1
+
+### New Features
+- Build scripts and patches adapted to compile with OpenDDS v3.13.1
+- WpfShapeDemo: Fixed RTI shape coordinates compatibility and prepared to work with other vendors
+
+### Breaking Changes
+- The calls to the `ACE::init/fini` are not called anymore by the `ParticipantService` and must be called via `OpenDDSharp.Ace.Init/Finit` method
+
+### Bug Fixes
+- Fixed memory leak in the `Write` method when using sequences
+
 # Version 0.3.0
 
 ### New Features
