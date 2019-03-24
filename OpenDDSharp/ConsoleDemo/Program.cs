@@ -33,6 +33,8 @@ namespace ConsoleDemo
         {
             bool useListener = true;
 
+            OpenDDSharp.Ace.Init();
+
             ParticipantService participantService = ParticipantService.Instance;
             DomainParticipantFactory domainFactory = participantService.GetDomainParticipantFactory(args);
             DomainParticipantQos qos = new DomainParticipantQos();
@@ -193,6 +195,7 @@ namespace ConsoleDemo
             }            
             
             participantService.Shutdown();
+            OpenDDSharp.Ace.Fini();
 
             Console.WriteLine("Press ENTER to finish the test.");
             Console.ReadLine();

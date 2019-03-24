@@ -40,6 +40,8 @@ namespace TestSupportProcess
                 throw new ApplicationException("Incorrect number of arguments.");
             }
 
+            OpenDDSharp.Ace.Init();
+
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -71,6 +73,8 @@ namespace TestSupportProcess
             {
                 throw new ApplicationException("Argument is not a valid test kind.");
             }
+
+            OpenDDSharp.Ace.Fini();
         }
 
         private static void TestOnSubscriptionLostDisconnected()

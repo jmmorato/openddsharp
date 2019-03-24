@@ -11,6 +11,8 @@ namespace OpenDDSharp.ShapesDemo
     {
         private void OnApplicationStartup(object sender, StartupEventArgs e)
         {
+            Ace.Init();
+
             InteroperatibilityProvider provider = InteroperatibilityProvider.OpenDDS;
             if (e.Args.Length > 0 && e.Args[0].StartsWith("-Vendor="))
             {
@@ -34,7 +36,9 @@ namespace OpenDDSharp.ShapesDemo
 
         private void ApplicationExit(object sender, ExitEventArgs e)
         {
-            ViewModelLocator.Cleanup();            
+            ViewModelLocator.Cleanup();
+
+            Ace.Fini();
         }
     }
 }

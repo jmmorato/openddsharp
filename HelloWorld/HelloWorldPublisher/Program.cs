@@ -9,6 +9,8 @@ namespace OpenDDSharp.HelloWorldPublisher
     {
         static void Main(string[] args)
         {
+            Ace.Init();
+
             DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
             DomainParticipant participant = dpf.CreateParticipant(42);
             if (participant == null)
@@ -63,6 +65,8 @@ namespace OpenDDSharp.HelloWorldPublisher
             participant.DeleteContainedEntities();
             dpf.DeleteParticipant(participant);
             ParticipantService.Instance.Shutdown();
+
+            Ace.Fini();
         }
     }
 }

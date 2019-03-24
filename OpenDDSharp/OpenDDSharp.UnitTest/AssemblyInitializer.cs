@@ -45,6 +45,8 @@ namespace OpenDDSharp.UnitTest
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
+            Ace.Init();
+
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
             ParticipantService.Instance.AddDiscovery(disc);            
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -80,6 +82,8 @@ namespace OpenDDSharp.UnitTest
             TransportRegistry.Close();
             ParticipantService.Instance.Shutdown();
             Assert.IsTrue(ParticipantService.Instance.IsShutdown);
+
+            Ace.Fini();
         }
     }
 }
