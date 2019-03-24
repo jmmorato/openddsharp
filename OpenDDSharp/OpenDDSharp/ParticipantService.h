@@ -42,7 +42,6 @@ namespace OpenDDSharp {
 
 			private:
 				static ParticipantService _instance;
-				::OpenDDS::DCPS::Service_Participant* impl_entity;
             
             internal:
                 unsigned long counter = 0;

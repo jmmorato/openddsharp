@@ -241,6 +241,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ace.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="BudgetExceededStatus.cpp" />
     <ClCompile Include="BuiltinTopicKey.cpp" />
@@ -352,6 +353,7 @@
     <ClCompile Include="WriterDataLifecycleQosPolicy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ace.h" />
     <ClInclude Include="AssemblyInfo.h" />
     <ClInclude Include="BudgetExceededStatus.h" />
     <ClInclude Include="BuiltinTopicKey.h" />

@@ -341,6 +341,9 @@
     <ClCompile Include="MulticastInst.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DomainParticipantFactory.h">
@@ -710,6 +713,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MulticastInst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
