@@ -6,6 +6,7 @@
         <Description xml:space="preserve">OpenDDSharp IDL Templates</Description>
         <MoreInfo >htpp://www.openddsharp.com</MoreInfo>
         <License>LICENSE.txt</License>
+        <Icon>favicon.ico</Icon>
         <Tags>OpenDDSharp, OpenDDS, DDS</Tags>
     </Metadata>
     <Installation>
