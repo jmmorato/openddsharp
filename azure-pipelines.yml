@@ -37,12 +37,8 @@ jobs:
         filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
         arguments: $(BuildPlatform)
         modifyEnvironment: true
-    - task: BatchScript@1
-      displayName: 'Put perl on PATH'
-      inputs:
-        filename: ext\OpenDDS\tools\scripts\prepend_path
-        arguments: 'C:\Strawberry\perl\bin'
-        modifyEnvironment: true
+    - script: set PATH='C:\Strawberry\perl\bin';%PATH%
+      displayName: 'Put perl on PATH'      
     - script: |
         cd ext\OpenDDS
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
