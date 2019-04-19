@@ -7,25 +7,21 @@ IF EXIST "..\ext" (
     rmdir ..\ext /s /q    
 )
 
-REM Checkout OpenDDS to the version 3.13.1
-TITLE Checkout OpenDDS to the version 3.13.1
+REM Checkout OpenDDS to the version 3.13.2
+TITLE Checkout OpenDDS to the version 3.13.2
 mkdir ..\ext
 cd ..\ext
 git clone git://github.com/objectcomputing/OpenDDS.git
 cd OpenDDS
 git fetch && git fetch --tags
-git checkout tags/DDS-3.13.1
+git checkout tags/DDS-3.13.2
 
 REM Apply the needed OpenDDS patches
 TITLE Apply the needed OpenDDS patches
 git apply %CD%\..\..\Patches\ConditionImpl.h.patch
 git apply %CD%\..\..\Patches\DataReaderImpl.cpp.patch
 git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
-git apply %CD%\..\..\Patches\MultiTopicDataReaderBase.cpp.patch
 git apply %CD%\..\..\Patches\unique_ptr.h.patch
-REM git apply %CD%\..\..\Patches\SubscriberImpl.cpp.patch
-REM git apply %CD%\..\..\Patches\DataWriterImpl.cpp.patch
-REM git apply %CD%\..\..\Patches\configure.patch
     
 REM Download ACE/TAO and unzip
 TITLE Download ACE/TAO and unzip
@@ -40,7 +36,6 @@ REM Call OpenDDS configure script
 TITLE OpenDDS configure script
 REM git apply %CD%\..\..\Patches\configure.patch
 call configure --no-tests
-REM xcopy %CD%\..\..\Build\ACE.vcxproj %ACE_ROOT%\ace /y
     
 REM Create a copy of the original bin/lib folders
 TITLE Create a copy of the original bin/lib folders
