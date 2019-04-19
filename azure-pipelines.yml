@@ -12,17 +12,71 @@ jobs:
         BuildPlatform: x64
         BuildConfiguration: Release
       Debug32:
-        BuildPlatform: Win32
+        BuildPlatform: x86
         BuildConfiguration: Debug
       Release32:
-        BuildPlatform: Win32
+        BuildPlatform: x86
         BuildConfiguration: Release
-
-  steps:
-    - script: echo Hello, world!
-      displayName: 'Run a one-line script'
-
+  steps: 
     - script: |
-        echo Add other tasks to build, test, and deploy your project.
-        echo See https://aka.ms/yaml
-      displayName: 'Run a multi-line script'
+        git clone git://github.com/objectcomputing/OpenDDS.git $(Build.SourcesDirectory)\ext\OpenDDS
+        cd ext\OpenDDS
+        git fetch && git fetch --tags
+        git checkout tags/DDS-3.13.2
+        git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
+        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
+        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
+        git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch
+        if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
+        echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
+        cd ..\..
+      displayName: 'Clone OpenDDS v3.13.2'
+    - task: BatchScript@1
+      displayName: 'VcVars'
+      inputs:
+        filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
+        arguments: $(BuildPlatform)
+        modifyEnvironment: true
+    - task: BatchScript@1
+      displayName: 'Put perl on PATH'
+      inputs:
+        filename: ext\OpenDDS\tools\scripts\prepend_path
+        arguments: 'C:\Strawberry\perl\bin'
+        modifyEnvironment: true
+    - script: |
+        cd ext\OpenDDS
+        if %BuildConfiguration%==Release set OPT=--no-debug --optimize
+        call configure -v --ace-github-latest --no-tests %OPT%
+        cd ..\..
+      failOnStderr: #
+      displayName: 'Run configure script'
+    - task: BatchScript@1
+      displayName: 'Setenv from configure script'
+      inputs:
+        filename: ext\OpenDDS\setenv.cmd
+        modifyEnvironment: true
+    - task: VSBuild@1
+      displayName: 'Build OpenDDS solution'
+      inputs:
+        solution: ext\OpenDDS\DDS_TAOv2.sln
+        platform: $(VcArch)
+        configuration: $(BuildConfiguration)
+        maximumCpuCount: true
+    - script: |
+        xcopy $(Build.SourcesDirectory)\ext\OpenDDS\ACE_wrappers\lib\* $(Build.SourcesDirectory)\ext\OpenDDS\ACE_wrappers\lib_%BuildPlatform% /s /i
+        xcopy $(Build.SourcesDirectory)\ext\OpenDDS\ACE_wrappers\bin\* $(Build.SourcesDirectory)\ext\OpenDDS\ACE_wrappers\bin_%BuildPlatform% /s /i
+        xcopy $(Build.SourcesDirectory)\ext\OpenDDS\lib\* $(Build.SourcesDirectory)\ext\OpenDDS\lib_%BuildPlatform% /s /i
+        xcopy $(Build.SourcesDirectory)\ext\OpenDDS\bin\* $(Build.SourcesDirectory)\ext\OpenDDS\bin_%BuildPlatform% /s /i
+        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
+        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
+        msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
+        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
+        nuget restore $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln
+      displayName: 'Prepare to build OpenDDSharp'
+    - task: VSBuild@1
+      displayName: 'Build OpenDDS solution'
+      inputs:
+        solution: OpenDDSharp\OpenDDSharp.sln
+        platform: $(BuildPlatform)
+        configuration: $(BuildConfiguration)
+        maximumCpuCount: true
