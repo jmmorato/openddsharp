@@ -26,7 +26,7 @@ jobs:
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
-        git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch
+        git apply $(Build.SourcesDirectory)\Patches\unique_ptr.h.patch
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         cd ..\..
