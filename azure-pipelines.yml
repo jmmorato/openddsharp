@@ -43,7 +43,7 @@ jobs:
     - script: |
         cd ext\OpenDDS
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --ace=ACE_wrappers --no-tests %OPT%
+        call configure -v --ace=ACE_wrappers --no-tests --host=win32 %OPT%
         cd ..\..
       failOnStderr: #
       displayName: 'Run configure script'
