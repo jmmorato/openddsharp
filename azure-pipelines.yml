@@ -2,7 +2,7 @@ jobs:
 - job: VisualStudio2017
   timeoutInMinutes: 90
   pool:
-    vmImage: vs2017-win2016
+    vmImage: 'vs2017-win2016'
   strategy:
     matrix:
       Debug64:
