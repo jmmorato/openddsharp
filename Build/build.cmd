@@ -33,7 +33,6 @@ call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" amd64
 
 REM Call OpenDDS configure script
 TITLE OpenDDS configure script
-REM git apply %CD%\..\..\Patches\configure.patch
 call configure --no-tests
     
 REM Create a copy of the original bin/lib folders
