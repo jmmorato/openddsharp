@@ -21,7 +21,6 @@ TITLE Apply the needed OpenDDS patches
 git apply %CD%\..\..\Patches\ConditionImpl.h.patch
 git apply %CD%\..\..\Patches\DataReaderImpl.cpp.patch
 git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
-git apply %CD%\..\..\Patches\unique_ptr.h.patch
     
 REM Download ACE/TAO and unzip
 TITLE Download ACE/TAO and unzip

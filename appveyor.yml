@@ -24,7 +24,6 @@ install:
   - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.cpp.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
-  - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch  
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_x64 /s /i
