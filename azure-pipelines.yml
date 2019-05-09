@@ -17,7 +17,19 @@ jobs:
       Release32:
         BuildPlatform: x86
         BuildConfiguration: Release
-  steps: 
+  variables:
+    VCPKG_ROOT: $(Build.SourcesDirectory)\vcpkg
+  steps:
+    - script: |
+      git clone -q --depth 1 git://github.com/Microsoft/vcpkg.git %VCPKG_ROOT%
+      call %VCPKG_ROOT%\bootstrap-vcpkg.bat
+      if %BuildPlatform%==x64 (set VCVARS_ARCH=x64) else set VCVARS_ARCH=x86
+      set VCPKG_ARCH=%VCVARS_ARCH%-windows
+      echo ##vso[task.setvariable variable=VcVarsArch]%VCVARS_ARCH%
+      %VCPKG_ROOT%\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
+      rmdir /s/q %VCPKG_ROOT%\packages %VCPKG_ROOT%\buildtrees
+      echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
+      displayName: Vcpkg
     - script: |
         git clone git://github.com/objectcomputing/OpenDDS.git $(Build.SourcesDirectory)\ext\OpenDDS
         cd ext\OpenDDS
@@ -43,7 +55,7 @@ jobs:
     - script: |
         cd ext\OpenDDS
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure.cmd -v --no-tests %OPT%
+        call configure -v --no-tests --xerces3=$(VcPkgInst) %OPT%
         cd ..\..
       failOnStderr: #
       displayName: 'Run configure script'
