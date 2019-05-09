@@ -32,11 +32,7 @@ jobs:
       displayName: Vcpkg
     - script: |
         git clone git://github.com/objectcomputing/OpenDDS.git $(Build.SourcesDirectory)\ext\OpenDDS
-        cd ext\OpenDDS
-        git fetch && git fetch --tags
-        git checkout tags/DDS-3.13.2
-        PowerShell -Command "& { Invoke-WebRequest -Uri 'http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }"
-        7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
+        cd ext\OpenDDS        
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch     
@@ -55,7 +51,7 @@ jobs:
     - script: |
         cd ext\OpenDDS
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --no-tests --xerces3=$(VcPkgInst) %OPT%
+        call configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
         cd ..\..
       failOnStderr: #
       displayName: 'Run configure script'
