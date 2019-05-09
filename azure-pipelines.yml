@@ -54,7 +54,7 @@ jobs:
       modifyEnvironment: true
   - script: |
       if %BuildConfiguration%==Release set OPT=--no-tests --no-debug --optimize
-      call configure -v --ace-github-latest --xerces3=$(VcPkgInst) %OPT%
+      call ext\OpenDDS\configure -v --ace-github-latest --xerces3=$(VcPkgInst) %OPT%
       if %BuildConfiguration%==Release (set SLN=DDS_TAOv2.sln) else set SLN=DDS_TAOv2_all.sln
       echo ##vso[task.setvariable variable=BuildSolution]%SLN%
     failOnStderr: #
@@ -62,7 +62,7 @@ jobs:
   - task: BatchScript@1
     displayName: Setenv from configure script
     inputs:
-      filename: setenv.cmd
+      filename: ext\OpenDDS\setenv.cmd
       modifyEnvironment: true
 - job: VisualStudio2017
   timeoutInMinutes: 90
@@ -116,10 +116,8 @@ jobs:
         echo %PATH%
       displayName: 'Put perl on PATH'      
     - script: |
-        cd ext\OpenDDS
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
-        cd ..\..
+        call ext\OpenDDS\configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
       failOnStderr: #
       displayName: 'Run configure script'
     - task: BatchScript@1
