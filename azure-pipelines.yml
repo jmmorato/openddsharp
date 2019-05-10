@@ -67,7 +67,7 @@ jobs:
     - task: BatchScript@1
       displayName: Put perl on PATH
       inputs:
-        filename: '%OPENDDS_ROOT%\tools\scripts\prepend_path'
+        filename: ext\OpenDDS\tools\scripts\prepend_path
         arguments: 'C:\Strawberry\perl\bin'
         modifyEnvironment: true
         workingFolder: '($OpenDdsRoot)'
@@ -190,7 +190,7 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
         msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
+        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
     - task: NuGetCommand@2
