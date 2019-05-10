@@ -43,21 +43,7 @@ jobs:
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
-      failOnStderr: true
-    - task: PowerShell@2
-      displayName: 'Download ACE/TAO'
-      inputs:
-        targetType: 'inline'
-        script: '& { Invoke-WebRequest -Uri ''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
-        workingDirectory: '$(OpenDdsRoot)'
-        failOnStderr: true
-        filePath: #
-    - task: CmdLine@2
-      displayName: 'Unzip ACE/TAO'
-      inputs:
-        script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
-        workingDirectory: '$(OpenDdsRoot)'
-        failOnStderr: true
+      failOnStderr: true    
     - task: BatchScript@1
       displayName: VcVars
       inputs:
@@ -76,7 +62,7 @@ jobs:
         REM set PATH=C:\Strawberry\perl\bin;%PATH%
         echo %PATH%        
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --no-tests %OPT%
+        call configure -v --ace-github-latest --no-tests %OPT%
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
       failOnStderr: true
