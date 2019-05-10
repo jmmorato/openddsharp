@@ -30,28 +30,24 @@ jobs:
         %VCPKG_ROOT%\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
         rmdir /s/q %VCPKG_ROOT%\packages %VCPKG_ROOT%\buildtrees
         echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
-      displayName: Vcpkg
-      failOnStderr: true
+      displayName: 'Vcpkg'
     - script: |
-        git -q --depth 1 clone git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
+        git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
-      failOnStderr: true
     - script: |
         git fetch && git fetch --tags
         git checkout tags/DDS-3.13.2
       displayName: 'Checkout OpenDDS v3.13.2'
       workingDirectory: '$(OpenDdsRoot)'
-      failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
-      workingDirectory: '$(OpenDdsRoot)'
-      failOnStderr: true
+      workingDirectory: '$(OpenDdsRoot)'      
     - task: PowerShell@2
       displayName: 'Download ACE/TAO'
       inputs:
@@ -73,7 +69,7 @@ jobs:
         arguments: $(VcVarsArch)
         modifyEnvironment: true
     - task: BatchScript@1
-      displayName: Put perl on PATH    
+      displayName: Put perl on PATH
       inputs:
         filename: tools\scripts\prepend_path
         arguments: 'C:\Strawberry\perl\bin'
@@ -82,7 +78,6 @@ jobs:
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --xerces3=$(VcPkgInst) --no-tests %OPT%
-      failOnStderr: true
       workingDirectory: $(OpenDdsRoot)
       displayName: Run configure script
     - task: BatchScript@1
@@ -121,28 +116,24 @@ jobs:
         %VCPKG_ROOT%\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
         rmdir /s/q %VCPKG_ROOT%\packages %VCPKG_ROOT%\buildtrees
         echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
-      displayName: Vcpkg
-      failOnStderr: true
+      displayName: Vcpkg      
     - script: |
-        git -q --depth 1 clone git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
+        git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
-      failOnStderr: true
     - script: |
         git fetch && git fetch --tags
         git checkout tags/DDS-3.13.2
       displayName: 'Checkout OpenDDS v3.13.2'
       workingDirectory: '$(OpenDdsRoot)'
-      failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
-      failOnStderr: true
     - task: PowerShell@2
       displayName: 'Download ACE/TAO'
       inputs:
@@ -166,7 +157,7 @@ jobs:
     - script: |
         set PATH='C:\Strawberry\perl\bin';%PATH%
         echo %PATH%
-      displayName: 'Put perl on PATH'      
+      displayName: 'Put perl on PATH'
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
