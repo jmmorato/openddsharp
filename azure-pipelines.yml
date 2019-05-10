@@ -31,28 +31,32 @@ jobs:
         rmdir /s/q %VCPKG_ROOT%\packages %VCPKG_ROOT%\buildtrees
         echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
       displayName: 'Vcpkg'
+      failOnStderr: true
     - script: |
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
+      failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
         git checkout -q tags/DDS-3.13.2
       displayName: 'Checkout OpenDDS v3.13.2'
       workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
-      workingDirectory: '$(OpenDdsRoot)'      
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
     - task: PowerShell@2
       displayName: 'Download ACE/TAO'
       inputs:
         targetType: 'inline'
-        script: '& { Invoke-WebRequest -Uri ''''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'''' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
+        script: '& { Invoke-WebRequest -Uri ''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
         workingDirectory: '$(OpenDdsRoot)'
         failOnStderr: true
         filePath: #
@@ -79,7 +83,8 @@ jobs:
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --xerces3=$(VcPkgInst) --no-tests %OPT%
       workingDirectory: $(OpenDdsRoot)
-      displayName: Run configure script
+      displayName: 'Run configure script'
+      failOnStderr: true
     - task: BatchScript@1
       displayName: Setenv from configure script
       inputs:
@@ -116,29 +121,33 @@ jobs:
         %VCPKG_ROOT%\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
         rmdir /s/q %VCPKG_ROOT%\packages %VCPKG_ROOT%\buildtrees
         echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
-      displayName: Vcpkg      
+      displayName: 'Vcpkg'
+      failOnStderr: true
     - script: |
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
+      failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
         git checkout -q tags/DDS-3.13.2
       displayName: 'Checkout OpenDDS v3.13.2'
       workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
     - task: PowerShell@2
       displayName: 'Download ACE/TAO'
       inputs:
         targetType: 'inline'
-        script: '& { Invoke-WebRequest -Uri ''''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'''' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
+        script: '& { Invoke-WebRequest -Uri ''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
         workingDirectory: '$(OpenDdsRoot)'
         failOnStderr: true
         filePath: #
@@ -157,13 +166,13 @@ jobs:
     - script: |
         set PATH='C:\Strawberry\perl\bin';%PATH%
         echo %PATH%
-      displayName: 'Put perl on PATH'
+      displayName: 'Put perl on PATH'      
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
-      failOnStderr: #
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
+      failOnStderr: true
     - task: BatchScript@1
       displayName: 'Setenv from configure script'
       inputs:
@@ -187,6 +196,7 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
         nuget restore $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln
       displayName: 'Prepare to build OpenDDSharp'
+      failOnStderr: true
     - task: VSBuild@1
       displayName: 'Build OpenDDS solution'
       inputs:
