@@ -42,6 +42,7 @@ jobs:
       if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
       echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
       cd $(Build.SourcesDirectory)
+      echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
     displayName: 'Clone OpenDDS v3.13.2'
   - task: BatchScript@1
     displayName: VcVars
@@ -50,17 +51,18 @@ jobs:
       arguments: $(VcVarsArch)
       modifyEnvironment: true
   - task: BatchScript@1
-    displayName: Put perl on PATH
+    displayName: Put perl on PATH    
     inputs:
       filename: tools\scripts\prepend_path
       arguments: 'C:\Strawberry\perl\bin'
       modifyEnvironment: true
+      workingFolder: $(OpenDdsRoot)
   - script: |
-      if %BuildConfiguration%==Release set OPT=--no-tests --no-debug --optimize
-      call %OPENDDS_ROOT%\configure -v --ace-github-latest --xerces3=$(VcPkgInst) %OPT%
-      if %BuildConfiguration%==Release (set SLN=DDS_TAOv2.sln) else set SLN=DDS_TAOv2_all.sln
-      echo ##vso[task.setvariable variable=BuildSolution]%SLN%
+      echo %OPENDDS_ROOT%\configure
+      if %BuildConfiguration%==Release set OPT=--no-debug --optimize
+      call %OPENDDS_ROOT%\configure -v --ace-github-latest --xerces3=$(VcPkgInst) --no-tests %OPT%      
     failOnStderr: #
+    workingDirectory: $(OpenDdsRoot)
     displayName: Run configure script
   - task: BatchScript@1
     displayName: Setenv from configure script
@@ -110,6 +112,7 @@ jobs:
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         cd $(Build.SourcesDirectory)
+        echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS v3.13.2'
     - task: BatchScript@1
       displayName: 'VcVars'
@@ -123,8 +126,9 @@ jobs:
       displayName: 'Put perl on PATH'      
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call %OPENDDS_ROOT%\configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
+        call configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
       failOnStderr: #
+      workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
     - task: BatchScript@1
       displayName: 'Setenv from configure script'
