@@ -72,16 +72,14 @@ jobs:
         filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
         arguments: $(VcVarsArch)
         modifyEnvironment: true
-    - task: BatchScript@1
-      displayName: Put perl on PATH
-      inputs:
-        filename: tools\scripts\prepend_path
-        arguments: 'C:\Strawberry\perl\bin'
-        modifyEnvironment: true
-        workingFolder: $(OpenDdsRoot)
+    - script: |
+        set PATH='C:\Strawberry\perl\bin';%PATH%
+        echo %PATH%
+      displayName: 'Put perl on PATH'
+      failOnStderr: true
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --xerces3=$(VcPkgInst) --no-tests %OPT%
+        call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
       failOnStderr: true
@@ -166,7 +164,8 @@ jobs:
     - script: |
         set PATH='C:\Strawberry\perl\bin';%PATH%
         echo %PATH%
-      displayName: 'Put perl on PATH'      
+      displayName: 'Put perl on PATH'
+      failOnStderr: true
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
