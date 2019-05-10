@@ -73,7 +73,7 @@ jobs:
         arguments: $(VcVarsArch)
         modifyEnvironment: true
     - script: |
-        setx PATH='C:\Strawberry\perl\bin';%PATH%        
+        setx PATH 'C:\Strawberry\perl\bin';%PATH%
       displayName: 'Put perl on PATH'
       failOnStderr: true
     - script: |
@@ -162,7 +162,7 @@ jobs:
         arguments: $(BuildPlatform)
         modifyEnvironment: true
     - script: |
-        setx PATH='C:\Strawberry\perl\bin';%PATH%
+        setx PATH 'C:\Strawberry\perl\bin';%PATH%
       displayName: 'Put perl on PATH'
       failOnStderr: true
     - script: |
