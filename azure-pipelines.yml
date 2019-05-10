@@ -18,7 +18,8 @@ jobs:
         BuildPlatform: Win32
         BuildConfiguration: Release
   variables:
-    VCPKG_ROOT: $(Build.SourcesDirectory)\vcpkg
+    VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
+    OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
   - script: |
       git clone -q --depth 1 git://github.com/Microsoft/vcpkg.git %VCPKG_ROOT%
@@ -31,16 +32,16 @@ jobs:
       echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
     displayName: Vcpkg
   - script: |
-      git clone git://github.com/objectcomputing/OpenDDS.git $(Build.SourcesDirectory)\ext\OpenDDS      
-      cd ext\OpenDDS        
+      git clone git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
+      cd %OPENDDS_ROOT%
       git fetch && git fetch --tags
       git checkout tags/DDS-3.13.2
       git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
       git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
-      git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch     
+      git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
       echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
-      cd ..\..
+      cd $(Build.SourcesDirectory)
     displayName: 'Clone OpenDDS v3.13.2'
   - task: BatchScript@1
     displayName: VcVars
@@ -85,7 +86,8 @@ jobs:
         BuildPlatform: x86
         BuildConfiguration: Release
   variables:
-    VCPKG_ROOT: $(Build.SourcesDirectory)\vcpkg
+    VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
+    OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
     - script: |
         git clone -q --depth 1 git://github.com/Microsoft/vcpkg.git %VCPKG_ROOT%
@@ -98,8 +100,8 @@ jobs:
         echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
       displayName: Vcpkg
     - script: |
-        git clone git://github.com/objectcomputing/OpenDDS.git $(Build.SourcesDirectory)\ext\OpenDDS
-        cd ext\OpenDDS
+        git clone git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
+        cd %OPENDDS_ROOT%
         git fetch && git fetch --tags
         git checkout tags/DDS-3.13.2
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
@@ -107,7 +109,7 @@ jobs:
         git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
-        cd ..\..
+        cd $(Build.SourcesDirectory)
       displayName: 'Clone OpenDDS v3.13.2'
     - task: BatchScript@1
       displayName: 'VcVars'
