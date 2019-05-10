@@ -176,7 +176,7 @@ jobs:
         filename: $(Build.SourcesDirectory)\ext\OpenDDS\setenv.cmd
         modifyEnvironment: true
     - task: VSBuild@1
-      displayName: 'Build OpenDDS solution'
+      displayName: 'Build OpenDDS'
       inputs:
         solution: ext\OpenDDS\DDS_TAOv2.sln
         platform: $(VcArch)
@@ -194,13 +194,14 @@ jobs:
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
     - task: NuGetCommand@2
+      displayName: "NuGet Restore OpenDDSharp "
       inputs:
         command: 'restore'
         restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
         feedsToUse: 'select'
         versioningScheme: 'off'
     - task: VSBuild@1
-      displayName: 'Build OpenDDS solution'
+      displayName: 'Build OpenDDSharp'
       inputs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
