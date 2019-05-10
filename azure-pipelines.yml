@@ -21,17 +21,16 @@ jobs:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
-    - script: |
-        git clone -q --depth 1 git://github.com/Microsoft/vcpkg.git %VCPKG_ROOT%
-        call %VCPKG_ROOT%\bootstrap-vcpkg.bat
-        if %BuildPlatform%==x64 (set VCVARS_ARCH=x64) else set VCVARS_ARCH=x86
-        set VCPKG_ARCH=%VCVARS_ARCH%-windows
-        echo ##vso[task.setvariable variable=VcVarsArch]%VCVARS_ARCH%
-        %VCPKG_ROOT%\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
-        rmdir /s/q %VCPKG_ROOT%\packages %VCPKG_ROOT%\buildtrees
-        echo ##vso[task.setvariable variable=VcPkgInst]%VCPKG_ROOT%\installed\%VCPKG_ARCH%
-      displayName: 'Install vcpkg'
-      failOnStderr: true
+    - task: CmdLine@2
+      displayName: 'Install Sandcastle'
+      inputs:
+        script: 'choco install sandcastle'
+        failOnStderr: true
+    - task: CmdLine@2
+      displayName: 'Install Strawberry Perl'
+      inputs:
+        script: 'choco install strawberryperl'
+        failOnStderr: true
     - script: |
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
@@ -136,6 +135,16 @@ jobs:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
+    - task: CmdLine@2
+      displayName: 'Install sandcastle'
+      inputs:
+        script: 'choco install sandcastle'
+        failOnStderr: true
+    - task: CmdLine@2
+      displayName: 'Install Strawberry Perl'
+      inputs:
+        script: 'choco install strawberryperl'
+        failOnStderr: true
     - script: |
         git clone -q --depth 1 git://github.com/Microsoft/vcpkg.git %VCPKG_ROOT%
         call %VCPKG_ROOT%\bootstrap-vcpkg.bat
@@ -221,7 +230,7 @@ jobs:
         msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
       displayName: 'Prepare to build OpenDDSharp'
-      failOnStderr: true
+      failOnStderr: true    
     - task: NuGetCommand@2
       displayName: "NuGet Restore OpenDDSharp "
       inputs:
