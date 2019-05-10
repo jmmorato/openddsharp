@@ -40,15 +40,7 @@ jobs:
       displayName: 'Clone OpenDDS'
       failOnStderr: true
     - script: |
-        git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.13.2
-      displayName: 'Checkout OpenDDS v3.13.2'
-      workingDirectory: '$(OpenDdsRoot)'
-      failOnStderr: true
-    - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
-        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
-        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
@@ -72,15 +64,18 @@ jobs:
         filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
         arguments: $(VcVarsArch)
         modifyEnvironment: true
+    - task: BatchScript@1
+      displayName: Put perl on PATH
+      inputs:
+        filename: tools\scripts\prepend_path
+        arguments: 'C:\Strawberry\perl\bin'
+        modifyEnvironment: true
+        workingFolder: '($OpenDdsRoot)'
     - script: |
-        setx PATH "C:\Strawberry\perl\bin;%PATH%"
-      displayName: 'Put perl on PATH'
-      failOnStderr: false
-    - script: |
-        set PATH=C:\Strawberry\perl\bin;%PATH%
+        REM set PATH=C:\Strawberry\perl\bin;%PATH%
         echo %PATH%        
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
+        call configure -v --no-tests %OPT%
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
       failOnStderr: true
@@ -170,7 +165,7 @@ jobs:
         set PATH=C:\Strawberry\perl\bin;%PATH%
         echo %PATH%
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
+        call configure -v --no-tests %OPT%
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
       failOnStderr: true
@@ -195,9 +190,14 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
         msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
-        nuget restore $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
+    - task: NuGetCommand@2
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
     - task: VSBuild@1
       displayName: 'Build OpenDDS solution'
       inputs:
