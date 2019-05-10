@@ -38,8 +38,8 @@ jobs:
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
     - script: |
-        git fetch && git fetch --tags
-        git checkout tags/DDS-3.13.2
+        git fetch -q && git fetch -q --tags
+        git checkout -q tags/DDS-3.13.2
       displayName: 'Checkout OpenDDS v3.13.2'
       workingDirectory: '$(OpenDdsRoot)'
     - script: |
@@ -124,8 +124,8 @@ jobs:
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
     - script: |
-        git fetch && git fetch --tags
-        git checkout tags/DDS-3.13.2
+        git fetch -q && git fetch -q --tags
+        git checkout -q tags/DDS-3.13.2
       displayName: 'Checkout OpenDDS v3.13.2'
       workingDirectory: '$(OpenDdsRoot)'
     - script: |
