@@ -67,10 +67,11 @@ jobs:
     - task: BatchScript@1
       displayName: Put perl on PATH
       inputs:
-        filename: tools\scripts\prepend_path
+        filename: '%OPENDDS_ROOT%\tools\scripts\prepend_path'
         arguments: 'C:\Strawberry\perl\bin'
         modifyEnvironment: true
         workingFolder: '($OpenDdsRoot)'
+        failOnStandardError: true
     - script: |
         REM set PATH=C:\Strawberry\perl\bin;%PATH%
         echo %PATH%        
