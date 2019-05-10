@@ -75,7 +75,7 @@ jobs:
     - script: |
         setx PATH "C:\Strawberry\perl\bin;%PATH%"
       displayName: 'Put perl on PATH'
-      failOnStderr: true
+      failOnStderr: false
     - script: |
         echo %PATH%
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
@@ -164,7 +164,7 @@ jobs:
     - script: |
         setx PATH "C:\Strawberry\perl\bin;%PATH%"
       displayName: 'Put perl on PATH'
-      failOnStderr: true
+      failOnStderr: false
     - script: |
         echo %PATH%
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
