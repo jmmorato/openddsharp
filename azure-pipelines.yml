@@ -36,6 +36,8 @@ jobs:
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
+        if %BuildPlatform%==x64 (set VCVARS_ARCH=x64) else set VCVARS_ARCH=x86
+        echo ##vso[task.setvariable variable=VcVarsArch]%VCVARS_ARCH%
       displayName: 'Clone OpenDDS'
       failOnStderr: true
     - script: |
