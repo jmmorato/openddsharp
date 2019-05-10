@@ -44,6 +44,19 @@ jobs:
       cd $(Build.SourcesDirectory)
       echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
     displayName: 'Clone OpenDDS v3.13.2'
+  - task: PowerShell@2
+    displayName: 'Download ACE/TAO'
+    inputs:
+      targetType: 'inline'
+      script: 'Invoke-WebRequest -Uri ''''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'''' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
+  - task: CmdLine@2
+    displayName: 'Unzip ACE/TAO'
+    inputs:
+      script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
   - task: BatchScript@1
     displayName: VcVars
     inputs:
@@ -58,9 +71,8 @@ jobs:
       modifyEnvironment: true
       workingFolder: $(OpenDdsRoot)
   - script: |
-      echo %OPENDDS_ROOT%\configure
       if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-      call %OPENDDS_ROOT%\configure -v --ace-github-latest --xerces3=$(VcPkgInst) --no-tests %OPT%      
+      call configure -v --xerces3=$(VcPkgInst) --no-tests %OPT%      
     failOnStderr: #
     workingDirectory: $(OpenDdsRoot)
     displayName: Run configure script
@@ -114,6 +126,19 @@ jobs:
         cd $(Build.SourcesDirectory)
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS v3.13.2'
+    - task: PowerShell@2
+      displayName: 'Download ACE/TAO'
+      inputs:
+        targetType: 'inline'
+        script: 'Invoke-WebRequest -Uri ''''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'''' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
+        workingDirectory: '$(OpenDdsRoot)'
+        failOnStderr: true
+    - task: CmdLine@2
+      displayName: 'Unzip ACE/TAO'
+      inputs:
+        script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
+        workingDirectory: '$(OpenDdsRoot)'
+        failOnStderr: true
     - task: BatchScript@1
       displayName: 'VcVars'
       inputs:
@@ -126,7 +151,7 @@ jobs:
       displayName: 'Put perl on PATH'      
     - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
+        call configure -v --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) --no-tests %OPT%
       failOnStderr: #
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
