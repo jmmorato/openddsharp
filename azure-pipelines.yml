@@ -24,13 +24,8 @@ jobs:
     - task: CmdLine@2
       displayName: 'Install Sandcastle'
       inputs:
-        script: 'choco install sandcastle'
-        failOnStderr: true
-    - task: CmdLine@2
-      displayName: 'Install Strawberry Perl'
-      inputs:
-        script: 'choco install strawberryperl'
-        failOnStderr: true
+        script: 'choco install windows-adk-all --version 10.0.16299.0'
+        failOnStderr: true    
     - script: |
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
@@ -137,17 +132,7 @@ jobs:
   variables:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
-  steps:
-    - task: CmdLine@2
-      displayName: 'Install sandcastle'
-      inputs:
-        script: 'choco install sandcastle'
-        failOnStderr: true
-    - task: CmdLine@2
-      displayName: 'Install Strawberry Perl'
-      inputs:
-        script: 'choco install strawberryperl'
-        failOnStderr: true
+  steps:    
     - script: |
         git clone -q --depth 1 git://github.com/Microsoft/vcpkg.git %VCPKG_ROOT%
         call %VCPKG_ROOT%\bootstrap-vcpkg.bat
