@@ -22,7 +22,7 @@ jobs:
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
     - task: CmdLine@2
-      displayName: 'Install Sandcastle'
+      displayName: 'Install Windows SDK 10.0.16299.0'
       inputs:
         script: 'choco install windows-adk-all --version 10.0.16299.0'
         failOnStderr: true    
