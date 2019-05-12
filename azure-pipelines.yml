@@ -232,7 +232,7 @@ jobs:
       displayName: Execute Unit Tests
       inputs:
         testSelector: 'testAssemblies'
-        testAssemblyVer2: '**\*UnitTest.dll
+        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll
           !**\*TestAdapter.dll
           !**\obj\**'
         searchFolder: '$(System.DefaultWorkingDirectory)'
