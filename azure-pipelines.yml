@@ -106,10 +106,11 @@ jobs:
         platform: '$(BuildPlatform)'
         configuration: '$(BuildConfiguration)'
 - job: VisualStudio2017
-  timeoutInMinutes: 360  
+  timeoutInMinutes: 360
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
+    maxParallel: 1
     matrix:
       Debug64:
         BuildPlatform: x64
