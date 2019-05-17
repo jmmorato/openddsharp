@@ -415,7 +415,36 @@ namespace OpenDDSharp.BuildTasks
 
         private void ShutDown()
         {
-            _dte.Quit();            
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    _dte.Quit();
+                }
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
         }
         #endregion
     }
