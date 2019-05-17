@@ -176,7 +176,7 @@ jobs:
         set PATH=C:\Strawberry\perl\bin;%PATH%
         echo %PATH%
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --no-tests %OPT%
+        call configure -v --no-tests
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
       failOnStderr: true
