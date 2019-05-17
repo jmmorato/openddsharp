@@ -152,7 +152,7 @@ jobs:
       displayName: 'Call vcvarsall.bat'
       inputs:
         filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
-        arguments: $(BuildPlatform)
+        arguments: amd64
         modifyEnvironment: true
     - script: |
         setx PATH "C:\Strawberry\perl\bin;%PATH%"
@@ -179,10 +179,6 @@ jobs:
         configuration: $(BuildConfiguration)
         maximumCpuCount: true
     - script: |
-        xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_$(BuildPlatform) /s /i
-        xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_$(BuildPlatform) /s /i
-        xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_$(BuildPlatform) /s /i
-        xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_$(BuildPlatform) /s /i
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
         msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
