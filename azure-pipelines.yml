@@ -160,7 +160,6 @@ jobs:
       failOnStderr: false
     - script: |
         set PATH=C:\Strawberry\perl\bin;%PATH%
-        echo %PATH%
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --no-tests
       workingDirectory: $(OpenDdsRoot)
@@ -202,6 +201,7 @@ jobs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
+        maximumCpuCount: true
     - task: VSTest@2
       displayName: Execute Unit Tests
       inputs:
