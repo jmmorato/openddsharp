@@ -86,7 +86,7 @@ jobs:
         versioningScheme: 'off'
     - task: VSBuild@1
       displayName: 'Build OpenDDSharp'
-      enabled: false
+      enabled: true
       inputs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
