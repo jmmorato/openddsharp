@@ -96,6 +96,7 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
+    maxParallel: 1
     matrix:
       Debug64:
         BuildPlatform: x64
