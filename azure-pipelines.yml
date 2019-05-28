@@ -179,8 +179,7 @@ jobs:
         platform: $(VcArch)
         configuration: $(BuildConfiguration)
         maximumCpuCount: true
-    - script: |
-        msbuild DDS_TAOv2.sln /m /p:Configuration=$(BuildConfiguration);Platform=$(VcArch)
+    - script: msbuild DDS_TAOv2.sln /m /p:Configuration=$(BuildConfiguration);Platform=$(VcArch)
       displayName: 'Build OpenDDS with msbuild'
       workingDirectory: $(OpenDdsRoot)
     - script: |
@@ -209,10 +208,8 @@ jobs:
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
         maximumCpuCount: false
-    - script: |
-        msbuild OpenDDSharp.sln /p:Configuration=$(BuildConfiguration);Platform=$(BuildPlatform)
+    - script: msbuild OpenDDSharp\OpenDDSharp.sln /p:Configuration=$(BuildConfiguration);Platform=$(BuildPlatform)
       displayName: 'Build OpenDDSharp with msbuild'
-      workingDirectory: .\OpenDDSharp
     - task: VSTest@2
       displayName: Execute Unit Tests
       inputs:
