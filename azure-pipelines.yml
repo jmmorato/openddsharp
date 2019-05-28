@@ -207,7 +207,7 @@ jobs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
-        maximumCpuCount: false
+        maximumCpuCount: true
     - script: msbuild OpenDDSharp\OpenDDSharp.sln /p:Configuration=$(BuildConfiguration);Platform=$(BuildPlatform)
       displayName: 'Build OpenDDSharp with msbuild'
       enabled: false
