@@ -200,7 +200,7 @@ jobs:
         restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
         feedsToUse: 'select'
         versioningScheme: 'off'
-    - task: VSBuild@1
+    - task: MSBuild@1
       displayName: 'Build OpenDDSharp'
       enabled: true
       inputs:
