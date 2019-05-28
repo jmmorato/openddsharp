@@ -153,7 +153,7 @@ jobs:
       displayName: 'Call vcvarsall.bat'
       inputs:
         filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
-        arguments: amd64
+        arguments: $(BuildPlatform)
         modifyEnvironment: true
     - script: |
         setx PATH "C:\Strawberry\perl\bin;%PATH%"
@@ -202,7 +202,7 @@ jobs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
-        maximumCpuCount: true
+        maximumCpuCount: false
     - task: VSTest@2
       displayName: Execute Unit Tests
       inputs:
