@@ -96,7 +96,6 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
-    maxParallel: 1
     matrix:
       Debug64:
         BuildPlatform: x64
@@ -171,17 +170,14 @@ jobs:
       inputs:
         filename: $(Build.SourcesDirectory)\ext\OpenDDS\setenv.cmd
         modifyEnvironment: true
-    - task: VSBuild@1
+    - task: MSBuild@1
       displayName: 'Build OpenDDS'
-      enabled: false
+      enabled: true
       inputs:
         solution: ext\OpenDDS\DDS_TAOv2.sln
         platform: $(VcArch)
         configuration: $(BuildConfiguration)
         maximumCpuCount: true
-    - script: msbuild DDS_TAOv2.sln /m /p:Configuration=$(BuildConfiguration);Platform=$(VcArch)
-      displayName: 'Build OpenDDS with msbuild'
-      workingDirectory: $(OpenDdsRoot)
     - script: |
         xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_$(BuildPlatform) /s /i
         xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_$(BuildPlatform) /s /i
@@ -207,7 +203,7 @@ jobs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
-        maximumCpuCount: true
+        maximumCpuCount: false
     - script: msbuild OpenDDSharp\OpenDDSharp.sln /p:Configuration=$(BuildConfiguration);Platform=$(BuildPlatform)
       displayName: 'Build OpenDDSharp with msbuild'
       enabled: false
