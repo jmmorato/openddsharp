@@ -213,8 +213,6 @@ jobs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
         searchFolder: '$(System.DefaultWorkingDirectory)'
-        runSettingsFile: 'OpenDDSharp\CodeCoverage.runsettings'
-        codeCoverageEnabled: true
         platform: '$(BuildPlatform)'
         configuration: '$(BuildConfiguration)'
         runTestsInIsolation: true
