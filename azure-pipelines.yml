@@ -217,3 +217,5 @@ jobs:
         platform: '$(BuildPlatform)'
         configuration: '$(BuildConfiguration)'
         runTestsInIsolation: true
+        runInParallel: false
+        codeCoverageEnabled: true
