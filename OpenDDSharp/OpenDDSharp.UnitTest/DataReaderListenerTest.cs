@@ -23,7 +23,6 @@ using System.Threading;
 using System.Diagnostics;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
-using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -199,11 +198,11 @@ namespace OpenDDSharp.UnitTest
             _dataWriter.Write(new TestStruct { Id = 1 });
 
             // After half second deadline should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(0, count);
 
             // After one second and a half one deadline should be lost
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             Assert.AreEqual(1, count);
         }
 
@@ -247,7 +246,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(found);
 
             // Check the number of incompatible DataWriter
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
         }
 
@@ -301,7 +300,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -369,11 +368,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // After half second liveliness should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(1, count);
 
             // After one second and a half one liveliness should be lost
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
@@ -425,7 +424,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(found);
 
             // Check subscription matched call
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(1, count);
 
             // Delete the writer
@@ -433,7 +432,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Check subscription matched call
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
@@ -484,13 +483,13 @@ namespace OpenDDSharp.UnitTest
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
 
             time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -647,7 +646,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             DataWriterQos dwQos = new DataWriterQos();
-            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 0U };
+            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
             result = _writer.SetQos(dwQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -665,8 +664,9 @@ namespace OpenDDSharp.UnitTest
             // Write a sample
             InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
-            
-            result = _dataWriter.Write(new TestStruct { Id = 1 }, handle);
+
+            Timestamp time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
+            result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
