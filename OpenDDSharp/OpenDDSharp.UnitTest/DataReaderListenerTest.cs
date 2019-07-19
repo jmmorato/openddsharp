@@ -647,7 +647,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             DataWriterQos dwQos = new DataWriterQos();
-            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
+            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 0U };
             result = _writer.SetQos(dwQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
