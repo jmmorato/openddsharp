@@ -92,6 +92,7 @@ jobs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
+        msbuildArgs: /p:PlatformToolset=v142
 - job: VisualStudio2017
   timeoutInMinutes: 90
   pool:
