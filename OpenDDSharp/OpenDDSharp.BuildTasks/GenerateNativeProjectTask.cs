@@ -20,28 +20,17 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.IO;
 using System.Xml;
-using System.Management;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
+using System.Globalization;
 using EnvDTE;
 using EnvDTE80;
 using EnvDTE100;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace OpenDDSharp.BuildTasks
 {    
     public class GenerateNativeProjectTask : Task
     {
-        #region PInvoke
-        [DllImport("ole32.dll")]
-        private static extern void CreateBindCtx(int reserved, out IBindCtx ppbc);
-
-        [DllImport("ole32.dll")]
-        private static extern int GetRunningObjectTable(int reserved, out IRunningObjectTable prot);
-        #endregion
-
         #region Fields
         private DTE2 _dte;
         private Solution4 _solution;
@@ -123,54 +112,13 @@ namespace OpenDDSharp.BuildTasks
         private void InitializeDTE()
         {
             // We are in a MSBuild process and we need the parent Devenv process id.
-            var myId = System.Diagnostics.Process.GetCurrentProcess().Id;
-            var query = string.Format("SELECT ParentProcessId FROM Win32_Process WHERE ProcessId = {0}", myId);
-            var search = new ManagementObjectSearcher("root\\CIMV2", query);
-            var results = search.Get().GetEnumerator();
-            results.MoveNext();
-            var queryObj = results.Current;
-            var parentId = (uint)queryObj["ParentProcessId"];
-
-            // Get the current DTE version for the parent process
-            string strDTE = GetCurrentInstance(parentId);
-            if (string.IsNullOrWhiteSpace(strDTE))
-                throw new InvalidProgramException("Could not retrieve the current DTE instance version.");
+            var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
+            int msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
 
             // Create the DTE instance
-            Type type = Type.GetTypeFromProgID(strDTE);
+            Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", msbuildVersion));
             object obj = Activator.CreateInstance(type, true);
             _dte = (DTE2)obj;
-        }
-
-        private string GetCurrentInstance(uint processId)
-        {
-            Regex regex = new Regex(@"^!(?<dte>VisualStudio\.DTE\.\d+\.\d+):" + processId + "$");
-            
-            IRunningObjectTable rot;
-            IEnumMoniker enumMoniker;
-            int retVal = GetRunningObjectTable(0, out rot);
-
-            if (retVal == 0)
-            {
-                rot.EnumRunning(out enumMoniker);
-
-                IntPtr fetched = IntPtr.Zero;
-                IMoniker[] moniker = new IMoniker[1];
-                while (enumMoniker.Next(1, moniker, fetched) == 0)
-                {
-                    IBindCtx bindCtx;
-                    CreateBindCtx(0, out bindCtx);
-                    string displayName;
-                    moniker[0].GetDisplayName(bindCtx, null, out displayName);                    
-                    var match = regex.Match(displayName);
-                    if (match.Success)
-                    {
-                        return match.Groups["dte"].Value;
-                    }
-                }
-            }
-
-            return null;
         }
 
         private void GenerateSolutionFile()
