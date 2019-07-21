@@ -93,6 +93,7 @@ jobs:
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
         msbuildArgs: /p:PlatformToolset=v142
+        maximumCpuCount: true
 - job: VisualStudio2017
   timeoutInMinutes: 90
   pool:
