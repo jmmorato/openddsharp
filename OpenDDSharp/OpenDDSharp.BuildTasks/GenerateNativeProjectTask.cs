@@ -115,10 +115,42 @@ namespace OpenDDSharp.BuildTasks
             var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
             int msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
 
-            // Create the DTE instance
-            Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", msbuildVersion));
-            object obj = Activator.CreateInstance(type, true);
-            _dte = (DTE2)obj;
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    // Create the DTE instance
+                    Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", msbuildVersion));
+                    object obj = Activator.CreateInstance(type, true);
+                    _dte = (DTE2)obj;
+
+                    success = true;
+                }
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception {0}: {1}", msbuildProcess, ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
         }
 
         private void GenerateSolutionFile()
