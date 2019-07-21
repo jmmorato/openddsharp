@@ -142,7 +142,7 @@ namespace OpenDDSharp.BuildTasks
                         System.Threading.Thread.Sleep(150);
 
 #if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception {0}: {1}", msbuildProcess, ex.ToString());
+                        Log.LogMessage(MessageImportance.High, "Exception {0}: {1}", msbuildProcess.MainModule.FileVersionInfo.FileMajorPart, ex.ToString());
 #endif
                     }
                     else
