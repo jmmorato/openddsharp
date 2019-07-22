@@ -124,7 +124,7 @@ namespace OpenDDSharp.BuildTasks
                     // Create the DTE instance
                     Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
-                    _dte = (DTE2)obj;
+                    _dte = (DTE2)obj;                                        
 
                     success = true;
                 }
@@ -355,7 +355,7 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _project = _solution.Projects.Item(1);
+                    _project = _solution.Projects.Item(1);                    
 
                     success = true;
                 }
@@ -427,8 +427,16 @@ namespace OpenDDSharp.BuildTasks
             while (!success && retry > 0)
             {
                 try
-                {
-                    _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+                {                   
+                   _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);                    
+                    if (_solution.SolutionBuild.LastBuildInfo > 0)
+                    {
+                        string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                        string logFile = Path.Combine(IntDir, "obj", Platform, Configuration, projectName + ".log");                        
+                        Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+
+                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                    }
                     success = true;
                 }
 #if DEBUG
