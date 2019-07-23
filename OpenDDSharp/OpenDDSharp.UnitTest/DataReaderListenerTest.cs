@@ -543,7 +543,7 @@ namespace OpenDDSharp.UnitTest
                 supportProcess.KillProcess(process);
             }
 
-            bool resp = evt.Wait(10000);
+            bool resp = evt.Wait(20000);
             Assert.IsTrue(resp);
             Assert.AreEqual(1, count);
 
@@ -608,7 +608,7 @@ namespace OpenDDSharp.UnitTest
                 supportProcess.KillProcess(process);
             }
 
-            bool resp = evt.Wait(10000);
+            bool resp = evt.Wait(20000);
             Assert.IsTrue(resp);
             Assert.AreEqual(1, count);
 
