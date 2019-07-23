@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Globalization;
 using System.ComponentModel;
 using OpenDDSharp.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -129,15 +130,24 @@ namespace OpenDDSharp.UnitTest.Helpers
         }
 
         public void KillProcess(Process process)
-        {
-            if (!process.HasExited)
-            {                
-                process.Kill();
+        {            
+            while (!process.HasExited)
+            {
+                try
+                {
+                    process.Kill();
+                    process.WaitForExit(5000);
+                }
+                catch (Exception ex)
+                {
+                    _testContext.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} Exception: {1}", nameof(KillProcess), ex.Message));
+                }
             }
-
+            
             process.OutputDataReceived -= SupportProcessOnOutputDataReceived;
             process.ErrorDataReceived -= SupportProcessOnErrorDataReceived;
             process.Dispose();
+            process = null;
         }
 
         private void SupportProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
