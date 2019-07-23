@@ -439,6 +439,10 @@ namespace OpenDDSharp.BuildTasks
                     }
                     success = true;
                 }
+                catch(InvalidOperationException)
+                {
+                    throw;
+                }
 #if DEBUG
                 catch (Exception ex)
 #else
