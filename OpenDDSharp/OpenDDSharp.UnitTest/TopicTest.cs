@@ -21,7 +21,6 @@ using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
-using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -212,6 +211,11 @@ namespace OpenDDSharp.UnitTest
             result = topic.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
+            // TODO: OpenDDS bug in master branch: 
+            // If the topic has been never enabled the call to DeleteTopic fails.
+            // That was not happenning in previous releases (i.e. v3.13.1).
+            result = otherTopic.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
