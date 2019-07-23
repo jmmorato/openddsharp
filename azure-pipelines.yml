@@ -94,6 +94,17 @@ jobs:
         configuration: $(BuildConfiguration)
         msbuildArgs: /p:PlatformToolset=v142
         maximumCpuCount: true
+    - task: VSTest@2
+      displayName: Execute Unit Tests
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        platform: '$(BuildPlatform)'
+        configuration: '$(BuildConfiguration)'
+        runTestsInIsolation: true
+        runInParallel: false
+        codeCoverageEnabled: true
 - job: VisualStudio2017
   timeoutInMinutes: 90
   pool:
@@ -207,9 +218,6 @@ jobs:
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
         maximumCpuCount: true
-    - script: msbuild OpenDDSharp\OpenDDSharp.sln /p:Configuration=$(BuildConfiguration);Platform=$(BuildPlatform)
-      displayName: 'Build OpenDDSharp with msbuild'
-      enabled: false
     - task: VSTest@2
       displayName: Execute Unit Tests
       inputs:
