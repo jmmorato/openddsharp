@@ -21,6 +21,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Globalization;
+using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
 using EnvDTE100;
@@ -37,6 +38,12 @@ namespace OpenDDSharp.BuildTasks
         private Project _project;
         private string _solutionName;
         private string _projectName;
+        private int _msbuildVersion;
+        private readonly Dictionary<int, string> _platformToolsets = new Dictionary<int, string>
+        {
+            { 15, "v141" },
+            { 16, "v142" }
+        };
         #endregion
 
         #region Properties
@@ -111,9 +118,9 @@ namespace OpenDDSharp.BuildTasks
 
         private void InitializeDTE()
         {
-            // We are in a MSBuild process and we need the parent Devenv process id.
+            // Get the current MSBuild version
             var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
-            int msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
+            _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
 
             int retry = 100;
             bool success = false;
@@ -122,7 +129,7 @@ namespace OpenDDSharp.BuildTasks
                 try
                 {
                     // Create the DTE instance
-                    Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", msbuildVersion));
+                    Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
                     _dte = (DTE2)obj;                                        
 
@@ -281,6 +288,15 @@ namespace OpenDDSharp.BuildTasks
                         }
                     }
 
+                    if (_platformToolsets.ContainsKey(_msbuildVersion))
+                    {
+                        nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
+                        foreach (XmlNode node in nodes)
+                        {
+                            node.InnerXml = _platformToolsets[_msbuildVersion];
+                        }
+                    }
+                    
                     doc.Save(_project.FullName);
                     success = true;
                 }
@@ -427,7 +443,7 @@ namespace OpenDDSharp.BuildTasks
             while (!success && retry > 0)
             {
                 try
-                {                   
+                {                                       
                    _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);                    
                     if (_solution.SolutionBuild.LastBuildInfo > 0)
                     {
