@@ -624,63 +624,60 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnBudgetExceeded()
         {
-            ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            // Attach to the event
-            int count = 0;
-            _listener.BudgetExceeded += (r, s) =>
+            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
             {
-                Assert.AreEqual(_reader, r);
-                Assert.AreEqual(1, s.TotalCount);
-                Assert.AreEqual(1, s.TotalCountChange);
-                Assert.AreNotEqual(InstanceHandle.HandleNil, s.LastInstanceHandle);
+                // Attach to the event
+                int count = 0;
+                _listener.BudgetExceeded += (r, s) =>
+                {
+                    Assert.AreEqual(_reader, r);
+                    Assert.AreEqual(1, s.TotalCount);
+                    Assert.AreEqual(1, s.TotalCountChange);
+                    Assert.AreNotEqual(InstanceHandle.HandleNil, s.LastInstanceHandle);
 
-                count++;
-                evt.Set();
-            };
+                    count++;
+                    evt.Set();
+                };
 
-            // Prepare QoS for the test
-            DataReaderQos drQos = new DataReaderQos();            
-            drQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            ReturnCode result = _reader.SetQos(drQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Prepare QoS for the test
+                DataReaderQos drQos = new DataReaderQos();
+                drQos.LatencyBudget.Duration = new Duration { Seconds = 1, NanoSeconds = 0U };
+                drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+                ReturnCode result = _reader.SetQos(drQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
-            result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                DataWriterQos dwQos = new DataWriterQos();
+                dwQos.LatencyBudget.Duration = new Duration { Seconds = 1, NanoSeconds = 0U };
+                result = _writer.SetQos(dwQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Enable entities
+                result = _writer.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                result = _reader.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 5000);
-            Assert.IsTrue(found);
+                // Wait for discovery
+                bool found = _writer.WaitForSubscriptions(1, 5000);
+                Assert.IsTrue(found);
 
-            // Write a sample
-            InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
-            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+                // Write a sample
+                InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+                Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-            Timestamp time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
-            result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                Timestamp time = DateTime.Now.Subtract(TimeSpan.FromSeconds(2)).ToTimestamp();
+                result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-            Assert.AreEqual(ReturnCode.Ok, result);
+                bool ret = evt.Wait(5000);
+                Assert.IsTrue(ret);
+                Assert.AreEqual(1, count);
 
-            bool ret = evt.Wait(5000);
-            Assert.IsTrue(ret);
-            Assert.AreEqual(1, count);
-
-            // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            evt.Dispose();
+                // Remove the listener to avoid extra messages
+                result = _reader.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
         #endregion
     }

@@ -154,7 +154,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         {
             if (!string.IsNullOrWhiteSpace(e.Data))
             {
-                //_testContext.WriteLine(e.Data);
+                _testContext.WriteLine(e.Data);
             }
         }
 
@@ -162,7 +162,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         {
             if (!string.IsNullOrWhiteSpace(e.Data))
             {
-                //_testContext.WriteLine(e.Data);
+                _testContext.WriteLine(e.Data);
             }
         }
 
