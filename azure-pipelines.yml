@@ -30,7 +30,7 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch
-        git checkout 4f15324d457b2ae68762d8a78f74b46f97fec557
+        git checkout -q 4f15324d457b2ae68762d8a78f74b46f97fec557
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
