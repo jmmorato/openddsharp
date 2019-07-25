@@ -49,8 +49,7 @@ jobs:
         failOnStandardError: true
     - script: |
         REM set PATH=C:\Strawberry\perl\bin;%PATH%
-        echo %PATH%        
-        if %BuildConfiguration%==Release set OPT=--no-debug --optimize
+        REM if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --ace-github-latest --no-tests %OPT%
         perl tools\scripts\show_build_config.pl
       workingDirectory: $(OpenDdsRoot)
@@ -99,6 +98,7 @@ jobs:
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+        runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
         searchFolder: '$(System.DefaultWorkingDirectory)'
         platform: '$(BuildPlatform)'
         configuration: '$(BuildConfiguration)'
@@ -174,7 +174,7 @@ jobs:
       failOnStderr: false
     - script: |
         set PATH=C:\Strawberry\perl\bin;%PATH%
-        if %BuildConfiguration%==Release set OPT=--no-debug --optimize
+        REM if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --no-tests
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
@@ -224,6 +224,7 @@ jobs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
         searchFolder: '$(System.DefaultWorkingDirectory)'
+        runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
         platform: '$(BuildPlatform)'
         configuration: '$(BuildConfiguration)'
         runTestsInIsolation: true
