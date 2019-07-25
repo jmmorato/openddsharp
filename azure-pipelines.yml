@@ -22,7 +22,7 @@ jobs:
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
     - script: |
-        git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
+        git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         git fetch
         git checkout 4f15324d457b2ae68762d8a78f74b46f97fec557
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
