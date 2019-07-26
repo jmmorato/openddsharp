@@ -93,19 +93,19 @@ namespace OpenDDSharp.UnitTest.Helpers
                 UseShellExecute = false,
             };
 
-            Process infoRepoProcess = new Process
+            Process process = new Process
             {
                 StartInfo = processInfo,
                 EnableRaisingEvents = true
             };
 
-            infoRepoProcess.OutputDataReceived += SupportProcessOnOutputDataReceived;
-            infoRepoProcess.ErrorDataReceived += SupportProcessOnErrorDataReceived;
+            process.OutputDataReceived += SupportProcessOnOutputDataReceived;
+            process.ErrorDataReceived += SupportProcessOnErrorDataReceived;
 
             bool processStarted = false;
             try
             {
-                processStarted = infoRepoProcess.Start();
+                processStarted = process.Start();
             }
             catch (Win32Exception e)
             {
@@ -123,14 +123,17 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new InvalidOperationException("Support process could not be started.");
             }
 
-            infoRepoProcess.BeginOutputReadLine();
-            infoRepoProcess.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
-            return infoRepoProcess;
+            return process;
         }
 
         public void KillProcess(Process process)
-        {            
+        {
+            process.OutputDataReceived -= SupportProcessOnOutputDataReceived;
+            process.ErrorDataReceived -= SupportProcessOnErrorDataReceived;
+
             while (!process.HasExited)
             {
                 try
@@ -143,11 +146,8 @@ namespace OpenDDSharp.UnitTest.Helpers
                     _testContext.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} Exception: {1}", nameof(KillProcess), ex.Message));
                 }
             }
-            
-            process.OutputDataReceived -= SupportProcessOnOutputDataReceived;
-            process.ErrorDataReceived -= SupportProcessOnErrorDataReceived;
+                        
             process.Dispose();
-            process = null;
         }
 
         private void SupportProcessOnOutputDataReceived(object sender, DataReceivedEventArgs e)
