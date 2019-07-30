@@ -91,11 +91,8 @@ jobs:
 
   - script: |
       rmdir %DDS_ROOT%\dds\Release /s /q
-      rmdir %DDS_ROOT%\dds\Debug /s /q
       rmdir %ACE_ROOT%\ace\Release /s /q
-      rmdir %ACE_ROOT%\ace\Debug /s /q
       rmdir %TAO_ROOT%\tao\Release /s /q
-      rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
 
@@ -130,11 +127,8 @@ jobs:
 
   - script: |
       rmdir %DDS_ROOT%\dds\Release /s /q
-      rmdir %DDS_ROOT%\dds\Debug /s /q
       rmdir %ACE_ROOT%\ace\Release /s /q
-      rmdir %ACE_ROOT%\ace\Debug /s /q
       rmdir %TAO_ROOT%\tao\Release /s /q
-      rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
 
@@ -174,12 +168,9 @@ jobs:
     displayName: 'Copy DLLs to bin/lib_x64 folders'
     failOnStderr: true
 
-  - script: |
-      rmdir %DDS_ROOT%\dds\Release /s /q
+  - script: |      
       rmdir %DDS_ROOT%\dds\Debug /s /q
-      rmdir %ACE_ROOT%\ace\Release /s /q
       rmdir %ACE_ROOT%\ace\Debug /s /q
-      rmdir %TAO_ROOT%\tao\Release /s /q
       rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
@@ -213,12 +204,9 @@ jobs:
     displayName: 'Copy DLLs to bin/lib_x86 folders'
     failOnStderr: true
 
-  - script: |
-      rmdir %DDS_ROOT%\dds\Release /s /q
+  - script: |      
       rmdir %DDS_ROOT%\dds\Debug /s /q
-      rmdir %ACE_ROOT%\ace\Release /s /q
       rmdir %ACE_ROOT%\ace\Debug /s /q
-      rmdir %TAO_ROOT%\tao\Release /s /q
       rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
