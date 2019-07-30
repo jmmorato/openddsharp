@@ -79,6 +79,7 @@ jobs:
       platform: x64
       configuration: Release
       maximumCpuCount: true
+      clean: true
 
   - script: |
       xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x64 /s /i
@@ -86,6 +87,14 @@ jobs:
       xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x64 /s /i
       xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x64 /s /i
     displayName: 'Copy DLLs to bin/lib_x64 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\dds\Release /s /q
+      rmdir %DDS_ROOT%\dds\Debug /s /q
+      rmdir %ACE_ROOT%\ace\Release /s /q
+      rmdir %ACE_ROOT%\ace\Debug /s /q
+    displayName: 'Clean-up temporal files'
     failOnStderr: true
 
   - script: |
@@ -115,6 +124,14 @@ jobs:
       xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x86 /s /i
       xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x86 /s /i
     displayName: 'Copy DLLs to bin/lib_x86 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\dds\Release /s /q
+      rmdir %DDS_ROOT%\dds\Debug /s /q
+      rmdir %ACE_ROOT%\ace\Release /s /q
+      rmdir %ACE_ROOT%\ace\Debug /s /q
+    displayName: 'Clean-up temporal files'
     failOnStderr: true
 
   - script: |
@@ -154,6 +171,14 @@ jobs:
     failOnStderr: true
 
   - script: |
+      rmdir %DDS_ROOT%\dds\Release /s /q
+      rmdir %DDS_ROOT%\dds\Debug /s /q
+      rmdir %ACE_ROOT%\ace\Release /s /q
+      rmdir %ACE_ROOT%\ace\Debug /s /q
+    displayName: 'Clean-up temporal files'
+    failOnStderr: true
+
+  - script: |
       rmdir %DDS_ROOT%\bin /s /q
       rmdir %DDS_ROOT%\lib /s /q
       rmdir %ACE_ROOT%\bin /s /q
@@ -180,6 +205,14 @@ jobs:
       xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x86 /s /i /Y
       xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x86 /s /i /Y
     displayName: 'Copy DLLs to bin/lib_x86 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\dds\Release /s /q
+      rmdir %DDS_ROOT%\dds\Debug /s /q
+      rmdir %ACE_ROOT%\ace\Release /s /q
+      rmdir %ACE_ROOT%\ace\Debug /s /q
+    displayName: 'Clean-up temporal files'
     failOnStderr: true
 
   - script: |
