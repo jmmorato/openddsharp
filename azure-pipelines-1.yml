@@ -188,7 +188,7 @@ jobs:
     displayName: 'Copy the OpenDDSharp code generator templates'
     failOnStderr: true
 
-    - script: |
+  - script: |
       rmdir %DDS_ROOT%\bin /s /q
       rmdir %DDS_ROOT%\lib /s /q
       rmdir %ACE_ROOT%\bin /s /q
