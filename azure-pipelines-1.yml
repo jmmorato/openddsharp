@@ -81,6 +81,55 @@ jobs:
       maximumCpuCount: true
 
   - script: |
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x64 /s /i
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x64 /s /i
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x64 /s /i
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x64 /s /i
+    displayName: 'Copy DLLs to bin/lib_x64 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\original_bin\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Restore the original bin/lib folders'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDS Win32/Release'
+    enabled: true
+    inputs:
+      solution: ext\OpenDDS\DDS_TAOv2.sln
+      platform: Win32
+      configuration: Release
+      maximumCpuCount: true
+  
+  - script: |
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x86 /s /i
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x86 /s /i
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x86 /s /i
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x86 /s /i
+    displayName: 'Copy DLLs to bin/lib_x86 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\original_bin\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Restore the original bin/lib folders'
+    failOnStderr: true
+
+  - script: |
       set PATH=C:\Strawberry\perl\bin;%PATH%
       call configure -v --no-tests
     workingDirectory: $(OpenDdsRoot)
@@ -101,7 +150,7 @@ jobs:
       xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x64 /s /i
       xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x64 /s /i
       xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x64 /s /i
-    displayName: 'Create bin/lib_x64 folders'
+    displayName: 'Copy DLLs to bin/lib_x64 folders'
     failOnStderr: true
 
   - script: |
@@ -126,33 +175,29 @@ jobs:
       maximumCpuCount: true
 
   - script: |
-      set PATH=C:\Strawberry\perl\bin;%PATH%
-      call configure -v --no-tests --no-debug --optimize
-    workingDirectory: $(OpenDdsRoot)
-    displayName: 'Run configure script for Release'
-    failOnStderr: true
-
-  - task: MSBuild@1
-    displayName: 'Build OpenDDS Win32/Release'
-    enabled: true
-    inputs:
-      solution: ext\OpenDDS\DDS_TAOv2.sln
-      platform: Win32
-      configuration: Release
-      maximumCpuCount: true
-
-  - script: |
       xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x86 /s /i
       xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x86 /s /i
       xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x86 /s /i
       xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x86 /s /i
-    displayName: 'Create bin/lib_x86 folders'
+    displayName: 'Copy DLLs to bin/lib_x86 folders'
     failOnStderr: true
 
   - script: |
       xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl /Y
       xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl /Y
     displayName: 'Copy the OpenDDSharp code generator templates'
+    failOnStderr: true
+
+    - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\bin_x86\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\lib_x86\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\bin_x86\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\lib_x86\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Prepare bin and lib folders for x86 compilation'
     failOnStderr: true
 
   - task: NuGetCommand@2
