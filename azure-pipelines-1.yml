@@ -94,6 +94,8 @@ jobs:
       rmdir %DDS_ROOT%\dds\Debug /s /q
       rmdir %ACE_ROOT%\ace\Release /s /q
       rmdir %ACE_ROOT%\ace\Debug /s /q
+      rmdir %TAO_ROOT%\tao\Release /s /q
+      rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
 
@@ -131,6 +133,8 @@ jobs:
       rmdir %DDS_ROOT%\dds\Debug /s /q
       rmdir %ACE_ROOT%\ace\Release /s /q
       rmdir %ACE_ROOT%\ace\Debug /s /q
+      rmdir %TAO_ROOT%\tao\Release /s /q
+      rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
 
@@ -175,6 +179,8 @@ jobs:
       rmdir %DDS_ROOT%\dds\Debug /s /q
       rmdir %ACE_ROOT%\ace\Release /s /q
       rmdir %ACE_ROOT%\ace\Debug /s /q
+      rmdir %TAO_ROOT%\tao\Release /s /q
+      rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
 
@@ -212,6 +218,8 @@ jobs:
       rmdir %DDS_ROOT%\dds\Debug /s /q
       rmdir %ACE_ROOT%\ace\Release /s /q
       rmdir %ACE_ROOT%\ace\Debug /s /q
+      rmdir %TAO_ROOT%\tao\Release /s /q
+      rmdir %TAO_ROOT%\tao\Debug /s /q
     displayName: 'Clean-up temporal files'
     failOnStderr: true
 
