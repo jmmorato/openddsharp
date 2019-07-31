@@ -269,6 +269,7 @@ jobs:
   - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
     displayName: 'Execute Unit Tests x86/Debug'
@@ -295,6 +296,7 @@ jobs:
   - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
     displayName: 'Execute Unit Tests x86/Release'
@@ -339,6 +341,7 @@ jobs:
   - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
     displayName: 'Execute Unit Tests x64/Debug'
@@ -365,6 +368,7 @@ jobs:
   - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
     displayName: 'Execute Unit Tests x64/Release'
