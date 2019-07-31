@@ -26,6 +26,14 @@ jobs:
     workingDirectory: '$(OpenDdsRoot)'
     failOnStderr: true
 
+  - script: |
+      git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
+      git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
+      git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
+    displayName: 'Apply OpenDDS->OpenDDSharp Patches'
+    workingDirectory: '$(OpenDdsRoot)'
+    failOnStderr: true
+
   - task: PowerShell@2
     displayName: 'Download ACE/TAO'
     inputs:
