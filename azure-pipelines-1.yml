@@ -266,7 +266,7 @@ jobs:
       configuration: Debug
       maximumCpuCount: true
     
-  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
@@ -293,7 +293,7 @@ jobs:
       configuration: Release
       maximumCpuCount: true
 
-  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
@@ -338,7 +338,7 @@ jobs:
       configuration: Debug
       maximumCpuCount: true
 
-  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
@@ -365,7 +365,7 @@ jobs:
       configuration: Release
       maximumCpuCount: true
 
-  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
