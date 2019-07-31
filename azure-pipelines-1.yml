@@ -266,7 +266,7 @@ jobs:
       configuration: Debug
       maximumCpuCount: true
     
-  - script: for /f %i in ('dir /a:d /s /b obj') do rd /s /q "%i"
+  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
 
@@ -292,7 +292,7 @@ jobs:
       configuration: Release
       maximumCpuCount: true
 
-  - script: for /f %i in ('dir /a:d /s /b obj') do rd /s /q "%i"
+  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
 
@@ -336,7 +336,7 @@ jobs:
       configuration: Debug
       maximumCpuCount: true
 
-  - script: for /f %i in ('dir /a:d /s /b obj') do rd /s /q "%i"
+  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
 
@@ -362,7 +362,7 @@ jobs:
       configuration: Release
       maximumCpuCount: true
 
-  - script: for /f %i in ('dir /a:d /s /b obj') do rd /s /q "%i"
+  - script: for /f %i in ('dir /a:d /s /b obj') do rmdir "%i" /s /q
     displayName: 'Clean-up obj folders'
     failOnStderr: true
 
