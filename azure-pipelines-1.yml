@@ -46,7 +46,6 @@ jobs:
     displayName: 'Unzip ACE/TAO'
     inputs:
       script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
-        del /f ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
 
