@@ -45,9 +45,15 @@ jobs:
   - task: CmdLine@2
     displayName: 'Unzip ACE/TAO'
     inputs:
-      script: |
-        '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
+      script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
         del /f ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
+
+  - task: CmdLine@2
+    displayName: 'Delete ACE/TAO zip'
+    inputs:
+      script: del /f ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
 
