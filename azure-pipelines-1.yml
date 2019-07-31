@@ -239,7 +239,7 @@ jobs:
 
   - script: |
       msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
+      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
     displayName: 'Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder'
     failOnStderr: true
 
@@ -256,7 +256,7 @@ jobs:
     displayName: 'Execute Unit Tests x86/Debug'
     inputs:
       testSelector: 'testAssemblies'
-      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x86\Debug\OpenDDSharp.UnitTest.dll'
       searchFolder: '$(System.DefaultWorkingDirectory)'
       runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
       platform: x86
@@ -278,7 +278,7 @@ jobs:
     displayName: 'Execute Unit Tests x86/Release'
     inputs:
       testSelector: 'testAssemblies'
-      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x86\Release\OpenDDSharp.UnitTest.dll'
       searchFolder: '$(System.DefaultWorkingDirectory)'
       runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
       platform: x86
@@ -301,7 +301,7 @@ jobs:
 
   - script: |
       msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
+      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
     displayName: 'Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder'
     failOnStderr: true
 
@@ -318,7 +318,7 @@ jobs:
     displayName: 'Execute Unit Tests x64/Debug'
     inputs:
       testSelector: 'testAssemblies'
-      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x64\Debug\OpenDDSharp.UnitTest.dll'
       searchFolder: '$(System.DefaultWorkingDirectory)'
       runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
       platform: x64
@@ -340,7 +340,7 @@ jobs:
     displayName: 'Execute Unit Tests x64/Release'
     inputs:
       testSelector: 'testAssemblies'
-      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x64\Release\OpenDDSharp.UnitTest.dll'
       searchFolder: '$(System.DefaultWorkingDirectory)'
       runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
       platform: x64
