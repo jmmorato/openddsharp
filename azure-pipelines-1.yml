@@ -266,9 +266,9 @@ jobs:
       configuration: Debug
       maximumCpuCount: true
     
-  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
-    failOnStderr: false
+    failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
@@ -293,9 +293,9 @@ jobs:
       configuration: Release
       maximumCpuCount: true
 
-  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
-    failOnStderr: false
+    failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
@@ -338,9 +338,9 @@ jobs:
       configuration: Debug
       maximumCpuCount: true
 
-  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
-    failOnStderr: false
+    failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
@@ -365,9 +365,9 @@ jobs:
       configuration: Release
       maximumCpuCount: true
 
-  - script: for /f %%i in ('dir /a:d /s /b obj') do rmdir "%%i" /s /q
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
     displayName: 'Clean-up obj folders'
-    failOnStderr: false
+    failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
 
   - task: VSTest@2
