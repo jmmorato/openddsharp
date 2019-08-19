@@ -383,3 +383,13 @@ jobs:
       runInParallel: false
       codeCoverageEnabled: true
 
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec'
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec'
+
