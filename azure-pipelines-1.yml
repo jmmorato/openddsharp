@@ -386,10 +386,21 @@ jobs:
   - task: NuGetCommand@2
     inputs:
       command: 'pack'
-      packagesToPack: '(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec'
+      packagesToPack: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec'
 
   - task: NuGetCommand@2
     inputs:
       command: 'pack'
-      packagesToPack: '(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec'
+      packagesToPack: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec'
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp\OpenDDSharp.IdlTemplates\bin\Release'
+      Contents: 'OpenDDSharp.IdlTemplates.vsix'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: BuildOutputs
 
