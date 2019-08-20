@@ -384,23 +384,34 @@ jobs:
       codeCoverageEnabled: true
 
   - task: NuGetCommand@2
+    displayName: 'Pack OpenDDSharp NuGet package'
     inputs:
       command: 'pack'
       packagesToPack: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec'
 
   - task: NuGetCommand@2
+    displayName: 'Pack OpenDDSharp.IdlGenerator NuGet package'
     inputs:
       command: 'pack'
       packagesToPack: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec'
 
   - task: CopyFiles@2
+    displayName: 'Copy OpenDDSharp.IdlTemplates VSIX extension to the artifact folder'
     inputs:
       SourceFolder: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlTemplates\bin\Release'
       Contents: 'OpenDDSharp.IdlTemplates.vsix'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
   
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: $(Build.ArtifactStagingDirectory)
-      artifactName: BuildOutputs
+  # - task: PublishBuildArtifacts@1
+  #   inputs:
+  #     pathToPublish: $(Build.ArtifactStagingDirectory)
+  #     artifactName: BuildOutputs
+
+  - publish: $(Build.ArtifactStagingDirectory)\**
+    artifact: BuildOutputs
+    displayName: 'Publish artifacts'
+  
+  - download: current
+    artifact: BuildOutputs
+    displayName: 'Download artifacts'
 
