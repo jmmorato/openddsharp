@@ -109,6 +109,7 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>.;$(IntDir);$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);$(DDS_ROOT)\dds;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDLL;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>.;$(IntDir)\bin\$(Platform)\$(Configuration);$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -130,6 +131,7 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>.;$(IntDir);$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);$(DDS_ROOT)\dds;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_AMD64_;_WIN64;_DEBUG;_WINDLL;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>.;$(IntDir)\bin\$(Platform)\$(Configuration);$(ACE_ROOT)\lib_x64;$(DDS_ROOT)\lib_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -155,6 +157,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDLL;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CallingConvention>
       </CallingConvention>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -179,6 +182,7 @@
       <PreprocessorDefinitions>WIN32;_AMD64_;_WIN64;NDEBUG;_WINDLL;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CallingConvention>
       </CallingConvention>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
