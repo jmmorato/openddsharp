@@ -402,16 +402,9 @@ jobs:
       Contents: 'OpenDDSharp.IdlTemplates.vsix'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
   
-  # - task: PublishBuildArtifacts@1
-  #   inputs:
-  #     pathToPublish: $(Build.ArtifactStagingDirectory)
-  #     artifactName: BuildOutputs
-
-  - publish: $(Build.ArtifactStagingDirectory)\**
-    artifact: BuildOutputs
+  - task: PublishBuildArtifacts@1
     displayName: 'Publish artifacts'
-  
-  - download: current
-    artifact: BuildOutputs
-    displayName: 'Download artifacts'
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: BuildOutputs
 
