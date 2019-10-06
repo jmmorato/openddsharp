@@ -17,17 +17,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
+#include "Ace.h"
 
-#define Internal_Name "OpenDDSharp.dll"
-#define Original_Filename "OpenDDSharp.dll"
-#define Product_Name "OpenDDSharp"
-#define Assembly_Title L"OpenDDSharp"
-#define Assembly_Configuration L""
-#define Assembly_Company L"OpenDDSharp"
-#define Assembly_Product L"OpenDDSharp"
-#define Assembly_Copyright L"Copyright © Jose Morato 2018. All rights reserved"
-#define Assembly_Description L".NET wrapper for OpenDDS"
-#define File_Version 0,4,1,0
-#define File_Version_Str "0.4.1.0"
-#define Assembly_Version L"0.4.1.0"
+int OpenDDSharp::Ace::Ace::Init() {
+	return ACE::init();
+}
+
+int OpenDDSharp::Ace::Ace::Fini() {
+	return ACE::fini();
+}

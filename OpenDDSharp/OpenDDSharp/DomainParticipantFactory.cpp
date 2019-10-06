@@ -140,8 +140,9 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipantFactory::DeleteP
 	}
 	::DDS::ReturnCode_t ret = impl_entity->delete_participant(participant->impl_entity);
 	if (ret == ::DDS::RETCODE_OK) {
-		EntityManager::get_instance()->remove(participant->impl_entity);       
+		EntityManager::get_instance()->remove(participant->impl_entity);   
+		participant->impl_entity = NULL;
 	}
-
+	
 	return (OpenDDSharp::DDS::ReturnCode)ret;	
 }

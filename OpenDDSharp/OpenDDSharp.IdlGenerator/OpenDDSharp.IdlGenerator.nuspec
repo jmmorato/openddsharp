@@ -2,12 +2,12 @@
 <package >
   <metadata>
     <id>OpenDDSharp.IdlGenerator</id>
-    <version>0.3.0</version>
+    <version>0.4.1</version>
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
     <projectUrl>http://www.openddsharp.com</projectUrl>
-    <iconUrl>http://www.openddsharp.com/favicon.png</iconUrl>
+    <iconUrl>http://www.openddsharp.com/favicon.ico</iconUrl>
     <licenseUrl>http://www.openddsharp.com/Home/License</licenseUrl>
     <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

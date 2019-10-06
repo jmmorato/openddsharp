@@ -4,7 +4,7 @@
         xmlns:model="clr-namespace:OpenDDSharp.ShapesDemo.Model"
         xmlns:converter="clr-namespace:OpenDDSharp.ShapesDemo.Converter"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        Title="OpenDDSharp - WPF Shapes Demo" Height="415px" Width="508px" 
+        Title="OpenDDSharp - WPF Shapes Demo" Height="415px" Width="540px" 
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow" Background="#E6EEF6"
         DataContext="{Binding MainWindow, Source={StaticResource Locator}}">
     <Window.Resources>
@@ -33,9 +33,9 @@
     
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Right">
-            <Border BorderThickness="1"  BorderBrush="#666666" Padding="0"  Margin="5,8,5,5">
+            <Border BorderThickness="1" BorderBrush="#666666" Padding="0" Margin="5,8,5,5">
                 <ItemsControl DockPanel.Dock="Right" ItemsSource="{Binding Shapes}"
-                              Background="White" Width="321px" 
+                              Background="White" Width="321px"
                               Height="361px" Padding="0">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -89,6 +89,7 @@
                 </Path>
             </Canvas>
         </Grid>
+        
         <DockPanel DockPanel.Dock="Left" LastChildFill="True">
             <Border DockPanel.Dock="Top" Margin="5,8,5,5" BorderThickness="1"  Height="215" BorderBrush="#666666" Padding="2">
                 <StackPanel Orientation="Vertical">

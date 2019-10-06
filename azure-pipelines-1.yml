@@ -1,0 +1,410 @@
+# Release Master
+trigger: none
+jobs:
+
+- job: MasterRelease
+  timeoutInMinutes: 300
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  variables:
+      OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
+
+  steps:
+  - script: |      
+      git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
+      echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
+    displayName: 'Clone OpenDDS'
+    failOnStderr: true
+
+  - script: |
+      git fetch -q && git fetch -q --tags
+      git checkout -q tags/DDS-3.13.2
+    displayName: 'Checkout OpenDDS v3.13.2'
+    workingDirectory: '$(OpenDdsRoot)'
+    failOnStderr: true
+
+  - script: |
+      git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
+      git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
+      git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
+    displayName: 'Apply OpenDDS->OpenDDSharp Patches'
+    workingDirectory: '$(OpenDdsRoot)'
+    failOnStderr: true
+
+  - task: PowerShell@2
+    displayName: 'Download ACE/TAO'
+    inputs:
+      targetType: 'inline'
+      script: '& { Invoke-WebRequest -Uri ''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
+      filePath: #
+
+  - task: CmdLine@2
+    displayName: 'Unzip ACE/TAO'
+    inputs:
+      script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
+
+  - task: CmdLine@2
+    displayName: 'Delete ACE/TAO zip'
+    inputs:
+      script: del /f ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
+
+  - task: BatchScript@1
+    displayName: 'Call vcvarsall.bat'
+    inputs:
+      filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
+      arguments: x64
+      modifyEnvironment: true
+
+  - script: |
+      set PATH=C:\Strawberry\perl\bin;%PATH%
+      call configure -v --no-tests --no-debug --optimize
+    workingDirectory: $(OpenDdsRoot)
+    displayName: 'Run configure script for Release'
+    failOnStderr: true
+
+  - task: BatchScript@1
+    displayName: 'Setenv from configure script'
+    inputs:
+      filename: $(Build.SourcesDirectory)\ext\OpenDDS\setenv.cmd
+      modifyEnvironment: true
+
+  - script: |
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\original_bin /s /i /Y
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\original_lib /s /i /Y
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\original_bin /s /i /Y
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\original_lib /s /i /Y
+    workingDirectory: $(OpenDdsRoot)
+    displayName: 'Create a copy of the original bin/lib folders'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDS x64/Release'
+    enabled: true
+    inputs:
+      solution: ext\OpenDDS\DDS_TAOv2.sln
+      platform: x64
+      configuration: Release
+      maximumCpuCount: true
+      clean: true
+
+  - script: |
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x64 /s /i
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x64 /s /i
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x64 /s /i
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x64 /s /i
+    displayName: 'Copy DLLs to bin/lib_x64 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\dds\Release /s /q
+      rmdir %ACE_ROOT%\ace\Release /s /q
+      rmdir %TAO_ROOT%\tao\Release /s /q
+    displayName: 'Clean-up temporal files'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\original_bin\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Restore the original bin/lib folders'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDS Win32/Release'
+    enabled: true
+    inputs:
+      solution: ext\OpenDDS\DDS_TAOv2.sln
+      platform: Win32
+      configuration: Release
+      maximumCpuCount: true
+  
+  - script: |
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x86 /s /i
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x86 /s /i
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x86 /s /i
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x86 /s /i
+    displayName: 'Copy DLLs to bin/lib_x86 folders'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\dds\Release /s /q
+      rmdir %ACE_ROOT%\ace\Release /s /q
+      rmdir %TAO_ROOT%\tao\Release /s /q
+    displayName: 'Clean-up temporal files'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\original_bin\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Restore the original bin/lib folders'
+    failOnStderr: true
+
+  - script: |
+      set PATH=C:\Strawberry\perl\bin;%PATH%
+      call configure -v --no-tests
+    workingDirectory: $(OpenDdsRoot)
+    displayName: 'Run configure script for Debug'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDS x64/Debug'
+    enabled: true
+    inputs:
+      solution: ext\OpenDDS\DDS_TAOv2.sln
+      platform: x64
+      configuration: Debug
+      maximumCpuCount: true
+
+  - script: |
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x64 /s /i /Y
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x64 /s /i /Y
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x64 /s /i /Y
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x64 /s /i /Y
+    displayName: 'Copy DLLs to bin/lib_x64 folders'
+    failOnStderr: true
+
+  - script: |      
+      rmdir %DDS_ROOT%\dds\Debug /s /q
+      rmdir %ACE_ROOT%\ace\Debug /s /q
+      rmdir %TAO_ROOT%\tao\Debug /s /q
+    displayName: 'Clean-up temporal files'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\original_bin\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Restore the original bin/lib folders'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDS Win32/Debug'
+    enabled: true
+    inputs:
+      solution: ext\OpenDDS\DDS_TAOv2.sln
+      platform: Win32
+      configuration: Debug
+      maximumCpuCount: true
+
+  - script: |
+      xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_x86 /s /i /Y
+      xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_x86 /s /i /Y
+      xcopy %DDS_ROOT%\lib\* %DDS_ROOT%\lib_x86 /s /i /Y
+      xcopy %DDS_ROOT%\bin\* %DDS_ROOT%\bin_x86 /s /i /Y
+    displayName: 'Copy DLLs to bin/lib_x86 folders'
+    failOnStderr: true
+
+  - script: |      
+      rmdir %DDS_ROOT%\dds\Debug /s /q
+      rmdir %ACE_ROOT%\ace\Debug /s /q
+      rmdir %TAO_ROOT%\tao\Debug /s /q
+    displayName: 'Clean-up temporal files'
+    failOnStderr: true
+
+  - script: |
+      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl /Y
+      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl /Y
+    displayName: 'Copy the OpenDDSharp code generator templates'
+    failOnStderr: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\bin_x86\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\lib_x86\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\bin_x86\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\lib_x86\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Prepare bin and lib folders for x86 compilation'
+    failOnStderr: true
+
+  - task: NuGetCommand@2
+    displayName: "NuGet Restore OpenDDSharp"
+    inputs:
+      command: 'restore'
+      restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
+      feedsToUse: 'select'
+      versioningScheme: 'off'
+
+  - script: |
+      msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
+      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
+    displayName: 'Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDSharp x86/Debug'
+    enabled: true
+    inputs:
+      solution: OpenDDSharp\OpenDDSharp.sln
+      platform: x86
+      configuration: Debug
+      maximumCpuCount: true
+    
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
+    displayName: 'Clean-up obj folders'
+    failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
+
+  - task: VSTest@2
+    displayName: 'Execute Unit Tests x86/Debug'
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x86\Debug\OpenDDSharp.UnitTest.dll'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
+      platform: x86
+      configuration: Debug
+      runTestsInIsolation: true
+      runInParallel: false
+      codeCoverageEnabled: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDSharp x86/Release'
+    enabled: true
+    inputs:
+      solution: OpenDDSharp\OpenDDSharp.sln
+      platform: x86
+      configuration: Release
+      maximumCpuCount: true
+
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
+    displayName: 'Clean-up obj folders'
+    failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
+
+  - task: VSTest@2
+    displayName: 'Execute Unit Tests x86/Release'
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x86\Release\OpenDDSharp.UnitTest.dll'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
+      platform: x86
+      configuration: Release
+      runTestsInIsolation: true
+      runInParallel: false
+      codeCoverageEnabled: true
+
+  - script: |
+      rmdir %DDS_ROOT%\bin /s /q
+      rmdir %DDS_ROOT%\lib /s /q
+      rmdir %ACE_ROOT%\bin /s /q
+      rmdir %ACE_ROOT%\lib /s /q
+      xcopy %DDS_ROOT%\bin_x64\* %DDS_ROOT%\bin /s /i /Y
+      xcopy %DDS_ROOT%\lib_x64\* %DDS_ROOT%\lib /s /i /Y
+      xcopy %ACE_ROOT%\bin_x64\* %ACE_ROOT%\bin /s /i /Y
+      xcopy %ACE_ROOT%\lib_x64\* %ACE_ROOT%\lib /s /i /Y
+    displayName: 'Prepare bin and lib folders for x64 compilation'
+    failOnStderr: true
+
+  - script: |
+      msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
+      xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin
+    displayName: 'Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder'
+    failOnStderr: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDSharp x64/Debug'
+    enabled: true
+    inputs:
+      solution: OpenDDSharp\OpenDDSharp.sln
+      platform: x64
+      configuration: Debug
+      maximumCpuCount: true
+
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
+    displayName: 'Clean-up obj folders'
+    failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
+
+  - task: VSTest@2
+    displayName: 'Execute Unit Tests x64/Debug'
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x64\Debug\OpenDDSharp.UnitTest.dll'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
+      platform: x64
+      configuration: Debug
+      runTestsInIsolation: true
+      runInParallel: false
+      codeCoverageEnabled: true
+
+  - task: MSBuild@1
+    displayName: 'Build OpenDDSharp x64/Release'
+    enabled: true
+    inputs:
+      solution: OpenDDSharp\OpenDDSharp.sln
+      platform: x64
+      configuration: Release
+      maximumCpuCount: true
+
+  - script: for /f %%i in ('dir /a:d /s /b obj') do @if exist "%%i" rmdir "%%i" /s /q
+    displayName: 'Clean-up obj folders'
+    failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
+
+  - task: VSTest@2
+    displayName: 'Execute Unit Tests x64/Release'
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\x64\Release\OpenDDSharp.UnitTest.dll'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
+      platform: x64
+      configuration: Release
+      runTestsInIsolation: true
+      runInParallel: false
+      codeCoverageEnabled: true
+
+  - task: NuGetCommand@2
+    displayName: 'Pack OpenDDSharp NuGet package'
+    inputs:
+      command: 'pack'
+      packagesToPack: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec'
+
+  - task: NuGetCommand@2
+    displayName: 'Pack OpenDDSharp.IdlGenerator NuGet package'
+    inputs:
+      command: 'pack'
+      packagesToPack: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec'
+
+  - task: CopyFiles@2
+    displayName: 'Copy OpenDDSharp.IdlTemplates VSIX extension to the artifact folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlTemplates\bin\Release'
+      Contents: 'OpenDDSharp.IdlTemplates.vsix'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifacts'
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: BuildOutputs
+

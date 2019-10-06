@@ -20,12 +20,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.IO;
 using System.Xml;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
+using System.Globalization;
+using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
-using System.Runtime.InteropServices;
 using EnvDTE100;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace OpenDDSharp.BuildTasks
 {    
@@ -37,6 +38,12 @@ namespace OpenDDSharp.BuildTasks
         private Project _project;
         private string _solutionName;
         private string _projectName;
+        private int _msbuildVersion;
+        private readonly Dictionary<int, string> _platformToolsets = new Dictionary<int, string>
+        {
+            { 15, "v141" },
+            { 16, "v142" }
+        };
         #endregion
 
         #region Properties
@@ -106,9 +113,51 @@ namespace OpenDDSharp.BuildTasks
                 File.Delete(fullPath);
             }
 
-            Type type = Type.GetTypeFromProgID("VisualStudio.DTE.15.0");
-            object obj = Activator.CreateInstance(type, true);
-            _dte = (DTE2)obj;
+            InitializeDTE();
+        }
+
+        private void InitializeDTE()
+        {
+            // Get the current MSBuild version
+            var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
+            _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
+
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    // Create the DTE instance
+                    Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
+                    object obj = Activator.CreateInstance(type, true);
+                    _dte = (DTE2)obj;                                        
+
+                    success = true;
+                }
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception {0}: {1}", msbuildProcess.MainModule.FileVersionInfo.FileMajorPart, ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
         }
 
         private void GenerateSolutionFile()
@@ -239,6 +288,15 @@ namespace OpenDDSharp.BuildTasks
                         }
                     }
 
+                    if (_platformToolsets.ContainsKey(_msbuildVersion))
+                    {
+                        nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
+                        foreach (XmlNode node in nodes)
+                        {
+                            node.InnerXml = _platformToolsets[_msbuildVersion];
+                        }
+                    }
+                    
                     doc.Save(_project.FullName);
                     success = true;
                 }
@@ -313,7 +371,7 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _project = _solution.Projects.Item(1);
+                    _project = _solution.Projects.Item(1);                    
 
                     success = true;
                 }
@@ -385,9 +443,21 @@ namespace OpenDDSharp.BuildTasks
             while (!success && retry > 0)
             {
                 try
-                {
-                    _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+                {                                       
+                   _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);                    
+                    if (_solution.SolutionBuild.LastBuildInfo > 0)
+                    {
+                        string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                        string logFile = Path.Combine(IntDir, "obj", Platform, Configuration, projectName + ".log");                        
+                        Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+
+                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                    }
                     success = true;
+                }
+                catch(InvalidOperationException)
+                {
+                    throw;
                 }
 #if DEBUG
                 catch (Exception ex)
@@ -415,7 +485,11 @@ namespace OpenDDSharp.BuildTasks
 
         private void ShutDown()
         {
-            _dte.Quit();            
+            try
+            {                
+                _dte.Quit();
+            }
+            catch { }
         }
         #endregion
     }

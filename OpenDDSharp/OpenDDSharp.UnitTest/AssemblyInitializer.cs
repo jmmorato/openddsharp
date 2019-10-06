@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
 using System.Diagnostics;
+using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
 using OpenDDSharp.UnitTest.Helpers;
@@ -39,13 +40,19 @@ namespace OpenDDSharp.UnitTest
         private static SupportProcessHelper _supportProcess;
         private static Process _infoProcess;
 
+        public static DomainParticipantFactory Factory { get; private set; }
+
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
+            Ace.Init();
+
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
             ParticipantService.Instance.AddDiscovery(disc);            
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
             Assert.AreEqual(RTPS_DISCOVERY, ParticipantService.Instance.DefaultDiscovery);
+            ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
+            ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
             InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
             ParticipantService.Instance.AddDiscovery(infoRepo);
@@ -54,6 +61,8 @@ namespace OpenDDSharp.UnitTest
             _supportProcess = new SupportProcessHelper(context);
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
+
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
 
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
@@ -73,6 +82,8 @@ namespace OpenDDSharp.UnitTest
             TransportRegistry.Close();
             ParticipantService.Instance.Shutdown();
             Assert.IsTrue(ParticipantService.Instance.IsShutdown);
+
+            Ace.Fini();
         }
     }
 }

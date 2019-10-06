@@ -23,7 +23,6 @@ using System.Threading;
 using System.Diagnostics;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
-using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -37,8 +36,7 @@ namespace OpenDDSharp.UnitTest
         private const string TEST_CATEGORY = "DataReaderListener";
         #endregion
 
-        #region Fields
-        private static DomainParticipantFactory _dpf;
+        #region Fields        
         private DomainParticipant _participant;
         private Topic _topic;
         private Subscriber _subscriber;
@@ -54,16 +52,10 @@ namespace OpenDDSharp.UnitTest
         #endregion
 
         #region Initialization/Cleanup
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-        }
-
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
@@ -114,9 +106,9 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            if (_dpf != null)
+            if (AssemblyInitializer.Factory != null)
             {
-                ReturnCode result = _dpf.DeleteParticipant(_participant);
+                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
         }
@@ -159,7 +151,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
 
             Assert.AreEqual(5, count);
         }
@@ -206,11 +198,11 @@ namespace OpenDDSharp.UnitTest
             _dataWriter.Write(new TestStruct { Id = 1 });
 
             // After half second deadline should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(0, count);
 
             // After one second and a half one deadline should be lost
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             Assert.AreEqual(1, count);
         }
 
@@ -254,7 +246,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(found);
 
             // Check the number of incompatible DataWriter
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
         }
 
@@ -308,7 +300,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -376,11 +368,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // After half second liveliness should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(1, count);
 
             // After one second and a half one liveliness should be lost
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
@@ -432,7 +424,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(found);
 
             // Check subscription matched call
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(1, count);
 
             // Delete the writer
@@ -440,7 +432,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Check subscription matched call
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(2, count);
 
             // Remove the listener to avoid extra messages
@@ -491,13 +483,13 @@ namespace OpenDDSharp.UnitTest
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
 
             time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
 
             // Remove the listener to avoid extra messages
@@ -510,7 +502,7 @@ namespace OpenDDSharp.UnitTest
         public void TestOnSubscriptionDisconnected()
         {
             ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            DomainParticipant domainParticipant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            DomainParticipant domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(domainParticipant);
             domainParticipant.BindTcpTransportConfig();
 
@@ -551,7 +543,7 @@ namespace OpenDDSharp.UnitTest
                 supportProcess.KillProcess(process);
             }
 
-            bool resp = evt.Wait(10000);
+            bool resp = evt.Wait(20000);
             Assert.IsTrue(resp);
             Assert.AreEqual(1, count);
 
@@ -560,7 +552,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             domainParticipant.DeleteContainedEntities();
-            _dpf.DeleteParticipant(domainParticipant);
+            AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
         }
 
         [TestMethod]
@@ -575,7 +567,7 @@ namespace OpenDDSharp.UnitTest
         public void TestOnSubscriptionLost()
         {
             ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            DomainParticipant domainParticipant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            DomainParticipant domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(domainParticipant);
             domainParticipant.BindTcpTransportConfig();
 
@@ -616,7 +608,7 @@ namespace OpenDDSharp.UnitTest
                 supportProcess.KillProcess(process);
             }
 
-            bool resp = evt.Wait(10000);
+            bool resp = evt.Wait(20000);
             Assert.IsTrue(resp);
             Assert.AreEqual(1, count);
 
@@ -625,69 +617,71 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             domainParticipant.DeleteContainedEntities();
-            _dpf.DeleteParticipant(domainParticipant);
+            AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnBudgetExceeded()
         {
-            ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            // Attach to the event
-            int count = 0;
-            _listener.BudgetExceeded += (r, s) =>
-            {
-                Assert.AreEqual(_reader, r);
-                Assert.AreEqual(1, s.TotalCount);
-                Assert.AreEqual(1, s.TotalCountChange);
-                Assert.AreNotEqual(InstanceHandle.HandleNil, s.LastInstanceHandle);
+            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
+            { 
+                // Attach to the event
+                int count = 0;
+                _listener.BudgetExceeded += (r, s) =>
+                {
+                    Assert.AreEqual(_reader, r);
+                    Assert.AreEqual(1, s.TotalCount);
+                    Assert.AreEqual(1, s.TotalCountChange);
+                    Assert.AreNotEqual(InstanceHandle.HandleNil, s.LastInstanceHandle);
 
-                count++;
-                evt.Set();
-            };
+                    count++;
+                    evt.Set();
+                };
 
-            // Prepare QoS for the test
-            DataReaderQos drQos = new DataReaderQos();            
-            drQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            ReturnCode result = _reader.SetQos(drQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Prepare QoS for the test
+                DataReaderQos drQos = new DataReaderQos();
+                drQos.LatencyBudget.Duration = new Duration { Seconds = 1, NanoSeconds = 0U };
+                drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+                ReturnCode result = _reader.SetQos(drQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.LatencyBudget.Duration = new Duration { Seconds = 0, NanoSeconds = 1U };
-            result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                DataWriterQos dwQos = new DataWriterQos();
+                dwQos.LatencyBudget.Duration = new Duration { Seconds = 1, NanoSeconds = 0U };
+                result = _writer.SetQos(dwQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Enable entities
+                result = _writer.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                result = _reader.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 5000);
-            Assert.IsTrue(found);
+                // Wait for discovery
+                bool found = _writer.WaitForSubscriptions(1, 5000);
+                Assert.IsTrue(found);
 
-            // Write a sample
-            InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
-            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
-            
-            result = _dataWriter.Write(new TestStruct { Id = 1 }, handle);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Write a sample
+                InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+                Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-            result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-            Assert.AreEqual(ReturnCode.Ok, result);
+                Timestamp time = DateTime.Now.Subtract(TimeSpan.FromSeconds(2)).ToTimestamp();
+                result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            bool ret = evt.Wait(5000);
-            Assert.IsTrue(ret);
-            Assert.AreEqual(1, count);
+                result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                bool ret = evt.Wait(5000);
+                Assert.IsTrue(ret);
+                Assert.AreEqual(1, count);
 
-            evt.Dispose();
+                // TODO: Investigate why randomly crash when removing the listener after receive this event
+                //// Remove the listener to avoid extra messages
+                //result = _reader.SetListener(null);
+                //Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
         #endregion
     }

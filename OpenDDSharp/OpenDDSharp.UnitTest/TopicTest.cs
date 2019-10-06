@@ -21,7 +21,6 @@ using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
-using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,22 +34,15 @@ namespace OpenDDSharp.UnitTest
         private const string TEST_CATEGORY = "Topic";
         #endregion
 
-        #region Fields
-        private static DomainParticipantFactory _dpf;
+        #region Fields        
         private DomainParticipant _participant;
         #endregion
 
         #region Initialization/Cleanup
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-        }
-
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
         }
@@ -64,9 +56,9 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            if (_dpf != null)
+            if (AssemblyInitializer.Factory != null)
             {
-                ReturnCode result = _dpf.DeleteParticipant(_participant);
+                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
         }
@@ -219,6 +211,11 @@ namespace OpenDDSharp.UnitTest
             result = topic.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
+            // TODO: OpenDDS bug in master branch: 
+            // If the topic has been never enabled the call to DeleteTopic fails.
+            // That was not happenning in previous releases (i.e. v3.13.1).
+            result = otherTopic.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]

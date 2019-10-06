@@ -38,7 +38,6 @@ namespace OpenDDSharp.UnitTest
         #endregion
 
         #region Fields
-        private static DomainParticipantFactory _dpf;
         private DomainParticipant _participant;
         #endregion
 
@@ -47,17 +46,12 @@ namespace OpenDDSharp.UnitTest
         #endregion
 
         #region Initialization/Cleanup
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {            
-            _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-        }
-
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);            
             Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();
         }
 
         [TestCleanup]
@@ -68,12 +62,12 @@ namespace OpenDDSharp.UnitTest
                 ReturnCode result = _participant.DeleteContainedEntities();
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
-
-            if (_dpf != null)
+            
+            if (AssemblyInitializer.Factory != null)
             {
-                ReturnCode result = _dpf.DeleteParticipant(_participant);
+                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
                 Assert.AreEqual(ReturnCode.Ok, result);                
-            }
+            }            
         }
         #endregion
 
@@ -139,20 +133,21 @@ namespace OpenDDSharp.UnitTest
         }
 
         [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
+        [TestCategory(TEST_CATEGORY)]        
         public void TestGetListener()
         {
             DomainParticipantListener listener = _participant.GetListener();
             Assert.IsNull(listener);
 
             MyParticipantListener otherListener = new MyParticipantListener();
-            DomainParticipant other = _dpf.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN, otherListener);
+            DomainParticipant other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN, otherListener);
             Assert.IsNotNull(other);
+            other.BindRtpsUdpTransportConfig();
 
             listener = other.GetListener();
             Assert.IsNotNull(listener);
 
-            ReturnCode result = _dpf.DeleteParticipant(other);
+            ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(other);
             Assert.AreEqual(ReturnCode.Ok, result);            
         }
 
@@ -375,7 +370,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);            
 
             result = subscriber.DeleteDataReader(reader);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+            Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _participant.DeleteTopic(topic);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -613,7 +608,7 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
 
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             Assert.AreNotEqual(otherParticipant.InstanceHandle, _participant.InstanceHandle);
             otherParticipant.BindRtpsUdpTransportConfig();
@@ -673,15 +668,15 @@ namespace OpenDDSharp.UnitTest
 
             result = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, result);
-            result = _dpf.DeleteParticipant(otherParticipant);
+            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);            
         }
 
         [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
+        [TestCategory(TEST_CATEGORY)]        
         public void TestIgnoreParticipant()
         {
-            DomainParticipant other = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(other);
             other.BindRtpsUdpTransportConfig();
 
@@ -690,7 +685,7 @@ namespace OpenDDSharp.UnitTest
 
             // TODO: Test that actually is ignored
 
-            result = _dpf.DeleteParticipant(other);
+            result = AssemblyInitializer.Factory.DeleteParticipant(other);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -1273,7 +1268,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, handles.Count);
 
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -1292,7 +1287,7 @@ namespace OpenDDSharp.UnitTest
             result = _participant.GetDiscoveredParticipants(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);            
 
-            result = _dpf.DeleteParticipant(otherParticipant);
+            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -1302,7 +1297,7 @@ namespace OpenDDSharp.UnitTest
         {
             DomainParticipantQos qos = new DomainParticipantQos();
             qos.UserData.Value = new List<byte> { 0x42 };
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -1321,7 +1316,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.Key);
             Assert.IsNotNull(data.Key.Value);
 
-            result = _dpf.DeleteParticipant(otherParticipant);
+            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -1332,7 +1327,7 @@ namespace OpenDDSharp.UnitTest
             // OPENDDS ISSUE: Not working correctly with RTPS
             // OPENDDS ISSUE: Only discover local topics
 
-            DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
@@ -1348,12 +1343,12 @@ namespace OpenDDSharp.UnitTest
 
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
             Assert.IsNotNull(topic);
-
-            Thread.Sleep(100);
+            InstanceHandle handle = topic.InstanceHandle;
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
+            Assert.AreEqual(handle, handles.First());
 
             // Test with null parameter
             result = participant.GetDiscoveredTopics(null);
@@ -1361,14 +1356,14 @@ namespace OpenDDSharp.UnitTest
 
             // Remove the participant
             participant.DeleteContainedEntities();
-            _dpf.DeleteParticipant(participant);
+            AssemblyInitializer.Factory.DeleteParticipant(participant);
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
         {
-            DomainParticipant participant = _dpf.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
@@ -1376,7 +1371,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, handles.Count);
 
-            // Create a new topic  and check that is discovered
+            // Create a new topic and check that is discovered
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             result = support.RegisterType(participant, typeName);
@@ -1386,11 +1381,13 @@ namespace OpenDDSharp.UnitTest
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
+            InstanceHandle handle = topic.InstanceHandle;
             Thread.Sleep(100);
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
+            Assert.AreEqual(handle, handles.First());
 
             TopicBuiltinTopicData data = new TopicBuiltinTopicData();
             result = participant.GetDiscoveredTopicData(ref data, handles.First());
@@ -1401,7 +1398,7 @@ namespace OpenDDSharp.UnitTest
 
             // Remove the participant
             participant.DeleteContainedEntities();
-            _dpf.DeleteParticipant(participant);           
+            AssemblyInitializer.Factory.DeleteParticipant(participant);           
         }
         #endregion
     }

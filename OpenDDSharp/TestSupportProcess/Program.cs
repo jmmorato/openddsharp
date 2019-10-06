@@ -40,6 +40,8 @@ namespace TestSupportProcess
                 throw new ApplicationException("Incorrect number of arguments.");
             }
 
+            OpenDDSharp.Ace.Init();
+
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -71,6 +73,8 @@ namespace TestSupportProcess
             {
                 throw new ApplicationException("Argument is not a valid test kind.");
             }
+
+            OpenDDSharp.Ace.Fini();
         }
 
         private static void TestOnSubscriptionLostDisconnected()
@@ -202,9 +206,9 @@ namespace TestSupportProcess
 
         private static void BindRtpsUdpTransportConfig(DomainParticipant participant)
         {
-            long ticks = DateTime.Now.Ticks;
-            string configName = "openddsharp_rtps_interop_" + ticks.ToString();
-            string instName = "internal_openddsharp_rtps_transport_" + ticks.ToString();
+            string guid = Guid.NewGuid().ToString("N");
+            string configName = "openddsharp_rtps_interop_" + guid;
+            string instName = "internal_openddsharp_rtps_transport_" + guid;
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
@@ -216,9 +220,9 @@ namespace TestSupportProcess
 
         private static TcpInst BindTcpTransportConfig(Entity entity)
         {
-            long ticks = DateTime.Now.Ticks;
-            string configName = "openddsharp_tcp_" + ticks.ToString();
-            string instName = "internal_openddsharp_tcp_transport_" + ticks.ToString();
+            string guid = Guid.NewGuid().ToString("N");
+            string configName = "openddsharp_tcp_" + guid;
+            string instName = "internal_openddsharp_tcp_transport_" + guid;
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");

@@ -36,8 +36,7 @@ namespace OpenDDSharp.UnitTest
         private const string TEST_CATEGORY = "DataReader";
         #endregion
 
-        #region Fields
-        private static DomainParticipantFactory _dpf;
+        #region Fields        
         private DomainParticipant _participant;
         private Topic _topic;
         private Subscriber _subscriber;
@@ -48,16 +47,10 @@ namespace OpenDDSharp.UnitTest
         #endregion
 
         #region Initialization/Cleanup
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-        }
-
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
@@ -85,9 +78,9 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            if (_dpf != null)
+            if (AssemblyInitializer.Factory != null)
             {
-                ReturnCode result = _dpf.DeleteParticipant(_participant);
+                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
         }
@@ -863,7 +856,7 @@ namespace OpenDDSharp.UnitTest
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
             // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
             // WORKAROUND: Create another particpant for the DataReader.
-            DomainParticipant otherParticipant = _dpf.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -903,7 +896,7 @@ namespace OpenDDSharp.UnitTest
             result = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = _dpf.DeleteParticipant(otherParticipant);
+            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 

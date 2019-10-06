@@ -23,18 +23,16 @@ OpenDDSharp::OpenDDS::DCPS::TransportRegistry^ OpenDDSharp::OpenDDS::DCPS::Trans
     return %_instance;
 }
 
-OpenDDSharp::OpenDDS::DCPS::TransportRegistry::TransportRegistry() {
-    impl_entity = ::OpenDDS::DCPS::TransportRegistry::instance();
-};
+OpenDDSharp::OpenDDS::DCPS::TransportRegistry::TransportRegistry() { };
 
 System::Boolean OpenDDSharp::OpenDDS::DCPS::TransportRegistry::Released::get() {
-    return impl_entity->released();
+    return ::OpenDDS::DCPS::TransportRegistry::instance()->released();
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::GlobalConfig::get() {
     msclr::interop::marshal_context context;
     
-    ::OpenDDS::DCPS::TransportConfig_rch native = impl_entity->global_config();
+    ::OpenDDS::DCPS::TransportConfig_rch native = ::OpenDDS::DCPS::TransportRegistry::instance()->global_config();
     if (!native.is_nil()) {
         TransportConfig^ config = TransportConfigManager::get_instance()->find(native.in());
         if (config == nullptr) {            
@@ -55,7 +53,7 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::GlobalConfig::set(OpenDDShar
         throw gcnew System::ArgumentNullException("value", "The GlobalConfig cannot be null");
     }
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(value->impl_entity);
-    impl_entity->global_config(rch);
+	::OpenDDS::DCPS::TransportRegistry::instance()->global_config(rch);
 };
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::Close() {
@@ -63,7 +61,7 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::Close() {
 };
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::Release() {
-    impl_entity->release();
+	::OpenDDS::DCPS::TransportRegistry::instance()->release();
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::CreateInst(System::String^ name, System::String^ transportType) {
@@ -72,7 +70,7 @@ OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::Transport
     }
     msclr::interop::marshal_context context;
 
-    ::OpenDDS::DCPS::TransportInst_rch native = impl_entity->create_inst(context.marshal_as<const char*>(name), context.marshal_as<const char*>(transportType));
+    ::OpenDDS::DCPS::TransportInst_rch native = ::OpenDDS::DCPS::TransportRegistry::instance()->create_inst(context.marshal_as<const char*>(name), context.marshal_as<const char*>(transportType));
     if (native.is_nil()) {
         return nullptr;
     }
@@ -91,7 +89,7 @@ OpenDDSharp::OpenDDS::DCPS::TransportInst^ OpenDDSharp::OpenDDS::DCPS::Transport
     }
 
     msclr::interop::marshal_context context;
-    ::OpenDDS::DCPS::TransportInst_rch native = impl_entity->get_inst(context.marshal_as<const char*>(name));
+    ::OpenDDS::DCPS::TransportInst_rch native = ::OpenDDS::DCPS::TransportRegistry::instance()->get_inst(context.marshal_as<const char*>(name));
     if (native.is_nil()) {
         return nullptr;
     }
@@ -113,7 +111,7 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::RemoveInst(TransportInst^ in
     }
 
     ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst->impl_entity);
-    impl_entity->remove_inst(rch);
+	::OpenDDS::DCPS::TransportRegistry::instance()->remove_inst(rch);
     TransportInstManager::get_instance()->remove(inst->impl_entity);
 };
 
@@ -124,7 +122,7 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::Transpo
 
     msclr::interop::marshal_context context;
     
-    ::OpenDDS::DCPS::TransportConfig_rch native = impl_entity->create_config(context.marshal_as<const char*>(name));
+    ::OpenDDS::DCPS::TransportConfig_rch native = ::OpenDDS::DCPS::TransportRegistry::instance()->create_config(context.marshal_as<const char*>(name));
     if (native.is_nil()) {
         return nullptr;
     }
@@ -144,7 +142,7 @@ OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::Transpo
 
     msclr::interop::marshal_context context;
 
-    ::OpenDDS::DCPS::TransportConfig_rch native = impl_entity->get_config(context.marshal_as<const char*>(name));
+    ::OpenDDS::DCPS::TransportConfig_rch native = ::OpenDDS::DCPS::TransportRegistry::instance()->get_config(context.marshal_as<const char*>(name));
     if (native.is_nil()) {
         return nullptr;
     }
@@ -166,12 +164,12 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::RemoveConfig(TransportConfig
     }
 
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg->impl_entity);
-    impl_entity->remove_config(rch);
+	::OpenDDS::DCPS::TransportRegistry::instance()->remove_config(rch);
     TransportConfigManager::get_instance()->remove(cfg->impl_entity);
 };
 
 OpenDDSharp::OpenDDS::DCPS::TransportConfig^ OpenDDSharp::OpenDDS::DCPS::TransportRegistry::GetDomainDefaultConfig(System::Int32 domain) {
-    ::OpenDDS::DCPS::TransportConfig_rch native = impl_entity->domain_default_config(domain);
+    ::OpenDDS::DCPS::TransportConfig_rch native = ::OpenDDS::DCPS::TransportRegistry::instance()->domain_default_config(domain);
     if (native.is_nil()) {
         return nullptr;
     }
@@ -197,7 +195,7 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::SetDomainDefaultConfig(Syste
     }
 
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg->impl_entity);
-    impl_entity->domain_default_config(domain, rch);
+	::OpenDDS::DCPS::TransportRegistry::instance()->domain_default_config(domain, rch);
 }
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::BindConfig(System::String^ name, ::OpenDDSharp::DDS::Entity^ entity) {
@@ -210,7 +208,7 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::BindConfig(System::String^ n
     }
 
     msclr::interop::marshal_context context;
-    impl_entity->bind_config(context.marshal_as<const char*>(name), entity->impl_entity);
+	::OpenDDS::DCPS::TransportRegistry::instance()->bind_config(context.marshal_as<const char*>(name), entity->impl_entity);
 }
 
 void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::BindConfig(TransportConfig^ cfg, ::OpenDDSharp::DDS::Entity^ entity) {
@@ -223,5 +221,5 @@ void OpenDDSharp::OpenDDS::DCPS::TransportRegistry::BindConfig(TransportConfig^ 
     }
 
     ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg->impl_entity);
-    impl_entity->bind_config(rch, entity->impl_entity);
+	::OpenDDS::DCPS::TransportRegistry::instance()->bind_config(rch, entity->impl_entity);
 }

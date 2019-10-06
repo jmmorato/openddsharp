@@ -11,7 +11,7 @@ install:
   - git clone git://github.com/objectcomputing/OpenDDS.git
   - cd OpenDDS
   - git fetch && git fetch --tags
-  - git checkout tags/DDS-3.13 
+  - git checkout tags/DDS-3.13.2 
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64  
   - ps: Start-FileDownload 'http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
   - 7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
@@ -19,17 +19,11 @@ install:
   - set ACE_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers
   - set TAO_ROOT C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\TAO
   - set DDS_ROOT C:\projects\openddsharp\ext\OpenDDS
-  - set PATH=%PATH%;C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin;C:\projects\openddsharp\ext\OpenDDS\bin;C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib;C:\projects\openddsharp\ext\OpenDDS\lib
-  - git apply C:\projects\openddsharp\Patches\configure.patch
-  - call configure --no-tests
-  - xcopy C:\projects\openddsharp\Build\ACE.vcxproj %ACE_ROOT%\ace /y 
+  - set PATH=%PATH%;C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin;C:\projects\openddsharp\ext\OpenDDS\bin;C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib;C:\projects\openddsharp\ext\OpenDDS\lib  
+  - call configure --no-tests  
   - git apply C:\projects\openddsharp\Patches\ConditionImpl.h.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.cpp.patch
   - git apply C:\projects\openddsharp\Patches\DataReaderImpl.h.patch
-  - git apply C:\projects\openddsharp\Patches\unique_ptr.h.patch
-  - git apply C:\projects\openddsharp\Patches\MultiTopicDataReaderBase.cpp.patch
-  - git apply C:\projects\openddsharp\Patches\SubscriberImpl.cpp.patch
-  - git apply C:\projects\openddsharp\Patches\DataWriterImpl.cpp.patch  
   - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\lib_x64 /s /i
   - xcopy C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin\* C:\projects\openddsharp\ext\OpenDDS\ACE_wrappers\bin_x64 /s /i

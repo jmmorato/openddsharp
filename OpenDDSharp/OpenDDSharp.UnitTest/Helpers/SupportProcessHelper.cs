@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Globalization;
 using System.ComponentModel;
 using OpenDDSharp.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -92,19 +93,19 @@ namespace OpenDDSharp.UnitTest.Helpers
                 UseShellExecute = false,
             };
 
-            Process infoRepoProcess = new Process
+            Process process = new Process
             {
                 StartInfo = processInfo,
                 EnableRaisingEvents = true
             };
 
-            infoRepoProcess.OutputDataReceived += SupportProcessOnOutputDataReceived;
-            infoRepoProcess.ErrorDataReceived += SupportProcessOnErrorDataReceived;
+            process.OutputDataReceived += SupportProcessOnOutputDataReceived;
+            process.ErrorDataReceived += SupportProcessOnErrorDataReceived;
 
             bool processStarted = false;
             try
             {
-                processStarted = infoRepoProcess.Start();
+                processStarted = process.Start();
             }
             catch (Win32Exception e)
             {
@@ -122,21 +123,30 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new InvalidOperationException("Support process could not be started.");
             }
 
-            infoRepoProcess.BeginOutputReadLine();
-            infoRepoProcess.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
-            return infoRepoProcess;
+            return process;
         }
 
         public void KillProcess(Process process)
         {
-            if (!process.HasExited)
-            {                
-                process.Kill();
-            }
-
             process.OutputDataReceived -= SupportProcessOnOutputDataReceived;
             process.ErrorDataReceived -= SupportProcessOnErrorDataReceived;
+
+            while (!process.HasExited)
+            {
+                try
+                {
+                    process.Kill();
+                    process.WaitForExit(5000);
+                }
+                catch (Exception ex)
+                {
+                    _testContext.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} Exception: {1}", nameof(KillProcess), ex.Message));
+                }
+            }
+                        
             process.Dispose();
         }
 
