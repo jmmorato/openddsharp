@@ -136,14 +136,12 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.13.2
-      displayName: 'Checkout OpenDDS v3.13.2'
+        git checkout -q tags/DDS-3.13.3
+      displayName: 'Checkout OpenDDS v3.13.3'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
-        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
-        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
