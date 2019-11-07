@@ -1,0 +1,282 @@
+	public class <%TYPE%>TypeSupport
+    {
+        #region Field
+        private IntPtr _native;
+        #endregion
+
+        #region Constructors
+        public <%TYPE%>TypeSupport()
+        {
+            if (Environment.Is64BitProcess)
+            {
+                _native = <%TYPE%>TypeSupportNew64();
+            }
+            else
+            {
+                _native = <%TYPE%>TypeSupportNew86();
+            }
+        }
+        #endregion
+
+        #region Methods
+        public string GetTypeName()
+        {
+            if (Environment.Is64BitProcess)
+            {
+                return Marshal.PtrToStringAnsi(GetTypeName64(_native));                
+            }
+            else
+            {
+                return Marshal.PtrToStringAnsi(GetTypeName86(_native));                              
+            }
+        }
+
+        public ReturnCode RegisterType(DomainParticipant dp, string typeName)
+        {
+            if (Environment.Is64BitProcess)
+            {
+                return (ReturnCode)RegisterType64(_native, dp.ToNative(), typeName);
+            }
+            else
+            {
+                return (ReturnCode)RegisterType86(_native, dp.ToNative(), typeName);
+            }
+        }
+
+        public ReturnCode UnregisterType(DomainParticipant dp, string typeName)
+        {            
+            if (Environment.Is64BitProcess)
+            {
+                return (ReturnCode)UnregisterType64(_native, dp.ToNative(), typeName);
+            }
+            else
+            {
+                return (ReturnCode)UnregisterType86(_native, dp.ToNative(), typeName);
+            }
+        }
+        #endregion
+
+        #region PInvoke
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>TypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr <%TYPE%>TypeSupportNew64();
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>TypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr <%TYPE%>TypeSupportNew86();
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>TypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern IntPtr GetTypeName64(IntPtr native);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>TypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern IntPtr GetTypeName86(IntPtr native);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>TypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern int RegisterType64(IntPtr native, IntPtr dp, string typeName);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>TypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern int RegisterType86(IntPtr native, IntPtr dp, string typeName);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern int UnregisterType64(IntPtr native, IntPtr dp, string typeName);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern int UnregisterType86(IntPtr native, IntPtr dp, string typeName);
+        #endregion
+    }
+
+    public class <%TYPE%>DataWriter : DataWriter
+    {
+        #region Fields
+        private new readonly IntPtr _native;
+        #endregion
+
+        #region Constructors
+        public <%TYPE%>DataWriter(DataWriter dw) : base(dw.ToNative())
+        {
+            if (Environment.Is64BitProcess)
+            {
+                _native = Narrow64(base._native);
+            }
+            else
+            {
+                _native = Narrow86(base._native);
+            }
+        }
+        #endregion
+
+        #region Methods
+        public ReturnCode Write(<%TYPE%> data)
+        {
+            if (data == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            ReturnCode ret = ReturnCode.Error;
+            List<IntPtr> toRelease = new List<IntPtr>();
+
+            <%TYPE%>Wrapper wrapper = data.ToNative(toRelease);
+            if (Environment.Is64BitProcess)
+            {                                
+                ret = (ReturnCode)Write64(_native, ref wrapper, 0);
+            }
+            else
+            {
+                ret = (ReturnCode)Write86(_native, ref wrapper, 0);
+            }
+
+            // Always free the unmanaged memory.
+            foreach(IntPtr ptr in toRelease)
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            return ret;
+        }
+        #endregion
+
+        #region PInvoke
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Narrow64(IntPtr dw);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Narrow86(IntPtr dw);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>DataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Write64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] ref <%TYPE%>Wrapper data, int handle);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>DataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Write86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] ref <%TYPE%>Wrapper data, int handle);
+        #endregion
+    }
+
+    public class <%TYPE%>DataReader : DataReader
+    {
+        #region Fields
+        private new readonly IntPtr _native;
+        #endregion
+
+        #region Constructors
+        public <%TYPE%>DataReader(DataReader dr) : base(dr.ToNative())
+        {
+            if (Environment.Is64BitProcess)
+            {
+                _native = Narrow64(base._native);
+            }
+            else
+            {
+                _native = Narrow86(base._native);
+            }
+        }
+        #endregion
+
+        #region Methods
+        public ReturnCode Read()
+        {
+            if (Environment.Is64BitProcess)
+            {
+                ReturnCode ret = (ReturnCode)Read64(_native);
+                if (ret == ReturnCode.Ok)
+                {
+                    // TODO
+                }
+
+                return ret;
+            }
+            else
+            {
+                ReturnCode ret = (ReturnCode)Read86(_native);
+                if (ret == ReturnCode.Ok)
+                {
+                    // TODO
+                }
+
+                return ret;
+            }
+        }
+
+        public ReturnCode ReadNextSample(<%TYPE%> data)
+        {
+            if (data == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            ReturnCode ret = ReturnCode.Error;
+            <%TYPE%>Wrapper wrapper = new <%TYPE%>Wrapper();
+            if (Environment.Is64BitProcess)
+            {                
+                ret = (ReturnCode)ReadNextSample64(_native, ref wrapper);
+                if (ret == ReturnCode.Ok)
+                {
+                    data.FromNative(wrapper);
+
+                    // Always free the unmanaged memory.
+                    // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
+                    Release64(ref wrapper);
+                }
+
+                return ret;
+            }
+            else
+            {
+                ret = (ReturnCode)ReadNextSample86(_native, ref wrapper);
+                if (ret == ReturnCode.Ok)
+                {
+                    data.FromNative(wrapper);
+
+                    // Always free the unmanaged memory.
+                    // As the unmanaged memory was reserved in C++ we need a method to release it from C++.                    
+                    Release86(ref wrapper);
+                }
+            }
+
+            return ret;
+        }
+        #endregion
+
+        #region PInvoke
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>Wrapper_release", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Release64([MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>Wrapper_release", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Release86([MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Narrow64(IntPtr dw);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Narrow86(IntPtr dw);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Read64(IntPtr dr);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Read86(IntPtr dr);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%TYPE%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%TYPE%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] ref <%TYPE%>Wrapper data);
+        #endregion
+    }

@@ -29,11 +29,11 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:652
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_NRY5Q1_CPP_
-#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_NRY5Q1_CPP_
+#ifndef _TAO_IDL_TESTS_O0HDVE_CPP_
+#define _TAO_IDL_TESTS_O0HDVE_CPP_
 
 
-#include "TestPInvokeIdlTypeSupportS.h"
+#include "TestS.h"
 
 #endif /* ifndef */
 

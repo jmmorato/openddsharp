@@ -28,23 +28,16 @@
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_codegen.cpp:461
 
-#ifndef _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_JAFUS6_H_
-#define _TAO_IDL_TESTPINVOKEIDLTYPESUPPORTS_JAFUS6_H_
+#ifndef _TAO_IDL_TESTS_IKMKDP_H_
+#define _TAO_IDL_TESTS_IKMKDP_H_
 
 #include /**/ "ace/pre.h"
 
-#include "TestPInvokeIdlTypeSupportC.h"
-#include "TestPInvokeIdlS.h"
-#include "dds/DdsDcpsInfrastructureS.h"
-#include "dds/DdsDcpsPublicationS.h"
-#include "dds/DdsDcpsSubscriptionExtS.h"
-#include "dds/DdsDcpsTopicS.h"
-#include "dds/DdsDcpsTypeSupportExtS.h"
+#include "TestC.h"
 #include "tao/PortableServer/Basic_SArguments.h"
 #include "tao/PortableServer/Special_Basic_SArguments.h"
 #include "tao/PortableServer/Fixed_Size_SArgument_T.h"
 #include "tao/PortableServer/Var_Size_SArgument_T.h"
-#include "tao/PortableServer/Object_SArg_Traits.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once
@@ -60,23 +53,24 @@ TAO_BEGIN_VERSIONED_NAMESPACE_DECL
 // Arg traits specializations.
 namespace TAO
 {
+
+  // TAO_IDL - Generated from
+  // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_arg_traits.cpp:947
+
+  template<>
+  class SArg_Traits< ::Test::TestStruct>
+    : public
+        Fixed_Size_SArg_Traits_T<
+            ::Test::TestStruct,
+            TAO::Any_Insert_Policy_Noop
+          >
+  {
+  };
 }
 
 TAO_END_VERSIONED_NAMESPACE_DECL
 
 
-
-// TAO_IDL - Generated from
-// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_sh.cpp:38
-
-namespace POA_Test
-{
-  
-
-// TAO_IDL - Generated from
-// e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_sh.cpp:69
-
-} // module Test
 
 // TAO_IDL - Generated from
 // e:\projects\opendds\ext\opendds\ace_wrappers\tao\tao_idl\be\be_visitor_module\module_sh.cpp:38

@@ -1,0 +1,28 @@
+EXTERN_METHOD_EXPORT void <%TYPE%>Wrapper_release(<%TYPE%>Wrapper* obj);
+
+/////////////////////////////////////////////////
+// <%TYPE%> Type Support Methods
+/////////////////////////////////////////////////
+EXTERN_METHOD_EXPORT <%SCOPED%>TypeSupport_ptr <%TYPE%>TypeSupport_new();
+
+EXTERN_METHOD_EXPORT char* <%TYPE%>TypeSupport_GetTypeName(<%SCOPED%>TypeSupport_ptr native);
+
+EXTERN_METHOD_EXPORT int <%TYPE%>TypeSupport_RegisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName);
+
+EXTERN_METHOD_EXPORT int <%TYPE%>TypeSupport_UnregisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName);
+
+/////////////////////////////////////////////////
+// <%TYPE%> DataWriter Methods
+/////////////////////////////////////////////////
+EXTERN_METHOD_EXPORT <%SCOPED%>DataWriter_ptr <%TYPE%>DataWriter_Narrow(DDS::DataWriter_ptr dw);
+
+EXTERN_METHOD_EXPORT int <%TYPE%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%TYPE%>Wrapper* data, int handle);
+
+/////////////////////////////////////////////////
+// <%TYPE%> DataReader Methods
+/////////////////////////////////////////////////
+EXTERN_METHOD_EXPORT <%SCOPED%>DataReader_ptr <%TYPE%>DataReader_Narrow(DDS::DataReader_ptr dr);
+
+EXTERN_METHOD_EXPORT int <%TYPE%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%TYPE%>Wrapper* data);
+
+EXTERN_METHOD_EXPORT int <%TYPE%>DataReader_Read(<%SCOPED%>DataReader_ptr dr);

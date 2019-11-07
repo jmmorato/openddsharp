@@ -47,6 +47,12 @@
     <ClCompile Include="cli_generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="csharp_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cwrapper_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="be_extern.h">
@@ -67,12 +73,27 @@
     <ClInclude Include="cli_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="csharp_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cwrapper_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeaderTemplate.txt">
       <Filter>Template Files</Filter>
     </Text>
     <Text Include="ImplTemplate.txt">
+      <Filter>Template Files</Filter>
+    </Text>
+    <Text Include="CSharpImplTemplate.txt">
+      <Filter>Template Files</Filter>
+    </Text>
+    <Text Include="CWrapperHeaderTemplate.txt">
+      <Filter>Template Files</Filter>
+    </Text>
+    <Text Include="CWrapperImplTemplate.txt">
       <Filter>Template Files</Filter>
     </Text>
   </ItemGroup>

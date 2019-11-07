@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
+    <ProjectReference Include="..\TestIdlStandard\TestIdlStandard.csproj" />
     <ProjectReference Include="..\TestPInvokeIdl\TestPInvokeIdl.csproj" />
   </ItemGroup>
 
@@ -31,7 +32,7 @@
       <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Release\TestPInvokeIdlWrapper.x64.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Debug\TestPInvokeIdlWrapperd.x64.dll" /> <!--..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Debug\TestPInvokeIdlWrapperd.Win32.dll;-->
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Debug\TestPInvokeIdlWrapperd.x64.dll;..\TestIdlStandardWrapper\bin\x64\Debug\TestIdlStandardWrapperd.x64.dll" /> <!--..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Debug\TestPInvokeIdlWrapperd.Win32.dll;-->
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
       <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Release\TestPInvokeIdlWrapper.Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Release\TestPInvokeIdlWrapper.x64.dll" />

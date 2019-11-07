@@ -123,7 +123,6 @@ namespace Test
                 int value = Convert.ToInt32(sequence[i]);
                 // Newly-allocated space has no existing object, so the last param is false 
                 Marshal.StructureToPtr(value, ptr + sizeof(int) + (elSiz * i), false);
-
             }
         }
 

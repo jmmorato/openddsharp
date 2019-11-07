@@ -188,30 +188,53 @@ namespace {
 
 		switch (which) {		
 			case BE_GlobalData::STREAM_H:
-				out << "#pragma once\n\n"
-					<< "#pragma unmanaged\n"
-					<< "#include <dds/DCPS/Service_Participant.h>\n"
-					<< "#include \"" << name.c_str() << "TypeSupportImpl.h\"\n"
-					<< "#pragma managed\n\n"
-					<< "#include <vcclr.h>\n"
-					<< "#include <msclr/marshal.h>\n"
-					<< "#include \"LNK4248.h\"\n\n"
-					<< "using namespace System::Collections::Generic;\n\n"
-					<< "// Incomplete types generate LNK4248 warnings when compiled for .NET\n"
-					<< "SUPPRESS_LNK4248_CORBA\n\n";
+				if (be_global->cppcli()) {
+					out << "#pragma once\n\n"
+						<< "#pragma unmanaged\n"
+						<< "#include <dds/DCPS/Service_Participant.h>\n"
+						<< "#include \"" << name.c_str() << "TypeSupportImpl.h\"\n"
+						<< "#pragma managed\n\n"
+						<< "#include <vcclr.h>\n"
+						<< "#include <msclr/marshal.h>\n"
+						<< "#include \"LNK4248.h\"\n\n"
+						<< "using namespace System::Collections::Generic;\n\n"
+						<< "// Incomplete types generate LNK4248 warnings when compiled for .NET\n"
+						<< "SUPPRESS_LNK4248_CORBA\n\n";
+				}
+				else if (be_global->cwrapper()) {
+					out << "#pragma once\n\n"
+						<< "#include \"" << name.c_str() << "TypeSupportImpl.h\"\n"
+						<< "#include \"" << name.c_str() << "C.h\"\n"
+						<< "#include \"marshal.h\"\n\n"
+						<< "#ifndef EXTERN_METHOD_EXPORT\n"
+						<< "    #define EXTERN_METHOD_EXPORT extern \"C\" __declspec(dllexport)\n"
+						<< "#endif\n\n"
+						<< "#ifndef EXTERN_STRUCT_EXPORT\n"
+						<< "    #define EXTERN_STRUCT_EXPORT extern \"C\" struct\n"
+						<< "#endif\n\n";
+				}
 				break;
 			case BE_GlobalData::STREAM_CPP:
-				out << "#include \"" << be_global->header_name_.c_str() << "\"\n\n";
+				if (!be_global->csharp()) {
+					out << "#include \"" << be_global->header_name_.c_str() << "\"\n\n";
+				}
+				else {
+					out << "using System;\n"
+						<< "using System.Security;\n"
+						<< "using System.Collections.Generic;\n"
+					    << "using System.Runtime.InteropServices;\n"
+						<< "using OpenDDSharp.DDS;\n\n";
+				}
 				break;
 		}
 
-		if (which == BE_GlobalData::STREAM_H) {
+		if (which == BE_GlobalData::STREAM_H && be_global->cppcli()) {
 			out << "namespace OpenDDSharp {\n";
 		}
 
 		out << content.str();
 
-		if (which == BE_GlobalData::STREAM_H) {
+		if (which == BE_GlobalData::STREAM_H && be_global->cppcli()) {
 			out << "};\n";
 		}
 
@@ -294,7 +317,7 @@ void BE_produce()
 
 	const bool java_ts_only = be_global->java_arg().length() > 0;
 
-	dds_visitor visitor(d, java_ts_only);
+	dds_visitor visitor(d, java_ts_only, be_global);
 
 	if (root->ast_accept(&visitor) == -1) {
 		ACE_ERROR((LM_ERROR,
@@ -303,7 +326,7 @@ void BE_produce()
 		BE_abort();
 	}
 
-	if (!java_ts_only) {
+	if (!java_ts_only && !be_global->csharp()) {
 		postprocess(be_global->header_name_.c_str(),
 			be_global->header_, BE_GlobalData::STREAM_H);
 		/*if (!be_global->suppress_idl()) {

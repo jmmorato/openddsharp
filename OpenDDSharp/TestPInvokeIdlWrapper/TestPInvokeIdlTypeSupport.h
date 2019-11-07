@@ -12,6 +12,8 @@
     #define EXTERN_STRUCT_EXPORT extern "C" struct
 #endif
 
+//namespace Test {
+
 EXTERN_STRUCT_EXPORT NestedTestStructWrapper
 {
     int Id;
@@ -1217,3 +1219,5 @@ EXTERN_METHOD_EXPORT Test::BasicTestStructDataReader_ptr BasicTestStructDataRead
 EXTERN_METHOD_EXPORT int BasicTestStructDataReader_ReadNextSample(Test::BasicTestStructDataReader_ptr dr, BasicTestStructWrapper* data);
 
 EXTERN_METHOD_EXPORT int BasicTestStructDataReader_Read(Test::BasicTestStructDataReader_ptr dr);
+
+//};

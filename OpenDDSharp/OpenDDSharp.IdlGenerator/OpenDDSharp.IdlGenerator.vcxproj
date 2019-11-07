@@ -32,6 +32,8 @@
     <ClCompile Include="be_init.cpp" />
     <ClCompile Include="be_produce.cpp" />
     <ClCompile Include="be_util.cpp" />
+    <ClCompile Include="csharp_generator.cpp" />
+    <ClCompile Include="cwrapper_generator.cpp" />
     <ClCompile Include="dds_generator.cpp" />
     <ClCompile Include="dds_visitor.cpp" />
     <ClCompile Include="drv_args.cpp" />
@@ -43,11 +45,16 @@
     <ClInclude Include="be_extern.h" />
     <ClInclude Include="be_global.h" />
     <ClInclude Include="be_util.h" />
+    <ClInclude Include="csharp_generator.h" />
+    <ClInclude Include="cwrapper_generator.h" />
     <ClInclude Include="dds_generator.h" />
     <ClInclude Include="dds_visitor.h" />
     <ClInclude Include="cli_generator.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="CSharpImplTemplate.txt" />
+    <Text Include="CWrapperHeaderTemplate.txt" />
+    <Text Include="CWrapperImplTemplate.txt" />
     <Text Include="HeaderTemplate.txt" />
     <Text Include="ImplTemplate.txt" />
   </ItemGroup>
@@ -346,6 +353,6 @@
       <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
-    <Copy SourceFiles=".\HeaderTemplate.txt;.\ImplTemplate.txt" DestinationFolder="$(DDS_ROOT)\dds\idl" SkipUnchangedFiles="true" />
+    <Copy SourceFiles=".\HeaderTemplate.txt;.\ImplTemplate.txt;.\CSharpImplTemplate.txt;.\CWrapperHeaderTemplate.txt;.\CWrapperImplTemplate.txt" DestinationFolder="$(DDS_ROOT)\dds\idl" SkipUnchangedFiles="true" />
   </Target>
 </Project>

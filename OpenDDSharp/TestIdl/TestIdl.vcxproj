@@ -222,7 +222,7 @@
     <Message Text="Set the enviroment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
-    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />
+    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />    
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />

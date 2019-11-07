@@ -1,0 +1,69 @@
+void <%TYPE%>Wrapper_release(<%TYPE%>Wrapper* obj)
+{
+    obj->release();
+}
+
+<%SCOPED%>TypeSupport_ptr <%TYPE%>TypeSupport_new()
+{
+    return new <%SCOPED%>TypeSupportImpl();
+}
+
+char* <%TYPE%>TypeSupport_GetTypeName(<%SCOPED%>TypeSupport_ptr native)
+{
+    return native->get_type_name();
+}
+
+int <%TYPE%>TypeSupport_RegisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
+{
+    return native->register_type(dp, typeName);
+}
+
+int <%TYPE%>TypeSupport_UnregisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
+{
+    return native->unregister_type(dp, typeName);
+}
+
+<%SCOPED%>DataWriter_ptr <%TYPE%>DataWriter_Narrow(DDS::DataWriter_ptr dw)
+{
+    return <%SCOPED%>DataWriter::_narrow(dw);
+}
+
+int <%TYPE%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%TYPE%>Wrapper* data, int handle)
+{
+    <%SCOPED%> nativeData = data->to_native();
+
+    return dw->write(nativeData, DDS::HANDLE_NIL);    
+}
+
+<%SCOPED%>DataReader_ptr <%TYPE%>DataReader_Narrow(DDS::DataReader_ptr dr)
+{
+    return <%SCOPED%>DataReader::_narrow(dr);
+}
+
+int <%TYPE%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%TYPE%>Wrapper* data)
+{
+    <%SCOPED%> nativeData;
+    ::DDS::SampleInfo sampleInfo;
+    ::DDS::ReturnCode_t ret = dr->read_next_sample(nativeData, sampleInfo);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        data->from_native(nativeData);
+    }
+
+    return (int)ret;
+}
+
+int <%TYPE%>DataReader_Read(<%SCOPED%>DataReader_ptr dr)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::ReturnCode_t ret = dr->read(received_data, info_seq, ::DDS::LENGTH_UNLIMITED, ::DDS::ANY_SAMPLE_STATE, ::DDS::ANY_VIEW_STATE, ::DDS::ANY_INSTANCE_STATE);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        // TODO
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return (int)ret;
+}
