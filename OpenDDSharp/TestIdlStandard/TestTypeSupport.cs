@@ -13,8 +13,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenDDSharp.DDS;
 
-namespace Test {
-
+namespace Test
+{
     #region TestStruct Definitions
     public class TestStruct
     {

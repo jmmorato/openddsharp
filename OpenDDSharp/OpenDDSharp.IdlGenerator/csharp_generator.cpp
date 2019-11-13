@@ -74,7 +74,7 @@ csharp_generator::csharp_generator()
 }
 
 bool csharp_generator::gen_module(AST_Module* node) {
-	be_global->impl_ << "namespace " << node->name()->last_component()->get_string() << " {\n";
+	be_global->impl_ << "namespace " << node->name()->last_component()->get_string() << "\n{\n";
 
 	return true;
 }
@@ -236,8 +236,7 @@ bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const st
 	replacements["SEQ"] = be_global->sequence_suffix().c_str();
 	replacements["SCOPED_METHOD"] = replaceString(scoped_name, std::string("."), std::string("_"));
 
-	be_global->impl_ << "\n"
-					 << "    #region " << short_name << " Definitions\n"
+	be_global->impl_ << "    #region " << short_name << " Definitions\n"
 					 << "    public class " << short_name << "\n"
 					 << "    {\n"
 					 << "        #region Constants\n"
