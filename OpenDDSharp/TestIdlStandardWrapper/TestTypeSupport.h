@@ -24,7 +24,7 @@
 /////////////////////////////////////////////////
 // TestStruct Declaration
 /////////////////////////////////////////////////
-EXTERN_STRUCT_EXPORT TestStructWrapper
+EXTERN_STRUCT_EXPORT Test_TestStructWrapper
 {
     CORBA::Short ShortField;
     CORBA::UShort UnsignedShortField;
@@ -63,31 +63,31 @@ EXTERN_STRUCT_EXPORT TestStructWrapper
 
 };
 
-EXTERN_METHOD_EXPORT void TestStructWrapper_release(TestStructWrapper* obj);
+EXTERN_METHOD_EXPORT void Test_TestStructWrapper_release(Test_TestStructWrapper* obj);
 
 /////////////////////////////////////////////////
 // TestStruct Type Support Methods
 /////////////////////////////////////////////////
-EXTERN_METHOD_EXPORT Test::TestStructTypeSupport_ptr TestStructTypeSupport_new();
+EXTERN_METHOD_EXPORT Test::TestStructTypeSupport_ptr Test_TestStructTypeSupport_new();
 
-EXTERN_METHOD_EXPORT char* TestStructTypeSupport_GetTypeName(Test::TestStructTypeSupport_ptr native);
+EXTERN_METHOD_EXPORT char* Test_TestStructTypeSupport_GetTypeName(Test::TestStructTypeSupport_ptr native);
 
-EXTERN_METHOD_EXPORT int TestStructTypeSupport_RegisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName);
+EXTERN_METHOD_EXPORT int Test_TestStructTypeSupport_RegisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName);
 
-EXTERN_METHOD_EXPORT int TestStructTypeSupport_UnregisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName);
+EXTERN_METHOD_EXPORT int Test_TestStructTypeSupport_UnregisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName);
 
 /////////////////////////////////////////////////
 // TestStruct DataWriter Methods
 /////////////////////////////////////////////////
-EXTERN_METHOD_EXPORT Test::TestStructDataWriter_ptr TestStructDataWriter_Narrow(DDS::DataWriter_ptr dw);
+EXTERN_METHOD_EXPORT Test::TestStructDataWriter_ptr Test_TestStructDataWriter_Narrow(DDS::DataWriter_ptr dw);
 
-EXTERN_METHOD_EXPORT int TestStructDataWriter_Write(Test::TestStructDataWriter_ptr dw, TestStructWrapper* data, int handle);
+EXTERN_METHOD_EXPORT int Test_TestStructDataWriter_Write(Test::TestStructDataWriter_ptr dw, Test_TestStructWrapper* data, int handle);
 
 /////////////////////////////////////////////////
 // TestStruct DataReader Methods
 /////////////////////////////////////////////////
-EXTERN_METHOD_EXPORT Test::TestStructDataReader_ptr TestStructDataReader_Narrow(DDS::DataReader_ptr dr);
+EXTERN_METHOD_EXPORT Test::TestStructDataReader_ptr Test_TestStructDataReader_Narrow(DDS::DataReader_ptr dr);
 
-EXTERN_METHOD_EXPORT int TestStructDataReader_ReadNextSample(Test::TestStructDataReader_ptr dr, TestStructWrapper* data);
+EXTERN_METHOD_EXPORT int Test_TestStructDataReader_ReadNextSample(Test::TestStructDataReader_ptr dr, Test_TestStructWrapper* data);
 
-EXTERN_METHOD_EXPORT int TestStructDataReader_Read(Test::TestStructDataReader_ptr dr);
+EXTERN_METHOD_EXPORT int Test_TestStructDataReader_Read(Test::TestStructDataReader_ptr dr);

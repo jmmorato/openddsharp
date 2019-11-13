@@ -57,6 +57,15 @@ namespace {
 			}
 		}
 	}
+
+	std::string replaceString(std::string str, const std::string& from, const std::string& to) {
+		size_t start_pos = 0;
+		while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+			str.replace(start_pos, from.length(), to);
+			start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+		}
+		return str;
+	}
 }
 
 csharp_generator::csharp_generator()
@@ -225,6 +234,7 @@ bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const st
 	replacements["SCOPED"] = scoped_name;
 	replacements["TYPE"] = short_name;
 	replacements["SEQ"] = be_global->sequence_suffix().c_str();
+	replacements["SCOPED_METHOD"] = replaceString(scoped_name, std::string("."), std::string("_"));
 
 	be_global->impl_ << "\n"
 					 << "    #region " << short_name << " Definitions\n"

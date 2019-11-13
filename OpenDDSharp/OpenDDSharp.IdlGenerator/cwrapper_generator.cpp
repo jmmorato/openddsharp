@@ -57,6 +57,16 @@ namespace {
 			}
 		}
 	}
+
+	std::string replaceString(std::string str, const std::string& from, const std::string& to) {
+		size_t start_pos = 0;
+		while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+			str.replace(start_pos, from.length(), to);
+			start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+		}
+		return str;
+	}
+
 }
 
 cwrapper_generator::cwrapper_generator()
@@ -220,17 +230,19 @@ bool cwrapper_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const 
 {		
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
+	const std::string scoped_method = replaceString(scoped_name, std::string("::"), std::string("_"));
 
 	std::map<std::string, std::string> replacements;
 	replacements["SCOPED"] = scoped_name;
 	replacements["TYPE"] = short_name;
 	replacements["SEQ"] = be_global->sequence_suffix().c_str();
+	replacements["SCOPED_METHOD"] = scoped_method;
 
 	be_global->header_ << "/////////////////////////////////////////////////\n"
 					   << "// " << short_name << " Declaration\n"
 					   << "/////////////////////////////////////////////////\n";
 
-	be_global->header_ << "EXTERN_STRUCT_EXPORT " << short_name << "Wrapper\n"
+	be_global->header_ << "EXTERN_STRUCT_EXPORT " << scoped_method << "Wrapper\n"
 					   << "{\n"
 					   << declare_struct_fields(fields).c_str() << "\n"
 					   << implement_struct_to_native(fields, short_name, scoped_name).c_str()

@@ -9,49 +9,49 @@
 
 #include "TestTypeSupport.h"
 
-void TestStructWrapper_release(TestStructWrapper* obj)
+void Test_TestStructWrapper_release(Test_TestStructWrapper* obj)
 {
     obj->release();
 }
 
-Test::TestStructTypeSupport_ptr TestStructTypeSupport_new()
+Test::TestStructTypeSupport_ptr Test_TestStructTypeSupport_new()
 {
     return new Test::TestStructTypeSupportImpl();
 }
 
-char* TestStructTypeSupport_GetTypeName(Test::TestStructTypeSupport_ptr native)
+char* Test_TestStructTypeSupport_GetTypeName(Test::TestStructTypeSupport_ptr native)
 {
     return native->get_type_name();
 }
 
-int TestStructTypeSupport_RegisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
+int Test_TestStructTypeSupport_RegisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
 {
     return native->register_type(dp, typeName);
 }
 
-int TestStructTypeSupport_UnregisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
+int Test_TestStructTypeSupport_UnregisterType(Test::TestStructTypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
 {
     return native->unregister_type(dp, typeName);
 }
 
-Test::TestStructDataWriter_ptr TestStructDataWriter_Narrow(DDS::DataWriter_ptr dw)
+Test::TestStructDataWriter_ptr Test_TestStructDataWriter_Narrow(DDS::DataWriter_ptr dw)
 {
     return Test::TestStructDataWriter::_narrow(dw);
 }
 
-int TestStructDataWriter_Write(Test::TestStructDataWriter_ptr dw, TestStructWrapper* data, int handle)
+int Test_TestStructDataWriter_Write(Test::TestStructDataWriter_ptr dw, Test_TestStructWrapper* data, int handle)
 {
     Test::TestStruct nativeData = data->to_native();
 
     return dw->write(nativeData, DDS::HANDLE_NIL);    
 }
 
-Test::TestStructDataReader_ptr TestStructDataReader_Narrow(DDS::DataReader_ptr dr)
+Test::TestStructDataReader_ptr Test_TestStructDataReader_Narrow(DDS::DataReader_ptr dr)
 {
     return Test::TestStructDataReader::_narrow(dr);
 }
 
-int TestStructDataReader_ReadNextSample(Test::TestStructDataReader_ptr dr, TestStructWrapper* data)
+int Test_TestStructDataReader_ReadNextSample(Test::TestStructDataReader_ptr dr, Test_TestStructWrapper* data)
 {
     Test::TestStruct nativeData;
     ::DDS::SampleInfo sampleInfo;
@@ -64,7 +64,7 @@ int TestStructDataReader_ReadNextSample(Test::TestStructDataReader_ptr dr, TestS
     return (int)ret;
 }
 
-int TestStructDataReader_Read(Test::TestStructDataReader_ptr dr)
+int Test_TestStructDataReader_Read(Test::TestStructDataReader_ptr dr)
 {
     Test::TestStructSeq received_data;
     ::DDS::SampleInfoSeq info_seq;    

@@ -1,46 +1,46 @@
-void <%TYPE%>Wrapper_release(<%TYPE%>Wrapper* obj)
+void <%SCOPED_METHOD%>Wrapper_release(<%SCOPED_METHOD%>Wrapper* obj)
 {
     obj->release();
 }
 
-<%SCOPED%>TypeSupport_ptr <%TYPE%>TypeSupport_new()
+<%SCOPED%>TypeSupport_ptr <%SCOPED_METHOD%>TypeSupport_new()
 {
     return new <%SCOPED%>TypeSupportImpl();
 }
 
-char* <%TYPE%>TypeSupport_GetTypeName(<%SCOPED%>TypeSupport_ptr native)
+char* <%SCOPED_METHOD%>TypeSupport_GetTypeName(<%SCOPED%>TypeSupport_ptr native)
 {
     return native->get_type_name();
 }
 
-int <%TYPE%>TypeSupport_RegisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
+int <%SCOPED_METHOD%>TypeSupport_RegisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
 {
     return native->register_type(dp, typeName);
 }
 
-int <%TYPE%>TypeSupport_UnregisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
+int <%SCOPED_METHOD%>TypeSupport_UnregisterType(<%SCOPED%>TypeSupport_ptr native, ::DDS::DomainParticipant_ptr dp, const char* typeName)
 {
     return native->unregister_type(dp, typeName);
 }
 
-<%SCOPED%>DataWriter_ptr <%TYPE%>DataWriter_Narrow(DDS::DataWriter_ptr dw)
+<%SCOPED%>DataWriter_ptr <%SCOPED_METHOD%>DataWriter_Narrow(DDS::DataWriter_ptr dw)
 {
     return <%SCOPED%>DataWriter::_narrow(dw);
 }
 
-int <%TYPE%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%TYPE%>Wrapper* data, int handle)
+int <%SCOPED_METHOD%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper* data, int handle)
 {
     <%SCOPED%> nativeData = data->to_native();
 
     return dw->write(nativeData, DDS::HANDLE_NIL);    
 }
 
-<%SCOPED%>DataReader_ptr <%TYPE%>DataReader_Narrow(DDS::DataReader_ptr dr)
+<%SCOPED%>DataReader_ptr <%SCOPED_METHOD%>DataReader_Narrow(DDS::DataReader_ptr dr)
 {
     return <%SCOPED%>DataReader::_narrow(dr);
 }
 
-int <%TYPE%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%TYPE%>Wrapper* data)
+int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data)
 {
     <%SCOPED%> nativeData;
     ::DDS::SampleInfo sampleInfo;
@@ -53,7 +53,7 @@ int <%TYPE%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%TYPE%>Wrapp
     return (int)ret;
 }
 
-int <%TYPE%>DataReader_Read(<%SCOPED%>DataReader_ptr dr)
+int <%SCOPED_METHOD%>DataReader_Read(<%SCOPED%>DataReader_ptr dr)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    

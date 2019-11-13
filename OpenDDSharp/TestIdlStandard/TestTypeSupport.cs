@@ -185,35 +185,35 @@ namespace Test {
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructTypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructTypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr TestStructTypeSupportNew64();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructTypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructTypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr TestStructTypeSupportNew86();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructTypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructTypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern IntPtr GetTypeName64(IntPtr native);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructTypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructTypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern IntPtr GetTypeName86(IntPtr native);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructTypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructTypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int RegisterType64(IntPtr native, IntPtr dp, string typeName);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructTypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructTypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int RegisterType86(IntPtr native, IntPtr dp, string typeName);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructTypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructTypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int UnregisterType64(IntPtr native, IntPtr dp, string typeName);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructTypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructTypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int UnregisterType86(IntPtr native, IntPtr dp, string typeName);
         #endregion
     }
@@ -271,19 +271,19 @@ namespace Test {
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructDataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow64(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructDataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow86(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructDataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
         private static extern int Write64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] ref TestStructWrapper data, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructDataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
         private static extern int Write86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] ref TestStructWrapper data, int handle);
         #endregion
     }
@@ -375,35 +375,35 @@ namespace Test {
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructWrapper_release", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructWrapper_release", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Release64([MarshalAs(UnmanagedType.Struct), In, Out] ref TestStructWrapper data);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructWrapper_release", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructWrapper_release", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Release86([MarshalAs(UnmanagedType.Struct), In, Out] ref TestStructWrapper data);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructDataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow64(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructDataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow86(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructDataReader_Read", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataReader_Read", CallingConvention = CallingConvention.Cdecl)]
         private static extern int Read64(IntPtr dr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructDataReader_Read", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataReader_Read", CallingConvention = CallingConvention.Cdecl)]
         private static extern int Read86(IntPtr dr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "TestStructDataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
         private static extern int ReadNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref TestStructWrapper data);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "TestStructDataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
         private static extern int ReadNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] ref TestStructWrapper data);
         #endregion
     }
