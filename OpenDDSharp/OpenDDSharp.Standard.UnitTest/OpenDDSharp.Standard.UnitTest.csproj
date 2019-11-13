@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
+    <ProjectReference Include="..\TestIdlStandard\TestIdlStandard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="rtps.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CopyNative" AfterTargets="AfterBuild">
+    <!--PostBuildEvent-->
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Debug\TestPInvokeIdlWrapperd.Win32.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Release\TestPInvokeIdlWrapper.Win32.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Debug\TestPInvokeIdlWrapperd.x64.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Release\TestPInvokeIdlWrapper.x64.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Debug\TestPInvokeIdlWrapperd.x64.dll;..\TestIdlStandardWrapper\bin\x64\Debug\TestIdlStandardWrapperd.x64.dll" />
+      <!--..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Debug\TestPInvokeIdlWrapperd.Win32.dll;-->
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;..\TestPInvokeIdlWrapper\bin\Win32\Release\TestPInvokeIdlWrapper.Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;..\TestPInvokeIdlWrapper\bin\x64\Release\TestPInvokeIdlWrapper.x64.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>
