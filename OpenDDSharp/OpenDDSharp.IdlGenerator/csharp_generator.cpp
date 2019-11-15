@@ -664,10 +664,10 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 			break;
 		case AST_PredefinedType::PT_longdouble:
 			ret = "long double";
-			break;
-		case AST_PredefinedType::PT_octet:
-			ret = "System.Byte";
 			break;*/
+		case AST_PredefinedType::PT_octet:
+			ret = "Byte";
+			break;
 		case AST_PredefinedType::PT_char:
 		case AST_PredefinedType::PT_wchar:
 			ret = "Char";
@@ -766,10 +766,10 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 				break;
 			case AST_PredefinedType::PT_longdouble:
 				ret = "long double";
-				break;
-			case AST_PredefinedType::PT_octet:
-				ret = "System.Byte";
 				break;*/
+		case AST_PredefinedType::PT_octet:
+			ret = "[MarshalAs(UnmanagedType.U1)]\n";
+			break;
 		case AST_PredefinedType::PT_char:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
 			break;

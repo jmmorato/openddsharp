@@ -607,7 +607,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			//ret = "long double";
 			break;
 		case AST_PredefinedType::PT_octet:
-			//ret = "System::Byte";			
+			ret = "CORBA::Octet";			
 			break;
 		case AST_PredefinedType::PT_char:
 			ret = "CORBA::Char";

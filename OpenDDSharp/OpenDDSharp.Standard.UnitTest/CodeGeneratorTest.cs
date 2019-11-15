@@ -107,7 +107,8 @@ namespace OpenDDSharp.Standard.UnitTest
                 UnsignedLongLongField = 3,
                 CharField = 'a',
                 WCharField = 'b',
-                BooleanField = true
+                BooleanField = true,
+                OctetField = 0x42
             };
             _dataWriter.Write(data);
 
@@ -126,6 +127,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(data.CharField, received.CharField);
             Assert.AreEqual(data.WCharField, received.WCharField);
             Assert.AreEqual(data.BooleanField, received.BooleanField);
+            Assert.AreEqual(data.OctetField, received.OctetField);
 
             Assert.AreEqual(typeof(short), data.ShortField.GetType());
             Assert.AreEqual(typeof(int), data.LongField.GetType());
@@ -136,7 +138,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(char), data.CharField.GetType());
             Assert.AreEqual(typeof(char), data.WCharField.GetType());
             Assert.AreEqual(typeof(bool), data.BooleanField.GetType());
-            
+            Assert.AreEqual(typeof(byte), data.OctetField.GetType());
+
             Assert.AreEqual(defaultStruct.ShortField, 0);
             Assert.AreEqual(defaultStruct.LongField, 0);
             Assert.AreEqual(defaultStruct.LongLongField, 0);
@@ -146,6 +149,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.CharField, '\0');
             Assert.AreEqual(defaultStruct.WCharField, '\0');
             Assert.AreEqual(defaultStruct.BooleanField, false);
+            Assert.AreEqual(defaultStruct.OctetField, 0);
         }
         #endregion
     }

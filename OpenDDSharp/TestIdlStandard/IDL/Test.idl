@@ -11,5 +11,6 @@ module Test {
 		char CharField;
 		wchar WCharField;
 		boolean BooleanField;
+		octet OctetField;
     };
 };

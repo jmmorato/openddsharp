@@ -38,6 +38,7 @@ namespace Test
         Char _CharField;
         Char _WCharField;
         Boolean _BooleanField;
+        Byte _OctetField;
         #endregion
 
         #region Properties
@@ -94,6 +95,12 @@ namespace Test
             get { return _BooleanField; }
             set { _BooleanField = value; }
         }
+
+        public Byte OctetField
+        {
+            get { return _OctetField; }
+            set { _OctetField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -108,6 +115,7 @@ namespace Test
             _CharField = '\0';
             _WCharField = '\0';
             _BooleanField = false;
+            _OctetField = 0;
         }
         #endregion
 
@@ -125,6 +133,7 @@ namespace Test
             wrapper.CharField = _CharField;
             wrapper.WCharField = _WCharField;
             wrapper.BooleanField = _BooleanField;
+            wrapper.OctetField = _OctetField;
 
             return wrapper;
         }
@@ -140,6 +149,7 @@ namespace Test
             _CharField = wrapper.CharField;
             _WCharField = wrapper.WCharField;
             _BooleanField = wrapper.BooleanField;
+            _OctetField = wrapper.OctetField;
         }
         #endregion
     }
@@ -159,6 +169,8 @@ namespace Test
         public Char WCharField;
         [MarshalAs(UnmanagedType.I1)]
         public Boolean BooleanField;
+        [MarshalAs(UnmanagedType.U1)]
+        public Byte OctetField;
     }
 
 	public class TestStructTypeSupport
