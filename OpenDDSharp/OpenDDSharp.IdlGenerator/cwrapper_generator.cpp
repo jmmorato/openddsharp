@@ -626,8 +626,10 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			//ret = "System::Byte";			
 			break;
 		case AST_PredefinedType::PT_char:
+			ret = "CORBA::Char";
+			break;
 		case AST_PredefinedType::PT_wchar:
-			//ret = "System::Char";
+			ret = "CORBA::WChar";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			//ret = "System::Boolean";

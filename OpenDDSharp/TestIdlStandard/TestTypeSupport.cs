@@ -35,6 +35,8 @@ namespace Test
         UInt32 _UnsignedLongField;
         Int64 _LongLongField;
         UInt64 _UnsignedLongLongField;
+        Char _CharField;
+        Char _WCharField;
         #endregion
 
         #region Properties
@@ -73,6 +75,18 @@ namespace Test
             get { return _UnsignedLongLongField; }
             set { _UnsignedLongLongField = value; }
         }
+
+        public Char CharField
+        {
+            get { return _CharField; }
+            set { _CharField = value; }
+        }
+
+        public Char WCharField
+        {
+            get { return _WCharField; }
+            set { _WCharField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -84,6 +98,8 @@ namespace Test
             _UnsignedLongField = 0;
             _LongLongField = 0;
             _UnsignedLongLongField = 0;
+            _CharField = '\0';
+            _WCharField = '\0';
         }
         #endregion
 
@@ -98,6 +114,8 @@ namespace Test
             wrapper.UnsignedLongField = _UnsignedLongField;
             wrapper.LongLongField = _LongLongField;
             wrapper.UnsignedLongLongField = _UnsignedLongLongField;
+            wrapper.CharField = _CharField;
+            wrapper.WCharField = _WCharField;
 
             return wrapper;
         }
@@ -110,6 +128,8 @@ namespace Test
             _UnsignedLongField = wrapper.UnsignedLongField;
             _LongLongField = wrapper.LongLongField;
             _UnsignedLongLongField = wrapper.UnsignedLongLongField;
+            _CharField = wrapper.CharField;
+            _WCharField = wrapper.WCharField;
         }
         #endregion
     }
@@ -123,6 +143,10 @@ namespace Test
         public UInt32 UnsignedLongField;
         public Int64 LongLongField;
         public UInt64 UnsignedLongLongField;
+        [MarshalAs(UnmanagedType.I1)]
+        public Char CharField;
+        [MarshalAs(UnmanagedType.I2)]
+        public Char WCharField;
     }
 
 	public class TestStructTypeSupport

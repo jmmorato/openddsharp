@@ -8,5 +8,7 @@ module Test {
         unsigned long UnsignedLongField;
         long long LongLongField;
         unsigned long long UnsignedLongLongField;
+		char CharField;
+		wchar WCharField;
     };
 };

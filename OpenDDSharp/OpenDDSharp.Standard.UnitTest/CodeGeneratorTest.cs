@@ -93,7 +93,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
         #region Test Methods
         [TestMethod, TestCategory(TEST_CATEGORY)]
-        public void TestGeneratedIntegers()
+        public void TestGeneratedBasicTypes()
         {
             TestStruct data = new TestStruct
             {
@@ -103,6 +103,8 @@ namespace OpenDDSharp.Standard.UnitTest
                 UnsignedShortField = 1,
                 UnsignedLongField = 2,
                 UnsignedLongLongField = 3,
+                CharField = 'a',
+                WCharField = 'b'
             };
             _dataWriter.Write(data);
 
@@ -118,6 +120,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(data.UnsignedShortField, received.UnsignedShortField);
             Assert.AreEqual(data.UnsignedLongField, received.UnsignedLongField);
             Assert.AreEqual(data.UnsignedLongLongField, received.UnsignedLongLongField);
+            Assert.AreEqual(data.CharField, received.CharField);
+            Assert.AreEqual(data.WCharField, received.WCharField);
 
             Assert.AreEqual(typeof(short), data.ShortField.GetType());
             Assert.AreEqual(typeof(int), data.LongField.GetType());
@@ -125,6 +129,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(ushort), data.UnsignedShortField.GetType());
             Assert.AreEqual(typeof(uint), data.UnsignedLongField.GetType());
             Assert.AreEqual(typeof(ulong), data.UnsignedLongLongField.GetType());
+            Assert.AreEqual(typeof(char), data.CharField.GetType());
+            Assert.AreEqual(typeof(char), data.WCharField.GetType());
         }
         #endregion
     }

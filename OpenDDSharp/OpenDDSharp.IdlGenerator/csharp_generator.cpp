@@ -321,6 +321,10 @@ std::string csharp_generator::declare_marshal_fields(const std::vector<AST_Field
 		AST_Field* field = fields[i];
 		AST_Type* type = field->field_type();
 		const char* name = field->local_name()->get_string();
+		std::string marshalas = get_marshal_as_attribute(type);
+		if (!marshalas.empty()) {
+			ret.append(indent + marshalas);
+		}
 		std::string type_name = get_marshal_type(type);
 
 		ret.append(indent);
@@ -539,7 +543,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 			ret = "Double";
 			break;
 		case AST_PredefinedType::PT_longdouble:
-			ret = "long double";
+			ret = "Double";
 			break;
 		case AST_PredefinedType::PT_octet:
 			ret = "Byte";			
@@ -663,14 +667,118 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 			break;
 		case AST_PredefinedType::PT_octet:
 			ret = "System.Byte";
-			break;
+			break;*/
 		case AST_PredefinedType::PT_char:
 		case AST_PredefinedType::PT_wchar:
-			ret = "System.Char";
+			ret = "Char";
 			break;
-		case AST_PredefinedType::PT_boolean:
-			ret = "System.Boolean";*/
+		/*case AST_PredefinedType::PT_boolean:
+			ret = "System.Boolean";
+			break;*/
+		}
+		break;
+	}
+	case AST_Decl::NT_array:
+	{
+		/*AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		std::string base_type = get_csharp_type(arr_type->base_type());
+
+		ret = "array<";
+		ret.append(base_type);
+		ret.append(", ");
+		ret.append(std::to_string(arr_type->n_dims()));
+		ret.append(">^");*/
+		break;
+	}
+	case AST_Decl::NT_sequence:
+	{
+		/*AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		std::string base_type = get_csharp_type(seq_type->base_type());
+		ret = "List<";
+		ret.append(base_type);
+		ret.append(">^");*/
+		break;
+	}
+	default:
+		break;
+	}
+
+	return ret;
+}
+
+std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
+	AST_Decl::NodeType node_type = type->node_type();
+	std::string ret;
+
+	switch (node_type)
+	{
+	case AST_Decl::NT_union:
+	case AST_Decl::NT_struct:
+	{
+		/*ret = "OpenDDSharp::";
+		ret.append(type->full_name());
+		ret.append("^");*/
+		break;
+	}
+	case AST_Decl::NT_enum:
+	{
+		/*ret = "OpenDDSharp::";
+		ret.append(type->full_name());*/
+		break;
+	}
+	case AST_Decl::NT_typedef:
+	{
+		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+
+		ret = "OpenDDSharp::";
+		ret.append(type->full_name());
+		switch (typedef_type->base_type()->node_type())
+		{
+		case AST_Decl::NT_sequence:
+		case AST_Decl::NT_array:
+			ret.append("^");
 			break;
+		}*/
+		break;
+	}
+	case AST_Decl::NT_fixed:
+	{
+		//ret = "System.Decimal";
+		break;
+	}
+	case AST_Decl::NT_string:
+	case AST_Decl::NT_wstring:
+	{
+		//ret = "System.String";
+		break;
+	}
+	case AST_Decl::NT_pre_defined:
+	{
+		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
+
+		switch (predefined_type->pt())
+		{
+			/*case AST_PredefinedType::PT_float:
+				ret = "System.Single";
+				break;
+			case AST_PredefinedType::PT_double:
+				ret = "System.Double";
+				break;
+			case AST_PredefinedType::PT_longdouble:
+				ret = "long double";
+				break;
+			case AST_PredefinedType::PT_octet:
+				ret = "System.Byte";
+				break;*/
+		case AST_PredefinedType::PT_char:
+			ret = "[MarshalAs(UnmanagedType.I1)]\n";
+			break;
+		case AST_PredefinedType::PT_wchar:
+			ret = "[MarshalAs(UnmanagedType.I2)]\n";
+			break;
+			/*case AST_PredefinedType::PT_boolean:
+				ret = "System.Boolean";
+				break;*/
 		}
 		break;
 	}

@@ -46,6 +46,7 @@ private:
 	std::string implement_struct_from_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent);
 	std::string get_csharp_type(AST_Type* type);
 	std::string get_marshal_type(AST_Type* type);
+	std::string get_marshal_as_attribute(AST_Type* type);
 	std::string get_csharp_default_value(AST_Type* type);
 	std::string get_field_to_native(AST_Type* type, const char * name, const std::string indent);
 	std::string get_field_from_native(AST_Type* type, const char * name, const std::string indent);
