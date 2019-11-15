@@ -672,9 +672,9 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 		case AST_PredefinedType::PT_wchar:
 			ret = "Char";
 			break;
-		/*case AST_PredefinedType::PT_boolean:
-			ret = "System.Boolean";
-			break;*/
+		case AST_PredefinedType::PT_boolean:
+			ret = "Boolean";
+			break;
 		}
 		break;
 	}
@@ -776,9 +776,9 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 		case AST_PredefinedType::PT_wchar:
 			ret = "[MarshalAs(UnmanagedType.I2)]\n";
 			break;
-			/*case AST_PredefinedType::PT_boolean:
-				ret = "System.Boolean";
-				break;*/
+		case AST_PredefinedType::PT_boolean:
+			ret = "[MarshalAs(UnmanagedType.I1)]\n";
+			break;
 		}
 		break;
 	}

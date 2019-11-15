@@ -524,22 +524,6 @@ std::string cwrapper_generator::implement_struct_release(const std::vector<AST_F
 
 	ret.append("    }\n\n");
 
-	/*ret.append(" OpenDDSharp::");
-	ret.append(scoped_name);
-	ret.append("::FromNative(::");
-	ret.append(scoped_name);
-	ret.append(" native) {\n");
-
-	for (unsigned int i = 0; i < fields.size(); i++) {
-		AST_Field* field = fields[i];
-		AST_Type* field_type = field->field_type();
-		const char * field_name = field->local_name()->get_string();
-
-		ret.append(get_field_from_native(field_type, field_name));
-	}
-
-	ret.append("}\n\n");*/
-
 	return ret;
 }
 
@@ -632,7 +616,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			ret = "CORBA::WChar";
 			break;
 		case AST_PredefinedType::PT_boolean:
-			//ret = "System::Boolean";
+			ret = "CORBA::Boolean";
 			break;
 		}
 		break;

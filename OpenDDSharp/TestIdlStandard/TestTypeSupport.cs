@@ -37,6 +37,7 @@ namespace Test
         UInt64 _UnsignedLongLongField;
         Char _CharField;
         Char _WCharField;
+        Boolean _BooleanField;
         #endregion
 
         #region Properties
@@ -87,6 +88,12 @@ namespace Test
             get { return _WCharField; }
             set { _WCharField = value; }
         }
+
+        public Boolean BooleanField
+        {
+            get { return _BooleanField; }
+            set { _BooleanField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -100,6 +107,7 @@ namespace Test
             _UnsignedLongLongField = 0;
             _CharField = '\0';
             _WCharField = '\0';
+            _BooleanField = false;
         }
         #endregion
 
@@ -116,6 +124,7 @@ namespace Test
             wrapper.UnsignedLongLongField = _UnsignedLongLongField;
             wrapper.CharField = _CharField;
             wrapper.WCharField = _WCharField;
+            wrapper.BooleanField = _BooleanField;
 
             return wrapper;
         }
@@ -130,6 +139,7 @@ namespace Test
             _UnsignedLongLongField = wrapper.UnsignedLongLongField;
             _CharField = wrapper.CharField;
             _WCharField = wrapper.WCharField;
+            _BooleanField = wrapper.BooleanField;
         }
         #endregion
     }
@@ -147,6 +157,8 @@ namespace Test
         public Char CharField;
         [MarshalAs(UnmanagedType.I2)]
         public Char WCharField;
+        [MarshalAs(UnmanagedType.I1)]
+        public Boolean BooleanField;
     }
 
 	public class TestStructTypeSupport

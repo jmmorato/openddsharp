@@ -95,6 +95,8 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypes()
         {
+            TestStruct defaultStruct = new TestStruct();
+
             TestStruct data = new TestStruct
             {
                 ShortField = -1,
@@ -104,7 +106,8 @@ namespace OpenDDSharp.Standard.UnitTest
                 UnsignedLongField = 2,
                 UnsignedLongLongField = 3,
                 CharField = 'a',
-                WCharField = 'b'
+                WCharField = 'b',
+                BooleanField = true
             };
             _dataWriter.Write(data);
 
@@ -122,6 +125,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(data.UnsignedLongLongField, received.UnsignedLongLongField);
             Assert.AreEqual(data.CharField, received.CharField);
             Assert.AreEqual(data.WCharField, received.WCharField);
+            Assert.AreEqual(data.BooleanField, received.BooleanField);
 
             Assert.AreEqual(typeof(short), data.ShortField.GetType());
             Assert.AreEqual(typeof(int), data.LongField.GetType());
@@ -131,6 +135,17 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(ulong), data.UnsignedLongLongField.GetType());
             Assert.AreEqual(typeof(char), data.CharField.GetType());
             Assert.AreEqual(typeof(char), data.WCharField.GetType());
+            Assert.AreEqual(typeof(bool), data.BooleanField.GetType());
+            
+            Assert.AreEqual(defaultStruct.ShortField, 0);
+            Assert.AreEqual(defaultStruct.LongField, 0);
+            Assert.AreEqual(defaultStruct.LongLongField, 0);
+            Assert.AreEqual(defaultStruct.UnsignedShortField, (ushort)0);
+            Assert.AreEqual(defaultStruct.UnsignedLongField, 0U);
+            Assert.AreEqual(defaultStruct.UnsignedLongLongField, 0UL);
+            Assert.AreEqual(defaultStruct.CharField, '\0');
+            Assert.AreEqual(defaultStruct.WCharField, '\0');
+            Assert.AreEqual(defaultStruct.BooleanField, false);
         }
         #endregion
     }

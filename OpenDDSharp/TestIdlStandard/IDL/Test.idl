@@ -10,5 +10,6 @@ module Test {
         unsigned long long UnsignedLongLongField;
 		char CharField;
 		wchar WCharField;
+		boolean BooleanField;
     };
 };
