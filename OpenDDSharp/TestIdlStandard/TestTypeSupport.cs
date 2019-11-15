@@ -20,11 +20,11 @@ namespace Test
     {
         #region Constants
 #if DEBUG
-        internal const string API_DLL_X86 = "TestIdlStandardWrapperd.x86.dll";
-        internal const string API_DLL_X64 = "TestIdlStandardWrapperd.x64.dll";
+        internal const string API_DLL_X86 = "TestIdlStandardWrapperd_Win32";
+        internal const string API_DLL_X64 = "TestIdlStandardWrapperd_x64";
 #else
-        internal const string API_DLL_X86 = "TestIdlStandardWrapper.x86.dll";
-        internal const string API_DLL_X64 = "TestIdlStandardWrapper.x64.dll";
+        internal const string API_DLL_X86 = "TestIdlStandardWrapper_Win32";
+        internal const string API_DLL_X64 = "TestIdlStandardWrapper_x64";
 #endif
         #endregion
 
