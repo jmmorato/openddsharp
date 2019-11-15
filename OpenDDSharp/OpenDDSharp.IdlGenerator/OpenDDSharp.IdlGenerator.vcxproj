@@ -50,6 +50,10 @@
     <ClInclude Include="dds_generator.h" />
     <ClInclude Include="dds_visitor.h" />
     <ClInclude Include="cli_generator.h" />
+    <ClInclude Include="marshal.h">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Text</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CSharpImplTemplate.txt" />
@@ -62,7 +66,9 @@
     <None Include="NativeIdlProject.vcxproj">
       <SubType>Designer</SubType>
     </None>
-    <None Include="NativeIdlProject.vcxproj.filters" />
+    <None Include="NativeIdlProject.vcxproj.filters">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NativeIdlProjectTemplate.vstemplate">
       <SubType>Designer</SubType>
     </None>
@@ -70,9 +76,17 @@
     <None Include="OpenDDSharp.IdlGenerator.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="StandardWrapperIdlProject.vcxproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="StandardWrapperIdlProject.vcxproj.filters" />
+    <None Include="StandardWrapperIdlProject.vstemplate">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="NativeIdlProjectTemplate.ico" />
+    <Image Include="StandardWrapperIdlProject.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>OpenDDSharp.IdlGenerator</ProjectName>

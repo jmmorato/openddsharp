@@ -7,28 +7,26 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Idl Files">
-      <UniqueIdentifier>{ddd3180a-092c-494b-a2b8-acba6378e1ec}</UniqueIdentifier>
+      <UniqueIdentifier>{b7422365-add2-4792-ae16-80480970e56f}</UniqueIdentifier>
+      <Extensions>idl;pidl</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestTypeSupport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="marshal.h">
+    <None Include="**\*.idl">
+      <Filter>Idl Files</Filter>
+    </None>    
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="**\*.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestTypeSupport.cpp">
+    <ClCompile Include="**\*.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Test.idl">
-      <Filter>Idl Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

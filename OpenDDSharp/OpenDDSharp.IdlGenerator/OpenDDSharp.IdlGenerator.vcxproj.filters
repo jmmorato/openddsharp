@@ -79,6 +79,9 @@
     <ClInclude Include="cwrapper_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="marshal.h">
+      <Filter>Project Template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeaderTemplate.txt">
@@ -109,9 +112,21 @@
     </None>
     <None Include="OpenDDSharp.IdlGenerator.nuspec" />
     <None Include="OpenDDSharp.IdlGenerator.targets" />
+    <None Include="StandardWrapperIdlProject.vcxproj">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.vcxproj.filters">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.vstemplate">
+      <Filter>Project Template</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="NativeIdlProjectTemplate.ico">
+      <Filter>Project Template</Filter>
+    </Image>
+    <Image Include="StandardWrapperIdlProject.ico">
       <Filter>Project Template</Filter>
     </Image>
   </ItemGroup>
