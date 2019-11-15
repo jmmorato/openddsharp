@@ -365,8 +365,10 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll" />
-    </ItemGroup>
+    </ItemGroup>    
     <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(DDS_ROOT)\bin" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(OutDir)openddsharp_idl.exe" DestinationFolder="$(DDS_ROOT)\bin" SkipUnchangedFiles="true" />
     <Copy SourceFiles=".\HeaderTemplate.txt;.\ImplTemplate.txt;.\CSharpImplTemplate.txt;.\CWrapperHeaderTemplate.txt;.\CWrapperImplTemplate.txt" DestinationFolder="$(DDS_ROOT)\dds\idl" SkipUnchangedFiles="true" />
   </Target>
 </Project>
