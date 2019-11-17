@@ -42,6 +42,8 @@ namespace Test
         Single _FloatField;
         Double _DoubleField;
         Decimal _LongDoubleField;
+        string _UnboundedStringField;
+        string _UnboundedWStringField;
         #endregion
 
         #region Properties
@@ -122,6 +124,18 @@ namespace Test
             get { return _LongDoubleField; }
             set { _LongDoubleField = value; }
         }
+
+        public string UnboundedStringField
+        {
+            get { return _UnboundedStringField; }
+            set { _UnboundedStringField = value; }
+        }
+
+        public string UnboundedWStringField
+        {
+            get { return _UnboundedWStringField; }
+            set { _UnboundedWStringField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -140,6 +154,8 @@ namespace Test
             _FloatField = 0;
             _DoubleField = 0;
             _LongDoubleField = 0;
+            _UnboundedStringField = string.Empty;;
+            _UnboundedWStringField = string.Empty;;
         }
         #endregion
 
@@ -161,6 +177,16 @@ namespace Test
             wrapper.FloatField = _FloatField;
             wrapper.DoubleField = _DoubleField;
             wrapper.LongDoubleField = Convert.ToDouble(_LongDoubleField);
+            if (UnboundedStringField != null)
+            {
+                wrapper.UnboundedStringField = Marshal.StringToHGlobalAnsi(UnboundedStringField);
+                toRelease.Add(wrapper.UnboundedStringField);
+            }
+            if (UnboundedWStringField != null)
+            {
+                wrapper.UnboundedWStringField = Marshal.StringToHGlobalUni(UnboundedWStringField);
+                toRelease.Add(wrapper.UnboundedWStringField);
+            }
 
             return wrapper;
         }
@@ -180,6 +206,22 @@ namespace Test
             _FloatField = wrapper.FloatField;
             _DoubleField = wrapper.DoubleField;
             _LongDoubleField = Convert.ToDecimal(wrapper.LongDoubleField);
+            if (wrapper.UnboundedStringField != IntPtr.Zero)
+            {
+                UnboundedStringField= Marshal.PtrToStringAnsi(wrapper.UnboundedStringField);
+            }
+            else
+            {
+                UnboundedStringField = null;
+            }
+            if (wrapper.UnboundedWStringField != IntPtr.Zero)
+            {
+                UnboundedWStringField= Marshal.PtrToStringUni(wrapper.UnboundedWStringField);
+            }
+            else
+            {
+                UnboundedWStringField = null;
+            }
         }
         #endregion
     }
@@ -204,6 +246,8 @@ namespace Test
         public Single FloatField;
         public Double DoubleField;
         public Double LongDoubleField;
+        public IntPtr UnboundedStringField;
+        public IntPtr UnboundedWStringField;
     }
 
 	public class TestStructTypeSupport

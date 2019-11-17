@@ -15,5 +15,7 @@ module Test {
 		float FloatField;
 		double DoubleField;
 		long double LongDoubleField;
+		string UnboundedStringField;		
+		wstring UnboundedWStringField;		
     };
 };

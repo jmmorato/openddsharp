@@ -115,6 +115,7 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
+            // TODO: Wait for acknowledgments
             System.Threading.Thread.Sleep(500);
 
             TestStruct received = new TestStruct();
@@ -162,6 +163,35 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.FloatField, 0.0f);
             Assert.AreEqual(defaultStruct.DoubleField, 0.0);
             Assert.AreEqual(defaultStruct.LongDoubleField, 0.0m);
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedTemplateTypes()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                UnboundedStringField = "Hello, I love you, won't you tell me your name?",
+                UnboundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?"
+            };
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(data.UnboundedStringField, received.UnboundedStringField);
+            Assert.AreEqual(data.UnboundedWStringField, received.UnboundedWStringField);
+
+            Assert.AreEqual(typeof(string), data.UnboundedStringField.GetType());
+            Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());
+
+            Assert.AreEqual(defaultStruct.UnboundedStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.UnboundedStringField, string.Empty);
         }
         #endregion
     }

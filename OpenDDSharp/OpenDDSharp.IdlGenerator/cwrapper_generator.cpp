@@ -567,10 +567,14 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 		//ret = "System::Decimal";
 		break;
 	}
-	case AST_Decl::NT_string:		
+	case AST_Decl::NT_string:
+	{
+		ret = "CORBA::Char*";
+		break;
+	}
 	case AST_Decl::NT_wstring:
 	{
-		//ret = "System::String^";
+		ret = "CORBA::WChar*";
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -649,6 +653,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	return ret;
 }
 
+// CODE REVIEW: Needed?
 std::string cwrapper_generator::get_cwrapper_default_value(AST_Type* type) {
 	AST_Decl::NodeType node_type = type->node_type();	
 	std::string ret(type->flat_name());
@@ -772,49 +777,26 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		break;
 	}
 	case AST_Decl::NT_string:
-	{		
-		/*ret.append("    if (m_");
-		ret.append(name);
-		ret.append(" != nullptr) {\n");
-
-		ret.append("        ret.");
-		ret.append(name);
-		ret.append(" = context.marshal_as<const char*>(m_");
-		ret.append(name);
-		ret.append(");\n");
-
-		ret.append("    }\n");
-		ret.append("    else {\n");
-
-		ret.append("        ret.");
-		ret.append(name);
-		ret.append(" = \"\";\n");
-
-		ret.append("    }\n");*/
-
-		break;
-	}
 	case AST_Decl::NT_wstring:
 	{
-		/*ret.append("    if (m_");
+		ret.append("        if (");
 		ret.append(name);
-		ret.append(" != nullptr) {\n");
+		ret.append(" != NULL)\n");
+		ret.append("        {\n");
 
-		ret.append("    ret.");
+		ret.append("            ret.");
 		ret.append(name);
-		ret.append(" = context.marshal_as<const wchar_t*>(m_");
+		if (node_type == AST_Decl::NT_string) {
+			ret.append(" = CORBA::string_dup(");
+		}
+		else {
+			ret.append(" = CORBA::wstring_dup(");
+		}
+
 		ret.append(name);
 		ret.append(");\n");
 
-		ret.append("    }\n");
-		ret.append("    else {\n");
-
-		ret.append("        ret.");
-		ret.append(name);
-		ret.append(" = (const wchar_t*)(\"\");\n");
-
-		ret.append("    }\n");*/
-		break;
+		ret.append("        }\n");
 	}
 	case AST_Decl::NT_enum:
 	{		
@@ -862,12 +844,12 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append(";\n");
 		}
 		else {
-			ret.append("    const long double const_");
+			ret.append("        const long double const_");
 			ret.append(name);
 			ret.append(" = ");
 			ret.append(name);
 			ret.append(";\n");
-			ret.append("    ret.");
+			ret.append("        ret.");
 			ret.append(name);
 			ret.append(".assign(const_");
 			ret.append(name);
@@ -898,11 +880,24 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
 	{
-		/*ret.append("    m_");
+		ret.append("        if (native.");
 		ret.append(name);
-		ret.append(" = gcnew System::String(native.");
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		ret.append("            ");
 		ret.append(name);
-		ret.append(");\n");*/
+		if (node_type == AST_Decl::NT_string) {
+			ret.append(" = CORBA::string_dup(native.");
+		}
+		else {
+			ret.append(" = CORBA::wstring_dup(native.");
+		}
+		ret.append(name);
+		ret.append(");\n");
+
+		ret.append("        }\n");
 		break;
 	}
 	case AST_Decl::NT_enum:
@@ -970,11 +965,22 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
 	{
-		/*ret.append("    m_");
+		ret.append("        if (");
 		ret.append(name);
-		ret.append(" = gcnew System::String(native.");
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		if (node_type == AST_Decl::NT_string) {
+			ret.append("            CORBA::string_free(");
+		}
+		else {
+			ret.append("            CORBA::wstring_free(");
+		}
 		ret.append(name);
-		ret.append(");\n");*/
+		ret.append(");\n");
+
+		ret.append("        }\n");
 		break;
 	}
 	case AST_Decl::NT_enum:

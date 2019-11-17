@@ -629,7 +629,7 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
 	{
-		//ret = "System.String";
+		ret = "IntPtr";
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -746,12 +746,6 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 		//ret = "System.Decimal";
 		break;
 	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{
-		//ret = "System.String";
-		break;
-	}
 	case AST_Decl::NT_pre_defined:
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
@@ -829,7 +823,7 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
 	{
-		ret = "\"\"";
+		ret = "string.Empty;";
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -924,48 +918,35 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		break;
 	}
 	case AST_Decl::NT_string:
-	{		
-		/*ret.append("    if (m_");
-		ret.append(name);
-		ret.append(" != nullptr) {\n");
-
-		ret.append("        ret.");
-		ret.append(name);
-		ret.append(" = context.marshal_as<const char*>(m_");
-		ret.append(name);
-		ret.append(");\n");
-
-		ret.append("    }\n");
-		ret.append("    else {\n");
-
-		ret.append("        ret.");
-		ret.append(name);
-		ret.append(" = \"\";\n");
-
-		ret.append("    }\n");*/
-
-		break;
-	}
 	case AST_Decl::NT_wstring:
-	{
-		/*ret.append("    if (m_");
+	{		
+		ret.append(indent);
+		ret.append("    if (");
 		ret.append(name);
-		ret.append(" != nullptr) {\n");
+		ret.append(" != null)\n");
 
-		ret.append("    ret.");
+		ret.append(indent);
+		ret.append("    {\n");
+
+		ret.append(indent);
+		ret.append("        wrapper.");
 		ret.append(name);
-		ret.append(" = context.marshal_as<const wchar_t*>(m_");
+		if (node_type == AST_Decl::NT_string) {
+			ret.append(" = Marshal.StringToHGlobalAnsi(");
+		}
+		else {
+			ret.append(" = Marshal.StringToHGlobalUni(");
+		}
 		ret.append(name);
 		ret.append(");\n");
 
-		ret.append("    }\n");
-		ret.append("    else {\n");
-
-		ret.append("        ret.");
+		ret.append(indent);
+		ret.append("        toRelease.Add(wrapper.");
 		ret.append(name);
-		ret.append(" = (const wchar_t*)(\"\");\n");
+		ret.append(");\n");
 
-		ret.append("    }\n");*/
+		ret.append(indent);
+		ret.append("    }\n");
 		break;
 	}
 	case AST_Decl::NT_enum:
@@ -1020,17 +1001,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(name);
 			ret.append(" = Convert.ToDouble(_");
 			ret.append(name);
-			ret.append(");\n");
-			/*ret.append("    const long double const_");
-			ret.append(name);
-			ret.append(" = m_");
-			ret.append(name);
-			ret.append(";\n");
-			ret.append("    ret.");
-			ret.append(name);
-			ret.append(".assign(const_");
-			ret.append(name);
-			ret.append(");\n");*/			
+			ret.append(");\n");			
 		}
 		break;
 	}
@@ -1056,12 +1027,42 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 	}
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
-	{
-		/*ret.append("    m_");
+	{		
+		ret.append("    if (wrapper.");
 		ret.append(name);
-		ret.append(" = gcnew System::String(native.");
+		ret.append(" != IntPtr.Zero)\n");
+
+		ret.append(indent);
+		ret.append("    {\n");
+
+		ret.append(indent);
+		ret.append("        ");
 		ret.append(name);
-		ret.append(");\n");*/
+		if (node_type == AST_Decl::NT_string) {
+			ret.append("= Marshal.PtrToStringAnsi(wrapper.");
+		}
+		else {
+			ret.append("= Marshal.PtrToStringUni(wrapper.");
+		}
+		ret.append(name);
+		ret.append(");\n");
+
+		ret.append(indent);
+		ret.append("    }\n");
+
+		ret.append(indent);
+		ret.append("    else\n");
+
+		ret.append(indent);
+		ret.append("    {\n");
+
+		ret.append(indent);
+		ret.append("        ");
+		ret.append(name);
+		ret.append(" = null;\n");
+
+		ret.append(indent);
+		ret.append("    }\n");
 		break;
 	}
 	case AST_Decl::NT_enum:
