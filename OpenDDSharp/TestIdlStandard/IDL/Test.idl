@@ -12,5 +12,8 @@ module Test {
 		wchar WCharField;
 		boolean BooleanField;
 		octet OctetField;
+		float FloatField;
+		double DoubleField;
+		long double LongDoubleField;
     };
 };

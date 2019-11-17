@@ -108,7 +108,10 @@ namespace OpenDDSharp.Standard.UnitTest
                 CharField = 'a',
                 WCharField = 'b',
                 BooleanField = true,
-                OctetField = 0x42
+                OctetField = 0x42,
+                FloatField = 42.42f,
+                DoubleField = 23.23d,
+                LongDoubleField = 69.69m,
             };
             _dataWriter.Write(data);
 
@@ -119,26 +122,32 @@ namespace OpenDDSharp.Standard.UnitTest
             
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(data.ShortField, received.ShortField);
-            Assert.AreEqual(data.LongField, received.LongField);
+            Assert.AreEqual(data.LongField, received.LongField); 
             Assert.AreEqual(data.LongLongField, received.LongLongField);
             Assert.AreEqual(data.UnsignedShortField, received.UnsignedShortField);
             Assert.AreEqual(data.UnsignedLongField, received.UnsignedLongField);
             Assert.AreEqual(data.UnsignedLongLongField, received.UnsignedLongLongField);
-            Assert.AreEqual(data.CharField, received.CharField);
+            Assert.AreEqual(data.CharField, received.CharField); 
             Assert.AreEqual(data.WCharField, received.WCharField);
             Assert.AreEqual(data.BooleanField, received.BooleanField);
             Assert.AreEqual(data.OctetField, received.OctetField);
+            Assert.AreEqual(data.FloatField, received.FloatField);
+            Assert.AreEqual(data.DoubleField, received.DoubleField);
+            Assert.AreEqual(data.LongDoubleField, received.LongDoubleField);
 
             Assert.AreEqual(typeof(short), data.ShortField.GetType());
             Assert.AreEqual(typeof(int), data.LongField.GetType());
             Assert.AreEqual(typeof(long), data.LongLongField.GetType());
             Assert.AreEqual(typeof(ushort), data.UnsignedShortField.GetType());
             Assert.AreEqual(typeof(uint), data.UnsignedLongField.GetType());
-            Assert.AreEqual(typeof(ulong), data.UnsignedLongLongField.GetType());
+            Assert.AreEqual(typeof(ulong), data.UnsignedLongLongField.GetType()); 
             Assert.AreEqual(typeof(char), data.CharField.GetType());
             Assert.AreEqual(typeof(char), data.WCharField.GetType());
             Assert.AreEqual(typeof(bool), data.BooleanField.GetType());
             Assert.AreEqual(typeof(byte), data.OctetField.GetType());
+            Assert.AreEqual(typeof(float), data.FloatField.GetType());
+            Assert.AreEqual(typeof(double), data.DoubleField.GetType());
+            Assert.AreEqual(typeof(decimal), data.LongDoubleField.GetType());
 
             Assert.AreEqual(defaultStruct.ShortField, 0);
             Assert.AreEqual(defaultStruct.LongField, 0);
@@ -150,6 +159,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.WCharField, '\0');
             Assert.AreEqual(defaultStruct.BooleanField, false);
             Assert.AreEqual(defaultStruct.OctetField, 0);
+            Assert.AreEqual(defaultStruct.FloatField, 0.0f);
+            Assert.AreEqual(defaultStruct.DoubleField, 0.0);
+            Assert.AreEqual(defaultStruct.LongDoubleField, 0.0m);
         }
         #endregion
     }

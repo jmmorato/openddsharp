@@ -598,13 +598,13 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			ret = "CORBA::ULongLong";
 			break;
 		case AST_PredefinedType::PT_float:
-			//ret = "System::Single";
+			ret = "CORBA::Float";
 			break;
 		case AST_PredefinedType::PT_double:
-			//ret = "System::Double";
+			ret = "CORBA::Double";
 			break;
 		case AST_PredefinedType::PT_longdouble:
-			//ret = "long double";
+			ret = "CORBA::Double";
 			break;
 		case AST_PredefinedType::PT_octet:
 			ret = "CORBA::Octet";			
@@ -862,16 +862,16 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append(";\n");
 		}
 		else {
-			/*ret.append("    const long double const_");
+			ret.append("    const long double const_");
 			ret.append(name);
-			ret.append(" = m_");
+			ret.append(" = ");
 			ret.append(name);
 			ret.append(";\n");
 			ret.append("    ret.");
 			ret.append(name);
 			ret.append(".assign(const_");
 			ret.append(name);
-			ret.append(");\n");	*/		
+			ret.append(");\n");			
 		}
 		break;
 	}

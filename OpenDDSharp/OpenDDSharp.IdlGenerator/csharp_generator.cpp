@@ -543,7 +543,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 			ret = "Double";
 			break;
 		case AST_PredefinedType::PT_longdouble:
-			ret = "Double";
+			ret = "Decimal";
 			break;
 		case AST_PredefinedType::PT_octet:
 			ret = "Byte";			
@@ -656,15 +656,15 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 		case AST_PredefinedType::PT_ulonglong:
 			ret = "UInt64";
 			break;
-		/*case AST_PredefinedType::PT_float:
-			ret = "System.Single";
+		case AST_PredefinedType::PT_float:
+			ret = "Single";
 			break;
 		case AST_PredefinedType::PT_double:
-			ret = "System.Double";
+			ret = "Double";
 			break;
 		case AST_PredefinedType::PT_longdouble:
-			ret = "long double";
-			break;*/
+			ret = "Double";
+			break;
 		case AST_PredefinedType::PT_octet:
 			ret = "Byte";
 			break;
@@ -757,16 +757,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
 		switch (predefined_type->pt())
-		{
-			/*case AST_PredefinedType::PT_float:
-				ret = "System.Single";
-				break;
-			case AST_PredefinedType::PT_double:
-				ret = "System.Double";
-				break;
-			case AST_PredefinedType::PT_longdouble:
-				ret = "long double";
-				break;*/
+		{		
 		case AST_PredefinedType::PT_octet:
 			ret = "[MarshalAs(UnmanagedType.U1)]\n";
 			break;
@@ -1024,6 +1015,12 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(";\n");
 		}
 		else {
+			ret.append(indent);
+			ret.append("    wrapper.");
+			ret.append(name);
+			ret.append(" = Convert.ToDouble(_");
+			ret.append(name);
+			ret.append(");\n");
 			/*ret.append("    const long double const_");
 			ret.append(name);
 			ret.append(" = m_");
@@ -1101,12 +1098,22 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
-	{		
-		ret.append("    _");
-		ret.append(name);
-		ret.append(" = wrapper.");
-		ret.append(name);
-		ret.append(";\n");		
+	{
+		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
+		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
+			ret.append("    _");
+			ret.append(name);
+			ret.append(" = wrapper.");
+			ret.append(name);
+			ret.append(";\n");
+		}
+		else {
+			ret.append("    _");
+			ret.append(name);
+			ret.append(" = Convert.ToDecimal(wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+		}
 		break;
 	}		
 	}

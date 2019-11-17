@@ -39,6 +39,9 @@ namespace Test
         Char _WCharField;
         Boolean _BooleanField;
         Byte _OctetField;
+        Single _FloatField;
+        Double _DoubleField;
+        Decimal _LongDoubleField;
         #endregion
 
         #region Properties
@@ -101,6 +104,24 @@ namespace Test
             get { return _OctetField; }
             set { _OctetField = value; }
         }
+
+        public Single FloatField
+        {
+            get { return _FloatField; }
+            set { _FloatField = value; }
+        }
+
+        public Double DoubleField
+        {
+            get { return _DoubleField; }
+            set { _DoubleField = value; }
+        }
+
+        public Decimal LongDoubleField
+        {
+            get { return _LongDoubleField; }
+            set { _LongDoubleField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -116,6 +137,9 @@ namespace Test
             _WCharField = '\0';
             _BooleanField = false;
             _OctetField = 0;
+            _FloatField = 0;
+            _DoubleField = 0;
+            _LongDoubleField = 0;
         }
         #endregion
 
@@ -134,6 +158,9 @@ namespace Test
             wrapper.WCharField = _WCharField;
             wrapper.BooleanField = _BooleanField;
             wrapper.OctetField = _OctetField;
+            wrapper.FloatField = _FloatField;
+            wrapper.DoubleField = _DoubleField;
+            wrapper.LongDoubleField = Convert.ToDouble(_LongDoubleField);
 
             return wrapper;
         }
@@ -150,6 +177,9 @@ namespace Test
             _WCharField = wrapper.WCharField;
             _BooleanField = wrapper.BooleanField;
             _OctetField = wrapper.OctetField;
+            _FloatField = wrapper.FloatField;
+            _DoubleField = wrapper.DoubleField;
+            _LongDoubleField = Convert.ToDecimal(wrapper.LongDoubleField);
         }
         #endregion
     }
@@ -171,6 +201,9 @@ namespace Test
         public Boolean BooleanField;
         [MarshalAs(UnmanagedType.U1)]
         public Byte OctetField;
+        public Single FloatField;
+        public Double DoubleField;
+        public Double LongDoubleField;
     }
 
 	public class TestStructTypeSupport
