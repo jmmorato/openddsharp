@@ -549,17 +549,8 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_sequence:
-		case AST_Decl::NT_array:
-			ret.append("^");
-			break;
-		}*/
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_cwrapper_type(typedef_type->base_type());
 		break;
 	}
 	case AST_Decl::NT_fixed:
@@ -811,25 +802,8 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_array:
-		{
-			ret.append(get_typedef_array_to_native(typedef_type, name));
-			break;
-		}
-		case AST_Decl::NT_sequence:
-		{
-			ret.append(get_typedef_seq_to_native(typedef_type, name));
-			break;
-		}
-		default:
-			ret = get_field_to_native(typedef_type->base_type(), name);
-			break;
-		}*/
-		
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_field_to_native(typedef_type->base_type(), name);
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -913,24 +887,8 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_array:
-		{
-			ret.append(get_typedef_array_from_native(typedef_type, name));
-			break;
-		}
-		case AST_Decl::NT_sequence:
-		{
-			ret.append(get_typedef_seq_from_native(typedef_type, name));
-			break;
-		}
-		default:
-			ret = get_field_to_native(typedef_type->base_type(), name);
-			break;
-		}*/
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_field_from_native(typedef_type->base_type(), name);
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -996,24 +954,8 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_array:
-		{
-			ret.append(get_typedef_array_from_native(typedef_type, name));
-			break;
-		}
-		case AST_Decl::NT_sequence:
-		{
-			ret.append(get_typedef_seq_from_native(typedef_type, name));
-			break;
-		}
-		default:
-			ret = get_field_to_native(typedef_type->base_type(), name);
-			break;
-		}*/
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_field_release(typedef_type->base_type(), name);
 		break;
 	}
 	case AST_Decl::NT_pre_defined:

@@ -189,7 +189,6 @@ bool csharp_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std:
 }
 
 bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
-	/*std::string cli_type("");
 	switch (base->node_type()) {
 	case AST_Decl::NT_sequence:
 	{
@@ -198,9 +197,6 @@ bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_
 			std::cerr << "ERROR: List of enum types are not supported in .NET. Field name: " << node->full_name() << std::endl;
 			return false;
 		}
-
-		cli_type = get_cli_type(base);
-		cli_type = cli_type.erase(cli_type.find_last_of("^"));
 		break;
 	}
 	case AST_Decl::NT_array:
@@ -210,17 +206,11 @@ bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_
 			std::cerr << "ERROR: Array of enum types are not supported in .NET. Field name: " << node->full_name() << std::endl;
 			return false;
 		}
-
-		cli_type = get_cli_type(base);
-		cli_type = cli_type.erase(cli_type.find_last_of("^"));
 		break;
 	}
 	default:
-		cli_type = get_cli_type(base);
 		break;
 	}
-
-	be_global->header_ << "\n    typedef " << cli_type << " " << name->last_component()->get_string() << ";\n";*/
 
 	return true;
 }
@@ -475,35 +465,26 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	case AST_Decl::NT_union:			
 	case AST_Decl::NT_struct:		
 	{
-		ret = "OpenDDSharp::";
+		/*ret = "OpenDDSharp::";
 		ret.append(type->full_name());
-		ret.append("^");
+		ret.append("^");*/
 		break;
 	}
 	case AST_Decl::NT_enum:	
 	{
-		ret = "OpenDDSharp::";
-		ret.append(type->full_name());
+		/*ret = "OpenDDSharp::";
+		ret.append(type->full_name());*/
 		break;
 	}
 	case AST_Decl::NT_typedef:
 	{
 		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_sequence:
-		case AST_Decl::NT_array:
-			ret.append("^");
-			break;
-		}
+		ret = get_csharp_type(typedef_type->base_type());
 		break;
 	}
 	case AST_Decl::NT_fixed:
 	{
-		ret = "decimal";
+		//ret = "decimal";
 		break;
 	}
 	case AST_Decl::NT_string:		
@@ -560,23 +541,23 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_array:
 	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		/*AST_Array* arr_type = AST_Array::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(arr_type->base_type());
 		
 		ret = "array<";
 		ret.append(base_type);
 		ret.append(", ");
 		ret.append(std::to_string(arr_type->n_dims()));
-		ret.append(">^");
+		ret.append(">^");*/
 		break;
 	}		
 	case AST_Decl::NT_sequence:
 	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		/*AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(seq_type->base_type());
 		ret = "List<";
 		ret.append(base_type);
-		ret.append(">^");
+		ret.append(">^");*/
 		break;
 	}		
 	default:
@@ -608,17 +589,8 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_sequence:
-		case AST_Decl::NT_array:
-			ret.append("^");
-			break;
-		}*/
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_marshal_type(typedef_type->base_type());
 		break;
 	}
 	case AST_Decl::NT_fixed:
@@ -728,17 +700,8 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_sequence:
-		case AST_Decl::NT_array:
-			ret.append("^");
-			break;
-		}*/
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_marshal_as_attribute(typedef_type->base_type());
 		break;
 	}
 	case AST_Decl::NT_fixed:
@@ -823,7 +786,7 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
 	{
-		ret = "string.Empty;";
+		ret = "string.Empty";
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -962,25 +925,8 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_array:
-		{
-			ret.append(get_typedef_array_to_native(typedef_type, name));
-			break;
-		}
-		case AST_Decl::NT_sequence:
-		{
-			ret.append(get_typedef_seq_to_native(typedef_type, name));
-			break;
-		}
-		default:
-			ret = get_field_to_native(typedef_type->base_type(), name);
-			break;
-		}*/
-		
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_field_to_native(typedef_type->base_type(), name, indent);
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
@@ -1078,24 +1024,8 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 	}
 	case AST_Decl::NT_typedef:
 	{
-		/*AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-
-		switch (typedef_type->base_type()->node_type())
-		{
-		case AST_Decl::NT_array:
-		{
-			ret.append(get_typedef_array_from_native(typedef_type, name));
-			break;
-		}
-		case AST_Decl::NT_sequence:
-		{
-			ret.append(get_typedef_seq_from_native(typedef_type, name));
-			break;
-		}
-		default:
-			ret = get_field_to_native(typedef_type->base_type(), name);
-			break;
-		}*/
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_field_from_native(typedef_type->base_type(), name, indent);
 		break;
 	}
 	case AST_Decl::NT_pre_defined:
