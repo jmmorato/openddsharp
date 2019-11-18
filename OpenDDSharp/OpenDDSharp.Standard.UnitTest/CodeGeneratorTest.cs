@@ -17,9 +17,9 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
@@ -173,7 +173,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStruct data = new TestStruct
             {
                 UnboundedStringField = "Hello, I love you, won't you tell me your name?",
-                UnboundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?"
+                UnboundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
+                BoundedStringField = "Hello, I love you, won't you tell me your name?",
+                BoundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?"
             };
             _dataWriter.Write(data);
 
@@ -186,12 +188,20 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(data.UnboundedStringField, received.UnboundedStringField);
             Assert.AreEqual(data.UnboundedWStringField, received.UnboundedWStringField);
+            // TODO: I would expect ".Substring(0, 32)" is received but it seems the whole string is transported. 
+            // Check with OpenDDS test and report for clarification if the behaviour is confirmed.
+            Assert.AreEqual(data.BoundedStringField, received.BoundedStringField);
+            Assert.AreEqual(data.BoundedWStringField, received.BoundedWStringField);
 
             Assert.AreEqual(typeof(string), data.UnboundedStringField.GetType());
-            Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());
+            Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());            
+            Assert.AreEqual(typeof(string), data.BoundedStringField.GetType());
+            Assert.AreEqual(typeof(string), data.BoundedWStringField.GetType());
 
             Assert.AreEqual(defaultStruct.UnboundedStringField, string.Empty);
-            Assert.AreEqual(defaultStruct.UnboundedStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.UnboundedWStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.BoundedStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
         }
         #endregion
     }

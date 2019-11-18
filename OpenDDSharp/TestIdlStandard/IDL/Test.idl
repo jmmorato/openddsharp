@@ -1,5 +1,8 @@
 module Test {
 
+	typedef string<32> BoundedStringType;
+	typedef wstring<32> BoundedWStringType;
+
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
         short ShortField;
@@ -16,6 +19,8 @@ module Test {
 		double DoubleField;
 		long double LongDoubleField;
 		string UnboundedStringField;		
-		wstring UnboundedWStringField;		
+		wstring UnboundedWStringField;
+		BoundedStringType BoundedStringField;
+		BoundedWStringType BoundedWStringField;
     };
 };
