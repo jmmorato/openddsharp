@@ -31,6 +31,11 @@ module Test {
 	typedef sequence<long double> UnboundedLongDoubleSequenceType;
 	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
 
+	typedef sequence<string> UnboundedStringSequenceType;
+	typedef sequence<string, 5> BoundedStringSequenceType;
+	typedef sequence<wstring> UnboundedWStringSequenceType;
+	typedef sequence<wstring, 5> BoundedWStringSequenceType;
+
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
         short ShortField;
@@ -76,5 +81,9 @@ module Test {
 		BoundedDoubleSequenceType BoundedDoubleSequenceField;
 		UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
 		BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+		UnboundedStringSequenceType UnboundedStringSequenceField;
+		BoundedStringSequenceType BoundedStringSequenceField;
+		UnboundedWStringSequenceType UnboundedWStringSequenceField;
+		BoundedWStringSequenceType BoundedWStringSequenceField;
     };
 };

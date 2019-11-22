@@ -360,7 +360,82 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.UnboundedWStringField, string.Empty);
             Assert.AreEqual(defaultStruct.BoundedStringField, string.Empty);
             Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
-        }        
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringSequences()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                BoundedStringSequenceField =
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets"
+                },
+                UnboundedStringSequenceField =
+                {
+                    "You've got your mother in a whirl",
+                    "She's not sure if you're a boy or a girl",
+                    "Hey babe! your hair's alright",
+                    "Hey babe! let's go out tonight",
+                    "You like me, and I like it all",
+                    "We like dancing and we look divine",
+                    "You love bands when they're playing hard",
+                    "You want more and you want it fast",
+                    "They put you down, they say I'm wrong",
+                    "You tacky thing, you put them on"
+                },
+                BoundedWStringSequenceField =
+                {
+                    "Rebel Rebel, you've turn your dress",
+                    "Rebel Rebel, your face is a mess",
+                    "Rebel Rebel, how could they know?",
+                    "Hot tramp, I love you so!"
+                },
+                UnboundedWStringSequenceField =
+                {
+                    "Well, you've got your diamonds",
+                    "And you've got your pretty clothes",
+                    "And the chauffer drives your car",
+                    "You let everybody know",
+                    "But don't play with me,",
+                    "'cause you're playing with fire",
+                }
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(data.BoundedStringSequenceField.SequenceEqual(received.BoundedStringSequenceField));
+            Assert.IsTrue(data.UnboundedStringSequenceField.SequenceEqual(received.UnboundedStringSequenceField));
+            Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
+            Assert.IsTrue(data.UnboundedWStringSequenceField.SequenceEqual(received.UnboundedWStringSequenceField));
+
+            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.BoundedStringSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.UnboundedStringSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.BoundedWStringSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.UnboundedWStringSequenceField.GetType()));
+
+            Assert.IsNotNull(defaultStruct.BoundedStringSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedStringSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedStringSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedStringSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedWStringSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedWStringSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedWStringSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedWStringSequenceField.Count, 0);
+        }
         #endregion
     }
 }

@@ -73,6 +73,10 @@ namespace Test
         IList<Double> _BoundedDoubleSequenceField;
         IList<Decimal> _UnboundedLongDoubleSequenceField;
         IList<Decimal> _BoundedLongDoubleSequenceField;
+        IList<string> _UnboundedStringSequenceField;
+        IList<string> _BoundedStringSequenceField;
+        IList<string> _UnboundedWStringSequenceField;
+        IList<string> _BoundedWStringSequenceField;
         #endregion
 
         #region Properties
@@ -333,6 +337,30 @@ namespace Test
             get { return _BoundedLongDoubleSequenceField; }
             set { _BoundedLongDoubleSequenceField = value; }
         }
+
+        public IList<string> UnboundedStringSequenceField
+        {
+            get { return _UnboundedStringSequenceField; }
+            set { _UnboundedStringSequenceField = value; }
+        }
+
+        public IList<string> BoundedStringSequenceField
+        {
+            get { return _BoundedStringSequenceField; }
+            set { _BoundedStringSequenceField = value; }
+        }
+
+        public IList<string> UnboundedWStringSequenceField
+        {
+            get { return _UnboundedWStringSequenceField; }
+            set { _UnboundedWStringSequenceField = value; }
+        }
+
+        public IList<string> BoundedWStringSequenceField
+        {
+            get { return _BoundedWStringSequenceField; }
+            set { _BoundedWStringSequenceField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -381,6 +409,10 @@ namespace Test
             _BoundedDoubleSequenceField = new List<Double>(5);
             _UnboundedLongDoubleSequenceField = new List<Decimal>();
             _BoundedLongDoubleSequenceField = new List<Decimal>(5);
+            _UnboundedStringSequenceField = new List<string>();
+            _BoundedStringSequenceField = new List<string>(5);
+            _UnboundedWStringSequenceField = new List<string>();
+            _BoundedWStringSequenceField = new List<string>(5);
         }
         #endregion
 
@@ -423,9 +455,9 @@ namespace Test
                 toRelease.Add(wrapper.BoundedWStringField);
             }
             MarshalHelper.BooleanSequenceToPtr(UnboundedBooleanSequenceField, ref wrapper.UnboundedBooleanSequenceField);
-        toRelease.Add(wrapper.UnboundedBooleanSequenceField);
+            toRelease.Add(wrapper.UnboundedBooleanSequenceField);
             MarshalHelper.BooleanSequenceToPtr(BoundedBooleanSequenceField, ref wrapper.BoundedBooleanSequenceField);
-        toRelease.Add(wrapper.BoundedBooleanSequenceField);
+            toRelease.Add(wrapper.BoundedBooleanSequenceField);
             if (UnboundedCharSequenceField != null)
             {                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(UnboundedCharSequenceField.ToArray()).ToList();
                 MarshalHelper.SequenceToPtr(aux, ref wrapper.UnboundedCharSequenceField);
@@ -478,6 +510,14 @@ namespace Test
             toRelease.Add(wrapper.UnboundedLongDoubleSequenceField);
             MarshalHelper.LongDoubleSequenceToPtr(BoundedLongDoubleSequenceField, ref wrapper.BoundedLongDoubleSequenceField);
             toRelease.Add(wrapper.BoundedLongDoubleSequenceField);
+            toRelease.AddRange(MarshalHelper.StringSequenceToPtr(UnboundedStringSequenceField, ref wrapper.UnboundedStringSequenceField, false));
+            toRelease.Add(wrapper.UnboundedStringSequenceField);
+            toRelease.AddRange(MarshalHelper.StringSequenceToPtr(BoundedStringSequenceField, ref wrapper.BoundedStringSequenceField, false));
+            toRelease.Add(wrapper.BoundedStringSequenceField);
+            toRelease.AddRange(MarshalHelper.StringSequenceToPtr(UnboundedWStringSequenceField, ref wrapper.UnboundedWStringSequenceField, true));
+            toRelease.Add(wrapper.UnboundedWStringSequenceField);
+            toRelease.AddRange(MarshalHelper.StringSequenceToPtr(BoundedWStringSequenceField, ref wrapper.BoundedWStringSequenceField, true));
+            toRelease.Add(wrapper.BoundedWStringSequenceField);
 
             return wrapper;
         }
@@ -555,6 +595,10 @@ namespace Test
             MarshalHelper.PtrToSequence(wrapper.BoundedDoubleSequenceField, ref _BoundedDoubleSequenceField, 5);
             MarshalHelper.PtrToLongDoubleSequence(wrapper.UnboundedLongDoubleSequenceField, ref _UnboundedLongDoubleSequenceField);
             MarshalHelper.PtrToLongDoubleSequence(wrapper.BoundedLongDoubleSequenceField, ref _BoundedLongDoubleSequenceField, 5);
+            MarshalHelper.PtrToStringSequence(wrapper.UnboundedStringSequenceField, ref _UnboundedStringSequenceField, false);
+            MarshalHelper.PtrToStringSequence(wrapper.BoundedStringSequenceField, ref _BoundedStringSequenceField, false, 5);
+            MarshalHelper.PtrToStringSequence(wrapper.UnboundedWStringSequenceField, ref _UnboundedWStringSequenceField, true);
+            MarshalHelper.PtrToStringSequence(wrapper.BoundedWStringSequenceField, ref _BoundedWStringSequenceField, true, 5);
         }
         #endregion
     }
@@ -609,6 +653,10 @@ namespace Test
         public IntPtr BoundedDoubleSequenceField;
         public IntPtr UnboundedLongDoubleSequenceField;
         public IntPtr BoundedLongDoubleSequenceField;
+        public IntPtr UnboundedStringSequenceField;
+        public IntPtr BoundedStringSequenceField;
+        public IntPtr UnboundedWStringSequenceField;
+        public IntPtr BoundedWStringSequenceField;
     }
 
 	public class TestStructTypeSupport

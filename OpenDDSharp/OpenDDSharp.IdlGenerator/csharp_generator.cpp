@@ -1009,14 +1009,8 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		case AST_Decl::NT_string:
 		case AST_Decl::NT_wstring:
 		{
-			/*toRelease.AddRange(Helper.StringSequenceToPtr(StringSequence, ref wrapper.StringSequence, false));
-			toRelease.Add(wrapper.StringSequence);
-
-			toRelease.AddRange(Helper.StringSequenceToPtr(WStringSequence, ref wrapper.WStringSequence, true));
-			toRelease.Add(wrapper.WStringSequence);*/
-
 			ret.append(indent);
-			ret.append("    toRelease.AddRange(Helper.StringSequenceToPtr(");
+			ret.append("    toRelease.AddRange(MarshalHelper.StringSequenceToPtr(");
 			ret.append(name);
 			ret.append(", ref wrapper.");
 			ret.append(name);
@@ -1030,7 +1024,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(indent);
 			ret.append("    toRelease.Add(wrapper.");
 			ret.append(name);
-			ret.append(");");
+			ret.append(");\n");
 
 			break;
 		}
@@ -1093,7 +1087,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(");\n");
 
 				ret.append(indent);
-				ret.append("toRelease.Add(wrapper.");
+				ret.append("    toRelease.Add(wrapper.");
 				ret.append(name);
 				ret.append(");\n");
 				break;
@@ -1305,9 +1299,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		}
 		case AST_Decl::NT_string:
 		case AST_Decl::NT_wstring:
-		{
-			/*Helper.PtrToStringSequence(wrapper.StringSequence, ref _stringSequence, false);
-			Helper.PtrToStringSequence(wrapper.WStringSequence, ref _wstringSequence, true);*/
+		{			
 			ret.append("    MarshalHelper.PtrToStringSequence(wrapper.");
 			ret.append(name);
 			ret.append(", ref _");
@@ -1323,6 +1315,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append(std::to_string(bound));
 			}
 			ret.append(");\n");
+			break;
 		}
 		case AST_Decl::NT_enum:
 		{

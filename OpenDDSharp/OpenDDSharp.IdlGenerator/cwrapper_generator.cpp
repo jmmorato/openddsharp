@@ -987,10 +987,10 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		{
 			ret.append("            marshal::release_");
 			if (base_node_type == AST_Decl::NT_string) {
-				ret.append("_basic_string_sequence_ptr(");
+				ret.append("basic_string_sequence_ptr(");
 			}
 			else {
-				ret.append("_wide_string_sequence_ptr(");
+				ret.append("wide_string_sequence_ptr(");
 			}
 			ret.append(name);
 			ret.append(");\n");
