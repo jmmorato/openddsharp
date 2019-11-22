@@ -220,6 +220,7 @@ namespace {
 				}
 				else {
 					out << "using System;\n"
+						<< "using System.Linq;\n"
 						<< "using System.Security;\n"
 						<< "using System.Collections.Generic;\n"
 					    << "using System.Runtime.InteropServices;\n"

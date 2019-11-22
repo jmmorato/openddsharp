@@ -66,7 +66,6 @@ namespace {
 		}
 		return str;
 	}
-
 }
 
 cwrapper_generator::cwrapper_generator()
@@ -75,14 +74,10 @@ cwrapper_generator::cwrapper_generator()
 }
 
 bool cwrapper_generator::gen_module(AST_Module* node) {
-	//be_global->header_ << "namespace " << node->name()->last_component()->get_string() << " {\n\n";
-
 	return true;
 }
 
 bool cwrapper_generator::gen_module_end() {
-	//be_global->header_ << "\n};\n";
-
 	return true;
 }
 
@@ -190,39 +185,6 @@ bool cwrapper_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const st
 }
 
 bool cwrapper_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
-	/*std::string cli_type("");
-	switch (base->node_type()) {
-	case AST_Decl::NT_sequence:
-	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(base);
-		if (seq_type->base_type()->node_type() == AST_Decl::NT_enum) {
-			std::cerr << "ERROR: List of enum types are not supported in .NET. Field name: " << node->full_name() << std::endl;
-			return false;
-		}
-
-		cli_type = get_cli_type(base);
-		cli_type = cli_type.erase(cli_type.find_last_of("^"));
-		break;
-	}
-	case AST_Decl::NT_array:
-	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(base);
-		if (arr_type->base_type()->node_type() == AST_Decl::NT_enum) {
-			std::cerr << "ERROR: Array of enum types are not supported in .NET. Field name: " << node->full_name() << std::endl;
-			return false;
-		}
-
-		cli_type = get_cli_type(base);
-		cli_type = cli_type.erase(cli_type.find_last_of("^"));
-		break;
-	}
-	default:
-		cli_type = get_cli_type(base);
-		break;
-	}
-
-	be_global->header_ << "\n    typedef " << cli_type << " " << name->last_component()->get_string() << ";\n";*/
-
 	return true;
 }
 
@@ -334,94 +296,6 @@ std::string cwrapper_generator::declare_struct_fields(const std::vector<AST_Fiel
 
 	return ret;
 }
-
-//std::string cwrapper_generator::declare_struct_field_properties(const std::vector<AST_Field*>& fields) {
-//	std::string ret("");
-//
-//	for (unsigned int i = 0; i < fields.size(); i++) {
-//		AST_Field* field = fields[i];
-//		AST_Type* type = field->field_type();
-//		const char* name = field->local_name()->get_string();		
-//		std::string type_name = get_cwrapper_type(type);
-//
-//		ret.append("        property ");
-//		ret.append(type_name.c_str());
-//		ret.append(" ");
-//		ret.append(name);
-//		ret.append(" {\n");
-//		ret.append("            ");
-//		ret.append(type_name.c_str());
-//		ret.append(" get();\n");
-//		ret.append("            void set(");
-//		ret.append(type_name.c_str());
-//		ret.append(" value);\n");
-//		ret.append("        }\n");
-//	}
-//
-//	return ret;
-//}
-
-//std::string cwrapper_generator::implement_struct_constructor(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name) {
-//	std::string ret("");
-//	ret.append("OpenDDSharp::");
-//	ret.append(scoped_name);
-//	ret.append("::");
-//	ret.append(name);
-//	ret.append("() {\n");
-//
-//	for (unsigned int i = 0; i < fields.size(); i++) {
-//		AST_Field* field = fields[i];
-//		AST_Type* type = field->field_type();
-//
-//		if (type->node_type() != AST_Decl::NT_enum) {
-//			const char* field_name = field->local_name()->get_string();
-//			std::string default_value = get_cwrapper_default_value(type);
-//
-//			ret.append("    m_");
-//			ret.append(field_name);
-//			ret.append(" = ");
-//			ret.append(default_value);
-//			ret.append(";\n");
-//		}
-//	}
-//
-//	ret.append("}\n\n");
-//	return ret;
-//}
-
-//std::string cwrapper_generator::implement_struct_properties(const std::vector<AST_Field*>& fields, const std::string scoped_name) {
-//	std::string ret("");
-//
-//	for (unsigned int i = 0; i < fields.size(); i++) {
-//		AST_Field* field = fields[i];
-//		AST_Type* type = field->field_type();
-//		const char* field_name = field->local_name()->get_string();
-//		std::string cli_type = get_cwrapper_type(type);
-//
-//		ret.append(cli_type);
-//		ret.append(" OpenDDSharp::");
-//		ret.append(scoped_name);
-//		ret.append("::");
-//		ret.append(field_name);
-//		ret.append("::get() {\n");
-//		ret.append("    return m_");
-//		ret.append(field_name);
-//		ret.append(";\n}\n\n");
-//
-//		ret.append("void OpenDDSharp::");
-//		ret.append(scoped_name);
-//		ret.append("::");
-//		ret.append(field_name);
-//		ret.append("::set(");
-//		ret.append(cli_type);
-//		ret.append(" value) {\n");
-//		ret.append("    m_");
-//		ret.append(field_name);
-//		ret.append(" = value;\n}\n\n");
-//	}
-//
-//	return ret;
-//}
 
 std::string cwrapper_generator::implement_struct_to_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name) {
 	std::string ret("    ");
@@ -630,115 +504,9 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	}		
 	case AST_Decl::NT_sequence:
 	{
-		/*AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
-		std::string base_type = get_cwrapper_type(seq_type->base_type());
-		ret = "List<";
-		ret.append(base_type);
-		ret.append(">^");*/
+		ret = "void*";
 		break;
 	}		
-	default:
-		break;
-	}
-
-	return ret;
-}
-
-// CODE REVIEW: Needed?
-std::string cwrapper_generator::get_cwrapper_default_value(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();	
-	std::string ret(type->flat_name());
-
-	switch (node_type)
-	{
-	case AST_Decl::NT_union:
-	case AST_Decl::NT_struct:
-	{
-		ret = "gcnew OpenDDSharp::";
-		ret.append(type->full_name());
-		ret.append("()");
-		break;
-	}
-	case AST_Decl::NT_typedef:
-	{
-		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-		ret = get_cwrapper_default_value(typedef_type->base_type());
-		break;
-	}
-	case AST_Decl::NT_fixed:
-	{
-		ret = "0";
-		break;
-	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{
-		ret = "\"\"";
-		break;
-	}
-	case AST_Decl::NT_pre_defined:
-	{
-		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
-		switch (predefined_type->pt())
-		{
-		case AST_PredefinedType::PT_short:
-		case AST_PredefinedType::PT_long:
-		case AST_PredefinedType::PT_longlong:
-		case AST_PredefinedType::PT_ushort:
-		case AST_PredefinedType::PT_ulong:
-		case AST_PredefinedType::PT_ulonglong:
-		case AST_PredefinedType::PT_float:
-		case AST_PredefinedType::PT_double:
-		case AST_PredefinedType::PT_longdouble:
-		case AST_PredefinedType::PT_octet:
-			ret = "0";
-			break;
-		case AST_PredefinedType::PT_char:
-		case AST_PredefinedType::PT_wchar:
-			ret = "'\\0'";
-			break;
-		case AST_PredefinedType::PT_boolean:
-			ret = "false";
-			break;
-		}
-		break;
-	}
-	case AST_Decl::NT_array:
-	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		std::string base_type = get_cwrapper_type(arr_type->base_type());
-		AST_Expression** dims = arr_type->dims();
-		
-		ret = "gcnew array<";
-		ret.append(base_type);
-		ret.append(", ");
-		ret.append(std::to_string(arr_type->n_dims()));
-		ret.append(">(");
-		ret.append(std::to_string(dims[0]->ev()->u.ulval));
-		unsigned int i = 1;
-		while (i < arr_type->n_dims()) {
-			ret.append(", ");
-			ret.append(std::to_string(dims[i]->ev()->u.ulval));
-			i++;
-		}
-		ret.append(")");
-		break;
-	}
-	case AST_Decl::NT_sequence:
-	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
-		std::string base_type = get_cwrapper_type(seq_type->base_type());
-		
-		ret = "gcnew List<";
-		ret.append(base_type);
-		ret.append(">(");
-		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
-		if (bound > 0) {
-			ret.append(std::to_string(bound));
-		}
-		ret.append(")");
-		break;
-	}
 	default:
 		break;
 	}
@@ -831,6 +599,129 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		}
 		break;
 	}
+	case AST_Decl::NT_sequence: 
+	{
+		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		std::string base_type = get_cwrapper_type(seq_type->base_type());
+		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
+		std::string sequence_kind = bound > 0 ? "bounded" : "unbounded";
+		
+		ret.append("        if (");
+		ret.append(name);
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		switch (base_node_type)
+		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			ret.append("            TAO::");
+			ret.append(sequence_kind);
+			ret.append("_value_sequence<");
+			ret.append(base_type);
+			ret.append("Wrapper");
+			if (bound > 0) {
+				ret.append(", ");
+				ret.append(std::to_string(bound));
+			}
+			ret.append("> aux;\n");
+
+			ret.append("            marshal::ptr_to_");
+			ret.append(sequence_kind);
+			ret.append("_sequence(");
+			ret.append(name);
+			ret.append(", aux);\n");
+
+			ret.append("            ACE_UINT32 length = aux.length();");
+
+			ret.append("            ret.");
+			ret.append(name);
+			ret.append(".length(length);\n");
+
+			ret.append("            for (ACE_UINT32 i = 0; i < length; i++)\n");
+
+			ret.append("            {");
+
+			ret.append("                ret.");
+			ret.append(name);
+			ret.append("[i] = aux[i].to_native();\n");
+
+			ret.append("            }");
+			break;
+		}
+		case AST_Decl::NT_string:
+		case AST_Decl::NT_wstring:
+		{
+			ret.append("            marshal::ptr_to_");
+			ret.append(sequence_kind);
+			if (base_node_type == AST_Decl::NT_string) {
+				ret.append("_basic_string_sequence(");
+			}
+			else {
+				ret.append("_wide_string_sequence(");
+			}
+			ret.append(name);
+			ret.append(", ret.");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		case AST_Decl::NT_pre_defined:
+		{
+			AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
+
+			if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+				ret.append("            TAO::");
+				ret.append(sequence_kind);
+				ret.append("_value_sequence<CORBA::Double");
+				if (bound > 0) {
+					ret.append(", ");
+					ret.append(std::to_string(bound));					
+				}
+				ret.append("> aux;\n");
+
+				ret.append("            marshal::ptr_to_");
+				ret.append(sequence_kind);
+				ret.append("_sequence(");
+				ret.append(name);
+				ret.append(", aux);\n");
+
+				ret.append("            int length = aux.length();\n");
+
+				ret.append("            ret.");
+				ret.append(name);
+				ret.append(".length(length);\n");
+
+				ret.append("            for (int i = 0; i < length; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                ret.");
+				ret.append(name);
+				ret.append("[i].assign(aux[i]);\n");
+				
+				ret.append("            }\n");				
+				break;
+			}
+		}
+		default: 
+		{
+			ret.append("            marshal::ptr_to_");
+			ret.append(sequence_kind);
+			ret.append("_sequence(");
+			ret.append(name);
+			ret.append(", ret.");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		}
+
+		ret.append("        }\n");
+	}
 	}
 
 	return ret;
@@ -899,7 +790,105 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 		ret.append(name);
 		ret.append(";\n");		
 		break;
-	}		
+	}
+	case AST_Decl::NT_sequence:
+	{
+		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		std::string base_type = get_cwrapper_type(seq_type->base_type());
+		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
+		std::string sequence_kind = bound > 0 ? "bounded" : "unbounded";
+
+		switch (base_node_type)
+		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			/*{
+				TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
+				ACE_UINT32 length = nativeData.StructSequence.length();
+				aux.length(length);
+				for (ACE_UINT32 i = 0; i < length; i++)
+				{
+					aux[i].from_native(nativeData.StructSequence[i]);
+				}
+				marshal::unbounded_sequence_to_ptr(aux, StructSequence);
+			}*/
+			// TODO
+			break;
+		}
+		case AST_Decl::NT_string:
+		case AST_Decl::NT_wstring:
+		{
+			ret.append("        marshal::");
+			ret.append(sequence_kind);
+			if (base_node_type == AST_Decl::NT_string) {
+				ret.append("_basic_string_sequence_to_ptr(native.");
+			}
+			else {
+				ret.append("_wide_string_sequence_to_ptr(native.");
+			}
+			ret.append(name);
+			ret.append(", ");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}		
+		case AST_Decl::NT_pre_defined:
+		{
+			AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
+
+			if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+				ret.append("        {\n");
+
+				ret.append("            int length = native.");
+				ret.append(name);
+				ret.append(".length();\n");
+
+				ret.append("            TAO::");
+				ret.append(sequence_kind);
+				ret.append("_value_sequence<CORBA::Double");
+				if (bound > 0) {
+					ret.append(", ");
+					ret.append(std::to_string(bound));
+				}
+				ret.append("> aux;\n");
+
+				ret.append("            aux.length(length);\n");
+
+				ret.append("            for (int i = 0; i < length; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                aux[i] = native.");
+				ret.append(name);
+				ret.append("[i];\n");
+
+				ret.append("            }\n");
+
+				ret.append("            marshal::");
+				ret.append(sequence_kind);
+				ret.append("_sequence_to_ptr(aux, ");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append("        }\n");				
+				break;
+			}
+		}
+		default:
+		{
+			ret.append("        marshal::");
+			ret.append(sequence_kind);
+			ret.append("_sequence_to_ptr(native.");
+			ret.append(name);
+			ret.append(", ");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		}
+	}
 	}
 
 	return ret;
@@ -966,6 +955,57 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		ret.append(name);
 		ret.append(";\n");*/
 		break;
+	}
+	case AST_Decl::NT_sequence:
+	{
+		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		std::string base_type = get_cwrapper_type(seq_type->base_type());
+		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
+		std::string sequence_kind = bound > 0 ? "bounded" : "unbounded";
+
+		ret.append("        if (");
+		ret.append(name);
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		switch (base_node_type)
+		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			ret.append("        marshal::release_structure_sequence_ptr<");
+			ret.append(base_type);
+			ret.append("Wrapper>(");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		case AST_Decl::NT_string:
+		case AST_Decl::NT_wstring:
+		{
+			ret.append("            marshal::release_");
+			if (base_node_type == AST_Decl::NT_string) {
+				ret.append("_basic_string_sequence_ptr(");
+			}
+			else {
+				ret.append("_wide_string_sequence_ptr(");
+			}
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		default:
+		{
+			ret.append("            ACE_OS::free(");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		}
+
+		ret.append("        }\n");
 	}
 	}
 

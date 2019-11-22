@@ -1,7 +1,35 @@
+
 module Test {
 
 	typedef string<32> BoundedStringType;
 	typedef wstring<32> BoundedWStringType;
+	
+	typedef sequence<boolean> UnboundedBooleanSequenceType;
+	typedef sequence<boolean, 5> BoundedBooleanSequenceType;
+	typedef sequence<char> UnboundedCharSequenceType;
+	typedef sequence<char, 5> BoundedCharSequenceType;
+	typedef sequence<wchar> UnboundedWCharSequenceType;
+	typedef sequence<wchar, 5> BoundedWCharSequenceType;
+	typedef sequence<octet> UnboundedOctetSequenceType;
+	typedef sequence<octet, 5> BoundedOctetSequenceType;
+	typedef sequence<short> UnboundedShortSequenceType;
+	typedef sequence<short, 5> BoundedShortSequenceType;
+	typedef sequence<unsigned short> UnboundedUShortSequenceType;
+	typedef sequence<unsigned short, 5> BoundedUShortSequenceType;
+	typedef sequence<long> UnboundedLongSequenceType;
+	typedef sequence<long, 5> BoundedLongSequenceType;
+	typedef sequence<unsigned long> UnboundedULongSequenceType;
+	typedef sequence<unsigned long, 5> BoundedULongSequenceType;
+	typedef sequence<long long> UnboundedLongLongSequenceType;
+	typedef sequence<long long, 5> BoundedLongLongSequenceType;
+	typedef sequence<unsigned long long> UnboundedULongLongSequenceType;
+	typedef sequence<unsigned long long, 5> BoundedULongLongSequenceType;
+	typedef sequence<float> UnboundedFloatSequenceType;
+	typedef sequence<float, 5> BoundedFloatSequenceType;
+	typedef sequence<double> UnboundedDoubleSequenceType;
+	typedef sequence<double, 5> BoundedDoubleSequenceType;
+	typedef sequence<long double> UnboundedLongDoubleSequenceType;
+	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
 
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
@@ -22,5 +50,31 @@ module Test {
 		wstring UnboundedWStringField;
 		BoundedStringType BoundedStringField;
 		BoundedWStringType BoundedWStringField;
+		UnboundedBooleanSequenceType UnboundedBooleanSequenceField;
+		BoundedBooleanSequenceType BoundedBooleanSequenceField;		
+		UnboundedCharSequenceType UnboundedCharSequenceField;
+		BoundedCharSequenceType BoundedCharSequenceField;
+		UnboundedWCharSequenceType UnboundedWCharSequenceField;
+		BoundedWCharSequenceType BoundedWCharSequenceField;
+		UnboundedOctetSequenceType UnboundedOctetSequenceField;
+		BoundedOctetSequenceType BoundedOctetSequenceField;
+		UnboundedShortSequenceType UnboundedShortSequenceField;
+		BoundedShortSequenceType BoundedShortSequenceField;
+		UnboundedUShortSequenceType UnboundedUShortSequenceField;
+		BoundedUShortSequenceType BoundedUShortSequenceField;
+		UnboundedLongSequenceType UnboundedLongSequenceField;
+		BoundedLongSequenceType BoundedLongSequenceField;
+		UnboundedULongSequenceType UnboundedULongSequenceField;
+		BoundedULongSequenceType BoundedULongSequenceField;
+		UnboundedLongLongSequenceType UnboundedLongLongSequenceField;
+		BoundedLongLongSequenceType BoundedLongLongSequenceField;
+		UnboundedULongLongSequenceType UnboundedULongLongSequenceField;
+		BoundedULongLongSequenceType BoundedULongLongSequenceField;
+		UnboundedFloatSequenceType UnboundedFloatSequenceField;
+		BoundedFloatSequenceType BoundedFloatSequenceField;
+		UnboundedDoubleSequenceType UnboundedDoubleSequenceField;
+		BoundedDoubleSequenceType BoundedDoubleSequenceField;
+		UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+		BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
     };
 };

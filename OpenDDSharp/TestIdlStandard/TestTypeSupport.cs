@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Security;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -46,6 +47,32 @@ namespace Test
         string _UnboundedWStringField;
         string _BoundedStringField;
         string _BoundedWStringField;
+        IList<Boolean> _UnboundedBooleanSequenceField;
+        IList<Boolean> _BoundedBooleanSequenceField;
+        IList<Char> _UnboundedCharSequenceField;
+        IList<Char> _BoundedCharSequenceField;
+        IList<Char> _UnboundedWCharSequenceField;
+        IList<Char> _BoundedWCharSequenceField;
+        IList<Byte> _UnboundedOctetSequenceField;
+        IList<Byte> _BoundedOctetSequenceField;
+        IList<Int16> _UnboundedShortSequenceField;
+        IList<Int16> _BoundedShortSequenceField;
+        IList<UInt16> _UnboundedUShortSequenceField;
+        IList<UInt16> _BoundedUShortSequenceField;
+        IList<Int32> _UnboundedLongSequenceField;
+        IList<Int32> _BoundedLongSequenceField;
+        IList<UInt32> _UnboundedULongSequenceField;
+        IList<UInt32> _BoundedULongSequenceField;
+        IList<Int64> _UnboundedLongLongSequenceField;
+        IList<Int64> _BoundedLongLongSequenceField;
+        IList<UInt64> _UnboundedULongLongSequenceField;
+        IList<UInt64> _BoundedULongLongSequenceField;
+        IList<Single> _UnboundedFloatSequenceField;
+        IList<Single> _BoundedFloatSequenceField;
+        IList<Double> _UnboundedDoubleSequenceField;
+        IList<Double> _BoundedDoubleSequenceField;
+        IList<Decimal> _UnboundedLongDoubleSequenceField;
+        IList<Decimal> _BoundedLongDoubleSequenceField;
         #endregion
 
         #region Properties
@@ -150,6 +177,162 @@ namespace Test
             get { return _BoundedWStringField; }
             set { _BoundedWStringField = value; }
         }
+
+        public IList<Boolean> UnboundedBooleanSequenceField
+        {
+            get { return _UnboundedBooleanSequenceField; }
+            set { _UnboundedBooleanSequenceField = value; }
+        }
+
+        public IList<Boolean> BoundedBooleanSequenceField
+        {
+            get { return _BoundedBooleanSequenceField; }
+            set { _BoundedBooleanSequenceField = value; }
+        }
+
+        public IList<Char> UnboundedCharSequenceField
+        {
+            get { return _UnboundedCharSequenceField; }
+            set { _UnboundedCharSequenceField = value; }
+        }
+
+        public IList<Char> BoundedCharSequenceField
+        {
+            get { return _BoundedCharSequenceField; }
+            set { _BoundedCharSequenceField = value; }
+        }
+
+        public IList<Char> UnboundedWCharSequenceField
+        {
+            get { return _UnboundedWCharSequenceField; }
+            set { _UnboundedWCharSequenceField = value; }
+        }
+
+        public IList<Char> BoundedWCharSequenceField
+        {
+            get { return _BoundedWCharSequenceField; }
+            set { _BoundedWCharSequenceField = value; }
+        }
+
+        public IList<Byte> UnboundedOctetSequenceField
+        {
+            get { return _UnboundedOctetSequenceField; }
+            set { _UnboundedOctetSequenceField = value; }
+        }
+
+        public IList<Byte> BoundedOctetSequenceField
+        {
+            get { return _BoundedOctetSequenceField; }
+            set { _BoundedOctetSequenceField = value; }
+        }
+
+        public IList<Int16> UnboundedShortSequenceField
+        {
+            get { return _UnboundedShortSequenceField; }
+            set { _UnboundedShortSequenceField = value; }
+        }
+
+        public IList<Int16> BoundedShortSequenceField
+        {
+            get { return _BoundedShortSequenceField; }
+            set { _BoundedShortSequenceField = value; }
+        }
+
+        public IList<UInt16> UnboundedUShortSequenceField
+        {
+            get { return _UnboundedUShortSequenceField; }
+            set { _UnboundedUShortSequenceField = value; }
+        }
+
+        public IList<UInt16> BoundedUShortSequenceField
+        {
+            get { return _BoundedUShortSequenceField; }
+            set { _BoundedUShortSequenceField = value; }
+        }
+
+        public IList<Int32> UnboundedLongSequenceField
+        {
+            get { return _UnboundedLongSequenceField; }
+            set { _UnboundedLongSequenceField = value; }
+        }
+
+        public IList<Int32> BoundedLongSequenceField
+        {
+            get { return _BoundedLongSequenceField; }
+            set { _BoundedLongSequenceField = value; }
+        }
+
+        public IList<UInt32> UnboundedULongSequenceField
+        {
+            get { return _UnboundedULongSequenceField; }
+            set { _UnboundedULongSequenceField = value; }
+        }
+
+        public IList<UInt32> BoundedULongSequenceField
+        {
+            get { return _BoundedULongSequenceField; }
+            set { _BoundedULongSequenceField = value; }
+        }
+
+        public IList<Int64> UnboundedLongLongSequenceField
+        {
+            get { return _UnboundedLongLongSequenceField; }
+            set { _UnboundedLongLongSequenceField = value; }
+        }
+
+        public IList<Int64> BoundedLongLongSequenceField
+        {
+            get { return _BoundedLongLongSequenceField; }
+            set { _BoundedLongLongSequenceField = value; }
+        }
+
+        public IList<UInt64> UnboundedULongLongSequenceField
+        {
+            get { return _UnboundedULongLongSequenceField; }
+            set { _UnboundedULongLongSequenceField = value; }
+        }
+
+        public IList<UInt64> BoundedULongLongSequenceField
+        {
+            get { return _BoundedULongLongSequenceField; }
+            set { _BoundedULongLongSequenceField = value; }
+        }
+
+        public IList<Single> UnboundedFloatSequenceField
+        {
+            get { return _UnboundedFloatSequenceField; }
+            set { _UnboundedFloatSequenceField = value; }
+        }
+
+        public IList<Single> BoundedFloatSequenceField
+        {
+            get { return _BoundedFloatSequenceField; }
+            set { _BoundedFloatSequenceField = value; }
+        }
+
+        public IList<Double> UnboundedDoubleSequenceField
+        {
+            get { return _UnboundedDoubleSequenceField; }
+            set { _UnboundedDoubleSequenceField = value; }
+        }
+
+        public IList<Double> BoundedDoubleSequenceField
+        {
+            get { return _BoundedDoubleSequenceField; }
+            set { _BoundedDoubleSequenceField = value; }
+        }
+
+        public IList<Decimal> UnboundedLongDoubleSequenceField
+        {
+            get { return _UnboundedLongDoubleSequenceField; }
+            set { _UnboundedLongDoubleSequenceField = value; }
+        }
+
+        public IList<Decimal> BoundedLongDoubleSequenceField
+        {
+            get { return _BoundedLongDoubleSequenceField; }
+            set { _BoundedLongDoubleSequenceField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -172,6 +355,32 @@ namespace Test
             _UnboundedWStringField = string.Empty;
             _BoundedStringField = string.Empty;
             _BoundedWStringField = string.Empty;
+            _UnboundedBooleanSequenceField = new List<Boolean>();
+            _BoundedBooleanSequenceField = new List<Boolean>(5);
+            _UnboundedCharSequenceField = new List<Char>();
+            _BoundedCharSequenceField = new List<Char>(5);
+            _UnboundedWCharSequenceField = new List<Char>();
+            _BoundedWCharSequenceField = new List<Char>(5);
+            _UnboundedOctetSequenceField = new List<Byte>();
+            _BoundedOctetSequenceField = new List<Byte>(5);
+            _UnboundedShortSequenceField = new List<Int16>();
+            _BoundedShortSequenceField = new List<Int16>(5);
+            _UnboundedUShortSequenceField = new List<UInt16>();
+            _BoundedUShortSequenceField = new List<UInt16>(5);
+            _UnboundedLongSequenceField = new List<Int32>();
+            _BoundedLongSequenceField = new List<Int32>(5);
+            _UnboundedULongSequenceField = new List<UInt32>();
+            _BoundedULongSequenceField = new List<UInt32>(5);
+            _UnboundedLongLongSequenceField = new List<Int64>();
+            _BoundedLongLongSequenceField = new List<Int64>(5);
+            _UnboundedULongLongSequenceField = new List<UInt64>();
+            _BoundedULongLongSequenceField = new List<UInt64>(5);
+            _UnboundedFloatSequenceField = new List<Single>();
+            _BoundedFloatSequenceField = new List<Single>(5);
+            _UnboundedDoubleSequenceField = new List<Double>();
+            _BoundedDoubleSequenceField = new List<Double>(5);
+            _UnboundedLongDoubleSequenceField = new List<Decimal>();
+            _BoundedLongDoubleSequenceField = new List<Decimal>(5);
         }
         #endregion
 
@@ -213,6 +422,62 @@ namespace Test
                 wrapper.BoundedWStringField = Marshal.StringToHGlobalUni(BoundedWStringField);
                 toRelease.Add(wrapper.BoundedWStringField);
             }
+            MarshalHelper.BooleanSequenceToPtr(UnboundedBooleanSequenceField, ref wrapper.UnboundedBooleanSequenceField);
+        toRelease.Add(wrapper.UnboundedBooleanSequenceField);
+            MarshalHelper.BooleanSequenceToPtr(BoundedBooleanSequenceField, ref wrapper.BoundedBooleanSequenceField);
+        toRelease.Add(wrapper.BoundedBooleanSequenceField);
+            if (UnboundedCharSequenceField != null)
+            {                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(UnboundedCharSequenceField.ToArray()).ToList();
+                MarshalHelper.SequenceToPtr(aux, ref wrapper.UnboundedCharSequenceField);
+                toRelease.Add(wrapper.UnboundedCharSequenceField);
+            }            if (BoundedCharSequenceField != null)
+            {                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(BoundedCharSequenceField.ToArray()).ToList();
+                MarshalHelper.SequenceToPtr(aux, ref wrapper.BoundedCharSequenceField);
+                toRelease.Add(wrapper.BoundedCharSequenceField);
+            }            MarshalHelper.SequenceToPtr(UnboundedWCharSequenceField, ref wrapper.UnboundedWCharSequenceField);
+            toRelease.Add(wrapper.UnboundedWCharSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedWCharSequenceField, ref wrapper.BoundedWCharSequenceField);
+            toRelease.Add(wrapper.BoundedWCharSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedOctetSequenceField, ref wrapper.UnboundedOctetSequenceField);
+            toRelease.Add(wrapper.UnboundedOctetSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedOctetSequenceField, ref wrapper.BoundedOctetSequenceField);
+            toRelease.Add(wrapper.BoundedOctetSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedShortSequenceField, ref wrapper.UnboundedShortSequenceField);
+            toRelease.Add(wrapper.UnboundedShortSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedShortSequenceField, ref wrapper.BoundedShortSequenceField);
+            toRelease.Add(wrapper.BoundedShortSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedUShortSequenceField, ref wrapper.UnboundedUShortSequenceField);
+            toRelease.Add(wrapper.UnboundedUShortSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedUShortSequenceField, ref wrapper.BoundedUShortSequenceField);
+            toRelease.Add(wrapper.BoundedUShortSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedLongSequenceField, ref wrapper.UnboundedLongSequenceField);
+            toRelease.Add(wrapper.UnboundedLongSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedLongSequenceField, ref wrapper.BoundedLongSequenceField);
+            toRelease.Add(wrapper.BoundedLongSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedULongSequenceField, ref wrapper.UnboundedULongSequenceField);
+            toRelease.Add(wrapper.UnboundedULongSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedULongSequenceField, ref wrapper.BoundedULongSequenceField);
+            toRelease.Add(wrapper.BoundedULongSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedLongLongSequenceField, ref wrapper.UnboundedLongLongSequenceField);
+            toRelease.Add(wrapper.UnboundedLongLongSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedLongLongSequenceField, ref wrapper.BoundedLongLongSequenceField);
+            toRelease.Add(wrapper.BoundedLongLongSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedULongLongSequenceField, ref wrapper.UnboundedULongLongSequenceField);
+            toRelease.Add(wrapper.UnboundedULongLongSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedULongLongSequenceField, ref wrapper.BoundedULongLongSequenceField);
+            toRelease.Add(wrapper.BoundedULongLongSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedFloatSequenceField, ref wrapper.UnboundedFloatSequenceField);
+            toRelease.Add(wrapper.UnboundedFloatSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedFloatSequenceField, ref wrapper.BoundedFloatSequenceField);
+            toRelease.Add(wrapper.BoundedFloatSequenceField);
+            MarshalHelper.SequenceToPtr(UnboundedDoubleSequenceField, ref wrapper.UnboundedDoubleSequenceField);
+            toRelease.Add(wrapper.UnboundedDoubleSequenceField);
+            MarshalHelper.SequenceToPtr(BoundedDoubleSequenceField, ref wrapper.BoundedDoubleSequenceField);
+            toRelease.Add(wrapper.BoundedDoubleSequenceField);
+            MarshalHelper.LongDoubleSequenceToPtr(UnboundedLongDoubleSequenceField, ref wrapper.UnboundedLongDoubleSequenceField);
+            toRelease.Add(wrapper.UnboundedLongDoubleSequenceField);
+            MarshalHelper.LongDoubleSequenceToPtr(BoundedLongDoubleSequenceField, ref wrapper.BoundedLongDoubleSequenceField);
+            toRelease.Add(wrapper.BoundedLongDoubleSequenceField);
 
             return wrapper;
         }
@@ -264,6 +529,32 @@ namespace Test
             {
                 BoundedWStringField = null;
             }
+            MarshalHelper.PtrToBooleanSequence(wrapper.UnboundedBooleanSequenceField, ref _UnboundedBooleanSequenceField);
+            MarshalHelper.PtrToBooleanSequence(wrapper.BoundedBooleanSequenceField, ref _BoundedBooleanSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedCharSequenceField, ref _UnboundedCharSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedCharSequenceField, ref _BoundedCharSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedWCharSequenceField, ref _UnboundedWCharSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedWCharSequenceField, ref _BoundedWCharSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedOctetSequenceField, ref _UnboundedOctetSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedOctetSequenceField, ref _BoundedOctetSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedShortSequenceField, ref _UnboundedShortSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedShortSequenceField, ref _BoundedShortSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedUShortSequenceField, ref _UnboundedUShortSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedUShortSequenceField, ref _BoundedUShortSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedLongSequenceField, ref _UnboundedLongSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedLongSequenceField, ref _BoundedLongSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedULongSequenceField, ref _UnboundedULongSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedULongSequenceField, ref _BoundedULongSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedLongLongSequenceField, ref _UnboundedLongLongSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedLongLongSequenceField, ref _BoundedLongLongSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedULongLongSequenceField, ref _UnboundedULongLongSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedULongLongSequenceField, ref _BoundedULongLongSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedFloatSequenceField, ref _UnboundedFloatSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedFloatSequenceField, ref _BoundedFloatSequenceField, 5);
+            MarshalHelper.PtrToSequence(wrapper.UnboundedDoubleSequenceField, ref _UnboundedDoubleSequenceField);
+            MarshalHelper.PtrToSequence(wrapper.BoundedDoubleSequenceField, ref _BoundedDoubleSequenceField, 5);
+            MarshalHelper.PtrToLongDoubleSequence(wrapper.UnboundedLongDoubleSequenceField, ref _UnboundedLongDoubleSequenceField);
+            MarshalHelper.PtrToLongDoubleSequence(wrapper.BoundedLongDoubleSequenceField, ref _BoundedLongDoubleSequenceField, 5);
         }
         #endregion
     }
@@ -292,6 +583,32 @@ namespace Test
         public IntPtr UnboundedWStringField;
         public IntPtr BoundedStringField;
         public IntPtr BoundedWStringField;
+        public IntPtr UnboundedBooleanSequenceField;
+        public IntPtr BoundedBooleanSequenceField;
+        public IntPtr UnboundedCharSequenceField;
+        public IntPtr BoundedCharSequenceField;
+        public IntPtr UnboundedWCharSequenceField;
+        public IntPtr BoundedWCharSequenceField;
+        public IntPtr UnboundedOctetSequenceField;
+        public IntPtr BoundedOctetSequenceField;
+        public IntPtr UnboundedShortSequenceField;
+        public IntPtr BoundedShortSequenceField;
+        public IntPtr UnboundedUShortSequenceField;
+        public IntPtr BoundedUShortSequenceField;
+        public IntPtr UnboundedLongSequenceField;
+        public IntPtr BoundedLongSequenceField;
+        public IntPtr UnboundedULongSequenceField;
+        public IntPtr BoundedULongSequenceField;
+        public IntPtr UnboundedLongLongSequenceField;
+        public IntPtr BoundedLongLongSequenceField;
+        public IntPtr UnboundedULongLongSequenceField;
+        public IntPtr BoundedULongLongSequenceField;
+        public IntPtr UnboundedFloatSequenceField;
+        public IntPtr BoundedFloatSequenceField;
+        public IntPtr UnboundedDoubleSequenceField;
+        public IntPtr BoundedDoubleSequenceField;
+        public IntPtr UnboundedLongDoubleSequenceField;
+        public IntPtr BoundedLongDoubleSequenceField;
     }
 
 	public class TestStructTypeSupport

@@ -17,9 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
@@ -166,7 +168,163 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
-        public void TestGeneratedTemplateTypes()
+        public void TestGeneratedBasicTypeSequences()
+        {
+            // TODO: Bounded lists that exceed the bound throws an exception. 
+            // As per documentation: Bounds checking on bounded sequences may raise an exception if necessary.
+            // Check bound before toNative and throw a user friendly exception.
+            // Another option is to implement an internal BoundedList that check the bound before Add/Insert.
+
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {              
+                BoundedBooleanSequenceField = { true, true, false, false, true },
+                UnboundedBooleanSequenceField = { true, true, false, false, true, true, false },
+                BoundedCharSequenceField = { 'z' },
+                UnboundedCharSequenceField = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' },
+                BoundedWCharSequenceField = { 'i', 'j', 'k', 'l', 'm' },
+                UnboundedWCharSequenceField = { 'n', 'o', 'p' },
+                BoundedOctetSequenceField = { 0x01, 0x02, 0x03 },
+                UnboundedOctetSequenceField = { 0x04, 0x05, 0x06, 0x07, 0x08 },
+                BoundedShortSequenceField = { -1, 2, -3 },
+                UnboundedShortSequenceField = { 4, -5, 6, -7, 8 },
+                BoundedUShortSequenceField = { 1, 2, 3 },
+                UnboundedUShortSequenceField = { 4, 5, 6, 7, 8 },
+                BoundedLongSequenceField = { -1, 2, -3, 100, -200 },
+                UnboundedLongSequenceField = { 1, -2, 3, -100, 200, -300, 1000 },
+                BoundedULongSequenceField = { 1, 2, 3, 100, 200 },
+                UnboundedULongSequenceField = { 1, 2, 3, 100, 200, 300, 1000 },
+                BoundedLongLongSequenceField = { -1, 2, -3, 100, -200 },
+                UnboundedLongLongSequenceField = { 1, -2, 3, -100, 200, -300, 1000 },
+                BoundedULongLongSequenceField = { 1, 2, 3, 100, 200 },
+                UnboundedULongLongSequenceField = { 1, 2, 3, 100, 200, 300, 1000 },
+                BoundedFloatSequenceField = { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
+                UnboundedFloatSequenceField = { 1.5f, -2.6f, 3.7f, -100.8f, 200.9f, -300.0f, 1000.1f },
+                BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
+                UnboundedDoubleSequenceField = { 1.5d, -2.6d, 3.7d, -100.8d, 200.9d, -300.0d, 1000.1d },
+                BoundedLongDoubleSequenceField = { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
+                UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
+            };
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);           
+            Assert.IsTrue(data.BoundedBooleanSequenceField.SequenceEqual(received.BoundedBooleanSequenceField));
+            Assert.IsTrue(data.UnboundedBooleanSequenceField.SequenceEqual(received.UnboundedBooleanSequenceField));
+            Assert.IsTrue(data.BoundedCharSequenceField.SequenceEqual(received.BoundedCharSequenceField));
+            Assert.IsTrue(data.UnboundedCharSequenceField.SequenceEqual(received.UnboundedCharSequenceField));
+            Assert.IsTrue(data.BoundedWCharSequenceField.SequenceEqual(received.BoundedWCharSequenceField));
+            Assert.IsTrue(data.UnboundedWCharSequenceField.SequenceEqual(received.UnboundedWCharSequenceField));
+            Assert.IsTrue(data.BoundedOctetSequenceField.SequenceEqual(received.BoundedOctetSequenceField));
+            Assert.IsTrue(data.UnboundedOctetSequenceField.SequenceEqual(received.UnboundedOctetSequenceField));
+            Assert.IsTrue(data.BoundedShortSequenceField.SequenceEqual(received.BoundedShortSequenceField));
+            Assert.IsTrue(data.UnboundedShortSequenceField.SequenceEqual(received.UnboundedShortSequenceField));
+            Assert.IsTrue(data.BoundedUShortSequenceField.SequenceEqual(received.BoundedUShortSequenceField));
+            Assert.IsTrue(data.UnboundedUShortSequenceField.SequenceEqual(received.UnboundedUShortSequenceField));
+            Assert.IsTrue(data.BoundedLongSequenceField.SequenceEqual(received.BoundedLongSequenceField));
+            Assert.IsTrue(data.UnboundedLongSequenceField.SequenceEqual(received.UnboundedLongSequenceField));
+            Assert.IsTrue(data.BoundedULongSequenceField.SequenceEqual(received.BoundedULongSequenceField));
+            Assert.IsTrue(data.UnboundedULongSequenceField.SequenceEqual(received.UnboundedULongSequenceField));
+            Assert.IsTrue(data.BoundedLongLongSequenceField.SequenceEqual(received.BoundedLongLongSequenceField));
+            Assert.IsTrue(data.UnboundedLongLongSequenceField.SequenceEqual(received.UnboundedLongLongSequenceField));
+            Assert.IsTrue(data.BoundedULongLongSequenceField.SequenceEqual(received.BoundedULongLongSequenceField));
+            Assert.IsTrue(data.UnboundedULongLongSequenceField.SequenceEqual(received.UnboundedULongLongSequenceField));
+            Assert.IsTrue(data.BoundedFloatSequenceField.SequenceEqual(received.BoundedFloatSequenceField));
+            Assert.IsTrue(data.UnboundedFloatSequenceField.SequenceEqual(received.UnboundedFloatSequenceField));
+            Assert.IsTrue(data.BoundedDoubleSequenceField.SequenceEqual(received.BoundedDoubleSequenceField));
+            Assert.IsTrue(data.UnboundedDoubleSequenceField.SequenceEqual(received.UnboundedDoubleSequenceField));
+            Assert.IsTrue(data.BoundedLongDoubleSequenceField.SequenceEqual(received.BoundedLongDoubleSequenceField));
+            Assert.IsTrue(data.UnboundedLongDoubleSequenceField.SequenceEqual(received.UnboundedLongDoubleSequenceField));
+
+            Assert.IsTrue(typeof(IList<bool>).IsAssignableFrom(data.BoundedBooleanSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<bool>).IsAssignableFrom(data.UnboundedBooleanSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.BoundedCharSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.UnboundedCharSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.BoundedWCharSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.UnboundedWCharSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<byte>).IsAssignableFrom(data.BoundedOctetSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<byte>).IsAssignableFrom(data.UnboundedOctetSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<short>).IsAssignableFrom(data.BoundedShortSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<short>).IsAssignableFrom(data.UnboundedShortSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<ushort>).IsAssignableFrom(data.BoundedUShortSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<ushort>).IsAssignableFrom(data.UnboundedUShortSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<int>).IsAssignableFrom(data.BoundedLongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<int>).IsAssignableFrom(data.UnboundedLongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<uint>).IsAssignableFrom(data.BoundedULongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<uint>).IsAssignableFrom(data.UnboundedULongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<long>).IsAssignableFrom(data.BoundedLongLongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<long>).IsAssignableFrom(data.UnboundedLongLongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<ulong>).IsAssignableFrom(data.BoundedULongLongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<ulong>).IsAssignableFrom(data.UnboundedULongLongSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<float>).IsAssignableFrom(data.BoundedFloatSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<float>).IsAssignableFrom(data.UnboundedFloatSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<double>).IsAssignableFrom(data.BoundedDoubleSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<double>).IsAssignableFrom(data.UnboundedDoubleSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<decimal>).IsAssignableFrom(data.BoundedLongDoubleSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<decimal>).IsAssignableFrom(data.UnboundedLongDoubleSequenceField.GetType()));
+
+            Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedBooleanSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedBooleanSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedBooleanSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedCharSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedCharSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedCharSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedCharSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedWCharSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedWCharSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedWCharSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedWCharSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedOctetSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedOctetSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedOctetSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedOctetSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedShortSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedShortSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedShortSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedShortSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedUShortSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedUShortSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedUShortSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedUShortSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedLongSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedLongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedLongSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedLongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedULongSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedULongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedULongSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedULongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedLongLongSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedLongLongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedLongLongSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedLongLongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedULongLongSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedULongLongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedULongLongSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedULongLongSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedFloatSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedFloatSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedFloatSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedFloatSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedDoubleSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedDoubleSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedDoubleSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedDoubleSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.BoundedLongDoubleSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedLongDoubleSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedLongDoubleSequenceField.Count, 0);
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringTypes()
         {
             TestStruct defaultStruct = new TestStruct();
 
@@ -194,7 +352,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(data.BoundedWStringField, received.BoundedWStringField);
 
             Assert.AreEqual(typeof(string), data.UnboundedStringField.GetType());
-            Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());            
+            Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());
             Assert.AreEqual(typeof(string), data.BoundedStringField.GetType());
             Assert.AreEqual(typeof(string), data.BoundedWStringField.GetType());
 
@@ -202,7 +360,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.UnboundedWStringField, string.Empty);
             Assert.AreEqual(defaultStruct.BoundedStringField, string.Empty);
             Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
-        }
+        }        
         #endregion
     }
 }

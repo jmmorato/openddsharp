@@ -35,7 +35,6 @@ public:
 	bool gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid);
 
 private:
-	//std::string header_template_;
 	std::string impl_template_;
 
 	std::string declare_struct_fields(const std::vector<AST_Field*>& fields, const std::string indent);

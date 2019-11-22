@@ -56,6 +56,57 @@ public static class MarshalHelper
         }
     }
 
+    public static void PtrToLongDoubleSequence(this IntPtr ptr, ref IList<decimal> sequence, int capacity = 0)
+    {
+        // Ensure a not null empty list to populate
+        if (sequence == null)
+        {
+            if (capacity > 0)
+                sequence = new List<decimal>(capacity);
+            else
+                sequence = new List<decimal>();
+        }
+        else
+            sequence.Clear();
+
+        if (ptr == IntPtr.Zero)
+            return;
+
+        // Start by reading the size of the array
+        int length = Marshal.ReadInt32(ptr);
+        // For efficiency, only compute the element size once
+        int elSiz = Marshal.SizeOf<double>();
+        // Populate the list
+        for (int i = 0; i < length; i++)
+        {
+            sequence.Add(Convert.ToDecimal(Marshal.PtrToStructure<double>(ptr + sizeof(int) + (elSiz * i))));
+        }
+    }
+    public static void LongDoubleSequenceToPtr(this IList<decimal> sequence, ref IntPtr ptr)
+    {
+        if (sequence == null || sequence.Count == 0)
+        {
+            // No structures in the list. Write 0 and return
+            ptr = Marshal.AllocHGlobal(sizeof(int));
+            Marshal.WriteInt32(ptr, 0);
+            return;
+        }
+
+        int elSiz = Marshal.SizeOf<double>();
+        // Get the total size of unmanaged memory that is needed (length + elements)
+        int size = sizeof(int) + (elSiz * sequence.Count);
+        // Allocate unmanaged space.
+        ptr = Marshal.AllocHGlobal(size);
+        // Write the "Length" field first
+        Marshal.WriteInt32(ptr, sequence.Count);
+        // Write the list data
+        for (int i = 0; i < sequence.Count; i++)
+        {
+            // Newly-allocated space has no existing object, so the last param is false 
+            Marshal.StructureToPtr(Convert.ToDouble(sequence[i]), ptr + sizeof(int) + (elSiz * i), false);
+        }
+    }
+
     public static void PtrToEnumSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0) where T : Enum
     {
         // Ensure a not null empty list to populate

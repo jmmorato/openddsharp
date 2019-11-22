@@ -189,7 +189,7 @@ bool csharp_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std:
 }
 
 bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
-	switch (base->node_type()) {
+	/*switch (base->node_type()) {
 	case AST_Decl::NT_sequence:
 	{
 		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(base);
@@ -210,7 +210,7 @@ bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_
 	}
 	default:
 		break;
-	}
+	}*/
 
 	return true;
 }
@@ -484,7 +484,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_fixed:
 	{
-		//ret = "decimal";
+		ret = "decimal";
 		break;
 	}
 	case AST_Decl::NT_string:		
@@ -553,11 +553,12 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	}		
 	case AST_Decl::NT_sequence:
 	{
-		/*AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(seq_type->base_type());
-		ret = "List<";
+
+		ret = "IList<";
 		ret.append(base_type);
-		ret.append(">^");*/
+		ret.append(">");
 		break;
 	}		
 	default:
@@ -664,11 +665,7 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_sequence:
 	{
-		/*AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(seq_type->base_type());
-		ret = "List<";
-		ret.append(base_type);
-		ret.append(">^");*/
+		ret = "IntPtr";		
 		break;
 	}
 	default:
@@ -739,15 +736,6 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 		ret.append(base_type);
 		ret.append(", ");
 		ret.append(std::to_string(arr_type->n_dims()));
-		ret.append(">^");*/
-		break;
-	}
-	case AST_Decl::NT_sequence:
-	{
-		/*AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(seq_type->base_type());
-		ret = "List<";
-		ret.append(base_type);
 		ret.append(">^");*/
 		break;
 	}
@@ -842,7 +830,7 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(seq_type->base_type());
 		
-		ret = "gcnew List<";
+		ret = "new List<";
 		ret.append(base_type);
 		ret.append(">(");
 		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
@@ -951,6 +939,199 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		}
 		break;
 	}
+	case AST_Decl::NT_sequence:
+	{
+		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		std::string base_type = get_csharp_type(seq_type->base_type());
+		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+
+		switch (base_node_type)
+		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			/*if (StructSequence != null)
+			{
+				List<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
+				foreach(NestedTestStruct s in StructSequence)
+				{
+					aux.Add(s.ToNative(toRelease));
+				}
+				Helper.SequenceToPtr(aux, ref wrapper.StructSequence);
+				toRelease.Add(wrapper.StructSequence);
+			}*/
+
+			ret.append(indent);
+			ret.append("    if (");
+			ret.append(name);
+			ret.append(" != null)\n");
+
+			ret.append(indent);
+			ret.append("    {\n");
+
+			ret.append(indent);
+			ret.append("        List<");
+			ret.append(base_type);
+			ret.append("Wrapper> aux = new List<");
+			ret.append(base_type);
+			ret.append("Wrapper>();\n");
+
+			ret.append(indent);
+			ret.append("        foreach(");
+			ret.append(base_type);
+			ret.append(" s in ");
+			ret.append(name);
+			ret.append(")\n");
+
+			ret.append(indent);
+			ret.append("        {\n");
+
+			ret.append(indent);
+			ret.append("            aux.Add(s.ToNative(toRelease));\n");
+
+			ret.append(indent);
+			ret.append("        }\n");
+
+			ret.append(indent);
+			ret.append("        MarshalHelper.SequenceToPtr(aux, ref wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+
+			ret.append(indent);
+			ret.append("        toRelease.Add(wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+
+			ret.append(indent);
+			ret.append("    }\n");
+			break;
+		}
+		case AST_Decl::NT_string:
+		case AST_Decl::NT_wstring:
+		{
+			/*toRelease.AddRange(Helper.StringSequenceToPtr(StringSequence, ref wrapper.StringSequence, false));
+			toRelease.Add(wrapper.StringSequence);
+
+			toRelease.AddRange(Helper.StringSequenceToPtr(WStringSequence, ref wrapper.WStringSequence, true));
+			toRelease.Add(wrapper.WStringSequence);*/
+
+			ret.append(indent);
+			ret.append("    toRelease.AddRange(Helper.StringSequenceToPtr(");
+			ret.append(name);
+			ret.append(", ref wrapper.");
+			ret.append(name);
+			if (base_node_type == AST_Decl::NT_string) {
+				ret.append(", false));\n");
+			}
+			else {
+				ret.append(", true));\n");
+			}
+
+			ret.append(indent);
+			ret.append("    toRelease.Add(wrapper.");
+			ret.append(name);
+			ret.append(");");
+
+			break;
+		}
+		case AST_Decl::NT_enum:
+		{
+			/*Helper.EnumSequenceToPtr(EnumSequence, ref wrapper.EnumSequence);
+			toRelease.Add(wrapper.EnumSequence);*/
+			ret.append(indent);
+			ret.append("    MarshalHelper.EnumSequenceToPtr(");
+			ret.append(name);
+			ret.append(", ref wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+
+			ret.append(indent);
+			ret.append("toRelease.Add(wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		case AST_Decl::NT_pre_defined:
+		{
+			AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
+
+			if (predefined_type->pt() == AST_PredefinedType::PT_char) {
+				ret.append(indent);
+				ret.append("    if (");
+				ret.append(name);
+				ret.append(" != null)\n");
+
+				ret.append(indent);
+				ret.append("    {");
+
+				ret.append(indent);
+				ret.append("        IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(");
+				ret.append(name);
+				ret.append(".ToArray()).ToList();\n");
+
+				ret.append(indent);
+				ret.append("        MarshalHelper.SequenceToPtr(aux, ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("        toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("    }");
+
+				break;
+			}
+			else if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {
+				ret.append(indent);
+				ret.append("    MarshalHelper.BooleanSequenceToPtr(");
+				ret.append(name);
+				ret.append(", ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
+			else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+				ret.append(indent);
+				ret.append("    MarshalHelper.LongDoubleSequenceToPtr(");
+				ret.append(name);
+				ret.append(", ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("    toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
+		}
+		default:
+		{
+			ret.append(indent);
+			ret.append("    MarshalHelper.SequenceToPtr(");
+			ret.append(name);
+			ret.append(", ref wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+
+			ret.append(indent);
+			ret.append("    toRelease.Add(wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+			break;
+		}
+		}		
+	}
+	default:
+		break;
 	}
 
 	return ret;
@@ -1046,7 +1227,164 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			ret.append(");\n");
 		}
 		break;
-	}		
+	}
+	case AST_Decl::NT_sequence:
+	{
+		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		std::string base_type = get_csharp_type(seq_type->base_type());
+		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
+
+		switch (base_node_type)
+		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			//// We need to use the wrapper struct to receive the structures
+			//// In the generated code, the aux variable will be suffixed with the field name
+			//if (wrapper.StructSequence != IntPtr.Zero)
+			//{
+			//	IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
+			//	Helper.PtrToSequence(wrapper.StructSequence, ref aux);
+			//	foreach(NestedTestStructWrapper native in aux)
+			//	{
+			//		NestedTestStruct s = new NestedTestStruct();
+			//		s.FromNative(native);
+			//		StructSequence.Add(s);
+			//	}
+			//}
+
+			ret.append("    if (wrapper.");
+			ret.append(name);
+			ret.append(" != IntPtr.Zero)\n");
+
+			ret.append(indent);
+			ret.append("    {\n");
+
+			ret.append(indent);
+			ret.append("        IList<");
+			ret.append(base_type);
+			ret.append("Wrapper> aux = new List<");
+			ret.append(base_type);
+			ret.append("Wrapper>();\n");
+
+			ret.append(indent);
+			ret.append("        MarshalHelper.PtrToSequence(wrapper.");
+			ret.append(name);
+			ret.append(", ref aux);\n");
+
+			ret.append(indent);
+			ret.append("        foreach(");
+			ret.append(base_type);
+			ret.append("Wrapper native in aux)\n");
+
+			ret.append(indent);
+			ret.append("        {\n");
+
+			ret.append(indent);
+			ret.append("            ");
+			ret.append(base_type);
+			ret.append(" s = new ");
+			ret.append(base_type);
+			ret.append("();\n");
+
+			ret.append(indent);
+			ret.append("            s.FromNative(native);\n");
+
+			ret.append(indent);
+			ret.append("            ");
+			ret.append(name);
+			ret.append(".Add(s);\n");
+
+			ret.append(indent);
+			ret.append("        }\n");
+
+			ret.append(indent);
+			ret.append("    }\n");
+			break;
+		}
+		case AST_Decl::NT_string:
+		case AST_Decl::NT_wstring:
+		{
+			/*Helper.PtrToStringSequence(wrapper.StringSequence, ref _stringSequence, false);
+			Helper.PtrToStringSequence(wrapper.WStringSequence, ref _wstringSequence, true);*/
+			ret.append("    MarshalHelper.PtrToStringSequence(wrapper.");
+			ret.append(name);
+			ret.append(", ref _");
+			ret.append(name);
+			if (base_node_type == AST_Decl::NT_string) {
+				ret.append(", false");
+			}
+			else {
+				ret.append(", true");
+			}
+			if (bound > 0) {
+				ret.append(", ");
+				ret.append(std::to_string(bound));
+			}
+			ret.append(");\n");
+		}
+		case AST_Decl::NT_enum:
+		{
+			//Helper.PtrToEnumSequence(wrapper.EnumSequence, ref _enumSequence);
+			ret.append("    MarshalHelper.PtrToEnumSequence(wrapper.");
+			ret.append(name);
+			ret.append(", ref _");
+			ret.append(name);
+			if (bound > 0) {
+				ret.append(", ");
+				ret.append(std::to_string(bound));
+			}
+			ret.append(");\n");
+			break;
+		}
+		case AST_Decl::NT_pre_defined:
+		{
+			AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
+
+			if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {				
+				ret.append("    MarshalHelper.PtrToBooleanSequence(wrapper.");
+				ret.append(name);
+				ret.append(", ref _");
+				ret.append(name);
+				if (bound > 0) {
+					ret.append(", ");
+					ret.append(std::to_string(bound));
+				}
+				ret.append(");\n");
+				break;
+			}
+			else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+				ret.append("    MarshalHelper.PtrToLongDoubleSequence(wrapper.");
+				ret.append(name);
+				ret.append(", ref _");
+				ret.append(name);
+				if (bound > 0) {
+					ret.append(", ");
+					ret.append(std::to_string(bound));
+				}
+				ret.append(");\n");
+				break;
+			}
+		}
+		default:
+		{			
+			ret.append("    MarshalHelper.PtrToSequence(wrapper.");
+			ret.append(name);
+			ret.append(", ref _");
+			ret.append(name);
+			if (bound > 0) {
+				ret.append(", ");
+				ret.append(std::to_string(bound));
+			}
+			ret.append(");\n");
+			break;
+		}
+		}
+		break;
+	}
+	default:
+		break;
 	}
 
 	return ret;
