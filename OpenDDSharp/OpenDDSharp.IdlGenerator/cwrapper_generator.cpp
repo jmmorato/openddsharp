@@ -189,10 +189,10 @@ bool cwrapper_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AS
 }
 
 bool cwrapper_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
-{		
+{			
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
-	const std::string scoped_method = replaceString(scoped_name, std::string("::"), std::string("_"));
+	const std::string scoped_method = replaceString(std::string(scoped_name), std::string("::"), std::string("_"));
 
 	std::map<std::string, std::string> replacements;
 	replacements["SCOPED"] = scoped_name;
@@ -221,44 +221,7 @@ bool cwrapper_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const 
 		std::string impl = impl_template_;
 		replaceAll(impl, replacements);
 		be_global->impl_ << impl;
-	}					   
-
-	/*const std::string scoped_name = scoped(name);
-	const std::string short_name = name->last_component()->get_string();
-
-	std::map<std::string, std::string> replacements;
-	replacements["SCOPED"] = scoped_name;
-	replacements["TYPE"] = short_name;
-	replacements["SEQ"] = be_global->sequence_suffix().c_str();	
-
-	be_global->header_ << "\n    public ref class " << short_name << " {\n\n"
-					   << "    private:\n"
-					   << declare_struct_fields(fields).c_str() << "\n"
-					   << "    public:\n"
-					   << declare_struct_field_properties(fields).c_str() << "\n"
-					   << "    public:\n"
-					   << "        " << short_name << "();\n\n"
-					   << "    internal:\n"
-					   << "        ::" << scoped_name << " ToNative();\n"
-					   << "        void FromNative(::" << scoped_name << " native);\n"
-					   << "    };\n\n";
-
-	be_global->impl_ << implement_struct_constructor(fields, short_name, scoped_name).c_str()					 
-					 << implement_struct_properties(fields, scoped_name).c_str()
-					 << implement_struct_to_native(fields, short_name, scoped_name).c_str()
-					 << implement_struct_from_native(fields, short_name, scoped_name).c_str();
-
-
-	IDL_GlobalData::DCPS_Data_Type_Info* info = idl_global->is_dcps_type(name);
-	if (info) {
-		std::string header = header_template_;
-		replaceAll(header, replacements);
-		be_global->header_ << header;
-
-		std::string impl = impl_template_;
-		replaceAll(impl, replacements);
-		be_global->impl_ << impl;
-	}*/
+	}
 
 	return true;
 }
@@ -318,34 +281,6 @@ std::string cwrapper_generator::implement_struct_to_native(const std::vector<AST
 	ret.append("\n        return ret;\n");
 	ret.append("    }\n\n");
 
-	//ret.append(scoped_name);
-	//ret.append(" OpenDDSharp::");
-	//ret.append(scoped_name);
-	//ret.append("::ToNative() {\n");	
-
-	///*ret.append("    ::");
-	//ret.append(scoped_name);
-	//ret.append("* ret = new ::");
-	//ret.append(scoped_name);
-	//ret.append("();\n");*/
-	//ret.append("    ::");
-	//ret.append(scoped_name);
-	//ret.append(" ret;\n");
-
-	//ret.append("    msclr::interop::marshal_context context;\n\n");
-	//
-	//for (unsigned int i = 0; i < fields.size(); i++) {
-	//	AST_Field* field = fields[i];		
-	//	AST_Type* field_type = field->field_type();
-	//	const char * field_name = field->local_name()->get_string();		
-
-	//	ret.append(get_field_to_native(field_type, field_name));
-	//}
-
-	//ret.append("\n    return ret;\n");
-
-	//ret.append("}\n\n");
-
 	return ret;
 }
 
@@ -364,22 +299,6 @@ std::string cwrapper_generator::implement_struct_from_native(const std::vector<A
 	}
 
 	ret.append("    }\n\n");
-
-	/*ret.append(" OpenDDSharp::");
-	ret.append(scoped_name);
-	ret.append("::FromNative(::");
-	ret.append(scoped_name);
-	ret.append(" native) {\n");
-
-	for (unsigned int i = 0; i < fields.size(); i++) {
-		AST_Field* field = fields[i];
-		AST_Type* field_type = field->field_type();
-		const char * field_name = field->local_name()->get_string();
-
-		ret.append(get_field_from_native(field_type, field_name));
-	}
-
-	ret.append("}\n\n");*/
 
 	return ret;
 }
@@ -409,10 +328,9 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	{	
 	case AST_Decl::NT_union:			
 	case AST_Decl::NT_struct:		
-	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		ret.append("^");*/
+	{		
+		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("_"));		
+		ret.append("Wrapper");
 		break;
 	}
 	case AST_Decl::NT_enum:	
@@ -521,18 +439,12 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 	{
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
-	{
-		/*ret.append("    if (m_");
-		ret.append(name);
-		ret.append(" != nullptr) {\n");
-
+	{		
 		ret.append("        ret.");
 		ret.append(name);
-		ret.append(" = m_");
+		ret.append(" = ");
 		ret.append(name);
-		ret.append("->ToNative();\n");
-
-		ret.append("    }\n");*/
+		ret.append(".to_native();\n");
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -621,8 +533,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append("            TAO::");
 			ret.append(sequence_kind);
 			ret.append("_value_sequence<");
-			ret.append(base_type);
-			ret.append("Wrapper");
+			ret.append(base_type);			
 			if (bound > 0) {
 				ret.append(", ");
 				ret.append(std::to_string(bound));
@@ -735,11 +646,11 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
 	{
-		/*ret.append("    m_");
+		ret.append("        ");
 		ret.append(name);
-		ret.append("->FromNative(native.");
+		ret.append(".from_native(native.");
 		ret.append(name);
-		ret.append(");\n");*/
+		ret.append(");\n");
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -804,17 +715,41 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 		case AST_Decl::NT_union:
 		case AST_Decl::NT_struct:
 		{
-			/*{
-				TAO::unbounded_value_sequence<NestedTestStructWrapper> aux;
-				ACE_UINT32 length = nativeData.StructSequence.length();
-				aux.length(length);
-				for (ACE_UINT32 i = 0; i < length; i++)
-				{
-					aux[i].from_native(nativeData.StructSequence[i]);
-				}
-				marshal::unbounded_sequence_to_ptr(aux, StructSequence);
-			}*/
-			// TODO
+			ret.append("        {\n");
+
+			ret.append("            TAO::");
+			ret.append(sequence_kind);
+			ret.append("_value_sequence<");
+			ret.append(base_type);
+			if (bound > 0) {
+				ret.append(", ");
+				ret.append(std::to_string(bound));
+			}
+			ret.append("> aux;\n");
+
+			ret.append("            ACE_UINT32 length = native.");
+			ret.append(name);
+			ret.append(".length();\n");
+
+			ret.append("            aux.length(length);\n");
+
+			ret.append("            for (ACE_UINT32 i = 0; i < length; i++)\n");
+
+			ret.append("            {\n");
+
+			ret.append("                aux[i].from_native(native.");
+			ret.append(name);
+			ret.append("[i]);\n");
+
+			ret.append("            }\n");
+
+			ret.append("            marshal::");
+			ret.append(sequence_kind);
+			ret.append("_sequence_to_ptr(aux, ");
+			ret.append(name);
+			ret.append(");\n");
+
+			ret.append("        }\n");			
 			break;
 		}
 		case AST_Decl::NT_string:
@@ -902,11 +837,9 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
 	{
-		/*ret.append("    m_");
+		ret.append("        ");
 		ret.append(name);
-		ret.append("->FromNative(native.");
-		ret.append(name);
-		ret.append(");\n");*/
+		ret.append(".release();\n");		
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -947,15 +880,6 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		ret = get_field_release(typedef_type->base_type(), name);
 		break;
 	}
-	case AST_Decl::NT_pre_defined:
-	{
-		/*ret.append("        ");
-		ret.append(name);
-		ret.append(" = native.");
-		ret.append(name);
-		ret.append(";\n");*/
-		break;
-	}
 	case AST_Decl::NT_sequence:
 	{
 		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
@@ -975,9 +899,9 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		case AST_Decl::NT_union:
 		case AST_Decl::NT_struct:
 		{
-			ret.append("        marshal::release_structure_sequence_ptr<");
+			ret.append("			marshal::release_structure_sequence_ptr<");
 			ret.append(base_type);
-			ret.append("Wrapper>(");
+			ret.append(">(");
 			ret.append(name);
 			ret.append(");\n");
 			break;

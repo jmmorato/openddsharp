@@ -35,6 +35,15 @@ module Test {
 	typedef sequence<string, 5> BoundedStringSequenceType;
 	typedef sequence<wstring> UnboundedWStringSequenceType;
 	typedef sequence<wstring, 5> BoundedWStringSequenceType;
+	
+	#pragma DCPS_DATA_TYPE "Test::NestedTestStruct"
+	struct NestedStruct {
+		long Id;
+		string Message;
+	};
+
+	typedef sequence<NestedStruct> UnboundedStructSequenceType;
+	typedef sequence<NestedStruct, 5> BoundedStructSequenceType;
 
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
@@ -51,10 +60,12 @@ module Test {
 		float FloatField;
 		double DoubleField;
 		long double LongDoubleField;
+
 		string UnboundedStringField;		
 		wstring UnboundedWStringField;
 		BoundedStringType BoundedStringField;
 		BoundedWStringType BoundedWStringField;
+
 		UnboundedBooleanSequenceType UnboundedBooleanSequenceField;
 		BoundedBooleanSequenceType BoundedBooleanSequenceField;		
 		UnboundedCharSequenceType UnboundedCharSequenceField;
@@ -81,9 +92,15 @@ module Test {
 		BoundedDoubleSequenceType BoundedDoubleSequenceField;
 		UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
 		BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+
 		UnboundedStringSequenceType UnboundedStringSequenceField;
 		BoundedStringSequenceType BoundedStringSequenceField;
 		UnboundedWStringSequenceType UnboundedWStringSequenceField;
 		BoundedWStringSequenceType BoundedWStringSequenceField;
+
+		NestedStruct NestedStructField;
+
+		UnboundedStructSequenceType UnboundedStructSequenceField;
+		BoundedStructSequenceType BoundedStructSequenceField;
     };
 };

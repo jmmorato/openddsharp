@@ -189,29 +189,6 @@ bool csharp_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std:
 }
 
 bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
-	/*switch (base->node_type()) {
-	case AST_Decl::NT_sequence:
-	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(base);
-		if (seq_type->base_type()->node_type() == AST_Decl::NT_enum) {
-			std::cerr << "ERROR: List of enum types are not supported in .NET. Field name: " << node->full_name() << std::endl;
-			return false;
-		}
-		break;
-	}
-	case AST_Decl::NT_array:
-	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(base);
-		if (arr_type->base_type()->node_type() == AST_Decl::NT_enum) {
-			std::cerr << "ERROR: Array of enum types are not supported in .NET. Field name: " << node->full_name() << std::endl;
-			return false;
-		}
-		break;
-	}
-	default:
-		break;
-	}*/
-
 	return true;
 }
 
@@ -224,7 +201,7 @@ bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const st
 	replacements["SCOPED"] = scoped_name;
 	replacements["TYPE"] = short_name;
 	replacements["SEQ"] = be_global->sequence_suffix().c_str();
-	replacements["SCOPED_METHOD"] = replaceString(scoped_name, std::string("."), std::string("_"));
+	replacements["SCOPED_METHOD"] = replaceString(std::string(scoped_name), std::string("."), std::string("_"));
 
 	be_global->impl_ << "    #region " << short_name << " Definitions\n"
 					 << "    public class " << short_name << "\n"
@@ -465,9 +442,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	case AST_Decl::NT_union:			
 	case AST_Decl::NT_struct:		
 	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		ret.append("^");*/
+		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
 		break;
 	}
 	case AST_Decl::NT_enum:	
@@ -577,9 +552,8 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
 	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		ret.append("^");*/
+		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
+		ret.append("Wrapper");
 		break;
 	}
 	case AST_Decl::NT_enum:
@@ -684,9 +658,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
 	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());
-		ret.append("^");*/
+		ret.append("[MarshalAs(UnmanagedType.Struct)]\n");
 		break;
 	}
 	case AST_Decl::NT_enum:
@@ -755,8 +727,8 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
 	{
-		ret = "gcnew OpenDDSharp::";
-		ret.append(type->full_name());
+		ret = "new ";
+		ret.append(replaceString(std::string(type->full_name()), std::string("::"), std::string(".")));
 		ret.append("()");
 		break;
 	}
@@ -855,17 +827,23 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
 	{
-		/*ret.append("    if (m_");
+		ret.append(indent);
+		ret.append("    if (");
 		ret.append(name);
-		ret.append(" != nullptr) {\n");
+		ret.append(" != null)\n");
 
-		ret.append("        ret.");
-		ret.append(name);
-		ret.append(" = m_");
-		ret.append(name);
-		ret.append("->ToNative();\n");
+		ret.append(indent);
+		ret.append("    {\n");
 
-		ret.append("    }\n");*/
+		ret.append(indent);
+		ret.append("        wrapper.");
+		ret.append(name);
+		ret.append(" = ");
+		ret.append(name);
+		ret.append(".ToNative(toRelease);\n");
+
+		ret.append(indent);
+		ret.append("    }\n");
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -950,17 +928,6 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		case AST_Decl::NT_union:
 		case AST_Decl::NT_struct:
 		{
-			/*if (StructSequence != null)
-			{
-				List<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
-				foreach(NestedTestStruct s in StructSequence)
-				{
-					aux.Add(s.ToNative(toRelease));
-				}
-				Helper.SequenceToPtr(aux, ref wrapper.StructSequence);
-				toRelease.Add(wrapper.StructSequence);
-			}*/
-
 			ret.append(indent);
 			ret.append("    if (");
 			ret.append(name);
@@ -1138,12 +1105,12 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 	{
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
-	{
-		/*ret.append("    m_");
+	{		
+		ret.append("    ");
 		ret.append(name);
-		ret.append("->FromNative(native.");
+		ret.append(".FromNative(wrapper.");
 		ret.append(name);
-		ret.append(");\n");*/
+		ret.append(");\n");		
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -1234,20 +1201,6 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		case AST_Decl::NT_union:
 		case AST_Decl::NT_struct:
 		{
-			//// We need to use the wrapper struct to receive the structures
-			//// In the generated code, the aux variable will be suffixed with the field name
-			//if (wrapper.StructSequence != IntPtr.Zero)
-			//{
-			//	IList<NestedTestStructWrapper> aux = new List<NestedTestStructWrapper>();
-			//	Helper.PtrToSequence(wrapper.StructSequence, ref aux);
-			//	foreach(NestedTestStructWrapper native in aux)
-			//	{
-			//		NestedTestStruct s = new NestedTestStruct();
-			//		s.FromNative(native);
-			//		StructSequence.Add(s);
-			//	}
-			//}
-
 			ret.append("    if (wrapper.");
 			ret.append(name);
 			ret.append(" != IntPtr.Zero)\n");
