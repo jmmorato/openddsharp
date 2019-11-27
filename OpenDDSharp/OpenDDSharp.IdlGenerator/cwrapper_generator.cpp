@@ -335,8 +335,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_enum:	
 	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());*/
+		ret = type->full_name();
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -468,16 +467,15 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		ret.append(");\n");
 
 		ret.append("        }\n");
+		break;
 	}
 	case AST_Decl::NT_enum:
-	{		
-		/*ret.append("    ret.");
+	{				
+		ret.append("        ret.");
 		ret.append(name);
-		ret.append(" = (::");
-		ret.append(scoped(type->name()));
-		ret.append(")m_");
+		ret.append(" = ");
 		ret.append(name);
-		ret.append(";\n");*/
+		ret.append(";\n");
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -546,7 +544,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append(name);
 			ret.append(", aux);\n");
 
-			ret.append("            ACE_UINT32 length = aux.length();");
+			ret.append("            ACE_UINT32 length = aux.length();\n");
 
 			ret.append("            ret.");
 			ret.append(name);
@@ -554,13 +552,13 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 
 			ret.append("            for (ACE_UINT32 i = 0; i < length; i++)\n");
 
-			ret.append("            {");
+			ret.append("            {\n");
 
 			ret.append("                ret.");
 			ret.append(name);
 			ret.append("[i] = aux[i].to_native();\n");
 
-			ret.append("            }");
+			ret.append("            }\n");
 			break;
 		}
 		case AST_Decl::NT_string:
@@ -678,13 +676,12 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 	}
 	case AST_Decl::NT_enum:
 	{
-		/*ret.append("    m_");
+		ret.append("        ");
 		ret.append(name);
-		ret.append(" = (::OpenDDSharp::");
-		ret.append(scoped(type->name()));
-		ret.append(")native.");
+		ret.append(" = ");
+		ret.append("native.");
 		ret.append(name);
-		ret.append(";\n");*/
+		ret.append(";\n");
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -861,17 +858,6 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		ret.append(");\n");
 
 		ret.append("        }\n");
-		break;
-	}
-	case AST_Decl::NT_enum:
-	{
-		/*ret.append("    m_");
-		ret.append(name);
-		ret.append(" = (::OpenDDSharp::");
-		ret.append(scoped(type->name()));
-		ret.append(")native.");
-		ret.append(name);
-		ret.append(";\n");*/
 		break;
 	}
 	case AST_Decl::NT_typedef:

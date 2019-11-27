@@ -169,21 +169,25 @@ bool csharp_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AS
 }
 
 bool csharp_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std::vector<AST_EnumVal*>& contents, const char* repoid) {
-
-	/*be_global->header_ << "\n    public enum class " << name->last_component()->get_string() << " {\n";
+	be_global->impl_ << "    #region " << name->last_component()->get_string() << " Enumeration\n"
+					 << "    public enum " << name->last_component()->get_string() << "\n"
+					 << "    {\n";
 
 	for (unsigned int i = 0; i < contents.size(); i++) {
 		AST_EnumVal* val = contents[i];
-		be_global->header_ << "        " << val->local_name()->get_string() << " = ::" << val->full_name();
+	
+		be_global->impl_ << "        " << val->local_name()->get_string() << " = ";
+		val->constant_value()->dump(be_global->impl_);
 
 		if (i + 1 < contents.size()) {
-			be_global->header_ << ",";
-		} 
+			be_global->impl_ << ",";
+		}
 
-		be_global->header_ << "\n";
+		be_global->impl_ << "\n";
 	}
 
-	be_global->header_ << "    };\n";*/
+	be_global->impl_ << "    }\n";
+	be_global->impl_ << "    #endregion\n\n";
 
 	return true;
 }
@@ -414,21 +418,6 @@ std::string csharp_generator::implement_struct_from_native(const std::vector<AST
 
 	ret.append(indent);
 	ret.append("}\n");
-	/*ret.append(" OpenDDSharp::");
-	ret.append(scoped_name);
-	ret.append("::FromNative(::");
-	ret.append(scoped_name);
-	ret.append(" native) {\n");
-
-	for (unsigned int i = 0; i < fields.size(); i++) {
-		AST_Field* field = fields[i];
-		AST_Type* field_type = field->field_type();
-		const char * field_name = field->local_name()->get_string();
-
-		ret.append(get_field_from_native(field_type, field_name));
-	}
-
-	ret.append("}\n\n");*/
 
 	return ret;
 }
@@ -447,8 +436,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_enum:	
 	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());*/
+		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -558,8 +546,7 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_enum:
 	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());*/
+		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -659,12 +646,6 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 	case AST_Decl::NT_struct:
 	{
 		ret.append("[MarshalAs(UnmanagedType.Struct)]\n");
-		break;
-	}
-	case AST_Decl::NT_enum:
-	{
-		/*ret = "OpenDDSharp::";
-		ret.append(type->full_name());*/
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -879,14 +860,13 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		break;
 	}
 	case AST_Decl::NT_enum:
-	{		
-		/*ret.append("    ret.");
+	{
+		ret.append(indent);
+		ret.append("    wrapper.");
 		ret.append(name);
-		ret.append(" = (::");
-		ret.append(scoped(type->name()));
-		ret.append(")m_");
+		ret.append(" = ");
 		ret.append(name);
-		ret.append(";\n");*/
+		ret.append(";\n");
 		break;
 	}
 	case AST_Decl::NT_typedef:
@@ -1154,14 +1134,13 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		break;
 	}
 	case AST_Decl::NT_enum:
-	{
-		/*ret.append("    m_");
+	{		
+		ret.append("    ");
 		ret.append(name);
-		ret.append(" = (::OpenDDSharp::");
-		ret.append(scoped(type->name()));
-		ret.append(")native.");
+		ret.append(" = ");
+		ret.append("wrapper.");
 		ret.append(name);
-		ret.append(";\n");*/
+		ret.append(";\n");
 		break;
 	}
 	case AST_Decl::NT_typedef:

@@ -34,7 +34,7 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Fields
-        private DomainParticipant _participant;
+        private static DomainParticipant _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
         private Publisher _publisher;
         private Subscriber _subscriber;
         private Topic _topic;
@@ -44,11 +44,15 @@ namespace OpenDDSharp.Standard.UnitTest
         private TestStructDataWriter _dataWriter;
         #endregion
 
+        #region Properties
+        public TestContext TestContext { get; set; }
+        #endregion
+
         #region Initialization/Cleanup
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            //_participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             
             _publisher = _participant.CreatePublisher();
@@ -62,7 +66,7 @@ namespace OpenDDSharp.Standard.UnitTest
             ReturnCode ret = typeSupport.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            _topic = _participant.CreateTopic("TestTopic", typeName);
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(_topic);
 
             _dr = _subscriber.CreateDataReader(_topic);
@@ -79,17 +83,24 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            //if (_participant != null)
-            //{
-            //    ReturnCode result = _participant.DeleteContainedEntities();
-            //    Assert.AreEqual(ReturnCode.Ok, result);
-            //}
+            if (_participant != null)
+            {
+                ReturnCode result = _participant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
 
             //if (AssemblyInitializer.Factory != null)
             //{
             //    ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
             //    Assert.AreEqual(ReturnCode.Ok, result);
             //}
+
+            //_participant = null;
+            _publisher = null;
+            _subscriber = null;
+            _topic = null;
+            _dw = null;
+            _dr = null;
         }
         #endregion
 
@@ -520,6 +531,32 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.BoundedStructSequenceField.Count, 0);
             Assert.IsNotNull(defaultStruct.UnboundedStructSequenceField);
             Assert.AreEqual(defaultStruct.UnboundedStructSequenceField.Count, 0);
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumType()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                TestEnumField = TestEnum.ENUM5
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(data.TestEnumField, received.TestEnumField);
+
+            Assert.AreEqual(typeof(TestEnum), data.TestEnumField.GetType());
+
+            Assert.AreEqual(TestEnum.ENUM1, defaultStruct.TestEnumField);
         }
         #endregion
     }

@@ -94,6 +94,24 @@ namespace Test
 
     #endregion
 
+    #region TestEnum Enumeration
+    public enum TestEnum
+    {
+        ENUM1 = 0,
+        ENUM2 = 1,
+        ENUM3 = 2,
+        ENUM4 = 3,
+        ENUM5 = 4,
+        ENUM6 = 5,
+        ENUM7 = 6,
+        ENUM8 = 7,
+        ENUM9 = 8,
+        ENUM10 = 9,
+        ENUM11 = 10,
+        ENUM12 = 11
+    }
+    #endregion
+
     #region TestStruct Definitions
     public class TestStruct
     {
@@ -158,6 +176,7 @@ namespace Test
         Test.NestedStruct _NestedStructField;
         IList<Test.NestedStruct> _UnboundedStructSequenceField;
         IList<Test.NestedStruct> _BoundedStructSequenceField;
+        Test.TestEnum _TestEnumField;
         #endregion
 
         #region Properties
@@ -460,6 +479,12 @@ namespace Test
             get { return _BoundedStructSequenceField; }
             set { _BoundedStructSequenceField = value; }
         }
+
+        public Test.TestEnum TestEnumField
+        {
+            get { return _TestEnumField; }
+            set { _TestEnumField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -644,6 +669,7 @@ namespace Test
                 MarshalHelper.SequenceToPtr(aux, ref wrapper.BoundedStructSequenceField);
                 toRelease.Add(wrapper.BoundedStructSequenceField);
             }
+            wrapper.TestEnumField = TestEnumField;
 
             return wrapper;
         }
@@ -748,6 +774,7 @@ namespace Test
                     BoundedStructSequenceField.Add(s);
                 }
             }
+            TestEnumField = wrapper.TestEnumField;
         }
         #endregion
     }
@@ -810,6 +837,7 @@ namespace Test
         public Test.NestedStructWrapper NestedStructField;
         public IntPtr UnboundedStructSequenceField;
         public IntPtr BoundedStructSequenceField;
+        public Test.TestEnum TestEnumField;
     }
 
 	public class TestStructTypeSupport

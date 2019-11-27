@@ -45,6 +45,21 @@ module Test {
 	typedef sequence<NestedStruct> UnboundedStructSequenceType;
 	typedef sequence<NestedStruct, 5> BoundedStructSequenceType;
 
+	enum TestEnum {
+		ENUM1,
+		ENUM2,
+		ENUM3,
+		ENUM4,
+		ENUM5,
+		ENUM6,
+		ENUM7,
+		ENUM8,
+		ENUM9,
+		ENUM10,
+		ENUM11,
+		ENUM12
+	};
+
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
         short ShortField;
@@ -102,5 +117,7 @@ module Test {
 
 		UnboundedStructSequenceType UnboundedStructSequenceField;
 		BoundedStructSequenceType BoundedStructSequenceField;
+
+		TestEnum TestEnumField;
     };
 };
