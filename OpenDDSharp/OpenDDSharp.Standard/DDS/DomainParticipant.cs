@@ -115,6 +115,18 @@ namespace OpenDDSharp.DDS
             }
         }
 
+        public ReturnCode DeleteContainedEntities()
+        {
+            if (Environment.Is64BitProcess)
+            {
+                return DeleteContainedEntities64(_native);
+            }
+            else
+            {
+                return DeleteContainedEntities86(_native);
+            }
+        }
+
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public IntPtr ToNative()
         {
@@ -146,6 +158,14 @@ namespace OpenDDSharp.DDS
         [SuppressUnmanagedCodeSecurity]
         [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern IntPtr CreateTopic86(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(Constants.API_DLL_X64, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern ReturnCode DeleteContainedEntities64(IntPtr dp);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern ReturnCode DeleteContainedEntities86(IntPtr dp);
         #endregion
     }
 }

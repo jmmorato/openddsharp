@@ -42,3 +42,5 @@ EXTERN_METHOD_EXPORT ::DDS::Topic_ptr DomainParticipant_CreateTopic(
     TopicQosWrapper* qos,
     ::DDS::TopicListener_ptr a_listener,
     ::DDS::StatusMask mask);
+
+EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp);

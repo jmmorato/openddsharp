@@ -47,3 +47,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 {
     return dp->create_topic(topic_name, type_name, TOPIC_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
+
+::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp)
+{
+	return dp->delete_contained_entities();
+}

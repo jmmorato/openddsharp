@@ -28,6 +28,10 @@ DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::Dom
     //::DDS::DomainParticipantQos native_qos;    
     //native_qos.entity_factory.autoenable_created_entities = qos.entity_factory.autoenable_created_entities;        
     //native_qos.user_data.value = qos.user_data.value;
-    return dpf->create_participant(domainId, PARTICIPANT_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-    printf("DomainParticipantFactory_CreateParticipant3");
+    return dpf->create_participant(domainId, PARTICIPANT_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);    
+}
+
+::DDS::ReturnCode_t DomainParticipantFactory_DeleteParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainParticipant_ptr dp)
+{
+	return dpf->delete_participant(dp);
 }

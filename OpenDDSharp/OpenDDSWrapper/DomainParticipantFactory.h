@@ -29,3 +29,5 @@ EXTERN_METHOD_EXPORT DDS::DomainParticipant_ptr DomainParticipantFactory_CreateP
     DomainParticipantQosWrapper* qos,
     ::DDS::DomainParticipantListener_ptr a_listener,
     ::DDS::StatusMask mask);
+
+EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t DomainParticipantFactory_DeleteParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainParticipant_ptr dp);

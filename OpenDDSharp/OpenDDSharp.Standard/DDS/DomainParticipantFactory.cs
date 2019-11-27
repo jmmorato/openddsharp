@@ -62,6 +62,18 @@ namespace OpenDDSharp.DDS
                 return new DomainParticipant(native);
             }
         }
+
+        public ReturnCode DeleteParticipant(DomainParticipant dp)
+        {
+            if (Environment.Is64BitProcess)
+            {
+                return DeleteParticipant64(_native, dp.ToNative());
+            }
+            else
+            {
+                return DeleteParticipant86(_native, dp.ToNative());
+            }
+        }
         #endregion
 
         #region PInvoke
@@ -72,6 +84,14 @@ namespace OpenDDSharp.DDS
         [SuppressUnmanagedCodeSecurity]
         [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipantFactory_CreateParticipant", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr CreateParticipant86(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] ref DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(Constants.API_DLL_X64, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
+        private static extern ReturnCode DeleteParticipant64(IntPtr dpf, IntPtr dp);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
+        private static extern ReturnCode DeleteParticipant86(IntPtr dpf, IntPtr dp);
         #endregion
     }
 }
