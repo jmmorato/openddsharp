@@ -14,6 +14,76 @@ using OpenDDSharp.DDS;
 
 namespace Test
 {
+    public static class TEST_SHORT_CONST
+    {
+        public static readonly System.Int16 Value = -1;
+    }
+
+    public static class TEST_USHORT_CONST
+    {
+        public static readonly System.UInt16 Value = 1;
+    }
+
+    public static class TEST_LONG_CONST
+    {
+        public static readonly System.Int32 Value = -2;
+    }
+
+    public static class TEST_ULONG_CONST
+    {
+        public static readonly System.UInt32 Value = 2;
+    }
+
+    public static class TEST_LONGLONG_CONST
+    {
+        public static readonly System.Int64 Value = -3;
+    }
+
+    public static class TEST_ULONGLONG_CONST
+    {
+        public static readonly System.UInt64 Value = 3;
+    }
+
+    public static class TEST_FLOAT_CONST
+    {
+        public static readonly System.Single Value = 4.100000f;
+    }
+
+    public static class TEST_DOUBLE_CONST
+    {
+        public static readonly System.Double Value = 5.100000;
+    }
+
+    public static class TEST_CHAR_CONST
+    {
+        public static readonly System.Char Value = 'X';
+    }
+
+    public static class TEST_WCHAR_CONST
+    {
+        public static readonly System.Char Value = 'S';
+    }
+
+    public static class TEST_OCTET_CONST
+    {
+        public static readonly System.Byte Value = 66;
+    }
+
+    public static class TEST_BOOLEAN_CONST
+    {
+        public static readonly System.Boolean Value = true;
+    }
+
+    public static class TEST_STRING_CONST
+    {
+        public static readonly System.String Value = "Hello, I love you, won't you tell me your name?";
+    }
+
+    public static class TEST_WSTRING_CONST
+    {
+        public static readonly System.String Value = "Hello, I love you, won't you tell me your name?";
+    }
+
     #region NestedStruct Definitions
     public class NestedStruct
     {
@@ -112,6 +182,11 @@ namespace Test
     }
     #endregion
 
+    public static class TEST_ENUM_CONST
+    {
+        public static readonly Test.TestEnum Value = TestEnum.ENUM6;
+    }
+
     #region TestStruct Definitions
     public class TestStruct
     {
@@ -177,6 +252,8 @@ namespace Test
         IList<Test.NestedStruct> _UnboundedStructSequenceField;
         IList<Test.NestedStruct> _BoundedStructSequenceField;
         Test.TestEnum _TestEnumField;
+        IList<Test.TestEnum> _UnboundedEnumSequenceField;
+        IList<Test.TestEnum> _BoundedEnumSequenceField;
         #endregion
 
         #region Properties
@@ -485,6 +562,18 @@ namespace Test
             get { return _TestEnumField; }
             set { _TestEnumField = value; }
         }
+
+        public IList<Test.TestEnum> UnboundedEnumSequenceField
+        {
+            get { return _UnboundedEnumSequenceField; }
+            set { _UnboundedEnumSequenceField = value; }
+        }
+
+        public IList<Test.TestEnum> BoundedEnumSequenceField
+        {
+            get { return _BoundedEnumSequenceField; }
+            set { _BoundedEnumSequenceField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -540,6 +629,8 @@ namespace Test
             _NestedStructField = new Test.NestedStruct();
             _UnboundedStructSequenceField = new List<Test.NestedStruct>();
             _BoundedStructSequenceField = new List<Test.NestedStruct>(5);
+            _UnboundedEnumSequenceField = new List<Test.TestEnum>();
+            _BoundedEnumSequenceField = new List<Test.TestEnum>(5);
         }
         #endregion
 
@@ -586,14 +677,18 @@ namespace Test
             MarshalHelper.BooleanSequenceToPtr(BoundedBooleanSequenceField, ref wrapper.BoundedBooleanSequenceField);
             toRelease.Add(wrapper.BoundedBooleanSequenceField);
             if (UnboundedCharSequenceField != null)
-            {                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(UnboundedCharSequenceField.ToArray()).ToList();
+            {
+                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(UnboundedCharSequenceField.ToArray()).ToList();
                 MarshalHelper.SequenceToPtr(aux, ref wrapper.UnboundedCharSequenceField);
                 toRelease.Add(wrapper.UnboundedCharSequenceField);
-            }            if (BoundedCharSequenceField != null)
-            {                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(BoundedCharSequenceField.ToArray()).ToList();
+            }
+            if (BoundedCharSequenceField != null)
+            {
+                IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(BoundedCharSequenceField.ToArray()).ToList();
                 MarshalHelper.SequenceToPtr(aux, ref wrapper.BoundedCharSequenceField);
                 toRelease.Add(wrapper.BoundedCharSequenceField);
-            }            MarshalHelper.SequenceToPtr(UnboundedWCharSequenceField, ref wrapper.UnboundedWCharSequenceField);
+            }
+            MarshalHelper.SequenceToPtr(UnboundedWCharSequenceField, ref wrapper.UnboundedWCharSequenceField);
             toRelease.Add(wrapper.UnboundedWCharSequenceField);
             MarshalHelper.SequenceToPtr(BoundedWCharSequenceField, ref wrapper.BoundedWCharSequenceField);
             toRelease.Add(wrapper.BoundedWCharSequenceField);
@@ -670,6 +765,10 @@ namespace Test
                 toRelease.Add(wrapper.BoundedStructSequenceField);
             }
             wrapper.TestEnumField = TestEnumField;
+            MarshalHelper.EnumSequenceToPtr(UnboundedEnumSequenceField, ref wrapper.UnboundedEnumSequenceField);
+            toRelease.Add(wrapper.UnboundedEnumSequenceField);
+            MarshalHelper.EnumSequenceToPtr(BoundedEnumSequenceField, ref wrapper.BoundedEnumSequenceField);
+            toRelease.Add(wrapper.BoundedEnumSequenceField);
 
             return wrapper;
         }
@@ -775,6 +874,8 @@ namespace Test
                 }
             }
             TestEnumField = wrapper.TestEnumField;
+            MarshalHelper.PtrToEnumSequence(wrapper.UnboundedEnumSequenceField, ref _UnboundedEnumSequenceField);
+            MarshalHelper.PtrToEnumSequence(wrapper.BoundedEnumSequenceField, ref _BoundedEnumSequenceField, 5);
         }
         #endregion
     }
@@ -838,6 +939,8 @@ namespace Test
         public IntPtr UnboundedStructSequenceField;
         public IntPtr BoundedStructSequenceField;
         public Test.TestEnum TestEnumField;
+        public IntPtr UnboundedEnumSequenceField;
+        public IntPtr BoundedEnumSequenceField;
     }
 
 	public class TestStructTypeSupport

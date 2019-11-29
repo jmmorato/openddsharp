@@ -1,5 +1,19 @@
 
 module Test {
+	const short TEST_SHORT_CONST = -1;
+	const unsigned short TEST_USHORT_CONST = 1;
+	const long TEST_LONG_CONST = -2;
+	const unsigned long TEST_ULONG_CONST = 2;
+	const long long TEST_LONGLONG_CONST = -3;
+	const unsigned long long TEST_ULONGLONG_CONST = 3;
+	const float TEST_FLOAT_CONST = 4.1;
+	const double TEST_DOUBLE_CONST = 5.1;
+	const char TEST_CHAR_CONST = 'X';
+	const wchar TEST_WCHAR_CONST = 'S';
+	const octet TEST_OCTET_CONST = 0x42;
+	const boolean TEST_BOOLEAN_CONST = 1;
+	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";	
+	const wstring TEST_WSTRING_CONST = L"Hello, I love you, won't you tell me your name?";
 
 	typedef string<32> BoundedStringType;
 	typedef wstring<32> BoundedWStringType;
@@ -34,7 +48,7 @@ module Test {
 	typedef sequence<string> UnboundedStringSequenceType;
 	typedef sequence<string, 5> BoundedStringSequenceType;
 	typedef sequence<wstring> UnboundedWStringSequenceType;
-	typedef sequence<wstring, 5> BoundedWStringSequenceType;
+	typedef sequence<wstring, 5> BoundedWStringSequenceType;	
 	
 	#pragma DCPS_DATA_TYPE "Test::NestedTestStruct"
 	struct NestedStruct {
@@ -59,6 +73,11 @@ module Test {
 		ENUM11,
 		ENUM12
 	};
+
+	typedef sequence<TestEnum> UnboundedEnumSequenceType;
+	typedef sequence<TestEnum, 5> BoundedEnumSequenceType;
+
+	const TestEnum TEST_ENUM_CONST = TestEnum::ENUM6;
 
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
@@ -119,5 +138,8 @@ module Test {
 		BoundedStructSequenceType BoundedStructSequenceField;
 
 		TestEnum TestEnumField;
+
+		UnboundedEnumSequenceType UnboundedEnumSequenceField;
+		BoundedEnumSequenceType BoundedEnumSequenceField;
     };
 };

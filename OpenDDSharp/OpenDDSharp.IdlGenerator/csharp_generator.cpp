@@ -86,84 +86,102 @@ bool csharp_generator::gen_module_end() {
 }
 
 bool csharp_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AST_Constant* constant) {
-	/*std::string cli_type("");
-	
-	bool is_string = false;
-	bool is_char = false;
+	std::string csharp_type("");
+	std::string str_value("");
+
 	switch (constant->et()) {
 	case AST_Expression::EV_short:
-		cli_type = "System::Int16";
+		str_value = std::to_string(constant->constant_value()->ev()->u.sval);
+		csharp_type = "System.Int16";
 		break;
 	case AST_Expression::EV_ushort:
-		cli_type = "System::UInt16";
+		str_value = std::to_string(constant->constant_value()->ev()->u.usval);
+		csharp_type = "System.UInt16";
 		break;
 	case AST_Expression::EV_long:
-		cli_type = "System::Int32";
+		str_value = std::to_string(constant->constant_value()->ev()->u.lval);
+		csharp_type = "System.Int32";
 		break;
 	case AST_Expression::EV_ulong:
-		cli_type = "System::UInt32";
+		str_value = std::to_string(constant->constant_value()->ev()->u.ulval);
+		csharp_type = "System.UInt32";
 		break;
 	case AST_Expression::EV_float:
-		cli_type = "System::Single";
+		str_value = std::to_string(constant->constant_value()->ev()->u.fval);
+		str_value.append("f");
+		csharp_type = "System.Single";
 		break;
 	case AST_Expression::EV_double:
-		cli_type = "System::Double";
+		str_value = std::to_string(constant->constant_value()->ev()->u.dval);
+		csharp_type = "System.Double";
 		break;
 	case AST_Expression::EV_char:
 	case AST_Expression::EV_wchar:
-		is_char = true;
-		cli_type = "System::Char";
+	{
+		std::ostringstream value("");
+		constant->constant_value()->dump(value);
+		str_value = "'";
+		str_value.append(value.str());
+		str_value.append("'");
+		csharp_type = "System.Char";
 		break;
+	}
 	case AST_Expression::EV_octet:
-		cli_type = "System::Byte";
+		str_value = std::to_string(constant->constant_value()->ev()->u.oval);
+		csharp_type = "System.Byte";
 		break;
 	case AST_Expression::EV_bool:
-		cli_type = "System::Boolean";
+		str_value = constant->constant_value()->ev()->u.bval ? "true" : "false";
+		csharp_type = "System.Boolean";		
 		break;
 	case AST_Expression::EV_string:
+		str_value = "\"";
+		str_value.append(constant->constant_value()->ev()->u.strval->get_string());
+		str_value.append("\"");
+		csharp_type = "System.String";
+		break;
 	case AST_Expression::EV_wstring:
-		is_string = true;
-		cli_type = "System::String^";
+		str_value = "\"";
+		str_value.append(constant->constant_value()->ev()->u.wstrval);
+		str_value.append("\"");
+		csharp_type = "System.String";
 		break;
 	case AST_Expression::EV_longlong:
-		cli_type = "System::Int64";
+		str_value = std::to_string(constant->constant_value()->ev()->u.llval);
+		csharp_type = "System.Int64";
 		break;
 	case AST_Expression::EV_ulonglong:
-		cli_type = "System::UInt64";
+		str_value = std::to_string(constant->constant_value()->ev()->u.ullval);
+		csharp_type = "System.UInt64";
 		break;
 	case AST_Expression::EV_fixed:
-		cli_type = "System::Decimal";
+		str_value = std::to_string(constant->constant_value()->ev()->u.fixedval);
+		csharp_type = "System.Decimal";
 		break;
+	case AST_Expression::EV_enum:
+	{
+		std::ostringstream value("");
+		constant->constant_value()->n()->dump(value);
+		str_value = replaceString(std::string(value.str()), std::string("::"), std::string("."));
+
+		std::ostringstream type("");
+		constant->enum_full_name()->dump(type);
+		std::string str_type = type.str();
+		if (str_type.rfind("::", 0) == 0) {
+			str_type = str_type.substr(2);			
+		}
+		csharp_type = replaceString(std::string(str_type), std::string("::"), std::string("."));
+		break;
+	}
 	default:
-		//CODE REVIEW: Error and stop?
+		// CODE REVIEW: Error and stop?
 		return true;
 	}
-	
-	be_global->header_ << "    public ref class " << name->last_component()->get_string() << " sealed {\n";
-	be_global->header_ << "    public:\n";
-	be_global->header_ << "        static const " << cli_type << " VALUE = ";
 
-	if (is_string) {
-		be_global->header_ << "\"";
-	}
-	else if (is_char) {
-		be_global->header_ << "'";
-	}
-
-	constant->constant_value()->dump(be_global->header_);
-
-	if (is_string) {
-		be_global->header_ << "\"";
-	}
-	else if (is_char) {
-		be_global->header_ << "'";
-	}
-
-	be_global->header_ << ";\n";
-
-	be_global->header_ << "    private:\n";
-	be_global->header_ << "        " << name->last_component()->get_string() << "() {}\n";
-	be_global->header_ << "    };\n";*/
+	be_global->impl_ << "    public static class " << name->last_component()->get_string() << "\n"
+					 << "    {\n"
+					 << "        public static readonly " << csharp_type << " Value = " << str_value << ";\n"
+				     << "    }\n\n";	
 
 	return true;
 }
@@ -247,7 +265,7 @@ bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const st
 		be_global->impl_ << impl;
 	}
 
-	be_global->impl_ << "\n    #endregion" << "\n\n";
+	be_global->impl_ << "    #endregion" << "\n\n";
 
 	return true;
 }
@@ -977,8 +995,6 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		}
 		case AST_Decl::NT_enum:
 		{
-			/*Helper.EnumSequenceToPtr(EnumSequence, ref wrapper.EnumSequence);
-			toRelease.Add(wrapper.EnumSequence);*/
 			ret.append(indent);
 			ret.append("    MarshalHelper.EnumSequenceToPtr(");
 			ret.append(name);
@@ -987,7 +1003,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(");\n");
 
 			ret.append(indent);
-			ret.append("toRelease.Add(wrapper.");
+			ret.append("    toRelease.Add(wrapper.");
 			ret.append(name);
 			ret.append(");\n");
 			break;
@@ -1003,7 +1019,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(" != null)\n");
 
 				ret.append(indent);
-				ret.append("    {");
+				ret.append("    {\n");
 
 				ret.append(indent);
 				ret.append("        IList<byte> aux = System.Text.Encoding.ASCII.GetBytes(");
@@ -1021,7 +1037,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(");\n");
 
 				ret.append(indent);
-				ret.append("    }");
+				ret.append("    }\n");
 
 				break;
 			}
@@ -1250,8 +1266,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			break;
 		}
 		case AST_Decl::NT_enum:
-		{
-			//Helper.PtrToEnumSequence(wrapper.EnumSequence, ref _enumSequence);
+		{			
 			ret.append("    MarshalHelper.PtrToEnumSequence(wrapper.");
 			ret.append(name);
 			ret.append(", ref _");

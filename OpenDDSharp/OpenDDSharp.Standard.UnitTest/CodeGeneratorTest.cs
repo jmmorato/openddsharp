@@ -558,6 +558,72 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Assert.AreEqual(TestEnum.ENUM1, defaultStruct.TestEnumField);
         }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumSequences()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                UnboundedEnumSequenceField = { TestEnum.ENUM10, TestEnum.ENUM9, TestEnum.ENUM8, TestEnum.ENUM7, TestEnum.ENUM6, TestEnum.ENUM5 },
+                BoundedEnumSequenceField = { TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5 }
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
+            Assert.IsTrue(data.UnboundedEnumSequenceField.SequenceEqual(received.UnboundedEnumSequenceField));
+
+            Assert.IsTrue(typeof(IList<TestEnum>).IsAssignableFrom(data.BoundedEnumSequenceField.GetType()));
+            Assert.IsTrue(typeof(IList<TestEnum>).IsAssignableFrom(data.UnboundedEnumSequenceField.GetType()));
+
+            Assert.IsNotNull(defaultStruct.BoundedEnumSequenceField);
+            Assert.AreEqual(defaultStruct.BoundedEnumSequenceField.Count, 0);
+            Assert.IsNotNull(defaultStruct.UnboundedEnumSequenceField);
+            Assert.AreEqual(defaultStruct.UnboundedEnumSequenceField.Count, 0);
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedConstants()
+        {
+            Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(int), TEST_LONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(long), TEST_LONGLONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(ushort), TEST_USHORT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(uint), TEST_ULONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(ulong), TEST_ULONGLONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(char), TEST_CHAR_CONST.Value.GetType());
+            Assert.AreEqual(typeof(char), TEST_WCHAR_CONST.Value.GetType());
+            Assert.AreEqual(typeof(bool), TEST_BOOLEAN_CONST.Value.GetType());
+            Assert.AreEqual(typeof(byte), TEST_OCTET_CONST.Value.GetType());
+            Assert.AreEqual(typeof(float), TEST_FLOAT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(double), TEST_DOUBLE_CONST.Value.GetType());
+            Assert.AreEqual(typeof(TestEnum), TEST_ENUM_CONST.Value.GetType());
+
+            Assert.AreEqual(-1, TEST_SHORT_CONST.Value);
+            Assert.AreEqual((ushort)1, TEST_USHORT_CONST.Value);
+            Assert.AreEqual(-2, TEST_LONG_CONST.Value);
+            Assert.AreEqual(2U, TEST_ULONG_CONST.Value);
+            Assert.AreEqual(-3L, TEST_LONGLONG_CONST.Value);
+            Assert.AreEqual(3UL, TEST_ULONGLONG_CONST.Value);
+            Assert.AreEqual(4.1f, TEST_FLOAT_CONST.Value);
+            Assert.AreEqual(5.1, TEST_DOUBLE_CONST.Value);
+            Assert.AreEqual('X', TEST_CHAR_CONST.Value);
+            Assert.AreEqual('S', TEST_WCHAR_CONST.Value);
+            Assert.AreEqual(0x42, TEST_OCTET_CONST.Value);
+            Assert.IsTrue(TEST_BOOLEAN_CONST.Value);
+            Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_STRING_CONST.Value);
+            Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_WSTRING_CONST.Value);
+            Assert.AreEqual(TestEnum.ENUM6, TEST_ENUM_CONST.Value);
+        }
         #endregion
     }
 }

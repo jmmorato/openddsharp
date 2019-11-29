@@ -82,105 +82,10 @@ bool cwrapper_generator::gen_module_end() {
 }
 
 bool cwrapper_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AST_Constant* constant) {
-	/*std::string cli_type("");
-	
-	bool is_string = false;
-	bool is_char = false;
-	switch (constant->et()) {
-	case AST_Expression::EV_short:
-		cli_type = "System::Int16";
-		break;
-	case AST_Expression::EV_ushort:
-		cli_type = "System::UInt16";
-		break;
-	case AST_Expression::EV_long:
-		cli_type = "System::Int32";
-		break;
-	case AST_Expression::EV_ulong:
-		cli_type = "System::UInt32";
-		break;
-	case AST_Expression::EV_float:
-		cli_type = "System::Single";
-		break;
-	case AST_Expression::EV_double:
-		cli_type = "System::Double";
-		break;
-	case AST_Expression::EV_char:
-	case AST_Expression::EV_wchar:
-		is_char = true;
-		cli_type = "System::Char";
-		break;
-	case AST_Expression::EV_octet:
-		cli_type = "System::Byte";
-		break;
-	case AST_Expression::EV_bool:
-		cli_type = "System::Boolean";
-		break;
-	case AST_Expression::EV_string:
-	case AST_Expression::EV_wstring:
-		is_string = true;
-		cli_type = "System::String^";
-		break;
-	case AST_Expression::EV_longlong:
-		cli_type = "System::Int64";
-		break;
-	case AST_Expression::EV_ulonglong:
-		cli_type = "System::UInt64";
-		break;
-	case AST_Expression::EV_fixed:
-		cli_type = "System::Decimal";
-		break;
-	default:
-		//CODE REVIEW: Error and stop?
-		return true;
-	}
-	
-	be_global->header_ << "    public ref class " << name->last_component()->get_string() << " sealed {\n";
-	be_global->header_ << "    public:\n";
-	be_global->header_ << "        static const " << cli_type << " VALUE = ";
-
-	if (is_string) {
-		be_global->header_ << "\"";
-	}
-	else if (is_char) {
-		be_global->header_ << "'";
-	}
-
-	constant->constant_value()->dump(be_global->header_);
-
-	if (is_string) {
-		be_global->header_ << "\"";
-	}
-	else if (is_char) {
-		be_global->header_ << "'";
-	}
-
-	be_global->header_ << ";\n";
-
-	be_global->header_ << "    private:\n";
-	be_global->header_ << "        " << name->last_component()->get_string() << "() {}\n";
-	be_global->header_ << "    };\n";*/
-
 	return true;
 }
 
 bool cwrapper_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std::vector<AST_EnumVal*>& contents, const char* repoid) {
-
-	/*be_global->header_ << "\n    public enum class " << name->last_component()->get_string() << " {\n";
-
-	for (unsigned int i = 0; i < contents.size(); i++) {
-		AST_EnumVal* val = contents[i];
-		be_global->header_ << "        " << val->local_name()->get_string() << " = ::" << val->full_name();
-
-		if (i + 1 < contents.size()) {
-			be_global->header_ << ",";
-		} 
-
-		be_global->header_ << "\n";
-	}
-
-	be_global->header_ << "    };\n";*/
-
 	return true;
 }
 
@@ -765,7 +670,7 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			ret.append(name);
 			ret.append(");\n");
 			break;
-		}		
+		}
 		case AST_Decl::NT_pre_defined:
 		{
 			AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
