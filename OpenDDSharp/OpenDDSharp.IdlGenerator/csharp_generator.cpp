@@ -265,7 +265,7 @@ bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const st
 		be_global->impl_ << impl;
 	}
 
-	be_global->impl_ << "    #endregion" << "\n\n";
+	be_global->impl_ << "\n    #endregion" << "\n\n";
 
 	return true;
 }
