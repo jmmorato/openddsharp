@@ -254,6 +254,19 @@ namespace Test
         Test.TestEnum _TestEnumField;
         IList<Test.TestEnum> _UnboundedEnumSequenceField;
         IList<Test.TestEnum> _BoundedEnumSequenceField;
+        Int16[] _ShortArrayField;
+        UInt16[] _UnsignedShortArrayField;
+        Int32[] _LongArrayField;
+        UInt32[] _UnsignedLongArrayField;
+        Int64[] _LongLongArrayField;
+        UInt64[] _UnsignedLongLongArrayField;
+        Char[] _CharArrayField;
+        Char[] _WCharArrayField;
+        Boolean[] _BooleanArrayField;
+        Byte[] _OctetArrayField;
+        Single[] _FloatArrayField;
+        Double[] _DoubleArrayField;
+        Decimal[] _LongDoubleArrayField;
         #endregion
 
         #region Properties
@@ -574,6 +587,84 @@ namespace Test
             get { return _BoundedEnumSequenceField; }
             set { _BoundedEnumSequenceField = value; }
         }
+
+        public Int16[] ShortArrayField
+        {
+            get { return _ShortArrayField; }
+            set { _ShortArrayField = value; }
+        }
+
+        public UInt16[] UnsignedShortArrayField
+        {
+            get { return _UnsignedShortArrayField; }
+            set { _UnsignedShortArrayField = value; }
+        }
+
+        public Int32[] LongArrayField
+        {
+            get { return _LongArrayField; }
+            set { _LongArrayField = value; }
+        }
+
+        public UInt32[] UnsignedLongArrayField
+        {
+            get { return _UnsignedLongArrayField; }
+            set { _UnsignedLongArrayField = value; }
+        }
+
+        public Int64[] LongLongArrayField
+        {
+            get { return _LongLongArrayField; }
+            set { _LongLongArrayField = value; }
+        }
+
+        public UInt64[] UnsignedLongLongArrayField
+        {
+            get { return _UnsignedLongLongArrayField; }
+            set { _UnsignedLongLongArrayField = value; }
+        }
+
+        public Char[] CharArrayField
+        {
+            get { return _CharArrayField; }
+            set { _CharArrayField = value; }
+        }
+
+        public Char[] WCharArrayField
+        {
+            get { return _WCharArrayField; }
+            set { _WCharArrayField = value; }
+        }
+
+        public Boolean[] BooleanArrayField
+        {
+            get { return _BooleanArrayField; }
+            set { _BooleanArrayField = value; }
+        }
+
+        public Byte[] OctetArrayField
+        {
+            get { return _OctetArrayField; }
+            set { _OctetArrayField = value; }
+        }
+
+        public Single[] FloatArrayField
+        {
+            get { return _FloatArrayField; }
+            set { _FloatArrayField = value; }
+        }
+
+        public Double[] DoubleArrayField
+        {
+            get { return _DoubleArrayField; }
+            set { _DoubleArrayField = value; }
+        }
+
+        public Decimal[] LongDoubleArrayField
+        {
+            get { return _LongDoubleArrayField; }
+            set { _LongDoubleArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -585,8 +676,8 @@ namespace Test
             _UnsignedLongField = 0;
             _LongLongField = 0;
             _UnsignedLongLongField = 0;
-            _CharField = '\0';
-            _WCharField = '\0';
+            _CharField = default(char);
+            _WCharField = default(char);
             _BooleanField = false;
             _OctetField = 0;
             _FloatField = 0;
@@ -631,6 +722,19 @@ namespace Test
             _BoundedStructSequenceField = new List<Test.NestedStruct>(5);
             _UnboundedEnumSequenceField = new List<Test.TestEnum>();
             _BoundedEnumSequenceField = new List<Test.TestEnum>(5);
+            _ShortArrayField = new Int16[5];
+            _UnsignedShortArrayField = new UInt16[5];
+            _LongArrayField = new Int32[5];
+            _UnsignedLongArrayField = new UInt32[5];
+            _LongLongArrayField = new Int64[5];
+            _UnsignedLongLongArrayField = new UInt64[5];
+            _CharArrayField = new Char[5];
+            _WCharArrayField = new Char[5];
+            _BooleanArrayField = new Boolean[5];
+            _OctetArrayField = new Byte[5];
+            _FloatArrayField = new Single[5];
+            _DoubleArrayField = new Double[5];
+            _LongDoubleArrayField = new Decimal[5];
         }
         #endregion
 
@@ -769,6 +873,19 @@ namespace Test
             toRelease.Add(wrapper.UnboundedEnumSequenceField);
             MarshalHelper.EnumSequenceToPtr(BoundedEnumSequenceField, ref wrapper.BoundedEnumSequenceField);
             toRelease.Add(wrapper.BoundedEnumSequenceField);
+            wrapper.ShortArrayField = ShortArrayField;
+            wrapper.UnsignedShortArrayField = UnsignedShortArrayField;
+            wrapper.LongArrayField = LongArrayField;
+            wrapper.UnsignedLongArrayField = UnsignedLongArrayField;
+            wrapper.LongLongArrayField = LongLongArrayField;
+            wrapper.UnsignedLongLongArrayField = UnsignedLongLongArrayField;
+            wrapper.CharArrayField = CharArrayField;
+            wrapper.WCharArrayField = WCharArrayField;
+            wrapper.BooleanArrayField = BooleanArrayField;
+            wrapper.OctetArrayField = OctetArrayField;
+            wrapper.FloatArrayField = FloatArrayField;
+            wrapper.DoubleArrayField = DoubleArrayField;
+            wrapper.LongDoubleArrayField = Array.ConvertAll(LongDoubleArrayField, e => Convert.ToDouble(e));
 
             return wrapper;
         }
@@ -876,6 +993,19 @@ namespace Test
             TestEnumField = wrapper.TestEnumField;
             MarshalHelper.PtrToEnumSequence(wrapper.UnboundedEnumSequenceField, ref _UnboundedEnumSequenceField);
             MarshalHelper.PtrToEnumSequence(wrapper.BoundedEnumSequenceField, ref _BoundedEnumSequenceField, 5);
+            ShortArrayField = wrapper.ShortArrayField;
+            UnsignedShortArrayField = wrapper.UnsignedShortArrayField;
+            LongArrayField = wrapper.LongArrayField;
+            UnsignedLongArrayField = wrapper.UnsignedLongArrayField;
+            LongLongArrayField = wrapper.LongLongArrayField;
+            UnsignedLongLongArrayField = wrapper.UnsignedLongLongArrayField;
+            CharArrayField = wrapper.CharArrayField;
+            WCharArrayField = wrapper.WCharArrayField;
+            BooleanArrayField = wrapper.BooleanArrayField;
+            OctetArrayField = wrapper.OctetArrayField;
+            FloatArrayField = wrapper.FloatArrayField;
+            DoubleArrayField = wrapper.DoubleArrayField;
+            LongDoubleArrayField = Array.ConvertAll(wrapper.LongDoubleArrayField, e => Convert.ToDecimal(e));
         }
         #endregion
     }
@@ -941,6 +1071,32 @@ namespace Test
         public Test.TestEnum TestEnumField;
         public IntPtr UnboundedEnumSequenceField;
         public IntPtr BoundedEnumSequenceField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I2, SizeConst = 5)]
+        public Int16[] ShortArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U2, SizeConst = 5)]
+        public UInt16[] UnsignedShortArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 5)]
+        public Int32[] LongArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U4, SizeConst = 5)]
+        public UInt32[] UnsignedLongArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I8, SizeConst = 5)]
+        public Int64[] LongLongArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U8, SizeConst = 5)]
+        public UInt64[] UnsignedLongLongArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 5)]
+        public Char[] CharArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I2, SizeConst = 5)]
+        public Char[] WCharArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 5)]
+        public Boolean[] BooleanArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U1, SizeConst = 5)]
+        public Byte[] OctetArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 5)]
+        public Single[] FloatArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R8, SizeConst = 5)]
+        public Double[] DoubleArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R8, SizeConst = 5)]
+        public Double[] LongDoubleArrayField;
     }
 
 	public class TestStructTypeSupport

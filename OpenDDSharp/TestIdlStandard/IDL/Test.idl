@@ -48,7 +48,21 @@ module Test {
 	typedef sequence<string> UnboundedStringSequenceType;
 	typedef sequence<string, 5> BoundedStringSequenceType;
 	typedef sequence<wstring> UnboundedWStringSequenceType;
-	typedef sequence<wstring, 5> BoundedWStringSequenceType;	
+	typedef sequence<wstring, 5> BoundedWStringSequenceType;
+	
+	typedef short ShortArrayType[5];
+	typedef unsigned short UnsignedShortArrayType[5];
+	typedef long LongArrayType[5];
+	typedef unsigned long UnsignedLongArrayType[5];
+	typedef long long LongLongArrayType[5];
+	typedef unsigned long long UnsignedLongLongArrayType[5];
+	typedef char CharArrayType[5];
+	typedef wchar WCharArrayType[5];
+	typedef boolean BooleanArrayType[5];
+	typedef octet OctetArrayType[5];
+	typedef float FloatArrayType[5];
+	typedef double DoubleArrayType[5];
+	typedef long double LongDoubleArrayType[5];
 	
 	#pragma DCPS_DATA_TYPE "Test::NestedTestStruct"
 	struct NestedStruct {
@@ -101,7 +115,7 @@ module Test {
 		BoundedWStringType BoundedWStringField;
 
 		UnboundedBooleanSequenceType UnboundedBooleanSequenceField;
-		BoundedBooleanSequenceType BoundedBooleanSequenceField;		
+		BoundedBooleanSequenceType BoundedBooleanSequenceField;
 		UnboundedCharSequenceType UnboundedCharSequenceField;
 		BoundedCharSequenceType BoundedCharSequenceField;
 		UnboundedWCharSequenceType UnboundedWCharSequenceField;
@@ -141,5 +155,19 @@ module Test {
 
 		UnboundedEnumSequenceType UnboundedEnumSequenceField;
 		BoundedEnumSequenceType BoundedEnumSequenceField;
+
+		ShortArrayType ShortArrayField;
+		UnsignedShortArrayType UnsignedShortArrayField;
+		LongArrayType LongArrayField;
+		UnsignedLongArrayType UnsignedLongArrayField;
+		LongLongArrayType LongLongArrayField;
+		UnsignedLongLongArrayType UnsignedLongLongArrayField;
+		CharArrayType CharArrayField;
+		WCharArrayType WCharArrayField;
+		BooleanArrayType BooleanArrayField;
+		OctetArrayType OctetArrayField;
+		FloatArrayType FloatArrayField;
+		DoubleArrayType DoubleArrayField;
+		LongDoubleArrayType LongDoubleArrayField;
     };
 };

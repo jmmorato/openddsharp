@@ -335,6 +335,156 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedBasicTypeArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                BooleanArrayField = new [] { true, true, false, false, true },
+                CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
+                WCharArrayField = new[] { 'i', 'j', 'k', 'l', 'm' },
+                OctetArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
+                ShortArrayField = new short[] { 4, -5, 6, -7, 8 },
+                UnsignedShortArrayField = new ushort[] { 4, 5, 6, 7, 8 },
+                LongArrayField = new[] { -1, 2, -3, 100, -200 },
+                UnsignedLongArrayField = new[] { 1u, 2u, 3u, 100u, 200u },
+                LongLongArrayField = new[] { -1L, 2L, -3L, 100L, -200L },
+                UnsignedLongLongArrayField = new[] { 1UL, 2UL, 3UL, 100UL, 200UL },
+                FloatArrayField = new[] { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
+                DoubleArrayField = new[] { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
+                LongDoubleArrayField = new[] { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
+            };
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(data.BooleanArrayField.SequenceEqual(received.BooleanArrayField));
+            Assert.IsTrue(data.CharArrayField.SequenceEqual(received.CharArrayField));
+            Assert.IsTrue(data.WCharArrayField.SequenceEqual(received.WCharArrayField));
+            Assert.IsTrue(data.OctetArrayField.SequenceEqual(received.OctetArrayField));
+            Assert.IsTrue(data.ShortArrayField.SequenceEqual(received.ShortArrayField));
+            Assert.IsTrue(data.UnsignedShortArrayField.SequenceEqual(received.UnsignedShortArrayField));
+            Assert.IsTrue(data.LongArrayField.SequenceEqual(received.LongArrayField));
+            Assert.IsTrue(data.UnsignedLongArrayField.SequenceEqual(received.UnsignedLongArrayField));
+            Assert.IsTrue(data.LongLongArrayField.SequenceEqual(received.LongLongArrayField));
+            Assert.IsTrue(data.UnsignedLongLongArrayField.SequenceEqual(received.UnsignedLongLongArrayField));
+            Assert.IsTrue(data.FloatArrayField.SequenceEqual(received.FloatArrayField));
+            Assert.IsTrue(data.DoubleArrayField.SequenceEqual(received.DoubleArrayField));
+            Assert.IsTrue(data.LongDoubleArrayField.SequenceEqual(received.LongDoubleArrayField));
+
+            Assert.AreEqual(typeof(bool[]), data.BooleanArrayField.GetType());
+            Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
+            Assert.AreEqual(typeof(char[]), data.WCharArrayField.GetType());
+            Assert.AreEqual(typeof(byte[]), data.OctetArrayField.GetType());
+            Assert.AreEqual(typeof(short[]), data.ShortArrayField.GetType());
+            Assert.AreEqual(typeof(ushort[]), data.UnsignedShortArrayField.GetType());
+            Assert.AreEqual(typeof(int[]), data.LongArrayField.GetType());
+            Assert.AreEqual(typeof(uint[]), data.UnsignedLongArrayField.GetType());
+            Assert.AreEqual(typeof(long[]), data.LongLongArrayField.GetType());
+            Assert.AreEqual(typeof(ulong[]), data.UnsignedLongLongArrayField.GetType());
+            Assert.AreEqual(typeof(float[]), data.FloatArrayField.GetType());
+            Assert.AreEqual(typeof(double[]), data.DoubleArrayField.GetType());
+            Assert.AreEqual(typeof(decimal[]), data.LongDoubleArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.BooleanArrayField);
+            Assert.AreEqual(5, defaultStruct.BooleanArrayField.Length);
+            foreach(var i in defaultStruct.BooleanArrayField)
+            {
+                Assert.AreEqual(default(bool), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.CharArrayField);
+            Assert.AreEqual(5, defaultStruct.CharArrayField.Length);
+            foreach (var i in defaultStruct.CharArrayField)
+            {
+                Assert.AreEqual(default(char), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.WCharArrayField);
+            Assert.AreEqual(5, defaultStruct.WCharArrayField.Length);
+            foreach (var i in defaultStruct.WCharArrayField)
+            {
+                Assert.AreEqual(default(char), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.OctetArrayField);
+            Assert.AreEqual(5, defaultStruct.OctetArrayField.Length);
+            foreach (var i in defaultStruct.OctetArrayField)
+            {
+                Assert.AreEqual(default(byte), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.ShortArrayField);
+            Assert.AreEqual(5, defaultStruct.ShortArrayField.Length);
+            foreach (var i in defaultStruct.ShortArrayField)
+            {
+                Assert.AreEqual(default(short), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UnsignedShortArrayField);
+            Assert.AreEqual(5, defaultStruct.UnsignedShortArrayField.Length);
+            foreach (var i in defaultStruct.UnsignedShortArrayField)
+            {
+                Assert.AreEqual(default(ushort), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.LongArrayField);
+            Assert.AreEqual(5, defaultStruct.LongArrayField.Length);
+            foreach (var i in defaultStruct.LongArrayField)
+            {
+                Assert.AreEqual(default(int), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UnsignedLongArrayField);
+            Assert.AreEqual(5, defaultStruct.UnsignedLongArrayField.Length);
+            foreach (var i in defaultStruct.UnsignedLongArrayField)
+            {
+                Assert.AreEqual(default(uint), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.LongLongArrayField);
+            Assert.AreEqual(5, defaultStruct.LongLongArrayField.Length);
+            foreach (var i in defaultStruct.LongLongArrayField)
+            {
+                Assert.AreEqual(default(long), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UnsignedLongLongArrayField);
+            Assert.AreEqual(5, defaultStruct.UnsignedLongLongArrayField.Length);
+            foreach (var i in defaultStruct.UnsignedLongLongArrayField)
+            {
+                Assert.AreEqual(default(ulong), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.FloatArrayField);
+            Assert.AreEqual(5, defaultStruct.FloatArrayField.Length);
+            foreach (var i in defaultStruct.FloatArrayField)
+            {
+                Assert.AreEqual(default(float), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.DoubleArrayField);
+            Assert.AreEqual(5, defaultStruct.DoubleArrayField.Length);
+            foreach (var i in defaultStruct.DoubleArrayField)
+            {
+                Assert.AreEqual(default(double), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.LongDoubleArrayField);
+            Assert.AreEqual(5, defaultStruct.LongDoubleArrayField.Length);
+            foreach (var i in defaultStruct.LongDoubleArrayField)
+            {
+                Assert.AreEqual(default(decimal), i);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringTypes()
         {
             TestStruct defaultStruct = new TestStruct();

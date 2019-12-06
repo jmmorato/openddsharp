@@ -133,14 +133,14 @@ bool cwrapper_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const 
 
 bool cwrapper_generator::gen_union(AST_Union*, UTL_ScopedName* name, const std::vector<AST_UnionBranch*>&, AST_Type*, const char*)
 {
-	/*if (idl_global->is_dcps_type(name)) {
+	if (idl_global->is_dcps_type(name)) {
 		std::cerr << "ERROR: union " << scoped(name) << " can not be used as a "
 			"DCPS_DATA_TYPE (only structs can be Topic types)" << std::endl;
 		return false;
 	}
 
-	//TODO: Implement unions for c++/cli
-	std::cerr << "ERROR: union not implemented yet." << std::endl;*/
+	// TODO: Implement unions.
+	std::cerr << "ERROR: union not implemented yet." << std::endl;
 
 	return true;
 }
@@ -154,12 +154,14 @@ std::string cwrapper_generator::declare_struct_fields(const std::vector<AST_Fiel
 		AST_Type* type = field->field_type();		
 		const char* name = field->local_name()->get_string();		
 		std::string type_name = get_cwrapper_type(type);
-		
+		std::string array_dec = get_array_definition(type);
+
 		ret.append(indent);
 		ret.append(type_name.c_str());
 		ret.append(" ");
 		ret.append(name);
-		ret.append(";\n");		
+		ret.append(array_dec);
+		ret.append(";\n");
 	}
 
 	return ret;
@@ -227,7 +229,7 @@ std::string cwrapper_generator::implement_struct_release(const std::vector<AST_F
 
 std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	AST_Decl::NodeType node_type = type->node_type();	
-	std::string ret(type->flat_name());
+	std::string ret("");
 
 	switch (node_type)
 	{	
@@ -251,7 +253,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_fixed:
 	{
-		//ret = "System::Decimal";
+		ret = "CORBA::Double";
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -314,14 +316,15 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 	}
 	case AST_Decl::NT_array:
 	{
-		/*AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		std::string base_type = get_cwrapper_type(arr_type->base_type());
-		
-		ret = "array<";
-		ret.append(base_type);
-		ret.append(", ");
-		ret.append(std::to_string(arr_type->n_dims()));
-		ret.append(">^");*/
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		AST_Expression** dims = arr_type->dims();
+		if (arr_type->n_dims() == 1) {
+			std::string base_type = get_cwrapper_type(arr_type->base_type());
+			ret = base_type;
+		}
+		else {
+			ret = "void*";
+		}
 		break;
 	}		
 	case AST_Decl::NT_sequence:
@@ -329,6 +332,36 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 		ret = "void*";
 		break;
 	}		
+	default:
+		break;
+	}
+
+	return ret;
+}
+
+std::string cwrapper_generator::get_array_definition(AST_Type* type) {
+	AST_Decl::NodeType node_type = type->node_type();
+	std::string ret("");
+
+	switch (node_type)
+	{
+	case AST_Decl::NT_array:
+	{
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		if (arr_type->n_dims() == 1) {
+			AST_Expression** dims = arr_type->dims();
+			ret.append("[");
+			ret.append(std::to_string(dims[0]->ev()->u.ulval));
+			ret.append("]");
+		}
+		break;
+	}
+	case AST_Decl::NT_typedef:
+	{
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_array_definition(typedef_type->base_type());
+		break;
+	}
 	default:
 		break;
 	}
@@ -535,6 +568,58 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		}
 
 		ret.append("        }\n");
+		break;
+	}
+	case AST_Decl::NT_array:
+	{
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		std::string base_type = get_cwrapper_type(arr_type->base_type());
+		AST_Expression** dims = arr_type->dims();
+		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+
+		ret.append("        if (");
+		ret.append(name);
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		if (arr_type->n_dims() == 1)
+		{
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				// TODO
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				// TODO
+				break;
+			}
+			default:
+			{
+				ret.append("            ACE_OS::memcpy(ret.");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append(");\n");
+				break;
+			}
+			}
+		}
+		else {
+			// TODO: Multidimensional arrays
+		}
+
+		ret.append("        }\n");
+		break;
 	}
 	}
 
@@ -725,6 +810,58 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			break;
 		}
 		}
+		break;
+	}
+	case AST_Decl::NT_array:
+	{
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		std::string base_type = get_cwrapper_type(arr_type->base_type());
+		AST_Expression** dims = arr_type->dims();
+		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+
+		ret.append("        if (native.");
+		ret.append(name);
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		if (arr_type->n_dims() == 1)
+		{
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				// TODO
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				// TODO
+				break;
+			}
+			default:
+			{
+				ret.append("            ACE_OS::memcpy(");
+				ret.append(name);
+				ret.append(", native.");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append(");\n");
+				break;
+			}
+			}
+		}
+		else {
+			// TODO: Multidimensional arrays
+		}
+
+		ret.append("        }\n");
+		break;
 	}
 	}
 
@@ -821,483 +958,75 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		}
 
 		ret.append("        }\n");
-	}
-	}
-
-	return ret;
-}
-
-std::string cwrapper_generator::get_typedef_seq_to_native(AST_Typedef* typedef_type, std::string field_name) {
-	std::string ret("");
-
-	AST_Sequence * seq_type = AST_Sequence::narrow_from_decl(typedef_type->base_type());
-	std::string typedef_full_name = typedef_type->full_name();
-
-	ret.append("    if (m_");
-	ret.append(field_name);
-	ret.append(" != nullptr) {\n");
-
-	unsigned int bound = seq_type->max_size()->ev()->u.ulval;
-	if (bound > 0) {
-		ret.append("        int seq_");
-		ret.append(field_name);
-		ret.append("_length = System::Math::Min((int)ret.");
-		ret.append(field_name);
-		ret.append(".maximum(), m_");
-		ret.append(field_name);
-		ret.append("->Count);\n");
-	}
-	else {
-		ret.append("        int seq_");
-		ret.append(field_name);
-		ret.append("_length = m_");
-		ret.append(field_name);
-		ret.append("->Count;\n");
-	}
-	
-	ret.append("        ret.");
-	ret.append(field_name);
-	ret.append(".length(seq_");
-	ret.append(field_name);
-	ret.append("_length);\n");
-
-	ret.append("        for (int i = 0; i < seq_");
-	ret.append(field_name);
-	ret.append("_length; i++) {\n");
-	
-	switch (seq_type->base_type()->node_type())
-	{
-	case AST_Decl::NT_union:
-	case AST_Decl::NT_struct:
-	{
-		ret.append("            if (m_" + field_name + "[i] != nullptr) {\n");
-
-		ret.append("                ret.");
-		ret.append(field_name);
-		ret.append("[i] = ");
-		ret.append("m_");
-		ret.append(field_name);
-		ret.append("[i]->ToNative();\n");
-
-		ret.append("            }\n");
-
-		ret.append("            else {\n");
-
-		ret.append("                ::");
-		ret.append(seq_type->base_type()->full_name());
-		ret.append(" aux = {};\n");
-
-		ret.append("                ret.");
-		ret.append(field_name);
-		ret.append("[i] = aux;\n");
-
-		ret.append("            }\n");
 		break;
 	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{		
-		ret.append("            if (m_" + field_name + "[i] != nullptr) {\n");
+	case AST_Decl::NT_array:
+	{
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		std::string base_type = get_cwrapper_type(arr_type->base_type());
+		AST_Expression** dims = arr_type->dims();
+		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
 
-		ret.append("                ret.");
-		ret.append(field_name);
-		ret.append("[i] = ");
-		if (seq_type->base_type()->node_type() == AST_Decl::NT_string) {
-			ret.append("context.marshal_as<const char*>(m_");
+		ret.append("        if (");
+		ret.append(name);
+		ret.append(" != NULL)\n");
+
+		ret.append("        {\n");
+
+		if (arr_type->n_dims() == 1)
+		{
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				/*if (StructArray != NULL)
+				{
+					for (int i = 0; i < 5; i++)
+					{
+						StructArray[i].release();
+					}
+				}*/
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				//if (StringArray != NULL)
+				//{
+				//	for (int i = 0; i < 10; i++)
+				//	{
+				//		if (StringArray[i] != NULL)
+				//		{
+				//			CORBA::string_free(StringArray[i]);
+				//		}
+				//	}
+				//}
+
+				//if (WStringArray != NULL)
+				//{
+				//	// Release the wstrings in the array 
+				//	for (int i = 0; i < 4; i++)
+				//	{
+				//		if (WStringArray[i] != NULL)
+				//		{
+				//			CORBA::wstring_free(WStringArray[i]);
+				//		}
+				//	}
+				//}
+				break;
+			}
+			default: 
+				break;
+			}
 		}
 		else {
-			ret.append("context.marshal_as<const wchar_t*>(m_");
+			// TODO: Multidimensional arrays
 		}
-		ret.append(field_name);
-		ret.append("[i]);\n");
-
-		ret.append("            }\n");
-
-		ret.append("            else {\n");
-
-		ret.append("                ret.");
-		ret.append(field_name);
-		ret.append("[i] = \"\";\n");
-
-		ret.append("            }\n");
-		break;
-	}
-	case AST_Decl::NT_pre_defined:
-	{
-		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(seq_type->base_type());
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
-			ret.append("            ret.");
-			ret.append(field_name);
-			ret.append("[i] = ");
-			ret.append("m_");
-			ret.append(field_name);
-			ret.append("[i];\n");
-		}
-		else {
-			ret.append("            const long double const_aux = m_");
-			ret.append(field_name);
-			ret.append("[i];\n");
-
-			ret.append("            ret.");
-			ret.append(field_name);
-			ret.append("[i].assign(const_aux);\n");
-		}
-		break;
-	}
-	}	
-
-	ret.append("        }\n");
-
-	ret.append("    }\n");
-	ret.append("    else {\n");
-
-	ret.append("        ret.");
-	ret.append(field_name);
-	ret.append(".length(0);\n");
-
-	ret.append("    }\n");
-
-	return ret;
-}
-
-std::string cwrapper_generator::get_typedef_seq_from_native(AST_Typedef* typedef_type, std::string field_name) {
-	std::string ret("");
-
-	AST_Sequence * seq_type = AST_Sequence::narrow_from_decl(typedef_type->base_type());
-	std::string typedef_full_name = typedef_type->full_name();
-
-	ret.append("    m_");
-	ret.append(field_name);
-	ret.append(" = gcnew List<");
-	ret.append(get_cwrapper_type(seq_type->base_type()));
-	ret.append(">(");
-	unsigned int bound = seq_type->max_size()->ev()->u.ulval;
-	if (bound > 0) {
-		ret.append(std::to_string(bound));
-	}
-	ret.append(");\n");
-
-	ret.append("    ::");
-	ret.append(typedef_full_name);
-	ret.append(" seq_");
-	ret.append(field_name);
-	ret.append(" = native.");
-	ret.append(field_name);
-	ret.append(";\n");
-
-	ret.append("    for (unsigned int i = 0; i < seq_");
-	ret.append(field_name);
-	ret.append(".length(); i++) {\n");
-
-		
-	switch (seq_type->base_type()->node_type()) 
-	{
-	case AST_Decl::NT_struct:
-	case AST_Decl::NT_union:
-		ret.append("        OpenDDSharp::");
-		ret.append(seq_type->base_type()->full_name());
-		ret.append("^ aux = gcnew OpenDDSharp::");
-		ret.append(seq_type->base_type()->full_name());
-		ret.append("();\n");
-		ret.append("        aux->FromNative(seq_");
-		ret.append(field_name);
-		ret.append("[i]);\n");
-		ret.append("        m_");
-		ret.append(field_name);
-		ret.append("->Add(aux);\n");
-		break;
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-		ret.append("        m_");
-		ret.append(field_name);
-		ret.append("->Add(");
-		ret.append("gcnew System::String(");
-		ret.append("seq_");
-		ret.append(field_name);
-		ret.append("[i]));\n");
-		break;
-	default:		
-		ret.append("        m_");
-		ret.append(field_name);
-		ret.append("->Add(");
-		ret.append("seq_");
-		ret.append(field_name);
-		ret.append("[i]);\n");
-		break;
-	}
-
-	ret.append("    }\n");
-
-	return ret;
-}
-
-std::string cwrapper_generator::get_typedef_array_to_native(AST_Typedef* typedef_type, std::string field_name) {
-	std::string ret("");
-
-	AST_Array * arr_type = AST_Array::narrow_from_decl(typedef_type->base_type());
-	unsigned int n_dims = arr_type->n_dims();
-	AST_Expression** dims = arr_type->dims();
-
-	ret.append("    if (m_" + field_name + " != nullptr) {\n");
-
-	for (unsigned int i = 0; i < n_dims; i++) {				
-		ret.append("        unsigned int dim" + std::to_string(i) + "_" + field_name + " = ");
-		ret.append("System::Math::Min(m_" + field_name + "->GetLength(" + std::to_string(i) + "), " + std::to_string(dims[i]->ev()->u.ulval) + ");\n");		
-	}
-
-	for (unsigned int i = 0; i < n_dims; i++) {
-		std::string dim = "i_dim" + std::to_string(i);
-		ret.append("        for (unsigned int " + dim + " = 0; " + dim + " < dim" + std::to_string(i) + "_" + field_name + "; " + dim + "++) {\n");
-	}
-
-	
-	switch (arr_type->base_type()->node_type())
-	{
-	case AST_Decl::NT_struct:
-	case AST_Decl::NT_union:
-	{
-		ret.append("            if (m_" + field_name + "[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("] != nullptr) {\n");
-
-		ret.append("                ret." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(" = ");
-		ret.append("m_" + field_name);
-		ret.append("[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("]->ToNative();\n");
-
-		ret.append("            }\n");
-		ret.append("            else {\n");
-
-		ret.append("                ::");
-		ret.append(arr_type->base_type()->full_name());
-		ret.append(" aux = {};\n");
-
-		ret.append("                ret." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(" = aux;\n");
-
-		ret.append("            }\n");
-		break;
-	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{
-		ret.append("            if (m_" + field_name);
-		ret.append("[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("] != nullptr) {\n");
-
-		ret.append("                ret." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(" = ");
-		if (arr_type->base_type()->node_type() == AST_Decl::NT_string) {
-			ret.append("context.marshal_as<const char*>(m_" + field_name);
-		}
-		else {
-			ret.append("context.marshal_as<const wchar_t*>(m_" + field_name);
-		}
-		ret.append("[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("]);\n");
-
-		ret.append("            }\n");
-
-		ret.append("            else {\n");
-
-		ret.append("                ret." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(" = \"\";\n");
-
-		ret.append("            }\n");
-		break;
-	}
-	case AST_Decl::NT_pre_defined:
-	{
-		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
-			ret.append("            ret." + field_name);
-			for (unsigned int i = 0; i < n_dims; i++) {
-				ret.append("[i_dim" + std::to_string(i) + "]");
-			}
-			ret.append(" = ");
-			ret.append("m_" + field_name);
-			ret.append("[");
-			for (unsigned int i = 0; i < n_dims; i++) {
-				ret.append("i_dim" + std::to_string(i));
-				if (i + 1 < n_dims) {
-					ret.append(", ");
-				}
-			}
-			ret.append("];\n");
-		}
-		else {
-			ret.append("            const long double const_aux = m_" + field_name + "[");			
-			for (unsigned int i = 0; i < n_dims; i++) {
-				ret.append("i_dim" + std::to_string(i));
-				if (i + 1 < n_dims) {
-					ret.append(", ");
-				}
-			}
-			ret.append("];\n");
-
-			ret.append("            ret." + field_name);
-			for (unsigned int i = 0; i < n_dims; i++) {
-				ret.append("[i_dim" + std::to_string(i) + "]");
-			}
-			ret.append(".assign(const_aux);\n");
-		}
-		break;
-	}
-	}
-	
-	for (unsigned int i = 0; i < n_dims; i++) {
-		ret.append("        }\n");
-	}
-	ret.append("    }\n");
-	return ret;
-}
-
-std::string cwrapper_generator::get_typedef_array_from_native(AST_Typedef* typedef_type, std::string field_name) {
-	std::string ret("");
-
-	AST_Array * arr_type = AST_Array::narrow_from_decl(typedef_type->base_type());
-	unsigned int n_dims = arr_type->n_dims();
-	AST_Expression** dims = arr_type->dims();
-
-	ret.append("    m_" + field_name + " = gcnew array<" + get_cwrapper_type(arr_type->base_type()) + ", " + std::to_string(n_dims) + ">(");
-	ret.append(std::to_string(dims[0]->ev()->u.ulval));
-	unsigned int i = 1;
-	while (i < n_dims) {
-		ret.append(", ");
-		ret.append(std::to_string(dims[i]->ev()->u.ulval));
-		i++;
-	}
-	ret.append(");\n");
-
-	for (unsigned int i = 0; i < n_dims; i++) {
-		std::string dim = "i_dim" + std::to_string(i);
-		ret.append("    for (unsigned int " + dim + " = 0; " + dim + " < " + std::to_string(dims[i]->ev()->u.ulval) + "; " + dim + "++) {\n");
-	}
-
-	switch (arr_type->base_type()->node_type())
-	{
-	case AST_Decl::NT_struct:
-	case AST_Decl::NT_union:
-	{
-		ret.append("        m_" + field_name + "[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("] = gcnew OpenDDSharp::");
-		ret.append(arr_type->base_type()->full_name());
-		ret.append("();\n");
-
-		ret.append("        m_" + field_name + "[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("]->FromNative(native." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(");\n");
-		break;
-	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{		
-		ret.append("        if (native." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(" != NULL) {\n");
-
-		ret.append("            m_" + field_name + "[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("] = gcnew System::String(native." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(");\n");
-
-		ret.append("        }\n");
-		
-		ret.append("        else {\n");
-
-		ret.append("            m_" + field_name + "[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("] = \"\";\n");
 
 		ret.append("        }\n");
 		break;
 	}
-	case AST_Decl::NT_pre_defined:
-	{
-		ret.append("        m_" + field_name + "[");
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("i_dim" + std::to_string(i));
-			if (i + 1 < n_dims) {
-				ret.append(", ");
-			}
-		}
-		ret.append("] = native." + field_name);
-		for (unsigned int i = 0; i < n_dims; i++) {
-			ret.append("[i_dim" + std::to_string(i) + "]");
-		}
-		ret.append(";\n");
-		break;
-	}
-	}
-
-	for (unsigned int i = 0; i < n_dims; i++) {
-		ret.append("    }\n");
 	}
 
 	return ret;

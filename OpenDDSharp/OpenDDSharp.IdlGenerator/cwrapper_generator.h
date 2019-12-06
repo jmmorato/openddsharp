@@ -43,13 +43,10 @@ private:
 	std::string implement_struct_from_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name);
 	std::string implement_struct_release(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name);
 	std::string get_cwrapper_type(AST_Type* type);	
+	std::string get_array_definition(AST_Type* type);
 	std::string get_field_to_native(AST_Type* type, const char * name);
 	std::string get_field_from_native(AST_Type* type, const char * name);
 	std::string get_field_release(AST_Type* type, const char * name);
-	std::string get_typedef_seq_to_native(AST_Typedef* typedef_type, std::string field_name);
-	std::string get_typedef_seq_from_native(AST_Typedef* typedef_type, std::string field_name);
-	std::string get_typedef_array_to_native(AST_Typedef* typedef_type, std::string field_name);
-	std::string get_typedef_array_from_native(AST_Typedef* typedef_type, std::string field_name);
 };
 
 #endif

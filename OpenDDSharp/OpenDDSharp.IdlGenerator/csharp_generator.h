@@ -46,13 +46,10 @@ private:
 	std::string get_csharp_type(AST_Type* type);
 	std::string get_marshal_type(AST_Type* type);
 	std::string get_marshal_as_attribute(AST_Type* type);
+	std::string get_marshal_attribute_unmanaged_type(AST_Type* type);
 	std::string get_csharp_default_value(AST_Type* type);
 	std::string get_field_to_native(AST_Type* type, const char * name, const std::string indent);
 	std::string get_field_from_native(AST_Type* type, const char * name, const std::string indent);
-	std::string get_typedef_seq_to_native(AST_Typedef* typedef_type, std::string field_name);
-	std::string get_typedef_seq_from_native(AST_Typedef* typedef_type, std::string field_name);
-	std::string get_typedef_array_to_native(AST_Typedef* typedef_type, std::string field_name);
-	std::string get_typedef_array_from_native(AST_Typedef* typedef_type, std::string field_name);
 };
 
 #endif
