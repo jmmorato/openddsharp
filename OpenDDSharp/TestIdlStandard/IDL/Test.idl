@@ -63,6 +63,9 @@ module Test {
 	typedef float FloatArrayType[5];
 	typedef double DoubleArrayType[5];
 	typedef long double LongDoubleArrayType[5];
+
+	typedef string StringArrayType[5];
+	typedef wstring WStringArrayType[5];
 	
 	#pragma DCPS_DATA_TYPE "Test::NestedTestStruct"
 	struct NestedStruct {
@@ -169,5 +172,8 @@ module Test {
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
 		LongDoubleArrayType LongDoubleArrayField;
+
+		StringArrayType StringArrayField;
+		WStringArrayType WStringArrayField;
     };
 };

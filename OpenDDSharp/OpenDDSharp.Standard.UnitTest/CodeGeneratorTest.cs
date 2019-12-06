@@ -599,6 +599,61 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                StringArrayField = new[]
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets"
+                },                
+                WStringArrayField = new[]
+                {
+                    "Rebel Rebel, you've turn your dress",
+                    "Rebel Rebel, your face is a mess",
+                    "Rebel Rebel, how could they know?",
+                    "Hot tramp,",
+                    "I love you so!"
+                },                
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
+            Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
+
+            Assert.AreEqual(typeof(string[]), data.StringArrayField.GetType());
+            Assert.AreEqual(typeof(string[]), data.WStringArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StringArrayField);
+            Assert.AreEqual(5, defaultStruct.StringArrayField.Length);
+            foreach (var s in defaultStruct.StringArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+
+            Assert.IsNotNull(defaultStruct.WStringArrayField);
+            Assert.AreEqual(5, defaultStruct.WStringArrayField.Length);
+            foreach (var s in defaultStruct.WStringArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructuresTypes()
         {
             TestStruct defaultStruct = new TestStruct();

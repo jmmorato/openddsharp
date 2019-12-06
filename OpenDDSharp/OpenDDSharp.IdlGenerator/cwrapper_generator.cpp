@@ -596,7 +596,32 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				// TODO
+				ret.append("            for (int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                if (");
+				ret.append(name);
+				ret.append("[i] != NULL)\n");
+
+				ret.append("                {\n");
+
+				ret.append("                    ret.");
+				ret.append(name);
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("[i] = CORBA::string_dup(");
+				}
+				else {
+					ret.append("[i] = CORBA::wstring_dup(");
+				}
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append("                }\n");
+				
+				ret.append("            }\n");
 				break;
 			}
 			default:
@@ -838,7 +863,32 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				// TODO
+				ret.append("            for (int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                if (native.");
+				ret.append(name);
+				ret.append("[i] != NULL)\n");
+
+				ret.append("                {\n");
+
+				ret.append("                    ");
+				ret.append(name);
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("[i] = CORBA::string_dup(native.");
+				}
+				else {
+					ret.append("[i] = CORBA::wstring_dup(native.");
+				}
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append("                }\n");
+
+				ret.append("            }\n");
 				break;
 			}
 			default:
@@ -992,28 +1042,30 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				//if (StringArray != NULL)
-				//{
-				//	for (int i = 0; i < 10; i++)
-				//	{
-				//		if (StringArray[i] != NULL)
-				//		{
-				//			CORBA::string_free(StringArray[i]);
-				//		}
-				//	}
-				//}
+				ret.append("            for (int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
 
-				//if (WStringArray != NULL)
-				//{
-				//	// Release the wstrings in the array 
-				//	for (int i = 0; i < 4; i++)
-				//	{
-				//		if (WStringArray[i] != NULL)
-				//		{
-				//			CORBA::wstring_free(WStringArray[i]);
-				//		}
-				//	}
-				//}
+				ret.append("            {\n");
+
+				ret.append("                if (");
+				ret.append(name);
+				ret.append("[i] != NULL)\n");
+
+				ret.append("                {\n");
+
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("                    CORBA::string_free(");
+				}
+				else {
+					ret.append("                    CORBA::wstring_free(");
+				}
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append("                }\n");
+
+				ret.append("            }\n");
 				break;
 			}
 			default: 

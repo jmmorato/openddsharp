@@ -267,6 +267,8 @@ namespace Test
         Single[] _FloatArrayField;
         Double[] _DoubleArrayField;
         Decimal[] _LongDoubleArrayField;
+        string[] _StringArrayField;
+        string[] _WStringArrayField;
         #endregion
 
         #region Properties
@@ -665,6 +667,18 @@ namespace Test
             get { return _LongDoubleArrayField; }
             set { _LongDoubleArrayField = value; }
         }
+
+        public string[] StringArrayField
+        {
+            get { return _StringArrayField; }
+            set { _StringArrayField = value; }
+        }
+
+        public string[] WStringArrayField
+        {
+            get { return _WStringArrayField; }
+            set { _WStringArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -735,6 +749,8 @@ namespace Test
             _FloatArrayField = new Single[5];
             _DoubleArrayField = new Double[5];
             _LongDoubleArrayField = new Decimal[5];
+            _StringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
+            _WStringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
         }
         #endregion
 
@@ -886,6 +902,30 @@ namespace Test
             wrapper.FloatArrayField = FloatArrayField;
             wrapper.DoubleArrayField = DoubleArrayField;
             wrapper.LongDoubleArrayField = Array.ConvertAll(LongDoubleArrayField, e => Convert.ToDouble(e));
+            if (StringArrayField != null)
+            {
+                wrapper.StringArrayField = new IntPtr[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    if (StringArrayField[i] != null)
+                    {
+                        wrapper.StringArrayField[i] = Marshal.StringToHGlobalAnsi(StringArrayField[i]);
+                        toRelease.Add(wrapper.StringArrayField[i]);
+                    }
+                }
+            }
+            if (WStringArrayField != null)
+            {
+                wrapper.WStringArrayField = new IntPtr[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    if (WStringArrayField[i] != null)
+                    {
+                        wrapper.WStringArrayField[i] = Marshal.StringToHGlobalAnsi(WStringArrayField[i]);
+                        toRelease.Add(wrapper.WStringArrayField[i]);
+                    }
+                }
+            }
 
             return wrapper;
         }
@@ -1006,6 +1046,20 @@ namespace Test
             FloatArrayField = wrapper.FloatArrayField;
             DoubleArrayField = wrapper.DoubleArrayField;
             LongDoubleArrayField = Array.ConvertAll(wrapper.LongDoubleArrayField, e => Convert.ToDecimal(e));
+            for (int i = 0; i < 5; i++)
+            {
+                if (wrapper.StringArrayField[i] != null)
+                {
+                    StringArrayField[i] = Marshal.PtrToStringAnsi(wrapper.StringArrayField[i]);
+                }
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                if (wrapper.WStringArrayField[i] != null)
+                {
+                    WStringArrayField[i] = Marshal.PtrToStringAnsi(wrapper.WStringArrayField[i]);
+                }
+            }
         }
         #endregion
     }
@@ -1097,6 +1151,10 @@ namespace Test
         public Double[] DoubleArrayField;
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R8, SizeConst = 5)]
         public Double[] LongDoubleArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.SysInt, SizeConst = 5)]
+        public IntPtr[] StringArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.SysInt, SizeConst = 5)]
+        public IntPtr[] WStringArrayField;
     }
 
 	public class TestStructTypeSupport
