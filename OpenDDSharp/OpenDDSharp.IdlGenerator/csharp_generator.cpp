@@ -877,6 +877,35 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 
 		switch (base_node_type)
 		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			unsigned int total_dim = arr_type->n_dims();
+			ret = "new ";
+			ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+			ret.append("[");
+			for (unsigned int i = 1; i < total_dim; i++) {
+				ret.append(",");
+			}
+			ret.append("] { ");
+
+			if (arr_type->n_dims() == 1) {
+				unsigned int dim = dims[0]->ev()->u.ulval;
+				for (unsigned int i = 0; i < dim; i++) {
+					ret.append("new ");
+					ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+					ret.append("()");
+					if (i + 1 < dim) {
+						ret.append(", ");
+					}
+				}
+				ret.append(" }");
+			}
+			else {
+				// TODO: Implement multiarray
+			}
+			break;
+		}
 		case AST_Decl::NT_string:
 		case AST_Decl::NT_wstring:
 		{
@@ -898,6 +927,7 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 				ret.append(" }");
 			}
 			else {
+				// TODO: something similar but correctly formated
 				/*for (unsigned int i = 0; i < total_dim; i++) {
 					unsigned int dim = dims[i]->ev()->u.ulval;
 					for (unsigned int j = 0; j < dim; j++) {
@@ -1238,87 +1268,59 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				/*if (StructArray != null)
-				{
-					wrapper.StructArray = new NestedTestStructWrapper[5];
-					for (int i = 0; i < 5; i++)
-					{
-						if (StructArray[i] != null)
-						{
-							wrapper.StructArray[i] = StructArray[i].ToNative(toRelease);
-						}
-					}
-				}*/
-
 				ret.append(indent);
 				ret.append("    if (");
 				ret.append(name);
 				ret.append(" != null)\n");
 
+				ret.append(indent);
 				ret.append("    {\n");
 
+				ret.append(indent);
 				ret.append("        wrapper.");
 				ret.append(name);
 				ret.append(" = new ");
-				ret.append(replaceString(std::string(type->full_name()), std::string("::"), std::string(".")));
+				ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
 				ret.append("Wrapper[");
-				ret.append("];\n");
 				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("];\n");				
 
+				ret.append(indent);
 				ret.append("        for (int i = 0; i < ");
 				ret.append(std::to_string(dims[0]->ev()->u.ulval));
 				ret.append("; i++)\n");
 
+				ret.append(indent);
 				ret.append("        {\n");
 
+				ret.append(indent);
 				ret.append("            if (");
 				ret.append(name);
 				ret.append("[i] != null)\n");
 
+				ret.append(indent);
 				ret.append("            {\n");
 
+				ret.append(indent);
 				ret.append("                wrapper.");
 				ret.append(name);
 				ret.append("[i] = ");
 				ret.append(name);
 				ret.append("[i].ToNative(toRelease);\n");
 
+				ret.append(indent);
 				ret.append("            }\n");
 
+				ret.append(indent);
 				ret.append("        }\n");
 
+				ret.append(indent);
 				ret.append("    }\n");
 				break;
 			}
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				/*if (StringArray != null)
-				{
-					wrapper.StringArray = new IntPtr[10];
-					for (int i = 0; i < 10; i++)
-					{
-						if (StringArray[i] != null)
-						{
-							wrapper.StringArray[i] = Marshal.StringToHGlobalAnsi(StringArray[i]);
-							toRelease.Add(wrapper.StringArray[i]);
-						}
-					}
-				}*/
-
-				/*if (WStringArray != null)
-				{
-					wrapper.WStringArray = new IntPtr[4];
-					for (int i = 0; i < 4; i++)
-					{
-						if (WStringArray[i] != null)
-						{
-							wrapper.WStringArray[i] = Marshal.StringToHGlobalUni(WStringArray[i]);
-							toRelease.Add(wrapper.WStringArray[i]);
-						}
-					}
-				}*/
-
 				ret.append(indent);
 				ret.append("    if (");
 				ret.append(name);
@@ -1660,11 +1662,29 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				/*for (int i = 0; i < 5; i++)
-				{
-					StructArray[i] = new NestedTestStruct();
-					StructArray[i].FromNative(wrapper.StructArray[i]);
-				}*/
+				ret.append("    for (int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(name);
+				ret.append("[i] = new ");
+				ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+				ret.append("();\n");
+
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(name);
+				ret.append("[i].FromNative(wrapper.");
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
 				break;
 			}
 			case AST_Decl::NT_string:

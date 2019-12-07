@@ -76,6 +76,8 @@ module Test {
 	typedef sequence<NestedStruct> UnboundedStructSequenceType;
 	typedef sequence<NestedStruct, 5> BoundedStructSequenceType;
 
+	typedef NestedStruct StructArrayType[5];
+
 	enum TestEnum {
 		ENUM1,
 		ENUM2,
@@ -175,5 +177,7 @@ module Test {
 
 		StringArrayType StringArrayField;
 		WStringArrayType WStringArrayField;
+
+		StructArrayType StructArrayField;
     };
 };

@@ -739,6 +739,48 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructureArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                StructArrayField = new NestedStruct[]
+                {
+                    new NestedStruct { Message = "Pressure pushing down on me", Id = 1 },
+                    new NestedStruct { Message = "Pressing down on you, no man ask for", Id = 2 },
+                    new NestedStruct { Message = "Under pressure that burns a building down", Id = 3 },
+                    new NestedStruct { Message = "Splits a family in two", Id = 4 },
+                    new NestedStruct { Message = "Puts people on streets", Id = 5 },
+                },
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(data.StructArrayField[i].Id, received.StructArrayField[i].Id);
+                Assert.AreEqual(data.StructArrayField[i].Message, received.StructArrayField[i].Message);
+            }
+
+            Assert.AreEqual(typeof(NestedStruct[]), data.StructArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StructArrayField);
+            Assert.AreEqual(5, defaultStruct.StructArrayField.Length);
+            foreach (var s in defaultStruct.StructArrayField)
+            {
+                Assert.IsNotNull(s);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumType()
         {
             TestStruct defaultStruct = new TestStruct();

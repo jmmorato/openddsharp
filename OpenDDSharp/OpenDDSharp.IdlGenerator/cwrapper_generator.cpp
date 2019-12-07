@@ -590,13 +590,25 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				// TODO
+				ret.append("            for (unsigned int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                ret.");
+				ret.append(name);
+				ret.append("[i] = ");
+				ret.append(name);
+				ret.append("[i].to_native();\n");
+
+				ret.append("            }\n");
 				break;
 			}
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				ret.append("            for (int i = 0; i < ");
+				ret.append("            for (unsigned int i = 0; i < ");
 				ret.append(std::to_string(dims[0]->ev()->u.ulval));
 				ret.append("; i++)\n");
 
@@ -857,13 +869,25 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				// TODO
+				ret.append("            for (unsigned int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                ");
+				ret.append(name);
+				ret.append("[i].from_native(native.");
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append("            }\n");
 				break;
 			}
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				ret.append("            for (int i = 0; i < ");
+				ret.append("            for (unsigned int i = 0; i < ");
 				ret.append(std::to_string(dims[0]->ev()->u.ulval));
 				ret.append("; i++)\n");
 
@@ -1030,13 +1054,17 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				/*if (StructArray != NULL)
-				{
-					for (int i = 0; i < 5; i++)
-					{
-						StructArray[i].release();
-					}
-				}*/
+				ret.append("            for (unsigned int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                ");
+				ret.append(name);
+				ret.append("[i].release();");
+
+				ret.append("            }\n");
 				break;
 			}
 			case AST_Decl::NT_string:

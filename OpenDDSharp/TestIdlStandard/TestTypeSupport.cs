@@ -269,6 +269,7 @@ namespace Test
         Decimal[] _LongDoubleArrayField;
         string[] _StringArrayField;
         string[] _WStringArrayField;
+        Test.NestedStruct[] _StructArrayField;
         #endregion
 
         #region Properties
@@ -679,6 +680,12 @@ namespace Test
             get { return _WStringArrayField; }
             set { _WStringArrayField = value; }
         }
+
+        public Test.NestedStruct[] StructArrayField
+        {
+            get { return _StructArrayField; }
+            set { _StructArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -751,6 +758,7 @@ namespace Test
             _LongDoubleArrayField = new Decimal[5];
             _StringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
             _WStringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
+            _StructArrayField = new Test.NestedStruct[] { new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct() };
         }
         #endregion
 
@@ -926,6 +934,17 @@ namespace Test
                     }
                 }
             }
+            if (StructArrayField != null)
+            {
+                wrapper.StructArrayField = new Test.NestedStructWrapper[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    if (StructArrayField[i] != null)
+                    {
+                        wrapper.StructArrayField[i] = StructArrayField[i].ToNative(toRelease);
+                    }
+                }
+            }
 
             return wrapper;
         }
@@ -1060,6 +1079,11 @@ namespace Test
                     WStringArrayField[i] = Marshal.PtrToStringAnsi(wrapper.WStringArrayField[i]);
                 }
             }
+            for (int i = 0; i < 5; i++)
+            {
+                StructArrayField[i] = new Test.NestedStruct();
+                StructArrayField[i].FromNative(wrapper.StructArrayField[i]);
+            }
         }
         #endregion
     }
@@ -1155,6 +1179,8 @@ namespace Test
         public IntPtr[] StringArrayField;
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.SysInt, SizeConst = 5)]
         public IntPtr[] WStringArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 5)]
+        public Test.NestedStructWrapper[] StructArrayField;
     }
 
 	public class TestStructTypeSupport
