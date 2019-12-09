@@ -98,6 +98,8 @@ module Test {
 
 	const TestEnum TEST_ENUM_CONST = TestEnum::ENUM6;
 
+	typedef TestEnum EnumArrayType[5];
+
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
         short ShortField;
@@ -179,5 +181,7 @@ module Test {
 		WStringArrayType WStringArrayField;
 
 		StructArrayType StructArrayField;
+
+		EnumArrayType EnumArrayField;
     };
 };

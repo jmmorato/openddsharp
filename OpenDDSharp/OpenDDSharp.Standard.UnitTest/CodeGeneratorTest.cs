@@ -839,6 +839,37 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                EnumArrayField = new TestEnum[] { TestEnum.ENUM1, TestEnum.ENUM3, TestEnum.ENUM5, TestEnum.ENUM7, TestEnum.ENUM11 }
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
+
+            Assert.IsTrue(typeof(TestEnum[]).IsAssignableFrom(data.EnumArrayField.GetType()));
+
+            Assert.IsNotNull(defaultStruct.EnumArrayField);
+            Assert.AreEqual(5, defaultStruct.EnumArrayField.Length);
+            foreach (var s in defaultStruct.EnumArrayField)
+            {
+                Assert.AreEqual(default(TestEnum), s);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedConstants()
         {
             Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());

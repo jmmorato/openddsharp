@@ -270,6 +270,7 @@ namespace Test
         string[] _StringArrayField;
         string[] _WStringArrayField;
         Test.NestedStruct[] _StructArrayField;
+        Test.TestEnum[] _EnumArrayField;
         #endregion
 
         #region Properties
@@ -686,6 +687,12 @@ namespace Test
             get { return _StructArrayField; }
             set { _StructArrayField = value; }
         }
+
+        public Test.TestEnum[] EnumArrayField
+        {
+            get { return _EnumArrayField; }
+            set { _EnumArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -759,6 +766,7 @@ namespace Test
             _StringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
             _WStringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
             _StructArrayField = new Test.NestedStruct[] { new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct() };
+            _EnumArrayField = new Test.TestEnum[5];
         }
         #endregion
 
@@ -945,6 +953,7 @@ namespace Test
                     }
                 }
             }
+            wrapper.EnumArrayField = EnumArrayField;
 
             return wrapper;
         }
@@ -1084,6 +1093,7 @@ namespace Test
                 StructArrayField[i] = new Test.NestedStruct();
                 StructArrayField[i].FromNative(wrapper.StructArrayField[i]);
             }
+            EnumArrayField = wrapper.EnumArrayField;
         }
         #endregion
     }
@@ -1181,6 +1191,8 @@ namespace Test
         public IntPtr[] WStringArrayField;
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 5)]
         public Test.NestedStructWrapper[] StructArrayField;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 5)]
+        public Test.TestEnum[] EnumArrayField;
     }
 
 	public class TestStructTypeSupport
