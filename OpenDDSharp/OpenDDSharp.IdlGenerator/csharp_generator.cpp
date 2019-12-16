@@ -1458,6 +1458,23 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				//}
 				break;
 			}
+			case AST_Decl::NT_enum:
+			{
+				ret.append(indent);
+				ret.append("        MarshalHelper.EnumMultiArrayToPtr<");
+				ret.append(base_type);
+				ret.append(">(");
+				ret.append(name);
+				ret.append(", ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("        toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
 			case AST_Decl::NT_pre_defined:
 			{
 				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
@@ -1971,6 +1988,35 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				//{
 				//	WStringMultiArray = new string[3, 4, 2];
 				//}
+				break;
+			}
+			case AST_Decl::NT_enum:
+			{
+				ret.append("    if (");
+				ret.append(name);
+				ret.append(" == null)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(name);
+				ret.append(" = ");
+				ret.append(get_csharp_default_value(type));
+				ret.append(";\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
+
+				ret.append(indent);
+				ret.append("    MarshalHelper.PtrToEnumMultiArray<");
+				ret.append(base_type);
+				ret.append(">(wrapper.");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(");\n");
 				break;
 			}
 			case AST_Decl::NT_pre_defined:

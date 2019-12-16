@@ -114,6 +114,8 @@ module Test {
 
 	typedef TestEnum EnumArrayType[5];
 
+	typedef TestEnum EnumMultiArrayType[3][4][2];
+
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
     struct TestStruct {
         short ShortField;
@@ -211,5 +213,7 @@ module Test {
 		FloatMultiArrayType FloatMultiArrayField;
 		DoubleMultiArrayType DoubleMultiArrayField;
 		LongDoubleMultiArrayType LongDoubleMultiArrayField;
+
+		EnumMultiArrayType EnumMultiArrayField;
     };
 };

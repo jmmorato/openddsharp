@@ -1075,11 +1075,47 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
 
-            Assert.IsTrue(typeof(TestEnum[]).IsAssignableFrom(data.EnumArrayField.GetType()));
+            Assert.AreEqual(typeof(TestEnum[]), data.EnumArrayField.GetType());
 
             Assert.IsNotNull(defaultStruct.EnumArrayField);
             Assert.AreEqual(5, defaultStruct.EnumArrayField.Length);
             foreach (var s in defaultStruct.EnumArrayField)
+            {
+                Assert.AreEqual(default(TestEnum), s);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumMultiArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                EnumMultiArrayField = new TestEnum[,,]
+                {
+                    { { TestEnum.ENUM1, TestEnum.ENUM2 }, { TestEnum.ENUM3, TestEnum.ENUM4 }, { TestEnum.ENUM5, TestEnum.ENUM6 }, { TestEnum.ENUM7, TestEnum.ENUM8 } },
+                    { { TestEnum.ENUM9, TestEnum.ENUM10 }, { TestEnum.ENUM11, TestEnum.ENUM12 }, { TestEnum.ENUM1, TestEnum.ENUM2 }, { TestEnum.ENUM3, TestEnum.ENUM4 } },
+                    { { TestEnum.ENUM5, TestEnum.ENUM6 }, { TestEnum.ENUM7, TestEnum.ENUM8 }, { TestEnum.ENUM9, TestEnum.ENUM10 }, { TestEnum.ENUM11, TestEnum.ENUM12 } }
+                }
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(CompareMultiArray(data.EnumMultiArrayField, received.EnumMultiArrayField));
+
+            Assert.AreEqual(typeof(TestEnum[,,]), data.EnumMultiArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.EnumMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.EnumMultiArrayField.Length);
+            foreach (var s in defaultStruct.EnumMultiArrayField)
             {
                 Assert.AreEqual(default(TestEnum), s);
             }

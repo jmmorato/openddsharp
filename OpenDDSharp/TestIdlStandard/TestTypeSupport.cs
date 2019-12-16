@@ -284,6 +284,7 @@ namespace Test
         Single[,,] _FloatMultiArrayField;
         Double[,,] _DoubleMultiArrayField;
         Decimal[,,] _LongDoubleMultiArrayField;
+        Test.TestEnum[,,] _EnumMultiArrayField;
         #endregion
 
         #region Properties
@@ -784,6 +785,12 @@ namespace Test
             get { return _LongDoubleMultiArrayField; }
             set { _LongDoubleMultiArrayField = value; }
         }
+
+        public Test.TestEnum[,,] EnumMultiArrayField
+        {
+            get { return _EnumMultiArrayField; }
+            set { _EnumMultiArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -871,6 +878,7 @@ namespace Test
             _FloatMultiArrayField = new Single[3, 4, 2];
             _DoubleMultiArrayField = new Double[3, 4, 2];
             _LongDoubleMultiArrayField = new Decimal[3, 4, 2];
+            _EnumMultiArrayField = new Test.TestEnum[3, 4, 2];
         }
         #endregion
 
@@ -1131,6 +1139,11 @@ namespace Test
                 MarshalHelper.MultiArrayToPtr<Double>(aux, ref wrapper.LongDoubleMultiArrayField);
                 toRelease.Add(wrapper.LongDoubleMultiArrayField);
             }
+            if (EnumMultiArrayField != null)
+            {
+                MarshalHelper.EnumMultiArrayToPtr<Test.TestEnum>(EnumMultiArrayField, ref wrapper.EnumMultiArrayField);
+                toRelease.Add(wrapper.EnumMultiArrayField);
+            }
 
             return wrapper;
         }
@@ -1346,6 +1359,11 @@ namespace Test
                     }
                 }
             }
+            if (EnumMultiArrayField == null)
+            {
+                EnumMultiArrayField = new Test.TestEnum[3, 4, 2];
+            }
+            MarshalHelper.PtrToEnumMultiArray<Test.TestEnum>(wrapper.EnumMultiArrayField, EnumMultiArrayField);
         }
         #endregion
     }
@@ -1458,6 +1476,7 @@ namespace Test
         public IntPtr FloatMultiArrayField;
         public IntPtr DoubleMultiArrayField;
         public IntPtr LongDoubleMultiArrayField;
+        public IntPtr EnumMultiArrayField;
     }
 
 	public class TestStructTypeSupport
