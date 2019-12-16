@@ -271,6 +271,19 @@ namespace Test
         string[] _WStringArrayField;
         Test.NestedStruct[] _StructArrayField;
         Test.TestEnum[] _EnumArrayField;
+        Int16[,,] _ShortMultiArrayField;
+        UInt16[,,] _UnsignedShortMultiArrayField;
+        Int32[,,] _LongMultiArrayField;
+        UInt32[,,] _UnsignedLongMultiArrayField;
+        Int64[,,] _LongLongMultiArrayField;
+        UInt64[,,] _UnsignedLongLongMultiArrayField;
+        Char[,,] _CharMultiArrayField;
+        Char[,,] _WCharMultiArrayField;
+        Boolean[,,] _BooleanMultiArrayField;
+        Byte[,,] _OctetMultiArrayField;
+        Single[,,] _FloatMultiArrayField;
+        Double[,,] _DoubleMultiArrayField;
+        Decimal[,,] _LongDoubleMultiArrayField;
         #endregion
 
         #region Properties
@@ -693,6 +706,84 @@ namespace Test
             get { return _EnumArrayField; }
             set { _EnumArrayField = value; }
         }
+
+        public Int16[,,] ShortMultiArrayField
+        {
+            get { return _ShortMultiArrayField; }
+            set { _ShortMultiArrayField = value; }
+        }
+
+        public UInt16[,,] UnsignedShortMultiArrayField
+        {
+            get { return _UnsignedShortMultiArrayField; }
+            set { _UnsignedShortMultiArrayField = value; }
+        }
+
+        public Int32[,,] LongMultiArrayField
+        {
+            get { return _LongMultiArrayField; }
+            set { _LongMultiArrayField = value; }
+        }
+
+        public UInt32[,,] UnsignedLongMultiArrayField
+        {
+            get { return _UnsignedLongMultiArrayField; }
+            set { _UnsignedLongMultiArrayField = value; }
+        }
+
+        public Int64[,,] LongLongMultiArrayField
+        {
+            get { return _LongLongMultiArrayField; }
+            set { _LongLongMultiArrayField = value; }
+        }
+
+        public UInt64[,,] UnsignedLongLongMultiArrayField
+        {
+            get { return _UnsignedLongLongMultiArrayField; }
+            set { _UnsignedLongLongMultiArrayField = value; }
+        }
+
+        public Char[,,] CharMultiArrayField
+        {
+            get { return _CharMultiArrayField; }
+            set { _CharMultiArrayField = value; }
+        }
+
+        public Char[,,] WCharMultiArrayField
+        {
+            get { return _WCharMultiArrayField; }
+            set { _WCharMultiArrayField = value; }
+        }
+
+        public Boolean[,,] BooleanMultiArrayField
+        {
+            get { return _BooleanMultiArrayField; }
+            set { _BooleanMultiArrayField = value; }
+        }
+
+        public Byte[,,] OctetMultiArrayField
+        {
+            get { return _OctetMultiArrayField; }
+            set { _OctetMultiArrayField = value; }
+        }
+
+        public Single[,,] FloatMultiArrayField
+        {
+            get { return _FloatMultiArrayField; }
+            set { _FloatMultiArrayField = value; }
+        }
+
+        public Double[,,] DoubleMultiArrayField
+        {
+            get { return _DoubleMultiArrayField; }
+            set { _DoubleMultiArrayField = value; }
+        }
+
+        public Decimal[,,] LongDoubleMultiArrayField
+        {
+            get { return _LongDoubleMultiArrayField; }
+            set { _LongDoubleMultiArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -767,6 +858,19 @@ namespace Test
             _WStringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
             _StructArrayField = new Test.NestedStruct[] { new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct() };
             _EnumArrayField = new Test.TestEnum[5];
+            _ShortMultiArrayField = new Int16[3, 4, 2];
+            _UnsignedShortMultiArrayField = new UInt16[3, 4, 2];
+            _LongMultiArrayField = new Int32[3, 4, 2];
+            _UnsignedLongMultiArrayField = new UInt32[3, 4, 2];
+            _LongLongMultiArrayField = new Int64[3, 4, 2];
+            _UnsignedLongLongMultiArrayField = new UInt64[3, 4, 2];
+            _CharMultiArrayField = new Char[3, 4, 2];
+            _WCharMultiArrayField = new Char[3, 4, 2];
+            _BooleanMultiArrayField = new Boolean[3, 4, 2];
+            _OctetMultiArrayField = new Byte[3, 4, 2];
+            _FloatMultiArrayField = new Single[3, 4, 2];
+            _DoubleMultiArrayField = new Double[3, 4, 2];
+            _LongDoubleMultiArrayField = new Decimal[3, 4, 2];
         }
         #endregion
 
@@ -954,6 +1058,79 @@ namespace Test
                 }
             }
             wrapper.EnumArrayField = EnumArrayField;
+            if (ShortMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Int16>(ShortMultiArrayField, ref wrapper.ShortMultiArrayField);
+                toRelease.Add(wrapper.ShortMultiArrayField);
+            }
+            if (UnsignedShortMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<UInt16>(UnsignedShortMultiArrayField, ref wrapper.UnsignedShortMultiArrayField);
+                toRelease.Add(wrapper.UnsignedShortMultiArrayField);
+            }
+            if (LongMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Int32>(LongMultiArrayField, ref wrapper.LongMultiArrayField);
+                toRelease.Add(wrapper.LongMultiArrayField);
+            }
+            if (UnsignedLongMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<UInt32>(UnsignedLongMultiArrayField, ref wrapper.UnsignedLongMultiArrayField);
+                toRelease.Add(wrapper.UnsignedLongMultiArrayField);
+            }
+            if (LongLongMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Int64>(LongLongMultiArrayField, ref wrapper.LongLongMultiArrayField);
+                toRelease.Add(wrapper.LongLongMultiArrayField);
+            }
+            if (UnsignedLongLongMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<UInt64>(UnsignedLongLongMultiArrayField, ref wrapper.UnsignedLongLongMultiArrayField);
+                toRelease.Add(wrapper.UnsignedLongLongMultiArrayField);
+            }
+            if (CharMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<byte>(CharMultiArrayField, ref wrapper.CharMultiArrayField);
+                toRelease.Add(wrapper.CharMultiArrayField);
+            }
+            if (WCharMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Char>(WCharMultiArrayField, ref wrapper.WCharMultiArrayField);
+                toRelease.Add(wrapper.WCharMultiArrayField);
+            }
+            if (BooleanMultiArrayField != null)
+            {
+                MarshalHelper.BooleanMultiArrayToPtr(BooleanMultiArrayField, ref wrapper.BooleanMultiArrayField);
+                toRelease.Add(wrapper.BooleanMultiArrayField);
+            }
+            if (OctetMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Byte>(OctetMultiArrayField, ref wrapper.OctetMultiArrayField);
+                toRelease.Add(wrapper.OctetMultiArrayField);
+            }
+            if (FloatMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Single>(FloatMultiArrayField, ref wrapper.FloatMultiArrayField);
+                toRelease.Add(wrapper.FloatMultiArrayField);
+            }
+            if (DoubleMultiArrayField != null)
+            {
+                MarshalHelper.MultiArrayToPtr<Double>(DoubleMultiArrayField, ref wrapper.DoubleMultiArrayField);
+                toRelease.Add(wrapper.DoubleMultiArrayField);
+            }
+            if (LongDoubleMultiArrayField != null)
+            {
+                double[,,] aux = new double[3, 4, 2];
+                for (int i0 = 0; i0 < 3; ++i0) {
+                    for (int i1 = 0; i1 < 4; ++i1) {
+                        for (int i2 = 0; i2 < 2; ++i2) {
+                            aux[i0, i1, i2]  = Convert.ToDouble(LongDoubleMultiArrayField[i0, i1, i2]);
+                        }
+                    }
+                }
+                MarshalHelper.MultiArrayToPtr<Double>(aux, ref wrapper.LongDoubleMultiArrayField);
+                toRelease.Add(wrapper.LongDoubleMultiArrayField);
+            }
 
             return wrapper;
         }
@@ -1094,6 +1271,81 @@ namespace Test
                 StructArrayField[i].FromNative(wrapper.StructArrayField[i]);
             }
             EnumArrayField = wrapper.EnumArrayField;
+            if (ShortMultiArrayField == null)
+            {
+                ShortMultiArrayField = new Int16[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Int16>(wrapper.ShortMultiArrayField, ShortMultiArrayField);
+            if (UnsignedShortMultiArrayField == null)
+            {
+                UnsignedShortMultiArrayField = new UInt16[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<UInt16>(wrapper.UnsignedShortMultiArrayField, UnsignedShortMultiArrayField);
+            if (LongMultiArrayField == null)
+            {
+                LongMultiArrayField = new Int32[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Int32>(wrapper.LongMultiArrayField, LongMultiArrayField);
+            if (UnsignedLongMultiArrayField == null)
+            {
+                UnsignedLongMultiArrayField = new UInt32[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<UInt32>(wrapper.UnsignedLongMultiArrayField, UnsignedLongMultiArrayField);
+            if (LongLongMultiArrayField == null)
+            {
+                LongLongMultiArrayField = new Int64[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Int64>(wrapper.LongLongMultiArrayField, LongLongMultiArrayField);
+            if (UnsignedLongLongMultiArrayField == null)
+            {
+                UnsignedLongLongMultiArrayField = new UInt64[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<UInt64>(wrapper.UnsignedLongLongMultiArrayField, UnsignedLongLongMultiArrayField);
+            if (CharMultiArrayField == null)
+            {
+                CharMultiArrayField = new Char[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<byte>(wrapper.CharMultiArrayField, CharMultiArrayField);
+            if (WCharMultiArrayField == null)
+            {
+                WCharMultiArrayField = new Char[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Char>(wrapper.WCharMultiArrayField, WCharMultiArrayField);
+            if (BooleanMultiArrayField == null)
+            {
+                BooleanMultiArrayField = new Boolean[3, 4, 2];
+            }
+            MarshalHelper.PtrToBooleanMultiArray(wrapper.BooleanMultiArrayField, BooleanMultiArrayField);
+            if (OctetMultiArrayField == null)
+            {
+                OctetMultiArrayField = new Byte[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Byte>(wrapper.OctetMultiArrayField, OctetMultiArrayField);
+            if (FloatMultiArrayField == null)
+            {
+                FloatMultiArrayField = new Single[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Single>(wrapper.FloatMultiArrayField, FloatMultiArrayField);
+            if (DoubleMultiArrayField == null)
+            {
+                DoubleMultiArrayField = new Double[3, 4, 2];
+            }
+            MarshalHelper.PtrToMultiArray<Double>(wrapper.DoubleMultiArrayField, DoubleMultiArrayField);
+            if (LongDoubleMultiArrayField == null)
+            {
+                LongDoubleMultiArrayField = new Decimal[3, 4, 2];
+            }
+            {
+                double[,,] aux = new double[3, 4, 2];
+                MarshalHelper.PtrToMultiArray<Double>(wrapper.LongDoubleMultiArrayField, aux);
+                for (int i0 = 0; i0 < 3; ++i0) {
+                    for (int i1 = 0; i1 < 4; ++i1) {
+                        for (int i2 = 0; i2 < 2; ++i2) {
+                            LongDoubleMultiArrayField[i0, i1, i2] = Convert.ToDecimal(aux[i0, i1, i2]);
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }
@@ -1193,6 +1445,19 @@ namespace Test
         public Test.NestedStructWrapper[] StructArrayField;
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 5)]
         public Test.TestEnum[] EnumArrayField;
+        public IntPtr ShortMultiArrayField;
+        public IntPtr UnsignedShortMultiArrayField;
+        public IntPtr LongMultiArrayField;
+        public IntPtr UnsignedLongMultiArrayField;
+        public IntPtr LongLongMultiArrayField;
+        public IntPtr UnsignedLongLongMultiArrayField;
+        public IntPtr CharMultiArrayField;
+        public IntPtr WCharMultiArrayField;
+        public IntPtr BooleanMultiArrayField;
+        public IntPtr OctetMultiArrayField;
+        public IntPtr FloatMultiArrayField;
+        public IntPtr DoubleMultiArrayField;
+        public IntPtr LongDoubleMultiArrayField;
     }
 
 	public class TestStructTypeSupport

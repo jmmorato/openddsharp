@@ -652,7 +652,130 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			}
 		}
 		else {
-			// TODO: Multidimensional arrays
+			ACE_UINT32 total_dim = 1;
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				total_dim *= dims[i]->ev()->u.ulval;
+			}
+
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				// TODO
+				/*if (StructMultiArray != NULL)
+				{
+					NestedTestStructWrapper arr_StructMultiArray[24];
+					ACE_OS::memcpy(arr_StructMultiArray, StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+
+					int i = 0;
+					for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
+						for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
+							for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
+								nativeData.StructMultiArray[i0][i1][i2] = arr_StructMultiArray[i].to_native();
+								i++;
+							}
+						}
+					}
+				}*/
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				// TODO
+				//if (StringMultiArray != NULL)
+				//{
+				//	char** arr_StringMultiArray = new char*[24];
+				//	marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr_StringMultiArray, 24);
+				//	ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(CORBA::Char*) * 24);
+				//	delete[] arr_StringMultiArray;
+				//}
+
+				//// Multi-dimensional array of wstrings
+				//if (WStringMultiArray != NULL)
+				//{
+				//	wchar_t** arr_WStringMultiArray = new wchar_t*[24];
+				//	marshal::ptr_to_wide_string_multi_array(WStringMultiArray, arr_WStringMultiArray, 24);
+				//	ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(CORBA::WChar*) * 24);
+				//	delete[] arr_WStringMultiArray;
+				//}
+				break;
+			}
+			case AST_Decl::NT_pre_defined:
+			{
+				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+				if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {					
+					std::string indent = "            ";
+					ret.append(indent);
+					ret.append(base_type);
+					ret.append(" aux[");
+					ret.append(std::to_string(total_dim));
+					ret.append("];\n");
+
+					ret.append(indent);
+					ret.append("ACE_OS::memcpy(aux, ");
+					ret.append(name);
+					ret.append(", sizeof(");
+					ret.append(base_type);
+					ret.append(") * ");
+					ret.append(std::to_string(total_dim));
+					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("int i = 0;\n");
+
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append(indent);
+						ret.append("for (ACE_UINT32 i");
+						ret.append(std::to_string(i));						
+						ret.append(" = 0; i");
+						ret.append(std::to_string(i));
+						ret.append(" < ");
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						ret.append("; ++i");
+						ret.append(std::to_string(i));
+						ret.append(") {\n");
+
+						indent.append("    ");
+					}
+
+					ret.append(indent);
+					ret.append("ret.");
+					ret.append(name);
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("[i");
+						ret.append(std::to_string(i));
+						ret.append("]");
+					}
+					ret.append(".assign(aux[i]);\n");
+
+					ret.append(indent);
+					ret.append("i++;\n");
+
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						indent.erase(0, 4);
+						ret.append(indent);
+						ret.append("}\n");
+					}
+					break;
+				}
+			}
+			default:
+			{
+				ret.append("            ACE_OS::memcpy(ret.");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+				break;
+			}
+			}
 		}
 
 		ret.append("        }\n");
@@ -931,7 +1054,151 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			}
 		}
 		else {
-			// TODO: Multidimensional arrays
+			ACE_UINT32 total_dim = 1;
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				total_dim *= dims[i]->ev()->u.ulval;
+			}
+
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				//// TODO
+				//if (nativeData.StructMultiArray != NULL)
+				//{
+				//	NestedTestStructWrapper arr_StructMultiArray[24];
+				//	int i = 0;
+				//	for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
+				//		for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
+				//			for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
+				//				arr_StructMultiArray[i].from_native(nativeData.StructMultiArray[i0][i1][i2]);
+				//				i++;
+				//			}
+				//		}
+				//	}
+
+				//	StructMultiArray = ACE_OS::malloc(sizeof(NestedTestStructWrapper) * 24);
+				//	ACE_OS::memcpy(StructMultiArray, arr_StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+				//}
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				//// TODO
+				//if (nativeData.StringMultiArray != NULL)
+				//{
+				//	CORBA::Char** arr_StringMultiArray = new CORBA::Char*[24];
+				//	ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(CORBA::Char*) * 24);
+				//	marshal::basic_string_multi_array_to_ptr(arr_StringMultiArray, StringMultiArray, 24);
+				//	delete[] arr_StringMultiArray;
+				//}
+
+				//// Multi-dimensional array of strings
+				//if (nativeData.WStringMultiArray != NULL)
+				//{
+				//	CORBA::WChar** arr_WStringMultiArray = new CORBA::WChar*[24];
+				//	ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(CORBA::WChar*) * 24);
+				//	marshal::wide_string_multi_array_to_ptr(arr_WStringMultiArray, WStringMultiArray, 24);
+				//	delete[] arr_WStringMultiArray;
+				//}
+				break;
+			}
+			case AST_Decl::NT_pre_defined:
+			{
+				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+				if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+					std::string indent = "            ";
+					ret.append(indent);
+					ret.append(base_type);
+					ret.append(" aux");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("[");
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						ret.append("]");
+					}
+					ret.append(";\n");
+
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append(indent);
+						ret.append("for (ACE_UINT32 i");
+						ret.append(std::to_string(i));
+						ret.append(" = 0; i");
+						ret.append(std::to_string(i));
+						ret.append(" < ");
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						ret.append("; ++i");
+						ret.append(std::to_string(i));
+						ret.append(") {\n");
+
+						indent.append("    ");
+					}
+
+					ret.append(indent);
+					ret.append("aux");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("[i");
+						ret.append(std::to_string(i));
+						ret.append("]");
+					}
+					ret.append(" = native.");
+					ret.append(name);
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("[i");
+						ret.append(std::to_string(i));
+						ret.append("]");
+					}
+					ret.append(";\n");
+
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						indent.erase(0, 4);
+						ret.append(indent);
+						ret.append("}\n");
+					}
+
+					ret.append(indent);
+					ret.append(name);
+					ret.append(" = ACE_OS::malloc(sizeof(");
+					ret.append(base_type);
+					ret.append(") * ");
+					ret.append(std::to_string(total_dim));
+					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("ACE_OS::memcpy(");
+					ret.append(name);
+					ret.append(", aux, sizeof(");
+					ret.append(base_type);
+					ret.append(") * ");
+					ret.append(std::to_string(total_dim));
+					ret.append(");\n");
+					break;
+				}
+			}
+			default:
+			{
+				ret.append("            ");
+				ret.append(name);
+				ret.append(" = ACE_OS::malloc(sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				ret.append("            ACE_OS::memcpy(");
+				ret.append(name);
+				ret.append(", native.");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+				break;
+			}
+			}
 		}
 
 		ret.append("        }\n");
@@ -1047,6 +1314,7 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 
 		ret.append("        {\n");
 
+		bool reset = false;
 		if (arr_type->n_dims() == 1)
 		{
 			switch (base_node_type)
@@ -1062,7 +1330,7 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 
 				ret.append("                ");
 				ret.append(name);
-				ret.append("[i].release();");
+				ret.append("[i].release();\n");
 
 				ret.append("            }\n");
 				break;
@@ -1096,15 +1364,59 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 				ret.append("            }\n");
 				break;
 			}
-			default: 
+			default:
+				reset = true;				
 				break;
 			}
 		}
 		else {
-			// TODO: Multidimensional arrays
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				////TODO
+				//if (StructMultiArray != NULL)
+				//{
+				//	NestedTestStructWrapper arr_StructMultiArray[24];
+				//	ACE_OS::memcpy(arr_StructMultiArray, StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+				//	for (int i = 0; i < 24; i++)
+				//	{
+				//		arr_StructMultiArray[i].release();
+				//	}
+				//	ACE_OS::free(StructMultiArray);
+				//}
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				////TODO
+				//if (StringMultiArray != NULL)
+				//{
+				//	marshal::release_basic_string_multi_array_ptr(StringMultiArray, 24);
+				//}
+
+				//// Release pointer to the multi-dimensional array of wstrings
+				//if (WStringMultiArray != NULL)
+				//{
+				//	marshal::release_wide_string_multi_array_ptr(WStringMultiArray, 24);
+				//}
+				break;
+			}
+			default:
+				ret.append("            ACE_OS::free(");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
 		}
 
 		ret.append("        }\n");
+
+		if (reset) {
+			ret = "";
+		}
 		break;
 	}
 	}

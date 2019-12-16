@@ -66,6 +66,20 @@ module Test {
 
 	typedef string StringArrayType[5];
 	typedef wstring WStringArrayType[5];
+
+	typedef short ShortMultiArrayType[3][4][2];
+	typedef unsigned short UnsignedShortMultiArrayType[3][4][2];
+	typedef long LongMultiArrayType[3][4][2];
+	typedef unsigned long UnsignedLongMultiArrayType[3][4][2];
+	typedef long long LongLongMultiArrayType[3][4][2];
+	typedef unsigned long long UnsignedLongLongMultiArrayType[3][4][2];
+	typedef char CharMultiArrayType[3][4][2];
+	typedef wchar WCharMultiArrayType[3][4][2];
+	typedef boolean BooleanMultiArrayType[3][4][2];
+	typedef octet OctetMultiArrayType[3][4][2];
+	typedef float FloatMultiArrayType[3][4][2];
+	typedef double DoubleMultiArrayType[3][4][2];
+	typedef long double LongDoubleMultiArrayType[3][4][2];
 	
 	#pragma DCPS_DATA_TYPE "Test::NestedTestStruct"
 	struct NestedStruct {
@@ -183,5 +197,19 @@ module Test {
 		StructArrayType StructArrayField;
 
 		EnumArrayType EnumArrayField;
+
+		ShortMultiArrayType ShortMultiArrayField;
+		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
+		LongMultiArrayType LongMultiArrayField;
+		UnsignedLongMultiArrayType UnsignedLongMultiArrayField;
+		LongLongMultiArrayType LongLongMultiArrayField;
+		UnsignedLongLongMultiArrayType UnsignedLongLongMultiArrayField;
+		CharMultiArrayType CharMultiArrayField;
+		WCharMultiArrayType WCharMultiArrayField;
+		BooleanMultiArrayType BooleanMultiArrayField;
+		OctetMultiArrayType OctetMultiArrayField;
+		FloatMultiArrayType FloatMultiArrayField;
+		DoubleMultiArrayType DoubleMultiArrayField;
+		LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 };

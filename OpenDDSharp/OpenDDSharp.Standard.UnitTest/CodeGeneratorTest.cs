@@ -485,6 +485,222 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedBasicTypeMultiArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                BooleanMultiArrayField = new[,,]
+                {
+                    { { true, false }, { true, false }, { true, false }, { true, false } },
+                    { { true, false }, { true, false }, { true, false }, { true, false } },
+                    { { true, false }, { true, false }, { true, false }, { true, false } }
+                },
+                CharMultiArrayField = new[,,]
+                {
+                    { { '1', '2' }, { '3', '4' }, { '5', '6' }, { '7', '8' } },
+                    { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
+                    { { '7', '8' }, { '9', '0' }, { '1', '2' }, { '3', '4' } }
+                },
+                WCharMultiArrayField = new[,,]
+                {
+                    { { '1', '2' }, { '3', '4' }, { '5', '6' }, { '7', '8' } },
+                    { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
+                    { { '7', '8' }, { '9', '0' }, { '1', '2' }, { '3', '4' } }
+                },
+                OctetMultiArrayField = new byte[,,]
+                {
+                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
+                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
+                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                },
+                ShortMultiArrayField = new short[,,]
+                {
+                    { { -01, -02 }, { -03, -04 }, { -05, -06 }, { -07, -08 } },
+                    { { -09, -10 }, { -11, -12 }, { -13, -14 }, { -15, -16 } },
+                    { { -17, -18 }, { -19, -20 }, { -21, -22 }, { -23, -24 } }
+                },
+                UnsignedShortMultiArrayField = new ushort[,,]
+                {
+                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
+                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
+                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                },
+                LongMultiArrayField = new[,,]
+                {
+                    { { -01, 02 }, { -03, 04 }, { -05, 06 }, { -07, 08 } },
+                    { { -09, 10 }, { -11, 12 }, { -13, 14 }, { -15, 16 } },
+                    { { -17, 18 }, { -19, 20 }, { -21, 22 }, { -23, 24 } }
+                },
+                UnsignedLongMultiArrayField = new[,,]
+                {
+                    { { 25U, 26U }, { 27U, 28U }, { 29U, 30U }, { 31U, 32U } },
+                    { { 33U, 34U }, { 35U, 36U }, { 37U, 38U }, { 39U, 40U } },
+                    { { 41U, 42U }, { 43U, 44U }, { 45U, 46U }, { 47U, 48U } }
+                },
+                LongLongMultiArrayField = new[,,]
+                {
+                    { { -25L, -26L }, { -27L, -28L }, { -29L, -30L }, { -31L, -32L } },
+                    { { -33L, -34L }, { -35L, -36L }, { -37L, -38L }, { -39L, -40L } },
+                    { { -41L, -42L }, { -43L, -44L }, { -45L, -46L }, { -47L, -48L } }
+                },
+                UnsignedLongLongMultiArrayField = new[,,]
+                {
+                    { { 49UL, 50UL }, { 51UL, 52UL }, { 53UL, 54UL }, { 55UL, 56UL } },
+                    { { 57UL, 58UL }, { 59UL, 60UL }, { 61UL, 62UL }, { 63UL, 64UL } },
+                    { { 65UL, 66UL }, { 67UL, 68UL }, { 69UL, 70UL }, { 71UL, 72UL } }
+                },
+                FloatMultiArrayField = new[,,]
+                {
+                    { { 01.01f, 02.02f }, { 03.03f, 04.04f }, { 05.05f, 06.06f }, { 07.07f, 08.08f } },
+                    { { 09.09f, 10.10f }, { 11.11f, 12.12f }, { 13.13f, 14.14f }, { 15.15f, 16.16f } },
+                    { { 17.17f, 18.18f }, { 19.19f, 20.20f }, { 21.21f, 22.22f }, { 23.23f, 24.24f } }
+                },
+                DoubleMultiArrayField = new[,,]
+                {
+                    { { 01.01, 02.02 }, { 03.03, 04.04 }, { 05.05, 06.06 }, { 07.07, 08.08 } },
+                    { { 09.09, 10.10 }, { 11.11, 12.12 }, { 13.13, 14.14 }, { 15.15, 16.16 } },
+                    { { 17.17, 18.18 }, { 19.19, 20.20 }, { 21.21, 22.22 }, { 23.23, 24.24 } }
+                },
+                LongDoubleMultiArrayField = new[,,]
+                {
+                    { { 01.01m, 02.02m }, { 03.03m, 04.04m }, { 05.05m, 06.06m }, { 07.07m, 08.08m } },
+                    { { 09.09m, 10.10m }, { 11.11m, 12.12m }, { 13.13m, 14.14m }, { 15.15m, 16.16m } },
+                    { { 17.17m, 18.18m }, { 19.19m, 20.20m }, { 21.21m, 22.22m }, { 23.23m, 24.24m } }
+                },
+            };
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.CharMultiArrayField, received.CharMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.WCharMultiArrayField, received.WCharMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.OctetMultiArrayField, received.OctetMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.ShortMultiArrayField, received.ShortMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.UnsignedShortMultiArrayField, received.UnsignedShortMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.LongMultiArrayField, received.LongMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.UnsignedLongMultiArrayField, received.UnsignedLongMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.LongLongMultiArrayField, received.LongLongMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.UnsignedLongLongMultiArrayField, received.UnsignedLongLongMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.FloatMultiArrayField, received.FloatMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.DoubleMultiArrayField, received.DoubleMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.LongDoubleMultiArrayField, received.LongDoubleMultiArrayField));
+
+            Assert.AreEqual(typeof(bool[,,]), data.BooleanMultiArrayField.GetType());
+            Assert.AreEqual(typeof(char[,,]), data.CharMultiArrayField.GetType());
+            Assert.AreEqual(typeof(char[,,]), data.WCharMultiArrayField.GetType());
+            Assert.AreEqual(typeof(byte[,,]), data.OctetMultiArrayField.GetType());
+            Assert.AreEqual(typeof(short[,,]), data.ShortMultiArrayField.GetType());
+            Assert.AreEqual(typeof(ushort[,,]), data.UnsignedShortMultiArrayField.GetType());
+            Assert.AreEqual(typeof(int[,,]), data.LongMultiArrayField.GetType());
+            Assert.AreEqual(typeof(uint[,,]), data.UnsignedLongMultiArrayField.GetType());
+            Assert.AreEqual(typeof(long[,,]), data.LongLongMultiArrayField.GetType());
+            Assert.AreEqual(typeof(ulong[,,]), data.UnsignedLongLongMultiArrayField.GetType());
+            Assert.AreEqual(typeof(float[,,]), data.FloatMultiArrayField.GetType());
+            Assert.AreEqual(typeof(double[,,]), data.DoubleMultiArrayField.GetType());
+            Assert.AreEqual(typeof(decimal[,,]), data.LongDoubleMultiArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.BooleanMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.BooleanMultiArrayField.Length);
+            foreach (var i in defaultStruct.BooleanMultiArrayField)
+            {
+                Assert.AreEqual(default(bool), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.CharMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.CharMultiArrayField.Length);
+            foreach (var i in defaultStruct.CharMultiArrayField)
+            {
+                Assert.AreEqual(default(char), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.WCharMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.WCharMultiArrayField.Length);
+            foreach (var i in defaultStruct.WCharMultiArrayField)
+            {
+                Assert.AreEqual(default(char), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.OctetMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.OctetMultiArrayField.Length);
+            foreach (var i in defaultStruct.OctetMultiArrayField)
+            {
+                Assert.AreEqual(default(byte), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.ShortMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.ShortMultiArrayField.Length);
+            foreach (var i in defaultStruct.ShortMultiArrayField)
+            {
+                Assert.AreEqual(default(short), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UnsignedShortMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.UnsignedShortMultiArrayField.Length);
+            foreach (var i in defaultStruct.UnsignedShortMultiArrayField)
+            {
+                Assert.AreEqual(default(ushort), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.LongMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.LongMultiArrayField.Length);
+            foreach (var i in defaultStruct.LongMultiArrayField)
+            {
+                Assert.AreEqual(default(int), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UnsignedLongMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.UnsignedLongMultiArrayField.Length);
+            foreach (var i in defaultStruct.UnsignedLongMultiArrayField)
+            {
+                Assert.AreEqual(default(uint), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.LongLongMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.LongLongMultiArrayField.Length);
+            foreach (var i in defaultStruct.LongLongMultiArrayField)
+            {
+                Assert.AreEqual(default(long), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UnsignedLongLongMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.UnsignedLongLongMultiArrayField.Length);
+            foreach (var i in defaultStruct.UnsignedLongLongMultiArrayField)
+            {
+                Assert.AreEqual(default(ulong), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.FloatMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.FloatMultiArrayField.Length);
+            foreach (var i in defaultStruct.FloatMultiArrayField)
+            {
+                Assert.AreEqual(default(float), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.DoubleMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.DoubleMultiArrayField.Length);
+            foreach (var i in defaultStruct.DoubleMultiArrayField)
+            {
+                Assert.AreEqual(default(double), i);
+            }
+
+            Assert.IsNotNull(defaultStruct.LongDoubleMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.LongDoubleMultiArrayField.Length);
+            foreach (var i in defaultStruct.LongDoubleMultiArrayField)
+            {
+                Assert.AreEqual(default(decimal), i);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringTypes()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -901,6 +1117,15 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_STRING_CONST.Value);
             Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_WSTRING_CONST.Value);
             Assert.AreEqual(TestEnum.ENUM6, TEST_ENUM_CONST.Value);
+        }
+        #endregion
+
+        #region Methods
+        private bool CompareMultiArray<T>(T[,,] data1, T[,,] data2)
+        {
+            return data1.Rank == data2.Rank &&
+                   Enumerable.Range(0, data1.Rank).All(dimension => data1.GetLength(dimension) == data2.GetLength(dimension)) &&
+                   data1.Cast<T>().SequenceEqual(data2.Cast<T>());
         }
         #endregion
     }

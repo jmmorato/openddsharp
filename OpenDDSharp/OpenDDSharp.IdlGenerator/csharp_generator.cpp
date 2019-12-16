@@ -528,7 +528,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 		ret = base_type;
 		ret.append("[");
 		for (unsigned int i = 1; i < arr_type->n_dims(); i++) {
-			ret.append(", ");
+			ret.append(",");
 		}
 		ret.append("]");
 		break;
@@ -1407,7 +1407,183 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			}
 		}
 		else {
-			// TODO: Multidimensional arrays
+			ret.append(indent);
+			ret.append("    if (");
+			ret.append(name);
+			ret.append(" != null)\n");
+
+			ret.append(indent);
+			ret.append("    {\n");
+
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				// TODO
+				//// Multi-dimensional array of structs
+				//if (StructMultiArray != null)
+				//{
+				//	NestedTestStructWrapper[] aux = new NestedTestStructWrapper[24];
+				//	int i = 0;
+				//	foreach(NestedTestStruct s in StructMultiArray)
+				//	{
+				//		if (s != null)
+				//			aux[i] = s.ToNative(toRelease);
+
+				//		i++;
+				//	}
+
+				//	Helper.MultiArrayToPtr<NestedTestStructWrapper>(aux, ref wrapper.StructMultiArray);
+				//	toRelease.Add(wrapper.StructMultiArray);
+				//}
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				// TODO
+				//// Multi-dimensional array of strings
+				//if (StringMultiArray != null)
+				//{
+				//	toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray, false));
+				//	toRelease.Add(wrapper.StringMultiArray);
+				//}
+
+				//// Multi-dimensional array of wstrings
+				//if (WStringMultiArray != null)
+				//{
+				//	toRelease.AddRange(Helper.StringMultiArrayToPtr(WStringMultiArray, ref wrapper.WStringMultiArray, true));
+				//	toRelease.Add(wrapper.WStringMultiArray);
+				//}
+				break;
+			}
+			case AST_Decl::NT_pre_defined:
+			{
+				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+				if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {
+					
+					ret.append(indent);
+					ret.append("        MarshalHelper.BooleanMultiArrayToPtr(");
+					ret.append(name);
+					ret.append(", ref wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("        toRelease.Add(wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_char) {
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.MultiArrayToPtr<byte>(");
+					ret.append(name);
+					ret.append(", ref wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("        toRelease.Add(wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+					ret.append(indent);
+					ret.append("        double[");
+					for (ACE_UINT32 i = 1; i < arr_type->n_dims(); i++) {
+						ret.append(",");						
+					}
+					ret.append("] aux = new double[");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						if (i + 1 < arr_type->n_dims()) {
+							ret.append(", ");
+						}						
+					}
+					ret.append("];\n");
+					
+					std::string loop_indent(indent);
+					loop_indent.append("        ");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append(loop_indent);
+						ret.append("for (int i");
+						ret.append(std::to_string(i));
+						ret.append(" = 0; i");
+						ret.append(std::to_string(i));
+						ret.append(" < ");
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						ret.append("; ++i");
+						ret.append(std::to_string(i));
+						ret.append(") {\n");
+
+						loop_indent.append("    ");
+					}
+
+					ret.append(loop_indent);
+					ret.append("aux[");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("i");
+						ret.append(std::to_string(i));
+						if (i + 1 < arr_type->n_dims()) {
+							ret.append(", ");
+						}
+					}
+					ret.append("]  = Convert.ToDouble(");
+					ret.append(name);
+					ret.append("[");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("i");
+						ret.append(std::to_string(i));
+						if (i + 1 < arr_type->n_dims()) {
+							ret.append(", ");
+						}
+					}
+					ret.append("]);\n");
+
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						loop_indent.erase(0, 4);
+						ret.append(loop_indent);
+						ret.append("}\n");
+					}
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.MultiArrayToPtr<Double>(aux, ref wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("        toRelease.Add(wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+					break;
+				}
+			}
+			default:
+			{
+				ret.append(indent);
+				ret.append("        MarshalHelper.MultiArrayToPtr<");
+				ret.append(base_type);
+				ret.append(">(");
+				ret.append(name);
+				ret.append(", ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("        toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
+			}
+
+			ret.append(indent);
+			ret.append("    }\n");
 		}
 
 		break;
@@ -1749,7 +1925,228 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			}
 		}
 		else {
-			// TODO: Multidimensional arrays
+			switch (base_node_type)
+			{
+			case AST_Decl::NT_union:
+			case AST_Decl::NT_struct:
+			{
+				// TODO
+				/*if (wrapper.StructMultiArray != null)
+				{
+					if (StructMultiArray == null)
+					{
+						StructMultiArray = new NestedTestStruct[3, 4, 2];
+					}
+
+					NestedTestStructWrapper[] aux_StructMultiArray = new NestedTestStructWrapper[24];
+					Helper.PtrToMultiArray<NestedTestStructWrapper>(wrapper.StructMultiArray, aux_StructMultiArray);
+					int[] dimensions = new int[StructMultiArray.Rank];
+					for (int i = 0; i < 24; i++)
+					{
+						if (i > 0)
+						{
+							Helper.UpdateDimensionsArray(StructMultiArray, dimensions);
+						}
+
+						NestedTestStruct aux = new NestedTestStruct();
+						aux.FromNative(aux_StructMultiArray[i]);
+						StructMultiArray.SetValue(aux, dimensions);
+					}
+				}*/
+				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				// TODO
+				//// Multi-dimensional array of strings
+				//if (StringMultiArray == null)
+				//{
+				//	StringMultiArray = new string[3, 4, 2];
+				//}
+				//Helper.PtrToStringMultiArray(wrapper.StringMultiArray, StringMultiArray, false);
+
+				//// Multi-dimensional array of wstrings
+				//if (WStringMultiArray == null)
+				//{
+				//	WStringMultiArray = new string[3, 4, 2];
+				//}
+				break;
+			}
+			case AST_Decl::NT_pre_defined:
+			{
+				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+				if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {					
+					ret.append("    if (");
+					ret.append(name);
+					ret.append(" == null)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        ");
+					ret.append(name);
+					ret.append(" = ");
+					ret.append(get_csharp_default_value(type));
+					ret.append(";\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
+
+					ret.append(indent);
+					ret.append("    MarshalHelper.PtrToBooleanMultiArray(wrapper.");
+					ret.append(name);
+					ret.append(", ");
+					ret.append(name);
+					ret.append(");\n");
+					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_char) {
+					ret.append("    if (");
+					ret.append(name);
+					ret.append(" == null)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        ");
+					ret.append(name);
+					ret.append(" = ");
+					ret.append(get_csharp_default_value(type));
+					ret.append(";\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
+
+					ret.append(indent);
+					ret.append("    MarshalHelper.PtrToMultiArray<byte>(wrapper.");					
+					ret.append(name);
+					ret.append(", ");
+					ret.append(name);
+					ret.append(");\n");
+					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+					ret.append("    if (");
+					ret.append(name);
+					ret.append(" == null)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        ");
+					ret.append(name);
+					ret.append(" = ");
+					ret.append(get_csharp_default_value(type));
+					ret.append(";\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        double[");
+					for (ACE_UINT32 i = 1; i < arr_type->n_dims(); i++) {
+						ret.append(",");
+					}
+					ret.append("] aux = new double[");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						if (i + 1 < arr_type->n_dims()) {
+							ret.append(", ");
+						}
+					}
+					ret.append("];\n");
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.PtrToMultiArray<Double>(wrapper.");
+					ret.append(name);
+					ret.append(", aux);\n");
+
+					std::string loop_indent(indent);
+					loop_indent.append("        ");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append(loop_indent);
+						ret.append("for (int i");
+						ret.append(std::to_string(i));
+						ret.append(" = 0; i");
+						ret.append(std::to_string(i));
+						ret.append(" < ");
+						ret.append(std::to_string(dims[i]->ev()->u.ulval));
+						ret.append("; ++i");
+						ret.append(std::to_string(i));
+						ret.append(") {\n");
+
+						loop_indent.append("    ");
+					}
+
+					ret.append(loop_indent);
+					ret.append(name);
+					ret.append("[");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("i");
+						ret.append(std::to_string(i));
+						if (i + 1 < arr_type->n_dims()) {
+							ret.append(", ");
+						}
+					}
+					ret.append("] = Convert.ToDecimal(aux[");
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						ret.append("i");
+						ret.append(std::to_string(i));
+						if (i + 1 < arr_type->n_dims()) {
+							ret.append(", ");
+						}
+					}
+					ret.append("]);\n");
+
+					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+						loop_indent.erase(0, 4);
+						ret.append(loop_indent);
+						ret.append("}\n");
+					}
+
+					ret.append(indent);
+					ret.append("    }\n");
+					break;
+				}
+			}
+			default:
+			{				
+				ret.append("    if (");
+				ret.append(name);
+				ret.append(" == null)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(name);
+				ret.append(" = ");
+				ret.append(get_csharp_default_value(type));
+				ret.append(";\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
+
+				ret.append(indent);
+				ret.append("    MarshalHelper.PtrToMultiArray<");
+				ret.append(base_type);
+				ret.append(">(wrapper.");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
+			}
 		}
 		break;
 	}
