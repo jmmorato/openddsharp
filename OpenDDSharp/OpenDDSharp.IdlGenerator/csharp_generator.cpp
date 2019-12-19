@@ -342,13 +342,15 @@ std::string csharp_generator::implement_struct_constructor(const std::vector<AST
 		if (type->node_type() != AST_Decl::NT_enum) {
 			char* field_name = field->local_name()->get_string();
 			//field_name[0] = tolower(field_name[0]);
-			std::string default_value = get_csharp_default_value(type);			
+			std::string default_value = get_csharp_default_value(type);
+			std::string initialization = get_csharp_constructor_initialization(type, field_name);
 
 			ret.append(indent + "    _");
 			ret.append(field_name);
 			ret.append(" = ");
 			ret.append(default_value);
-			ret.append(";\n");			
+			ret.append(";\n");
+			ret.append(initialization);
 		}
 	}
 
@@ -884,26 +886,12 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 			ret = "new ";
 			ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
 			ret.append("[");
+			ret.append(std::to_string(dims[0]->ev()->u.ulval));
 			for (unsigned int i = 1; i < total_dim; i++) {
 				ret.append(",");
+				ret.append(std::to_string(dims[i]->ev()->u.ulval));
 			}
-			ret.append("] { ");
-
-			if (arr_type->n_dims() == 1) {
-				unsigned int dim = dims[0]->ev()->u.ulval;
-				for (unsigned int i = 0; i < dim; i++) {
-					ret.append("new ");
-					ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
-					ret.append("()");
-					if (i + 1 < dim) {
-						ret.append(", ");
-					}
-				}
-				ret.append(" }");
-			}
-			else {
-				// TODO: Implement multiarray
-			}
+			ret.append("]");
 			break;
 		}
 		case AST_Decl::NT_string:
@@ -911,39 +899,12 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 		{
 			unsigned int total_dim = arr_type->n_dims();
 			ret = "new string[";
+			ret.append(std::to_string(dims[0]->ev()->u.ulval));
 			for (unsigned int i = 1; i < total_dim; i++) {
-				ret.append(",");				
+				ret.append(",");
+				ret.append(std::to_string(dims[i]->ev()->u.ulval));
 			}
-			ret.append("] { ");
-
-			if (arr_type->n_dims() == 1) {				
-				unsigned int dim = dims[0]->ev()->u.ulval;
-				for (unsigned int i = 0; i < dim; i++) {
-					ret.append("string.Empty");
-					if (i + 1 < dim) {
-						ret.append(", ");
-					}
-				}				
-				ret.append(" }");
-			}
-			else {
-				// TODO: something similar but correctly formated
-				/*for (unsigned int i = 0; i < total_dim; i++) {
-					unsigned int dim = dims[i]->ev()->u.ulval;
-					for (unsigned int j = 0; j < dim; j++) {
-						ret.append("string.Empty");
-						if (j + 1 < dim) {
-							ret.append(", ");
-						}
-					}
-					if (i + 1 < total_dim)
-					{
-						ret.append("\n");
-					}
-				}
-				ret.append(" }");*/
-				// TODO: Implement multiarray
-			}
+			ret.append("]");
 			break;
 		}
 		default:
@@ -975,6 +936,119 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 			ret.append(std::to_string(bound));
 		}
 		ret.append(")");
+		break;
+	}
+	default:
+		break;
+	}
+
+	return ret;
+}
+
+std::string csharp_generator::get_csharp_constructor_initialization(AST_Type* type, const char * name) {
+	AST_Decl::NodeType node_type = type->node_type();
+	std::string ret("");
+
+	switch (node_type)
+	{
+	case AST_Decl::NT_typedef:
+	{
+		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		ret = get_csharp_constructor_initialization(typedef_type->base_type(), name);
+		break;
+	}
+	case AST_Decl::NT_array:
+	{
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		std::string base_type = get_csharp_type(arr_type->base_type());
+		AST_Expression** dims = arr_type->dims();
+		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+
+		switch (base_node_type)
+		{
+		case AST_Decl::NT_union:
+		case AST_Decl::NT_struct:
+		{
+			std::string loop_indent("            ");
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				ret.append(loop_indent);
+				ret.append("for (int i");
+				ret.append(std::to_string(i));
+				ret.append(" = 0; i");
+				ret.append(std::to_string(i));
+				ret.append(" < ");
+				ret.append(std::to_string(dims[i]->ev()->u.ulval));
+				ret.append("; ++i");
+				ret.append(std::to_string(i));
+				ret.append(") {\n");
+
+				loop_indent.append("    ");
+			}
+
+			ret.append(loop_indent);
+			ret.append(name);
+			ret.append("[");
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				ret.append("i");
+				ret.append(std::to_string(i));
+				if (i + 1 < arr_type->n_dims()) {
+					ret.append(", ");
+				}
+			}
+			ret.append("] = new ");
+			ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+			ret.append("();\n");
+
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				loop_indent.erase(0, 4);
+				ret.append(loop_indent);
+				ret.append("}\n");
+			}
+			break;
+		}
+		case AST_Decl::NT_string:
+		case AST_Decl::NT_wstring:
+		{
+			std::string loop_indent("            ");
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				ret.append(loop_indent);
+				ret.append("for (int i");
+				ret.append(std::to_string(i));
+				ret.append(" = 0; i");
+				ret.append(std::to_string(i));
+				ret.append(" < ");
+				ret.append(std::to_string(dims[i]->ev()->u.ulval));
+				ret.append("; ++i");
+				ret.append(std::to_string(i));
+				ret.append(") {\n");
+
+				loop_indent.append("    ");
+			}
+
+			ret.append(loop_indent);
+			ret.append(name);
+			ret.append("[");
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				ret.append("i");
+				ret.append(std::to_string(i));
+				if (i + 1 < arr_type->n_dims()) {
+					ret.append(", ");
+				}
+			}
+			ret.append("] = string.Empty;\n");
+
+			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+				loop_indent.erase(0, 4);
+				ret.append(loop_indent);
+				ret.append("}\n");
+			}
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
 		break;
 	}
 	default:
@@ -1442,20 +1516,22 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				// TODO
-				//// Multi-dimensional array of strings
-				//if (StringMultiArray != null)
-				//{
-				//	toRelease.AddRange(Helper.StringMultiArrayToPtr(StringMultiArray, ref wrapper.StringMultiArray, false));
-				//	toRelease.Add(wrapper.StringMultiArray);
-				//}
+				ret.append(indent);
+				ret.append("    toRelease.AddRange(MarshalHelper.StringMultiArrayToPtr(");
+				ret.append(name);
+				ret.append(", ref wrapper.");
+				ret.append(name);
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append(", false));\n");
+				}
+				else {
+					ret.append(", true));\n");
+				}
 
-				//// Multi-dimensional array of wstrings
-				//if (WStringMultiArray != null)
-				//{
-				//	toRelease.AddRange(Helper.StringMultiArrayToPtr(WStringMultiArray, ref wrapper.WStringMultiArray, true));
-				//	toRelease.Add(wrapper.WStringMultiArray);
-				//}
+				ret.append(indent);
+				ret.append("    toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
 				break;
 			}
 			case AST_Decl::NT_enum:
@@ -1602,7 +1678,6 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(indent);
 			ret.append("    }\n");
 		}
-
 		break;
 	}
 	default:
@@ -1974,20 +2049,35 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			}
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
-			{
-				// TODO
-				//// Multi-dimensional array of strings
-				//if (StringMultiArray == null)
-				//{
-				//	StringMultiArray = new string[3, 4, 2];
-				//}
-				//Helper.PtrToStringMultiArray(wrapper.StringMultiArray, StringMultiArray, false);
+			{				
+				ret.append("    if (");
+				ret.append(name);
+				ret.append(" == null)\n");
 
-				//// Multi-dimensional array of wstrings
-				//if (WStringMultiArray == null)
-				//{
-				//	WStringMultiArray = new string[3, 4, 2];
-				//}
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(name);
+				ret.append(" = ");
+				ret.append(get_csharp_default_value(type));
+				ret.append(";\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
+
+				ret.append(indent);
+				ret.append("    MarshalHelper.PtrToStringMultiArray(wrapper.");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append(", false);\n");
+				}
+				else {
+					ret.append(", true);\n");
+				}
 				break;
 			}
 			case AST_Decl::NT_enum:

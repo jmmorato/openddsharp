@@ -285,6 +285,8 @@ namespace Test
         Double[,,] _DoubleMultiArrayField;
         Decimal[,,] _LongDoubleMultiArrayField;
         Test.TestEnum[,,] _EnumMultiArrayField;
+        string[,,] _StringMultiArrayField;
+        string[,,] _WStringMultiArrayField;
         #endregion
 
         #region Properties
@@ -791,6 +793,18 @@ namespace Test
             get { return _EnumMultiArrayField; }
             set { _EnumMultiArrayField = value; }
         }
+
+        public string[,,] StringMultiArrayField
+        {
+            get { return _StringMultiArrayField; }
+            set { _StringMultiArrayField = value; }
+        }
+
+        public string[,,] WStringMultiArrayField
+        {
+            get { return _WStringMultiArrayField; }
+            set { _WStringMultiArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -861,9 +875,18 @@ namespace Test
             _FloatArrayField = new Single[5];
             _DoubleArrayField = new Double[5];
             _LongDoubleArrayField = new Decimal[5];
-            _StringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
-            _WStringArrayField = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
-            _StructArrayField = new Test.NestedStruct[] { new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct(), new Test.NestedStruct() };
+            _StringArrayField = new string[5];
+            for (int i0 = 0; i0 < 5; ++i0) {
+                StringArrayField[i0] = string.Empty;
+            }
+            _WStringArrayField = new string[5];
+            for (int i0 = 0; i0 < 5; ++i0) {
+                WStringArrayField[i0] = string.Empty;
+            }
+            _StructArrayField = new Test.NestedStruct[5];
+            for (int i0 = 0; i0 < 5; ++i0) {
+                StructArrayField[i0] = new Test.NestedStruct();
+            }
             _EnumArrayField = new Test.TestEnum[5];
             _ShortMultiArrayField = new Int16[3, 4, 2];
             _UnsignedShortMultiArrayField = new UInt16[3, 4, 2];
@@ -879,6 +902,22 @@ namespace Test
             _DoubleMultiArrayField = new Double[3, 4, 2];
             _LongDoubleMultiArrayField = new Decimal[3, 4, 2];
             _EnumMultiArrayField = new Test.TestEnum[3, 4, 2];
+            _StringMultiArrayField = new string[3,4,2];
+            for (int i0 = 0; i0 < 3; ++i0) {
+                for (int i1 = 0; i1 < 4; ++i1) {
+                    for (int i2 = 0; i2 < 2; ++i2) {
+                        StringMultiArrayField[i0, i1, i2] = string.Empty;
+                    }
+                }
+            }
+            _WStringMultiArrayField = new string[3,4,2];
+            for (int i0 = 0; i0 < 3; ++i0) {
+                for (int i1 = 0; i1 < 4; ++i1) {
+                    for (int i2 = 0; i2 < 2; ++i2) {
+                        WStringMultiArrayField[i0, i1, i2] = string.Empty;
+                    }
+                }
+            }
         }
         #endregion
 
@@ -1144,6 +1183,16 @@ namespace Test
                 MarshalHelper.EnumMultiArrayToPtr<Test.TestEnum>(EnumMultiArrayField, ref wrapper.EnumMultiArrayField);
                 toRelease.Add(wrapper.EnumMultiArrayField);
             }
+            if (StringMultiArrayField != null)
+            {
+            toRelease.AddRange(MarshalHelper.StringMultiArrayToPtr(StringMultiArrayField, ref wrapper.StringMultiArrayField, false));
+            toRelease.Add(wrapper.StringMultiArrayField);
+            }
+            if (WStringMultiArrayField != null)
+            {
+            toRelease.AddRange(MarshalHelper.StringMultiArrayToPtr(WStringMultiArrayField, ref wrapper.WStringMultiArrayField, true));
+            toRelease.Add(wrapper.WStringMultiArrayField);
+            }
 
             return wrapper;
         }
@@ -1364,6 +1413,16 @@ namespace Test
                 EnumMultiArrayField = new Test.TestEnum[3, 4, 2];
             }
             MarshalHelper.PtrToEnumMultiArray<Test.TestEnum>(wrapper.EnumMultiArrayField, EnumMultiArrayField);
+            if (StringMultiArrayField == null)
+            {
+                StringMultiArrayField = new string[3,4,2];
+            }
+            MarshalHelper.PtrToStringMultiArray(wrapper.StringMultiArrayField, StringMultiArrayField, false);
+            if (WStringMultiArrayField == null)
+            {
+                WStringMultiArrayField = new string[3,4,2];
+            }
+            MarshalHelper.PtrToStringMultiArray(wrapper.WStringMultiArrayField, WStringMultiArrayField, true);
         }
         #endregion
     }
@@ -1477,6 +1536,8 @@ namespace Test
         public IntPtr DoubleMultiArrayField;
         public IntPtr LongDoubleMultiArrayField;
         public IntPtr EnumMultiArrayField;
+        public IntPtr StringMultiArrayField;
+        public IntPtr WStringMultiArrayField;
     }
 
 	public class TestStructTypeSupport

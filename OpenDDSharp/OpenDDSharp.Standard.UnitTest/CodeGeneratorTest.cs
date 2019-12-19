@@ -870,6 +870,57 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringMultiArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                StringMultiArrayField = new[,,]
+                {
+                    { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
+                    { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
+                    { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
+                },
+                WStringMultiArrayField = new[,,]
+                {
+                    { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
+                    { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
+                    { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
+                },
+            };
+
+            _dataWriter.Write(data);
+
+            // TODO: Wait for acknowledgments
+            System.Threading.Thread.Sleep(500);
+
+            TestStruct received = new TestStruct();
+            var ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(CompareMultiArray(data.StringMultiArrayField, received.StringMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.WStringMultiArrayField, received.WStringMultiArrayField));
+
+            Assert.AreEqual(typeof(string[,,]), data.StringMultiArrayField.GetType());
+            Assert.AreEqual(typeof(string[,,]), data.WStringMultiArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StringMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.StringMultiArrayField.Length);
+            foreach (var s in defaultStruct.StringMultiArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+
+            Assert.IsNotNull(defaultStruct.WStringMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.WStringMultiArrayField.Length);
+            foreach (var s in defaultStruct.WStringMultiArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructuresTypes()
         {
             TestStruct defaultStruct = new TestStruct();

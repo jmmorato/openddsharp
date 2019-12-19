@@ -683,23 +683,52 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				// TODO
-				//if (StringMultiArray != NULL)
-				//{
-				//	char** arr_StringMultiArray = new char*[24];
-				//	marshal::ptr_to_basic_string_multi_array(StringMultiArray, arr_StringMultiArray, 24);
-				//	ACE_OS::memcpy(nativeData.StringMultiArray, arr_StringMultiArray, sizeof(CORBA::Char*) * 24);
-				//	delete[] arr_StringMultiArray;
-				//}
+				ret.append("            ");
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("char");
+				}
+				else {
+					ret.append("wchar_t");
+				}
+				ret.append("** arr_");
+				ret.append(name);
+				ret.append(" = new ");
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("char");
+				}
+				else {
+					ret.append("wchar_t");
+				}
+				ret.append("*[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
 
-				//// Multi-dimensional array of wstrings
-				//if (WStringMultiArray != NULL)
-				//{
-				//	wchar_t** arr_WStringMultiArray = new wchar_t*[24];
-				//	marshal::ptr_to_wide_string_multi_array(WStringMultiArray, arr_WStringMultiArray, 24);
-				//	ACE_OS::memcpy(nativeData.WStringMultiArray, arr_WStringMultiArray, sizeof(CORBA::WChar*) * 24);
-				//	delete[] arr_WStringMultiArray;
-				//}
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("            marshal::ptr_to_basic_string_multi_array(");
+				}
+				else {
+					ret.append("            marshal::ptr_to_wide_string_multi_array(");
+				}
+				ret.append(name);
+				ret.append(", arr_");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				ret.append("            ACE_OS::memcpy(ret.");
+				ret.append(name);
+				ret.append(", arr_");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append("*) * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				ret.append("            delete[] arr_");
+				ret.append(name);
+				ret.append(";\n");
 				break;
 			}
 			case AST_Decl::NT_pre_defined:
@@ -1086,23 +1115,42 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				//// TODO
-				//if (nativeData.StringMultiArray != NULL)
-				//{
-				//	CORBA::Char** arr_StringMultiArray = new CORBA::Char*[24];
-				//	ACE_OS::memcpy(arr_StringMultiArray, nativeData.StringMultiArray, sizeof(CORBA::Char*) * 24);
-				//	marshal::basic_string_multi_array_to_ptr(arr_StringMultiArray, StringMultiArray, 24);
-				//	delete[] arr_StringMultiArray;
-				//}
+				ret.append("            ");
+				ret.append(base_type);
+				ret.append("* arr_");
+				ret.append(name);
+				ret.append(" = new ");
+				ret.append(base_type);
+				ret.append("[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
 
-				//// Multi-dimensional array of strings
-				//if (nativeData.WStringMultiArray != NULL)
-				//{
-				//	CORBA::WChar** arr_WStringMultiArray = new CORBA::WChar*[24];
-				//	ACE_OS::memcpy(arr_WStringMultiArray, nativeData.WStringMultiArray, sizeof(CORBA::WChar*) * 24);
-				//	marshal::wide_string_multi_array_to_ptr(arr_WStringMultiArray, WStringMultiArray, 24);
-				//	delete[] arr_WStringMultiArray;
-				//}
+				ret.append("            ACE_OS::memcpy(arr_");
+				ret.append(name);
+				ret.append(", native.");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("            marshal::basic_string_multi_array_to_ptr(arr_");
+				}
+				else {
+					ret.append("            marshal::wide_string_multi_array_to_ptr(arr_");
+				}
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				ret.append("            delete[] arr_");
+				ret.append(name);
+				ret.append(";\n");
 				break;
 			}
 			case AST_Decl::NT_pre_defined:
@@ -1308,6 +1356,11 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		AST_Expression** dims = arr_type->dims();
 		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
 
+		ACE_UINT32 total_dim = 1;
+		for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+			total_dim *= dims[i]->ev()->u.ulval;
+		}
+
 		ret.append("        if (");
 		ret.append(name);
 		ret.append(" != NULL)\n");
@@ -1391,17 +1444,16 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
 			{
-				////TODO
-				//if (StringMultiArray != NULL)
-				//{
-				//	marshal::release_basic_string_multi_array_ptr(StringMultiArray, 24);
-				//}
-
-				//// Release pointer to the multi-dimensional array of wstrings
-				//if (WStringMultiArray != NULL)
-				//{
-				//	marshal::release_wide_string_multi_array_ptr(WStringMultiArray, 24);
-				//}
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("            marshal::release_basic_string_multi_array_ptr(");					
+				}
+				else {
+					ret.append("            marshal::release_wide_string_multi_array_ptr(");
+				}
+				ret.append(name);
+				ret.append(", ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
 				break;
 			}
 			default:
