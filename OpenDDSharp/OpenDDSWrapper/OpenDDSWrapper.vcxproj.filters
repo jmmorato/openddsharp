@@ -45,6 +45,9 @@
     <ClInclude Include="marshal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DomainParticipant.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

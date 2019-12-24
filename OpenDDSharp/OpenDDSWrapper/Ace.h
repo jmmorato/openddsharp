@@ -17,18 +17,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#include "ParticipantService.h"
+#pragma once
+#include "Utils.h"
+#include "ace/Init_ACE.h"
 
-void ParticipantService_new() {
+EXTERN_METHOD_EXPORT
+int Ace_Init();
 
-}
-
-::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactory()
-{
-    return TheParticipantFactory;
-}
-
-::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactoryParameters(int argc, char *argv[])
-{
-    return ::DDS::DomainParticipantFactory::_duplicate(TheParticipantFactoryWithArgs(argc, argv));
-}
+EXTERN_METHOD_EXPORT
+int Ace_Fini();

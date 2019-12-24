@@ -184,6 +184,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Ace.h" />
     <ClInclude Include="DataReader.h" />
     <ClInclude Include="DataWriter.h" />
     <ClInclude Include="DomainParticipant.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ace.cpp" />
     <ClCompile Include="DataReader.cpp" />
     <ClCompile Include="DataWriter.cpp" />
     <ClCompile Include="DomainParticipant.cpp" />
