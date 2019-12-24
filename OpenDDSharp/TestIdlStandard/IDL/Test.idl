@@ -95,6 +95,8 @@ module Test {
 
 	typedef NestedStruct StructArrayType[5];
 
+	typedef NestedStruct StructMultiArrayType[3][4][2];
+
 	enum TestEnum {
 		ENUM1,
 		ENUM2,
@@ -221,5 +223,7 @@ module Test {
 
 		StringMultiArrayType StringMultiArrayField;
 		WStringMultiArrayType WStringMultiArrayField;
+
+		StructMultiArrayType StructMultiArrayField;
     };
 };

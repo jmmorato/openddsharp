@@ -1494,23 +1494,56 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				// TODO
-				//// Multi-dimensional array of structs
-				//if (StructMultiArray != null)
-				//{
-				//	NestedTestStructWrapper[] aux = new NestedTestStructWrapper[24];
-				//	int i = 0;
-				//	foreach(NestedTestStruct s in StructMultiArray)
-				//	{
-				//		if (s != null)
-				//			aux[i] = s.ToNative(toRelease);
+				ACE_UINT32 total_dim = 1;
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					total_dim *= dims[i]->ev()->u.ulval;
+				}
 
-				//		i++;
-				//	}
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(base_type);
+				ret.append("Wrapper[] aux = new ");
+				ret.append(base_type);
+				ret.append("Wrapper[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
 
-				//	Helper.MultiArrayToPtr<NestedTestStructWrapper>(aux, ref wrapper.StructMultiArray);
-				//	toRelease.Add(wrapper.StructMultiArray);
-				//}
+				ret.append(indent);
+				ret.append("        int i = 0;\n");
+
+				ret.append(indent);
+				ret.append("        foreach(");
+				ret.append(base_type);
+				ret.append(" s in ");
+				ret.append(name);
+				ret.append(")\n");
+
+				ret.append(indent);
+				ret.append("        {\n");
+
+				ret.append(indent);
+				ret.append("            if (s != null)\n");
+
+				ret.append(indent);
+				ret.append("                aux[i] = s.ToNative(toRelease);\n\n");
+
+				ret.append(indent);
+				ret.append("            i++;\n");
+
+				ret.append(indent);
+				ret.append("        }\n");
+
+				ret.append(indent);
+				ret.append("        MarshalHelper.MultiArrayToPtr<");
+				ret.append(base_type);
+				ret.append("Wrapper>(aux, ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("        toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
 				break;
 			}
 			case AST_Decl::NT_string:
@@ -2022,29 +2055,99 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				// TODO
-				/*if (wrapper.StructMultiArray != null)
-				{
-					if (StructMultiArray == null)
-					{
-						StructMultiArray = new NestedTestStruct[3, 4, 2];
-					}
+				ACE_UINT32 total_dim = 1;
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					total_dim *= dims[i]->ev()->u.ulval;
+				}
 
-					NestedTestStructWrapper[] aux_StructMultiArray = new NestedTestStructWrapper[24];
-					Helper.PtrToMultiArray<NestedTestStructWrapper>(wrapper.StructMultiArray, aux_StructMultiArray);
-					int[] dimensions = new int[StructMultiArray.Rank];
-					for (int i = 0; i < 24; i++)
-					{
-						if (i > 0)
-						{
-							Helper.UpdateDimensionsArray(StructMultiArray, dimensions);
-						}
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != null)\n");
 
-						NestedTestStruct aux = new NestedTestStruct();
-						aux.FromNative(aux_StructMultiArray[i]);
-						StructMultiArray.SetValue(aux, dimensions);
-					}
-				}*/
+				ret.append(indent);
+				ret.append("    {\n");				
+
+				ret.append(indent);
+				ret.append("        if (");
+				ret.append(name);
+				ret.append(" == null)\n");
+
+				ret.append(indent);
+				ret.append("        {\n");
+
+				ret.append(indent);
+				ret.append("            ");
+				ret.append(name);
+				ret.append(" = ");
+				ret.append(get_csharp_default_value(type));
+				ret.append(";\n");
+
+				ret.append(indent);
+				ret.append("        }\n");
+
+				ret.append(indent);
+				ret.append("        ");
+				ret.append(base_type);
+				ret.append("Wrapper[] aux_");
+				ret.append(name);
+				ret.append(" = new ");
+				ret.append(base_type);
+				ret.append("Wrapper[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
+
+				ret.append(indent);
+				ret.append("        MarshalHelper.PtrToMultiArray<");
+				ret.append(base_type);
+				ret.append("Wrapper>(wrapper.");
+				ret.append(name);
+				ret.append(", aux_");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("        int[] dimensions = new int[");
+				ret.append(name);
+				ret.append(".Rank];\n");
+
+				ret.append(indent);
+				ret.append("        for (int i = 0; i < ");
+				ret.append(std::to_string(total_dim));
+				ret.append("; i++)\n");
+
+				ret.append(indent);
+				ret.append("        {\n");
+
+				ret.append(indent);
+				ret.append("            if (i > 0)\n");
+
+				ret.append(indent);
+				ret.append("                MarshalHelper.UpdateDimensionsArray(");
+				ret.append(name);
+				ret.append(", dimensions);\n\n");
+
+				ret.append(indent);
+				ret.append("            ");
+				ret.append(base_type);
+				ret.append(" aux = new ");
+				ret.append(base_type);
+				ret.append("();\n");
+
+				ret.append(indent);
+				ret.append("            aux.FromNative(aux_");
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append(indent);
+				ret.append("            ");
+				ret.append(name);
+				ret.append(".SetValue(aux, dimensions);\n");
+
+				ret.append(indent);
+				ret.append("        }\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
 				break;
 			}
 			case AST_Decl::NT_string:

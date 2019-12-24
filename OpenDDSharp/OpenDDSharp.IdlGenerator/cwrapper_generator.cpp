@@ -662,22 +662,62 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				// TODO
-				/*if (StructMultiArray != NULL)
-				{
-					NestedTestStructWrapper arr_StructMultiArray[24];
-					ACE_OS::memcpy(arr_StructMultiArray, StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
+				ret.append("            ");
+				ret.append(base_type);
+				ret.append(" arr_");
+				ret.append(name);
+				ret.append("[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
 
-					int i = 0;
-					for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
-						for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
-							for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
-								nativeData.StructMultiArray[i0][i1][i2] = arr_StructMultiArray[i].to_native();
-								i++;
-							}
-						}
-					}
-				}*/
+				ret.append("            ACE_OS::memcpy(arr_");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n\n");
+
+				ret.append("            int i = 0;\n");
+
+				std::string indent("            ");
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					ret.append(indent);
+					ret.append("for (ACE_UINT32 i");
+					ret.append(std::to_string(i));
+					ret.append(" = 0; i");
+					ret.append(std::to_string(i));
+					ret.append(" < ");
+					ret.append(std::to_string(dims[i]->ev()->u.ulval));
+					ret.append("; ++i");
+					ret.append(std::to_string(i));
+					ret.append(") {\n");
+
+					indent.append("    ");
+				}
+
+				ret.append(indent);
+				ret.append("ret.");
+				ret.append(name);
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					ret.append("[i");
+					ret.append(std::to_string(i));
+					ret.append("]");
+				}
+				ret.append(" = arr_");
+				ret.append(name);
+				ret.append("[i].to_native();\n");
+
+				ret.append(indent);
+				ret.append("i++;\n");
+
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					indent.erase(0, 4);
+					ret.append(indent);
+					ret.append("}\n");
+				}
 				break;
 			}
 			case AST_Decl::NT_string:
@@ -1093,23 +1133,70 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				//// TODO
-				//if (nativeData.StructMultiArray != NULL)
-				//{
-				//	NestedTestStructWrapper arr_StructMultiArray[24];
-				//	int i = 0;
-				//	for (ACE_UINT32 i0 = 0; i0 < 3; ++i0) {
-				//		for (ACE_UINT32 i1 = 0; i1 < 4; ++i1) {
-				//			for (ACE_UINT32 i2 = 0; i2 < 2; ++i2) {
-				//				arr_StructMultiArray[i].from_native(nativeData.StructMultiArray[i0][i1][i2]);
-				//				i++;
-				//			}
-				//		}
-				//	}
+				ret.append("            ");
+				ret.append(base_type);
+				ret.append(" arr_");
+				ret.append(name);
+				ret.append("[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
 
-				//	StructMultiArray = ACE_OS::malloc(sizeof(NestedTestStructWrapper) * 24);
-				//	ACE_OS::memcpy(StructMultiArray, arr_StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
-				//}
+				ret.append("            int i = 0;\n");
+
+				std::string indent("            ");
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					ret.append(indent);
+					ret.append("for (ACE_UINT32 i");
+					ret.append(std::to_string(i));
+					ret.append(" = 0; i");
+					ret.append(std::to_string(i));
+					ret.append(" < ");
+					ret.append(std::to_string(dims[i]->ev()->u.ulval));
+					ret.append("; ++i");
+					ret.append(std::to_string(i));
+					ret.append(") {\n");
+
+					indent.append("    ");
+				}
+
+				ret.append(indent);
+				ret.append("arr_");
+				ret.append(name);
+				ret.append("[i].from_native(native.");
+				ret.append(name);
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					ret.append("[i");
+					ret.append(std::to_string(i));
+					ret.append("]");
+				}
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("i++;\n");
+
+				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+					indent.erase(0, 4);
+					ret.append(indent);
+					ret.append("}\n");
+				}
+
+				ret.append("            ");
+				ret.append(name);
+				ret.append(" = ACE_OS::malloc(sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				ret.append("            ACE_OS::memcpy(");
+				ret.append(name);
+				ret.append(", arr_");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
 				break;
 			}
 			case AST_Decl::NT_string:
@@ -1428,17 +1515,39 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				////TODO
-				//if (StructMultiArray != NULL)
-				//{
-				//	NestedTestStructWrapper arr_StructMultiArray[24];
-				//	ACE_OS::memcpy(arr_StructMultiArray, StructMultiArray, sizeof(NestedTestStructWrapper) * 24);
-				//	for (int i = 0; i < 24; i++)
-				//	{
-				//		arr_StructMultiArray[i].release();
-				//	}
-				//	ACE_OS::free(StructMultiArray);
-				//}
+				ret.append("            ");
+				ret.append(base_type);
+				ret.append(" arr_");
+				ret.append(name);
+				ret.append("[");
+				ret.append(std::to_string(total_dim));
+				ret.append("];\n");
+
+				ret.append("            ACE_OS::memcpy(arr_");
+				ret.append(name);
+				ret.append(", ");
+				ret.append(name);
+				ret.append(", sizeof(");
+				ret.append(base_type);
+				ret.append(") * ");
+				ret.append(std::to_string(total_dim));
+				ret.append(");\n");
+
+				ret.append("            for (int i = 0; i < ");
+				ret.append(std::to_string(total_dim));
+				ret.append("; i++)\n");
+
+				ret.append("            {\n");
+
+				ret.append("                arr_");
+				ret.append(name);
+				ret.append("[i].release();\n");
+
+				ret.append("            }\n");
+
+				ret.append("            ACE_OS::free(");
+				ret.append(name);
+				ret.append(");\n");
 				break;
 			}
 			case AST_Decl::NT_string:

@@ -287,6 +287,7 @@ namespace Test
         Test.TestEnum[,,] _EnumMultiArrayField;
         string[,,] _StringMultiArrayField;
         string[,,] _WStringMultiArrayField;
+        Test.NestedStruct[,,] _StructMultiArrayField;
         #endregion
 
         #region Properties
@@ -805,6 +806,12 @@ namespace Test
             get { return _WStringMultiArrayField; }
             set { _WStringMultiArrayField = value; }
         }
+
+        public Test.NestedStruct[,,] StructMultiArrayField
+        {
+            get { return _StructMultiArrayField; }
+            set { _StructMultiArrayField = value; }
+        }
         #endregion 
 
         #region Constructors
@@ -915,6 +922,14 @@ namespace Test
                 for (int i1 = 0; i1 < 4; ++i1) {
                     for (int i2 = 0; i2 < 2; ++i2) {
                         WStringMultiArrayField[i0, i1, i2] = string.Empty;
+                    }
+                }
+            }
+            _StructMultiArrayField = new Test.NestedStruct[3,4,2];
+            for (int i0 = 0; i0 < 3; ++i0) {
+                for (int i1 = 0; i1 < 4; ++i1) {
+                    for (int i2 = 0; i2 < 2; ++i2) {
+                        StructMultiArrayField[i0, i1, i2] = new Test.NestedStruct();
                     }
                 }
             }
@@ -1193,6 +1208,20 @@ namespace Test
             toRelease.AddRange(MarshalHelper.StringMultiArrayToPtr(WStringMultiArrayField, ref wrapper.WStringMultiArrayField, true));
             toRelease.Add(wrapper.WStringMultiArrayField);
             }
+            if (StructMultiArrayField != null)
+            {
+                Test.NestedStructWrapper[] aux = new Test.NestedStructWrapper[24];
+                int i = 0;
+                foreach(Test.NestedStruct s in StructMultiArrayField)
+                {
+                    if (s != null)
+                        aux[i] = s.ToNative(toRelease);
+
+                    i++;
+                }
+                MarshalHelper.MultiArrayToPtr<Test.NestedStructWrapper>(aux, ref wrapper.StructMultiArrayField);
+                toRelease.Add(wrapper.StructMultiArrayField);
+            }
 
             return wrapper;
         }
@@ -1423,6 +1452,25 @@ namespace Test
                 WStringMultiArrayField = new string[3,4,2];
             }
             MarshalHelper.PtrToStringMultiArray(wrapper.WStringMultiArrayField, WStringMultiArrayField, true);
+            if (wrapper.StructMultiArrayField != null)
+            {
+                if (StructMultiArrayField == null)
+                {
+                    StructMultiArrayField = new Test.NestedStruct[3,4,2];
+                }
+                Test.NestedStructWrapper[] aux_StructMultiArrayField = new Test.NestedStructWrapper[24];
+                MarshalHelper.PtrToMultiArray<Test.NestedStructWrapper>(wrapper.StructMultiArrayField, aux_StructMultiArrayField);
+                int[] dimensions = new int[StructMultiArrayField.Rank];
+                for (int i = 0; i < 24; i++)
+                {
+                    if (i > 0)
+                        MarshalHelper.UpdateDimensionsArray(StructMultiArrayField, dimensions);
+
+                    Test.NestedStruct aux = new Test.NestedStruct();
+                    aux.FromNative(aux_StructMultiArrayField[i]);
+                    StructMultiArrayField.SetValue(aux, dimensions);
+                }
+            }
         }
         #endregion
     }
@@ -1538,6 +1586,7 @@ namespace Test
         public IntPtr EnumMultiArrayField;
         public IntPtr StringMultiArrayField;
         public IntPtr WStringMultiArrayField;
+        public IntPtr StructMultiArrayField;
     }
 
 	public class TestStructTypeSupport

@@ -184,8 +184,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DataReader.h" />
+    <ClInclude Include="DataWriter.h" />
     <ClInclude Include="DomainParticipant.h" />
     <ClInclude Include="DomainParticipantFactory.h" />
+    <ClInclude Include="marshal.h" />
     <ClInclude Include="ParticipantService.h" />
     <ClInclude Include="Publisher.h" />
     <ClInclude Include="QosPolicies.h" />
@@ -193,6 +196,8 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DataReader.cpp" />
+    <ClCompile Include="DataWriter.cpp" />
     <ClCompile Include="DomainParticipant.cpp" />
     <ClCompile Include="DomainParticipantFactory.cpp" />
     <ClCompile Include="ParticipantService.cpp" />

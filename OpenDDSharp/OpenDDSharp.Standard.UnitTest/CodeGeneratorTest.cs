@@ -54,7 +54,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             //_participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            
+
             _publisher = _participant.CreatePublisher();
             Assert.IsNotNull(_publisher);
 
@@ -70,14 +70,15 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(_topic);
 
             _dr = _subscriber.CreateDataReader(_topic);
-            Assert.IsNotNull(_dr);            
+            Assert.IsNotNull(_dr);
             _dataReader = new TestStructDataReader(_dr);
 
             _dw = _publisher.CreateDataWriter(_topic);
-            Assert.IsNotNull(_dw);            
+            Assert.IsNotNull(_dw);
             _dataWriter = new TestStructDataWriter(_dw);
 
             Assert.IsTrue(_dataWriter.WaitForSubscriptions(1, 1000));
+            Assert.IsTrue(_dataReader.WaitForPublications(1, 1000));
         }
 
         [TestCleanup]
@@ -127,21 +128,21 @@ namespace OpenDDSharp.Standard.UnitTest
                 LongDoubleField = 69.69m,
             };
             _dataWriter.Write(data);
-
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-            
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.AreEqual(data.ShortField, received.ShortField);
-            Assert.AreEqual(data.LongField, received.LongField); 
+            Assert.AreEqual(data.LongField, received.LongField);
             Assert.AreEqual(data.LongLongField, received.LongLongField);
             Assert.AreEqual(data.UnsignedShortField, received.UnsignedShortField);
             Assert.AreEqual(data.UnsignedLongField, received.UnsignedLongField);
             Assert.AreEqual(data.UnsignedLongLongField, received.UnsignedLongLongField);
-            Assert.AreEqual(data.CharField, received.CharField); 
+            Assert.AreEqual(data.CharField, received.CharField);
             Assert.AreEqual(data.WCharField, received.WCharField);
             Assert.AreEqual(data.BooleanField, received.BooleanField);
             Assert.AreEqual(data.OctetField, received.OctetField);
@@ -154,7 +155,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(long), data.LongLongField.GetType());
             Assert.AreEqual(typeof(ushort), data.UnsignedShortField.GetType());
             Assert.AreEqual(typeof(uint), data.UnsignedLongField.GetType());
-            Assert.AreEqual(typeof(ulong), data.UnsignedLongLongField.GetType()); 
+            Assert.AreEqual(typeof(ulong), data.UnsignedLongLongField.GetType());
             Assert.AreEqual(typeof(char), data.CharField.GetType());
             Assert.AreEqual(typeof(char), data.WCharField.GetType());
             Assert.AreEqual(typeof(bool), data.BooleanField.GetType());
@@ -189,7 +190,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStruct defaultStruct = new TestStruct();
 
             TestStruct data = new TestStruct
-            {              
+            {
                 BoundedBooleanSequenceField = { true, true, false, false, true },
                 UnboundedBooleanSequenceField = { true, true, false, false, true, true, false },
                 BoundedCharSequenceField = { 'z' },
@@ -219,13 +220,13 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
+            ret = _dataReader.ReadNextSample(received);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);           
             Assert.IsTrue(data.BoundedBooleanSequenceField.SequenceEqual(received.BoundedBooleanSequenceField));
             Assert.IsTrue(data.UnboundedBooleanSequenceField.SequenceEqual(received.UnboundedBooleanSequenceField));
             Assert.IsTrue(data.BoundedCharSequenceField.SequenceEqual(received.BoundedCharSequenceField));
@@ -341,7 +342,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TestStruct data = new TestStruct
             {
-                BooleanArrayField = new [] { true, true, false, false, true },
+                BooleanArrayField = new[] { true, true, false, false, true },
                 CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
                 WCharArrayField = new[] { 'i', 'j', 'k', 'l', 'm' },
                 OctetArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
@@ -357,11 +358,11 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
+            ret = _dataReader.ReadNextSample(received);
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsTrue(data.BooleanArrayField.SequenceEqual(received.BooleanArrayField));
@@ -394,7 +395,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Assert.IsNotNull(defaultStruct.BooleanArrayField);
             Assert.AreEqual(5, defaultStruct.BooleanArrayField.Length);
-            foreach(var i in defaultStruct.BooleanArrayField)
+            foreach (var i in defaultStruct.BooleanArrayField)
             {
                 Assert.AreEqual(default(bool), i);
             }
@@ -491,19 +492,19 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TestStruct data = new TestStruct
             {
-                BooleanMultiArrayField = new[,,]
+                BooleanMultiArrayField = new[, ,]
                 {
                     { { true, false }, { true, false }, { true, false }, { true, false } },
                     { { true, false }, { true, false }, { true, false }, { true, false } },
                     { { true, false }, { true, false }, { true, false }, { true, false } }
                 },
-                CharMultiArrayField = new[,,]
+                CharMultiArrayField = new[, ,]
                 {
                     { { '1', '2' }, { '3', '4' }, { '5', '6' }, { '7', '8' } },
                     { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
                     { { '7', '8' }, { '9', '0' }, { '1', '2' }, { '3', '4' } }
                 },
-                WCharMultiArrayField = new[,,]
+                WCharMultiArrayField = new[, ,]
                 {
                     { { '1', '2' }, { '3', '4' }, { '5', '6' }, { '7', '8' } },
                     { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
@@ -527,43 +528,43 @@ namespace OpenDDSharp.Standard.UnitTest
                     { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
                     { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
                 },
-                LongMultiArrayField = new[,,]
+                LongMultiArrayField = new[, ,]
                 {
                     { { -01, 02 }, { -03, 04 }, { -05, 06 }, { -07, 08 } },
                     { { -09, 10 }, { -11, 12 }, { -13, 14 }, { -15, 16 } },
                     { { -17, 18 }, { -19, 20 }, { -21, 22 }, { -23, 24 } }
                 },
-                UnsignedLongMultiArrayField = new[,,]
+                UnsignedLongMultiArrayField = new[, ,]
                 {
                     { { 25U, 26U }, { 27U, 28U }, { 29U, 30U }, { 31U, 32U } },
                     { { 33U, 34U }, { 35U, 36U }, { 37U, 38U }, { 39U, 40U } },
                     { { 41U, 42U }, { 43U, 44U }, { 45U, 46U }, { 47U, 48U } }
                 },
-                LongLongMultiArrayField = new[,,]
+                LongLongMultiArrayField = new[, ,]
                 {
                     { { -25L, -26L }, { -27L, -28L }, { -29L, -30L }, { -31L, -32L } },
                     { { -33L, -34L }, { -35L, -36L }, { -37L, -38L }, { -39L, -40L } },
                     { { -41L, -42L }, { -43L, -44L }, { -45L, -46L }, { -47L, -48L } }
                 },
-                UnsignedLongLongMultiArrayField = new[,,]
+                UnsignedLongLongMultiArrayField = new[, ,]
                 {
                     { { 49UL, 50UL }, { 51UL, 52UL }, { 53UL, 54UL }, { 55UL, 56UL } },
                     { { 57UL, 58UL }, { 59UL, 60UL }, { 61UL, 62UL }, { 63UL, 64UL } },
                     { { 65UL, 66UL }, { 67UL, 68UL }, { 69UL, 70UL }, { 71UL, 72UL } }
                 },
-                FloatMultiArrayField = new[,,]
+                FloatMultiArrayField = new[, ,]
                 {
                     { { 01.01f, 02.02f }, { 03.03f, 04.04f }, { 05.05f, 06.06f }, { 07.07f, 08.08f } },
                     { { 09.09f, 10.10f }, { 11.11f, 12.12f }, { 13.13f, 14.14f }, { 15.15f, 16.16f } },
                     { { 17.17f, 18.18f }, { 19.19f, 20.20f }, { 21.21f, 22.22f }, { 23.23f, 24.24f } }
                 },
-                DoubleMultiArrayField = new[,,]
+                DoubleMultiArrayField = new[, ,]
                 {
                     { { 01.01, 02.02 }, { 03.03, 04.04 }, { 05.05, 06.06 }, { 07.07, 08.08 } },
                     { { 09.09, 10.10 }, { 11.11, 12.12 }, { 13.13, 14.14 }, { 15.15, 16.16 } },
                     { { 17.17, 18.18 }, { 19.19, 20.20 }, { 21.21, 22.22 }, { 23.23, 24.24 } }
                 },
-                LongDoubleMultiArrayField = new[,,]
+                LongDoubleMultiArrayField = new[, ,]
                 {
                     { { 01.01m, 02.02m }, { 03.03m, 04.04m }, { 05.05m, 06.06m }, { 07.07m, 08.08m } },
                     { { 09.09m, 10.10m }, { 11.11m, 12.12m }, { 13.13m, 14.14m }, { 15.15m, 16.16m } },
@@ -572,12 +573,11 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
@@ -714,13 +714,13 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.AreEqual(data.UnboundedStringField, received.UnboundedStringField);
             Assert.AreEqual(data.UnboundedWStringField, received.UnboundedWStringField);
             // TODO: I would expect ".Substring(0, 32)" is received but it seems the whole string is transported. 
@@ -787,13 +787,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.IsTrue(data.BoundedStringSequenceField.SequenceEqual(received.BoundedStringSequenceField));
             Assert.IsTrue(data.UnboundedStringSequenceField.SequenceEqual(received.UnboundedStringSequenceField));
             Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
@@ -828,7 +828,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     "Under pressure that burns a building down",
                     "Splits a family in two",
                     "Puts people on streets"
-                },                
+                },
                 WStringArrayField = new[]
                 {
                     "Rebel Rebel, you've turn your dress",
@@ -836,18 +836,18 @@ namespace OpenDDSharp.Standard.UnitTest
                     "Rebel Rebel, how could they know?",
                     "Hot tramp,",
                     "I love you so!"
-                },                
+                },
             };
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
             Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
 
@@ -876,13 +876,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TestStruct data = new TestStruct
             {
-                StringMultiArrayField = new[,,]
+                StringMultiArrayField = new[, ,]
                 {
                     { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
                     { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
                     { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
                 },
-                WStringMultiArrayField = new[,,]
+                WStringMultiArrayField = new[, ,]
                 {
                     { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
                     { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
@@ -892,13 +892,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.IsTrue(CompareMultiArray(data.StringMultiArrayField, received.StringMultiArrayField));
             Assert.IsTrue(CompareMultiArray(data.WStringMultiArrayField, received.WStringMultiArrayField));
 
@@ -932,11 +932,11 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
+            ret = _dataReader.ReadNextSample(received);
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsNotNull(received.NestedStructField);
@@ -978,13 +978,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             for (int i = 1; i < data.BoundedStructSequenceField.Count; i++)
             {
                 Assert.AreEqual(data.BoundedStructSequenceField[i].Id, received.BoundedStructSequenceField[i].Id);
@@ -994,7 +994,7 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 Assert.AreEqual(data.UnboundedStructSequenceField[i].Id, received.UnboundedStructSequenceField[i].Id);
                 Assert.AreEqual(data.UnboundedStructSequenceField[i].Message, received.UnboundedStructSequenceField[i].Message);
-            }            
+            }
 
             Assert.IsTrue(typeof(IList<NestedStruct>).IsAssignableFrom(data.BoundedStructSequenceField.GetType()));
             Assert.IsTrue(typeof(IList<NestedStruct>).IsAssignableFrom(data.UnboundedStructSequenceField.GetType()));
@@ -1024,13 +1024,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             for (int i = 0; i < 5; i++)
             {
                 Assert.AreEqual(data.StructArrayField[i].Id, received.StructArrayField[i].Id);
@@ -1048,6 +1048,52 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         [TestMethod, TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructureMultiArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                StructMultiArrayField = new NestedStruct[,,]
+                {
+                    { { new  NestedStruct{ Id = 1, Message = "01" }, new  NestedStruct{ Id = 2, Message = "02" } }, { new  NestedStruct{ Id = 3, Message = "03" }, new  NestedStruct{ Id = 4, Message = "04" } }, { new  NestedStruct{ Id = 5, Message = "05" }, new  NestedStruct{ Id = 6, Message = "06" } }, { new  NestedStruct{ Id = 7, Message = "07" }, new  NestedStruct{ Id = 8, Message = "08" } } },
+                    { { new  NestedStruct{ Id = 9, Message = "09" }, new  NestedStruct{ Id = 10, Message = "10" } }, { new  NestedStruct{ Id = 11, Message = "11" }, new  NestedStruct{ Id = 12, Message = "12" } }, { new  NestedStruct{ Id = 13, Message = "13" }, new  NestedStruct{ Id = 14, Message = "14" } }, { new  NestedStruct{ Id = 15, Message = "15" }, new  NestedStruct{ Id = 16, Message = "16" } } },
+                    { { new  NestedStruct{ Id = 17, Message = "17" }, new  NestedStruct{ Id = 18, Message = "18" } }, { new  NestedStruct{ Id = 19, Message = "19" }, new  NestedStruct{ Id = 20, Message = "20" } }, { new  NestedStruct{ Id = 21, Message = "21" }, new  NestedStruct{ Id = 22, Message = "22" } }, { new  NestedStruct{ Id = 23, Message = "23" }, new  NestedStruct{ Id = 24, Message = "24" } } },
+                },
+            };
+
+            _dataWriter.Write(data);
+
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            TestStruct received = new TestStruct();
+            ret = _dataReader.ReadNextSample(received);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            for (int i0 = 0; i0 < 3; i0++)
+            {
+                for (int i1 = 0; i1 < 4; i1++)
+                {
+                    for (int i2 = 0; i2 < 2; i2++)
+                    {
+                        Assert.AreEqual(data.StructMultiArrayField[i0, i1, i2].Id, received.StructMultiArrayField[i0, i1, i2].Id);
+                        Assert.AreEqual(data.StructMultiArrayField[i0, i1, i2].Message, received.StructMultiArrayField[i0, i1, i2].Message);
+                    }
+                }
+            }
+
+            Assert.AreEqual(typeof(NestedStruct[,,]), data.StructMultiArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StructMultiArrayField);
+            Assert.AreEqual(24, defaultStruct.StructMultiArrayField.Length);
+            foreach (var s in defaultStruct.StructMultiArrayField)
+            {
+                Assert.IsNotNull(s);
+            }
+        }
+
+        [TestMethod, TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumType()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -1059,13 +1105,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.AreEqual(data.TestEnumField, received.TestEnumField);
 
             Assert.AreEqual(typeof(TestEnum), data.TestEnumField.GetType());
@@ -1086,13 +1132,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
             Assert.IsTrue(data.UnboundedEnumSequenceField.SequenceEqual(received.UnboundedEnumSequenceField));
 
@@ -1117,13 +1163,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
 
             Assert.AreEqual(typeof(TestEnum[]), data.EnumArrayField.GetType());
@@ -1153,13 +1199,13 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            // TODO: Wait for acknowledgments
-            System.Threading.Thread.Sleep(500);
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             TestStruct received = new TestStruct();
-            var ret = _dataReader.ReadNextSample(received);
-
+            ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
+
             Assert.IsTrue(CompareMultiArray(data.EnumMultiArrayField, received.EnumMultiArrayField));
 
             Assert.AreEqual(typeof(TestEnum[,,]), data.EnumMultiArrayField.GetType());

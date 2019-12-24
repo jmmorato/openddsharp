@@ -28,43 +28,40 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         #region Extensions
         public static bool WaitForSubscriptions(this DataWriter writer, int subscriptionsCount, int milliseconds)
         {
-            //PublicationMatchedStatus status = new PublicationMatchedStatus();
-            //writer.GetPublicationMatchedStatus(ref status);
-            //int count = milliseconds / 100;
-            //while (status.CurrentCount != subscriptionsCount && count > 0)
-            //{
-            //    System.Threading.Thread.Sleep(100);
-            //    writer.GetPublicationMatchedStatus(ref status);
-            //    count--;
-            //}
+            PublicationMatchedStatus status = new PublicationMatchedStatus();
+            writer.GetPublicationMatchedStatus(ref status);
+            int count = milliseconds / 100;
+            while (status.CurrentCount != subscriptionsCount && count > 0)
+            {
+                Thread.Sleep(100);
+                writer.GetPublicationMatchedStatus(ref status);
+                count--;
+            }
 
-            //if (count == 0 && status.CurrentCount != subscriptionsCount)
-            //{
-            //    return false;
-            //}
-            Thread.Sleep(500);
+            if (count == 0 && status.CurrentCount != subscriptionsCount)
+            {
+                return false;
+            }            
 
             return true;
         }
 
         public static bool WaitForPublications(this DataReader reader, int publicationsCount, int milliseconds)
         {
-            //List<InstanceHandle> handles = new List<InstanceHandle>();
-            //reader.GetMatchedPublications(handles);
-            //int count = milliseconds / 100;
-            //while (handles.Count != publicationsCount && count > 0)
-            //{
-            //    System.Threading.Thread.Sleep(100);
-            //    reader.GetMatchedPublications(handles);
-            //    count--;
-            //}
+            List<InstanceHandle> handles = new List<InstanceHandle>();
+            reader.GetMatchedPublications(handles);
+            int count = milliseconds / 100;
+            while (handles.Count != publicationsCount && count > 0)
+            {
+                Thread.Sleep(100);
+                reader.GetMatchedPublications(handles);
+                count--;
+            }
 
-            //if (count == 0 && handles.Count != publicationsCount)
-            //{
-            //    return false;
-            //}
-
-            Thread.Sleep(500);
+            if (count == 0 && handles.Count != publicationsCount)
+            {
+                return false;
+            }
 
             return true;
         }
