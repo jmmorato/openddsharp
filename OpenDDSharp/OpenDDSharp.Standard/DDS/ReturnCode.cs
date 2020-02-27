@@ -11,7 +11,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 OpenDDSharp is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
@@ -20,6 +20,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 namespace OpenDDSharp.DDS
 {
+    /// <summary>
+    /// Represents the various return code values that DDS operations return.
+    /// </summary>
     public enum ReturnCode
     {
         /// <summary>
@@ -83,9 +86,9 @@ namespace OpenDDSharp.DDS
         NoData = 11,
 
         /// <summary>
-        /// An operation was invoked on an inappropriate object or at an inappropriate time (as determined by QoS policies that control the behaviour of the object in question). 
-        /// There is no precondition that could be changed to make the operation succeed. 
+        /// An operation was invoked on an inappropriate object or at an inappropriate time (as determined by QoS policies that control the behaviour of the object in question).
+        /// There is no precondition that could be changed to make the operation succeed.
         /// </summary>
-        IllegalOperation = 12
+        IllegalOperation = 12,
     }
 }

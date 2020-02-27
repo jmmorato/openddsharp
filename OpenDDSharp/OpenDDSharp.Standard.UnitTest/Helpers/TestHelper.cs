@@ -17,9 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 
 namespace OpenDDSharp.Standard.UnitTest.Helpers
 {
@@ -64,6 +66,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             }
 
             return true;
+        }
+
+        public static void BindRtpsUdpTransportConfig(this Entity entity)
+        {
+            string guid = Guid.NewGuid().ToString("N");
+            string configName = "openddsharp_rtps_interop_" + guid;
+            string instName = "internal_openddsharp_rtps_transport_" + guid;
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
+            RtpsUdpInst rui = new RtpsUdpInst(inst);
+            config.Insert(inst);
+
+            TransportRegistry.Instance.BindConfig(configName, entity);
         }
         #endregion
     }

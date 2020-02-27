@@ -21,4 +21,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 
 EXTERN_METHOD_EXPORT
+::DDS::Entity_ptr DataReader_NarrowBase(::DDS::DataReader_ptr dp);
+
+EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataReader_GetMatchedPublications(::DDS::DataReader_ptr dr, void* & ptr);

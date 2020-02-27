@@ -17,19 +17,19 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using OpenDDSharp.Helpers;
 
 namespace OpenDDSharp
 {
-    ///<summary>
-	/// The ACE library static class used for initialization and finalization.
-	///</summary>
+    /// <summary>
+    /// The ACE library static class used for initialization and finalization.
+    /// </summary>
     public static class Ace
     {
         #region Methods
-        // <summary>
+        /// <summary>
         /// This method initializes the ACE library services and initializes
         /// ACE's internal resources. Applications should not instantiate
         /// ACE classes or call methods on objects of these classes until a
@@ -40,54 +40,49 @@ namespace OpenDDSharp
         /// </returns>
         public static int Init()
         {
-            if (Environment.Is64BitProcess)
-            {
-                return Init64();
-            }
-            else
-            {
-                return Init86();
-            }
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Init86(), () => UnsafeNativeMethods.Init64());
         }
 
         /// <summary>
-		/// Finalize the ACE library services and releases ACE's internal
-		/// resources. In general, do not instantiate ACE classes or call
-		/// methods on objects of these classes after a Ace.Fini() has been
-		/// called.
-		/// </summary>
-		/// <returns>
-		/// Returns 0 on success, -1 on failure, and 1 if it had already been called.
-		/// </returns>
-		public static int Fini()
+        /// Finalize the ACE library services and releases ACE's internal
+        /// resources. In general, do not instantiate ACE classes or call
+        /// methods on objects of these classes after a Ace.Fini() has been
+        /// called.
+        /// </summary>
+        /// <returns>
+        /// Returns 0 on success, -1 on failure, and 1 if it had already been called.
+        /// </returns>
+        public static int Fini()
         {
-            if (Environment.Is64BitProcess)
-            {
-                return Fini64();
-            }
-            else
-            {
-                return Fini86();
-            }
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Fini86(), () => UnsafeNativeMethods.Fini64());
         }
         #endregion
 
-        #region PInvoke
+        #region UnsafeNativeMethods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X64, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Init64();
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int Init64();
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X86, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Init86();
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int Init86();
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X64, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Fini64();
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int Fini64();
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X86, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Fini86();
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int Fini86();
+        }
         #endregion
     }
 }

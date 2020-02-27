@@ -33,8 +33,8 @@ namespace OpenDDSharp.Standard.UnitTest
         private const string TEST_CATEGORY = "Standard.CodeGenerator";
         #endregion
 
-        #region Fields
-        private static DomainParticipant _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+        #region Fields        
+        private DomainParticipant _participant;
         private Publisher _publisher;
         private Subscriber _subscriber;
         private Topic _topic;
@@ -52,14 +52,15 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            //_participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();            
 
             _publisher = _participant.CreatePublisher();
             Assert.IsNotNull(_publisher);
 
             _subscriber = _participant.CreateSubscriber();
-            Assert.IsNotNull(_publisher);
+            Assert.IsNotNull(_subscriber);
 
             TestStructTypeSupport typeSupport = new TestStructTypeSupport();
             string typeName = typeSupport.GetTypeName();
@@ -90,13 +91,13 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            //if (AssemblyInitializer.Factory != null)
-            //{
-            //    ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-            //    Assert.AreEqual(ReturnCode.Ok, result);
-            //}
+            if (AssemblyInitializer.Factory != null)
+            {
+                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
 
-            //_participant = null;
+            _participant = null;
             _publisher = null;
             _subscriber = null;
             _topic = null;
@@ -131,6 +132,9 @@ namespace OpenDDSharp.Standard.UnitTest
             
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -220,8 +224,11 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -358,8 +365,11 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -573,8 +583,11 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -714,8 +727,11 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -787,8 +803,11 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -841,8 +860,11 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -892,8 +914,11 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -932,8 +957,11 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -981,6 +1009,9 @@ namespace OpenDDSharp.Standard.UnitTest
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
+
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -1027,6 +1058,9 @@ namespace OpenDDSharp.Standard.UnitTest
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
+
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -1066,6 +1100,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -1108,6 +1145,9 @@ namespace OpenDDSharp.Standard.UnitTest
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
+
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -1134,6 +1174,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -1163,8 +1206,11 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);
@@ -1201,6 +1247,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
             ret = _dataReader.ReadNextSample(received);

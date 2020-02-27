@@ -23,19 +23,25 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "QosPolicies.h"
 #include "dds\DCPS\Marked_Default_Qos.h"
 
-EXTERN_METHOD_EXPORT ::DDS::Publisher_ptr DomainParticipant_CreatePublisher(
+EXTERN_METHOD_EXPORT
+::DDS::Entity_ptr DomainParticipant_NarrowBase(::DDS::DomainParticipant_ptr dp);
+
+EXTERN_METHOD_EXPORT 
+::DDS::Publisher_ptr DomainParticipant_CreatePublisher(
     ::DDS::DomainParticipant_ptr dp, 
     PublisherQosWrapper* qos, 
     ::DDS::PublisherListener_ptr a_listener, 
     ::DDS::StatusMask mask);
 
-EXTERN_METHOD_EXPORT ::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(
+EXTERN_METHOD_EXPORT 
+::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(
     ::DDS::DomainParticipant_ptr dp, 
     SubscriberQosWrapper* qos, 
     ::DDS::SubscriberListener_ptr a_listener, 
     ::DDS::StatusMask mask);
 
-EXTERN_METHOD_EXPORT ::DDS::Topic_ptr DomainParticipant_CreateTopic(
+EXTERN_METHOD_EXPORT 
+::DDS::Topic_ptr DomainParticipant_CreateTopic(
     ::DDS::DomainParticipant_ptr dp,
     const char * topic_name,
     const char * type_name,
@@ -43,4 +49,5 @@ EXTERN_METHOD_EXPORT ::DDS::Topic_ptr DomainParticipant_CreateTopic(
     ::DDS::TopicListener_ptr a_listener,
     ::DDS::StatusMask mask);
 
-EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp);
+EXTERN_METHOD_EXPORT 
+::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp);

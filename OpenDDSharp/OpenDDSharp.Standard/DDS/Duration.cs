@@ -11,18 +11,22 @@ the Free Software Foundation, either version 3 of the License, or
 
 OpenDDSharp is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
 using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.DDS
 {
+    /// <summary>
+    /// Structure for duration representation.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Duration
+    public struct Duration : IEquatable<Duration>
     {
         #region Constants
         /// <summary>
@@ -47,9 +51,47 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Property
+        /// <summary>
+        /// Gets or sets the seconds.
+        /// </summary>
         public int Seconds { get; set; }
 
+        /// <summary>
+        /// Gets or sets the nanoseconds.
+        /// </summary>
         public int NanoSeconds { get; set; }
+        #endregion
+
+        #region IEquatable<Duration> Members
+        public bool Equals(Duration other)
+        {
+            return Seconds == other.Seconds && NanoSeconds == other.NanoSeconds;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is Duration other) && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1725149974;
+            hashCode = (hashCode * -1521134295) + Seconds.GetHashCode();
+            hashCode = (hashCode * -1521134295) + NanoSeconds.GetHashCode();
+            return hashCode;
+        }
+        #endregion
+
+        #region Operators
+        public static bool operator ==(Duration left, Duration right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Duration left, Duration right)
+        {
+            return !(left == right);
+        }
         #endregion
     }
 }

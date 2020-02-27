@@ -20,6 +20,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DataReader.h"
 #include "marshal.h"
 
+::DDS::Entity_ptr DataReader_NarrowBase(::DDS::DataReader_ptr dw) {
+	return static_cast<::DDS::Entity_ptr>(dw);
+}
+
 ::DDS::ReturnCode_t DataReader_GetMatchedPublications(::DDS::DataReader_ptr dr, void* & ptr) {
 	::DDS::InstanceHandleSeq publication_handles;
 	::DDS::ReturnCode_t ret = dr->get_matched_publications(publication_handles);

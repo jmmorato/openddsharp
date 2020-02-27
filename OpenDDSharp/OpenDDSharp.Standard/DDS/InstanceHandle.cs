@@ -11,23 +11,27 @@ the Free Software Foundation, either version 3 of the License, or
 
 OpenDDSharp is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
 
 namespace OpenDDSharp.DDS
 {
-    public struct InstanceHandle
+    /// <summary>
+    /// Type definition for an instance handle.
+    /// </summary>
+    public struct InstanceHandle : IEquatable<InstanceHandle>
     {
         #region Constants
         public static readonly InstanceHandle HandleNil = 0;
         #endregion
 
         #region Fields
-        private int _value;
+        private readonly int _value;
         #endregion
 
         #region Constructors
@@ -39,13 +43,86 @@ namespace OpenDDSharp.DDS
 
         #region Methods
         /// <summary>
+        /// Creates a new <see cref="InstanceHandle"/> from an <see cref="int"/> value.
+        /// </summary>
+        /// <param name="value">The <see cref="int"/> value.</param>
+        /// <returns>A newly created <see cref="InstanceHandle"/> object.</returns>
+        public static InstanceHandle FromInt32(int value)
+        {
+            InstanceHandle r = new InstanceHandle(value);
+            return r;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="int"/> value of the <see cref="InstanceHandle"/>.
+        /// </summary>
+        /// <returns>The <see cref="int"/> value.</returns>
+        public int ToInt32()
+        {
+            return _value;
+        }
+        #endregion
+
+        #region IEquatable<InstanceHandle> Members
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (GetType() != obj.GetType() && !(obj is int))
+            {
+                return false;
+            }
+
+            InstanceHandle aux;
+            if (obj is int)
+            {
+                aux = (int)obj;
+            }
+            else
+            {
+                aux = (InstanceHandle)obj;
+            }
+
+            return _value == aux._value;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other"> An object to compare with this object.</param>
+        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+        public bool Equals(InstanceHandle other)
+        {
+            return _value == other._value;
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return _value;
+        }
+        #endregion
+
+        #region Operators
+        /// <summary>
         /// Implicit conversion operator from <see cref="InstanceHandle" /> to <see cref="int" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="int" /> value.</returns>
-        public static implicit operator int (InstanceHandle value)
+        public static implicit operator int(InstanceHandle value)
         {
-            return value._value;
+            return value.ToInt32();
         }
 
         /// <summary>
@@ -55,8 +132,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="InstanceHandle" /> value.</returns>
         public static implicit operator InstanceHandle(int value)
         {
-            InstanceHandle r = new InstanceHandle(value);
-            return r;
+            return FromInt32(value);
         }
 
         /// <summary>
@@ -79,45 +155,6 @@ namespace OpenDDSharp.DDS
         public static bool operator !=(InstanceHandle x, InstanceHandle y)
         {
             return !x.Equals(y);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="other">The object to compare with the current object.</param>
-        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType() && obj.GetType() != typeof(int))
-            {
-                return false;
-            }
-
-            InstanceHandle aux = InstanceHandle.HandleNil;
-            if (obj.GetType() == typeof(int))
-            {
-                aux = (int)obj;
-            }
-            else
-            {
-                aux = (InstanceHandle)obj;
-            }
-
-            return (_value == aux._value);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>            
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return _value;
         }
         #endregion
     }

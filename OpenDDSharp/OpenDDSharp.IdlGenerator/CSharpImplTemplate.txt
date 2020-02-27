@@ -94,19 +94,20 @@
     public class <%TYPE%>DataWriter : DataWriter
     {
         #region Fields
-        private new readonly IntPtr _native;
+        private readonly IntPtr _native;
         #endregion
 
         #region Constructors
         public <%TYPE%>DataWriter(DataWriter dw) : base(dw.ToNative())
         {
+			IntPtr ptr = base.ToNative();
             if (Environment.Is64BitProcess)
             {
-                _native = Narrow64(base._native);
+                _native = Narrow64(ptr);
             }
             else
             {
-                _native = Narrow86(base._native);
+                _native = Narrow86(ptr);
             }
         }
         #endregion
@@ -164,19 +165,20 @@
     public class <%TYPE%>DataReader : DataReader
     {
         #region Fields
-        private new readonly IntPtr _native;
+        private readonly IntPtr _native;
         #endregion
 
         #region Constructors
         public <%TYPE%>DataReader(DataReader dr) : base(dr.ToNative())
         {
+			IntPtr ptr = base.ToNative();
             if (Environment.Is64BitProcess)
             {
-                _native = Narrow64(base._native);
+                _native = Narrow64(ptr);
             }
             else
             {
-                _native = Narrow86(base._native);
+                _native = Narrow86(ptr);
             }
         }
         #endregion

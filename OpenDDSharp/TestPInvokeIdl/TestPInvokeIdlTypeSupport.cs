@@ -1756,19 +1756,20 @@ namespace Test
     public class BasicTestStructDataWriter : DataWriter
     {
         #region Fields
-        private new readonly IntPtr _native;
+        private readonly IntPtr _native;
         #endregion
 
         #region Constructors
         public BasicTestStructDataWriter(DataWriter dw) : base(dw.ToNative())
         {
+            IntPtr ptr = base.ToNative();
             if (Environment.Is64BitProcess)
             {
-                _native = Narrow64(base._native);
+                _native = Narrow64(ptr);
             }
             else
             {
-                _native = Narrow86(base._native);
+                _native = Narrow86(ptr);
             }
         }
         #endregion
@@ -1826,19 +1827,20 @@ namespace Test
     public class BasicTestStructDataReader : DataReader
     {
         #region Fields
-        private new readonly IntPtr _native;
+        private readonly IntPtr _native;
         #endregion
 
         #region Constructors
         public BasicTestStructDataReader(DataReader dr) : base(dr.ToNative())
         {
+            IntPtr ptr = base.ToNative();
             if (Environment.Is64BitProcess)
             {
-                _native = Narrow64(base._native);
+                _native = Narrow64(ptr);
             }
             else
             {
-                _native = Narrow86(base._native);
+                _native = Narrow86(ptr);
             }
         }
         #endregion

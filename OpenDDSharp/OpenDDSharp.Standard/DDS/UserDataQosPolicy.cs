@@ -22,6 +22,10 @@ using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.DDS
 {
+    public class UserDataQosPolicy
+    {
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     internal struct UserDataQosPolicyWrapper
     {

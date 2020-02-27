@@ -22,8 +22,29 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include <dds/DCPS/Service_Participant.h>
 
-EXTERN_METHOD_EXPORT void ParticipantService_new();
+//EXTERN_METHOD_EXPORT 
+//void ParticipantService_new();
 
-EXTERN_METHOD_EXPORT::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactory();
+EXTERN_METHOD_EXPORT
+::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactory();
 
-EXTERN_METHOD_EXPORT::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactoryParameters(int argc, char *argv[]);
+EXTERN_METHOD_EXPORT
+::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactoryParameters(int argc, char *argv[]);
+
+EXTERN_METHOD_EXPORT
+void ParticipantService_AddDiscovery(::OpenDDS::DCPS::Discovery* discovery);
+
+EXTERN_METHOD_EXPORT
+char * ParticipantService_GetDefaultDiscovery();
+
+EXTERN_METHOD_EXPORT
+void ParticipantService_SetDefaultDiscovery(char * defaultDiscovery);
+
+EXTERN_METHOD_EXPORT
+void ParticipantService_SetRepoDomain(int domain, char * repo, bool attach_participant);
+
+EXTERN_METHOD_EXPORT
+void ParticipantService_Shutdown();
+
+EXTERN_METHOD_EXPORT
+bool ParticipantService_GetIsShutdown();

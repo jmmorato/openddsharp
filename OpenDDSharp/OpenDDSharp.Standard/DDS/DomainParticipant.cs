@@ -11,38 +11,39 @@ the Free Software Foundation, either version 3 of the License, or
 
 OpenDDSharp is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using OpenDDSharp.Helpers;
 using System;
-using System.Security;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace OpenDDSharp.DDS
 {
     /// <summary>
-    /// <para>The DomainParticipant represents the participation of the application on a communication plane that isolates applications 
+    /// <para>The DomainParticipant represents the participation of the application on a communication plane that isolates applications
     /// running on the same set of physical computers from each other.</para>
-    /// <para>A domain establishes a virtual network linking all applications that share the same <see cref="DomainId" /> and isolating them from applications running on different domains. 
+    /// <para>A domain establishes a virtual network linking all applications that share the same <see cref="DomainId" /> and isolating them from applications running on different domains.
     /// In this way, several independent distributed applications can coexist in the same physical network without interfering, or even being aware of each other.</para>
     /// </summary>
     /// <remarks>
-    /// The DomainParticipant also acts as a container for all other <see cref="Entity" /> objects and as factory for the <see cref="Publisher" />, 
+    /// The DomainParticipant also acts as a container for all other <see cref="Entity" /> objects and as factory for the <see cref="Publisher" />,
     /// <see cref="Subscriber" />, <see cref="Topic" />, and <see cref="MultiTopic" /> <see cref="Entity" /> objects. In addition, the Domain Participant
     /// provides administration services in the domain, offering operations that allow the application to ‘ignore’ locally any
     /// information about a given participant, publication, subscription, or topic.
     /// </remarks>
-    public class DomainParticipant
+    public class DomainParticipant : Entity
     {
         #region Fields
         private readonly IntPtr _native;
         #endregion
 
         #region Constructors
-        internal DomainParticipant(IntPtr native)
+        internal DomainParticipant(IntPtr native) : base(NarrowBase(native))
         {
             _native = native;
         }
@@ -58,28 +59,17 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
         public Publisher CreatePublisher()
         {
-            if (Environment.Is64BitProcess)
-            {
-                PublisherQosWrapper qos = new PublisherQosWrapper();
-                IntPtr native = CreatePublisher64(_native, ref qos, IntPtr.Zero, 0u);
-                if (native.Equals(IntPtr.Zero))
-                {
-                    return null;
-                }
+            PublisherQosWrapper qos = default(PublisherQosWrapper);
 
-                return new Publisher(native);
-            }
-            else
-            {
-                PublisherQosWrapper qos = new PublisherQosWrapper();
-                IntPtr native = CreatePublisher86(_native, ref qos, IntPtr.Zero, 0u);
-                if (native.Equals(IntPtr.Zero))
-                {
-                    return null;
-                }
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, ref qos, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreatePublisher64(_native, ref qos, IntPtr.Zero, 0u));
 
-                return new Publisher(native);
+            if (native.Equals(IntPtr.Zero))
+            {
+                return null;
             }
+
+            return new Publisher(native);
         }
 
         /// <summary>
@@ -91,28 +81,17 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
         public Subscriber CreateSubscriber()
         {
-            if (Environment.Is64BitProcess)
-            {
-                SubscriberQosWrapper qos = new SubscriberQosWrapper();
-                IntPtr native = CreateSubscriber64(_native, ref qos, IntPtr.Zero, 0u);
-                if (native.Equals(IntPtr.Zero))
-                {
-                    return null;
-                }
+            SubscriberQosWrapper qos = default(SubscriberQosWrapper);
 
-                return new Subscriber(native);
-            }
-            else
-            {
-                SubscriberQosWrapper qos = new SubscriberQosWrapper();
-                IntPtr native = CreateSubscriber86(_native, ref qos, IntPtr.Zero, 0u);
-                if (native.Equals(IntPtr.Zero))
-                {
-                    return null;
-                }
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, ref qos, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateSubscriber64(_native, ref qos, IntPtr.Zero, 0u));
 
-                return new Subscriber(native);
+            if (native.Equals(IntPtr.Zero))
+            {
+                return null;
             }
+
+            return new Subscriber(native);
         }
 
         /// <summary>
@@ -128,28 +107,17 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
         public Topic CreateTopic(string topicName, string typeName)
         {
-            if (Environment.Is64BitProcess)
-            {
-                TopicQosWrapper qos = new TopicQosWrapper();
-                IntPtr native = CreateTopic64(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u);
-                if (native.Equals(IntPtr.Zero))
-                {
-                    return null;
-                }
+            TopicQosWrapper qos = default(TopicQosWrapper);
 
-                return new Topic(native);
-            }
-            else
-            {
-                TopicQosWrapper qos = new TopicQosWrapper();
-                IntPtr native = CreateTopic86(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u);
-                if (native.Equals(IntPtr.Zero))
-                {
-                    return null;
-                }
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u));
 
-                return new Topic(native);
+            if (native.Equals(IntPtr.Zero))
+            {
+                return null;
             }
+
+            return new Topic(native);
         }
 
         /// <summary>
@@ -160,62 +128,83 @@ namespace OpenDDSharp.DDS
         /// <remarks>
         /// <para>Prior to deleting each contained entity, this operation will recursively call the corresponding DeleteContainedEntities
         /// operation on each contained entity (if applicable).This pattern is applied recursively. In this manner the operation
-        ///	DeleteContainedEntities on the <see cref="DomainParticipant" /> will end up deleting all the entities recursively contained in the
-        ///	<see cref="DomainParticipant" />, that is also the <see cref="DataWriter" />, <see cref="DataReader" />, as well as the <see cref="QueryCondition" /> 
+        /// DeleteContainedEntities on the <see cref="DomainParticipant" /> will end up deleting all the entities recursively contained in the
+        /// <see cref="DomainParticipant" />, that is also the <see cref="DataWriter" />, <see cref="DataReader" />, as well as the <see cref="QueryCondition" />
         /// and <see cref="ReadCondition" /> objects belonging to the contained DataReaders.</para>
         /// </remarks>
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteContainedEntities()
         {
-            if (Environment.Is64BitProcess)
-            {
-                return DeleteContainedEntities64(_native);
-            }
-            else
-            {
-                return DeleteContainedEntities86(_native);
-            }
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteContainedEntities86(_native),
+                                               () => UnsafeNativeMethods.DeleteContainedEntities64(_native));
         }
 
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public IntPtr ToNative()
+        public new IntPtr ToNative()
         {
             return _native;
         }
+
+        private static IntPtr NarrowBase(IntPtr ptr)
+        {
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
+                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
+        }
         #endregion
 
-        #region PInvoke
+        #region UnsafeNativeMethods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X64, EntryPoint = "DomainParticipant_CreatePublisher", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr CreatePublisher64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref PublisherQosWrapper qos, IntPtr a_listener, uint mask);
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase64(IntPtr ptr);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipant_CreatePublisher", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr CreatePublisher86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref PublisherQosWrapper qos, IntPtr a_listener, uint mask);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase86(IntPtr ptr);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X64, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr CreateSubscriber64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreatePublisher", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreatePublisher64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref PublisherQosWrapper qos, IntPtr a_listener, uint mask);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr CreateSubscriber86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_CreatePublisher", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreatePublisher86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref PublisherQosWrapper qos, IntPtr a_listener, uint mask);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X64, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern IntPtr CreateTopic64(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateSubscriber64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern IntPtr CreateTopic86(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateSubscriber86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X64, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern ReturnCode DeleteContainedEntities64(IntPtr dp);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateTopic64(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
 
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(Constants.API_DLL_X86, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern ReturnCode DeleteContainedEntities86(IntPtr dp);
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateTopic86(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteContainedEntities64(IntPtr dp);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteContainedEntities86(IntPtr dp);
+        }
         #endregion
     }
 }

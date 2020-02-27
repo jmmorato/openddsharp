@@ -82,6 +82,7 @@ public static class MarshalHelper
             sequence.Add(Convert.ToDecimal(Marshal.PtrToStructure<double>(ptr + sizeof(int) + (elSiz * i))));
         }
     }
+
     public static void LongDoubleSequenceToPtr(this IList<decimal> sequence, ref IntPtr ptr)
     {
         if (sequence == null || sequence.Count == 0)

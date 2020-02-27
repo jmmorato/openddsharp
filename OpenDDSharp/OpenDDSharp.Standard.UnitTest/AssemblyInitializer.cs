@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.OpenDDS.RTPS;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -45,12 +46,13 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             Ace.Init();
 
-            //RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
-            //ParticipantService.Instance.AddDiscovery(disc);
-            //ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-            //Assert.AreEqual(RTPS_DISCOVERY, ParticipantService.Instance.DefaultDiscovery);
-            //ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
-            //ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
+            RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
+            Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
+            ParticipantService.Instance.AddDiscovery(disc);
+            ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+            Assert.AreEqual(RTPS_DISCOVERY, ParticipantService.Instance.DefaultDiscovery);
+            ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
+            ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
             //InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
             //ParticipantService.Instance.AddDiscovery(infoRepo);
@@ -60,10 +62,10 @@ namespace OpenDDSharp.Standard.UnitTest
             //_infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             //System.Threading.Thread.Sleep(1000);
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory(); //, "-DCPSConfigFile", "rtps.ini", "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10"
 
-            //Assert.IsFalse(TransportRegistry.Instance.Released);
-            //Assert.IsFalse(ParticipantService.Instance.IsShutdown);
+            Assert.IsFalse(TransportRegistry.Instance.Released);
+            Assert.IsFalse(ParticipantService.Instance.IsShutdown);
         }
 
         [AssemblyCleanup]
@@ -75,11 +77,11 @@ namespace OpenDDSharp.Standard.UnitTest
             //    File.Delete(INFOREPO_IOR);
             //}
 
-            //TransportRegistry.Instance.Release();
-            //Assert.IsTrue(TransportRegistry.Instance.Released);
-            //TransportRegistry.Close();
-            //ParticipantService.Instance.Shutdown();
-            //Assert.IsTrue(ParticipantService.Instance.IsShutdown);
+            TransportRegistry.Instance.Release();
+            Assert.IsTrue(TransportRegistry.Instance.Released);
+            TransportRegistry.Close();
+            ParticipantService.Instance.Shutdown();
+            Assert.IsTrue(ParticipantService.Instance.IsShutdown);
 
             Ace.Fini();
         }

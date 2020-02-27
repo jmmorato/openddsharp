@@ -4,26 +4,51 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>OpenDDSharp</AssemblyName>
     <RootNamespace>OpenDDSharp</RootNamespace>
+    <CodeAnalysisRuleSet>Properties\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- Analyzer API for our custom checks. -->
+    <!-- Downgraded to < 3.0 because VS2017 doesn't support targeting .NET Standard on analyzers -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <!-- Third-party analyzers included. -->
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.5">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.17.0.9346">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <!-- Downgraded because VS2017 doesn't support targeting .NET Standard on analyzers -->
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="15.0.240">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <Target Name="CopyNative" AfterTargets="AfterBuild">    
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd.Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd.x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;" />
     </ItemGroup>
     <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
