@@ -32,14 +32,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>true</CLRSupport>
@@ -47,14 +49,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>true</CLRSupport>
@@ -222,12 +226,12 @@
     <Message Text="Set the enviroment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
-    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />    
+    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
   </Target>
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll"  />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent">
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntDir)'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" />
   </Target>
