@@ -28,7 +28,7 @@ jobs:
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
       failOnStderr: true
-    - script: |        
+    - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
@@ -47,7 +47,7 @@ jobs:
         modifyEnvironment: true
         workingFolder: '($OpenDdsRoot)'
         failOnStandardError: true
-    - script: |        
+    - script: |
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
         call configure -v --ace-github-latest --no-tests %OPT%
         perl tools\scripts\show_build_config.pl
@@ -77,15 +77,21 @@ jobs:
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
     - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
       inputs:
         versionSpec: 5.4.0
     - task: NuGetCommand@2
-      displayName: "NuGet Restore OpenDDSharp "
+      displayName: "NuGet Restore OpenDDSharp"
       inputs:
         command: 'restore'
         restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
         feedsToUse: 'select'
         versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet restore"
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
     - task: VSBuild@1
       displayName: 'Build OpenDDSharp'
       enabled: true
@@ -206,6 +212,7 @@ jobs:
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
     - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
       inputs:
         versionSpec: 5.4.0
     - task: NuGetCommand@2
@@ -215,6 +222,11 @@ jobs:
         restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
         feedsToUse: 'select'
         versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet restore"
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
     - task: MSBuild@1
       displayName: 'Build OpenDDSharp'
       enabled: true
