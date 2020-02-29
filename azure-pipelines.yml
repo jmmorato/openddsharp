@@ -76,6 +76,9 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: 5.4.0
     - task: NuGetCommand@2
       displayName: "NuGet Restore OpenDDSharp "
       inputs:
@@ -202,6 +205,9 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: 5.4.0
     - task: NuGetCommand@2
       displayName: "NuGet Restore OpenDDSharp"
       inputs:
