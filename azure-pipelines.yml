@@ -92,6 +92,7 @@ jobs:
       inputs:
         command: 'restore'
         feedsToUse: 'select'
+        workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - task: VSBuild@1
       displayName: 'Build OpenDDSharp'
       enabled: true
@@ -227,6 +228,7 @@ jobs:
       inputs:
         command: 'restore'
         feedsToUse: 'select'
+        workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - task: MSBuild@1
       displayName: 'Build OpenDDSharp'
       enabled: true
