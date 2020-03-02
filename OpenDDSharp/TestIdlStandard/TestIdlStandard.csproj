@@ -56,22 +56,10 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
       <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Debug\$(ProjectName)Wrapperd_x64.dll" />      
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Debug\$(ProjectName)Wrapperd_x64.dll" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Debug\$(ProjectName)Wrapperd_x64.dll" />
-    </ItemGroup>
+    </ItemGroup>    
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
       <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Release\$(ProjectName)Wrapper_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Release\$(ProjectName)Wrapper_x64.dll" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Release\$(ProjectName)Wrapper_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Release\$(ProjectName)Wrapper_x64.dll" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Release\$(ProjectName)Wrapper_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Release\$(ProjectName)Wrapper_x64.dll" />
-    </ItemGroup>
+    </ItemGroup>    
     <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
   

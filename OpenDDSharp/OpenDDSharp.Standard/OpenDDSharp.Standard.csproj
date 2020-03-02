@@ -5,6 +5,7 @@
     <AssemblyName>OpenDDSharp</AssemblyName>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>Properties\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   
   <ItemGroup>
@@ -46,7 +47,7 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
       <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;" />
-    </ItemGroup>
+    </ItemGroup> 
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
       <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;" />
     </ItemGroup>
