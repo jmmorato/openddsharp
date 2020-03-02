@@ -40,11 +40,17 @@ jobs:
         projects: '**/*.csproj'
         workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - script: |
-        git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%        
+        git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT% 
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
+      failOnStderr: true
+    - script: |
+        git fetch -q && git fetch -q --tags
+        git checkout -q tags/DDS-3.13.3
+      displayName: 'Checkout OpenDDS v3.13.3'
+      workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
@@ -156,7 +162,6 @@ jobs:
         projects: '**/*.csproj'
         workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - script: |
-        hostname
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
@@ -165,14 +170,12 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.13.2
-      displayName: 'Checkout OpenDDS v3.13.2'
+        git checkout -q tags/DDS-3.13.3
+      displayName: 'Checkout OpenDDS v3.13.3'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
-        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.cpp.patch
-        git apply $(Build.SourcesDirectory)\Patches\DataReaderImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
