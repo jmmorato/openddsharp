@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,7 +28,7 @@
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />    
   </Target>
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll"  />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent">
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)\NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" />
   </Target>
@@ -56,7 +57,19 @@
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
       <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Debug\$(ProjectName)Wrapperd_x64.dll" />      
     </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Debug\$(ProjectName)Wrapperd_x64.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Debug\$(ProjectName)Wrapperd_x64.dll" />
+    </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
+      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Release\$(ProjectName)Wrapper_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Release\$(ProjectName)Wrapper_x64.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+      <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Release\$(ProjectName)Wrapper_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Release\$(ProjectName)Wrapper_x64.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <Dlls Include="$(IntermediateOutputPath)\WrapperProject\bin\Win32\Release\$(ProjectName)Wrapper_Win32.dll;$(IntermediateOutputPath)\WrapperProject\bin\x64\Release\$(ProjectName)Wrapper_x64.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
