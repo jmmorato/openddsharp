@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>    
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Platforms>AnyCPU;x64;x86</Platforms>    
   </PropertyGroup>  
   
   <ItemGroup>
@@ -31,10 +32,10 @@
       <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\Release\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" /> <!--..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;-->
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_Win32.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
