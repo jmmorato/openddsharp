@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 namespace OpenDDSharp.DDS
 {
     /// <summary>
-    /// This enumeration defines the valid kinds of the <see cref="LivelinessQosPolicy" /> Kind.
+    /// This enumeration defines the valid kinds of the <see cref="LivelinessQosPolicy.Kind" />.
     /// </summary>
     public enum LivelinessQosPolicyKind
     {
