@@ -35,9 +35,13 @@
   <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent">
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)\WrapperProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\StandardWrapperIdlProject.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsWrapper="True" />
   </Target>
-  <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent">
+  <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+  </Target>
+  <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x86'">
+    <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
+    <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <Target Name="CopyNative" AfterTargets="AfterBuild">

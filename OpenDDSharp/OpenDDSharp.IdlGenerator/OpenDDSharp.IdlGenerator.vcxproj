@@ -201,7 +201,7 @@
       <AdditionalIncludeDirectories>$(DDS_ROOT);$(ACE_ROOT);.;$(TAO_ROOT)\TAO_IDL\include;$(TAO_ROOT)\TAO_IDL\fe;$(TAO_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_CONSOLE;_CRT_NONSTDC_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;MPC_LIB_MODIFIER="d";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ProgramDataBaseFileName>Debug\opendds_idl\I386\</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
@@ -369,7 +369,7 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll" />
-    </ItemGroup>    
+    </ItemGroup>
     <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(DDS_ROOT)\bin" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(OutDir)openddsharp_idl.exe" DestinationFolder="$(DDS_ROOT)\bin" SkipUnchangedFiles="true" />
