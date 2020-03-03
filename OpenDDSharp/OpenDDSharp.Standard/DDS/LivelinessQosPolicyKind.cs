@@ -30,7 +30,7 @@ namespace OpenDDSharp.DDS
         AutomaticLivelinessQos = 0,
 
         /// <summary>
-        /// requires only that one Entity within the publisher is asserted to be alive to deduce all other <see cref="Entity" /> objects within the 
+        /// requires only that one Entity within the publisher is asserted to be alive to deduce all other <see cref="Entity" /> objects within the
         /// same <see cref="DomainParticipant" /> are also alive.
         /// </summary>
         ManualByParticipantLivelinessQos = 1,
