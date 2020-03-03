@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -48,7 +49,8 @@ namespace OpenDDSharp.DDS
         /// Internal use only.
         /// </summary>
         /// <returns>The native pointer.</returns>
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal new IntPtr ToNative()
         {
             return _native;

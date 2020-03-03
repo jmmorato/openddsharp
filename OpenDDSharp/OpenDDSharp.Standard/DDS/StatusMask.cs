@@ -77,11 +77,11 @@ namespace OpenDDSharp.DDS
         }
         #endregion
 
-        #region IEquatable<Duration> Members
+        #region IEquatable<StatusMask> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="other"> An object to compare with this object.</param>
+        /// <param name="other">An object to compare with this object.</param>
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(StatusMask other)
         {
@@ -106,7 +106,7 @@ namespace OpenDDSharp.DDS
             }
 
             StatusMask aux;
-            if (obj is int)
+            if (obj is uint)
             {
                 aux = (uint)obj;
             }
@@ -152,23 +152,23 @@ namespace OpenDDSharp.DDS
         /// <summary>
         /// Equals comparison operator.
         /// </summary>
-        /// <param name="x">The left value for the comparison.</param>
-        /// <param name="y">The right value for the comparison.</param>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(StatusMask x, StatusMask y)
+        public static bool operator ==(StatusMask left, StatusMask right)
         {
-            return x.Equals(y);
+            return left.Equals(right);
         }
 
         /// <summary>
         /// Not equals comparison operator.
         /// </summary>
-        /// <param name="x">The left value for the comparison.</param>
-        /// <param name="y">The right value for the comparison.</param>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-        public static bool operator !=(StatusMask x, StatusMask y)
+        public static bool operator !=(StatusMask left, StatusMask right)
         {
-            return !x.Equals(y);
+            return !left.Equals(right);
         }
         #endregion
     }
