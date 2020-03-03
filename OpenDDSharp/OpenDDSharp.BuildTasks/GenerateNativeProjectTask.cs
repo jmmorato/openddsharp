@@ -471,7 +471,7 @@ namespace OpenDDSharp.BuildTasks
         {
             List<string> platforms = new List<string>();
 
-            if (Platform == "Win32")
+            if (Platform == "Win32" || Platform == "x86")
             {
                 platforms.Add("x86");
             }
