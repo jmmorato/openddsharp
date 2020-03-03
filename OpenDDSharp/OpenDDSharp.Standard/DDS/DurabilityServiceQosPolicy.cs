@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.DDS
 {
@@ -25,6 +26,7 @@ namespace OpenDDSharp.DDS
     /// This policy is used to configure the history QoS and the resource limits QoS used by the fictitious <see cref="DataReader" /> and
     /// <see cref="DataWriter" /> used by the "persistence service".
     /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct DurabilityServiceQosPolicy : IEquatable<DurabilityServiceQosPolicy>
     {
         #region Properties
