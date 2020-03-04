@@ -131,7 +131,7 @@ namespace OpenDDSharp.DDS
         /// Implicit conversion operator from <see cref="uint" /> to <see cref="SampleStateMask" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="InstanceHandle" /> value.</returns>
+        /// <returns>The <see cref="SampleStateMask" /> value.</returns>
         public static implicit operator SampleStateMask(uint value)
         {
             return FromUInt32(value);

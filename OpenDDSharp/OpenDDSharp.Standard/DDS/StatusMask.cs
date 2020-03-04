@@ -143,7 +143,7 @@ namespace OpenDDSharp.DDS
         /// Implicit conversion operator from <see cref="uint" /> to <see cref="StatusMask" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="InstanceHandle" /> value.</returns>
+        /// <returns>The <see cref="StatusMask" /> value.</returns>
         public static implicit operator StatusMask(uint value)
         {
             return FromUInt32(value);

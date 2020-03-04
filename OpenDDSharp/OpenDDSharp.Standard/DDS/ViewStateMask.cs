@@ -133,7 +133,7 @@ namespace OpenDDSharp.DDS
         /// Implicit conversion operator from <see cref="uint" /> to <see cref="ViewStateMask" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="InstanceHandle" /> value.</returns>
+        /// <returns>The <see cref="ViewStateMask" /> value.</returns>
         public static implicit operator ViewStateMask(uint value)
         {
             return FromUInt32(value);
