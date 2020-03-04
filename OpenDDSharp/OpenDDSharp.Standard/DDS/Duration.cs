@@ -59,7 +59,7 @@ namespace OpenDDSharp.DDS
         /// <summary>
         /// Gets or sets the nanoseconds.
         /// </summary>
-        public int NanoSeconds { get; set; }
+        public uint NanoSeconds { get; set; }
         #endregion
 
         #region IEquatable<Duration> Members
