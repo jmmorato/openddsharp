@@ -30,8 +30,7 @@ namespace OpenDDSharp.DDS
     /// association to be created. The value offered is considered compatible with the value requested if and only if the inequality "offered kind &gt;= requested kind" evaluates to '<see langword="true" />'.
     /// For the purposes of this inequality, the values of Reliability kind are considered ordered such that BestEffort &lt; Reliable.
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ReliabilityQosPolicy : IEquatable<ReliabilityQosPolicy>
+    public sealed class ReliabilityQosPolicy : IEquatable<ReliabilityQosPolicy>
     {
         #region Properties
         /// <summary>
@@ -46,6 +45,18 @@ namespace OpenDDSharp.DDS
         public Duration MaxBlockingTime { get; set; }
         #endregion
 
+        #region Constructors
+        internal ReliabilityQosPolicy()
+        {
+            Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+            MaxBlockingTime = new Duration
+            {
+                Seconds = Duration.InfiniteSeconds,
+                NanoSeconds = Duration.InfiniteNanoseconds,
+            };
+        }
+        #endregion
+
         #region IEquatable<ReliabilityQosPolicy> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -54,6 +65,11 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(ReliabilityQosPolicy other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return Kind == other.Kind &&
                    MaxBlockingTime == other.MaxBlockingTime;
         }
@@ -65,17 +81,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((LivelinessQosPolicy)obj);
+            return (obj is ReliabilityQosPolicy other) && Equals(other);
         }
 
         /// <summary>
@@ -100,6 +106,16 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(ReliabilityQosPolicy left, ReliabilityQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return true;
+            }
+
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
             return left.Equals(right);
         }
 
@@ -111,7 +127,56 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
         public static bool operator !=(ReliabilityQosPolicy left, ReliabilityQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return false;
+            }
+
+            if (left == null || right == null)
+            {
+                return true;
+            }
+
             return !left.Equals(right);
+        }
+        #endregion
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ReliabilityQosPolicyWrapper
+    {
+        #region Fields
+        public ReliabilityQosPolicyKind Kind;
+        public Duration MaxBlockingTime;
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="ReliabilityQosPolicyWrapper" /> to <see cref="ReliabilityQosPolicy" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="ReliabilityQosPolicy" /> object.</returns>
+        public static implicit operator ReliabilityQosPolicy(ReliabilityQosPolicyWrapper value)
+        {
+            return new ReliabilityQosPolicy
+            {
+                Kind = value.Kind,
+                MaxBlockingTime = value.MaxBlockingTime,
+            };
+        }
+
+        /// <summary>
+        /// Implicit conversion operator from <see cref="ReliabilityQosPolicy" /> to <see cref="ReliabilityQosPolicyWrapper" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="ReliabilityQosPolicyWrapper" /> object.</returns>
+        public static implicit operator ReliabilityQosPolicyWrapper(ReliabilityQosPolicy value)
+        {
+            return new ReliabilityQosPolicyWrapper
+            {
+                Kind = value.Kind,
+                MaxBlockingTime = value.MaxBlockingTime,
+            };
         }
         #endregion
     }

@@ -38,8 +38,7 @@ namespace OpenDDSharp.DDS
     /// <para>The setting of the Deadline policy must be set consistently with that of the TimeBasedFilter. For these two policies
     /// to be consistent the settings must be such that "deadline period &gt;= minimum separation".</para>
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct DeadlineQosPolicy : IEquatable<DeadlineQosPolicy>
+    public sealed class DeadlineQosPolicy : IEquatable<DeadlineQosPolicy>
     {
         #region Properties
         /// <summary>
@@ -55,6 +54,17 @@ namespace OpenDDSharp.DDS
         public Duration Period { get; set; }
         #endregion
 
+        #region Constructors
+        internal DeadlineQosPolicy()
+        {
+            Period = new Duration
+            {
+                Seconds = Duration.InfiniteSeconds,
+                NanoSeconds = Duration.InfiniteNanoseconds,
+            };
+        }
+        #endregion
+
         #region IEquatable<DeadlineQosPolicy> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -63,6 +73,11 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(DeadlineQosPolicy other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return Period == other.Period;
         }
 
@@ -73,17 +88,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((DeadlineQosPolicy)obj);
+            return (obj is DeadlineQosPolicy other) && Equals(other);
         }
 
         /// <summary>
@@ -105,6 +110,16 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(DeadlineQosPolicy left, DeadlineQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return true;
+            }
+
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
             return left.Equals(right);
         }
 
@@ -116,7 +131,53 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
         public static bool operator !=(DeadlineQosPolicy left, DeadlineQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return false;
+            }
+
+            if (left == null || right == null)
+            {
+                return true;
+            }
+
             return !left.Equals(right);
+        }
+        #endregion
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct DeadlineQosPolicyWrapper
+    {
+        #region Fields
+        public Duration Period;
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="DeadlineQosPolicyWrapper" /> to <see cref="DeadlineQosPolicy" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="DeadlineQosPolicy" /> object.</returns>
+        public static implicit operator DeadlineQosPolicy(DeadlineQosPolicyWrapper value)
+        {
+            return new DeadlineQosPolicy
+            {
+                Period = value.Period,
+            };
+        }
+
+        /// <summary>
+        /// Implicit conversion operator from <see cref="DeadlineQosPolicy" /> to <see cref="DeadlineQosPolicyWrapper" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="DeadlineQosPolicyWrapper" /> object.</returns>
+        public static implicit operator DeadlineQosPolicyWrapper(DeadlineQosPolicy value)
+        {
+            return new DeadlineQosPolicyWrapper
+            {
+                Period = value.Period,
+            };
         }
         #endregion
     }

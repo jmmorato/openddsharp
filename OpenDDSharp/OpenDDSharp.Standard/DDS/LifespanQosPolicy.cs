@@ -35,14 +35,24 @@ namespace OpenDDSharp.DDS
     /// and DDS can detect it, the <see cref="DataReader" /> is allowed to use the reception timestamp instead of the source timestamp in its
     /// computation of the 'expiration time'.</para>
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct LifespanQosPolicy : IEquatable<LifespanQosPolicy>
+    public sealed class LifespanQosPolicy : IEquatable<LifespanQosPolicy>
     {
         #region Properties
         /// <summary>
         /// Gets or sets the expiration time duration. The default value is infinite, which means samples never expire.
         /// </summary>
         public Duration Duration { get; set; }
+        #endregion
+
+        #region Constructors
+        internal LifespanQosPolicy()
+        {
+            Duration = new Duration
+            {
+                Seconds = Duration.InfiniteSeconds,
+                NanoSeconds = Duration.InfiniteNanoseconds,
+            };
+        }
         #endregion
 
         #region IEquatable<LifespanQosPolicy> Members
@@ -53,6 +63,11 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(LifespanQosPolicy other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return Duration == other.Duration;
         }
 
@@ -63,17 +78,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((LifespanQosPolicy)obj);
+            return (obj is LifespanQosPolicy other) && Equals(other);
         }
 
         /// <summary>
@@ -95,6 +100,16 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(LifespanQosPolicy left, LifespanQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return true;
+            }
+
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
             return left.Equals(right);
         }
 
@@ -106,7 +121,53 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
         public static bool operator !=(LifespanQosPolicy left, LifespanQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return false;
+            }
+
+            if (left == null || right == null)
+            {
+                return true;
+            }
+
             return !left.Equals(right);
+        }
+        #endregion
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct LifespanQosPolicyWrapper
+    {
+        #region Fields
+        public Duration Duration;
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="LifespanQosPolicyWrapper" /> to <see cref="LifespanQosPolicy" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="LifespanQosPolicy" /> object.</returns>
+        public static implicit operator LifespanQosPolicy(LifespanQosPolicyWrapper value)
+        {
+            return new LifespanQosPolicy
+            {
+                Duration = value.Duration,
+            };
+        }
+
+        /// <summary>
+        /// Implicit conversion operator from <see cref="LifespanQosPolicy" /> to <see cref="LifespanQosPolicyWrapper" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="LifespanQosPolicyWrapper" /> object.</returns>
+        public static implicit operator LifespanQosPolicyWrapper(LifespanQosPolicy value)
+        {
+            return new LifespanQosPolicyWrapper
+            {
+                Duration = value.Duration,
+            };
         }
         #endregion
     }

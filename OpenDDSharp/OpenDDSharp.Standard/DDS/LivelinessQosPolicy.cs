@@ -32,8 +32,7 @@ namespace OpenDDSharp.DDS
     ///     <item><description>The inequality "offered LeaseDuration &lt;= requested LeaseDuration" evaluates to 'true'.</description></item>
     /// </list>
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct LivelinessQosPolicy : IEquatable<LivelinessQosPolicy>
+    public sealed class LivelinessQosPolicy : IEquatable<LivelinessQosPolicy>
     {
         #region Properties
         /// <summary>
@@ -47,6 +46,18 @@ namespace OpenDDSharp.DDS
         public Duration LeaseDuration { get; set; }
         #endregion
 
+        #region Constructors
+        internal LivelinessQosPolicy()
+        {
+            Kind = LivelinessQosPolicyKind.AutomaticLivelinessQos;
+            LeaseDuration = new Duration
+            {
+                Seconds = Duration.InfiniteSeconds,
+                NanoSeconds = Duration.InfiniteNanoseconds,
+            };
+        }
+        #endregion
+
         #region IEquatable<LivelinessQosPolicy> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -55,6 +66,11 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(LivelinessQosPolicy other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return Kind == other.Kind &&
                    LeaseDuration == other.LeaseDuration;
         }
@@ -66,17 +82,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((LivelinessQosPolicy)obj);
+            return (obj is LivelinessQosPolicy other) && Equals(other);
         }
 
         /// <summary>
@@ -101,6 +107,16 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(LivelinessQosPolicy left, LivelinessQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return true;
+            }
+
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
             return left.Equals(right);
         }
 
@@ -112,7 +128,56 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
         public static bool operator !=(LivelinessQosPolicy left, LivelinessQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return false;
+            }
+
+            if (left == null || right == null)
+            {
+                return true;
+            }
+
             return !left.Equals(right);
+        }
+        #endregion
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct LivelinessQosPolicyWrapper
+    {
+        #region Fields
+        public LivelinessQosPolicyKind Kind;
+        public Duration LeaseDuration;
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="LivelinessQosPolicyWrapper" /> to <see cref="LivelinessQosPolicy" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="LivelinessQosPolicy" /> object.</returns>
+        public static implicit operator LivelinessQosPolicy(LivelinessQosPolicyWrapper value)
+        {
+            return new LivelinessQosPolicy
+            {
+                Kind = value.Kind,
+                LeaseDuration = value.LeaseDuration,
+            };
+        }
+
+        /// <summary>
+        /// Implicit conversion operator from <see cref="LivelinessQosPolicy" /> to <see cref="LivelinessQosPolicyWrapper" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="LivelinessQosPolicyWrapper" /> object.</returns>
+        public static implicit operator LivelinessQosPolicyWrapper(LivelinessQosPolicy value)
+        {
+            return new LivelinessQosPolicyWrapper
+            {
+                Kind = value.Kind,
+                LeaseDuration = value.LeaseDuration,
+            };
         }
         #endregion
     }

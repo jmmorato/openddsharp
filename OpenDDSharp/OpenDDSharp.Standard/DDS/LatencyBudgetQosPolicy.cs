@@ -28,7 +28,7 @@ namespace OpenDDSharp.DDS
     /// to how the service should take advantage of this hint.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct LatencyBudgetQosPolicy : IEquatable<LatencyBudgetQosPolicy>
+    public sealed class LatencyBudgetQosPolicy : IEquatable<LatencyBudgetQosPolicy>
     {
         #region Properties
         /// <summary>
@@ -41,6 +41,17 @@ namespace OpenDDSharp.DDS
         public Duration Duration { get; set; }
         #endregion
 
+        #region Constructors
+        internal LatencyBudgetQosPolicy()
+        {
+            Duration = new Duration
+            {
+                Seconds = Duration.ZeroSeconds,
+                NanoSeconds = Duration.ZeroNanoseconds,
+            };
+        }
+        #endregion
+
         #region IEquatable<LatencyBudgetQosPolicy> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -49,6 +60,11 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(LatencyBudgetQosPolicy other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return Duration == other.Duration;
         }
 
@@ -59,17 +75,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((LatencyBudgetQosPolicy)obj);
+            return (obj is LatencyBudgetQosPolicy other) && Equals(other);
         }
 
         /// <summary>
@@ -91,6 +97,16 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(LatencyBudgetQosPolicy left, LatencyBudgetQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return true;
+            }
+
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
             return left.Equals(right);
         }
 
@@ -102,7 +118,53 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
         public static bool operator !=(LatencyBudgetQosPolicy left, LatencyBudgetQosPolicy right)
         {
+            if (left == null && right == null)
+            {
+                return false;
+            }
+
+            if (left == null || right == null)
+            {
+                return true;
+            }
+
             return !left.Equals(right);
+        }
+        #endregion
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct LatencyBudgetQosPolicyWrapper
+    {
+        #region Fields
+        public Duration Duration;
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="LatencyBudgetQosPolicyWrapper" /> to <see cref="LatencyBudgetQosPolicy" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="LatencyBudgetQosPolicy" /> object.</returns>
+        public static implicit operator LatencyBudgetQosPolicy(LatencyBudgetQosPolicyWrapper value)
+        {
+            return new LatencyBudgetQosPolicy
+            {
+                Duration = value.Duration,
+            };
+        }
+
+        /// <summary>
+        /// Implicit conversion operator from <see cref="LatencyBudgetQosPolicy" /> to <see cref="LatencyBudgetQosPolicyWrapper" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="LatencyBudgetQosPolicyWrapper" /> object.</returns>
+        public static implicit operator LatencyBudgetQosPolicyWrapper(LatencyBudgetQosPolicy value)
+        {
+            return new LatencyBudgetQosPolicyWrapper
+            {
+                Duration = value.Duration,
+            };
         }
         #endregion
     }
