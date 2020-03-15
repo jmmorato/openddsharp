@@ -6,6 +6,7 @@
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>Properties\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   
   <ItemGroup>
