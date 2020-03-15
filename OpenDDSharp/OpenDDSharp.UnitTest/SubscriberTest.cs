@@ -384,7 +384,7 @@ namespace OpenDDSharp.UnitTest
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestCreateDataReaderr()
+        public void TestCreateDataReader()
         {
             // Initialize entities
             TestStructTypeSupport support = new TestStructTypeSupport();
