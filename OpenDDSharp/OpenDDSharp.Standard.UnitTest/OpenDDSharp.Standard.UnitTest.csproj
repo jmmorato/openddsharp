@@ -26,28 +26,28 @@
   </ItemGroup>
 
   <Target Name="CopyNative" AfterTargets="AfterBuild">
+    
     <!--PostBuildEvent-->
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\TestIdlStandard\bin\x86\Debug\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\TestIdlStandard\bin\Release\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\TestIdlStandard\bin\x86\Release\netstandard2.0\*.*" />
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">      
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\TestIdlStandard\bin\x64\Debug\netstandard2.0\*.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\Release\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\x64\Release\netstandard2.0\*.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
       <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*;" />
-      <!---->
-    </ItemGroup>    
+    </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
       <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\Release\netstandard2.0\*.*;" />
-      <!---->
     </ItemGroup>
-    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    <Message Importance="high" Text="Copying @(Dlls) to $(TargetDir)" />
+    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />    
   </Target>
 
 </Project>
