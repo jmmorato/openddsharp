@@ -199,7 +199,7 @@ namespace OpenDDSharp.DDS
             hashCode = (hashCode * -1521134295) + EqualityComparer<LivelinessQosPolicy>.Default.GetHashCode(Liveliness);
             hashCode = (hashCode * -1521134295) + EqualityComparer<ReliabilityQosPolicy>.Default.GetHashCode(Reliability);
             hashCode = (hashCode * -1521134295) + EqualityComparer<LifespanQosPolicy>.Default.GetHashCode(Lifespan);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<PublicationBuiltinTopicData>.Default.GetHashCode(UserData);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<UserDataQosPolicy>.Default.GetHashCode(UserData);
             hashCode = (hashCode * -1521134295) + EqualityComparer<OwnershipQosPolicy>.Default.GetHashCode(Ownership);
             hashCode = (hashCode * -1521134295) + EqualityComparer<OwnershipStrengthQosPolicy>.Default.GetHashCode(OwnershipStrength);
             hashCode = (hashCode * -1521134295) + EqualityComparer<DestinationOrderQosPolicy>.Default.GetHashCode(DestinationOrder);
