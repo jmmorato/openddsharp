@@ -218,6 +218,25 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT ReaderDataLifecycleQosPolicyWrapper
+{
+    DDS::Duration_t autopurge_nowriter_samples_delay;
+    DDS::Duration_t autopurge_disposed_samples_delay;
+
+public:
+    ReaderDataLifecycleQosPolicyWrapper(::DDS::ReaderDataLifecycleQosPolicy native) {
+        autopurge_nowriter_samples_delay = native.autopurge_nowriter_samples_delay;
+        autopurge_disposed_samples_delay = native.autopurge_disposed_samples_delay;
+    }
+
+    operator ::DDS::ReaderDataLifecycleQosPolicy() const {
+        ::DDS::ReaderDataLifecycleQosPolicy native;
+        native.autopurge_disposed_samples_delay = autopurge_disposed_samples_delay;
+        native.autopurge_nowriter_samples_delay = autopurge_nowriter_samples_delay;
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;
