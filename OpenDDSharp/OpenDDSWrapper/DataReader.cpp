@@ -18,7 +18,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DataReader.h"
-#include "marshal.h"
 
 ::DDS::Entity_ptr DataReader_NarrowBase(::DDS::DataReader_ptr dw) {
 	return static_cast<::DDS::Entity_ptr>(dw);

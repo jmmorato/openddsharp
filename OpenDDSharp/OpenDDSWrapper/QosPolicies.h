@@ -21,10 +21,22 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include "Utils.h"
 #include "dds\DdsDcpsDomainC.h"
+#include "marshal.h"
 
 EXTERN_STRUCT_EXPORT UserDataQosPolicyWrapper
 {
     void* value;
+
+public:
+    UserDataQosPolicyWrapper(::DDS::UserDataQosPolicy native) {
+        unbounded_sequence_to_ptr(native.value, value);
+    }
+
+    operator ::DDS::UserDataQosPolicy() const {
+        ::DDS::UserDataQosPolicy native;
+        ptr_to_unbounded_sequence(value, native.value);                
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT EntityFactoryQosPolicyWrapper

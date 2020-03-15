@@ -45,7 +45,29 @@ static void unbounded_sequence_to_ptr(TAO::unbounded_value_sequence<T> sequence,
 	delete[] bytes;
 }
 
-EXTERN_METHOD_EXPORT
-void release_native_ptr(void* ptr) {
-	ACE_OS::free(ptr);
+template <typename T>
+static void ptr_to_unbounded_sequence(void* ptr, TAO::unbounded_value_sequence<T>& sequence)
+{
+    if (ptr == NULL)
+    {
+        return;
+    }
+
+    char* bytes = (char*)ptr;
+
+    // First 4 bytes are the length of the array
+    ACE_UINT32 length = 0;
+    ACE_OS::memcpy(&length, bytes, sizeof length);
+    sequence.length(length);
+
+    // The rest of the memory is the structures aligned one after the other
+    const ACE_UINT64 structs_offset = sizeof length;
+    const ACE_UINT64 struct_size = sizeof T;
+    for (ACE_UINT32 i = 0; i < length; i++)
+    {
+        ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
+    }
 }
+
+EXTERN_METHOD_EXPORT
+inline void release_native_ptr(void* ptr) { ACE_OS::free(ptr); }
