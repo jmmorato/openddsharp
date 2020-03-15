@@ -20,16 +20,16 @@
   <Target Name="CopyNative" AfterTargets="AfterBuild">
     <!--PostBuildEvent-->
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\TestIdlStandard\bin\x86\Debug\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\TestIdlStandard\bin\Release\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\TestIdlStandard\bin\x86\Release\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\TestIdlStandard\bin\Debug\x64\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\Release\netstandard2.0\*.*" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;..\TestIdlStandard\bin\x64\Release\netstandard2.0\*.*" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
       <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_Win32.dll;..\TestIdlStandard\bin\Debug\netstandard2.0\*.*" />
