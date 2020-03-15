@@ -177,6 +177,25 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT HistoryQosPolicyWrapper{
+    ::CORBA::Long kind;
+    ::CORBA::Long depth;
+
+public:
+    HistoryQosPolicyWrapper(::DDS::HistoryQosPolicy native) {
+        kind = (::CORBA::Long)native.kind;
+        depth = native.depth;
+    }
+
+    operator ::DDS::HistoryQosPolicy() const {
+        ::DDS::HistoryQosPolicy native;
+        native.kind = (DDS::HistoryQosPolicyKind)kind;
+        native.depth = depth;
+        return native;
+    }
+
+};
+
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;
