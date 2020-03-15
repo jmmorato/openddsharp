@@ -177,7 +177,8 @@ public:
     }
 };
 
-EXTERN_STRUCT_EXPORT HistoryQosPolicyWrapper{
+EXTERN_STRUCT_EXPORT HistoryQosPolicyWrapper
+{
     ::CORBA::Long kind;
     ::CORBA::Long depth;
 
@@ -193,13 +194,34 @@ public:
         native.depth = depth;
         return native;
     }
+};
 
+EXTERN_STRUCT_EXPORT ResourceLimitsQosPolicyWrapper
+{
+    ::CORBA::Long max_samples;
+    ::CORBA::Long max_instances;
+    ::CORBA::Long max_samples_per_instance;
+
+public:
+    ResourceLimitsQosPolicyWrapper(::DDS::ResourceLimitsQosPolicy native) {
+        max_samples = native.max_samples;
+        max_instances = native.max_instances;
+        max_samples_per_instance = native.max_samples_per_instance;
+    }
+
+    operator ::DDS::ResourceLimitsQosPolicy() const {
+        ::DDS::ResourceLimitsQosPolicy native;
+        native.max_samples = max_samples;
+        native.max_instances = max_instances;
+        native.max_samples_per_instance = max_samples_per_instance;
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;
-    EntityFactoryQosPolicyWrapper entity_factory;   
+    EntityFactoryQosPolicyWrapper entity_factory;
 };
 
 EXTERN_STRUCT_EXPORT PublisherQosWrapper 
