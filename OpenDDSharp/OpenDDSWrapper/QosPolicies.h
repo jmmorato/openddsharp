@@ -218,6 +218,23 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT TimeBasedFilterQosPolicyWrapper
+{
+    DDS::Duration_t minimum_separation;
+    DDS::Duration_t autopurge_disposed_samples_delay;
+
+public:
+    TimeBasedFilterQosPolicyWrapper(::DDS::TimeBasedFilterQosPolicy native) {
+        minimum_separation = native.minimum_separation;        
+    }
+
+    operator ::DDS::TimeBasedFilterQosPolicy() const {
+        ::DDS::TimeBasedFilterQosPolicy native;
+        native.minimum_separation = minimum_separation;        
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT ReaderDataLifecycleQosPolicyWrapper
 {
     DDS::Duration_t autopurge_nowriter_samples_delay;
