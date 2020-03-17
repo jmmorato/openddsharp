@@ -17,7 +17,6 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using OpenDDSharp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -137,6 +136,141 @@ namespace OpenDDSharp.DDS
         public GroupDataQosPolicy GroupData { get; internal set; }
         #endregion
 
+        #region Methods
+        internal PublicationBuiltinTopicDataWrapper ToNative()
+        {
+            if (toRelease == null)
+            {
+                toRelease = new List<IntPtr>();
+            }
+
+            var data = new PublicationBuiltinTopicDataWrapper
+            {
+                Deadline = Deadline,
+                DestinationOrder = DestinationOrder,
+                Durability = Durability,
+                DurabilityService = DurabilityService,
+                Key = Key,
+                LatencyBudget = LatencyBudget,
+                Lifespan = Lifespan,
+                Liveliness = Liveliness,
+                Ownership = Ownership,
+                OwnershipStrength = OwnershipStrength,
+                ParticipantKey = ParticipantKey,
+                Presentation = Presentation,
+                Reliability = Reliability,
+            };
+
+            if (Partition != null)
+            {
+                data.Partition = Partition.ToNative();
+            }
+
+            if (GroupData != null)
+            {
+                data.GroupData = GroupData.ToNative();
+            }
+
+            if (TopicData != null)
+            {
+                data.TopicData = TopicData.ToNative();
+            }
+
+            if (UserData != null)
+            {
+                data.UserData = UserData.ToNative();
+            }
+
+            if (TopicName != null)
+            {
+                data.TopicName = Marshal.StringToHGlobalAnsi(TopicName);
+                toRelease.Add(data.TopicName);
+            }
+
+            if (TypeName != null)
+            {
+                data.TypeName = Marshal.StringToHGlobalAnsi(TypeName);
+                toRelease.Add(data.TypeName);
+            }
+
+            return data;
+        }
+
+        internal void FromNative(PublicationBuiltinTopicDataWrapper wrapper)
+        {
+            Deadline = wrapper.Deadline;
+            DestinationOrder = wrapper.DestinationOrder;
+            Durability = wrapper.Durability;
+            DurabilityService = wrapper.DurabilityService;
+            Key = wrapper.Key;
+            LatencyBudget = wrapper.LatencyBudget;
+            Lifespan = wrapper.Lifespan;
+            Liveliness = wrapper.Liveliness;
+            Ownership = wrapper.Ownership;
+            OwnershipStrength = wrapper.OwnershipStrength;
+            ParticipantKey = wrapper.ParticipantKey;
+            Presentation = wrapper.Presentation;
+            Reliability = wrapper.Reliability;
+
+            if (Partition == null)
+            {
+                Partition = new PartitionQosPolicy();
+            }
+            Partition.FromNative(wrapper.Partition);
+
+            if (GroupData == null)
+            {
+                GroupData = new GroupDataQosPolicy();
+            }
+            GroupData.FromNative(wrapper.GroupData);
+
+            if (TopicData == null)
+            {
+                TopicData = new TopicDataQosPolicy();
+            }
+            TopicData.FromNative(wrapper.TopicData);
+
+            if (UserData == null)
+            {
+                UserData = new UserDataQosPolicy();
+            }
+            UserData.FromNative(wrapper.UserData);
+
+            if (wrapper.TopicName != IntPtr.Zero)
+            {
+                TopicName = Marshal.PtrToStringAnsi(wrapper.TopicName);
+            }
+            else
+            {
+                TopicName = null;
+            }
+
+            if (wrapper.TypeName != IntPtr.Zero)
+            {
+                TypeName = Marshal.PtrToStringAnsi(wrapper.TypeName);
+            }
+            else
+            {
+                TypeName = null;
+            }
+        }
+
+        internal void Release()
+        {
+            Partition?.Release();
+            GroupData?.Release();
+            TopicData?.Release();
+            UserData?.Release();
+
+            foreach (IntPtr ptr in toRelease)
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            toRelease.Clear();
+        }
+        #endregion
+
         #region IEquatable<PublicationBuiltinTopicData> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -145,11 +279,6 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(PublicationBuiltinTopicData other)
         {
-            if (other == null)
-            {
-                return false;
-            }
-
             return Key == other.Key &&
                    ParticipantKey == other.ParticipantKey &&
                    TopicName == other.TopicName &&
@@ -232,122 +361,6 @@ namespace OpenDDSharp.DDS
         public static bool operator !=(PublicationBuiltinTopicData left, PublicationBuiltinTopicData right)
         {
             return !left.Equals(right);
-        }
-        #endregion
-
-        #region Methods
-        internal PublicationBuiltinTopicDataWrapper ToNative()
-        {
-            if (toRelease == null)
-            {
-                toRelease = new List<IntPtr>();
-            }
-
-            var data = new PublicationBuiltinTopicDataWrapper
-            {
-                Deadline = Deadline,
-                DestinationOrder = DestinationOrder,
-                Durability = Durability,
-                DurabilityService = DurabilityService,
-                Key = Key,
-                LatencyBudget = LatencyBudget,
-                Lifespan = Lifespan,
-                Liveliness = Liveliness,
-                Ownership = Ownership,
-                OwnershipStrength = OwnershipStrength,
-                ParticipantKey = ParticipantKey,
-                Presentation = Presentation,
-                Reliability = Reliability,
-            };
-
-            if (Partition != null)
-            {
-                data.Partition = Partition.ToNative();
-            }
-
-            if (GroupData != null)
-            {
-                data.GroupData = GroupData.ToNative();
-            }
-
-            if (TopicData != null)
-            {
-                data.TopicData = TopicData.ToNative();
-            }
-
-            if (UserData != null)
-            {
-                data.UserData = UserData.ToNative();
-            }
-
-            if (TopicName != null)
-            {
-                data.TopicName = Marshal.StringToHGlobalAnsi(TopicName);
-                toRelease.Add(data.TopicName);
-            }
-
-            if (TypeName != null)
-            {
-                data.TypeName = Marshal.StringToHGlobalAnsi(TypeName);
-                toRelease.Add(data.TypeName);
-            }
-
-            return data;
-        }
-
-        internal void FromNative(PublicationBuiltinTopicDataWrapper wrapper)
-        {
-            Deadline = wrapper.Deadline;
-            DestinationOrder = wrapper.DestinationOrder;
-            Durability = wrapper.Durability;
-            DurabilityService = wrapper.DurabilityService;
-            Key = wrapper.Key;
-            LatencyBudget = wrapper.LatencyBudget;
-            Lifespan = wrapper.Lifespan;
-            Liveliness = wrapper.Liveliness;
-            Ownership = wrapper.Ownership;
-            OwnershipStrength = wrapper.OwnershipStrength;
-            ParticipantKey = wrapper.ParticipantKey;
-            Presentation = wrapper.Presentation;
-            Reliability = wrapper.Reliability;
-
-            Partition.FromNative(wrapper.Partition);
-            GroupData.FromNative(wrapper.GroupData);
-            TopicData.FromNative(wrapper.TopicData);
-            UserData.FromNative(wrapper.UserData);
-
-            if (wrapper.TopicName != IntPtr.Zero)
-            {
-                TopicName = Marshal.PtrToStringAnsi(wrapper.TopicName);
-            }
-            else
-            {
-                TopicName = null;
-            }
-
-            if (wrapper.TypeName != IntPtr.Zero)
-            {
-                TypeName = Marshal.PtrToStringAnsi(wrapper.TypeName);
-            }
-            else
-            {
-                TypeName = null;
-            }
-        }
-
-        internal void Release()
-        {
-            Partition?.Release();
-            GroupData?.Release();
-            TopicData?.Release();
-            UserData?.Release();
-
-            foreach (IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
-
-            toRelease.Clear();
         }
         #endregion
     }
