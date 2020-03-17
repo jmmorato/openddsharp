@@ -221,7 +221,6 @@ public:
 EXTERN_STRUCT_EXPORT TimeBasedFilterQosPolicyWrapper
 {
     DDS::Duration_t minimum_separation;
-    DDS::Duration_t autopurge_disposed_samples_delay;
 
 public:
     TimeBasedFilterQosPolicyWrapper(::DDS::TimeBasedFilterQosPolicy native) {
@@ -254,6 +253,38 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT DestinationOrderQosPolicyWrapper
+{
+    ::CORBA::Long kind;    
+
+public:
+    DestinationOrderQosPolicyWrapper(::DDS::DestinationOrderQosPolicy native) {
+        kind = (::CORBA::Long)native.kind;
+    }
+
+    operator ::DDS::DestinationOrderQosPolicy() const {
+        ::DDS::DestinationOrderQosPolicy native;
+        native.kind = (DDS::DestinationOrderQosPolicyKind)kind;
+        return native;
+    }
+};
+
+EXTERN_STRUCT_EXPORT OwnershipQosPolicyWrapper
+{
+    ::CORBA::Long kind;
+
+public:
+    OwnershipQosPolicyWrapper(::DDS::OwnershipQosPolicy native) {
+        kind = (::CORBA::Long)native.kind;
+    }
+
+    operator ::DDS::OwnershipQosPolicy() const {
+        ::DDS::OwnershipQosPolicy native;
+        native.kind = (DDS::OwnershipQosPolicyKind)kind;
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;
@@ -282,5 +313,16 @@ EXTERN_STRUCT_EXPORT DataWriterQosWrapper
 
 EXTERN_STRUCT_EXPORT DataReaderQosWrapper
 {
-
+     DurabilityQosPolicyWrapper durability;
+     DeadlineQosPolicyWrapper deadline;
+     LatencyBudgetQosPolicyWrapper latency_budget;
+     LivelinessQosPolicyWrapper liveliness;
+     ReliabilityQosPolicyWrapper reliability;
+     DestinationOrderQosPolicyWrapper destination_order;
+     HistoryQosPolicyWrapper history;
+     ResourceLimitsQosPolicyWrapper resource_limits;
+     UserDataQosPolicyWrapper user_data;
+     OwnershipQosPolicyWrapper ownership;
+     TimeBasedFilterQosPolicyWrapper timeBasedFilter;
+     ReaderDataLifecycleQosPolicyWrapper reader_data_lifecycle;
 };
