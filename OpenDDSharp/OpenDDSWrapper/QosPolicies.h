@@ -28,13 +28,19 @@ EXTERN_STRUCT_EXPORT UserDataQosPolicyWrapper
     void* value;
 
 public:
-    UserDataQosPolicyWrapper(::DDS::UserDataQosPolicy native) {
+    UserDataQosPolicyWrapper() {
+        value = NULL;
+    }
+
+    UserDataQosPolicyWrapper(const ::DDS::UserDataQosPolicy native) {
         unbounded_sequence_to_ptr(native.value, value);
     }
 
     operator ::DDS::UserDataQosPolicy() const {
         ::DDS::UserDataQosPolicy native;
-        ptr_to_unbounded_sequence(value, native.value);                
+        if (value != NULL) {
+            ptr_to_unbounded_sequence(value, native.value);
+        }
         return native;
     }
 };
@@ -49,7 +55,11 @@ EXTERN_STRUCT_EXPORT DurabilityQosPolicyWrapper
     ::CORBA::Long kind;
 
 public:
-    DurabilityQosPolicyWrapper(::DDS::DurabilityQosPolicy native) {
+    DurabilityQosPolicyWrapper() {
+        kind = 0;
+    }
+
+    DurabilityQosPolicyWrapper(const ::DDS::DurabilityQosPolicy native) {
         kind = native.kind;
     }
 
@@ -70,7 +80,17 @@ EXTERN_STRUCT_EXPORT DurabilityServiceQosPolicyWrapper
     ::CORBA::Long max_samples_per_instance;
 
 public:
-    DurabilityServiceQosPolicyWrapper(::DDS::DurabilityServiceQosPolicy native) {
+    DurabilityServiceQosPolicyWrapper() {
+        service_cleanup_delay.sec = ::DDS::DURATION_ZERO_SEC;
+        service_cleanup_delay.nanosec = ::DDS::DURATION_ZERO_NSEC;
+        history_kind = 0;
+        history_depth = 1;
+        max_samples = ::DDS::LENGTH_UNLIMITED;
+        max_instances = ::DDS::LENGTH_UNLIMITED;
+        max_samples_per_instance = ::DDS::LENGTH_UNLIMITED;
+    }
+
+    DurabilityServiceQosPolicyWrapper(const ::DDS::DurabilityServiceQosPolicy native) {
         service_cleanup_delay = native.service_cleanup_delay;
         history_kind = native.history_kind;
         history_depth = native.history_depth;
@@ -96,7 +116,12 @@ EXTERN_STRUCT_EXPORT DeadlineQosPolicyWrapper
     DDS::Duration_t period;
 
 public:
-    DeadlineQosPolicyWrapper(::DDS::DeadlineQosPolicy native) {
+    DeadlineQosPolicyWrapper() {
+        period.sec = ::DDS::DURATION_INFINITE_SEC;
+        period.nanosec = ::DDS::DURATION_INFINITE_NSEC;
+    }
+
+    DeadlineQosPolicyWrapper(const ::DDS::DeadlineQosPolicy native) {
         period = native.period;
     }
 
@@ -112,7 +137,12 @@ EXTERN_STRUCT_EXPORT LatencyBudgetQosPolicyWrapper
     DDS::Duration_t duration;
 
 public:
-    LatencyBudgetQosPolicyWrapper(::DDS::LatencyBudgetQosPolicy native) {
+    LatencyBudgetQosPolicyWrapper() {
+        duration.sec = ::DDS::DURATION_ZERO_SEC;
+        duration.nanosec = ::DDS::DURATION_ZERO_NSEC;
+    }
+
+    LatencyBudgetQosPolicyWrapper(const ::DDS::LatencyBudgetQosPolicy native) {
         duration = native.duration;
     }
 
@@ -129,7 +159,13 @@ EXTERN_STRUCT_EXPORT LivelinessQosPolicyWrapper
     DDS::Duration_t lease_duration;
 
 public:
-    LivelinessQosPolicyWrapper(::DDS::LivelinessQosPolicy native) {
+    LivelinessQosPolicyWrapper() {
+        kind = 0;
+        lease_duration.sec = ::DDS::DURATION_INFINITE_SEC;
+        lease_duration.nanosec = ::DDS::DURATION_INFINITE_NSEC;
+    }
+
+    LivelinessQosPolicyWrapper(const ::DDS::LivelinessQosPolicy native) {
         kind = (::CORBA::Long)native.kind;
         lease_duration = native.lease_duration;
     }
@@ -148,7 +184,13 @@ EXTERN_STRUCT_EXPORT ReliabilityQosPolicyWrapper
     DDS::Duration_t max_blocking_time;
 
 public:
-    ReliabilityQosPolicyWrapper(::DDS::ReliabilityQosPolicy native) {
+    ReliabilityQosPolicyWrapper() {
+        kind = 0;
+        max_blocking_time.sec = ::DDS::DURATION_INFINITE_SEC;
+        max_blocking_time.nanosec = ::DDS::DURATION_INFINITE_NSEC;
+    }
+
+    ReliabilityQosPolicyWrapper(const ::DDS::ReliabilityQosPolicy native) {
         kind = (::CORBA::Long)native.kind;
         max_blocking_time = native.max_blocking_time;
     }
@@ -166,7 +208,11 @@ EXTERN_STRUCT_EXPORT LifespanQosPolicyWrapper
     DDS::Duration_t duration;
 
 public:
-    LifespanQosPolicyWrapper(::DDS::LifespanQosPolicy native) {
+    LifespanQosPolicyWrapper() {
+        duration.sec = ::DDS::DURATION_INFINITE_SEC;
+        duration.nanosec = ::DDS::DURATION_INFINITE_NSEC;
+    }
+    LifespanQosPolicyWrapper(const ::DDS::LifespanQosPolicy native) {
         duration = native.duration;
     }
 
@@ -183,7 +229,12 @@ EXTERN_STRUCT_EXPORT HistoryQosPolicyWrapper
     ::CORBA::Long depth;
 
 public:
-    HistoryQosPolicyWrapper(::DDS::HistoryQosPolicy native) {
+    HistoryQosPolicyWrapper() {
+        kind = 0;
+        depth = 1;
+    }
+
+    HistoryQosPolicyWrapper(const ::DDS::HistoryQosPolicy native) {
         kind = (::CORBA::Long)native.kind;
         depth = native.depth;
     }
@@ -203,7 +254,13 @@ EXTERN_STRUCT_EXPORT ResourceLimitsQosPolicyWrapper
     ::CORBA::Long max_samples_per_instance;
 
 public:
-    ResourceLimitsQosPolicyWrapper(::DDS::ResourceLimitsQosPolicy native) {
+    ResourceLimitsQosPolicyWrapper() {
+        max_samples = ::DDS::LENGTH_UNLIMITED;
+        max_instances = ::DDS::LENGTH_UNLIMITED;
+        max_samples_per_instance = ::DDS::LENGTH_UNLIMITED;
+    }
+
+    ResourceLimitsQosPolicyWrapper(const ::DDS::ResourceLimitsQosPolicy native) {
         max_samples = native.max_samples;
         max_instances = native.max_instances;
         max_samples_per_instance = native.max_samples_per_instance;
@@ -223,7 +280,12 @@ EXTERN_STRUCT_EXPORT TimeBasedFilterQosPolicyWrapper
     DDS::Duration_t minimum_separation;
 
 public:
-    TimeBasedFilterQosPolicyWrapper(::DDS::TimeBasedFilterQosPolicy native) {
+    TimeBasedFilterQosPolicyWrapper() {
+        minimum_separation.sec = ::DDS::DURATION_ZERO_SEC;
+        minimum_separation.nanosec = ::DDS::DURATION_ZERO_NSEC;
+    }
+
+    TimeBasedFilterQosPolicyWrapper(const ::DDS::TimeBasedFilterQosPolicy native) {
         minimum_separation = native.minimum_separation;        
     }
 
@@ -240,7 +302,15 @@ EXTERN_STRUCT_EXPORT ReaderDataLifecycleQosPolicyWrapper
     DDS::Duration_t autopurge_disposed_samples_delay;
 
 public:
-    ReaderDataLifecycleQosPolicyWrapper(::DDS::ReaderDataLifecycleQosPolicy native) {
+    ReaderDataLifecycleQosPolicyWrapper() {
+        autopurge_nowriter_samples_delay.sec = ::DDS::DURATION_INFINITE_SEC;
+        autopurge_nowriter_samples_delay.nanosec = ::DDS::DURATION_INFINITE_NSEC;
+
+        autopurge_disposed_samples_delay.sec = ::DDS::DURATION_INFINITE_SEC;
+        autopurge_disposed_samples_delay.nanosec = ::DDS::DURATION_INFINITE_NSEC;
+    }
+
+    ReaderDataLifecycleQosPolicyWrapper(const ::DDS::ReaderDataLifecycleQosPolicy native) {
         autopurge_nowriter_samples_delay = native.autopurge_nowriter_samples_delay;
         autopurge_disposed_samples_delay = native.autopurge_disposed_samples_delay;
     }
@@ -258,7 +328,11 @@ EXTERN_STRUCT_EXPORT DestinationOrderQosPolicyWrapper
     ::CORBA::Long kind;    
 
 public:
-    DestinationOrderQosPolicyWrapper(::DDS::DestinationOrderQosPolicy native) {
+    DestinationOrderQosPolicyWrapper() {
+        kind = 0;
+    }
+
+    DestinationOrderQosPolicyWrapper(const ::DDS::DestinationOrderQosPolicy native) {
         kind = (::CORBA::Long)native.kind;
     }
 
@@ -274,7 +348,11 @@ EXTERN_STRUCT_EXPORT OwnershipQosPolicyWrapper
     ::CORBA::Long kind;
 
 public:
-    OwnershipQosPolicyWrapper(::DDS::OwnershipQosPolicy native) {
+    OwnershipQosPolicyWrapper() {
+        kind = 0;
+    }
+
+    OwnershipQosPolicyWrapper(const ::DDS::OwnershipQosPolicy native) {
         kind = (::CORBA::Long)native.kind;
     }
 
@@ -323,6 +401,41 @@ EXTERN_STRUCT_EXPORT DataReaderQosWrapper
      ResourceLimitsQosPolicyWrapper resource_limits;
      UserDataQosPolicyWrapper user_data;
      OwnershipQosPolicyWrapper ownership;
-     TimeBasedFilterQosPolicyWrapper timeBasedFilter;
+     TimeBasedFilterQosPolicyWrapper time_based_filter;
      ReaderDataLifecycleQosPolicyWrapper reader_data_lifecycle;
+
+public:
+    DataReaderQosWrapper();
+
+    DataReaderQosWrapper(const ::DDS::DataReaderQos native) {
+        durability = DurabilityQosPolicyWrapper(native.durability);
+        deadline = DeadlineQosPolicyWrapper(native.deadline);
+        latency_budget = LatencyBudgetQosPolicyWrapper(native.latency_budget);
+        liveliness = LivelinessQosPolicyWrapper(native.liveliness);
+        reliability = ReliabilityQosPolicyWrapper(native.reliability);
+        destination_order = DestinationOrderQosPolicyWrapper(native.destination_order);
+        history = HistoryQosPolicyWrapper(native.history);
+        resource_limits = ResourceLimitsQosPolicyWrapper(native.resource_limits);
+        user_data = UserDataQosPolicyWrapper(native.user_data);
+        ownership = OwnershipQosPolicyWrapper(native.ownership);
+        time_based_filter = TimeBasedFilterQosPolicyWrapper(native.time_based_filter);
+        reader_data_lifecycle = ReaderDataLifecycleQosPolicyWrapper(native.reader_data_lifecycle);
+    }
+
+    operator ::DDS::DataReaderQos() const {
+        ::DDS::DataReaderQos native;
+        native.durability = durability;
+        native.deadline = deadline;
+        native.latency_budget = latency_budget;
+        native.liveliness = liveliness;
+        native.reliability = reliability;
+        native.destination_order = destination_order;
+        native.history = history;
+        native.resource_limits = resource_limits;
+        native.user_data = user_data;
+        native.ownership = ownership;
+        native.time_based_filter = time_based_filter;
+        native.reader_data_lifecycle = reader_data_lifecycle;
+        return native;
+    }
 };
