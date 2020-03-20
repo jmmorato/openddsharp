@@ -151,7 +151,21 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetQos(DataReaderQos qos)
         {
-            throw new NotImplementedException();
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            DataReaderQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            return ret;
         }
 
         /// <summary>
@@ -161,7 +175,16 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode SetQos(DataReaderQos qos)
         {
-            throw new NotImplementedException();
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
+                                               () => UnsafeNativeMethods.SetQos64(_native, qosNative));
+
         }
 
         /// <summary>
@@ -269,7 +292,8 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode WaitForHistoricalData(Duration maxWait)
         {
-            throw new NotImplementedException();
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.WaitForHistoricalData86(_native, maxWait),
+                                               () => UnsafeNativeMethods.WaitForHistoricalData64(_native, maxWait));
         }
 
         /// <summary>
@@ -381,6 +405,30 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetMatchedPublications", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetMatchedPublications86(IntPtr dr, ref IntPtr publicationHandles);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_WaitForHistoricalData", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode WaitForHistoricalData64(IntPtr dr, Duration maxWait);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_WaitForHistoricalData", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode WaitForHistoricalData86(IntPtr dr, Duration maxWait);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
         }
         #endregion
     }

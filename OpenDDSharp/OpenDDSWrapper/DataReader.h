@@ -20,9 +20,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "Utils.h"
 #include "marshal.h"
+#include "QosPolicies.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataReader_NarrowBase(::DDS::DataReader_ptr dp);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataReader_GetMatchedPublications(::DDS::DataReader_ptr dr, void* & ptr);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_WaitForHistoricalData(::DDS::DataReader_ptr dr, ::DDS::Duration_t max_wait);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetQos(::DDS::DataReader_ptr dr, DataReaderQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_SetQos(::DDS::DataReader_ptr dr, DataReaderQosWrapper qos_wrapper);

@@ -28,12 +28,27 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	::DDS::ReturnCode_t ret = dr->get_matched_publications(publication_handles);
 
 	if (ret == ::DDS::RETCODE_OK) {
-		/*char buf[2048];
-		sprintf(buf, "PUBLICATION HANDLES %d \n", publication_handles.length());
-		OutputDebugStringA(buf);*/
-
 		unbounded_sequence_to_ptr(publication_handles, ptr);
 	}
 
 	return ret;
+}
+
+::DDS::ReturnCode_t DataReader_WaitForHistoricalData(::DDS::DataReader_ptr dr, ::DDS::Duration_t max_wait) {
+	return dr->wait_for_historical_data(max_wait);
+}
+
+::DDS::ReturnCode_t DataReader_GetQos(::DDS::DataReader_ptr dr, DataReaderQosWrapper& qos_wrapper) {
+	::DDS::DataReaderQos qos_native;
+	::DDS::ReturnCode_t ret = dr->get_qos(qos_native);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos_wrapper = qos_native;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t DataReader_SetQos(::DDS::DataReader_ptr dr, DataReaderQosWrapper qos_wrapper) {
+	return dr->set_qos(qos_wrapper);
 }
