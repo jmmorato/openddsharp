@@ -7,6 +7,7 @@
     <CodeAnalysisRuleSet>Properties\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <ItemGroup>
