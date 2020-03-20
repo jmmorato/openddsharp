@@ -50,16 +50,51 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
-        public DataReader CreateDataReader(Topic topic)
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the default QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
+        /// <para>The <see cref="ITopicDescription"/> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to
+        /// create this <see cref="Subscriber" />. If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation will fail and
+        /// return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        // TODO: Change ITopicDescription when implemented in Topic class.
+        public DataReader CreateDataReader(Topic topicDescription)
         {
-            if (topic == null)
+            return CreateDataReader(topicDescription, new DataReaderQos());
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
+        /// <para>The <see cref="ITopicDescription"/> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to
+        /// create this <see cref="Subscriber" />. If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation will fail and
+        /// return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        // TODO: Change ITopicDescription when implemented in Topic class.
+        public DataReader CreateDataReader(Topic topicDescription, DataReaderQos qos)
+        {
+            if (topicDescription is null)
             {
-                throw new ArgumentNullException(nameof(topic));
+                throw new ArgumentNullException(nameof(topicDescription));
             }
 
-            DataReaderQosWrapper qos = default(DataReaderQosWrapper);
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topic.ToNative(), ref qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topic.ToNative(), ref qos, IntPtr.Zero, 0u));
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
+            DataReaderQosWrapper qosWrapper = qos.ToNative();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNative(), qosWrapper, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNative(), qosWrapper, IntPtr.Zero, 0u));
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -95,11 +130,11 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateDataReader64(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] ref DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateDataReader64(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateDataReader86(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] ref DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateDataReader86(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
         }
         #endregion
     }

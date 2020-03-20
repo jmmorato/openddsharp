@@ -25,12 +25,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 ::DDS::DataReader_ptr Subscriber_CreateDataReader(::DDS::Subscriber_ptr sub,
 												  ::DDS::Topic_ptr topic,
-												  DataReaderQosWrapper* qos,
+												  DataReaderQosWrapper qos,
 												  ::DDS::DataReaderListener_ptr a_listener,
 												  ::DDS::StatusMask mask) {
-	::DDS::DataReaderQos nativeQos;
+	/*::DDS::DataReaderQos nativeQos;
 	::DDS::ReturnCode_t ret = sub->get_default_datareader_qos(nativeQos);
-	nativeQos.reliability.kind = DDS::ReliabilityQosPolicyKind::RELIABLE_RELIABILITY_QOS;
+	nativeQos.reliability.kind = DDS::ReliabilityQosPolicyKind::RELIABLE_RELIABILITY_QOS;*/
+	char buf[2048];
+	sprintf(buf, "Subscriber_CreateDataReader DEADLINE PERIOD: %d \n", qos.deadline.period.sec);
+	OutputDebugString(buf);
+	::DDS::DataReaderQos nativeQos = qos;
 
-    return sub->create_datareader(topic, nativeQos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK); // DATAREADER_QOS_DEFAULT
+	sprintf(buf, "Subscriber_CreateDataReader NATIVE DEADLINE PERIOD: %d \n", nativeQos.deadline.period.sec);
+	OutputDebugString(buf);
+
+    return sub->create_datareader(topic, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
