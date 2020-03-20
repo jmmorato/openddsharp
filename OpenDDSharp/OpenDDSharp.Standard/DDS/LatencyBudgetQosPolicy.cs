@@ -97,12 +97,12 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
         public static bool operator ==(LatencyBudgetQosPolicy left, LatencyBudgetQosPolicy right)
         {
-            if (left == null && right == null)
+            if (left is null && right is null)
             {
                 return true;
             }
 
-            if (left == null || right == null)
+            if (left is null || right is null)
             {
                 return false;
             }
@@ -118,12 +118,12 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
         public static bool operator !=(LatencyBudgetQosPolicy left, LatencyBudgetQosPolicy right)
         {
-            if (left == null && right == null)
+            if (left is null && right is null)
             {
                 return false;
             }
 
-            if (left == null || right == null)
+            if (left is null || right is null)
             {
                 return true;
             }
