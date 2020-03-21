@@ -272,7 +272,7 @@ namespace OpenDDSharp.DDS
     [StructLayout(LayoutKind.Sequential)]
     internal struct DataReaderQosWrapper
     {
-        #region Properties
+        #region Fields
         public DurabilityQosPolicyWrapper Durability;
         public DeadlineQosPolicyWrapper Deadline;
         public LatencyBudgetQosPolicyWrapper LatencyBudget;
