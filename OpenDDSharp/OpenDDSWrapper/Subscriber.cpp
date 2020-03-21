@@ -41,3 +41,21 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
     return sub->create_datareader(topic, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
+
+::DDS::ReturnCode_t Subscriber_GetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper& qos_wrapper) {
+	::DDS::SubscriberQos qos_native;
+	::DDS::ReturnCode_t ret = s->get_qos(qos_native);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos_wrapper = qos_native;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper qos_wrapper) {
+	char buf[2048];
+	sprintf(buf, "Subscriber_SetQos autoenable_created_entities: %s \n", qos_wrapper.entity_factory.autoenable_created_entities ? "true" : "false");
+	OutputDebugString(buf);
+	return s->set_qos(qos_wrapper);
+}

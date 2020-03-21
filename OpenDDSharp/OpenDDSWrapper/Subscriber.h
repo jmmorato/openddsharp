@@ -31,3 +31,8 @@ EXTERN_METHOD_EXPORT
 												  DataReaderQosWrapper qos,
 												  ::DDS::DataReaderListener_ptr a_listener,
 												  ::DDS::StatusMask mask);
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_GetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper qos_wrapper);
