@@ -70,7 +70,9 @@ namespace OpenDDSharp.Standard.UnitTest
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(_topic);
 
-            _dr = _subscriber.CreateDataReader(_topic);
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            _dr = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(_dr);
             _dataReader = new TestStructDataReader(_dr);
 
