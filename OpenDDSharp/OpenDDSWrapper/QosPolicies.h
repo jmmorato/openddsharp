@@ -553,7 +553,54 @@ public:
 
 EXTERN_STRUCT_EXPORT TopicQosWrapper
 {
+    TopicDataQosPolicyWrapper topic_data;
+    DurabilityQosPolicyWrapper durability;
+    DurabilityServiceQosPolicyWrapper durability_service;
+    DeadlineQosPolicyWrapper deadline;
+    LatencyBudgetQosPolicyWrapper latency_budget;
+    LivelinessQosPolicyWrapper liveliness;
+    ReliabilityQosPolicyWrapper reliability;
+    DestinationOrderQosPolicyWrapper destination_order;
+    HistoryQosPolicyWrapper history;
+    ResourceLimitsQosPolicyWrapper resource_limits;
+    TransportPriorityQosPolicyWrapper transport_priority;
+    LifespanQosPolicyWrapper lifespan;
+    OwnershipQosPolicyWrapper ownership;
 
+public:
+    TopicQosWrapper();
+
+    TopicQosWrapper(const ::DDS::TopicQos native) {
+        topic_data = native.topic_data;
+        durability = native.durability;
+        durability_service = native.durability_service;
+        deadline = native.deadline;
+        latency_budget = native.latency_budget;
+        liveliness = native.liveliness;
+        reliability = native.reliability;
+        history = native.history;
+        resource_limits = native.resource_limits;
+        transport_priority = native.transport_priority;
+        lifespan = native.lifespan;
+        ownership = native.ownership;
+    }
+
+    operator ::DDS::TopicQos() const {
+        ::DDS::TopicQos native;
+        native.topic_data = topic_data;
+        native.durability = durability;
+        native.durability_service = durability_service;
+        native.deadline = deadline;
+        native.latency_budget = latency_budget;
+        native.liveliness = liveliness;
+        native.reliability = reliability;
+        native.history = history;
+        native.resource_limits = resource_limits;
+        native.transport_priority = transport_priority;
+        native.lifespan = lifespan;
+        native.ownership = ownership;        
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT DataWriterQosWrapper
