@@ -478,6 +478,26 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT TransportPriorityQosPolicyWrapper
+{
+    CORBA::Long value;
+
+public:
+    TransportPriorityQosPolicyWrapper() {
+        value = 0;
+    }
+
+    TransportPriorityQosPolicyWrapper(const ::DDS::TransportPriorityQosPolicy native) {
+        value = native.value;
+    }
+
+    operator ::DDS::TransportPriorityQosPolicy() const {
+        ::DDS::TransportPriorityQosPolicy native;
+        native.value = value;
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;
