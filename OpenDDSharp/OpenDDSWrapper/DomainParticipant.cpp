@@ -23,33 +23,43 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	return static_cast<::DDS::Entity_ptr>(dp);
 }
 
-::DDS::Publisher_ptr DomainParticipant_CreatePublisher(
-    ::DDS::DomainParticipant_ptr dp, 
-    PublisherQosWrapper* qos, 
-    ::DDS::PublisherListener_ptr a_listener, 
-    ::DDS::StatusMask mask)
-{
+::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp, 
+                                                       PublisherQosWrapper* qos, 
+                                                       ::DDS::PublisherListener_ptr a_listener, 
+                                                       ::DDS::StatusMask mask) {
     return dp->create_publisher(PUBLISHER_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
 
-::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(
-    ::DDS::DomainParticipant_ptr dp,
-    SubscriberQosWrapper qos,
-    ::DDS::SubscriberListener_ptr a_listener,
-    ::DDS::StatusMask mask)
-{
+::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(::DDS::DomainParticipant_ptr dp,
+                                                         SubscriberQosWrapper qos,
+                                                         ::DDS::SubscriberListener_ptr a_listener,
+                                                         ::DDS::StatusMask mask) {
     return dp->create_subscriber(qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
 
-::DDS::Topic_ptr DomainParticipant_CreateTopic(
-    ::DDS::DomainParticipant_ptr dp,
-    const char * topic_name,
-    const char * type_name,
-    TopicQosWrapper* qos,
-    ::DDS::TopicListener_ptr a_listener,
-    ::DDS::StatusMask mask)
-{
+::DDS::Topic_ptr DomainParticipant_CreateTopic(::DDS::DomainParticipant_ptr dp,
+                                               const char * topic_name,
+                                               const char * type_name,
+                                               TopicQosWrapper* qos,
+                                               ::DDS::TopicListener_ptr a_listener,
+                                               ::DDS::StatusMask mask) {
     return dp->create_topic(topic_name, type_name, TOPIC_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+}
+
+
+::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr s, DomainParticipantQosWrapper& qos_wrapper) {
+    ::DDS::DomainParticipantQos qos_native;
+    ::DDS::ReturnCode_t ret = s->get_qos(qos_native);
+
+    if (ret == ::DDS::RETCODE_OK) {
+        qos_wrapper = qos_native;
+    }
+
+    return ret;
+}
+
+::DDS::ReturnCode_t DomainParticipant_SetQos(::DDS::DomainParticipant_ptr s, DomainParticipantQosWrapper qos_wrapper) {
+    return s->set_qos(qos_wrapper);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp)
