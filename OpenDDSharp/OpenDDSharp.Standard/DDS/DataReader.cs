@@ -165,6 +165,8 @@ namespace OpenDDSharp.DDS
                 qos.FromNative(qosWrapper);
             }
 
+            qos.Release();
+
             return ret;
         }
 
@@ -182,9 +184,12 @@ namespace OpenDDSharp.DDS
 
             var qosNative = qos.ToNative();
 
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
-                                               () => UnsafeNativeMethods.SetQos64(_native, qosNative));
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetQos64(_native, qosNative));
 
+            qos.Release();
+
+            return ret;
         }
 
         /// <summary>
