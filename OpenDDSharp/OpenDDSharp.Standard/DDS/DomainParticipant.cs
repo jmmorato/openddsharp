@@ -60,7 +60,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
         public Publisher CreatePublisher()
         {
-            PublisherQosWrapper qos = default(PublisherQosWrapper);
+            PublisherQosWrapper qos = default;
 
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, ref qos, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreatePublisher64(_native, ref qos, IntPtr.Zero, 0u));
@@ -82,10 +82,28 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
         public Subscriber CreateSubscriber()
         {
-            SubscriberQosWrapper qos = default(SubscriberQosWrapper);
+            return CreateSubscriber(new SubscriberQos());
+        }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, ref qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateSubscriber64(_native, ref qos, IntPtr.Zero, 0u));
+        /// <summary>
+        /// Creates a new <see cref="Subscriber" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Subscriber" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Subscriber" /> will be created.</para>
+        /// </remarks>
+        /// <param name="qos">The <see cref="SubscriberQos" /> policies to be used for creating the new <see cref="Subscriber" />.</param>
+        /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
+        public Subscriber CreateSubscriber(SubscriberQos qos)
+        {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
+            SubscriberQosWrapper qosWrapper = qos.ToNative();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, qosWrapper, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateSubscriber64(_native, qosWrapper, IntPtr.Zero, 0u));
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -108,7 +126,7 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
         public Topic CreateTopic(string topicName, string typeName)
         {
-            TopicQosWrapper qos = default(TopicQosWrapper);
+            TopicQosWrapper qos = default;
 
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u));
@@ -185,11 +203,11 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateSubscriber64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateSubscriber64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateSubscriber86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateSubscriber86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

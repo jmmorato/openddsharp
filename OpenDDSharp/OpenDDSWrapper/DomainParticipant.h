@@ -36,7 +36,7 @@ EXTERN_METHOD_EXPORT
 EXTERN_METHOD_EXPORT 
 ::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(
     ::DDS::DomainParticipant_ptr dp, 
-    SubscriberQosWrapper* qos, 
+    SubscriberQosWrapper qos, 
     ::DDS::SubscriberListener_ptr a_listener, 
     ::DDS::StatusMask mask);
 
