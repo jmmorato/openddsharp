@@ -126,7 +126,15 @@ namespace OpenDDSharp.DDS
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return -1937169414 + EqualityComparer<IEnumerable<byte>>.Default.GetHashCode(Value);
+            var hashCode = 1476352029;
+            if (Value != null)
+            {
+                foreach (var b in Value)
+                {
+                    hashCode = (hashCode * -1521134295) + b.GetHashCode();
+                }
+            }
+            return hashCode;
         }
         #endregion
 

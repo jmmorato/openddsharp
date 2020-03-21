@@ -136,9 +136,17 @@ namespace OpenDDSharp.DDS
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return -1937169414 + EqualityComparer<IEnumerable<string>>.Default.GetHashCode(Name);
+            var hashCode = 1476352029;
+            if (Name != null)
+            {
+                foreach (var s in Name)
+                {
+                    hashCode = (hashCode * -1521134295) + s.GetHashCode();
+                }
+            }
+            return hashCode;
         }
-        #endregion        
+        #endregion
     }
 
     [StructLayout(LayoutKind.Sequential)]
