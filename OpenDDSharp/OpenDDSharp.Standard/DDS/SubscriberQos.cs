@@ -77,7 +77,7 @@ namespace OpenDDSharp.DDS
                 data.GroupData = GroupData.ToNative();
             }
 
-            if (GroupData != null)
+            if (Partition != null)
             {
                 data.Partition = Partition.ToNative();
             }
@@ -203,9 +203,13 @@ namespace OpenDDSharp.DDS
     internal struct SubscriberQosWrapper
     {
         #region Fields
+        [MarshalAs(UnmanagedType.Struct)]
         public PresentationQosPolicyWrapper Presentation;
+        [MarshalAs(UnmanagedType.Struct)]
         public PartitionQosPolicyWrapper Partition;
+        [MarshalAs(UnmanagedType.Struct)]
         public GroupDataQosPolicyWrapper GroupData;
+        [MarshalAs(UnmanagedType.Struct)]
         public EntityFactoryQosPolicyWrapper EntityFactory;
         #endregion
     }
