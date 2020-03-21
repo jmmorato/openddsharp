@@ -91,7 +91,27 @@ public:
 
 EXTERN_STRUCT_EXPORT EntityFactoryQosPolicyWrapper
 {
-    bool autoenable_created_entities;
+    CORBA::Boolean autoenable_created_entities;
+
+public:
+    EntityFactoryQosPolicyWrapper() {
+        autoenable_created_entities = true;
+    }
+
+    EntityFactoryQosPolicyWrapper(const ::DDS::EntityFactoryQosPolicy native) {
+        autoenable_created_entities = native.autoenable_created_entities;
+    }
+
+    operator ::DDS::EntityFactoryQosPolicy() const {
+        ::DDS::EntityFactoryQosPolicy native;
+        char buf[2048];
+        sprintf(buf, "EntityFactoryQosPolicy autoenable_created_entities: %s \n", autoenable_created_entities ? "true" : "false");
+        OutputDebugString(buf);
+        native.autoenable_created_entities = autoenable_created_entities;
+        sprintf(buf, "EntityFactoryQosPolicy native.autoenable_created_entities: %s \n", native.autoenable_created_entities ? "true" : "false");
+        OutputDebugString(buf);
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT DurabilityQosPolicyWrapper
@@ -475,6 +495,25 @@ EXTERN_STRUCT_EXPORT SubscriberQosWrapper
     PartitionQosPolicyWrapper partition;
     GroupDataQosPolicyWrapper group_data;
     EntityFactoryQosPolicyWrapper entity_factory;
+
+public:
+    SubscriberQosWrapper();
+
+    SubscriberQosWrapper(const ::DDS::SubscriberQos native) {
+        presentation = native.presentation;
+        partition = native.partition;
+        group_data = native.group_data;
+        entity_factory = native.entity_factory;
+    }
+
+    operator ::DDS::SubscriberQos() const {
+        ::DDS::SubscriberQos native;
+        native.presentation = presentation;
+        native.partition = partition;
+        native.group_data = group_data;
+        native.entity_factory = entity_factory;
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT TopicQosWrapper
@@ -506,18 +545,18 @@ public:
     DataReaderQosWrapper();
 
     DataReaderQosWrapper(const ::DDS::DataReaderQos native) {
-        durability = DurabilityQosPolicyWrapper(native.durability);
-        deadline = DeadlineQosPolicyWrapper(native.deadline);
-        latency_budget = LatencyBudgetQosPolicyWrapper(native.latency_budget);
-        liveliness = LivelinessQosPolicyWrapper(native.liveliness);
-        reliability = ReliabilityQosPolicyWrapper(native.reliability);
-        destination_order = DestinationOrderQosPolicyWrapper(native.destination_order);
-        history = HistoryQosPolicyWrapper(native.history);
-        resource_limits = ResourceLimitsQosPolicyWrapper(native.resource_limits);
-        user_data = UserDataQosPolicyWrapper(native.user_data);
-        ownership = OwnershipQosPolicyWrapper(native.ownership);
-        time_based_filter = TimeBasedFilterQosPolicyWrapper(native.time_based_filter);
-        reader_data_lifecycle = ReaderDataLifecycleQosPolicyWrapper(native.reader_data_lifecycle);
+        durability = native.durability;
+        deadline = native.deadline;
+        latency_budget = native.latency_budget;
+        liveliness = native.liveliness;
+        reliability = native.reliability;
+        destination_order = native.destination_order;
+        history = native.history;
+        resource_limits = native.resource_limits;
+        user_data = native.user_data;
+        ownership = native.ownership;
+        time_based_filter = native.time_based_filter;
+        reader_data_lifecycle = native.reader_data_lifecycle;
     }
 
     operator ::DDS::DataReaderQos() const {
