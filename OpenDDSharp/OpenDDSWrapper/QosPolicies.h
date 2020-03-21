@@ -45,6 +45,50 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT GroupDataQosPolicyWrapper
+{
+    void* value;
+
+public:
+    GroupDataQosPolicyWrapper() {
+        value = NULL;
+    }
+
+    GroupDataQosPolicyWrapper(const ::DDS::GroupDataQosPolicy native) {
+        unbounded_sequence_to_ptr(native.value, value);
+    }
+
+    operator ::DDS::GroupDataQosPolicy() const {
+        ::DDS::GroupDataQosPolicy native;
+        if (value != NULL) {
+            ptr_to_unbounded_sequence(value, native.value);
+        }
+        return native;
+    }
+};
+
+EXTERN_STRUCT_EXPORT TopicDataQosPolicyWrapper
+{
+    void* value;
+
+public:
+    TopicDataQosPolicyWrapper() {
+        value = NULL;
+    }
+
+    TopicDataQosPolicyWrapper(const ::DDS::TopicDataQosPolicy native) {
+        unbounded_sequence_to_ptr(native.value, value);
+    }
+
+    operator ::DDS::TopicDataQosPolicy() const {
+        ::DDS::TopicDataQosPolicy native;
+        if (value != NULL) {
+            ptr_to_unbounded_sequence(value, native.value);
+        }
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT EntityFactoryQosPolicyWrapper
 {
     bool autoenable_created_entities;
@@ -374,9 +418,63 @@ EXTERN_STRUCT_EXPORT PublisherQosWrapper
 
 };
 
+EXTERN_STRUCT_EXPORT PresentationQosPolicyWrapper
+{
+    ::CORBA::Long access_scope;
+    ::CORBA::Boolean coherent_access;
+    ::CORBA::Boolean ordered_access;
+
+public:
+    PresentationQosPolicyWrapper() {
+        access_scope = 0;
+        coherent_access = false;
+        ordered_access = false;
+    }
+
+    PresentationQosPolicyWrapper(const ::DDS::PresentationQosPolicy native) {
+        access_scope = (::CORBA::Long)native.access_scope;
+        coherent_access = native.coherent_access;
+        ordered_access = native.ordered_access;
+    }
+
+    operator ::DDS::PresentationQosPolicy() const {
+        ::DDS::PresentationQosPolicy native;
+        native.access_scope = (::DDS::PresentationQosPolicyAccessScopeKind)access_scope;
+        native.coherent_access = coherent_access;
+        native.ordered_access = ordered_access;
+        return native;
+    }
+};
+
+EXTERN_STRUCT_EXPORT PartitionQosPolicyWrapper
+{
+    void* name;
+
+public:
+    PartitionQosPolicyWrapper() {
+        name = NULL;
+    }
+
+    PartitionQosPolicyWrapper(const ::DDS::PartitionQosPolicy native) {
+        ::TAO::unbounded_basic_string_sequence<char> list = native.name;
+        unbounded_basic_string_sequence_to_ptr(list, name);
+    }
+
+    operator ::DDS::PartitionQosPolicy() const {
+        ::DDS::PartitionQosPolicy native;
+        if (name != NULL) {
+            ptr_to_unbounded_basic_string_sequence(name, native.name);
+        }
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT SubscriberQosWrapper
 {
-
+    PresentationQosPolicyWrapper presentation;
+    PartitionQosPolicyWrapper partition;
+    GroupDataQosPolicyWrapper group_data;
+    EntityFactoryQosPolicyWrapper entity_factory;
 };
 
 EXTERN_STRUCT_EXPORT TopicQosWrapper
