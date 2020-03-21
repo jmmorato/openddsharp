@@ -124,9 +124,9 @@ namespace OpenDDSharp.DDS
                 Ownership = Ownership,
                 Reliability = Reliability,
                 History = History,
-                ReaderDataLifecycle = ReaderDataLifecycle,
                 ResourceLimits = ResourceLimits,
                 TimeBasedFilter = TimeBasedFilter,
+                ReaderDataLifecycle = ReaderDataLifecycle,
             };
 
             if (UserData != null)
@@ -147,9 +147,9 @@ namespace OpenDDSharp.DDS
             Ownership = wrapper.Ownership;
             Reliability = wrapper.Reliability;
             History = wrapper.History;
-            ReaderDataLifecycle = wrapper.ReaderDataLifecycle;
             ResourceLimits = wrapper.ResourceLimits;
             TimeBasedFilter = wrapper.TimeBasedFilter;
+            ReaderDataLifecycle = wrapper.ReaderDataLifecycle;
 
             if (UserData == null)
             {
@@ -188,7 +188,7 @@ namespace OpenDDSharp.DDS
                    UserData == other.UserData &&
                    Ownership == other.Ownership &&
                    TimeBasedFilter == other.TimeBasedFilter &&
-                   DestinationOrder == other.DestinationOrder;
+                   ReaderDataLifecycle == other.ReaderDataLifecycle;
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace OpenDDSharp.DDS
             hashCode = (hashCode * -1521134295) + EqualityComparer<UserDataQosPolicy>.Default.GetHashCode(UserData);
             hashCode = (hashCode * -1521134295) + EqualityComparer<OwnershipQosPolicy>.Default.GetHashCode(Ownership);
             hashCode = (hashCode * -1521134295) + EqualityComparer<TimeBasedFilterQosPolicy>.Default.GetHashCode(TimeBasedFilter);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<DestinationOrderQosPolicy>.Default.GetHashCode(DestinationOrder);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ReaderDataLifecycleQosPolicy>.Default.GetHashCode(ReaderDataLifecycle);
             return hashCode;
         }
         #endregion
