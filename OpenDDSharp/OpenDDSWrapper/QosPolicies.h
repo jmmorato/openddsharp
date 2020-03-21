@@ -427,17 +427,6 @@ public:
     }
 };
 
-EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
-{
-    UserDataQosPolicyWrapper user_data;
-    EntityFactoryQosPolicyWrapper entity_factory;
-};
-
-EXTERN_STRUCT_EXPORT PublisherQosWrapper 
-{
-
-};
-
 EXTERN_STRUCT_EXPORT PresentationQosPolicyWrapper
 {
     ::CORBA::Long access_scope;
@@ -487,6 +476,32 @@ public:
         }
         return native;
     }
+};
+
+EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
+{
+    UserDataQosPolicyWrapper user_data;
+    EntityFactoryQosPolicyWrapper entity_factory;
+
+public:
+    DomainParticipantQosWrapper();
+
+    DomainParticipantQosWrapper(const ::DDS::DomainParticipantQos native) {
+        user_data = native.user_data;
+        entity_factory = native.entity_factory;
+    }
+
+    operator ::DDS::DomainParticipantQos() const {
+        ::DDS::DomainParticipantQos native;
+        native.user_data = user_data;
+        native.entity_factory = entity_factory;
+        return native;
+    }
+};
+
+EXTERN_STRUCT_EXPORT PublisherQosWrapper 
+{
+
 };
 
 EXTERN_STRUCT_EXPORT SubscriberQosWrapper
