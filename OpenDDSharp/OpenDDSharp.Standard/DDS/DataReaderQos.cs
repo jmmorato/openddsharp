@@ -273,17 +273,29 @@ namespace OpenDDSharp.DDS
     internal struct DataReaderQosWrapper
     {
         #region Fields
+        [MarshalAs(UnmanagedType.Struct)]
         public DurabilityQosPolicyWrapper Durability;
+        [MarshalAs(UnmanagedType.Struct)]
         public DeadlineQosPolicyWrapper Deadline;
+        [MarshalAs(UnmanagedType.Struct)]
         public LatencyBudgetQosPolicyWrapper LatencyBudget;
+        [MarshalAs(UnmanagedType.Struct)]
         public LivelinessQosPolicyWrapper Liveliness;
+        [MarshalAs(UnmanagedType.Struct)]
         public ReliabilityQosPolicyWrapper Reliability;
+        [MarshalAs(UnmanagedType.Struct)]
         public DestinationOrderQosPolicyWrapper DestinationOrder;
+        [MarshalAs(UnmanagedType.Struct)]
         public HistoryQosPolicyWrapper History;
+        [MarshalAs(UnmanagedType.Struct)]
         public ResourceLimitsQosPolicyWrapper ResourceLimits;
+        [MarshalAs(UnmanagedType.Struct)]
         public UserDataQosPolicyWrapper UserData;
+        [MarshalAs(UnmanagedType.Struct)]
         public OwnershipQosPolicyWrapper Ownership;
+        [MarshalAs(UnmanagedType.Struct)]
         public TimeBasedFilterQosPolicyWrapper TimeBasedFilter;
+        [MarshalAs(UnmanagedType.Struct)]
         public ReaderDataLifecycleQosPolicyWrapper ReaderDataLifecycle;
         #endregion
     }
