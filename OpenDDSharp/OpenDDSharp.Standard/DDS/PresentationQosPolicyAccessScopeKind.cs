@@ -22,7 +22,7 @@ namespace OpenDDSharp.DDS
     /// <summary>
     /// This enumeration defines the valid kinds of the <see cref="PresentationQosPolicy.AccessScope" />.
     /// </summary>
-    public enum PresentationQosPolicyKind
+    public enum PresentationQosPolicyAccessScopeKind
     {
         /// <summary>
         /// Indicates that changes occur to instances independently. Instance access essentially acts as a no-op with respect to

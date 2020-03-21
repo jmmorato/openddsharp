@@ -36,7 +36,7 @@ namespace OpenDDSharp.DDS
         /// <summary>
         /// Gets or sets a value that specifies how the samples representing changes to data instances are presented to a subscribing application.
         /// </summary>
-        public PresentationQosPolicyKind AccessScope { get; set; }
+        public PresentationQosPolicyAccessScopeKind AccessScope { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether allow one or more changes to an instance be made available to an associated data reader as a single change or not. If a data reader does not receive
@@ -54,7 +54,7 @@ namespace OpenDDSharp.DDS
         #region Constructors
         internal PresentationQosPolicy()
         {
-            AccessScope = PresentationQosPolicyKind.InstancePresentationQos;
+            AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
             CoherentAccess = false;
             OrderedAccess = false;
         }
@@ -151,8 +151,10 @@ namespace OpenDDSharp.DDS
     internal struct PresentationQosPolicyWrapper
     {
         #region Fields
-        public PresentationQosPolicyKind AccessScope;
+        public PresentationQosPolicyAccessScopeKind AccessScope;
+        [MarshalAs(UnmanagedType.I1)]
         public bool CoherentAccess;
+        [MarshalAs(UnmanagedType.I1)]
         public bool OrderedAccess;
         #endregion
 
