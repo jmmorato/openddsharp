@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 #include "Utils.h"
+#include "QosPolicies.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataWriter_NarrowBase(::DDS::DataWriter_ptr dp);
@@ -28,4 +29,10 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_GetPublicationMatchedStatus(::DDS::DataWriter_ptr dw, ::DDS::PublicationMatchedStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_GetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_SetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper qos_wrapper);
 

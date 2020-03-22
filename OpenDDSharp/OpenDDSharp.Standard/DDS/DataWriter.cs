@@ -17,11 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using OpenDDSharp.Helpers;
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Security;
+using OpenDDSharp.Helpers;
 
 namespace OpenDDSharp.DDS
 {
@@ -33,7 +33,7 @@ namespace OpenDDSharp.DDS
     /// <para>A DataWriter is bound to exactly one <see cref="Topic" /> and therefore to exactly one data type. The <see cref="Topic" />
     /// must exist prior to the DataWriter’s creation.</para>
     /// <para>The DataWriter must be specialized for each particular application data-type.</para>
-    /// <para>All operations except for the operations <see cref="DataWriter.SetQos" />, <see cref="DataWriter.GetQos" />, SetListener,
+    /// <para>All operations except for the operations <see cref="SetQos" />, <see cref="GetQos" />, SetListener,
     /// <see cref="DataWriter.GetListener" />, <see cref="Entity.Enable" />, and <see cref="Entity.StatusCondition" />
     /// return the value <see cref="ReturnCode.NotEnabled" /> if the DataWriter has not been enabled yet.</para>
     /// </remarks>
@@ -44,6 +44,10 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWriter"/> class.
+        /// </summary>
+        /// <param name="native">The native pointer.</param>
         protected internal DataWriter(IntPtr native) : base(NarrowBase(native))
         {
             _native = native;
@@ -51,6 +55,54 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Gets the <see cref="DataWriter" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="DataWriterQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetQos(DataWriterQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            DataWriterQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="DataWriter" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="DataWriterQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetQos(DataWriterQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetQos64(_native, qosNative));
+
+            qos.Release();
+
+            return ret;
+        }
+
         /// <summary>
         /// Blocks the calling thread until either all data written by the <see cref="DataWriter" /> is
         /// acknowledged by all matched <see cref="DataReader" /> entities that have <see cref="ReliabilityQosPolicyKind.ReliableReliabilityQos" />, or else the duration
@@ -78,7 +130,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetPublicationMatchedStatus(ref PublicationMatchedStatus status)
         {
-            PublicationMatchedStatus s = default(PublicationMatchedStatus);
+            PublicationMatchedStatus s = default;
             ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetPublicationMatchedStatus86(_native, ref s),
                                                          () => UnsafeNativeMethods.GetPublicationMatchedStatus64(_native, ref s));
             status = s;
@@ -120,6 +172,22 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NarrowBase86(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataWriterQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataWriterQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_WaitForAcknowledgments", CallingConvention = CallingConvention.Cdecl)]
