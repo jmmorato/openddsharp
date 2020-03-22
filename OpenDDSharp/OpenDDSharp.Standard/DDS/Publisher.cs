@@ -62,19 +62,43 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
         public DataWriter CreateDataWriter(Topic topic)
         {
-            if (topic == null)
+            return CreateDataWriter(topic, new DataWriterQos());
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DataWriter" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
+        /// <para>The <see cref="Topic" /> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to create this
+        /// <see cref="Publisher" />. If the <see cref="Topic" /> was created from a different <see cref="DomainParticipant" />, 
+        /// the operation will fail and return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topic">The <see cref="Topic" /> that the <see cref="DataWriter" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataWriterQos" /> policies to be used for creating the new <see cref="DataWriter" />.</param>
+        /// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataWriter CreateDataWriter(Topic topic, DataWriterQos qos)
+        {
+            if (topic is null)
             {
                 throw new ArgumentNullException(nameof(topic));
             }
 
-            DataWriterQosWrapper qos = default;
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataWriter86(_native, topic.ToNative(), qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateDataWriter64(_native, topic.ToNative(), qos, IntPtr.Zero, 0u));
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
+            DataWriterQosWrapper qosWrapper = qos.ToNative();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataWriter86(_native, topic.ToNative(), qosWrapper, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateDataWriter64(_native, topic.ToNative(), qosWrapper, IntPtr.Zero, 0u));
 
             if (native.Equals(IntPtr.Zero))
             {
                 return null;
             }
+
+            qos.Release();
 
             return new DataWriter(native);
         }

@@ -29,7 +29,7 @@ EXTERN_METHOD_EXPORT
 EXTERN_METHOD_EXPORT 
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
 												 ::DDS::Topic_ptr topic,
-												 DataWriterQosWrapper* qos,
+												 DataWriterQosWrapper qos,
 												 ::DDS::DataWriterListener_ptr a_listener,
 												 ::DDS::StatusMask mask);
 
