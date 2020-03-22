@@ -204,6 +204,55 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         }
         #endregion
 
+        #region Publisher QoS
+        public static PublisherQos CreateNonDefaultPublisherQos()
+        {
+            PublisherQos qos = new PublisherQos();
+            qos.EntityFactory.AutoenableCreatedEntities = false;
+            qos.GroupData.Value = new List<byte> { 0x42 };
+            qos.Partition.Name = new List<string> { "TestPartition" };
+            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
+            qos.Presentation.CoherentAccess = true;
+            qos.Presentation.OrderedAccess = true;
+
+            return qos;
+        }
+
+        public static void TestDefaultPublisherQos(PublisherQos qos)
+        {
+            Assert.IsNotNull(qos.EntityFactory);
+            Assert.IsNotNull(qos.GroupData);
+            Assert.IsNotNull(qos.Partition);
+            Assert.IsNotNull(qos.Presentation);
+            Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
+            Assert.IsNotNull(qos.GroupData.Value);
+            Assert.AreEqual(0, qos.GroupData.Value.Count());
+            Assert.IsNotNull(qos.Partition.Name);
+            Assert.AreEqual(0, qos.Partition.Name.Count());
+            Assert.IsFalse(qos.Presentation.CoherentAccess);
+            Assert.IsFalse(qos.Presentation.OrderedAccess);
+            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
+        }
+
+        public static void TestNonDefaultPublisherQos(PublisherQos qos)
+        {
+            Assert.IsNotNull(qos.EntityFactory);
+            Assert.IsNotNull(qos.GroupData);
+            Assert.IsNotNull(qos.Partition);
+            Assert.IsNotNull(qos.Presentation);
+            Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
+            Assert.IsNotNull(qos.GroupData.Value);
+            Assert.AreEqual(1, qos.GroupData.Value.Count());
+            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.IsNotNull(qos.Partition.Name);
+            Assert.AreEqual(1, qos.Partition.Name.Count());
+            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.IsTrue(qos.Presentation.CoherentAccess);
+            Assert.IsTrue(qos.Presentation.OrderedAccess);
+            Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
+        }
+        #endregion
+
         #region Subscriber QoS
         public static SubscriberQos CreateNonDefaultSubscriberQos()
         {
