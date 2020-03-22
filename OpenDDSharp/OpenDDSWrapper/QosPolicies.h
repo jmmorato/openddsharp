@@ -521,7 +521,29 @@ public:
 
 EXTERN_STRUCT_EXPORT PublisherQosWrapper 
 {
+    PresentationQosPolicyWrapper presentation;
+    PartitionQosPolicyWrapper partition;
+    GroupDataQosPolicyWrapper group_data;
+    EntityFactoryQosPolicyWrapper entity_factory;
 
+public:
+    PublisherQosWrapper();
+
+    PublisherQosWrapper(const ::DDS::PublisherQos native) {
+        presentation = native.presentation;
+        partition = native.partition;
+        group_data = native.group_data;
+        entity_factory = native.entity_factory;
+    }
+
+    operator ::DDS::PublisherQos() const {
+        ::DDS::PublisherQos native;
+        native.presentation = presentation;
+        native.partition = partition;
+        native.group_data = group_data;
+        native.entity_factory = entity_factory;
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT SubscriberQosWrapper
