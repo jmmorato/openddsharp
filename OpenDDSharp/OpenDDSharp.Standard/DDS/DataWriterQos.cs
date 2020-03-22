@@ -116,7 +116,15 @@ namespace OpenDDSharp.DDS
             Deadline = new DeadlineQosPolicy();
             LatencyBudget = new LatencyBudgetQosPolicy();
             Liveliness = new LivelinessQosPolicy();
-            Reliability = new ReliabilityQosPolicy();
+            Reliability = new ReliabilityQosPolicy
+            {
+                Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                MaxBlockingTime = new Duration
+                {
+                    Seconds = 0,
+                    NanoSeconds = 100000000,
+                },
+            };
             DestinationOrder = new DestinationOrderQosPolicy();
             History = new HistoryQosPolicy();
             ResourceLimits = new ResourceLimitsQosPolicy();
