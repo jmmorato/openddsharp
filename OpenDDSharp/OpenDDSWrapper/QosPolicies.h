@@ -427,6 +427,28 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT OwnershipStrengthQosPolicyWrapper
+{
+    ::CORBA::Long value;
+    ::CORBA::Long max_instances;
+    ::CORBA::Long max_samples_per_instance;
+
+public:
+    OwnershipStrengthQosPolicyWrapper() {
+        value = 0;
+    }
+
+    OwnershipStrengthQosPolicyWrapper(const ::DDS::OwnershipStrengthQosPolicy native) {
+        value = native.value;
+    }
+
+    operator ::DDS::OwnershipStrengthQosPolicy() const {
+        ::DDS::OwnershipStrengthQosPolicy native;
+        native.value = value;
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT PresentationQosPolicyWrapper
 {
     ::CORBA::Long access_scope;
@@ -649,7 +671,62 @@ public:
 
 EXTERN_STRUCT_EXPORT DataWriterQosWrapper
 {
+    DurabilityQosPolicyWrapper durability;
+    DurabilityServiceQosPolicyWrapper durability_service;
+    DeadlineQosPolicyWrapper deadline;
+    LatencyBudgetQosPolicyWrapper latency_budget;
+    LivelinessQosPolicyWrapper liveliness;
+    ReliabilityQosPolicyWrapper reliability;
+    DestinationOrderQosPolicyWrapper destination_order;
+    HistoryQosPolicyWrapper history;
+    ResourceLimitsQosPolicyWrapper resource_limits;
+    TransportPriorityQosPolicyWrapper transport_priority;
+    LifespanQosPolicyWrapper lifespan;
+    OwnershipQosPolicyWrapper ownership;
+    UserDataQosPolicyWrapper user_data;
+    OwnershipStrengthQosPolicyWrapper ownership_strength;
+    WriterDataLifecycleQosPolicyWrapper writer_data_lifecycle;
 
+public:
+    DataWriterQosWrapper();
+
+    DataWriterQosWrapper(const ::DDS::DataWriterQos native) {
+        durability = native.durability;
+        durability_service = native.durability_service;
+        deadline = native.deadline;
+        latency_budget = native.latency_budget;
+        liveliness = native.liveliness;
+        reliability = native.reliability;
+        destination_order = native.destination_order;
+        history = native.history;
+        resource_limits = native.resource_limits;
+        transport_priority = native.transport_priority;
+        lifespan = native.lifespan;
+        ownership = native.ownership;
+        user_data = native.user_data;
+        ownership_strength = native.ownership_strength;
+        writer_data_lifecycle = native.writer_data_lifecycle;
+    }
+
+    operator ::DDS::DataWriterQos() const {
+        ::DDS::DataWriterQos native;
+        native.durability = durability;
+        native.durability_service = durability_service;
+        native.deadline = deadline;
+        native.latency_budget = latency_budget;
+        native.liveliness = liveliness;
+        native.reliability = reliability;
+        native.destination_order = destination_order;
+        native.history = history;
+        native.resource_limits = resource_limits;
+        native.transport_priority = transport_priority;
+        native.lifespan = lifespan;
+        native.ownership = ownership;
+        native.user_data = user_data;
+        native.ownership_strength = ownership_strength;
+        native.writer_data_lifecycle = writer_data_lifecycle;
+        return native;
+    }
 };
 
 EXTERN_STRUCT_EXPORT DataReaderQosWrapper
