@@ -578,6 +578,7 @@ public:
         latency_budget = native.latency_budget;
         liveliness = native.liveliness;
         reliability = native.reliability;
+        destination_order = native.destination_order;
         history = native.history;
         resource_limits = native.resource_limits;
         transport_priority = native.transport_priority;
@@ -594,6 +595,7 @@ public:
         native.latency_budget = latency_budget;
         native.liveliness = liveliness;
         native.reliability = reliability;
+        native.destination_order = destination_order;
         native.history = history;
         native.resource_limits = resource_limits;
         native.transport_priority = transport_priority;
