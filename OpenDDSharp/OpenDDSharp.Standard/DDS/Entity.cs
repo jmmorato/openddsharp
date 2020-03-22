@@ -64,6 +64,10 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entity"/> class.
+        /// </summary>
+        /// <param name="native">The native <see cref="Entity"/> pointer.</param>
         protected Entity(IntPtr native)
         {
             _native = native;
