@@ -24,7 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp, 
-                                                       PublisherQosWrapper* qos, 
+                                                       PublisherQosWrapper qos, 
                                                        ::DDS::PublisherListener_ptr a_listener, 
                                                        ::DDS::StatusMask mask) {
     return dp->create_publisher(PUBLISHER_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
@@ -40,16 +40,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::Topic_ptr DomainParticipant_CreateTopic(::DDS::DomainParticipant_ptr dp,
                                                const char * topic_name,
                                                const char * type_name,
-                                               TopicQosWrapper* qos,
+                                               TopicQosWrapper qos,
                                                ::DDS::TopicListener_ptr a_listener,
                                                ::DDS::StatusMask mask) {
-    return dp->create_topic(topic_name, type_name, TOPIC_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+    return dp->create_topic(topic_name, type_name, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
 
-
-::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr s, DomainParticipantQosWrapper& qos_wrapper) {
+::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper& qos_wrapper) {
     ::DDS::DomainParticipantQos qos_native;
-    ::DDS::ReturnCode_t ret = s->get_qos(qos_native);
+    ::DDS::ReturnCode_t ret = dp->get_qos(qos_native);
 
     if (ret == ::DDS::RETCODE_OK) {
         qos_wrapper = qos_native;
@@ -58,8 +57,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
     return ret;
 }
 
-::DDS::ReturnCode_t DomainParticipant_SetQos(::DDS::DomainParticipant_ptr s, DomainParticipantQosWrapper qos_wrapper) {
-    return s->set_qos(qos_wrapper);
+::DDS::ReturnCode_t DomainParticipant_SetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper qos_wrapper) {
+    return dp->set_qos(qos_wrapper);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp)

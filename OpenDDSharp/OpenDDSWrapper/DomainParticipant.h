@@ -28,7 +28,7 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT 
 ::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp, 
-                                                       PublisherQosWrapper* qos, 
+                                                       PublisherQosWrapper qos, 
                                                        ::DDS::PublisherListener_ptr a_listener, 
                                                        ::DDS::StatusMask mask);
 
@@ -42,7 +42,7 @@ EXTERN_METHOD_EXPORT
 ::DDS::Topic_ptr DomainParticipant_CreateTopic(::DDS::DomainParticipant_ptr dp,
                                                const char * topic_name,
                                                const char * type_name,
-                                               TopicQosWrapper* qos,
+                                               TopicQosWrapper qos,
                                                ::DDS::TopicListener_ptr a_listener,
                                                ::DDS::StatusMask mask);
 

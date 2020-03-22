@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -105,6 +106,8 @@ namespace OpenDDSharp.DDS
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, qosWrapper, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreateSubscriber64(_native, qosWrapper, IntPtr.Zero, 0u));
 
+            qos.Release();
+
             if (native.Equals(IntPtr.Zero))
             {
                 return null;
@@ -126,10 +129,45 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
         public Topic CreateTopic(string topicName, string typeName)
         {
-            TopicQosWrapper qos = default;
+            return CreateTopic(topicName, typeName, new TopicQos());
+        }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, ref qos, IntPtr.Zero, 0u));
+        /// <summary>
+        /// Creates a <see cref="Topic" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Topic" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>The <see cref="Topic" /> is bound to a type described by the <paramref name="typeName"/> argument. Prior to creating a <see cref="Topic" /> the type must have been
+        /// registered. This is done using the RegisterType operation on a derived class of the TypeSupport interface.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Topic" /> will be created.</para>
+        /// </remarks>
+        /// <param name="topicName">The name for the new topic.</param>
+        /// <param name="typeName">The name of the type which the new <see cref="Topic" /> will be bound.</param>
+        /// <param name="qos">The <see cref="TopicQos" /> policies to be used for creating the new <see cref="Topic" />.</param>
+        /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
+        public Topic CreateTopic(string topicName, string typeName, TopicQos qos)
+        {
+            if (string.IsNullOrWhiteSpace(topicName))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "The argument {0} cannot be null or empty.", nameof(topicName)), nameof(topicName));
+            }
+
+            if (string.IsNullOrWhiteSpace(typeName))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "The argument {0} cannot be null or empty.", nameof(typeName)), nameof(typeName));
+            }
+
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
+            TopicQosWrapper qosWrapper = qos.ToNative();
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, qosWrapper, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, qosWrapper, IntPtr.Zero, 0u));
+
+            qos.Release();
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -259,11 +297,11 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr CreateTopic64(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateTopic64(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_CreateTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr CreateTopic86(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] ref TopicQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateTopic86(IntPtr dp, string topicName, string typeName, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_GetQos", CallingConvention = CallingConvention.Cdecl)]
