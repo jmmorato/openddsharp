@@ -22,3 +22,22 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::Entity_ptr Topic_NarrowBase(::DDS::Topic_ptr t) {
 	return static_cast<::DDS::Entity_ptr>(t);
 }
+
+::DDS::TopicDescription_ptr Topic_NarrowTopicDescription(::DDS::Topic_ptr t) {
+	return static_cast<::DDS::TopicDescription_ptr>(t);
+}
+
+::DDS::ReturnCode_t Topic_GetQos(::DDS::Topic_ptr t, TopicQosWrapper& qos_wrapper) {
+    ::DDS::TopicQos qos_native;
+    ::DDS::ReturnCode_t ret = t->get_qos(qos_native);
+
+    if (ret == ::DDS::RETCODE_OK) {
+        qos_wrapper = qos_native;
+    }
+
+    return ret;
+}
+
+::DDS::ReturnCode_t Topic_SetQos(::DDS::Topic_ptr t, TopicQosWrapper qos_wrapper) {
+    return t->set_qos(qos_wrapper);
+}

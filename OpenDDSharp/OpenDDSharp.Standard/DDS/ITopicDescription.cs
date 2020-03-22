@@ -54,5 +54,13 @@ namespace OpenDDSharp.DDS
         /// <exclude />
         [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ToNative();
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        IntPtr ToNativeTopicDescription();
     }
 }

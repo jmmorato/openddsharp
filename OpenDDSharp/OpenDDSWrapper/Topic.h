@@ -19,6 +19,16 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 #include "Utils.h"
+#include "QosPolicies.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Topic_NarrowBase(::DDS::Topic_ptr t);
+
+EXTERN_METHOD_EXPORT
+::DDS::TopicDescription_ptr Topic_NarrowTopicDescription(::DDS::Topic_ptr t);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Topic_GetQos(::DDS::Topic_ptr t, TopicQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Topic_SetQos(::DDS::Topic_ptr t, TopicQosWrapper qos_wrapper);
