@@ -37,4 +37,4 @@ EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr s, PublisherQosWrapper& qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Publisher_ptr s, PublisherQosWrapper qos_wrapper);
+::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr s, PublisherQosWrapper qos_wrapper);
