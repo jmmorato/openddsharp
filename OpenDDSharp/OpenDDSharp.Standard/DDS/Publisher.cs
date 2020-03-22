@@ -49,6 +49,17 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Creates a new <see cref="DataWriter" /> with the default QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="DataWriter" /> will be attached and belongs to the <see cref="Publisher" /> that is its factory.</para>
+        /// <para>The <see cref="Topic" /> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to create this
+        /// <see cref="Publisher" />. If the <see cref="Topic" /> was created from a different <see cref="DomainParticipant" />, 
+        /// the operation will fail and return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topic">The <see cref="Topic" /> that the <see cref="DataWriter" /> will be associated with.</param>
+        /// <returns>The newly created <see cref="DataWriter" /> on success, otherwise <see langword="null"/>.</returns>
         public DataWriter CreateDataWriter(Topic topic)
         {
             if (topic == null)
@@ -56,9 +67,9 @@ namespace OpenDDSharp.DDS
                 throw new ArgumentNullException(nameof(topic));
             }
 
-            DataWriterQosWrapper qos = default(DataWriterQosWrapper);
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataWriter86(_native, topic.ToNative(), ref qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateDataWriter64(_native, topic.ToNative(), ref qos, IntPtr.Zero, 0u));
+            DataWriterQosWrapper qos = default;
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataWriter86(_native, topic.ToNative(), qos, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateDataWriter64(_native, topic.ToNative(), qos, IntPtr.Zero, 0u));
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -66,6 +77,54 @@ namespace OpenDDSharp.DDS
             }
 
             return new DataWriter(native);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Publisher" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="PublisherQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetQos(PublisherQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            PublisherQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="Publisher" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="PublisherQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetQos(PublisherQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetQos64(_native, qosNative));
+
+            qos.Release();
+
+            return ret;
         }
 
         private static IntPtr NarrowBase(IntPtr ptr)
@@ -94,11 +153,27 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Publisher_CreateDataWriter", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateDataWriter64(IntPtr pub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] ref DataWriterQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateDataWriter64(IntPtr pub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_CreateDataWriter", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateDataWriter86(IntPtr pub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] ref DataWriterQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateDataWriter86(IntPtr pub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos, IntPtr a_listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Publisher_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Publisher_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos);
         }
         #endregion
     }

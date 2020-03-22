@@ -32,5 +32,20 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	::DDS::ReturnCode_t ret = pub->get_default_datawriter_qos(nativeQos);
 	nativeQos.reliability.kind = DDS::ReliabilityQosPolicyKind::RELIABLE_RELIABILITY_QOS;
 
-    return pub->create_datawriter(topic, nativeQos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK); //DATAWRITER_QOS_DEFAULT
+    return pub->create_datawriter(topic, nativeQos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+}
+
+::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr p, PublisherQosWrapper& qos_wrapper) {
+	::DDS::PublisherQos qos_native;
+	::DDS::ReturnCode_t ret = p->get_qos(qos_native);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos_wrapper = qos_native;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr p, PublisherQosWrapper qos_wrapper) {
+	return p->set_qos(qos_wrapper);
 }

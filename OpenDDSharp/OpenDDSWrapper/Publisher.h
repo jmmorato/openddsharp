@@ -28,7 +28,13 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT 
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
-																	  ::DDS::Topic_ptr topic,
-																	  DataWriterQosWrapper* qos,
-																	  ::DDS::DataWriterListener_ptr a_listener,
-																	  ::DDS::StatusMask mask);
+												 ::DDS::Topic_ptr topic,
+												 DataWriterQosWrapper* qos,
+												 ::DDS::DataWriterListener_ptr a_listener,
+												 ::DDS::StatusMask mask);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr s, PublisherQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Publisher_ptr s, PublisherQosWrapper qos_wrapper);
