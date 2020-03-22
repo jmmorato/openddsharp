@@ -61,8 +61,7 @@ namespace OpenDDSharp.DDS
         /// </remarks>
         /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
         /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
-        // TODO: Change ITopicDescription when implemented in Topic class.
-        public DataReader CreateDataReader(Topic topicDescription)
+        public DataReader CreateDataReader(ITopicDescription topicDescription)
         {
             return CreateDataReader(topicDescription, new DataReaderQos());
         }
@@ -79,8 +78,7 @@ namespace OpenDDSharp.DDS
         /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
         /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
         /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
-        // TODO: Change ITopicDescription when implemented in Topic class.
-        public DataReader CreateDataReader(Topic topicDescription, DataReaderQos qos)
+        public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos)
         {
             if (topicDescription is null)
             {
@@ -93,8 +91,8 @@ namespace OpenDDSharp.DDS
             }
 
             DataReaderQosWrapper qosWrapper = qos.ToNative();
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNative(), qosWrapper, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNative(), qosWrapper, IntPtr.Zero, 0u));
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u));
 
             if (native.Equals(IntPtr.Zero))
             {

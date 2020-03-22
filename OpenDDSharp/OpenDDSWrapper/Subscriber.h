@@ -27,7 +27,7 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT 
 ::DDS::DataReader_ptr Subscriber_CreateDataReader(::DDS::Subscriber_ptr sub,
-												  ::DDS::Topic_ptr topic,
+												  ::DDS::TopicDescription_ptr topicDescription,
 												  DataReaderQosWrapper qos,
 												  ::DDS::DataReaderListener_ptr a_listener,
 												  ::DDS::StatusMask mask);
