@@ -95,6 +95,28 @@ namespace OpenDDSharp.DDS
         public OwnershipQosPolicy Ownership { get; internal set; }
         #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TopicQos"/> class.
+        /// </summary>
+        public TopicQos()
+        {
+            TopicData = new TopicDataQosPolicy();
+            Durability = new DurabilityQosPolicy();
+            DurabilityService = new DurabilityServiceQosPolicy();
+            Deadline = new DeadlineQosPolicy();
+            LatencyBudget = new LatencyBudgetQosPolicy();
+            Liveliness = new LivelinessQosPolicy();
+            Reliability = new ReliabilityQosPolicy();
+            DestinationOrder = new DestinationOrderQosPolicy();
+            History = new HistoryQosPolicy();
+            ResourceLimits = new ResourceLimitsQosPolicy();
+            TransportPriority = new TransportPriorityQosPolicy();
+            Lifespan = new LifespanQosPolicy();
+            Ownership = new OwnershipQosPolicy();
+        }
+        #endregion
+
         #region Methods
         internal TopicQosWrapper ToNative()
         {
