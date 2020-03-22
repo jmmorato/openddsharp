@@ -498,6 +498,26 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT WriterDataLifecycleQosPolicyWrapper
+{
+    CORBA::Boolean autodispose_unregistered_instances;
+
+public:
+    WriterDataLifecycleQosPolicyWrapper() {
+        autodispose_unregistered_instances = true;
+    }
+
+    WriterDataLifecycleQosPolicyWrapper(const ::DDS::WriterDataLifecycleQosPolicy native) {
+        autodispose_unregistered_instances = native.autodispose_unregistered_instances;
+    }
+
+    operator ::DDS::WriterDataLifecycleQosPolicy() const {
+        ::DDS::WriterDataLifecycleQosPolicy native;
+        native.autodispose_unregistered_instances = autodispose_unregistered_instances;
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;
