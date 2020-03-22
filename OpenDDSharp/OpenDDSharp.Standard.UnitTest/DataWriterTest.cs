@@ -100,6 +100,7 @@ namespace OpenDDSharp.Standard.UnitTest
             // Call GetQos and check the values received
             qos = new DataWriterQos();
             ReturnCode result = dataWriter.GetQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataWriterQos(qos);
 
             // Test GetQos with null parameter

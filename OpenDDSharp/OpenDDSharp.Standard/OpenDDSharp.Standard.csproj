@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>OpenDDSharp</AssemblyName>
     <RootNamespace>OpenDDSharp</RootNamespace>
-    <CodeAnalysisRuleSet>Properties\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>

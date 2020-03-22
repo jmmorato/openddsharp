@@ -30,7 +30,7 @@ namespace OpenDDSharp.Standard.UnitTest
     public class CodeGeneratorTest
     {
         #region Constants
-        private const string TEST_CATEGORY = "Standard.CodeGenerator";
+        private const string TEST_CATEGORY = "CodeGenerator";
         #endregion
 
         #region Fields        
@@ -109,7 +109,8 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypes()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -131,7 +132,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 LongDoubleField = 69.69m,
             };
             _dataWriter.Write(data);
-            
+
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -170,22 +171,23 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(double), data.DoubleField.GetType());
             Assert.AreEqual(typeof(decimal), data.LongDoubleField.GetType());
 
-            Assert.AreEqual(defaultStruct.ShortField, 0);
-            Assert.AreEqual(defaultStruct.LongField, 0);
-            Assert.AreEqual(defaultStruct.LongLongField, 0);
-            Assert.AreEqual(defaultStruct.UnsignedShortField, (ushort)0);
-            Assert.AreEqual(defaultStruct.UnsignedLongField, 0U);
-            Assert.AreEqual(defaultStruct.UnsignedLongLongField, 0UL);
-            Assert.AreEqual(defaultStruct.CharField, '\0');
-            Assert.AreEqual(defaultStruct.WCharField, '\0');
-            Assert.AreEqual(defaultStruct.BooleanField, false);
-            Assert.AreEqual(defaultStruct.OctetField, 0);
-            Assert.AreEqual(defaultStruct.FloatField, 0.0f);
-            Assert.AreEqual(defaultStruct.DoubleField, 0.0);
-            Assert.AreEqual(defaultStruct.LongDoubleField, 0.0m);
+            Assert.AreEqual(0, defaultStruct.ShortField);
+            Assert.AreEqual(0, defaultStruct.LongField);
+            Assert.AreEqual(0, defaultStruct.LongLongField);
+            Assert.AreEqual((ushort)0, defaultStruct.UnsignedShortField);
+            Assert.AreEqual(0U, defaultStruct.UnsignedLongField);
+            Assert.AreEqual(0UL, defaultStruct.UnsignedLongLongField);
+            Assert.AreEqual('\0', defaultStruct.CharField);
+            Assert.AreEqual('\0', defaultStruct.WCharField);
+            Assert.AreEqual(false, defaultStruct.BooleanField);
+            Assert.AreEqual(0, defaultStruct.OctetField);
+            Assert.AreEqual(0.0f, defaultStruct.FloatField);
+            Assert.AreEqual(0.0, defaultStruct.DoubleField);
+            Assert.AreEqual(0.0m, defaultStruct.LongDoubleField);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeSequences()
         {
             // TODO: Bounded lists that exceed the bound throws an exception. 
@@ -263,88 +265,89 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(data.BoundedLongDoubleSequenceField.SequenceEqual(received.BoundedLongDoubleSequenceField));
             Assert.IsTrue(data.UnboundedLongDoubleSequenceField.SequenceEqual(received.UnboundedLongDoubleSequenceField));
 
-            Assert.IsTrue(typeof(IList<bool>).IsAssignableFrom(data.BoundedBooleanSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<bool>).IsAssignableFrom(data.UnboundedBooleanSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.BoundedCharSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.UnboundedCharSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.BoundedWCharSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<char>).IsAssignableFrom(data.UnboundedWCharSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<byte>).IsAssignableFrom(data.BoundedOctetSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<byte>).IsAssignableFrom(data.UnboundedOctetSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<short>).IsAssignableFrom(data.BoundedShortSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<short>).IsAssignableFrom(data.UnboundedShortSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<ushort>).IsAssignableFrom(data.BoundedUShortSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<ushort>).IsAssignableFrom(data.UnboundedUShortSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<int>).IsAssignableFrom(data.BoundedLongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<int>).IsAssignableFrom(data.UnboundedLongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<uint>).IsAssignableFrom(data.BoundedULongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<uint>).IsAssignableFrom(data.UnboundedULongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<long>).IsAssignableFrom(data.BoundedLongLongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<long>).IsAssignableFrom(data.UnboundedLongLongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<ulong>).IsAssignableFrom(data.BoundedULongLongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<ulong>).IsAssignableFrom(data.UnboundedULongLongSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<float>).IsAssignableFrom(data.BoundedFloatSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<float>).IsAssignableFrom(data.UnboundedFloatSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<double>).IsAssignableFrom(data.BoundedDoubleSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<double>).IsAssignableFrom(data.UnboundedDoubleSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<decimal>).IsAssignableFrom(data.BoundedLongDoubleSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<decimal>).IsAssignableFrom(data.UnboundedLongDoubleSequenceField.GetType()));
+            Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
+            Assert.IsTrue(data.UnboundedBooleanSequenceField is IList<bool>);
+            Assert.IsTrue(data.BoundedCharSequenceField is IList<char>);
+            Assert.IsTrue(data.UnboundedCharSequenceField is IList<char>);
+            Assert.IsTrue(data.BoundedWCharSequenceField is IList<char>);
+            Assert.IsTrue(data.UnboundedWCharSequenceField is IList<char>);
+            Assert.IsTrue(data.BoundedOctetSequenceField is IList<byte>);
+            Assert.IsTrue(data.UnboundedOctetSequenceField is IList<byte>);
+            Assert.IsTrue(data.BoundedShortSequenceField is IList<short>);
+            Assert.IsTrue(data.UnboundedShortSequenceField is IList<short>);
+            Assert.IsTrue(data.BoundedUShortSequenceField is IList<ushort>);
+            Assert.IsTrue(data.UnboundedUShortSequenceField is IList<ushort>);
+            Assert.IsTrue(data.BoundedLongSequenceField is IList<int>);
+            Assert.IsTrue(data.UnboundedLongSequenceField is IList<int>);
+            Assert.IsTrue(data.BoundedULongSequenceField is IList<uint>);
+            Assert.IsTrue(data.UnboundedULongSequenceField is IList<uint>);
+            Assert.IsTrue(data.BoundedLongLongSequenceField is IList<long>);
+            Assert.IsTrue(data.UnboundedLongLongSequenceField is IList<long>);
+            Assert.IsTrue(data.BoundedULongLongSequenceField is IList<ulong>);
+            Assert.IsTrue(data.UnboundedULongLongSequenceField is IList<ulong>);
+            Assert.IsTrue(data.BoundedFloatSequenceField is IList<float>);
+            Assert.IsTrue(data.UnboundedFloatSequenceField is IList<float>);
+            Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
+            Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
+            Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
+            Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
 
             Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedBooleanSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedBooleanSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedBooleanSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedBooleanSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedCharSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedCharSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedCharSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedCharSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedWCharSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedWCharSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedWCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedWCharSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedWCharSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedWCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedOctetSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedOctetSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedOctetSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedOctetSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedOctetSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedOctetSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedShortSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedShortSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedShortSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedShortSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedShortSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedShortSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedUShortSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedUShortSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedUShortSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedUShortSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedUShortSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedUShortSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedLongSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedLongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedLongSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedLongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedULongSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedULongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedULongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedULongSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedULongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedULongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedLongLongSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedLongLongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedLongLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedLongLongSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedLongLongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedLongLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedULongLongSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedULongLongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedULongLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedULongLongSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedULongLongSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedULongLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedFloatSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedFloatSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedFloatSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedFloatSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedFloatSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedFloatSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedDoubleSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedDoubleSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedDoubleSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedDoubleSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedDoubleSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedDoubleSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedLongDoubleSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedLongDoubleSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedLongDoubleSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedLongDoubleSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeArrays()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -367,7 +370,7 @@ namespace OpenDDSharp.Standard.UnitTest
             };
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // To allow to change the thread context.
@@ -409,178 +412,374 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(5, defaultStruct.BooleanArrayField.Length);
             foreach (var i in defaultStruct.BooleanArrayField)
             {
-                Assert.AreEqual(default(bool), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.CharArrayField);
             Assert.AreEqual(5, defaultStruct.CharArrayField.Length);
             foreach (var i in defaultStruct.CharArrayField)
             {
-                Assert.AreEqual(default(char), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.WCharArrayField);
             Assert.AreEqual(5, defaultStruct.WCharArrayField.Length);
             foreach (var i in defaultStruct.WCharArrayField)
             {
-                Assert.AreEqual(default(char), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.OctetArrayField);
             Assert.AreEqual(5, defaultStruct.OctetArrayField.Length);
             foreach (var i in defaultStruct.OctetArrayField)
             {
-                Assert.AreEqual(default(byte), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.ShortArrayField);
             Assert.AreEqual(5, defaultStruct.ShortArrayField.Length);
             foreach (var i in defaultStruct.ShortArrayField)
             {
-                Assert.AreEqual(default(short), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.UnsignedShortArrayField);
             Assert.AreEqual(5, defaultStruct.UnsignedShortArrayField.Length);
             foreach (var i in defaultStruct.UnsignedShortArrayField)
             {
-                Assert.AreEqual(default(ushort), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.LongArrayField);
             Assert.AreEqual(5, defaultStruct.LongArrayField.Length);
             foreach (var i in defaultStruct.LongArrayField)
             {
-                Assert.AreEqual(default(int), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.UnsignedLongArrayField);
             Assert.AreEqual(5, defaultStruct.UnsignedLongArrayField.Length);
             foreach (var i in defaultStruct.UnsignedLongArrayField)
             {
-                Assert.AreEqual(default(uint), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.LongLongArrayField);
             Assert.AreEqual(5, defaultStruct.LongLongArrayField.Length);
             foreach (var i in defaultStruct.LongLongArrayField)
             {
-                Assert.AreEqual(default(long), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.UnsignedLongLongArrayField);
             Assert.AreEqual(5, defaultStruct.UnsignedLongLongArrayField.Length);
             foreach (var i in defaultStruct.UnsignedLongLongArrayField)
             {
-                Assert.AreEqual(default(ulong), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.FloatArrayField);
             Assert.AreEqual(5, defaultStruct.FloatArrayField.Length);
             foreach (var i in defaultStruct.FloatArrayField)
             {
-                Assert.AreEqual(default(float), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.DoubleArrayField);
             Assert.AreEqual(5, defaultStruct.DoubleArrayField.Length);
             foreach (var i in defaultStruct.DoubleArrayField)
             {
-                Assert.AreEqual(default(double), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.LongDoubleArrayField);
             Assert.AreEqual(5, defaultStruct.LongDoubleArrayField.Length);
             foreach (var i in defaultStruct.LongDoubleArrayField)
             {
-                Assert.AreEqual(default(decimal), i);
+                Assert.AreEqual(default, i);
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeMultiArrays()
         {
             TestStruct defaultStruct = new TestStruct();
 
             TestStruct data = new TestStruct
             {
-                BooleanMultiArrayField = new[, ,]
+                BooleanMultiArrayField = new[,,]
                 {
-                    { { true, false }, { true, false }, { true, false }, { true, false } },
-                    { { true, false }, { true, false }, { true, false }, { true, false } },
-                    { { true, false }, { true, false }, { true, false }, { true, false } }
+                    {
+                        { true, false },
+                        { true, false },
+                        { true, false },
+                        { true, false },
+                    },
+                    {
+                        { true, false },
+                        { true, false },
+                        { true, false },
+                        { true, false },
+                    },
+                    {
+                        { true, false },
+                        { true, false },
+                        { true, false },
+                        { true, false },
+                    }
                 },
-                CharMultiArrayField = new[, ,]
+                CharMultiArrayField = new[,,]
                 {
-                    { { '1', '2' }, { '3', '4' }, { '5', '6' }, { '7', '8' } },
-                    { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
-                    { { '7', '8' }, { '9', '0' }, { '1', '2' }, { '3', '4' } }
+                    {
+                        { '1', '2' },
+                        { '3', '4' },
+                        { '5', '6' },
+                        { '7', '8' },
+                    },
+                    {
+                        { '9', '0' },
+                        { '1', '2' },
+                        { '3', '4' },
+                        { '5', '6' },
+                    },
+                    {
+                        { '7', '8' },
+                        { '9', '0' },
+                        { '1', '2' },
+                        { '3', '4' },
+                    }
                 },
-                WCharMultiArrayField = new[, ,]
+                WCharMultiArrayField = new[,,]
                 {
-                    { { '1', '2' }, { '3', '4' }, { '5', '6' }, { '7', '8' } },
-                    { { '9', '0' }, { '1', '2' }, { '3', '4' }, { '5', '6' } },
-                    { { '7', '8' }, { '9', '0' }, { '1', '2' }, { '3', '4' } }
+                    {
+                        { '1', '2' },
+                        { '3', '4' },
+                        { '5', '6' },
+                        { '7', '8' }
+                    },
+                    {
+                        { '9', '0' },
+                        { '1', '2' },
+                        { '3', '4' },
+                        { '5', '6' },
+                    },
+                    {
+                        { '7', '8' },
+                        { '9', '0' },
+                        { '1', '2' },
+                        { '3', '4' },
+                    }
                 },
                 OctetMultiArrayField = new byte[,,]
                 {
-                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
-                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
-                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                    {
+                        { 01, 02 },
+                        { 03, 04 },
+                        { 05, 06 },
+                        { 07, 08 },
+                    },
+                    {
+                        { 09, 10 },
+                        { 11, 12 },
+                        { 13, 14 },
+                        { 15, 16 },
+                    },
+                    {
+                        { 17, 18 },
+                        { 19, 20 },
+                        { 21, 22 },
+                        { 23, 24 },
+                    }
                 },
                 ShortMultiArrayField = new short[,,]
                 {
-                    { { -01, -02 }, { -03, -04 }, { -05, -06 }, { -07, -08 } },
-                    { { -09, -10 }, { -11, -12 }, { -13, -14 }, { -15, -16 } },
-                    { { -17, -18 }, { -19, -20 }, { -21, -22 }, { -23, -24 } }
+                    {
+                        { -01, -02 },
+                        { -03, -04 },
+                        { -05, -06 },
+                        { -07, -08 },
+                    },
+                    {
+                        { -09, -10 },
+                        { -11, -12 },
+                        { -13, -14 },
+                        { -15, -16 },
+                    },
+                    {
+                        { -17, -18 },
+                        { -19, -20 },
+                        { -21, -22 },
+                        { -23, -24 },
+                    }
                 },
                 UnsignedShortMultiArrayField = new ushort[,,]
                 {
-                    { { 01, 02 }, { 03, 04 }, { 05, 06 }, { 07, 08 } },
-                    { { 09, 10 }, { 11, 12 }, { 13, 14 }, { 15, 16 } },
-                    { { 17, 18 }, { 19, 20 }, { 21, 22 }, { 23, 24 } }
+                    {
+                        { 01, 02 },
+                        { 03, 04 },
+                        { 05, 06 },
+                        { 07, 08 },
+                    },
+                    {
+                        { 09, 10 },
+                        { 11, 12 },
+                        { 13, 14 },
+                        { 15, 16 },
+                    },
+                    {
+                        { 17, 18 },
+                        { 19, 20 },
+                        { 21, 22 },
+                        { 23, 24 },
+                    }
                 },
-                LongMultiArrayField = new[, ,]
+                LongMultiArrayField = new[,,]
                 {
-                    { { -01, 02 }, { -03, 04 }, { -05, 06 }, { -07, 08 } },
-                    { { -09, 10 }, { -11, 12 }, { -13, 14 }, { -15, 16 } },
-                    { { -17, 18 }, { -19, 20 }, { -21, 22 }, { -23, 24 } }
+                    {
+                        { -01, 02 },
+                        { -03, 04 },
+                        { -05, 06 },
+                        { -07, 08 },
+                    },
+                    {
+                        { -09, 10 },
+                        { -11, 12 },
+                        { -13, 14 },
+                        { -15, 16 },
+                    },
+                    {
+                        { -17, 18 },
+                        { -19, 20 },
+                        { -21, 22 },
+                        { -23, 24 },
+                    }
                 },
-                UnsignedLongMultiArrayField = new[, ,]
+                UnsignedLongMultiArrayField = new[,,]
                 {
-                    { { 25U, 26U }, { 27U, 28U }, { 29U, 30U }, { 31U, 32U } },
-                    { { 33U, 34U }, { 35U, 36U }, { 37U, 38U }, { 39U, 40U } },
-                    { { 41U, 42U }, { 43U, 44U }, { 45U, 46U }, { 47U, 48U } }
+                    {
+                        { 25U, 26U },
+                        { 27U, 28U },
+                        { 29U, 30U },
+                        { 31U, 32U },
+                    },
+                    {
+                        { 33U, 34U },
+                        { 35U, 36U },
+                        { 37U, 38U },
+                        { 39U, 40U },
+                    },
+                    {
+                        { 41U, 42U },
+                        { 43U, 44U },
+                        { 45U, 46U },
+                        { 47U, 48U },
+                    }
                 },
-                LongLongMultiArrayField = new[, ,]
+                LongLongMultiArrayField = new[,,]
                 {
-                    { { -25L, -26L }, { -27L, -28L }, { -29L, -30L }, { -31L, -32L } },
-                    { { -33L, -34L }, { -35L, -36L }, { -37L, -38L }, { -39L, -40L } },
-                    { { -41L, -42L }, { -43L, -44L }, { -45L, -46L }, { -47L, -48L } }
+                    {
+                        { -25L, -26L },
+                        { -27L, -28L },
+                        { -29L, -30L },
+                        { -31L, -32L },
+                    },
+                    {
+                        { -33L, -34L },
+                        { -35L, -36L },
+                        { -37L, -38L },
+                        { -39L, -40L },
+                    },
+                    {
+                        { -41L, -42L },
+                        { -43L, -44L },
+                        { -45L, -46L },
+                        { -47L, -48L },
+                    }
                 },
-                UnsignedLongLongMultiArrayField = new[, ,]
+                UnsignedLongLongMultiArrayField = new[,,]
                 {
-                    { { 49UL, 50UL }, { 51UL, 52UL }, { 53UL, 54UL }, { 55UL, 56UL } },
-                    { { 57UL, 58UL }, { 59UL, 60UL }, { 61UL, 62UL }, { 63UL, 64UL } },
-                    { { 65UL, 66UL }, { 67UL, 68UL }, { 69UL, 70UL }, { 71UL, 72UL } }
+                    {
+                        { 49UL, 50UL },
+                        { 51UL, 52UL },
+                        { 53UL, 54UL },
+                        { 55UL, 56UL },
+                    },
+                    {
+                        { 57UL, 58UL },
+                        { 59UL, 60UL },
+                        { 61UL, 62UL },
+                        { 63UL, 64UL },
+                    },
+                    {
+                        { 65UL, 66UL },
+                        { 67UL, 68UL },
+                        { 69UL, 70UL },
+                        { 71UL, 72UL },
+                    }
                 },
-                FloatMultiArrayField = new[, ,]
+                FloatMultiArrayField = new[,,]
                 {
-                    { { 01.01f, 02.02f }, { 03.03f, 04.04f }, { 05.05f, 06.06f }, { 07.07f, 08.08f } },
-                    { { 09.09f, 10.10f }, { 11.11f, 12.12f }, { 13.13f, 14.14f }, { 15.15f, 16.16f } },
-                    { { 17.17f, 18.18f }, { 19.19f, 20.20f }, { 21.21f, 22.22f }, { 23.23f, 24.24f } }
+                    {
+                        { 01.01f, 02.02f },
+                        { 03.03f, 04.04f },
+                        { 05.05f, 06.06f },
+                        { 07.07f, 08.08f }
+                    },
+                    {
+                        { 09.09f, 10.10f },
+                        { 11.11f, 12.12f },
+                        { 13.13f, 14.14f },
+                        { 15.15f, 16.16f },
+                    },
+                    {
+                        { 17.17f, 18.18f },
+                        { 19.19f, 20.20f },
+                        { 21.21f, 22.22f },
+                        { 23.23f, 24.24f },
+                    }
                 },
-                DoubleMultiArrayField = new[, ,]
+                DoubleMultiArrayField = new[,,]
                 {
-                    { { 01.01, 02.02 }, { 03.03, 04.04 }, { 05.05, 06.06 }, { 07.07, 08.08 } },
-                    { { 09.09, 10.10 }, { 11.11, 12.12 }, { 13.13, 14.14 }, { 15.15, 16.16 } },
-                    { { 17.17, 18.18 }, { 19.19, 20.20 }, { 21.21, 22.22 }, { 23.23, 24.24 } }
+                    {
+                        { 01.01, 02.02 },
+                        { 03.03, 04.04 },
+                        { 05.05, 06.06 },
+                        { 07.07, 08.08 },
+                    },
+                    {
+                        { 09.09, 10.10 },
+                        { 11.11, 12.12 },
+                        { 13.13, 14.14 },
+                        { 15.15, 16.16 },
+                    },
+                    {
+                        { 17.17, 18.18 },
+                        { 19.19, 20.20 },
+                        { 21.21, 22.22 },
+                        { 23.23, 24.24 },
+                    }
                 },
-                LongDoubleMultiArrayField = new[, ,]
+                LongDoubleMultiArrayField = new[,,]
                 {
-                    { { 01.01m, 02.02m }, { 03.03m, 04.04m }, { 05.05m, 06.06m }, { 07.07m, 08.08m } },
-                    { { 09.09m, 10.10m }, { 11.11m, 12.12m }, { 13.13m, 14.14m }, { 15.15m, 16.16m } },
-                    { { 17.17m, 18.18m }, { 19.19m, 20.20m }, { 21.21m, 22.22m }, { 23.23m, 24.24m } }
+                    {
+                        { 01.01m, 02.02m },
+                        { 03.03m, 04.04m },
+                        { 05.05m, 06.06m },
+                        { 07.07m, 08.08m },
+                    },
+                    {
+                        { 09.09m, 10.10m },
+                        { 11.11m, 12.12m },
+                        { 13.13m, 14.14m },
+                        { 15.15m, 16.16m },
+                    },
+                    {
+                        { 17.17m, 18.18m },
+                        { 19.19m, 20.20m },
+                        { 21.21m, 22.22m },
+                        { 23.23m, 24.24m },
+                    }
                 },
             };
             _dataWriter.Write(data);
@@ -627,95 +826,96 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(24, defaultStruct.BooleanMultiArrayField.Length);
             foreach (var i in defaultStruct.BooleanMultiArrayField)
             {
-                Assert.AreEqual(default(bool), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.CharMultiArrayField);
             Assert.AreEqual(24, defaultStruct.CharMultiArrayField.Length);
             foreach (var i in defaultStruct.CharMultiArrayField)
             {
-                Assert.AreEqual(default(char), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.WCharMultiArrayField);
             Assert.AreEqual(24, defaultStruct.WCharMultiArrayField.Length);
             foreach (var i in defaultStruct.WCharMultiArrayField)
             {
-                Assert.AreEqual(default(char), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.OctetMultiArrayField);
             Assert.AreEqual(24, defaultStruct.OctetMultiArrayField.Length);
             foreach (var i in defaultStruct.OctetMultiArrayField)
             {
-                Assert.AreEqual(default(byte), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.ShortMultiArrayField);
             Assert.AreEqual(24, defaultStruct.ShortMultiArrayField.Length);
             foreach (var i in defaultStruct.ShortMultiArrayField)
             {
-                Assert.AreEqual(default(short), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.UnsignedShortMultiArrayField);
             Assert.AreEqual(24, defaultStruct.UnsignedShortMultiArrayField.Length);
             foreach (var i in defaultStruct.UnsignedShortMultiArrayField)
             {
-                Assert.AreEqual(default(ushort), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.LongMultiArrayField);
             Assert.AreEqual(24, defaultStruct.LongMultiArrayField.Length);
             foreach (var i in defaultStruct.LongMultiArrayField)
             {
-                Assert.AreEqual(default(int), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.UnsignedLongMultiArrayField);
             Assert.AreEqual(24, defaultStruct.UnsignedLongMultiArrayField.Length);
             foreach (var i in defaultStruct.UnsignedLongMultiArrayField)
             {
-                Assert.AreEqual(default(uint), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.LongLongMultiArrayField);
             Assert.AreEqual(24, defaultStruct.LongLongMultiArrayField.Length);
             foreach (var i in defaultStruct.LongLongMultiArrayField)
             {
-                Assert.AreEqual(default(long), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.UnsignedLongLongMultiArrayField);
             Assert.AreEqual(24, defaultStruct.UnsignedLongLongMultiArrayField.Length);
             foreach (var i in defaultStruct.UnsignedLongLongMultiArrayField)
             {
-                Assert.AreEqual(default(ulong), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.FloatMultiArrayField);
             Assert.AreEqual(24, defaultStruct.FloatMultiArrayField.Length);
             foreach (var i in defaultStruct.FloatMultiArrayField)
             {
-                Assert.AreEqual(default(float), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.DoubleMultiArrayField);
             Assert.AreEqual(24, defaultStruct.DoubleMultiArrayField.Length);
             foreach (var i in defaultStruct.DoubleMultiArrayField)
             {
-                Assert.AreEqual(default(double), i);
+                Assert.AreEqual(default, i);
             }
 
             Assert.IsNotNull(defaultStruct.LongDoubleMultiArrayField);
             Assert.AreEqual(24, defaultStruct.LongDoubleMultiArrayField.Length);
             foreach (var i in defaultStruct.LongDoubleMultiArrayField)
             {
-                Assert.AreEqual(default(decimal), i);
+                Assert.AreEqual(default, i);
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringTypes()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -725,7 +925,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 UnboundedStringField = "Hello, I love you, won't you tell me your name?",
                 UnboundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
                 BoundedStringField = "Hello, I love you, won't you tell me your name?",
-                BoundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?"
+                BoundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
             };
             _dataWriter.Write(data);
 
@@ -757,7 +957,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringSequences()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -770,7 +971,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     "Pressing down on you, no man ask for",
                     "Under pressure that burns a building down",
                     "Splits a family in two",
-                    "Puts people on streets"
+                    "Puts people on streets",
                 },
                 UnboundedStringSequenceField =
                 {
@@ -783,14 +984,14 @@ namespace OpenDDSharp.Standard.UnitTest
                     "You love bands when they're playing hard",
                     "You want more and you want it fast",
                     "They put you down, they say I'm wrong",
-                    "You tacky thing, you put them on"
+                    "You tacky thing, you put them on",
                 },
                 BoundedWStringSequenceField =
                 {
                     "Rebel Rebel, you've turn your dress",
                     "Rebel Rebel, your face is a mess",
                     "Rebel Rebel, how could they know?",
-                    "Hot tramp, I love you so!"
+                    "Hot tramp, I love you so!",
                 },
                 UnboundedWStringSequenceField =
                 {
@@ -805,7 +1006,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // To allow to change the thread context.
@@ -820,22 +1021,23 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
             Assert.IsTrue(data.UnboundedWStringSequenceField.SequenceEqual(received.UnboundedWStringSequenceField));
 
-            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.BoundedStringSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.UnboundedStringSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.BoundedWStringSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<string>).IsAssignableFrom(data.UnboundedWStringSequenceField.GetType()));
+            Assert.IsTrue(data.BoundedStringSequenceField is IList<string>);
+            Assert.IsTrue(data.UnboundedStringSequenceField is IList<string>);
+            Assert.IsTrue(data.BoundedWStringSequenceField is IList<string>);
+            Assert.IsTrue(data.UnboundedWStringSequenceField is IList<string>);
 
             Assert.IsNotNull(defaultStruct.BoundedStringSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedStringSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedStringSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedStringSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedStringSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedStringSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedWStringSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedWStringSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedWStringSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedWStringSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedWStringSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedWStringSequenceField.Count);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringArrays()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -893,24 +1095,55 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringMultiArrays()
         {
             TestStruct defaultStruct = new TestStruct();
 
             TestStruct data = new TestStruct
             {
-                StringMultiArrayField = new[, ,]
+                StringMultiArrayField = new[,,]
                 {
-                    { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
-                    { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
-                    { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
+                    {
+                        { "01", "02" },
+                        { "03", "04" },
+                        { "05", "06" },
+                        { "07", "08" },
+                    },
+                    {
+                        { "09", "10" },
+                        { "11", "12" },
+                        { "13", "14" },
+                        { "15", "16" },
+                    },
+                    {
+                        { "17", "18" },
+                        { "19", "20" },
+                        { "21", "22" },
+                        { "23", "24" },
+                    },
                 },
-                WStringMultiArrayField = new[, ,]
+                WStringMultiArrayField = new[,,]
                 {
-                    { { "01", "02" }, { "03", "04" }, { "05", "06" }, { "07", "08" } },
-                    { { "09", "10" }, { "11", "12" }, { "13", "14" }, { "15", "16" } },
-                    { { "17", "18" }, { "19", "20" }, { "21", "22" }, { "23", "24" } }
+                    {
+                        { "01", "02" },
+                        { "03", "04" },
+                        { "05", "06" },
+                        { "07", "08" },
+                    },
+                    {
+                        { "09", "10" },
+                        { "11", "12" },
+                        { "13", "14" },
+                        { "15", "16" },
+                    },
+                    {
+                        { "17", "18" },
+                        { "19", "20" },
+                        { "21", "22" },
+                        { "23", "24" },
+                    },
                 },
             };
 
@@ -947,19 +1180,20 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructuresTypes()
         {
             TestStruct defaultStruct = new TestStruct();
 
             TestStruct data = new TestStruct
             {
-                NestedStructField = new NestedStruct { Id = 1, Message = "Do androids dream of electric sheep?" }
+                NestedStructField = new NestedStruct { Id = 1, Message = "Do androids dream of electric sheep?" },
             };
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // To allow to change the thread context.
@@ -980,7 +1214,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(string.Empty, defaultStruct.NestedStructField.Message);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureSequences()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -1002,7 +1237,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     new NestedStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
                     new NestedStruct { Id = 3, Message = "Your head will collapse" },
                     new NestedStruct { Id = 4, Message = "But there's nothing in it" },
-                    new NestedStruct { Id = 5, Message = "And you'll ask yourself" }
+                    new NestedStruct { Id = 5, Message = "And you'll ask yourself" },
                 }
             };
 
@@ -1029,16 +1264,17 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(data.UnboundedStructSequenceField[i].Message, received.UnboundedStructSequenceField[i].Message);
             }
 
-            Assert.IsTrue(typeof(IList<NestedStruct>).IsAssignableFrom(data.BoundedStructSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<NestedStruct>).IsAssignableFrom(data.UnboundedStructSequenceField.GetType()));
+            Assert.IsTrue(data.BoundedStructSequenceField is IList<NestedStruct>);
+            Assert.IsTrue(data.UnboundedStructSequenceField is IList<NestedStruct>);
 
             Assert.IsNotNull(defaultStruct.BoundedStructSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedStructSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedStructSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedStructSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedStructSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedStructSequenceField.Count);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureArrays()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -1083,7 +1319,8 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureMultiArrays()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -1092,9 +1329,24 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 StructMultiArrayField = new NestedStruct[,,]
                 {
-                    { { new  NestedStruct{ Id = 1, Message = "01" }, new  NestedStruct{ Id = 2, Message = "02" } }, { new  NestedStruct{ Id = 3, Message = "03" }, new  NestedStruct{ Id = 4, Message = "04" } }, { new  NestedStruct{ Id = 5, Message = "05" }, new  NestedStruct{ Id = 6, Message = "06" } }, { new  NestedStruct{ Id = 7, Message = "07" }, new  NestedStruct{ Id = 8, Message = "08" } } },
-                    { { new  NestedStruct{ Id = 9, Message = "09" }, new  NestedStruct{ Id = 10, Message = "10" } }, { new  NestedStruct{ Id = 11, Message = "11" }, new  NestedStruct{ Id = 12, Message = "12" } }, { new  NestedStruct{ Id = 13, Message = "13" }, new  NestedStruct{ Id = 14, Message = "14" } }, { new  NestedStruct{ Id = 15, Message = "15" }, new  NestedStruct{ Id = 16, Message = "16" } } },
-                    { { new  NestedStruct{ Id = 17, Message = "17" }, new  NestedStruct{ Id = 18, Message = "18" } }, { new  NestedStruct{ Id = 19, Message = "19" }, new  NestedStruct{ Id = 20, Message = "20" } }, { new  NestedStruct{ Id = 21, Message = "21" }, new  NestedStruct{ Id = 22, Message = "22" } }, { new  NestedStruct{ Id = 23, Message = "23" }, new  NestedStruct{ Id = 24, Message = "24" } } },
+                    {
+                        { new NestedStruct{ Id = 1, Message = "01" }, new NestedStruct{ Id = 2, Message = "02" } },
+                        { new NestedStruct{ Id = 3, Message = "03" }, new NestedStruct{ Id = 4, Message = "04" } },
+                        { new NestedStruct{ Id = 5, Message = "05" }, new NestedStruct{ Id = 6, Message = "06" } },
+                        { new NestedStruct{ Id = 7, Message = "07" }, new NestedStruct{ Id = 8, Message = "08" } },
+                    },
+                    {
+                        { new NestedStruct{ Id = 9, Message = "09" }, new NestedStruct{ Id = 10, Message = "10" } },
+                        { new NestedStruct{ Id = 11, Message = "11" }, new NestedStruct{ Id = 12, Message = "12" } },
+                        { new NestedStruct{ Id = 13, Message = "13" }, new NestedStruct{ Id = 14, Message = "14" } },
+                        { new NestedStruct{ Id = 15, Message = "15" }, new NestedStruct{ Id = 16, Message = "16" } },
+                    },
+                    {
+                        { new NestedStruct{ Id = 17, Message = "17" }, new NestedStruct{ Id = 18, Message = "18" } },
+                        { new NestedStruct{ Id = 19, Message = "19" }, new NestedStruct{ Id = 20, Message = "20" } },
+                        { new NestedStruct{ Id = 21, Message = "21" }, new NestedStruct{ Id = 22, Message = "22" } },
+                        { new NestedStruct{ Id = 23, Message = "23" }, new NestedStruct{ Id = 24, Message = "24" } },
+                    },
                 },
             };
 
@@ -1132,14 +1384,15 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumType()
         {
             TestStruct defaultStruct = new TestStruct();
 
             TestStruct data = new TestStruct
             {
-                TestEnumField = TestEnum.ENUM5
+                TestEnumField = TestEnum.ENUM5,
             };
 
             _dataWriter.Write(data);
@@ -1161,7 +1414,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(TestEnum.ENUM1, defaultStruct.TestEnumField);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumSequences()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -1169,7 +1423,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStruct data = new TestStruct
             {
                 UnboundedEnumSequenceField = { TestEnum.ENUM10, TestEnum.ENUM9, TestEnum.ENUM8, TestEnum.ENUM7, TestEnum.ENUM6, TestEnum.ENUM5 },
-                BoundedEnumSequenceField = { TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5 }
+                BoundedEnumSequenceField = { TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5 },
             };
 
             _dataWriter.Write(data);
@@ -1187,28 +1441,29 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
             Assert.IsTrue(data.UnboundedEnumSequenceField.SequenceEqual(received.UnboundedEnumSequenceField));
 
-            Assert.IsTrue(typeof(IList<TestEnum>).IsAssignableFrom(data.BoundedEnumSequenceField.GetType()));
-            Assert.IsTrue(typeof(IList<TestEnum>).IsAssignableFrom(data.UnboundedEnumSequenceField.GetType()));
+            Assert.IsTrue(data.BoundedEnumSequenceField is IList<TestEnum>);
+            Assert.IsTrue(data.UnboundedEnumSequenceField is IList<TestEnum>);
 
             Assert.IsNotNull(defaultStruct.BoundedEnumSequenceField);
-            Assert.AreEqual(defaultStruct.BoundedEnumSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.BoundedEnumSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedEnumSequenceField);
-            Assert.AreEqual(defaultStruct.UnboundedEnumSequenceField.Count, 0);
+            Assert.AreEqual(0, defaultStruct.UnboundedEnumSequenceField.Count);
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumArrays()
         {
             TestStruct defaultStruct = new TestStruct();
 
             TestStruct data = new TestStruct
             {
-                EnumArrayField = new TestEnum[] { TestEnum.ENUM1, TestEnum.ENUM3, TestEnum.ENUM5, TestEnum.ENUM7, TestEnum.ENUM11 }
+                EnumArrayField = new TestEnum[] { TestEnum.ENUM1, TestEnum.ENUM3, TestEnum.ENUM5, TestEnum.ENUM7, TestEnum.ENUM11 },
             };
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // To allow to change the thread context.
@@ -1226,11 +1481,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(5, defaultStruct.EnumArrayField.Length);
             foreach (var s in defaultStruct.EnumArrayField)
             {
-                Assert.AreEqual(default(TestEnum), s);
+                Assert.AreEqual(default, s);
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumMultiArrays()
         {
             TestStruct defaultStruct = new TestStruct();
@@ -1239,10 +1495,25 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 EnumMultiArrayField = new TestEnum[,,]
                 {
-                    { { TestEnum.ENUM1, TestEnum.ENUM2 }, { TestEnum.ENUM3, TestEnum.ENUM4 }, { TestEnum.ENUM5, TestEnum.ENUM6 }, { TestEnum.ENUM7, TestEnum.ENUM8 } },
-                    { { TestEnum.ENUM9, TestEnum.ENUM10 }, { TestEnum.ENUM11, TestEnum.ENUM12 }, { TestEnum.ENUM1, TestEnum.ENUM2 }, { TestEnum.ENUM3, TestEnum.ENUM4 } },
-                    { { TestEnum.ENUM5, TestEnum.ENUM6 }, { TestEnum.ENUM7, TestEnum.ENUM8 }, { TestEnum.ENUM9, TestEnum.ENUM10 }, { TestEnum.ENUM11, TestEnum.ENUM12 } }
-                }
+                    {
+                        { TestEnum.ENUM1, TestEnum.ENUM2 },
+                        { TestEnum.ENUM3, TestEnum.ENUM4 },
+                        { TestEnum.ENUM5, TestEnum.ENUM6 },
+                        { TestEnum.ENUM7, TestEnum.ENUM8 },
+                    },
+                    {
+                        { TestEnum.ENUM9, TestEnum.ENUM10 },
+                        { TestEnum.ENUM11, TestEnum.ENUM12 },
+                        { TestEnum.ENUM1, TestEnum.ENUM2 },
+                        { TestEnum.ENUM3, TestEnum.ENUM4 },
+                    },
+                    {
+                        { TestEnum.ENUM5, TestEnum.ENUM6 },
+                        { TestEnum.ENUM7, TestEnum.ENUM8 },
+                        { TestEnum.ENUM9, TestEnum.ENUM10 },
+                        { TestEnum.ENUM11, TestEnum.ENUM12 },
+                    },
+                },
             };
 
             _dataWriter.Write(data);
@@ -1265,11 +1536,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(24, defaultStruct.EnumMultiArrayField.Length);
             foreach (var s in defaultStruct.EnumMultiArrayField)
             {
-                Assert.AreEqual(default(TestEnum), s);
+                Assert.AreEqual(default, s);
             }
         }
 
-        [TestMethod, TestCategory(TEST_CATEGORY)]
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedConstants()
         {
             Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());

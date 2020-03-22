@@ -30,15 +30,15 @@ namespace OpenDDSharp.Standard.UnitTest
     [TestClass]
     public class SubscriberTest
     {
-        #region Constants        
-        private const string TEST_CATEGORY = "Standard.Subscriber";
+        #region Constants
+        private const string TEST_CATEGORY = "Subscriber";
         #endregion
 
-        #region Fields        
+        #region Fields
         private DomainParticipant _participant;
         #endregion
 
-        #region Initialization/Cleanup       
+        #region Initialization/Cleanup
         [TestInitialize]
         public void TestInitialize()
         {
@@ -123,10 +123,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(qos.Presentation);
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
+            Assert.AreEqual(1, qos.GroupData.Value.Count);
             Assert.AreEqual(0x42, qos.GroupData.Value.First());
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
+            Assert.AreEqual(1, qos.Partition.Name.Count);
             Assert.AreEqual("TestPartition", qos.Partition.Name.First());
             Assert.IsFalse(qos.Presentation.CoherentAccess);
             Assert.IsFalse(qos.Presentation.OrderedAccess);
@@ -158,10 +158,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(qos.Presentation);
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
+            Assert.AreEqual(1, qos.GroupData.Value.Count);
             Assert.AreEqual(0x42, qos.GroupData.Value.First());
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
+            Assert.AreEqual(1, qos.Partition.Name.Count);
             Assert.AreEqual("TestPartition", qos.Partition.Name.First());
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);

@@ -33,7 +33,7 @@ namespace OpenDDSharp.Standard.UnitTest
     public class DomainParticipantTest
     {
         #region Constants
-        private const string TEST_CATEGORY = "Standard.DomainParticipant";
+        private const string TEST_CATEGORY = "DomainParticipant";
         #endregion
 
         #region Fields

@@ -32,7 +32,7 @@ namespace OpenDDSharp.Standard.UnitTest
     public class DataReaderTest
     {
         #region Constants
-        private const string TEST_CATEGORY = "Standard.DataReader";
+        private const string TEST_CATEGORY = "DataReader";
         #endregion
 
         #region Fields        
@@ -151,7 +151,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(qos.UserData);
             Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
+            Assert.AreEqual(1, qos.UserData.Value.Count);
             Assert.AreEqual(0x42, qos.UserData.Value.First());
 
             // Try to set immutable QoS properties before enable the datareader.

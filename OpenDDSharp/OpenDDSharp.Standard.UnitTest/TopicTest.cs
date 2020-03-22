@@ -29,11 +29,11 @@ namespace OpenDDSharp.Standard.UnitTest
     [TestClass]
     public class TopicTest
     {
-        #region Constants        
-        private const string TEST_CATEGORY = "Standard.Topic";
+        #region Constants
+        private const string TEST_CATEGORY = "Topic";
         #endregion
 
-        #region Fields        
+        #region Fields
         private DomainParticipant _participant;
         #endregion
 
@@ -130,17 +130,17 @@ namespace OpenDDSharp.Standard.UnitTest
             qos.Deadline.Period = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 0
+                NanoSeconds = 0,
             };
             qos.LatencyBudget.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Lifespan.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.TopicData.Value = new List<byte> { 0x5 };
 
@@ -166,10 +166,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(5, qos.Deadline.Period.Seconds);
             Assert.AreEqual(Duration.ZeroNanoseconds, qos.Deadline.Period.NanoSeconds);
             Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
+            Assert.AreEqual(5U, qos.LatencyBudget.Duration.NanoSeconds);
             Assert.AreEqual(5, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.Lifespan.Duration.NanoSeconds);
-            Assert.AreEqual(1, qos.TopicData.Value.Count());
+            Assert.AreEqual(5U, qos.Lifespan.Duration.NanoSeconds);
+            Assert.AreEqual(1, qos.TopicData.Value.Count);
             Assert.AreEqual(0x5, qos.TopicData.Value.First());
 
             // Create a disabled topic and try to set an inconsistent qos

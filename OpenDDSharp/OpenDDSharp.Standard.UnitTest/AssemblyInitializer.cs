@@ -23,11 +23,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
     [TestClass]
-    public sealed class AssemblyInitializer
+    public static class AssemblyInitializer
     {
         private const string RTPS_DISCOVERY = "RtpsDiscovery";
         private const string INFOREPO_DISCOVERY = "InfoRepo";
@@ -42,6 +43,7 @@ namespace OpenDDSharp.Standard.UnitTest
         public static DomainParticipantFactory Factory { get; private set; }
 
         [AssemblyInitialize]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Require by the AssemblyInitialize method signature")]
         public static void AssemblyInitialize(TestContext context)
         {
             Ace.Init();

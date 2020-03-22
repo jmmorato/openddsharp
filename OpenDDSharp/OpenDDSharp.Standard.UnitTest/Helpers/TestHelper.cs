@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -41,20 +42,30 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestDefaultDomainParticipantQos(DomainParticipantQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsNotNull(qos.UserData);
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            Assert.AreEqual(0, qos.UserData.Value.Count);
         }
 
         public static void TestNonDefaultDomainParticipantQos(DomainParticipantQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsNotNull(qos.UserData);
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
+            Assert.AreEqual(1, qos.UserData.Value.Count);
             Assert.AreEqual(0x42, qos.UserData.Value.First());
         }
         #endregion
@@ -66,7 +77,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.Deadline.Period = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 0
+                NanoSeconds = 0,
             };
             qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
             qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
@@ -81,25 +92,25 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.LatencyBudget.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Lifespan.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
             qos.Liveliness.LeaseDuration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
             qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
             qos.Reliability.MaxBlockingTime = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.ResourceLimits.MaxInstances = 5;
             qos.ResourceLimits.MaxSamples = 5;
@@ -112,6 +123,11 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestDefaultTopicQos(TopicQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.Deadline);
             Assert.IsNotNull(qos.DestinationOrder);
             Assert.IsNotNull(qos.Durability);
@@ -150,12 +166,17 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(0, qos.TopicData.Value.Count());
+            Assert.AreEqual(0, qos.TopicData.Value.Count);
             Assert.AreEqual(0, qos.TransportPriority.Value);
         }
 
         public static void TestNonDefaultTopicQos(TopicQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos);
             Assert.IsNotNull(qos.Deadline);
             Assert.IsNotNull(qos.DestinationOrder);
@@ -181,24 +202,24 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(5, qos.DurabilityService.MaxSamplesPerInstance);
             Assert.IsNotNull(qos.DurabilityService.ServiceCleanupDelay);
             Assert.AreEqual(5, qos.DurabilityService.ServiceCleanupDelay.Seconds);
-            Assert.AreEqual((uint)5, qos.DurabilityService.ServiceCleanupDelay.NanoSeconds);
+            Assert.AreEqual(5U, qos.DurabilityService.ServiceCleanupDelay.NanoSeconds);
             Assert.AreEqual(HistoryQosPolicyKind.KeepAllHistoryQos, qos.History.Kind);
             Assert.AreEqual(5, qos.History.Depth);
             Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
+            Assert.AreEqual(5U, qos.LatencyBudget.Duration.NanoSeconds);
             Assert.AreEqual(5, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.Lifespan.Duration.NanoSeconds);
+            Assert.AreEqual(5U, qos.Lifespan.Duration.NanoSeconds);
             Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, qos.Liveliness.Kind);
             Assert.AreEqual(5, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual((uint)5, qos.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(5U, qos.Liveliness.LeaseDuration.NanoSeconds);
             Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, qos.Ownership.Kind);
             Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
             Assert.AreEqual(5, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)5, qos.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(5U, qos.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(5, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(1, qos.TopicData.Value.Count());
+            Assert.AreEqual(1, qos.TopicData.Value.Count);
             Assert.AreEqual(0x5, qos.TopicData.Value.First());
             Assert.AreEqual(5, qos.TransportPriority.Value);
         }
@@ -220,15 +241,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestDefaultPublisherQos(PublisherQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsNotNull(qos.GroupData);
             Assert.IsNotNull(qos.Partition);
             Assert.IsNotNull(qos.Presentation);
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
+            Assert.AreEqual(0, qos.GroupData.Value.Count);
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
+            Assert.AreEqual(0, qos.Partition.Name.Count);
             Assert.IsFalse(qos.Presentation.CoherentAccess);
             Assert.IsFalse(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
@@ -236,16 +262,21 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestNonDefaultPublisherQos(PublisherQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsNotNull(qos.GroupData);
             Assert.IsNotNull(qos.Partition);
             Assert.IsNotNull(qos.Presentation);
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
+            Assert.AreEqual(1, qos.GroupData.Value.Count);
             Assert.AreEqual(0x42, qos.GroupData.Value.First());
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
+            Assert.AreEqual(1, qos.Partition.Name.Count);
             Assert.AreEqual("TestPartition", qos.Partition.Name.First());
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
@@ -269,15 +300,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestDefaultSubscriberQos(SubscriberQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsNotNull(qos.GroupData);
             Assert.IsNotNull(qos.Partition);
             Assert.IsNotNull(qos.Presentation);
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(0, qos.GroupData.Value.Count());
+            Assert.AreEqual(0, qos.GroupData.Value.Count);
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(0, qos.Partition.Name.Count());
+            Assert.AreEqual(0, qos.Partition.Name.Count);
             Assert.IsFalse(qos.Presentation.CoherentAccess);
             Assert.IsFalse(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
@@ -285,16 +321,21 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestNonDefaultSubscriberQos(SubscriberQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsNotNull(qos.GroupData);
             Assert.IsNotNull(qos.Partition);
             Assert.IsNotNull(qos.Presentation);
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count());
+            Assert.AreEqual(1, qos.GroupData.Value.Count);
             Assert.AreEqual(0x42, qos.GroupData.Value.First());
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count());
+            Assert.AreEqual(1, qos.Partition.Name.Count);
             Assert.AreEqual("TestPartition", qos.Partition.Name.First());
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
@@ -309,7 +350,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.Deadline.Period = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 0
+                NanoSeconds = 0,
             };
             qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
             qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
@@ -323,18 +364,18 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.LatencyBudget.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Lifespan.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
             qos.Liveliness.LeaseDuration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
             qos.OwnershipStrength.Value = 5;
@@ -342,7 +383,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.Reliability.MaxBlockingTime = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.ResourceLimits.MaxInstances = 5;
             qos.ResourceLimits.MaxSamples = 5;
@@ -356,6 +397,11 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestDefaultDataWriterQos(DataWriterQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos);
             Assert.IsNotNull(qos.Deadline);
             Assert.IsNotNull(qos.DestinationOrder);
@@ -399,18 +445,23 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
             Assert.IsNotNull(qos.Reliability.MaxBlockingTime);
             Assert.AreEqual(0, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)100000000, qos.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(100000000U, qos.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
             Assert.AreEqual(0, qos.TransportPriority.Value);
             Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            Assert.AreEqual(0, qos.UserData.Value.Count);
             Assert.IsTrue(qos.WriterDataLifecycle.AutodisposeUnregisteredInstances);
         }
 
         public static void TestNonDefaultDataWriterQos(DataWriterQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos);
             Assert.IsNotNull(qos.Deadline);
             Assert.IsNotNull(qos.DestinationOrder);
@@ -442,24 +493,24 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(5, qos.History.Depth);
             Assert.IsNotNull(qos.LatencyBudget.Duration);
             Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
+            Assert.AreEqual(5U, qos.LatencyBudget.Duration.NanoSeconds);
             Assert.IsNotNull(qos.Lifespan.Duration);
             Assert.AreEqual(5, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.Lifespan.Duration.NanoSeconds);
+            Assert.AreEqual(5U, qos.Lifespan.Duration.NanoSeconds);
             Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, qos.Liveliness.Kind);
             Assert.IsNotNull(qos.Liveliness.LeaseDuration);
             Assert.AreEqual(5, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual((uint)5, qos.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(5U, qos.Liveliness.LeaseDuration.NanoSeconds);
             Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, qos.Ownership.Kind);
             Assert.AreEqual(5, qos.OwnershipStrength.Value);
             Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, qos.Reliability.Kind);
             Assert.IsNotNull(qos.Reliability.MaxBlockingTime);
             Assert.AreEqual(5, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)5, qos.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(5U, qos.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(5, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
-            Assert.AreEqual(1, qos.UserData.Value.Count());
+            Assert.AreEqual(1, qos.UserData.Value.Count);
             Assert.AreEqual(0x5, qos.UserData.Value.First());
             Assert.AreEqual(5, qos.TransportPriority.Value);
             Assert.IsTrue(qos.WriterDataLifecycle.AutodisposeUnregisteredInstances);
@@ -474,7 +525,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.Deadline.Period = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 0
+                NanoSeconds = 0,
             };
             qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
             qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
@@ -483,30 +534,30 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.LatencyBudget.Duration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
             qos.Liveliness.LeaseDuration = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
             qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
             qos.Reliability.MaxBlockingTime = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             qos.ResourceLimits.MaxInstances = 5;
             qos.ResourceLimits.MaxSamples = 5;
@@ -514,7 +565,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.TimeBasedFilter.MinimumSeparation = new Duration
             {
                 Seconds = 3,
-                NanoSeconds = 3
+                NanoSeconds = 3,
             };
             qos.UserData.Value = new List<byte> { 0x5 };
 
@@ -523,6 +574,11 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void TestDefaultDataReaderQos(DataReaderQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos);
             Assert.IsNotNull(qos.Deadline);
             Assert.IsNotNull(qos.DestinationOrder);
@@ -566,13 +622,18 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
             Assert.IsNotNull(qos.TimeBasedFilter.MinimumSeparation);
             Assert.AreEqual(0, qos.TimeBasedFilter.MinimumSeparation.Seconds);
-            Assert.AreEqual((uint)0, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
+            Assert.AreEqual(0U, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.IsNotNull(qos.UserData.Value);
-            Assert.AreEqual(0, qos.UserData.Value.Count());
+            Assert.AreEqual(0, qos.UserData.Value.Count);
         }
 
         public static void TestNonDefaultDataReaderQos(DataReaderQos qos)
         {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
             Assert.IsNotNull(qos);
             Assert.IsNotNull(qos.Deadline);
             Assert.IsNotNull(qos.DestinationOrder);
@@ -596,29 +657,29 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(5, qos.History.Depth);
             Assert.IsNotNull(qos.LatencyBudget.Duration);
             Assert.AreEqual(5, qos.LatencyBudget.Duration.Seconds);
-            Assert.AreEqual((uint)5, qos.LatencyBudget.Duration.NanoSeconds);
+            Assert.AreEqual(5U, qos.LatencyBudget.Duration.NanoSeconds);
             Assert.AreEqual(LivelinessQosPolicyKind.ManualByParticipantLivelinessQos, qos.Liveliness.Kind);
             Assert.IsNotNull(qos.Liveliness.LeaseDuration);
             Assert.AreEqual(5, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual((uint)5, qos.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(5U, qos.Liveliness.LeaseDuration.NanoSeconds);
             Assert.AreEqual(OwnershipQosPolicyKind.ExclusiveOwnershipQos, qos.Ownership.Kind);
             Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay);
             Assert.AreEqual(5, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.Seconds);
-            Assert.AreEqual((uint)5, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.NanoSeconds);
+            Assert.AreEqual(5U, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.NanoSeconds);
             Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay);
             Assert.AreEqual(5, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.Seconds);
-            Assert.AreEqual((uint)5, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.NanoSeconds);
+            Assert.AreEqual(5U, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.NanoSeconds);
             Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
             Assert.IsNotNull(qos.Reliability.MaxBlockingTime);
             Assert.AreEqual(5, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual((uint)5, qos.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(5U, qos.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(5, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
             Assert.AreEqual(1, qos.UserData.Value.Count);
             Assert.IsNotNull(qos.TimeBasedFilter.MinimumSeparation);
             Assert.AreEqual(3, qos.TimeBasedFilter.MinimumSeparation.Seconds);
-            Assert.AreEqual((uint)3, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
+            Assert.AreEqual(3U, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.AreEqual(0x5, qos.UserData.Value.First());
         }
         #endregion
@@ -626,7 +687,12 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         #region Extensions
         public static bool WaitForSubscriptions(this DataWriter writer, int subscriptionsCount, int milliseconds)
         {
-            PublicationMatchedStatus status = new PublicationMatchedStatus();
+            if (writer is null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
+
+            PublicationMatchedStatus status = default;
             writer.GetPublicationMatchedStatus(ref status);
             int count = milliseconds / 100;
             while (status.CurrentCount != subscriptionsCount && count > 0)
@@ -639,13 +705,18 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             if (count == 0 && status.CurrentCount != subscriptionsCount)
             {
                 return false;
-            }            
+            }
 
             return true;
         }
 
         public static bool WaitForPublications(this DataReader reader, int publicationsCount, int milliseconds)
         {
+            if (reader is null)
+            {
+                throw new ArgumentNullException(nameof(reader));
+            }
+
             List<InstanceHandle> handles = new List<InstanceHandle>();
             reader.GetMatchedPublications(handles);
             int count = milliseconds / 100;
@@ -666,13 +737,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         public static void BindRtpsUdpTransportConfig(this Entity entity)
         {
-            string guid = Guid.NewGuid().ToString("N");
+            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             string configName = "openddsharp_rtps_interop_" + guid;
             string instName = "internal_openddsharp_rtps_transport_" + guid;
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-            RtpsUdpInst rui = new RtpsUdpInst(inst);
+            _ = new RtpsUdpInst(inst);
             config.Insert(inst);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
