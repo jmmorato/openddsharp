@@ -94,6 +94,8 @@ namespace OpenDDSharp.DDS
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u));
 
+            qos.Release();
+
             if (native.Equals(IntPtr.Zero))
             {
                 return null;
