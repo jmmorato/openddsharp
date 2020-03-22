@@ -61,10 +61,28 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
         public Publisher CreatePublisher()
         {
-            PublisherQosWrapper qos = default;
+            return CreatePublisher(new PublisherQos());
+        }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, ref qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreatePublisher64(_native, ref qos, IntPtr.Zero, 0u));
+        /// <summary>
+        /// Creates a new <see cref="Publisher" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Publisher" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Publisher" /> will be created.</para>
+        /// </remarks>
+        /// <param name="qos">The <see cref="PublisherQos" /> policies to be used for creating the new <see cref="Publisher" />.</param>
+        /// <returns> The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
+        public Publisher CreatePublisher(PublisherQos qos)
+        {
+            if (qos is null)
+            {
+                throw new ArgumentNullException(nameof(qos));
+            }
+
+            PublisherQosWrapper qosWrapper = qos.ToNative();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, qosWrapper, IntPtr.Zero, 0u),
+                                                        () => UnsafeNativeMethods.CreatePublisher64(_native, qosWrapper, IntPtr.Zero, 0u));
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -281,11 +299,11 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreatePublisher", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreatePublisher64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref PublisherQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreatePublisher64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_CreatePublisher", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreatePublisher86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] ref PublisherQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreatePublisher86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_CreateSubscriber", CallingConvention = CallingConvention.Cdecl)]
