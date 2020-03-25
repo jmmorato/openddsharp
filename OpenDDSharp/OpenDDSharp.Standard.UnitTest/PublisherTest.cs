@@ -24,6 +24,7 @@ using Test;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -63,6 +64,16 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
         #endregion
+
+        #region Test Methods
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
+        public void TestNewPublisherQos()
+        {
+            PublisherQos qos = new PublisherQos();
+            TestHelper.TestDefaultPublisherQos(qos);
+        }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -170,5 +181,98 @@ namespace OpenDDSharp.Standard.UnitTest
             result = publisher.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetDefaultDataWriterQos()
+        {
+            // Initialize entities.
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestGetDefaultDataWriterQos), typeName);
+            Assert.IsNotNull(topic);
+            // TODO: Uncomment when properties implemented.
+            //Assert.IsNull(topic.GetListener());
+            //Assert.AreEqual(nameof(TestGetDefaultDataWriterQos), topic.Name);
+            //Assert.AreEqual(typeName, topic.TypeName);
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            // Create a non-default DataWriter Qos, call GetDefaultDataWriterQos and check the default values.
+            DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
+            result = publisher.GetDefaultDataWriterQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataWriterQos(qos);
+
+            // Test with null parameter.
+            result = publisher.GetDefaultDataWriterQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetDefaultDataWriterQos()
+        {
+            // Initialize entities.
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestSetDefaultDataWriterQos), typeName);
+            Assert.IsNotNull(topic);
+            // TODO: Uncomment when properties implemented.
+            //Assert.IsNull(topic.GetListener());
+            //Assert.AreEqual(nameof(TestSetDefaultDataWriterQos), topic.Name);
+            //Assert.AreEqual(typeName, topic.TypeName);
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            // Creates a non-default QoS, set it an check it
+            DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
+            result = publisher.SetDefaultDataWriterQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = new DataWriterQos();
+            result = publisher.GetDefaultDataWriterQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultDataWriterQos(qos);
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+
+            qos = new DataWriterQos();
+            result = writer.GetQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultDataWriterQos(qos);
+
+            // Put back the default QoS and check it.
+            qos = new DataWriterQos();
+            result = publisher.SetDefaultDataWriterQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = TestHelper.CreateNonDefaultDataWriterQos();
+            result = publisher.GetDefaultDataWriterQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataWriterQos(qos);
+
+            DataWriter otherWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(otherWriter);
+
+            qos = TestHelper.CreateNonDefaultDataWriterQos();
+            result = otherWriter.GetQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataWriterQos(qos);
+
+            // Test with null parameter.
+            result = publisher.SetDefaultDataWriterQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+        #endregion
     }
 }

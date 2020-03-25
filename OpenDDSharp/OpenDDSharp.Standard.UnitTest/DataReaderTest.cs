@@ -25,6 +25,7 @@ using OpenDDSharp.OpenDDS.DCPS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Test;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -99,6 +100,15 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
+        public void TestNewDataReaderQos()
+        {
+            DataReaderQos qos = new DataReaderQos();
+            TestHelper.TestDefaultDataReaderQos(qos);
+        }
+
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()

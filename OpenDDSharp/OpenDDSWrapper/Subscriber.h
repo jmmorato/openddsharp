@@ -23,7 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "dds\DCPS\Marked_Default_Qos.h"
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr p);
+::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr sub);
 
 EXTERN_METHOD_EXPORT 
 ::DDS::DataReader_ptr Subscriber_CreateDataReader(::DDS::Subscriber_ptr sub,
@@ -31,8 +31,15 @@ EXTERN_METHOD_EXPORT
 												  DataReaderQosWrapper qos,
 												  ::DDS::DataReaderListener_ptr a_listener,
 												  ::DDS::StatusMask mask);
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Subscriber_GetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper& qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper qos_wrapper);
+::DDS::ReturnCode_t Subscriber_GetDefaultDataReaderQos(::DDS::Subscriber_ptr sub, DataReaderQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_SetDefaultDataReaderQos(::DDS::Subscriber_ptr sub, DataReaderQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_GetQos(::DDS::Subscriber_ptr sub, SubscriberQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr sub, SubscriberQosWrapper qos_wrapper);

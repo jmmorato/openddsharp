@@ -63,7 +63,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
         public DataReader CreateDataReader(ITopicDescription topicDescription)
         {
-            return CreateDataReader(topicDescription, new DataReaderQos());
+            return CreateDataReader(topicDescription, null);
         }
 
         /// <summary>
@@ -85,12 +85,21 @@ namespace OpenDDSharp.DDS
                 throw new ArgumentNullException(nameof(topicDescription));
             }
 
+            DataReaderQosWrapper qosWrapper = default;
             if (qos is null)
             {
-                throw new ArgumentNullException(nameof(qos));
+                qos = new DataReaderQos();
+                var ret = GetDefaultDataReaderQos(qos);
+                if (ret == ReturnCode.Ok)
+                {
+                    qosWrapper = qos.ToNative();
+                }
+            }
+            else
+            {
+                qosWrapper = qos.ToNative();
             }
 
-            DataReaderQosWrapper qosWrapper = qos.ToNative();
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u));
 
@@ -102,6 +111,62 @@ namespace OpenDDSharp.DDS
             }
 
             return new DataReader(native);
+        }
+
+        /// <summary>
+        /// Gets the default value of the <see cref="DataReader" /> QoS, that is, the QoS policies which will be used for newly
+        /// created <see cref="DataReader" /> entities in the case where the QoS policies are defaulted in the CreateDataReader operation.
+        /// </summary>
+        /// <remarks>
+        /// The values retrieved GetDefaultDataReaderQos will match the set of values specified on the last successful call to
+        /// <see cref="SetDefaultDataReaderQos" />, or else, if the call was never made, the default DDS standard values.
+        /// </remarks>
+        /// <param name="qos">The <see cref="DataReaderQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDefaultDataReaderQos(DataReaderQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            DataReaderQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultDataReaderQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetDefaultDataReaderQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets a default value of the <see cref="DataReader" /> QoS policies which will be used for newly created <see cref="DataReader" /> entities
+        /// in the case where the QoS policies are defaulted in the CreateDataReader operation.
+        /// </summary>
+        /// <remarks>
+        /// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
+        /// return <see cref="ReturnCode.InconsistentPolicy" />.
+        /// </remarks>
+        /// <param name="qos">The default <see cref="DataReaderQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetDefaultDataReaderQos(DataReaderQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultDataReaderQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetDefaultDataReaderQos64(_native, qosNative));
+            qos.Release();
+
+            return ret;
         }
 
         /// <summary>
@@ -185,20 +250,36 @@ namespace OpenDDSharp.DDS
             public static extern IntPtr CreateDataReader86(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultDataReaderQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultDataReaderQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultDataReaderQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultDataReaderQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+            public static extern ReturnCode GetQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+            public static extern ReturnCode GetQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
+            public static extern ReturnCode SetQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
+            public static extern ReturnCode SetQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
         }
         #endregion
     }

@@ -19,8 +19,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "Subscriber.h"
 
-::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr p) {
-	return static_cast<::DDS::Entity_ptr>(p);
+::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr sub) {
+	return static_cast<::DDS::Entity_ptr>(sub);
 }
 
 ::DDS::DataReader_ptr Subscriber_CreateDataReader(::DDS::Subscriber_ptr sub,
@@ -42,9 +42,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
     return sub->create_datareader(topicDescription, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
 
-::DDS::ReturnCode_t Subscriber_GetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper& qos_wrapper) {
-	::DDS::SubscriberQos qos_native;
-	::DDS::ReturnCode_t ret = s->get_qos(qos_native);
+::DDS::ReturnCode_t Subscriber_GetDefaultDataReaderQos(::DDS::Subscriber_ptr sub, DataReaderQosWrapper& qos_wrapper) {
+	::DDS::DataReaderQos qos_native;
+	::DDS::ReturnCode_t ret = sub->get_default_datareader_qos(qos_native);
 
 	if (ret == ::DDS::RETCODE_OK) {
 		qos_wrapper = qos_native;
@@ -53,9 +53,24 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	return ret;
 }
 
-::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr s, SubscriberQosWrapper qos_wrapper) {
+::DDS::ReturnCode_t Subscriber_SetDefaultDataReaderQos(::DDS::Subscriber_ptr sub, DataReaderQosWrapper qos_wrapper) {
+	return sub->set_default_datareader_qos(qos_wrapper);
+}
+
+::DDS::ReturnCode_t Subscriber_GetQos(::DDS::Subscriber_ptr sub, SubscriberQosWrapper& qos_wrapper) {
+	::DDS::SubscriberQos qos_native;
+	::DDS::ReturnCode_t ret = sub->get_qos(qos_native);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos_wrapper = qos_native;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr sub, SubscriberQosWrapper qos_wrapper) {
 	char buf[2048];
 	sprintf(buf, "Subscriber_SetQos autoenable_created_entities: %s \n", qos_wrapper.entity_factory.autoenable_created_entities ? "true" : "false");
 	OutputDebugString(buf);
-	return s->set_qos(qos_wrapper);
+	return sub->set_qos(qos_wrapper);
 }

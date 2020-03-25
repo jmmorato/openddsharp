@@ -24,6 +24,7 @@ using Test;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -65,6 +66,15 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
+        public void TestNewSubscriberQos()
+        {
+            SubscriberQos qos = new SubscriberQos();
+            TestHelper.TestDefaultSubscriberQos(qos);
+        }
+
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
@@ -169,6 +179,108 @@ namespace OpenDDSharp.Standard.UnitTest
 
             // Test SetQos with null parameter
             result = subscriber.SetQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetDefaultDataReaderQos()
+        {
+            // Initialize entities.
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestGetDefaultDataReaderQos), typeName);
+            Assert.IsNotNull(topic);
+            // TODO: Uncomment when properties implemented.
+            //Assert.IsNull(topic.GetListener());
+            //Assert.AreEqual(nameof(TestGetDefaultDataReaderQos), topic.Name);
+            //Assert.AreEqual(typeName, topic.TypeName);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            // Create a non-default DataReader Qos, call GetDefaultDataReaderQos and check the default values.
+            DataReaderQos qos = TestHelper.CreateNonDefaultDataReaderQos();
+            result = subscriber.GetDefaultDataReaderQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataReaderQos(qos);
+
+            // Test GetDefaultDataReaderQos with null parameter.
+            result = subscriber.GetDefaultDataReaderQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetDefaultDataReaderQos()
+        {
+            // Initialize entities.
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestSetDefaultDataReaderQos), typeName);
+            Assert.IsNotNull(topic);
+            // TODO: Uncomment when properties implemented.
+            //Assert.IsNull(topic.GetListener());
+            //Assert.AreEqual(nameof(TestSetDefaultDataReaderQos), topic.Name);
+            //Assert.AreEqual(typeName, topic.TypeName);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            // Creates a non-default QoS, set it an check it.
+            DataReaderQos qos = TestHelper.CreateNonDefaultDataReaderQos();
+            result = subscriber.SetDefaultDataReaderQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = new DataReaderQos();
+            result = subscriber.GetDefaultDataReaderQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
+
+            DataReader reader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(reader);
+
+            qos = new DataReaderQos();
+            result = reader.GetQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultDataReaderQos(qos);
+
+            // Put back the default QoS and check it.
+            qos = new DataReaderQos();
+            result = subscriber.SetDefaultDataReaderQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
+            result = subscriber.GetDefaultDataReaderQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataReaderQos(qos);
+
+            DataReader otherReader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(otherReader);
+
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
+            result = otherReader.GetQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataReaderQos(qos);
+
+            // Create an inconsistent QoS and try to set it.
+            qos = TestHelper.CreateNonDefaultDataReaderQos();
+            qos.TimeBasedFilter.MinimumSeparation = new Duration
+            {
+                Seconds = 5,
+                NanoSeconds = 5
+            };
+            result = subscriber.SetDefaultDataReaderQos(qos);
+            Assert.AreEqual(ReturnCode.InconsistentPolicy, result);
+
+            // Test SetDefaultDataReaderQos with null parameter.
+            result = subscriber.SetDefaultDataReaderQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
         #endregion

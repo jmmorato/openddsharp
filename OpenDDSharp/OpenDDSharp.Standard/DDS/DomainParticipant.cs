@@ -61,7 +61,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
         public Publisher CreatePublisher()
         {
-            return CreatePublisher(new PublisherQos());
+            return CreatePublisher(null);
         }
 
         /// <summary>
@@ -75,12 +75,21 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
         public Publisher CreatePublisher(PublisherQos qos)
         {
+            PublisherQosWrapper qosWrapper = default;
             if (qos is null)
             {
-                throw new ArgumentNullException(nameof(qos));
+                qos = new PublisherQos();
+                var ret = GetDefaultPublisherQos(qos);
+                if (ret == ReturnCode.Ok)
+                {
+                    qosWrapper = qos.ToNative();
+                }
+            }
+            else
+            {
+                qosWrapper = qos.ToNative();
             }
 
-            PublisherQosWrapper qosWrapper = qos.ToNative();
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, qosWrapper, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreatePublisher64(_native, qosWrapper, IntPtr.Zero, 0u));
 
@@ -93,6 +102,62 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
+        /// Gets the default value of the <see cref="Publisher" /> QoS, that is, the QoS policies which will be used for newly created
+        /// <see cref="Publisher" /> entities in the case where the QoS policies are defaulted in the CreatePublisher operation.			
+        /// </summary>
+        /// <remarks>
+        /// The values retrieved by the <see cref="GetDefaultPublisherQos" /> call will match the set of values specified on the last successful call to
+        /// <see cref="SetDefaultPublisherQos" />, or else, if the call was never made, the default values defined by the DDS standard.
+        /// </remarks>
+        /// <param name="qos">The <see cref="PublisherQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDefaultPublisherQos(PublisherQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            PublisherQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultPublisherQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetDefaultPublisherQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets a default value of the <see cref="Publisher" /> QoS policies which will be used for newly created <see cref="Publisher" /> entities in the
+        /// case where the QoS policies are defaulted in the CreatePublisher operation.
+        /// </summary>
+        /// <remarks>
+        /// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
+        /// return <see cref="ReturnCode.InconsistentPolicy" />.
+        /// </remarks>
+        /// <param name="qos">The default <see cref="PublisherQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetDefaultPublisherQos(PublisherQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultPublisherQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetDefaultPublisherQos64(_native, qosNative));
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
         /// Creates a new <see cref="Subscriber" /> with the default QoS policies and without listener attached.
         /// </summary>
         /// <remarks>
@@ -101,7 +166,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
         public Subscriber CreateSubscriber()
         {
-            return CreateSubscriber(new SubscriberQos());
+            return CreateSubscriber(null);
         }
 
         /// <summary>
@@ -115,12 +180,21 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
         public Subscriber CreateSubscriber(SubscriberQos qos)
         {
+            SubscriberQosWrapper qosWrapper = default;
             if (qos is null)
             {
-                throw new ArgumentNullException(nameof(qos));
+                qos = new SubscriberQos();
+                var ret = GetDefaultSubscriberQos(qos);
+                if (ret == ReturnCode.Ok)
+                {
+                    qosWrapper = qos.ToNative();
+                }
+            }
+            else
+            {
+                qosWrapper = qos.ToNative();
             }
 
-            SubscriberQosWrapper qosWrapper = qos.ToNative();
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, qosWrapper, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreateSubscriber64(_native, qosWrapper, IntPtr.Zero, 0u));
 
@@ -132,6 +206,62 @@ namespace OpenDDSharp.DDS
             }
 
             return new Subscriber(native);
+        }
+
+        /// <summary>
+        /// Gets the default value of the <see cref="Subscriber" /> QoS, that is, the QoS policies which will be used for newly created
+        /// <see cref="Subscriber" /> entities in the case where the QoS policies are defaulted in the CreateSubscriber operation.
+        /// </summary>
+        /// <remarks>
+        /// The values retrieved by the GetDefaultSubscriberQos call will match the set of values specified on the last successful call to
+        /// <see cref="SetDefaultSubscriberQos" />, or else, if the call was never made, the default values defined by the DDS standard.
+        /// </remarks>
+        /// <param name="qos">The <see cref="SubscriberQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDefaultSubscriberQos(SubscriberQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            SubscriberQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultSubscriberQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetDefaultSubscriberQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets a default value of the <see cref="Subscriber" /> QoS policies which will be used for newly created <see cref="Subscriber" /> entities in the
+        /// case where the QoS policies are defaulted in the CreateSubscriber operation.
+        /// </summary>
+        /// <remarks>
+        /// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
+        /// return <see cref="ReturnCode.InconsistentPolicy" />.
+        /// </remarks>
+        /// <param name="qos">The default <see cref="SubscriberQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetDefaultSubscriberQos(SubscriberQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultSubscriberQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetDefaultSubscriberQos64(_native, qosNative));
+            qos.Release();
+
+            return ret;
         }
 
         /// <summary>
@@ -147,7 +277,7 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
         public Topic CreateTopic(string topicName, string typeName)
         {
-            return CreateTopic(topicName, typeName, new TopicQos());
+            return CreateTopic(topicName, typeName, null);
         }
 
         /// <summary>
@@ -167,20 +297,28 @@ namespace OpenDDSharp.DDS
         {
             if (string.IsNullOrWhiteSpace(topicName))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "The argument {0} cannot be null or empty.", nameof(topicName)), nameof(topicName));
+                return null;
             }
 
             if (string.IsNullOrWhiteSpace(typeName))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "The argument {0} cannot be null or empty.", nameof(typeName)), nameof(typeName));
+                return null;
             }
 
+            TopicQosWrapper qosWrapper = default;
             if (qos is null)
             {
-                throw new ArgumentNullException(nameof(qos));
+                qos = new TopicQos();
+                var ret = GetDefaultTopicQos(qos);
+                if (ret == ReturnCode.Ok)
+                {
+                    qosWrapper = qos.ToNative();
+                }
             }
-
-            TopicQosWrapper qosWrapper = qos.ToNative();
+            else
+            {
+                qosWrapper = qos.ToNative();
+            }
 
             IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, qosWrapper, IntPtr.Zero, 0u),
                                                         () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, qosWrapper, IntPtr.Zero, 0u));
@@ -193,6 +331,62 @@ namespace OpenDDSharp.DDS
             }
 
             return new Topic(native);
+        }
+
+        /// <summary>
+        /// Gets the default value of the <see cref="Topic" /> QoS, that is, the QoS policies that will be used for newly created <see cref="Topic" />
+        /// entities in the case where the QoS policies are defaulted in the CreateTopic operation.
+        /// </summary>
+        /// <remarks>
+        /// The values retrieved <see cref="GetDefaultTopicQos" /> will match the set of values specified on the last successful call to
+        /// <see cref="SetDefaultTopicQos" />, or else, if the call was never made, the default values defined by the DDS standard.
+        /// </remarks>
+        /// <param name="qos">The <see cref="TopicQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDefaultTopicQos(TopicQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            TopicQosWrapper qosWrapper = default;
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultTopicQos86(_native, ref qosWrapper),
+                                                  () => UnsafeNativeMethods.GetDefaultTopicQos64(_native, ref qosWrapper));
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets a default value of the <see cref="Topic" /> QoS policies which will be used for newly created <see cref="Topic" /> entities in the
+        /// case where the QoS policies are defaulted in the CreateTopic operation.
+        /// </summary>
+        /// <remarks>
+        /// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
+        /// return <see cref="ReturnCode.InconsistentPolicy" />.
+        /// </remarks>
+        /// <param name="qos">The default <see cref="TopicQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetDefaultTopicQos(TopicQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultTopicQos86(_native, qosNative),
+                                                  () => UnsafeNativeMethods.SetDefaultTopicQos64(_native, qosNative));
+            qos.Release();
+
+            return ret;
         }
 
         /// <summary>
@@ -234,7 +428,6 @@ namespace OpenDDSharp.DDS
             }
 
             var qosNative = qos.ToNative();
-
             var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
                                                   () => UnsafeNativeMethods.SetQos64(_native, qosNative));
             qos.Release();
@@ -323,19 +516,67 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
+            public static extern ReturnCode GetQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
+            public static extern ReturnCode GetQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
+            public static extern ReturnCode SetQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_GetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultPublisherQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_GetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultPublisherQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_SetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultPublisherQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultPublisherQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_GetDefaultSubscriberQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultSubscriberQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_GetDefaultSubscriberQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultSubscriberQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_SetDefaultSubscriberQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultSubscriberQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultSubscriberQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultSubscriberQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_GetDefaultTopicQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultTopicQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_GetDefaultTopicQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultTopicQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_SetDefaultTopicQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultTopicQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultTopicQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultTopicQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

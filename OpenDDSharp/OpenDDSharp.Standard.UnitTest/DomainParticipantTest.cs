@@ -73,6 +73,107 @@ namespace OpenDDSharp.Standard.UnitTest
         #region Test Methods
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        public void TestGetDefaultPublisherQos()
+        {
+            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
+
+            ReturnCode result = _participant.GetDefaultPublisherQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultPublisherQos(qos);
+
+            // Test with null parameter
+            result = _participant.GetDefaultPublisherQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetDefaultPulisherQos()
+        {
+            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
+
+            ReturnCode result = _participant.SetDefaultPublisherQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = new PublisherQos();
+            result = _participant.GetDefaultPublisherQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultPublisherQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetDefaultPublisherQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetDefaultSubscriberQos()
+        {
+            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
+
+            ReturnCode result = _participant.GetDefaultSubscriberQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultSubscriberQos(qos);
+
+            result = _participant.GetDefaultSubscriberQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetDefaultSubscriberQos()
+        {
+            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
+
+            ReturnCode result = _participant.SetDefaultSubscriberQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = new SubscriberQos();
+            result = _participant.GetDefaultSubscriberQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultSubscriberQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetDefaultSubscriberQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetDefaultTopicQos()
+        {
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+
+            ReturnCode result = _participant.GetDefaultTopicQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultTopicQos(qos);
+
+            // Test with null parameter
+            result = _participant.GetDefaultTopicQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetDefaultTopicQos()
+        {
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+
+            ReturnCode result = _participant.SetDefaultTopicQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            qos = new TopicQos();
+            result = _participant.GetDefaultTopicQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestNonDefaultTopicQos(qos);
+
+            // Test with null parameter
+            result = _participant.SetDefaultTopicQos(null);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
             DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();

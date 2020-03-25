@@ -19,8 +19,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "Publisher.h"
 
-::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr p) {
-	return static_cast<::DDS::Entity_ptr>(p);
+::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr pub) {
+	return static_cast<::DDS::Entity_ptr>(pub);
 }
 
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
@@ -31,9 +31,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
     return pub->create_datawriter(topic, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
 
-::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr p, PublisherQosWrapper& qos_wrapper) {
-	::DDS::PublisherQos qos_native;
-	::DDS::ReturnCode_t ret = p->get_qos(qos_native);
+::DDS::ReturnCode_t Publisher_GetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper& qos_wrapper) {
+	::DDS::DataWriterQos qos_native;
+	::DDS::ReturnCode_t ret = pub->get_default_datawriter_qos(qos_native);
 
 	if (ret == ::DDS::RETCODE_OK) {
 		qos_wrapper = qos_native;
@@ -42,6 +42,21 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	return ret;
 }
 
-::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr p, PublisherQosWrapper qos_wrapper) {
-	return p->set_qos(qos_wrapper);
+::DDS::ReturnCode_t Publisher_SetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper qos_wrapper) {
+	return pub->set_default_datawriter_qos(qos_wrapper);
+}
+
+::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper& qos_wrapper) {
+	::DDS::PublisherQos qos_native;
+	::DDS::ReturnCode_t ret = pub->get_qos(qos_native);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos_wrapper = qos_native;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper qos_wrapper) {
+	return pub->set_qos(qos_wrapper);
 }

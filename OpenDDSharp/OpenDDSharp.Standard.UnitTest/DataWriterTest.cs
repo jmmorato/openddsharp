@@ -25,6 +25,7 @@ using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -35,7 +36,7 @@ namespace OpenDDSharp.Standard.UnitTest
         private const string TEST_CATEGORY = "DataWriter";
         #endregion
 
-        #region Fields        
+        #region Fields
         private DomainParticipant _participant;
         private Topic _topic;
         private Publisher _publisher;
@@ -87,6 +88,15 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
+        public void TestNewDataWriterQos()
+        {
+            DataWriterQos qos = new DataWriterQos();
+            TestHelper.TestDefaultDataWriterQos(qos);
+        }
+
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()

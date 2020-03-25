@@ -24,7 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "dds\DCPS\Marked_Default_Qos.h"
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr p);
+::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr pub);
 
 EXTERN_METHOD_EXPORT 
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
@@ -34,7 +34,13 @@ EXTERN_METHOD_EXPORT
 												 ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr s, PublisherQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper& qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr s, PublisherQosWrapper qos_wrapper);
+::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Publisher_GetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Publisher_SetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper qos_wrapper);

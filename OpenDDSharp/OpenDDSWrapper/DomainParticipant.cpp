@@ -30,11 +30,41 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
     return dp->create_publisher(qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 }
 
+::DDS::ReturnCode_t DomainParticipant_GetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper& qos_wrapper) {
+    ::DDS::PublisherQos qos_native;
+    ::DDS::ReturnCode_t ret = dp->get_default_publisher_qos(qos_native);
+
+    if (ret == ::DDS::RETCODE_OK) {
+        qos_wrapper = qos_native;
+    }
+
+    return ret;
+}
+
+::DDS::ReturnCode_t DomainParticipant_SetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper qos_wrapper) {
+    return dp->set_default_publisher_qos(qos_wrapper);
+}
+
 ::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(::DDS::DomainParticipant_ptr dp,
                                                          SubscriberQosWrapper qos,
                                                          ::DDS::SubscriberListener_ptr a_listener,
                                                          ::DDS::StatusMask mask) {
     return dp->create_subscriber(qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+}
+
+::DDS::ReturnCode_t DomainParticipant_GetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper& qos_wrapper) {
+    ::DDS::SubscriberQos qos_native;
+    ::DDS::ReturnCode_t ret = dp->get_default_subscriber_qos(qos_native);
+
+    if (ret == ::DDS::RETCODE_OK) {
+        qos_wrapper = qos_native;
+    }
+
+    return ret;
+}
+
+::DDS::ReturnCode_t DomainParticipant_SetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper qos_wrapper) {
+    return dp->set_default_subscriber_qos(qos_wrapper);
 }
 
 ::DDS::Topic_ptr DomainParticipant_CreateTopic(::DDS::DomainParticipant_ptr dp,
@@ -44,6 +74,21 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
                                                ::DDS::TopicListener_ptr a_listener,
                                                ::DDS::StatusMask mask) {
     return dp->create_topic(topic_name, type_name, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+}
+
+::DDS::ReturnCode_t DomainParticipant_GetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper& qos_wrapper) {
+    ::DDS::TopicQos qos_native;
+    ::DDS::ReturnCode_t ret = dp->get_default_topic_qos(qos_native);
+
+    if (ret == ::DDS::RETCODE_OK) {
+        qos_wrapper = qos_native;
+    }
+
+    return ret;
+}
+
+::DDS::ReturnCode_t DomainParticipant_SetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper qos_wrapper) {
+    return dp->set_default_topic_qos(qos_wrapper);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper& qos_wrapper) {

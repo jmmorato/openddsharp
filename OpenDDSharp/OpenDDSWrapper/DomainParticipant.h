@@ -32,11 +32,23 @@ EXTERN_METHOD_EXPORT
                                                        ::DDS::PublisherListener_ptr a_listener, 
                                                        ::DDS::StatusMask mask);
 
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_GetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_SetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper qos_wrapper);
+
 EXTERN_METHOD_EXPORT 
 ::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(::DDS::DomainParticipant_ptr dp, 
                                                          SubscriberQosWrapper qos, 
                                                          ::DDS::SubscriberListener_ptr a_listener, 
                                                          ::DDS::StatusMask mask);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_GetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_SetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper qos_wrapper);
 
 EXTERN_METHOD_EXPORT 
 ::DDS::Topic_ptr DomainParticipant_CreateTopic(::DDS::DomainParticipant_ptr dp,
@@ -45,6 +57,12 @@ EXTERN_METHOD_EXPORT
                                                TopicQosWrapper qos,
                                                ::DDS::TopicListener_ptr a_listener,
                                                ::DDS::StatusMask mask);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_GetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_SetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper qos_wrapper);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper& qos_wrapper);
