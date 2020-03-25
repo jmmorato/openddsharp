@@ -134,7 +134,7 @@ jobs:
       displayName: Execute Unit Tests
       inputs:
         testSelector: 'testAssemblies'
-        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.*UnitTest.dll'
+        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp*.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.*UnitTest.dll'
         runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
         searchFolder: '$(System.DefaultWorkingDirectory)'
         platform: '$(BuildPlatform)'
@@ -267,7 +267,7 @@ jobs:
       displayName: Execute Unit Tests
       inputs:
         testSelector: 'testAssemblies'
-        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.*UnitTest.dll'
+        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.*UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.*UnitTest.dll'
         searchFolder: '$(System.DefaultWorkingDirectory)'
         runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
         platform: '$(BuildPlatform)'
