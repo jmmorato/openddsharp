@@ -22,9 +22,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include <dds/DCPS/Service_Participant.h>
 
-//EXTERN_METHOD_EXPORT 
-//void ParticipantService_new();
-
 EXTERN_METHOD_EXPORT
 ::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactory();
 

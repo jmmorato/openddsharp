@@ -19,10 +19,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "ParticipantService.h"
 
-//void ParticipantService_new() {
-//
-//}
-
 ::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactory() {
     return TheParticipantFactory;
 }
