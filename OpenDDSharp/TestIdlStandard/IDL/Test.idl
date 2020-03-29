@@ -122,7 +122,9 @@ module Test {
 	typedef TestEnum EnumMultiArrayType[3][4][2];
 
     #pragma DCPS_DATA_TYPE "Test::TestStruct"
+	#pragma DCPS_DATA_KEY "Test::TestStruct Id"
     struct TestStruct {
+		long Id;
         short ShortField;
         unsigned short UnsignedShortField;
         long LongField;
