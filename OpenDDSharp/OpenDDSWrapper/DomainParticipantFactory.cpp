@@ -21,14 +21,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::DomainParticipantFactory_ptr dpf,
                                                                       ::DDS::DomainId_t domainId,
-                                                                      DomainParticipantQosWrapper* qos,
+                                                                      DomainParticipantQosWrapper qos,
                                                                       ::DDS::DomainParticipantListener_ptr a_listener,
                                                                       ::DDS::StatusMask mask)
-{    
-    //::DDS::DomainParticipantQos native_qos;    
-    //native_qos.entity_factory.autoenable_created_entities = qos.entity_factory.autoenable_created_entities;        
-    //native_qos.user_data.value = qos.user_data.value;
-    return dpf->create_participant(domainId, PARTICIPANT_QOS_DEFAULT, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+{
+    return dpf->create_participant(domainId, qos, a_listener, mask);
 }
 
 ::DDS::ReturnCode_t DomainParticipantFactory_DeleteParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainParticipant_ptr dp)

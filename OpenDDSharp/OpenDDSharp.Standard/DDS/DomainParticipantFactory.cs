@@ -41,21 +41,103 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Creates a new <see cref="DomainParticipant" /> object with the default QoS policies and without listener attached.
+        /// </summary>
+        /// <param name="domainId">Domain ID that the application intends to join.</param>
+        /// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
         public DomainParticipant CreateParticipant(int domainId)
         {
-            DomainParticipantQosWrapper qos = default(DomainParticipantQosWrapper);
+            return CreateParticipant(domainId, null, null, StatusMask.DefaultStatusMask);
+        }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateParticipant86(_native, domainId, ref qos, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateParticipant64(_native, domainId, ref qos, IntPtr.Zero, 0u));
+        /// <summary>
+        /// Creates a <see cref="DomainParticipant" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// If the specified QoS policies are not consistent, the operation will fail and no <see cref="DomainParticipant" /> will be created.
+        /// </remarks>
+        /// <param name="domainId">Domain ID that the application intends to join.</param>
+        /// <param name="qos">The <see cref="DomainParticipantQos" /> policies to be used for creating the new <see cref="DomainParticipant" />.</param>
+        /// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
+        public DomainParticipant CreateParticipant(int domainId, DomainParticipantQos qos)
+        {
+            return CreateParticipant(domainId, qos, null, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DomainParticipant" /> with the desired QoS policies and attaches to it the specified <see cref="DomainParticipantListener" />.
+        /// The specified <see cref="DomainParticipantListener" /> will be attached with the default <see cref="StatusMask" />.
+        /// </summary>
+        /// <remarks>
+        /// If the specified QoS policies are not consistent, the operation will fail and no <see cref="DomainParticipant" /> will be created.
+        /// </remarks>
+        /// <param name="domainId">Domain ID that the application intends to join.</param>
+        /// <param name="qos">The <see cref="DomainParticipantQos" /> policies to be used for creating the new <see cref="DomainParticipant" />.</param>
+        /// <param name="listener">The <see cref="DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
+        /// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
+        public DomainParticipant CreateParticipant(int domainId, DomainParticipantQos qos, DomainParticipantListener listener)
+        {
+            return CreateParticipant(domainId, qos, listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DomainParticipant" /> with the desired QoS policies and attaches to it the specified <see cref="DomainParticipantListener" />.
+        /// </summary>
+        /// <remarks>
+        /// If the specified QoS policies are not consistent, the operation will fail and no <see cref="DomainParticipant" /> will be created.
+        /// </remarks>
+        /// <param name="domainId">Domain ID that the application intends to join.</param>
+        /// <param name="qos">The <see cref="DomainParticipantQos" /> policies to be used for creating the new <see cref="DomainParticipant" />.</param>
+        /// <param name="listener">The <see cref="DomainParticipantListener" /> to be attached to the newly created <see cref="DomainParticipant" />.</param>
+        /// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns> The newly created <see cref="DomainParticipant" /> on success, otherwise <see langword="null"/>.</returns>
+        public DomainParticipant CreateParticipant(int domainId, DomainParticipantQos qos, DomainParticipantListener listener, StatusMask statusMask)
+        {
+            DomainParticipantQosWrapper qosWrapper = default;
+            if (qos is null)
+            {
+                qos = new DomainParticipantQos();
+                var ret = ReturnCode.Ok; // TODO: GetDefaultParticipantQos(qos);
+                if (ret == ReturnCode.Ok)
+                {
+                    qosWrapper = qos.ToNative();
+                }
+            }
+            else
+            {
+                qosWrapper = qos.ToNative();
+            }
+
+            IntPtr nativeListener = IntPtr.Zero;
+            if (listener != null)
+            {
+                nativeListener = listener.ToNative();
+            }
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateParticipant86(_native, domainId, qosWrapper, nativeListener, statusMask),
+                                                        () => UnsafeNativeMethods.CreateParticipant64(_native, domainId, qosWrapper, nativeListener, statusMask));
 
             if (native.Equals(IntPtr.Zero))
             {
                 return null;
             }
 
-            return new DomainParticipant(native);
+            return new DomainParticipant(native)
+            {
+                Listener = listener,
+            };
         }
 
+        /// <summary>
+        /// Deletes an existing <see cref="DomainParticipant" />.
+        /// </summary>
+        /// <remarks>
+        /// This operation can only be invoked if all domain entities belonging to the participant have already been deleted.
+        /// Otherwise the error <see cref="ReturnCode.PreconditionNotMet" /> is returned.
+        /// </remarks>
+        /// <param name="dp">The <see cref="DomainParticipant" /> to be deleted.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteParticipant(DomainParticipant dp)
         {
             if (dp == null)
@@ -79,11 +161,11 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipantFactory_CreateParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateParticipant64(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] ref DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateParticipant64(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantFactory_CreateParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateParticipant86(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] ref DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
+            public static extern IntPtr CreateParticipant86(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
