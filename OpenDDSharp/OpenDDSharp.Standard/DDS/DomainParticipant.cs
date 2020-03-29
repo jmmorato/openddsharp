@@ -19,7 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.ComponentModel;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -42,6 +42,10 @@ namespace OpenDDSharp.DDS
     {
         #region Fields
         private readonly IntPtr _native;
+        #endregion
+
+        #region Properties
+        internal DomainParticipantListener Listener { get; set; }
         #endregion
 
         #region Constructors
@@ -433,7 +437,45 @@ namespace OpenDDSharp.DDS
             qos.Release();
 
             return ret;
+        }
 
+        /// <summary>
+        /// Allows access to the attached <see cref="DomainParticipantListener" />.
+        /// </summary>
+        /// <returns>The attached <see cref="DomainParticipantListener" />.</returns>
+        [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
+        public DomainParticipantListener GetListener()
+        {
+            return Listener;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="DomainParticipantListener" /> using the <see cref="StatusMask.DefaultStatusMask" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="DomainParticipantListener" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(DomainParticipantListener listener)
+        {
+            return SetListener(listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Sets the <see cref="DomainParticipantListener" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="DomainParticipantListener" /> to be set.</param>
+        /// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(DomainParticipantListener listener, StatusMask mask)
+        {
+            Listener = listener;
+            IntPtr ptr = IntPtr.Zero;
+            if (listener != null)
+            {
+                ptr = listener.ToNative();
+            }
+
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetListener86(_native, ptr, mask),
+                                               () => UnsafeNativeMethods.SetListener64(_native, ptr, mask));
         }
 
         /// <summary>
@@ -528,7 +570,7 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
+            public static extern ReturnCode SetQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_GetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
@@ -577,6 +619,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultTopicQos", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetDefaultTopicQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener64(IntPtr dp, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener86(IntPtr dp, IntPtr listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipant_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

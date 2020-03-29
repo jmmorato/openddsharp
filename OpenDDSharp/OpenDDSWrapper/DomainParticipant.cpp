@@ -106,6 +106,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
     return dp->set_qos(qos_wrapper);
 }
 
+::DDS::ReturnCode_t DomainParticipant_SetListener(::DDS::DomainParticipant_ptr dp, OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr listener, ::DDS::StatusMask mask) {
+    return dp->set_listener(listener, mask);
+}
+
 ::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp)
 {
 	return dp->delete_contained_entities();
