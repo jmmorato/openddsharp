@@ -27,8 +27,8 @@ namespace OpenDDSharp.Helpers
     {
         #region Fields
         private static readonly object _lock = new object();
-        private readonly ConcurrentDictionary<IntPtr, TransportInst> _insts = new ConcurrentDictionary<IntPtr, TransportInst>();
         private static TransportInstManager _instance;
+        private readonly ConcurrentDictionary<IntPtr, TransportInst> _insts = new ConcurrentDictionary<IntPtr, TransportInst>();
         #endregion
 
         #region Singleton
