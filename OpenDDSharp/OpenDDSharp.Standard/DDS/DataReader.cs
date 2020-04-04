@@ -44,6 +44,7 @@ namespace OpenDDSharp.DDS
     {
         #region Fields
         private readonly IntPtr _native;
+        private readonly ICollection<ReadCondition> _conditions;
         #endregion
 
         #region Properties
@@ -68,9 +69,14 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataReader"/> class.
+        /// </summary>
+        /// <param name="native">The native pointer.</param>
         protected internal DataReader(IntPtr native) : base(NarrowBase(native))
         {
             _native = native;
+            _conditions = new List<ReadCondition>();
         }
         #endregion
 
@@ -354,8 +360,12 @@ namespace OpenDDSharp.DDS
 
         internal override void ClearContainedEntities()
         {
-            base.ClearContainedEntities();
-            throw new NotImplementedException();
+            foreach (ReadCondition c in _conditions)
+            {
+                MarshalHelper.ReleaseNativePointer(c.ToNative());
+            }
+
+            _conditions.Clear();
         }
 
         private static IntPtr NarrowBase(IntPtr ptr)

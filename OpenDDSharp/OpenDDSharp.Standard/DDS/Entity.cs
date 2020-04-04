@@ -110,7 +110,13 @@ namespace OpenDDSharp.DDS
 
         internal virtual void ClearContainedEntities()
         {
-            throw new NotImplementedException();
+            foreach (Entity e in ContainedEntities)
+            {
+                EntityManager.Instance.Remove(e.ToNative());
+                e.ClearContainedEntities();
+            }
+
+            ContainedEntities.Clear();
         }
 
         private StatusCondition GetStatusCondition()
