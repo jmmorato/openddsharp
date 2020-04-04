@@ -195,7 +195,10 @@
     <ClInclude Include="Discovery.h" />
     <ClInclude Include="DomainParticipant.h" />
     <ClInclude Include="DomainParticipantFactory.h" />
+    <ClInclude Include="DomainParticipantListener.h" />
+    <ClInclude Include="DomainParticipantListenerImpl.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="ListenerDelegates.h" />
     <ClInclude Include="marshal.h" />
     <ClInclude Include="ParticipantService.h" />
     <ClInclude Include="Publisher.h" />
@@ -216,6 +219,8 @@
     <ClCompile Include="Discovery.cpp" />
     <ClCompile Include="DomainParticipant.cpp" />
     <ClCompile Include="DomainParticipantFactory.cpp" />
+    <ClCompile Include="DomainParticipantListener.cpp" />
+    <ClCompile Include="DomainParticipantListenerImpl.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="ParticipantService.cpp" />
     <ClCompile Include="Publisher.cpp" />

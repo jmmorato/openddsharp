@@ -72,6 +72,15 @@
     <ClInclude Include="Topic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ListenerDelegates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DomainParticipantListenerImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DomainParticipantListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DomainParticipant.cpp">
@@ -123,6 +132,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Topic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DomainParticipantListenerImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DomainParticipantListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
