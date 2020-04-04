@@ -102,12 +102,17 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return new Publisher(native);
+            var p = new Publisher(native);
+
+            EntityManager.Instance.Add((p as Entity).ToNative(), p);
+            ContainedEntities.Add(p);
+
+            return p;
         }
 
         /// <summary>
         /// Gets the default value of the <see cref="Publisher" /> QoS, that is, the QoS policies which will be used for newly created
-        /// <see cref="Publisher" /> entities in the case where the QoS policies are defaulted in the CreatePublisher operation.			
+        /// <see cref="Publisher" /> entities in the case where the QoS policies are defaulted in the CreatePublisher operation.
         /// </summary>
         /// <remarks>
         /// The values retrieved by the <see cref="GetDefaultPublisherQos" /> call will match the set of values specified on the last successful call to
@@ -209,7 +214,12 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return new Subscriber(native);
+            var s = new Subscriber(native);
+
+            EntityManager.Instance.Add((s as Entity).ToNative(), s);
+            ContainedEntities.Add(s);
+
+            return s;
         }
 
         /// <summary>
@@ -334,7 +344,12 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return new Topic(native);
+            var t = new Topic(native);
+
+            EntityManager.Instance.Add((t as Entity).ToNative(), t);
+            ContainedEntities.Add(t);
+
+            return t;
         }
 
         /// <summary>
@@ -493,8 +508,20 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteContainedEntities()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteContainedEntities86(_native),
-                                               () => UnsafeNativeMethods.DeleteContainedEntities64(_native));
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteContainedEntities86(_native),
+                                                  () => UnsafeNativeMethods.DeleteContainedEntities64(_native));
+            if (ret == ReturnCode.Ok)
+            {
+                foreach (var e in ContainedEntities)
+                {
+                    EntityManager.Instance.Remove(e.ToNative());
+                    e.ClearContainedEntities();
+                }
+
+                ContainedEntities.Clear();
+            }
+
+            return ret;
         }
 
         /// <summary>

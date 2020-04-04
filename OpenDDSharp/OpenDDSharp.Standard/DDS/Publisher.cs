@@ -109,7 +109,12 @@ namespace OpenDDSharp.DDS
 
             qos.Release();
 
-            return new DataWriter(native);
+            var dw = new DataWriter(native);
+
+            EntityManager.Instance.Add((dw as Entity).ToNative(), dw);
+            ContainedEntities.Add(dw);
+
+            return dw;
         }
 
         /// <summary>

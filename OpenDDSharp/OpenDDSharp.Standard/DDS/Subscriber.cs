@@ -110,7 +110,12 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return new DataReader(native);
+            var dr = new DataReader(native);
+
+            EntityManager.Instance.Add((dr as Entity).ToNative(), dr);
+            ContainedEntities.Add(dr);
+
+            return dr;
         }
 
         /// <summary>
