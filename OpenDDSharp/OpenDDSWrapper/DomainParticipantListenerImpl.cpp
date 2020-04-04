@@ -19,19 +19,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DomainParticipantListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::DomainParticipantListenerImpl(std::function<void(::DDS::Subscriber_ptr)> onDataOnReaders,
-	std::function<void(::DDS::DataReader_ptr)> onDataAvalaible,
-	std::function<void(::DDS::DataReader_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
-	std::function<void(::DDS::DataReader_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
-	std::function<void(::DDS::DataReader_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
-	std::function<void(::DDS::DataReader_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
-	std::function<void(::DDS::DataReader_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-	std::function<void(::DDS::DataReader_ptr, ::DDS::SampleLostStatus)> onSampleLost,
-	std::function<void(::DDS::DataWriter_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
-	std::function<void(::DDS::DataWriter_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
-	std::function<void(::DDS::DataWriter_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
-	std::function<void(::DDS::DataWriter_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
-	std::function<void(::DDS::Topic_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
+::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::DomainParticipantListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataOnReaders,
+	std::function<void(::DDS::Entity_ptr)> onDataAvalaible,
+	std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
+	std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
+	std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
+	std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
+	std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
+	std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost,
+	std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
+	std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
+	std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
+	std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
+	std::function<void(::DDS::Entity_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
 	_onDataOnReaders = onDataOnReaders;
 	_onDataAvalaible = onDataAvalaible;
 	_onRequestedDeadlineMissed = onRequestedDeadlineMissed;
@@ -64,66 +64,78 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_on_readers(::DDS::Subscriber_ptr subscriber) {
-	if (_onDataOnReaders != NULL)
-		_onDataOnReaders(subscriber);
+	if (_onDataOnReaders != NULL) {
+		_onDataOnReaders(static_cast<::DDS::Entity_ptr>(subscriber));
+	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_available(::DDS::DataReader_ptr reader) {
 	if (_onDataAvalaible != NULL)
-		_onDataAvalaible(reader);
+		_onDataAvalaible(static_cast<::DDS::Entity_ptr>(reader));
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
-	if (_onRequestedDeadlineMissed != NULL)
-		_onRequestedDeadlineMissed(reader, status);
+	if (_onRequestedDeadlineMissed != NULL) {
+		_onRequestedDeadlineMissed(static_cast<::DDS::Entity_ptr>(reader), status);
+	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status) {
-	if (_onRequestedIncompatibleQos != NULL)
-		_onRequestedIncompatibleQos(reader, status);
+	if (_onRequestedIncompatibleQos != NULL) {
+		_onRequestedIncompatibleQos(static_cast<::DDS::Entity_ptr>(reader), status);
+	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status) {
-	if (_onSampleRejected != NULL)
-		_onSampleRejected(reader, status);
+	if (_onSampleRejected != NULL) {
+		_onSampleRejected(static_cast<::DDS::Entity_ptr>(reader), status);
+	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status) {
-	if (_onLivelinessChanged != NULL)
-		_onLivelinessChanged(reader, status);
+	if (_onLivelinessChanged != NULL) {
+		_onLivelinessChanged(static_cast<::DDS::Entity_ptr>(reader), status);
+	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status) {
-	if (_onSubscriptionMatched != NULL)
-		_onSubscriptionMatched(reader, status);
+	if (_onSubscriptionMatched != NULL) {
+		_onSubscriptionMatched(static_cast<::DDS::Entity_ptr>(reader), status);
+	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
-	if (_onSampleLost != NULL)
-		_onSampleLost(reader, status);
+	if (_onSampleLost != NULL) {
+		_onSampleLost(static_cast<::DDS::Entity_ptr>(reader), status);
+	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status) {
-	if (_onOfferedDeadlineMissed != NULL)
-		_onOfferedDeadlineMissed(writer, status);
+	if (_onOfferedDeadlineMissed != NULL) {
+		_onOfferedDeadlineMissed(static_cast<::DDS::Entity_ptr>(writer), status);
+	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status) {
-	if (_onOfferedIncompatibleQos != NULL)
-		_onOfferedIncompatibleQos(writer, status);
+	if (_onOfferedIncompatibleQos != NULL) {
+		_onOfferedIncompatibleQos(static_cast<::DDS::Entity_ptr>(writer), status);
+	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status) {
-	if (_onLivelinessLost != NULL)
-		_onLivelinessLost(writer, status);
+	if (_onLivelinessLost != NULL) {
+		_onLivelinessLost(static_cast<::DDS::Entity_ptr>(writer), status);
+	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status) {
-	if (_onPublicationMatched != NULL)
-		_onPublicationMatched(writer, status);
+	if (_onPublicationMatched != NULL) {
+		_onPublicationMatched(static_cast<::DDS::Entity_ptr>(writer), status);
+	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
-	if (_onInconsistentTopic != NULL)
-		_onInconsistentTopic(topic, status);
+	if (_onInconsistentTopic != NULL) {
+		_onInconsistentTopic(static_cast<::DDS::Entity_ptr>(topic), status);
+	}
 };
