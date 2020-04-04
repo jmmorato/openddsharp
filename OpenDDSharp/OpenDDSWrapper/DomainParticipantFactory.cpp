@@ -32,3 +32,18 @@ DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::Dom
 {
 	return dpf->delete_participant(dp);
 }
+
+::DDS::ReturnCode_t DomainParticipantFactory_GetDefaultParticipantQos(::DDS::DomainParticipantFactory_ptr dpf, DomainParticipantQosWrapper& qos_wrapper) {
+	::DDS::DomainParticipantQos qos_native;
+	::DDS::ReturnCode_t ret = dpf->get_default_participant_qos(qos_native);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		qos_wrapper = qos_native;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t DomainParticipantFactory_SetDefaultParticipantQos(::DDS::DomainParticipantFactory_ptr dpf, DomainParticipantQosWrapper qos_wrapper) {
+	return dpf->set_default_participant_qos(qos_wrapper);
+}

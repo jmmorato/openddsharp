@@ -23,11 +23,18 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "QosPolicies.h"
 #include "dds\DCPS\Marked_Default_Qos.h"
 
-EXTERN_METHOD_EXPORT DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(
-    ::DDS::DomainParticipantFactory_ptr dpf, 
-    ::DDS::DomainId_t domainId,
-    DomainParticipantQosWrapper qos,
-    ::DDS::DomainParticipantListener_ptr a_listener,
-    ::DDS::StatusMask mask);
+EXTERN_METHOD_EXPORT
+DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::DomainParticipantFactory_ptr dpf, 
+                                                                      ::DDS::DomainId_t domainId,
+                                                                      DomainParticipantQosWrapper qos,
+                                                                      ::DDS::DomainParticipantListener_ptr a_listener,
+                                                                      ::DDS::StatusMask mask);
 
-EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t DomainParticipantFactory_DeleteParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainParticipant_ptr dp);
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipantFactory_DeleteParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainParticipant_ptr dp);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipantFactory_GetDefaultParticipantQos(::DDS::DomainParticipantFactory_ptr pub, DomainParticipantQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipantFactory_SetDefaultParticipantQos(::DDS::DomainParticipantFactory_ptr pub, DomainParticipantQosWrapper qos_wrapper);
