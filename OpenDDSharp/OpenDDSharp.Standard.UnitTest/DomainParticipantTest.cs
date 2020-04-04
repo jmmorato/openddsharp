@@ -26,6 +26,7 @@ using Test;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenDDSharp.Standard.UnitTest.Listeners;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -214,6 +215,46 @@ namespace OpenDDSharp.Standard.UnitTest
             // Test with null parameter.
             result = _participant.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetListener()
+        {
+            DomainParticipantListener listener = _participant.GetListener();
+            Assert.IsNull(listener);
+
+            MyParticipantListener otherListener = new MyParticipantListener();
+            DomainParticipant other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN, null, otherListener);
+            Assert.IsNotNull(other);
+            other.BindRtpsUdpTransportConfig();
+
+            listener = other.GetListener();
+            Assert.IsNotNull(listener);
+
+            ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(other);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
+
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetListener()
+        {
+            DomainParticipantListener listener = _participant.GetListener();
+            Assert.IsNull(listener);
+
+            MyParticipantListener myListener = new MyParticipantListener();
+            ReturnCode result = _participant.SetListener(myListener);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            listener = _participant.GetListener();
+            Assert.AreEqual(myListener, listener);
+
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            listener = _participant.GetListener();
+            Assert.IsNull(listener);
         }
         #endregion
     }
