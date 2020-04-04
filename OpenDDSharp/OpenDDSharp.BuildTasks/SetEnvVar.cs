@@ -25,26 +25,15 @@ namespace OpenDDSharp.BuildTasks
 {
     public class SetEnvVar : Task
     {
-        private string _variable;
-        private string _value;
+        [Required]
+        public string Variable { get; set; }
 
         [Required]
-        public string Variable
-        {
-            get { return _variable; }
-            set { _variable = value; }
-        }
-
-        [Required]
-        public string Value
-        {
-            get { return _value; }
-            set { _value = value; }
-        }
+        public string Value { get; set; }
 
         public override bool Execute()
         {
-            Environment.SetEnvironmentVariable(_variable, _value);
+            Environment.SetEnvironmentVariable(Variable, Value, EnvironmentVariableTarget.User);
             return true;
         }
     }
