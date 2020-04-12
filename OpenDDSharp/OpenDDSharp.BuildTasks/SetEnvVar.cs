@@ -33,7 +33,7 @@ namespace OpenDDSharp.BuildTasks
 
         public override bool Execute()
         {
-            Environment.SetEnvironmentVariable(Variable, Value, EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(Variable, Value);
             return true;
         }
     }
