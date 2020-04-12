@@ -204,6 +204,8 @@
   </ItemGroup>
   <Target Name="OpenDDSIdl" BeforeTargets="PreBuildEvent">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
+    <Message Text="DDS_ROOT: $(DDS_ROOT)" Importance="High" />
+    <Message Text="ACE_ROOT: $(ACE_ROOT)" Importance="High" />
     <Exec Command="cmd /c &quot;$(ACE_ROOT)\bin\tao_idl -Wb,pre_include=ace/pre.h -Wb,post_include=ace/post.h -I$(TAO_ROOT) -Sa -St -I$(DDS_ROOT) -Wb,export_macro=%(IdlFiles.Filename)IDL_Export -Wb,export_include=%(IdlFiles.Filename)IDL_Export.h &quot;%(IdlFiles.Identity)&quot;&quot;" IgnoreExitCode="false" ContinueOnError="false" />
     <Exec Command="cmd /c &quot;$(DDS_ROOT)\bin\opendds_idl -Sa -St -Wb,export_macro=%(IdlFiles.Filename)IDL_Export &quot;%(IdlFiles.Identity)&quot;&quot;" IgnoreExitCode="false" ContinueOnError="false" />    
     <Exec Command="cmd /c &quot;$(ACE_ROOT)\bin\export_file_generator.exe&quot; %(IdlFiles.Filename)IDL &gt; %(IdlFiles.Filename)IDL_Export.h" IgnoreExitCode="false" ContinueOnError="false" />

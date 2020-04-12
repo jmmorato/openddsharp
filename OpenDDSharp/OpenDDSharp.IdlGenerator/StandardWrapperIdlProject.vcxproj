@@ -190,6 +190,7 @@
   </ItemGroup>
   <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
+    <Message Text="DDS_ROOT: $(DDS_ROOT)" Importance="High" />
     <Exec Command="$(DDS_ROOT)\bin\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -cwrapper" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 </Project>
