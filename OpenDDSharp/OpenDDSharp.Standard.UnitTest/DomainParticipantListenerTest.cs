@@ -304,7 +304,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// Test the <see cref="DomainParticipantListener.OnRequestedIncompatibleQos(DataReader, RequestedIncompatibleQosStatus)" /> event.
         /// </summary>
         [TestMethod]
-        [TestCategory(TEST_CATEGORY)]        
+        [TestCategory(TEST_CATEGORY)]
         public void TestOnRequestedIncompatibleQos()
         {
             int count = 0;
@@ -357,6 +357,78 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, policies.Count);
             Assert.AreEqual(1, policies.First().Count);
             Assert.AreEqual(11, policies.First().PolicyId);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnSampleRejected(DataReader, SampleRejectedStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnSampleRejected()
+        {
+            int count = 0;
+            DataReader dataReader = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+            InstanceHandle lastInstanceHandle = InstanceHandle.HandleNil;
+            SampleRejectedStatusKind lastReason = SampleRejectedStatusKind.NotRejected;
+
+            // Attach to the event
+            _listener.SampleRejected += (r, s) =>
+            {
+                dataReader = r;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+                lastInstanceHandle = s.LastInstanceHandle;
+                lastReason = s.LastReason;
+
+                count++;
+            };
+
+            // Prepare QoS for the test
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            drQos.ResourceLimits.MaxInstances = 1;
+            drQos.ResourceLimits.MaxSamples = 1;
+            drQos.ResourceLimits.MaxSamplesPerInstance = 1;
+            ReturnCode result = _reader.SetQos(drQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Enable entities
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery
+            bool found = _writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            // Write two samples of the same instances
+            for (int i = 1; i <= 2; i++)
+            {
+                result = _dataWriter.Write(new TestStruct
+                {
+                    Id = 1,
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
+
+            Thread.Sleep(100);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(_reader, dataReader);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, lastInstanceHandle);
+            Assert.AreEqual(SampleRejectedStatusKind.RejectedBySamplesPerInstanceLimit, lastReason);
+
+            // Remove the listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }

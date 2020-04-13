@@ -24,8 +24,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantListener_New(onDataOnReadersDeclaration onDataOnReaders,
 																						   onDataAvailabeDeclaration onDataAvalaible,
 																						   onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
-																						   onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos/*,
-																						   onSampleRejectedDeclaration onSampleRejected,
+																						   onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+																						   onSampleRejectedDeclaration onSampleRejected/*,
 																						   onLivelinessChangedDeclaration onLivelinessChanged,
 																						   onSubscriptionMatchedDeclaration onSubscriptionMatched,
 																						   onSampleLostDeclaration onSampleLost,
@@ -34,7 +34,6 @@ OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantLi
 																						   onLivelinessLostDeclaration onLivelinessLost,
 																						   onPublicationMatchedDeclaration onPublicationMatched,
 																						   onInconsistentTopicDeclaration onInconsistentTopic*/) {
-	onSampleRejectedDeclaration onSampleRejected = NULL;
 	onLivelinessChangedDeclaration onLivelinessChanged = NULL;
 	onSubscriptionMatchedDeclaration onSubscriptionMatched = NULL;
 	onSampleLostDeclaration onSampleLost = NULL;
