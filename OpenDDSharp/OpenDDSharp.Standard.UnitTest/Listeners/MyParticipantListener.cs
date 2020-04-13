@@ -31,7 +31,7 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         public Action<Subscriber> DataOnReaders { get; set; }
         //public Action<DataReader, LivelinessChangedStatus> LivelinessChanged;
         public Action<DataReader, RequestedDeadlineMissedStatus> RequestedDeadlineMissed;
-        //public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos;
+        public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos;
         //public Action<DataReader, SampleLostStatus> SampleLost;
         //public Action<DataReader, SampleRejectedStatus> SampleRejected;
         //public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched;
@@ -71,10 +71,10 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
             RequestedDeadlineMissed?.Invoke(reader, status);
         }
 
-        //public override void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status)
-        //{
-        //    RequestedIncompatibleQos?.Invoke(reader, status);
-        //}
+        public override void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status)
+        {
+            RequestedIncompatibleQos?.Invoke(reader, status);
+        }
 
         //public override void OnSampleLost(DataReader reader, SampleLostStatus status)
         //{

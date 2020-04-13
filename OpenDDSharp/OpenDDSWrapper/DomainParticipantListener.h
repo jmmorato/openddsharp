@@ -26,8 +26,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 EXTERN_METHOD_EXPORT
 OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantListener_New(onDataOnReadersDeclaration onDataOnReaders,
 																						   onDataAvailabeDeclaration onDataAvalaible,
-																						   onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed/*,
-																						   onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+																						   onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
+																						   onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos/*,
 																						   onSampleRejectedDeclaration onSampleRejected,
 																						   onLivelinessChangedDeclaration onLivelinessChanged,
 																						   onSubscriptionMatchedDeclaration onSubscriptionMatched,

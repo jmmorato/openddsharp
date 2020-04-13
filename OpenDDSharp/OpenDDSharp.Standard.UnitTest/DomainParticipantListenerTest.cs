@@ -18,14 +18,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
-using Test;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using OpenDDSharp.Standard.UnitTest.Listeners;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -297,6 +298,65 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, lastInstanceHandle);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnRequestedIncompatibleQos(DataReader, RequestedIncompatibleQosStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]        
+        public void TestOnRequestedIncompatibleQos()
+        {
+            int count = 0;
+            DataReader dr = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+            int lastPolicyId = 0;
+            ICollection<QosPolicyCount> policies = new List<QosPolicyCount>();
+
+            // Attach to the event
+            _listener.RequestedIncompatibleQos += (r, s) =>
+            {
+                dr = r;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+                lastPolicyId = s.LastPolicyId;
+                policies = s.Policies;
+
+                count++;
+            };
+
+            // Create a incompatible DataWriter
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+            DataWriter otherDataWriter = _publisher.CreateDataWriter(_topic, dwQos);
+            Assert.IsNotNull(otherDataWriter);
+
+            // Enable entities
+            ReturnCode result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = otherDataWriter.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery
+            bool found = _writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            // Check the number of incompatible DataWriter
+            Thread.Sleep(100);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(_reader, dr);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
+            Assert.AreEqual(11, lastPolicyId);
+            Assert.IsNotNull(policies);
+            Assert.AreEqual(1, policies.Count);
+            Assert.AreEqual(1, policies.First().Count);
+            Assert.AreEqual(11, policies.First().PolicyId);
         }
         #endregion
     }

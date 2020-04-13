@@ -111,6 +111,34 @@ namespace OpenDDSharp.Helpers
             }
         }
 
+        public static void SequenceToPtr<T>(this ICollection<T> sequence, ref IntPtr ptr)
+        {
+            if (sequence == null || sequence.Count == 0)
+            {
+                // No structures in the list. Write 0 and return
+                ptr = Marshal.AllocHGlobal(sizeof(int));
+                Marshal.WriteInt32(ptr, 0);
+                return;
+            }
+
+            int elSiz = Marshal.SizeOf<T>();
+            // Get the total size of unmanaged memory that is needed (length + elements)
+            int size = sizeof(int) + (elSiz * sequence.Count);
+            // Allocate unmanaged space.
+            ptr = Marshal.AllocHGlobal(size);
+            // Write the "Length" field first
+            Marshal.WriteInt32(ptr, sequence.Count);
+
+            // Write the list data
+            int i = 0;
+            foreach (var element in sequence)
+            {
+                // Newly-allocated space has no existing object, so the last param is false
+                Marshal.StructureToPtr(element, ptr + sizeof(int) + (elSiz * i), false);
+                i++;
+            }
+        }
+
         public static void SequenceToPtr<T>(this IList<T> sequence, ref IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)

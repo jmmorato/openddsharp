@@ -81,6 +81,9 @@
     <ClInclude Include="DomainParticipantListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Statuses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DomainParticipant.cpp">

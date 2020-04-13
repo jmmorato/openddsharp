@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 #include "Utils.h"
+#include "Statuses.h"
 
 // Subscriber delegates.
 typedef void(__stdcall* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
@@ -26,7 +27,7 @@ typedef void(__stdcall* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber
 // DataReader delegates.
 typedef void(__stdcall* onDataAvailabeDeclaration)(::DDS::Entity_ptr reader);
 typedef void(__stdcall* onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
-typedef void(__stdcall* onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status);
+typedef void(__stdcall* onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
 typedef void(__stdcall* onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);
 typedef void(__stdcall* onLivelinessChangedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::LivelinessChangedStatus& status);
 typedef void(__stdcall* onSubscriptionMatchedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
