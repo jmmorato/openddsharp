@@ -62,6 +62,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIdlStandard", "TestIdlS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard.UnitTest", "OpenDDSharp.Standard.UnitTest\OpenDDSharp.Standard.UnitTest.csproj", "{DA9645FE-381E-495E-9652-3DF086570B71}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CC7E7B3-C89B-44E8-8467-D0CD29A85700}"
+	ProjectSection(SolutionItems) = preProject
+		..\azure-pipelines-1.yml = ..\azure-pipelines-1.yml
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		CodeCoverage.runsettings = CodeCoverage.runsettings
+		OpenDDSharpRules.ruleset = OpenDDSharpRules.ruleset
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
