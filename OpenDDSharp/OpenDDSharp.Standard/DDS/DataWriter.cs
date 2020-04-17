@@ -138,6 +138,23 @@ namespace OpenDDSharp.DDS
             return ret;
         }
 
+        /// <summary>
+        /// Manually asserts the liveliness of the <see cref="DataWriter" />. This is used in combination with the liveliness QoS
+        /// policy to indicate to DDS that the entity remains active.
+        /// </summary>
+        /// <remarks>
+        /// <para>This operation need only be used if the <see cref="LivelinessQosPolicy" /> setting is either <see cref="LivelinessQosPolicyKind.ManualByParticipantLivelinessQos" />
+        /// or <see cref="LivelinessQosPolicyKind.ManualByTopicLivelinessQos" />. Otherwise, it has no effect.</para>
+        /// <para>NOTE: Writing data via the write operation on a <see cref="DataWriter" /> asserts liveliness on the <see cref="DataWriter" /> itself and its
+        /// <see cref="DomainParticipant" />. Consequently the use of AssertLiveliness is only needed if the application is not writing data regularly.</para>
+        /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode AssertLiveliness()
+        {
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.AssertLiveliness86(_native),
+                                               () => UnsafeNativeMethods.AssertLiveliness64(_native));
+        }
+
         private static IntPtr NarrowBase(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
@@ -204,6 +221,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetPublicationMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetPublicationMatchedStatus86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] ref PublicationMatchedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_AssertLiveliness", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode AssertLiveliness64(IntPtr dw);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_AssertLiveliness", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode AssertLiveliness86(IntPtr dw);
         }
         #endregion
     }

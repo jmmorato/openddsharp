@@ -36,3 +36,6 @@ EXTERN_METHOD_EXPORT
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_SetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper qos_wrapper);
 
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_AssertLiveliness(::DDS::DataWriter_ptr dw);
+

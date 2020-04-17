@@ -52,3 +52,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t DataWriter_SetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper qos_wrapper) {
 	return dw->set_qos(qos_wrapper);
 }
+
+::DDS::ReturnCode_t DataWriter_AssertLiveliness(::DDS::DataWriter_ptr dw) {
+	return dw->assert_liveliness();
+}
