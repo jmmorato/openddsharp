@@ -29,11 +29,11 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         //public Action<DataReader> ConnectionDataReaderDeleted;
         public Action<DataReader> DataAvailable { get; set; }
         public Action<Subscriber> DataOnReaders { get; set; }
-        //public Action<DataReader, LivelinessChangedStatus> LivelinessChanged;
-        public Action<DataReader, RequestedDeadlineMissedStatus> RequestedDeadlineMissed;
-        public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos;
+        public Action<DataReader, LivelinessChangedStatus> LivelinessChanged { get; set; }
+        public Action<DataReader, RequestedDeadlineMissedStatus> RequestedDeadlineMissed { get; set; }
+        public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos { get; set; }
         //public Action<DataReader, SampleLostStatus> SampleLost;
-        public Action<DataReader, SampleRejectedStatus> SampleRejected;
+        public Action<DataReader, SampleRejectedStatus> SampleRejected { get; set; }
         //public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched;
         //public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
         //public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
@@ -61,10 +61,10 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
             DataOnReaders?.Invoke(subscriber);
         }
 
-        //public override void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status)
-        //{
-        //    LivelinessChanged?.Invoke(reader, status);
-        //}
+        public override void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status)
+        {
+            LivelinessChanged?.Invoke(reader, status);
+        }
 
         public override void OnRequestedDeadlineMissed(DataReader reader, RequestedDeadlineMissedStatus status)
         {
