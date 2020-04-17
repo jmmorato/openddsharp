@@ -88,6 +88,9 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        /// <summary>
+        /// Test the <see cref="DataWriterQos" /> constructor.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
@@ -97,6 +100,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestHelper.TestDefaultDataWriterQos(qos);
         }
 
+        /// <summary>
+        /// Test the <see cref="DataWriter.GetQos(DataWriterQos)" /> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
@@ -118,6 +124,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
+        /// <summary>
+        /// Test the <see cref="DataWriter.SetQos(DataWriterQos)" /> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
@@ -179,6 +188,40 @@ namespace OpenDDSharp.Standard.UnitTest
             // Test SetQos with null parameter
             result = dataWriter.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DataWriter.AssertLiveliness()" /> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestAssertLiveliness()
+        {
+            // Initialize entities
+            DataWriterQos qos = new DataWriterQos();
+            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
+            qos.Liveliness.LeaseDuration = new Duration
+            {
+                Seconds = 1,
+            };
+            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            Assert.IsNotNull(writer);
+
+            // Manually assert liveliness
+            for (int i = 0; i < 5; i++)
+            {
+                ReturnCode assertResult = writer.AssertLiveliness();
+                Assert.AreEqual(ReturnCode.Ok, assertResult);
+                System.Threading.Thread.Sleep(500);
+            }
+
+            // TODO: Uncomment when implemented.
+            //// Check that no liveliness has been lost
+            //LivelinessLostStatus status = new LivelinessLostStatus();
+            //ReturnCode result = writer.GetLivelinessLostStatus(ref status);
+            //Assert.AreEqual(ReturnCode.Ok, result);
+            //Assert.AreEqual(0, status.TotalCount);
+            //Assert.AreEqual(0, status.TotalCountChange);
         }
         #endregion
     }
