@@ -30,3 +30,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::StatusMask Entity_GetStatusChanges(::DDS::Entity_ptr entity) {
 	return entity->get_status_changes();
 }
+
+::DDS::InstanceHandle_t Entity_GetInstanceHandle(::DDS::Entity_ptr entity) {
+	return entity->get_instance_handle();
+}
