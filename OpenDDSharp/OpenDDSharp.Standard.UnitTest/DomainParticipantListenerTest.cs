@@ -534,6 +534,69 @@ namespace OpenDDSharp.Standard.UnitTest
             result = _participant.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnSubscriptionMatched(DataReader, SubscriptionMatchedStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnSubscriptionMatched()
+        {
+            // Attach to the event
+            int count = 0;
+            _listener.SubscriptionMatched += (r, s) =>
+            {
+                Assert.AreEqual(_reader, r);
+
+                if (count == 0)
+                {
+                    // Liveliness alive
+                    Assert.AreEqual(1, s.TotalCount);
+                    Assert.AreEqual(1, s.TotalCountChange);
+                    Assert.AreEqual(1, s.CurrentCount);
+                    Assert.AreEqual(1, s.CurrentCountChange);
+                    Assert.AreEqual(_writer.InstanceHandle, s.LastPublicationHandle);
+                }
+                else
+                {
+                    // Liveliness not alive
+                    Assert.AreEqual(1, s.TotalCount);
+                    Assert.AreEqual(0, s.TotalCountChange);
+                    Assert.AreEqual(0, s.CurrentCount);
+                    Assert.AreEqual(-1, s.CurrentCountChange);
+                    Assert.AreEqual(_writer.InstanceHandle, s.LastPublicationHandle);
+                }
+
+                count++;
+            };
+
+            // Enable entities
+            ReturnCode result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery
+            bool found = _writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            // Check subscription matched call
+            System.Threading.Thread.Sleep(500);
+            Assert.AreEqual(1, count);
+
+            // Delete the writer
+            result = _publisher.DeleteDataWriter(_writer);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Check subscription matched call
+            System.Threading.Thread.Sleep(500);
+            Assert.AreEqual(2, count);
+
+            // Remove the listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
         #endregion
     }
 }
