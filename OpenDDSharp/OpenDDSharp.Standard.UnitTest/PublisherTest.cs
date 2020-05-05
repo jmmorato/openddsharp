@@ -66,6 +66,9 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        /// <summary>
+        /// Test the <see cref="PublisherQos"/> default constructor.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
@@ -75,6 +78,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestHelper.TestDefaultPublisherQos(qos);
         }
 
+        /// <summary>
+        /// Test the <see cref="Publisher.GetQos(PublisherQos)"/> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
@@ -96,6 +102,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
+        /// <summary>
+        /// Test the <see cref="Publisher.SetQos(PublisherQos)"/> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
@@ -182,6 +191,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
+        /// <summary>
+        /// Test the <see cref="Publisher.GetDefaultDataWriterQos(DataWriterQos)"/> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultDataWriterQos()
@@ -213,6 +225,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
+        /// <summary>
+        /// Test the <see cref="Publisher.SetDefaultDataWriterQos(DataWriterQos)"/> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultDataWriterQos()
@@ -272,6 +287,60 @@ namespace OpenDDSharp.Standard.UnitTest
             // Test with null parameter.
             result = publisher.SetDefaultDataWriterQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Publisher.DeleteDataWriter(DataWriter)"/> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestDeleteDataWriter()
+        {
+            // Initialize entities
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestDeleteDataWriter), typeName);
+            Assert.IsNotNull(topic);
+            // TODO: Uncomment when implemented
+            //Assert.IsNull(topic.GetListener());
+            //Assert.AreEqual(nameof(TestDeleteDataWriter), topic.Name);
+            //Assert.AreEqual(typeName, topic.TypeName);
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            Publisher otherPublisher = _participant.CreatePublisher();
+            Assert.IsNotNull(otherPublisher);
+
+            // Create a DataWriter and try to delete it with another publisher
+            DataWriter datawriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(datawriter);
+            // TODO: Uncomment when implemented
+            //Assert.AreEqual(publisher, datawriter.Publisher);
+            //Assert.IsNull(datawriter.GetListener());
+
+            DataWriterQos qos = new DataWriterQos();
+            result = datawriter.GetQos(qos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            TestHelper.TestDefaultDataWriterQos(qos);
+
+            result = otherPublisher.DeleteDataWriter(datawriter);
+            Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
+
+            // Delete the datawriter with the correct publisher
+            result = publisher.DeleteDataWriter(datawriter);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Try to remove it again
+            result = publisher.DeleteDataWriter(datawriter);
+            Assert.AreEqual(ReturnCode.Error, result);
+
+            // Test with null parameter
+            result = publisher.DeleteDataWriter(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }

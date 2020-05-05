@@ -44,3 +44,6 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_SetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Publisher_DeleteDataWriter(::DDS::Publisher_ptr pub, ::DDS::DataWriter_ptr dw);

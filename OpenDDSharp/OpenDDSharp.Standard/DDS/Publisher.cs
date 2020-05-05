@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -221,6 +222,37 @@ namespace OpenDDSharp.DDS
             return ret;
         }
 
+        /// <summary>
+        /// Deletes a <see cref="DataWriter" /> that belongs to the <see cref="Publisher" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The DeleteDataWriter operation must be called on the same <see cref="Publisher" /> object used to create the <see cref="DataWriter" />. If
+        /// DeleteDataWriter operation is called on a different <see cref="Publisher" />, the operation will have no effect and it will return
+        ///	<see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>The deletion of the <see cref="DataWriter" /> will automatically unregister all instances. Depending on the settings of the
+        /// <see cref="WriterDataLifecycleQosPolicy" />, the deletion of the <see cref="DataWriter" /> may also dispose all instances.</para>
+        /// </remarks>
+        /// <param name="datawriter">The <see cref="DataWriter" /> to be deleted.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode DeleteDataWriter(DataWriter datawriter)
+        {
+            if (datawriter == null)
+            {
+                return ReturnCode.Ok;
+            }
+
+            var native = datawriter.ToNative();
+            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteDataWriter86(_native, native),
+                                                  () => UnsafeNativeMethods.DeleteDataWriter64(_native, native));
+            if (ret == ReturnCode.Ok)
+            {
+                EntityManager.Instance.Remove(native);
+                ContainedEntities.Remove(datawriter);
+            }
+
+            return ret;
+        }
+
         private static IntPtr NarrowBase(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
@@ -284,6 +316,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_SetQos", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetQos86(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In] PublisherQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Publisher_DeleteDataWriter", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteDataWriter64(IntPtr pub, IntPtr dataWriter);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_DeleteDataWriter", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteDataWriter86(IntPtr pub, IntPtr dataWriter);
         }
         #endregion
     }
