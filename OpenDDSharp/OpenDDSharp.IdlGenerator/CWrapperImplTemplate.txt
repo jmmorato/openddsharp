@@ -32,7 +32,19 @@ int <%SCOPED_METHOD%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METH
 {
     <%SCOPED%> nativeData = data.to_native();
 
-    return dw->write(nativeData, DDS::HANDLE_NIL);
+    return dw->write(nativeData, handle);
+}
+
+int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time) {
+    <%SCOPED%> nativeData = data.to_native();
+
+    return dw->write_w_timestamp(nativeData, handle, time);
+}
+
+int <%SCOPED_METHOD%>DataWriter_RegisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance) {
+    <%SCOPED%> nativeData = instance.to_native();
+
+    return dw->register_instance(nativeData);
 }
 
 <%SCOPED%>DataReader_ptr <%SCOPED_METHOD%>DataReader_Narrow(DDS::DataReader_ptr dr)

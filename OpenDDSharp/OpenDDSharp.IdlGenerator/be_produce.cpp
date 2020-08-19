@@ -222,6 +222,7 @@ namespace {
 						<< "using System.Security;\n"
 						<< "using System.Collections.Generic;\n"
 					    << "using System.Runtime.InteropServices;\n"
+						<< "using OpenDDSharp;\n"
 						<< "using OpenDDSharp.DDS;\n\n";
 				}
 				break;

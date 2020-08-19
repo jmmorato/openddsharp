@@ -18,6 +18,10 @@ EXTERN_METHOD_EXPORT <%SCOPED%>DataWriter_ptr <%SCOPED_METHOD%>DataWriter_Narrow
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time);
+
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance);
+
 /////////////////////////////////////////////////
 // <%TYPE%> DataReader Methods
 /////////////////////////////////////////////////

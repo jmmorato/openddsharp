@@ -20,48 +20,48 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Runtime.InteropServices;
 
-namespace OpenDDSharp.DDS
+namespace OpenDDSharp
 {
     /// <summary>
-    /// The RequestedDeadlineMissed status indicates that the deadline requested via the <see cref="DeadlineQosPolicy" /> was not respected for a specific instance.
+    /// Structure for time value representation.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct RequestedDeadlineMissedStatus : IEquatable<RequestedDeadlineMissedStatus>
+    public struct Timestamp : IEquatable<Timestamp>
     {
         #region Fields
-        private int _totalCount;
-        private int _totalCountChange;
-        private InstanceHandle _lastInstanceHandle;
+        private int _seconds;
+        private uint _nanoSeconds;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the cumulative count of missed requested deadlines that have been reported.
+        /// Gets or sets the seconds.
         /// </summary>
-        public int TotalCount => _totalCount;
+        public int Seconds
+        {
+            get => _seconds;
+            set => _seconds = value;
+        }
 
         /// <summary>
-        /// Gets the incremental count of missed requested deadlines since the last time this status was accessed.
+        /// Gets or sets the microseconds.
         /// </summary>
-        public int TotalCountChange => _totalCountChange;
-
-        /// <summary>
-        /// Gets the instance handle of the last missed deadline.
-        /// </summary>
-        public InstanceHandle LastInstanceHandle => _lastInstanceHandle;
+        public uint NanoSeconds
+        {
+            get => _nanoSeconds;
+            set => _nanoSeconds = value;
+        }
         #endregion
 
-        #region IEquatable<RequestedDeadlineMissedStatus> Members
+        #region IEquatable<Timestamp> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-        public bool Equals(RequestedDeadlineMissedStatus other)
+        public bool Equals(Timestamp other)
         {
-            return TotalCount == other.TotalCount &&
-                   TotalCountChange == other.TotalCountChange &&
-                   LastInstanceHandle == other.LastInstanceHandle;
+            return Seconds == other.Seconds && NanoSeconds == other.NanoSeconds;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is RequestedDeadlineMissedStatus other) && Equals(other);
+            return (obj is Timestamp other) && Equals(other);
         }
 
         /// <summary>
@@ -80,10 +80,9 @@ namespace OpenDDSharp.DDS
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            var hashCode = 543595584;
-            hashCode = (hashCode * -1521134295) + TotalCount.GetHashCode();
-            hashCode = (hashCode * -1521134295) + TotalCountChange.GetHashCode();
-            hashCode = (hashCode * -1521134295) + LastInstanceHandle.GetHashCode();
+            var hashCode = -1725149974;
+            hashCode = (hashCode * -1521134295) + Seconds.GetHashCode();
+            hashCode = (hashCode * -1521134295) + NanoSeconds.GetHashCode();
             return hashCode;
         }
         #endregion
@@ -95,7 +94,7 @@ namespace OpenDDSharp.DDS
         /// <param name="left">The left value for the comparison.</param>
         /// <param name="right">The right value for the comparison.</param>
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(RequestedDeadlineMissedStatus left, RequestedDeadlineMissedStatus right)
+        public static bool operator ==(Timestamp left, Timestamp right)
         {
             return left.Equals(right);
         }
@@ -106,7 +105,7 @@ namespace OpenDDSharp.DDS
         /// <param name="left">The left value for the comparison.</param>
         /// <param name="right">The right value for the comparison.</param>
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-        public static bool operator !=(RequestedDeadlineMissedStatus left, RequestedDeadlineMissedStatus right)
+        public static bool operator !=(Timestamp left, Timestamp right)
         {
             return !(left == right);
         }

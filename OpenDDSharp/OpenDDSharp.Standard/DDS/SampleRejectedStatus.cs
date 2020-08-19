@@ -28,26 +28,33 @@ namespace OpenDDSharp.DDS
     [StructLayout(LayoutKind.Sequential)]
     public struct SampleRejectedStatus : IEquatable<SampleRejectedStatus>
     {
+        #region Fields
+        private int _totalCount;
+        private int _totalCountChange;
+        private SampleRejectedStatusKind _lastReason;
+        private InstanceHandle _lastInstanceHandle;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the cumulative count of samples that have been reported as rejected.
         /// </summary>
-        public int TotalCount { get; }
+        public int TotalCount => _totalCount;
 
         /// <summary>
         /// Gets the incremental count of rejected samples since the last time this status was accessed.
         /// </summary>
-        public int TotalCountChange { get; }
+        public int TotalCountChange => _totalCountChange;
 
         /// <summary>
         /// Gets the reason the most recently rejected sample was rejected.
         /// </summary>
-        public SampleRejectedStatusKind LastReason { get; }
+        public SampleRejectedStatusKind LastReason => _lastReason;
 
         /// <summary>
         /// Gets the instance handle of the last rejected sample.
         /// </summary>
-        public InstanceHandle LastInstanceHandle { get; }
+        public InstanceHandle LastInstanceHandle => _lastInstanceHandle;
         #endregion
 
         #region IEquatable<SampleRejectedStatus> Members

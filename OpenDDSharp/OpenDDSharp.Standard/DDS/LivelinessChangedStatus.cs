@@ -29,31 +29,39 @@ namespace OpenDDSharp.DDS
     [StructLayout(LayoutKind.Sequential)]
     public struct LivelinessChangedStatus : IEquatable<LivelinessChangedStatus>
     {
+        #region Fields
+        private int _aliveCount;
+        private int _notAliveCount;
+        private int _aliveCountChange;
+        private int _notAliveCountChange;
+        private InstanceHandle _lastPublicationHandle;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the total number of <see cref="DataWriter">DataWriters</see> currently active on the topic this <see cref="DataReader"/> is reading.
         /// </summary>
-        public int AliveCount { get; }
+        public int AliveCount => _aliveCount;
 
         /// <summary>
         /// Gets the total number of <see cref="DataWriter">DataWriters</see> writing to the <see cref="DataReader"/>'s topic that are no longer asserting their liveliness.
         /// </summary>
-        public int NotAliveCount { get; }
+        public int NotAliveCount => _notAliveCount;
 
         /// <summary>
         /// Gets the change in the alive count since the last time the status was accessed.
         /// </summary>
-        public int AliveCountChange { get; }
+        public int AliveCountChange => _aliveCountChange;
 
         /// <summary>
         /// Gets the change in the not alive count since the last time the status was accessed.
         /// </summary>
-        public int NotAliveCountChange { get; }
+        public int NotAliveCountChange => _notAliveCountChange;
 
         /// <summary>
         /// Gets the handle of the last <see cref="DataWriter" /> whose liveliness has changed.
         /// </summary>
-        public InstanceHandle LastPublicationHandle { get; }
+        public InstanceHandle LastPublicationHandle => _lastPublicationHandle;
         #endregion
 
         #region IEquatable<LivelinessChangedStatus> Members

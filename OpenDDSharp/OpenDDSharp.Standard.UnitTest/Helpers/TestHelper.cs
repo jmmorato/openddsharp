@@ -748,6 +748,18 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
+
+        public static Timestamp ToTimestamp(this DateTime dateTime)
+        {
+            DateTime epoc = new DateTime(1970, 1, 1);
+            TimeSpan span = dateTime - epoc;
+
+            return new Timestamp
+            {
+                Seconds = span.Seconds,
+                NanoSeconds = (uint)span.Milliseconds / 1000000
+            };
+        }
         #endregion
     }
 }

@@ -30,31 +30,39 @@ namespace OpenDDSharp.DDS
     [StructLayout(LayoutKind.Sequential)]
     public struct SubscriptionMatchedStatus : IEquatable<SubscriptionMatchedStatus>
     {
+        #region Fields
+        private int _totalCount;
+        private int _totalCountChange;
+        private int _currentCount;
+        private int _currentCountChange;
+        private InstanceHandle _lastPublicationHandle;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets the cumulative count of data readers that have compatibly matched this <see cref="DataWriter" />.
         /// </summary>
-        public int TotalCount { get; }
+        public int TotalCount => _totalCount;
 
         /// <summary>
         /// Gets the incremental change in the total count since the last time this status was accessed.
         /// </summary>
-        public int TotalCountChange { get; }
+        public int TotalCountChange => _totalCountChange;
 
         /// <summary>
         /// Gets the current number of data readers matched to this <see cref="DataWriter" />.
         /// </summary>
-        public int CurrentCount { get; }
+        public int CurrentCount => _currentCount;
 
         /// <summary>
         /// Gets the change in the current count since the last time this status was accessed.
         /// </summary>
-        public int CurrentCountChange { get; }
+        public int CurrentCountChange => _currentCountChange;
 
         /// <summary>
         /// Gets the handle for the last <see cref="DataWriter" /> matched.
         /// </summary>
-        public InstanceHandle LastPublicationHandle { get; }
+        public InstanceHandle LastPublicationHandle => _lastPublicationHandle;
         #endregion
 
         #region IEquatable<SubscriptionMatchedStatus> Members

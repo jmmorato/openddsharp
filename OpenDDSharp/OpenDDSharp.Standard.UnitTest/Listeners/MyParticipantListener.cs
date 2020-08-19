@@ -32,7 +32,7 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         public Action<DataReader, LivelinessChangedStatus> LivelinessChanged { get; set; }
         public Action<DataReader, RequestedDeadlineMissedStatus> RequestedDeadlineMissed { get; set; }
         public Action<DataReader, RequestedIncompatibleQosStatus> RequestedIncompatibleQos { get; set; }
-        //public Action<DataReader, SampleLostStatus> SampleLost;
+        public Action<DataReader, SampleLostStatus> SampleLost { get; set; }
         public Action<DataReader, SampleRejectedStatus> SampleRejected { get; set; }
         public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched { get; set; }
         //public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
@@ -76,10 +76,10 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
             RequestedIncompatibleQos?.Invoke(reader, status);
         }
 
-        //public override void OnSampleLost(DataReader reader, SampleLostStatus status)
-        //{
-        //    SampleLost?.Invoke(reader, status);
-        //}
+        public override void OnSampleLost(DataReader reader, SampleLostStatus status)
+        {
+            SampleLost?.Invoke(reader, status);
+        }
 
         public override void OnSampleRejected(DataReader reader, SampleRejectedStatus status)
         {

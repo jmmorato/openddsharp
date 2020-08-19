@@ -27,11 +27,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
 	std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
 	std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost,
-	std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
-	std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
-	std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
-	std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
-	std::function<void(::DDS::Entity_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
+	std::function<void(::DDS::Entity_ptr, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
+	std::function<void(::DDS::Entity_ptr, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
+	std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
+	std::function<void(::DDS::Entity_ptr, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
+	std::function<void(::DDS::Entity_ptr, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
 	_onDataOnReaders = onDataOnReaders;
 	_onDataAvalaible = onDataAvalaible;
 	_onRequestedDeadlineMissed = onRequestedDeadlineMissed;
@@ -70,8 +70,9 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_on_read
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_available(::DDS::DataReader_ptr reader) {
-	if (_onDataAvalaible != NULL)
+	if (_onDataAvalaible != NULL) {
 		_onDataAvalaible(static_cast<::DDS::Entity_ptr>(reader));
+	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
@@ -105,8 +106,21 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_subscription
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
+	/*char total_count[2048];
+	char total_count_change[2048];
+	sprintf(total_count, "TOTAL COUNT %d \n", status.total_count);
+	sprintf(total_count_change, "TOTAL COUNT CHANGE %d \n", status.total_count_change);
+	OutputDebugStringA(total_count);
+	OutputDebugStringA(total_count_change);*/
+
+	unsigned long long size = sizeof(status);
 	if (_onSampleLost != NULL) {
 		_onSampleLost(static_cast<::DDS::Entity_ptr>(reader), status);
+
+		//sprintf(total_count, "TOTAL COUNT2 %d \n", status.total_count);
+		//sprintf(total_count_change, "TOTAL COUNT CHANGE2 %d \n", status.total_count_change);
+		//OutputDebugStringA(total_count);
+		//OutputDebugStringA(total_count_change);
 	}
 }
 
