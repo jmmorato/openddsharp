@@ -36,8 +36,8 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         public Action<DataReader, SampleRejectedStatus> SampleRejected { get; set; }
         public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched { get; set; }
         //public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
-        //public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
-        //public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
+        public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
+        public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
         //public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
         //public Action<DataWriter> ConnectionDataWriterDeleted;
 
@@ -96,15 +96,15 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         //    LivelinessLost?.Invoke(writer, status);
         //}
 
-        //public override void OnOfferedDeadlineMissed(DataWriter writer, OfferedDeadlineMissedStatus status)
-        //{
-        //    OfferedDeadlineMissed?.Invoke(writer, status);
-        //}
+        public override void OnOfferedDeadlineMissed(DataWriter writer, OfferedDeadlineMissedStatus status)
+        {
+            OfferedDeadlineMissed?.Invoke(writer, status);
+        }
 
-        //public override void OnOfferedIncompatibleQos(DataWriter writer, OfferedIncompatibleQosStatus status)
-        //{
-        //    OfferedIncompatibleQos?.Invoke(writer, status);
-        //}
+        public override void OnOfferedIncompatibleQos(DataWriter writer, OfferedIncompatibleQosStatus status)
+        {
+            OfferedIncompatibleQos?.Invoke(writer, status);
+        }
 
         //public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
         //{

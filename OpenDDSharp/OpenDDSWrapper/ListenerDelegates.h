@@ -35,7 +35,7 @@ typedef void(__stdcall* onSampleLostDeclaration)(::DDS::Entity_ptr reader, const
 
 // DataWriter delegates
 typedef void(__stdcall* onOfferedDeadlineMissedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
-typedef void(__stdcall* onOfferedIncompatibleQosDeclaration)(::DDS::Entity_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status);
+typedef void(__stdcall* onOfferedIncompatibleQosDeclaration)(::DDS::Entity_ptr writer, const OfferedIncompatibleQosStatusWrapper& status);
 typedef void(__stdcall* onLivelinessLostDeclaration)(::DDS::Entity_ptr writer, const ::DDS::LivelinessLostStatus& status);
 typedef void(__stdcall* onPublicationMatchedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 

@@ -60,6 +60,12 @@ namespace OpenDDSharp.DDS
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSampleLostDelegate(IntPtr reader, ref SampleLostStatus status);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void OnOfferedDeadlineMissedDelegate(IntPtr writer, ref OfferedDeadlineMissedStatus status);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void OnOfferedIncompatibleQosDelegate(IntPtr writer, ref OfferedIncompatibleQosStatusWrapper status);
         #endregion
 
         #region Fields
@@ -81,6 +87,10 @@ namespace OpenDDSharp.DDS
         private readonly OnSubscriptionMatchedDelegate _onSubscriptionMatched;
         [MarshalAs(UnmanagedType.FunctionPtr)]
         private readonly OnSampleLostDelegate _onSampleLost;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        private readonly OnOfferedDeadlineMissedDelegate _onOfferedDeadlineMissed;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        private readonly OnOfferedIncompatibleQosDelegate _onOfferedIncompatibleQos;
 
         private GCHandle _gchDataOnReaders;
         private GCHandle _gchDataAvailable;
@@ -90,6 +100,8 @@ namespace OpenDDSharp.DDS
         private GCHandle _gchLivelinessChanged;
         private GCHandle _gchSubscriptionMatched;
         private GCHandle _gchSampleLost;
+        private GCHandle _gchOfferedDeadlineMissed;
+        private GCHandle _gchOfferedIncompatibleQos;
         #endregion
 
         #region Constructors
@@ -122,6 +134,12 @@ namespace OpenDDSharp.DDS
             _onSampleLost = new OnSampleLostDelegate(OnSampleLostHandler);
             _gchSampleLost = GCHandle.Alloc(_onSampleLost);
 
+            _onOfferedDeadlineMissed = new OnOfferedDeadlineMissedDelegate(OnOfferedDeadlineMissedHandler);
+            _gchOfferedDeadlineMissed = GCHandle.Alloc(_onOfferedDeadlineMissed);
+
+            _onOfferedIncompatibleQos = new OnOfferedIncompatibleQosDelegate(OnOfferedIncompatibleQosHandler);
+            _gchOfferedIncompatibleQos = GCHandle.Alloc(_onOfferedIncompatibleQos);
+
             _native = NewDomainParticipantListener(_onDataOnReaders,
                                                    _onDataAvailable,
                                                    _onRequestedDeadlineMissed,
@@ -129,7 +147,9 @@ namespace OpenDDSharp.DDS
                                                    _onSampleRejected,
                                                    _onLivelinessChanged,
                                                    _onSubscriptionMatched,
-                                                   _onSampleLost);
+                                                   _onSampleLost,
+                                                   _onOfferedDeadlineMissed,
+                                                   _onOfferedIncompatibleQos);
         }
 
         /// <summary>
@@ -175,6 +195,16 @@ namespace OpenDDSharp.DDS
             if (_gchSampleLost.IsAllocated)
             {
                 _gchSampleLost.Free();
+            }
+
+            if (_gchOfferedDeadlineMissed.IsAllocated)
+            {
+                _gchOfferedDeadlineMissed.Free();
+            }
+
+            if (_gchOfferedIncompatibleQos.IsAllocated)
+            {
+                _gchRequestedIncompatibleQos.Free();
             }
 
             MarshalHelper.ReleaseNativePointer(_native);
@@ -252,6 +282,24 @@ namespace OpenDDSharp.DDS
         /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
         /// <param name="status">The current <see cref="SampleLostStatus" />.</param>
         public abstract void OnSampleLost(DataReader reader, SampleLostStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.OfferedDeadlineMissedStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.OfferedDeadlineMissedStatus" /> indicates that the deadline offered by the
+        /// <see cref="DataWriter" /> has been missed for one or more instances.</para>
+        /// </summary>
+        /// <param name="writer">The <see cref="DataWriter" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="OfferedDeadlineMissedStatus" />.</param>
+        public abstract void OnOfferedDeadlineMissed(DataWriter writer, OfferedDeadlineMissedStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.OfferedIncompatibleQosStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.OfferedIncompatibleQosStatus" /> indicates that an offered QoS was incompatible with
+        /// the requested QoS of a <see cref="DataReader" />.</para>
+        /// </summary>
+        /// <param name="writer">The <see cref="DataWriter" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="OfferedIncompatibleQosStatus" />.</param>
+        public abstract void OnOfferedIncompatibleQos(DataWriter writer, OfferedIncompatibleQosStatus status);
 
         private void OnDataOnReadersHandler(IntPtr subscriber)
         {
@@ -360,6 +408,35 @@ namespace OpenDDSharp.DDS
             OnSampleLost(dataReader, status);
         }
 
+        private void OnOfferedDeadlineMissedHandler(IntPtr writer, ref OfferedDeadlineMissedStatus status)
+        {
+            Entity entity = EntityManager.Instance.Find(writer);
+
+            DataWriter dataWriter = null;
+            if (entity != null)
+            {
+                dataWriter = entity as DataWriter;
+            }
+
+            OnOfferedDeadlineMissed(dataWriter, status);
+        }
+
+        private void OnOfferedIncompatibleQosHandler(IntPtr writer, ref OfferedIncompatibleQosStatusWrapper status)
+        {
+            Entity entity = EntityManager.Instance.Find(writer);
+
+            DataWriter dataWriter = null;
+            if (entity != null)
+            {
+                dataWriter = entity as DataWriter;
+            }
+
+            OfferedIncompatibleQosStatus ret = default;
+            ret.FromNative(status);
+
+            OnOfferedIncompatibleQos(dataWriter, ret);
+        }
+
         private IntPtr NewDomainParticipantListener(OnDataOnReadersDelegate onDataOnReaders,
                                                     OnDataAvailableDelegate onDataAvailabe,
                                                     OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
@@ -367,7 +444,9 @@ namespace OpenDDSharp.DDS
                                                     OnSampleRejectedDelegate onSampleRejected,
                                                     OnLivelinessChangedDelegate onLivelinessChanged,
                                                     OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                                    OnSampleLostDelegate onSampleLost)
+                                                    OnSampleLostDelegate onSampleLost,
+                                                    OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
+                                                    OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NewDomainParticipantListener86(onDataOnReaders,
                                                                                                         onDataAvailabe,
@@ -376,7 +455,9 @@ namespace OpenDDSharp.DDS
                                                                                                         onSampleRejected,
                                                                                                         onLivelinessChanged,
                                                                                                         onSubscriptionMatched,
-                                                                                                        onSampleLost),
+                                                                                                        onSampleLost,
+                                                                                                        onOfferedDeadlineMissed,
+                                                                                                        onOfferedIncompatibleQos),
                                                () => UnsafeNativeMethods.NewDomainParticipantListener64(onDataOnReaders,
                                                                                                         onDataAvailabe,
                                                                                                         onRequestedDeadlineMissed,
@@ -384,7 +465,9 @@ namespace OpenDDSharp.DDS
                                                                                                         onSampleRejected,
                                                                                                         onLivelinessChanged,
                                                                                                         onSubscriptionMatched,
-                                                                                                        onSampleLost));
+                                                                                                        onSampleLost,
+                                                                                                        onOfferedDeadlineMissed,
+                                                                                                        onOfferedIncompatibleQos));
         }
 
         internal IntPtr ToNative()
@@ -411,7 +494,9 @@ namespace OpenDDSharp.DDS
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantListener_New", CallingConvention = CallingConvention.StdCall)]
@@ -422,7 +507,9 @@ namespace OpenDDSharp.DDS
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos);
 
         }
         #endregion

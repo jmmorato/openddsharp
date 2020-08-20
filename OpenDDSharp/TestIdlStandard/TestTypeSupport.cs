@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using OpenDDSharp;
 using OpenDDSharp.DDS;
 
 namespace Test
@@ -1717,6 +1718,11 @@ namespace Test
         #region Methods
         public ReturnCode Write(TestStruct data)
         {
+            return Write(data, InstanceHandle.HandleNil);
+        }
+
+        public ReturnCode Write(TestStruct data, InstanceHandle handle)
+        {
             if (data == null)
             {
                 return ReturnCode.BadParameter;
@@ -1728,17 +1734,64 @@ namespace Test
             TestStructWrapper wrapper = data.ToNative(toRelease);
             if (Environment.Is64BitProcess)
             {                                
-                ret = (ReturnCode)Write64(_native, wrapper, 0);
+                ret = (ReturnCode)Write64(_native, wrapper, handle);
             }
             else
             {
-                ret = (ReturnCode)Write86(_native, wrapper, 0);
+                ret = (ReturnCode)Write86(_native, wrapper, handle);
+            }
+
+            // Always free the unmanaged memory.
+            foreach (IntPtr ptr in toRelease)
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            return ret;
+        }
+
+        public ReturnCode Write(TestStruct data, InstanceHandle handle, Timestamp timestamp)
+        {
+            if (data == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            ReturnCode ret = ReturnCode.Error;
+            List<IntPtr> toRelease = new List<IntPtr>();
+
+            TestStructWrapper wrapper = data.ToNative(toRelease);
+            if (Environment.Is64BitProcess)
+            {                                
+                ret = (ReturnCode)WriteWithTimestamp64(_native, wrapper, handle, timestamp);
+            }
+            else
+            {
+                ret = (ReturnCode)WriteWithTimestamp86(_native, wrapper, handle, timestamp);
             }
 
             // Always free the unmanaged memory.
             foreach(IntPtr ptr in toRelease)
             {
                 Marshal.FreeHGlobal(ptr);
+            }
+
+            return ret;
+        }
+
+        public InstanceHandle RegisterInstance(TestStruct instance)
+        {
+            InstanceHandle ret = InstanceHandle.HandleNil;
+
+            List<IntPtr> toRelease = new List<IntPtr>();
+            TestStructWrapper wrapper = instance.ToNative(toRelease);
+            if (Environment.Is64BitProcess)
+            {                                
+                ret = RegisterInstance64(_native, wrapper);
+            }
+            else
+            {
+                ret = RegisterInstance86(_native, wrapper);
             }
 
             return ret;
@@ -1761,6 +1814,22 @@ namespace Test
         [SuppressUnmanagedCodeSecurity]
         [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
         private static extern int Write86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] TestStructWrapper data, int handle);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataWriter_WriteWithTimestamp", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int WriteWithTimestamp64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] TestStructWrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataWriter_WriteWithTimestamp", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int WriteWithTimestamp86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] TestStructWrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(TestStruct.API_DLL_X64, EntryPoint = "Test_TestStructDataWriter_RegisterInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int RegisterInstance64(IntPtr dw, TestStructWrapper instance);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(TestStruct.API_DLL_X86, EntryPoint = "Test_TestStructDataWriter_RegisterInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int RegisterInstance86(IntPtr dw, TestStructWrapper instance);
         #endregion
     }
 

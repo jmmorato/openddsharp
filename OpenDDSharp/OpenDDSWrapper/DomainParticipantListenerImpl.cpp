@@ -106,21 +106,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_subscription
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
-	/*char total_count[2048];
-	char total_count_change[2048];
-	sprintf(total_count, "TOTAL COUNT %d \n", status.total_count);
-	sprintf(total_count_change, "TOTAL COUNT CHANGE %d \n", status.total_count_change);
-	OutputDebugStringA(total_count);
-	OutputDebugStringA(total_count_change);*/
-
-	unsigned long long size = sizeof(status);
 	if (_onSampleLost != NULL) {
 		_onSampleLost(static_cast<::DDS::Entity_ptr>(reader), status);
-
-		//sprintf(total_count, "TOTAL COUNT2 %d \n", status.total_count);
-		//sprintf(total_count_change, "TOTAL COUNT CHANGE2 %d \n", status.total_count_change);
-		//OutputDebugStringA(total_count);
-		//OutputDebugStringA(total_count_change);
 	}
 }
 

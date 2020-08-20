@@ -669,6 +669,127 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
         }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnOfferedDeadlineMissed(DataWriter, OfferedDeadlineMissedStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnOfferedDeadlineMissed()
+        {
+            DataWriter writer = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+            var lastInstanceHandle = InstanceHandle.HandleNil;
+
+            // Attach to the event
+            int count = 0;
+            _listener.OfferedDeadlineMissed += (w, s) =>
+            {
+                writer = w;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+                lastInstanceHandle = s.LastInstanceHandle;
+                count++;
+            };
+
+            // Prepare QoS for the test
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Deadline.Period = new Duration { Seconds = 1 };
+            ReturnCode result = _writer.SetQos(dwQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Enable entities
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery and write an instance
+            bool found = _writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            _dataWriter.Write(new TestStruct { Id = 1 });
+
+            // After half second deadline should not be lost yet
+            Thread.Sleep(500);
+            Assert.AreEqual(0, count);
+
+            // After one second and a half one deadline should be lost
+            Thread.Sleep(1000);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(_writer, writer);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
+
+            // Remove the listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnOfferedIncompatibleQos(DataWriter, OfferedIncompatibleQosStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnOfferedIncompatibleQos()
+        {
+            DataWriter dw = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+            int lastPolicyId = 0;
+            ICollection<QosPolicyCount> policies = new List<QosPolicyCount>();
+
+            // Attach to the event
+            int count = 0;
+            _listener.OfferedIncompatibleQos += (w, s) =>
+            {
+                dw = w;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+                lastPolicyId = s.LastPolicyId;
+                policies = s.Policies;
+
+
+                count++;
+            };
+
+            // Prepare QoS for the test
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+            ReturnCode result = _writer.SetQos(dwQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            result = _reader.SetQos(drQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Enable entities
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery
+            System.Threading.Thread.Sleep(100);
+            Assert.AreEqual(1, count);
+
+            Assert.AreEqual(_writer, dw);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
+            Assert.AreEqual(11, lastPolicyId);
+            Assert.IsNotNull(policies);
+            Assert.AreEqual(1, policies.Count());
+            Assert.AreEqual(1, policies.First().Count);
+            Assert.AreEqual(11, policies.First().PolicyId);
+
+            // Remove the listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
         #endregion
     }
 }
