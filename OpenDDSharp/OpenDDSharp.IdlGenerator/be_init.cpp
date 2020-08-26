@@ -27,12 +27,21 @@ int
 BE_init(int&, ACE_TCHAR*[])
 {	
 	ACE_NEW_RETURN(be_global, BE_GlobalData, -1);
+	idl_global->default_idl_version_ = IDL_VERSION_4;
+	idl_global->anon_type_diagnostic(IDL_GlobalData::ANON_TYPE_SILENT);
 	return 0;
 }
 
 void
 BE_post_init(char*[], long)
 {	
+  if (idl_global->idl_version_ < IDL_VERSION_4) {
+    idl_global->ignore_files_ = true; // Exit without parsing files
+	ACE_DEBUG((LM_DEBUG, ACE_TEXT("OpenDDS requires IDL version to be 4 or greater\n")));
+  } else {
+    DRV_cpp_putarg("-D__OPENDDS_IDL_HAS_ANNOTATIONS");
+    idl_global->unknown_annotations_ = IDL_GlobalData::UNKNOWN_ANNOTATIONS_IGNORE;
+
 	std::ostringstream version;
 	version << "-D__OPENDDS_IDL=0x"
 		<< std::setw(2) << std::setfill('0') << DDS_MAJOR_VERSION
@@ -55,4 +64,5 @@ BE_post_init(char*[], long)
 		ACE_CString included;
 		DRV_add_include_path(included, dds_root.c_str(), 0, true);
 	}
+  }
 }

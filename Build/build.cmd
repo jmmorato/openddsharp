@@ -7,20 +7,20 @@ IF EXIST "..\ext" (
     rmdir ..\ext /s /q    
 )
 
-REM Checkout OpenDDS to the version 3.13.2
-TITLE Checkout OpenDDS to the version 3.13.2
+REM Checkout OpenDDS to the version 3.14
+TITLE Checkout OpenDDS to the version 3.14
 mkdir ..\ext
 cd ..\ext
 git clone git://github.com/objectcomputing/OpenDDS.git
 cd OpenDDS
 git fetch && git fetch --tags
-git checkout tags/DDS-3.13.2
+git checkout tags/DDS-3.14
 
 REM Apply the needed OpenDDS patches
-TITLE Apply the needed OpenDDS patches
-git apply %CD%\..\..\Patches\ConditionImpl.h.patch
-git apply %CD%\..\..\Patches\DataReaderImpl.cpp.patch
-git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
+REM TITLE Apply the needed OpenDDS patches
+REM git apply %CD%\..\..\Patches\ConditionImpl.h.patch
+REM git apply %CD%\..\..\Patches\DataReaderImpl.cpp.patch
+REM git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
     
 REM Download ACE/TAO and unzip
 TITLE Download ACE/TAO and unzip

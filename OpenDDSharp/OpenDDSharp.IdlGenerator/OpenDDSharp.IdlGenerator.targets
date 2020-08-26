@@ -24,7 +24,7 @@
   </Target>
   <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot;" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\tools\openddsharp_idl.exe --idl-version 4 &quot;%(IdlFiles.Identity)&quot;&quot;" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <ItemGroup Condition="'$(Language)' == 'C++'">
     <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

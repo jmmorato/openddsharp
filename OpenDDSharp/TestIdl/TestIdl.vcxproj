@@ -233,7 +233,7 @@
   </Target>
   <Target Name="OpenDDSharpIdl" BeforeTargets="PreBuildEvent">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\$(Platform)\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot;" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\$(Platform)\$(Configuration)\openddsharp_idl.exe --idl-version 4 &quot;%(IdlFiles.Identity)&quot;" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
