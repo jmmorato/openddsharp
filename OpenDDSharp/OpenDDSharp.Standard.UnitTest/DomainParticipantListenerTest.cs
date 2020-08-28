@@ -751,7 +751,6 @@ namespace OpenDDSharp.Standard.UnitTest
                 lastPolicyId = s.LastPolicyId;
                 policies = s.Policies;
 
-
                 count++;
             };
 
@@ -782,13 +781,61 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, totalCountChange);
             Assert.AreEqual(11, lastPolicyId);
             Assert.IsNotNull(policies);
-            Assert.AreEqual(1, policies.Count());
+            Assert.AreEqual(1, policies.Count);
             Assert.AreEqual(1, policies.First().Count);
             Assert.AreEqual(11, policies.First().PolicyId);
 
             // Remove the listener to avoid extra messages
             result = _participant.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnLivelinessLost(DataWriter, LivelinessLostStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnLivelinessLost()
+        {
+            DataWriter dw = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+
+            // Attach to the event
+            int count = 0;
+            _listener.LivelinessLost += (w, s) =>
+            {
+                dw = w;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+
+                count++;
+            };
+
+            // Prepare QoS for the test
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
+            dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
+            ReturnCode result = _writer.SetQos(dwQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Enable entities
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // After half second liveliness should not be lost yet
+            System.Threading.Thread.Sleep(500);
+            Assert.AreEqual(0, count);
+
+            // After one second and a half one liveliness should be lost
+            Thread.Sleep(1000);
+            Assert.AreEqual(1, count);
+
+            // Remove the listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
         }
         #endregion
     }

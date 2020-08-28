@@ -33,7 +33,7 @@ OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantLi
 																						   onSubscriptionMatchedDeclaration onSubscriptionMatched,
 																						   onSampleLostDeclaration onSampleLost,
 																						   onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissed,
-																						   onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos/*,
-																						   onLivelinessLostDeclaration onLivelinessLost,
+																						   onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
+																						   onLivelinessLostDeclaration onLivelinessLost/*,
 																						   onPublicationMatchedDeclaration onPublicationMatched,
 																						   onInconsistentTopicDeclaration onInconsistentTopic*/);
