@@ -28,6 +28,7 @@
     <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="annotations.cpp" />
     <ClCompile Include="be_global.cpp" />
     <ClCompile Include="be_init.cpp" />
     <ClCompile Include="be_produce.cpp" />
@@ -38,14 +39,17 @@
     <ClCompile Include="drv_preproc.cpp" />
     <ClCompile Include="openddsharp_idl.cpp" />
     <ClCompile Include="cli_generator.cpp" />
+    <ClCompile Include="topic_keys.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="annotations.h" />
     <ClInclude Include="be_extern.h" />
     <ClInclude Include="be_global.h" />
     <ClInclude Include="be_util.h" />
     <ClInclude Include="dds_generator.h" />
     <ClInclude Include="dds_visitor.h" />
     <ClInclude Include="cli_generator.h" />
+    <ClInclude Include="topic_keys.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeaderTemplate.txt" />

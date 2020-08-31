@@ -91,19 +91,23 @@ void OpenDDSharp::OpenDDS::DCPS::MulticastInst::SynBackoff::set(System::Double v
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::MulticastInst::SynInterval::get() {
-    return impl_entity->syn_interval_;
+	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
+	timeValue.MicroSeconds = impl_entity->syn_timeout_.value().get_msec();
+	return timeValue;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::MulticastInst::SynInterval::set(OpenDDSharp::TimeValue value) {
-    impl_entity->syn_interval_ = value;
+	impl_entity->syn_interval_ = value.MicroSeconds / 1e6;
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::MulticastInst::SynTimeout::get() {
-    return impl_entity->syn_timeout_;
+	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
+	timeValue.MicroSeconds = impl_entity->syn_timeout_.value().get_msec();
+	return timeValue;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::MulticastInst::SynTimeout::set(OpenDDSharp::TimeValue value) {
-    impl_entity->syn_timeout_ = value;
+	impl_entity->syn_timeout_ = value.MicroSeconds / 1e6;
 };
 
 size_t OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakDepth::get() {
@@ -115,11 +119,13 @@ void OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakDepth::set(size_t value) {
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakInterval::get() {
-    return impl_entity->nak_interval_;
+	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
+	timeValue.MicroSeconds = impl_entity->nak_interval_.value().get_msec();
+	return timeValue;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakInterval::set(OpenDDSharp::TimeValue value) {
-    impl_entity->nak_interval_ = value;
+	impl_entity->nak_interval_ = value.MicroSeconds / 1e6;
 };
 
 size_t OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakDelayIntervals::get() {
@@ -139,11 +145,13 @@ void OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakMax::set(size_t value) {
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakTimeout::get() {
-    return impl_entity->nak_timeout_;
+	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
+	timeValue.MicroSeconds = impl_entity->nak_timeout_.value().get_msec();
+	return timeValue;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::MulticastInst::NakTimeout::set(OpenDDSharp::TimeValue value) {
-    impl_entity->nak_timeout_ = value;
+	impl_entity->nak_timeout_ = value.MicroSeconds / 1e6;
 };
 
 System::Byte OpenDDSharp::OpenDDS::DCPS::MulticastInst::Ttl::get() {

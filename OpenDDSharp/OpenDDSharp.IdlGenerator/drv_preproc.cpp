@@ -1,9 +1,9 @@
 /*
-*
-*
-* Distributed under the OpenDDS License.
-* See: http://www.opendds.org/license.html
-*/
+ *
+ *
+ * Distributed under the OpenDDS License.
+ * See: http://www.opendds.org/license.html
+ */
 
 // This file is here to avoid the use of VPATH.  Since the TAO_IDL
 // counterparts are built with a different BE_GlobalData definition, the

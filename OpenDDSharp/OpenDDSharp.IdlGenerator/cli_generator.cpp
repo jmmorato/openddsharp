@@ -19,7 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "cli_generator.h"
 #include "be_extern.h"
-
+#include "be_util.h"
 #include "utl_identifier.h"
 
 #include "ace/OS_NS_sys_stat.h"
@@ -31,16 +31,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 namespace {
-	std::string read_template(const char* prefix) {		
-		const char* dds_root = ACE_OS::getenv("DDS_ROOT");
-		if (!dds_root) {
-			ACE_ERROR((LM_ERROR, "The environment variable DDS_ROOT must be set.\n"));
-			BE_abort();
-		}
-		std::string path = dds_root;
+	std::string read_template(const char* prefix) {
+		std::string path = be_util::dds_root();
 		path.append("/dds/idl/");
 		path.append(prefix);
-		path.append("Template.txt");		
+		path.append("Template.txt");
 		std::ifstream ifs(path.c_str());
 		std::ostringstream oss;
 		oss << ifs.rdbuf();
@@ -216,7 +211,7 @@ bool cli_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Typ
 	return true;
 }
 
-bool cli_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
+bool cli_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
 {		
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
@@ -244,8 +239,7 @@ bool cli_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const std::
 					 << implement_struct_from_native(fields, short_name, scoped_name).c_str();
 
 
-	IDL_GlobalData::DCPS_Data_Type_Info* info = idl_global->is_dcps_type(name);
-	if (info) {
+	if (be_global->is_topic_type(structure)) {
 		std::string header = header_template_;
 		replaceAll(header, replacements);
 		be_global->header_ << header;
