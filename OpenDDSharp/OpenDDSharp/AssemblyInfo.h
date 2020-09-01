@@ -29,5 +29,5 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #define Assembly_Copyright L"Copyright © Jose Morato 2018. All rights reserved"
 #define Assembly_Description L".NET wrapper for OpenDDS"
 #define File_Version 0,4,1,0
-#define File_Version_Str "0.4.1.0"
-#define Assembly_Version L"0.4.1.0"
+#define File_Version_Str "0.5.0.0"
+#define Assembly_Version L"0.5.0.0"
