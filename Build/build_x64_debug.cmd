@@ -7,6 +7,17 @@ IF EXIST "..\ext" (
     rmdir ..\ext /s /q    
 )
 
+REM Unset enviroment Variables
+TITLE Unset enviroment variables
+set MPC_ROOT=
+set ACE_ROOT=
+set TAO_ROOT=
+set DDS_ROOT=
+
+REM Set VSINSTALLDIR
+TITLE Set VSINSTALLDIR
+set VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\
+
 REM Checkout OpenDDS to the version 3.14
 TITLE Checkout OpenDDS to the version 3.14
 mkdir ..\ext
@@ -17,15 +28,15 @@ git fetch && git fetch --tags
 git checkout tags/DDS-3.14
 
 REM Apply the needed OpenDDS patches
-TITLE Apply the needed OpenDDS patches
+REM TITLE Apply the needed OpenDDS patches
 REM git apply %CD%\..\..\Patches\ConditionImpl.h.patch
 REM git apply %CD%\..\..\Patches\DataReaderImpl.cpp.patch
 REM git apply %CD%\..\..\Patches\DataReaderImpl.h.patch
     
 REM Download ACE/TAO and unzip
-TITLE Download ACE/TAO and unzip
-PowerShell -Command "& { Invoke-WebRequest -Uri 'http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }"
-7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
+REM TITLE Download ACE/TAO and unzip
+REM PowerShell -Command "& { Invoke-WebRequest -Uri 'http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }"
+REM 7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip
 
 REM Open Visual Studio command prompt
 TITLE Open Visual Studio command prompt amd64
@@ -33,25 +44,25 @@ call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" amd64
 
 REM Call OpenDDS configure script
 TITLE OpenDDS configure script
-call configure --no-tests
+call configure -v --ace-github-latest --no-tests
     
 REM Create a copy of the original bin/lib folders
 TITLE Create a copy of the original bin/lib folders
 xcopy .\bin\* .\original_bin /s /i /Y
 xcopy .\lib\* .\original_lib /s /i /Y
-xcopy .\ACE_wrappers\bin\* .\ACE_wrappers\original_bin /s /i /Y
-xcopy .\ACE_wrappers\lib\* .\ACE_wrappers\original_lib /s /i /Y
+xcopy .\ACE_TAO\ACE\bin\* .\ACE_TAO\ACE\original_bin /s /i /Y
+xcopy .\ACE_TAO\ACE\lib\* .\ACE_TAO\ACE\original_lib /s /i /Y
 
 cd ..\..\Build
 
 REM Prepare environment variables
 TITLE Prepare environment variables
 cd ..\ext\OpenDDS
-set MPC_ROOT=%CD%\ACE_wrappers\MPC
-set ACE_ROOT=%CD%\ACE_wrappers
-set TAO_ROOT=%CD%\ACE_wrappers\TAO
+set MPC_ROOT=%CD%\ACE_TAO\ACE\MPC
+set ACE_ROOT=%CD%\ACE_TAO\ACE
+set TAO_ROOT=%CD%\ACE_TAO\TAO
 set DDS_ROOT=%CD%
-set PATH=%PATH%;%ACE_ROOT%\bin;%DDS_ROOT%\bin;%ACE_ROOT%\lib;%DDS_ROOT%\lib
+set PATH=%ACE_ROOT%\bin;%DDS_ROOT%\bin;%ACE_ROOT%\lib;%DDS_ROOT%\lib;%PATH%
 
 REM Restore the original bin/lib folders
 TITLE Restore the original bin/lib folders
@@ -67,13 +78,26 @@ xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
 REM Build OpenDDS for x64 platforms
 TITLE DEBUG x64: Build OpenDDS
 msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
+TITLE RELEASE x64: Build OpenDDS
+msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=x64
 
 REM Create bin/lib_x64 folders
 TITLE Create bin/lib_x64 folders
-xcopy %CD%\ACE_wrappers\lib\* %CD%\ACE_wrappers\lib_x64 /s /i /Y
-xcopy %CD%\ACE_wrappers\bin\* %CD%\ACE_wrappers\bin_x64 /s /i /Y
+xcopy %CD%\ACE_TAO\ACE\lib\* %CD%\ACE_TAO\ACE\lib_x64 /s /i /Y
+xcopy %CD%\ACE_TAO\ACE\bin\* %CD%\ACE_TAO\ACE\bin_x64 /s /i /Y
 xcopy %CD%\lib\* %CD%\lib_x64 /s /i /Y
 xcopy %CD%\bin\* %CD%\bin_x64 /s /i /Y
+
+REM Restore the original bin/lib folders
+TITLE Restore the original bin/lib folders
+rmdir %DDS_ROOT%\bin /s /q
+rmdir %DDS_ROOT%\lib /s /q
+rmdir %ACE_ROOT%\bin /s /q
+rmdir %ACE_ROOT%\lib /s /q
+xcopy %DDS_ROOT%\original_bin\* %DDS_ROOT%\bin /s /i /Y
+xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
+xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
+xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
 
 REM Change folder to OpenDDSharp
 cd ..\..\OpenDDSharp
@@ -98,17 +122,19 @@ xcopy %ACE_ROOT%\lib_x64\* %ACE_ROOT%\lib /s /i /Y
 
 REM Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder
 TITLE Build the ExportFileGenerator and copy it to the ACE_ROOT\bin folder
-msbuild OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Debug" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-xcopy %CD%\OpenDDSharp.ExportFileGenerator\bin\Debug\* %ACE_ROOT%\bin /Y
+msbuild OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
+xcopy %CD%\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin /Y
 
 REM Build OpenDDSharp for x64 platforms
 TITLE DEBUG x64: Build OpenDDSharp
 msbuild OpenDDSharp.sln /p:Configuration=Debug;Platform=x64
+TITLE RELEASE x64: Build OpenDDSharp
+msbuild OpenDDSharp.sln /p:Configuration=Release;Platform=x64
 
 REM Come back to build folder
 REM cd ..\Build
 
 REM Create NuGet packages
-TITLE Create NuGet packages
+REM TITLE Create NuGet packages
 REM nuget pack "%CD%\..\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec"
 REM nuget pack "%CD%\..\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec"

@@ -87,10 +87,10 @@
     <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
-    <ACE_ROOT>..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
-    <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
   <Target Name="AfterBuild">
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">

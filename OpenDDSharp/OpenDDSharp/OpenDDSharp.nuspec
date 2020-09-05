@@ -29,13 +29,13 @@
     <file src=".\bin\Win32\Debug\OpenDDSharp.pdb" target="build\net461\x86\Debug" />
     <file src=".\bin\Win32\Debug\OpenDDSharp.xml" target="build\net461\x86\Debug" />
 
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\ACE.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_CodecFactory.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_AnyTypeCode.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_BiDirGIOP.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_PI.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_PortableServer.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscovery.dll" target="build\net461\x86" />
@@ -44,13 +44,13 @@
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcp.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicast.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udp.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\ACEd.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAOd.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_CodecFactoryd.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_AnyTypeCoded.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_BiDirGIOPd.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_PId.dll" target="build\net461\x86" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x86\TAO_PortableServerd.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.dll" target="build\net461\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" target="build\net461\x86" />
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" target="build\net461\x86" />
@@ -67,13 +67,13 @@
     <file src=".\bin\x64\Debug\OpenDDSharp.pdb" target="build\net461\x64\Debug" />
     <file src=".\bin\x64\Debug\OpenDDSharp.xml" target="build\net461\x64\Debug" />
 
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\ACE.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_CodecFactory.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_AnyTypeCode.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_BiDirGIOP.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_PI.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_PortableServer.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACE.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactory.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCode.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOP.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PI.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServer.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcps.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscovery.dll" target="build\net461\x64" />
@@ -82,13 +82,13 @@
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcp.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicast.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udp.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\ACEd.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAOd.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_CodecFactoryd.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_AnyTypeCoded.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_BiDirGIOPd.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_PId.dll" target="build\net461\x64" />
-    <file src="..\..\ext\OpenDDS\ACE_wrappers\lib_x64\TAO_PortableServerd.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAOd.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactoryd.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCoded.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOPd.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PId.dll" target="build\net461\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServerd.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtpsd.dll" target="build\net461\x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscoveryd.dll" target="build\net461\x64" />
