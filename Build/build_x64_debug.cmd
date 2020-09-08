@@ -14,9 +14,9 @@ set ACE_ROOT=
 set TAO_ROOT=
 set DDS_ROOT=
 
-REM Set VSINSTALLDIR
-TITLE Set VSINSTALLDIR
-set VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\
+REM If not already set in your build environment, set VSINSTALLDIR to your Visual Studio installation path.
+REM TITLE Set VSINSTALLDIR
+REM set VSINSTALLDIR=<SET TO YOUR VS INSTALLATION PATH>
 
 REM Checkout OpenDDS to the version 3.14
 TITLE Checkout OpenDDS to the version 3.14
