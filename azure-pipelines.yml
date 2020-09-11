@@ -22,13 +22,19 @@ jobs:
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
     - script: |
-        git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%        
+        git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
         echo ##vso[task.setvariable variable=OpenDdsRoot]%OPENDDS_ROOT%
       displayName: 'Clone OpenDDS'
       failOnStderr: true
-    - script: |        
+    - script: |
+        git fetch -q && git fetch -q --tags
+        git checkout -q tags/DDS-3.14
+      displayName: 'Checkout OpenDDS v3.14'
+      workingDirectory: '$(OpenDdsRoot)'
+      failOnStderr: true
+    - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
@@ -136,8 +142,8 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.13.3
-      displayName: 'Checkout OpenDDS v3.13.3'
+        git checkout -q tags/DDS-3.14
+      displayName: 'Checkout OpenDDS v3.14'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
@@ -145,20 +151,6 @@ jobs:
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
-    - task: PowerShell@2
-      displayName: 'Download ACE/TAO'
-      inputs:
-        targetType: 'inline'
-        script: '& { Invoke-WebRequest -Uri ''http://download.ociweb.com/TAO-2.2a/ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'' -OutFile ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip }'
-        workingDirectory: '$(OpenDdsRoot)'
-        failOnStderr: true
-        filePath: #
-    - task: CmdLine@2
-      displayName: 'Unzip ACE/TAO'
-      inputs:
-        script: '7z x ACE+TAO-2.2a_with_latest_patches_NO_makefiles.zip'
-        workingDirectory: '$(OpenDdsRoot)'
-        failOnStderr: true
     - task: BatchScript@1
       displayName: 'Call vcvarsall.bat'
       inputs:
@@ -172,7 +164,7 @@ jobs:
     - script: |
         set PATH=C:\Strawberry\perl\bin;%PATH%
         if %BuildConfiguration%==Release set OPT=--no-debug --optimize
-        call configure -v --no-tests %OPT%
+        call configure -v --ace-github-latest --no-tests %OPT%
       workingDirectory: $(OpenDdsRoot)
       displayName: 'Run configure script'
       failOnStderr: true
@@ -207,13 +199,14 @@ jobs:
         restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
         feedsToUse: 'select'
         versioningScheme: 'off'
-    - task: MSBuild@1
+    - task: VSBuild@1
       displayName: 'Build OpenDDSharp'
       enabled: true
       inputs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
+        msbuildArgs: /p:PlatformToolset=v142
         maximumCpuCount: true
     - task: VSTest@2
       displayName: Execute Unit Tests
