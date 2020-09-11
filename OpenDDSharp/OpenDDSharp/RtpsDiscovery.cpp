@@ -30,14 +30,11 @@ OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::RtpsDiscovery(System::String^ name) :
 }
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::ResendPeriod::get() {
-	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
-	timeValue.MicroSeconds = impl_entity->resend_period().value().get_msec();
-	return timeValue;
+    return impl_entity->resend_period();
 };
 
 void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::ResendPeriod::set(OpenDDSharp::TimeValue value) {
-	::OpenDDS::DCPS::TimeDuration duration = ::OpenDDS::DCPS::TimeDuration(value.MicroSeconds / 1e6);
-	impl_entity->resend_period(duration);
+    impl_entity->resend_period(value);
 };
 
 System::UInt16 OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::PB::get() {

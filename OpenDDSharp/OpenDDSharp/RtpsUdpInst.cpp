@@ -60,53 +60,43 @@ void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::NakDepth::set(size_t value) {
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::NakResponseDelay::get() {
-	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
-	timeValue.MicroSeconds = impl_entity->nak_response_delay_.value().get_msec();
-	return timeValue;
+    return impl_entity->nak_response_delay_;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::NakResponseDelay::set(OpenDDSharp::TimeValue value) {
-	impl_entity->nak_response_delay_ = value.MicroSeconds / 1e6;
+    impl_entity->nak_response_delay_ = value;
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HeartbeatPeriod::get() {
-	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
-	timeValue.MicroSeconds = impl_entity->heartbeat_period_.value().get_msec();
-	return timeValue;
+    return impl_entity->heartbeat_period_;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HeartbeatPeriod::set(OpenDDSharp::TimeValue value) {
-	impl_entity->heartbeat_period_ = value.MicroSeconds / 1e6;
+    impl_entity->heartbeat_period_ = value;
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HeartbeatResponseDelay::get() {
-	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
-	timeValue.MicroSeconds = impl_entity->heartbeat_response_delay_.value().get_msec();
-	return timeValue;
+    return impl_entity->heartbeat_response_delay_;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HeartbeatResponseDelay::set(OpenDDSharp::TimeValue value) {
-	impl_entity->heartbeat_response_delay_ = value.MicroSeconds / 1e6;
+    impl_entity->heartbeat_response_delay_ = value;
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HandshakeTimeout::get() {
-	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
-	timeValue.MicroSeconds = impl_entity->handshake_timeout_.value().get_msec();
-	return timeValue;
+    return impl_entity->handshake_timeout_;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HandshakeTimeout::set(OpenDDSharp::TimeValue value) {
-	impl_entity->handshake_timeout_ = value.MicroSeconds / 1e6;
+    impl_entity->handshake_timeout_ = value;
 };
 
 OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::DurableDataTimeout::get() {
-	OpenDDSharp::TimeValue timeValue = OpenDDSharp::TimeValue();
-	timeValue.MicroSeconds = impl_entity->durable_data_timeout_.value().get_msec();
-	return timeValue;
+    return impl_entity->durable_data_timeout_;
 };
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::DurableDataTimeout::set(OpenDDSharp::TimeValue value) {
-	impl_entity->durable_data_timeout_ = value.MicroSeconds / 1e6;
+    impl_entity->durable_data_timeout_ = value;
 };
 
 System::Boolean OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::UseMulticast::get() {
