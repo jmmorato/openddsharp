@@ -99,19 +99,6 @@ xcopy %DDS_ROOT%\original_lib\* %DDS_ROOT%\lib /s /i /Y
 xcopy %ACE_ROOT%\original_bin\* %ACE_ROOT%\bin /s /i /Y
 xcopy %ACE_ROOT%\original_lib\* %ACE_ROOT%\lib /s /i /Y
 
-REM Build OpenDDS for Win32 platforms
-TITLE DEBUG Win32: Build OpenDDS
-msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=Win32
-TITLE RELEASE WIN32: Build OpenDDS
-msbuild DDS_TAOv2.sln /m /p:Configuration=Release;Platform=Win32
-
-REM Create bin/lib_x86 folders
-TITLE Create bin/lib_x86 folders
-xcopy %CD%\ACE_TAO\ACE\lib\* %CD%\ACE_TAO\ACE\lib_x86 /s /i /Y
-xcopy %CD%\ACE_TAO\ACE\bin\* %CD%\ACE_TAO\ACE\bin_x86 /s /i /Y
-xcopy %CD%\lib\* %CD%\lib_x86 /s /i /Y
-xcopy %CD%\bin\* %CD%\bin_x86 /s /i /Y
-
 REM Change folder to OpenDDSharp
 cd ..\..\OpenDDSharp
 
@@ -144,31 +131,10 @@ msbuild OpenDDSharp.sln /p:Configuration=Debug;Platform=x64
 TITLE RELEASE x64: Build OpenDDSharp
 msbuild OpenDDSharp.sln /p:Configuration=Release;Platform=x64
 
-REM Prepare bin and lib folders for x86 compilation
-rmdir %DDS_ROOT%\bin /s /q
-rmdir %DDS_ROOT%\lib /s /q
-rmdir %ACE_ROOT%\bin /s /q
-rmdir %ACE_ROOT%\lib /s /q
-xcopy %DDS_ROOT%\bin_x86\* %DDS_ROOT%\bin /s /i /Y
-xcopy %DDS_ROOT%\lib_x86\* %DDS_ROOT%\lib /s /i /Y
-xcopy %ACE_ROOT%\bin_x86\* %ACE_ROOT%\bin /s /i /Y
-xcopy %ACE_ROOT%\lib_x86\* %ACE_ROOT%\lib /s /i /Y
-
-REM Build the ExportFileGenerator again and copy it to the ACE_ROOT\bin folder
-TITLE Build the ExportFileGenerator again and copy it to the ACE_ROOT\bin folder
-msbuild OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="Release" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-xcopy %CD%\OpenDDSharp.ExportFileGenerator\bin\Release\* %ACE_ROOT%\bin\ /Y
-
-REM Build OpenDDSharp for x86 platforms
-TITLE DEBUG x86: Build OpenDDSharp
-msbuild OpenDDSharp.sln /p:Configuration=Debug;Platform=x86
-TITLE RELEASE x86: Build OpenDDSharp
-msbuild OpenDDSharp.sln /p:Configuration=Release;Platform=x86
-
 REM Come back to build folder
-cd ..\Build
+REM cd ..\Build
 
 REM Create NuGet packages
-TITLE Create NuGet packages
-nuget pack "%CD%\..\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec"
-nuget pack "%CD%\..\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec"
+REM TITLE Create NuGet packages
+REM nuget pack "%CD%\..\OpenDDSharp\OpenDDSharp\OpenDDSharp.nuspec"
+REM nuget pack "%CD%\..\OpenDDSharp\OpenDDSharp.IdlGenerator\OpenDDSharp.IdlGenerator.nuspec"

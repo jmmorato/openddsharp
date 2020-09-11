@@ -58,6 +58,17 @@ namespace OpenDDSharp {
         static operator ACE_Time_Value(TimeValue t) {
             return ACE_Time_Value(t.Seconds, t.MicroSeconds);
         }
+
+        static operator TimeValue(::OpenDDS::DCPS::TimeDuration td) {
+            TimeValue t;
+            t.Seconds = td.value().sec();
+            t.MicroSeconds = td.value().usec();
+            return t;
+        }
+
+        static operator ::OpenDDS::DCPS::TimeDuration(TimeValue t) {
+            return ::OpenDDS::DCPS::TimeDuration(t.Seconds, t.MicroSeconds);
+        }
     };
 
 };
