@@ -79,7 +79,6 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
         msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
     - task: NuGetCommand@2
@@ -189,7 +188,6 @@ jobs:
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\HeaderTemplate.txt %DDS_ROOT%\dds\idl
         xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.IdlGenerator\ImplTemplate.txt %DDS_ROOT%\dds\idl
         msbuild $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln /t:OpenDDSharp_ExportFileGenerator /p:Configuration="$(BuildConfiguration)" /p:Platform="Any CPU" /p:BuildProjectReferences=false
-        xcopy $(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.ExportFileGenerator\bin\$(BuildConfiguration)\* %ACE_ROOT%\bin
       displayName: 'Prepare to build OpenDDSharp'
       failOnStderr: true
     - task: NuGetCommand@2
