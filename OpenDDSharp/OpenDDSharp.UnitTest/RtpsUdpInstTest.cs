@@ -42,7 +42,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual("239.255.0.2:7401", rui.MulticastGroupAddress);
             Assert.AreEqual(string.Empty, rui.MulticastInterface);
             Assert.AreEqual(string.Empty, rui.LocalAddress);
-            Assert.AreEqual(32U, rui.NakDepth);
+            Assert.AreEqual(0U, rui.NakDepth);
             Assert.IsNotNull(rui.NakResponseDelay);
             Assert.AreEqual(0, rui.NakResponseDelay.Seconds);
             Assert.AreEqual(200000, rui.NakResponseDelay.MicroSeconds);
