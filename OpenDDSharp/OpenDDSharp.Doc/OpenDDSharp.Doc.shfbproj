@@ -13,7 +13,7 @@
     <RootNamespace>OpenDDSharp.Doc</RootNamespace>
     <Name>OpenDDSharp.Doc</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.6.1</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <OutputPath>bin\</OutputPath>
     <HtmlHelpName>OpenDDSharp.Doc</HtmlHelpName>
     <Language>en-US</Language>
