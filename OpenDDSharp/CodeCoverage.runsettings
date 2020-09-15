@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<RunConfiguration>
+    <DisableAppDomain>True</DisableAppDomain>
+</RunConfiguration>
+
 <!-- File name extension must be .runsettings -->
 <RunSettings>
   <DataCollectionRunSettings>
