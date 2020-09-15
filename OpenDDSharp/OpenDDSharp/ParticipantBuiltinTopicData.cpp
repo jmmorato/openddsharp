@@ -32,3 +32,12 @@ void OpenDDSharp::DDS::ParticipantBuiltinTopicData::FromNative(::DDS::Participan
 	user_data = gcnew OpenDDSharp::DDS::UserDataQosPolicy();
 	user_data->FromNative(native.user_data);
 }
+
+::DDS::ParticipantBuiltinTopicData OpenDDSharp::DDS::ParticipantBuiltinTopicData::ToNative() {
+	::DDS::ParticipantBuiltinTopicData native;
+
+	native.key = key.ToNative();
+	native.user_data = user_data->ToNative();
+
+	return native;
+}

@@ -65,6 +65,13 @@ void OpenDDSharp::OpenDDS::DCPS::ParticipantService::AddDiscovery(::OpenDDSharp:
 	::OpenDDS::DCPS::Service_Participant::instance()->add_discovery(disc);
 }
 
+OpenDDSharp::OpenDDS::DCPS::Discovery^ OpenDDSharp::OpenDDS::DCPS::ParticipantService::GetDiscovery(System::Int32 domain) {
+	::OpenDDS::DCPS::Discovery_rch disc = ::OpenDDS::DCPS::Service_Participant::instance()->get_discovery(domain);
+	Discovery^ dsc = gcnew Discovery();
+	dsc->impl_entity = disc.in();
+	return dsc;
+}
+
 void OpenDDSharp::OpenDDS::DCPS::ParticipantService::SetRepoDomain(System::Int32 domain, System::String^ repo) {
     SetRepoDomain(domain, repo, true);
 }

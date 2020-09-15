@@ -29,3 +29,15 @@ void OpenDDSharp::DDS::BuiltinTopicKey::FromNative(::DDS::BuiltinTopicKey_t nati
 		m_value[i] = native.value[i];
 	}
 }
+
+::DDS::BuiltinTopicKey_t OpenDDSharp::DDS::BuiltinTopicKey::ToNative() {
+	::DDS::BuiltinTopicKey_t native;
+
+	if (m_value != nullptr && m_value->Length == 3) {
+		for (int i = 0; i < 3; i++) {
+			native.value[i] = m_value[i];
+		}
+	}
+
+	return native;
+}

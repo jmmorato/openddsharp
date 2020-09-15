@@ -293,6 +293,7 @@
     <ClCompile Include="OwnershipQosPolicy.cpp" />
     <ClCompile Include="OwnershipStrengthQosPolicy.cpp" />
     <ClCompile Include="ParticipantBuiltinTopicData.cpp" />
+    <ClCompile Include="ParticipantBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="ParticipantService.cpp" />
     <ClCompile Include="PartitionQosPolicy.cpp" />
     <ClCompile Include="PresentationQosPolicy.cpp" />
@@ -412,6 +413,7 @@
     <ClInclude Include="OwnershipQosPolicyKind.h" />
     <ClInclude Include="OwnershipStrengthQosPolicy.h" />
     <ClInclude Include="ParticipantBuiltinTopicData.h" />
+    <ClInclude Include="ParticipantBuiltinTopicDataDataReader.h" />
     <ClInclude Include="ParticipantService.h" />
     <ClInclude Include="PartitionQosPolicy.h" />
     <ClInclude Include="PresentationQosPolicy.h" />
