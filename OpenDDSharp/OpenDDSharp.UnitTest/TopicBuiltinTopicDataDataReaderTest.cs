@@ -100,7 +100,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -109,6 +110,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -137,7 +141,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -146,6 +151,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -174,7 +182,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -192,6 +201,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -220,7 +232,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -228,7 +241,9 @@ namespace OpenDDSharp.UnitTest
             ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, infos.Count); Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             var handle = infos.First().InstanceHandle;
             data = new List<TopicBuiltinTopicData>();
@@ -238,6 +253,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -266,7 +284,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -275,6 +294,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -303,7 +325,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -312,6 +335,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(typeName, data.First().TypeName);
+            Assert.IsNotNull(data.First().Key);
+            TestHelper.TestNonDefaultTopicData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -338,13 +364,17 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
             ret = _dr.ReadNextSample(ref data, infos);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(ReturnCode.Ok, ret); 
+            Assert.AreEqual(typeName, data.TypeName);
+            Assert.IsNotNull(data.Key);
+            TestHelper.TestNonDefaultTopicData(data);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -371,13 +401,17 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
             ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(typeName, data.TypeName);
+            Assert.IsNotNull(data.Key);
+            TestHelper.TestNonDefaultTopicData(data);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -405,7 +439,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
@@ -413,6 +448,9 @@ namespace OpenDDSharp.UnitTest
             // Get the for an existing instance
             ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(typeName, data.TypeName);
+            Assert.IsNotNull(data.Key);
+            TestHelper.TestNonDefaultTopicData(data);
 
             TopicBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
@@ -445,13 +483,17 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
             
             ReturnCode ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(typeName, data.TypeName);
+            Assert.IsNotNull(data.Key);
+            TestHelper.TestNonDefaultTopicData(data);
 
             // Lookup for an existing instance
             var handle = _dr.LookupInstance(data);
