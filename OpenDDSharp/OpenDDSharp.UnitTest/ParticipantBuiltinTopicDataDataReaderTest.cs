@@ -90,7 +90,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -100,6 +102,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -119,7 +123,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -129,6 +135,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -148,7 +156,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -158,6 +168,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             var handle = infos.First().InstanceHandle;
             data = new List<ParticipantBuiltinTopicData>();
@@ -186,7 +198,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -196,6 +210,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             var handle = infos.First().InstanceHandle;
             data = new List<ParticipantBuiltinTopicData>();
@@ -205,6 +221,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -224,7 +242,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -234,6 +254,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -253,7 +275,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -263,6 +287,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(1, data.First().UserData.Value.Count());
+            Assert.AreEqual(0x42, data.First().UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -278,9 +304,11 @@ namespace OpenDDSharp.UnitTest
             ParticipantBuiltinTopicData data = default;
             SampleInfo infos = new SampleInfo();
             ReturnCode ret = _dr.ReadNextSample(ref data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);            
+            Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -288,6 +316,8 @@ namespace OpenDDSharp.UnitTest
 
             ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(1, data.UserData.Value.Count());
+            Assert.AreEqual(0x42, data.UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -305,7 +335,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -313,6 +345,8 @@ namespace OpenDDSharp.UnitTest
 
             ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(1, data.UserData.Value.Count());
+            Assert.AreEqual(0x42, data.UserData.Value.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -331,7 +365,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -340,6 +376,8 @@ namespace OpenDDSharp.UnitTest
             // Get the for an existing instance
             ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(1, data.UserData.Value.Count());
+            Assert.AreEqual(0x42, data.UserData.Value.First());
 
             ParticipantBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
@@ -363,7 +401,9 @@ namespace OpenDDSharp.UnitTest
             ParticipantBuiltinTopicData data = default;
             SampleInfo info = new SampleInfo();
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipantQos qos = new DomainParticipantQos();
+            qos.UserData.Value = new byte[] { 0x42 };
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -371,6 +411,8 @@ namespace OpenDDSharp.UnitTest
             
             ReturnCode ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(1, data.UserData.Value.Count());
+            Assert.AreEqual(0x42, data.UserData.Value.First());
 
             // Lookup for an existing instance
             var handle = _dr.LookupInstance(data);
