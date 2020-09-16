@@ -330,6 +330,7 @@
     <ClCompile Include="SubscriberListenerNative.cpp" />
     <ClCompile Include="SubscriberQos.cpp" />
     <ClCompile Include="SubscriptionBuiltinTopicData.cpp" />
+    <ClCompile Include="SubscriptionBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="SubscriptionDisconnectedStatus.cpp" />
     <ClCompile Include="SubscriptionLostStatus.cpp" />
     <ClCompile Include="SubscriptionMatchedStatus.cpp" />
@@ -456,6 +457,7 @@
     <ClInclude Include="SubscriberListenerNative.h" />
     <ClInclude Include="SubscriberQos.h" />
     <ClInclude Include="SubscriptionBuiltinTopicData.h" />
+    <ClInclude Include="SubscriptionBuiltinTopicDataDataReader.h" />
     <ClInclude Include="SubscriptionDisconnectedStatus.h" />
     <ClInclude Include="SubscriptionLostStatus.h" />
     <ClInclude Include="SubscriptionMatchedStatus.h" />

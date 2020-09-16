@@ -138,3 +138,29 @@ void OpenDDSharp::DDS::SubscriptionBuiltinTopicData::FromNative(::DDS::Subscript
 	group_data = gcnew OpenDDSharp::DDS::GroupDataQosPolicy();
 	group_data->FromNative(native.group_data);
 }
+
+::DDS::SubscriptionBuiltinTopicData OpenDDSharp::DDS::SubscriptionBuiltinTopicData::ToNative() {
+	::DDS::SubscriptionBuiltinTopicData native;
+	msclr::interop::marshal_context context;
+
+	native.key = key.ToNative();
+	native.participant_key = participant_key.ToNative();
+	native.topic_name = context.marshal_as<const char*>(topic_name);
+	native.type_name = context.marshal_as<const char*>(type_name);
+	native.durability = durability->ToNative();	
+	native.deadline = deadline->ToNative();
+	native.latency_budget = latency_budget->ToNative();
+	native.liveliness = liveliness->ToNative();
+	native.reliability = reliability->ToNative();
+	native.ownership = ownership->ToNative();
+	native.destination_order = destination_order->ToNative();
+	native.user_data = user_data->ToNative();
+	native.topic_data = topic_data->ToNative();
+	native.time_based_filter = time_based_filter->ToNative();
+	native.presentation = presentation->ToNative();
+	native.partition = partition->ToNative();
+	native.topic_data = topic_data->ToNative();
+	native.group_data = group_data->ToNative();
+
+	return native;
+}

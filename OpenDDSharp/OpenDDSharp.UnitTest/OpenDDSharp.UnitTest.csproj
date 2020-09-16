@@ -22,6 +22,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -96,6 +97,7 @@
     <Compile Include="Listeners\MyTopicListener.cs" />
     <Compile Include="MulticastInstTest.cs" />
     <Compile Include="MultiTopicTest.cs" />
+    <Compile Include="SubscriptionBuiltinTopicDataDataReaderTest.cs" />
     <Compile Include="TopicBuiltinTopicDataDataReaderTest.cs" />
     <Compile Include="ParticipantBuiltinTopicDataDataReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

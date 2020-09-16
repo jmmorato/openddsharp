@@ -350,6 +350,9 @@
     <ClCompile Include="TopicBuiltinTopicDataDataReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SubscriptionBuiltinTopicDataDataReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DomainParticipantFactory.h">
@@ -728,6 +731,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TopicBuiltinTopicDataDataReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscriptionBuiltinTopicDataDataReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
