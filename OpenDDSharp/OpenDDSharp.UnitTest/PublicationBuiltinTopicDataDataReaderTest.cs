@@ -102,11 +102,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -145,11 +145,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -188,11 +188,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -240,11 +240,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -292,11 +292,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -335,11 +335,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -376,11 +376,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -415,11 +415,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -455,11 +455,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
@@ -501,11 +501,11 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
-            var subscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
+            var publisher = otherParticipant.CreatePublisher();
+            Assert.IsNotNull(publisher);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            var dataWriter = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
             
