@@ -220,6 +220,7 @@ namespace OpenDDSharp {
 
 		internal:
 			void FromNative(::DDS::PublicationBuiltinTopicData native);
+			::DDS::PublicationBuiltinTopicData ToNative();
 		};
 	};
 };

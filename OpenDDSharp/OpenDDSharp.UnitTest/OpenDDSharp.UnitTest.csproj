@@ -97,6 +97,7 @@
     <Compile Include="Listeners\MyTopicListener.cs" />
     <Compile Include="MulticastInstTest.cs" />
     <Compile Include="MultiTopicTest.cs" />
+    <Compile Include="PublicationBuiltinTopicDataDataReaderTest.cs" />
     <Compile Include="SubscriptionBuiltinTopicDataDataReaderTest.cs" />
     <Compile Include="TopicBuiltinTopicDataDataReaderTest.cs" />
     <Compile Include="ParticipantBuiltinTopicDataDataReaderTest.cs" />

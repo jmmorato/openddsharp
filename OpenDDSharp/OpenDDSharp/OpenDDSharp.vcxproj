@@ -298,6 +298,7 @@
     <ClCompile Include="PartitionQosPolicy.cpp" />
     <ClCompile Include="PresentationQosPolicy.cpp" />
     <ClCompile Include="PublicationBuiltinTopicData.cpp" />
+    <ClCompile Include="PublicationBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="PublicationDisconnectedStatus.cpp" />
     <ClCompile Include="PublicationLostStatus.cpp" />
     <ClCompile Include="PublicationMatchedStatus.cpp" />
@@ -421,6 +422,7 @@
     <ClInclude Include="PresentationQosPolicy.h" />
     <ClInclude Include="PresentationQosPolicyAccessScopeKind.h" />
     <ClInclude Include="PublicationBuiltinTopicData.h" />
+    <ClInclude Include="PublicationBuiltinTopicDataDataReader.h" />
     <ClInclude Include="PublicationDisconnectedStatus.h" />
     <ClInclude Include="PublicationLostStatus.h" />
     <ClInclude Include="PublicationMatchedStatus.h" />
