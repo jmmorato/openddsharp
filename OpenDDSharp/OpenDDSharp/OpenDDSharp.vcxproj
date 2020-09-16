@@ -339,6 +339,7 @@
     <ClCompile Include="Timestamp.cpp" />
     <ClCompile Include="Topic.cpp" />
     <ClCompile Include="TopicBuiltinTopicData.cpp" />
+    <ClCompile Include="TopicBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="TopicDataQosPolicy.cpp" />
     <ClCompile Include="TopicDescription.cpp" />
     <ClCompile Include="TopicListener.cpp" />
@@ -465,6 +466,7 @@
     <ClInclude Include="TimeValue.h" />
     <ClInclude Include="Topic.h" />
     <ClInclude Include="TopicBuiltinTopicData.h" />
+    <ClInclude Include="TopicBuiltinTopicDataDataReader.h" />
     <ClInclude Include="TopicDataQosPolicy.h" />
     <ClInclude Include="ITopicDescription.h" />
     <ClInclude Include="TopicDescription.h" />

@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
+using OpenDDSharp.Test;
 using OpenDDSharp.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
@@ -27,17 +28,17 @@ using System.Threading;
 namespace OpenDDSharp.UnitTest
 {
     [TestClass]
-    public class ParticipantBuiltinTopicDataDataReaderTest
+    public class TopicBuiltinTopicDataDataReaderTest
     {
         #region Constants        
-        private const string TEST_CATEGORY = "ParticipantBuiltinTopicDataDataReader";
+        private const string TEST_CATEGORY = "TopicBuiltinTopicDataDataReader";
         #endregion
 
         #region Fields        
-        private DomainParticipant _participant;
+        private DomainParticipant _participant;        
         private Subscriber _subscriber;
         private DataReader _dataReader;
-        private ParticipantBuiltinTopicDataDataReader _dr;
+        private TopicBuiltinTopicDataDataReader _dr;
         #endregion
 
         #region Properties
@@ -48,17 +49,17 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            _participant.BindTcpTransportConfig();
 
             _subscriber = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(_subscriber);
 
-            _dataReader = _subscriber.LookupDataReader(ParticipantBuiltinTopicDataDataReader.BUILT_IN_PARTICIPANT_TOPIC);
+            _dataReader = _subscriber.LookupDataReader(TopicBuiltinTopicDataDataReader.BUILT_IN_TOPIC_TOPIC);
             Assert.IsNotNull(_dataReader);
 
-            _dr = new ParticipantBuiltinTopicDataDataReader(_dataReader);
+            _dr = new TopicBuiltinTopicDataDataReader(_dataReader);
         }
 
         [TestCleanup]
@@ -83,16 +84,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestRead()
         {            
-            List<ParticipantBuiltinTopicData> data = new List<ParticipantBuiltinTopicData>();
+            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
             List<SampleInfo> infos = new List<SampleInfo>();            
             ReturnCode ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -112,16 +121,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestTake()
         {
-            List<ParticipantBuiltinTopicData> data = new List<ParticipantBuiltinTopicData>();
+            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
             List<SampleInfo> infos = new List<SampleInfo>();
             ReturnCode ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -141,16 +158,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestReadInstance()
         {
-            List<ParticipantBuiltinTopicData> data = new List<ParticipantBuiltinTopicData>();
+            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
             List<SampleInfo> infos = new List<SampleInfo>();
             ReturnCode ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -160,7 +185,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, infos.Count);
 
             var handle = infos.First().InstanceHandle;
-            data = new List<ParticipantBuiltinTopicData>();
+            data = new List<TopicBuiltinTopicData>();
             infos = new List<SampleInfo>();
 
             ret = _dr.ReadInstance(data, infos, handle);
@@ -179,16 +204,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestTakeInstance()
         {
-            List<ParticipantBuiltinTopicData> data = new List<ParticipantBuiltinTopicData>();
+            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
             List<SampleInfo> infos = new List<SampleInfo>();
             ReturnCode ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -198,7 +231,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, infos.Count);
 
             var handle = infos.First().InstanceHandle;
-            data = new List<ParticipantBuiltinTopicData>();
+            data = new List<TopicBuiltinTopicData>();
             infos = new List<SampleInfo>();
 
             ret = _dr.TakeInstance(data, infos, handle);
@@ -217,16 +250,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestReadNextInstance()
         {
-            List<ParticipantBuiltinTopicData> data = new List<ParticipantBuiltinTopicData>();
+            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
             List<SampleInfo> infos = new List<SampleInfo>();
             ReturnCode ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -246,16 +287,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestTakeNextInstance()
         {
-            List<ParticipantBuiltinTopicData> data = new List<ParticipantBuiltinTopicData>();
+            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
             List<SampleInfo> infos = new List<SampleInfo>();
             ReturnCode ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -275,14 +324,22 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestReadNextSample()
         {
-            ParticipantBuiltinTopicData data = default;
+            TopicBuiltinTopicData data = default;
             SampleInfo infos = new SampleInfo();
             ReturnCode ret = _dr.ReadNextSample(ref data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);            
+            Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -300,14 +357,22 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestTakeNextSample()
         {
-            ParticipantBuiltinTopicData data = default;
+            TopicBuiltinTopicData data = default;
             SampleInfo infos = new SampleInfo();
             ReturnCode ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -326,14 +391,22 @@ namespace OpenDDSharp.UnitTest
         public void TestGetKeyValue()
         {
             // Call GetKeyValue with HandleNil
-            ParticipantBuiltinTopicData data = default;
+            TopicBuiltinTopicData data = default;
             SampleInfo info = new SampleInfo();
             ReturnCode ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
 
@@ -341,7 +414,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            ParticipantBuiltinTopicData aux = default;
+            TopicBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, ret);
             for (int i = 0; i < 3; i++)
@@ -360,12 +433,20 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestLookupInstance()
         {
-            ParticipantBuiltinTopicData data = default;
+            TopicBuiltinTopicData data = default;
             SampleInfo info = new SampleInfo();
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            otherParticipant.BindTcpTransportConfig();
+
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(topic);
 
             Thread.Sleep(500);
             
