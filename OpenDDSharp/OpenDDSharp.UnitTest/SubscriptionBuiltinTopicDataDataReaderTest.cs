@@ -105,8 +105,9 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            Assert.IsNotNull(reader);
 
             Thread.Sleep(500);
 
@@ -114,6 +115,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -148,7 +150,8 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
@@ -157,6 +160,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -191,7 +195,8 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
@@ -200,6 +205,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             var handle = infos.First().InstanceHandle;
             data = new List<SubscriptionBuiltinTopicData>();
@@ -209,6 +215,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -243,7 +250,8 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
@@ -261,6 +269,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -295,7 +304,8 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
@@ -304,6 +314,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -338,7 +349,8 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
@@ -347,6 +359,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultSubscriptionData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -379,13 +392,15 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
 
             ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultSubscriptionData(data);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -418,13 +433,15 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
 
             ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultSubscriptionData(data);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -458,7 +475,8 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
@@ -466,6 +484,7 @@ namespace OpenDDSharp.UnitTest
             // Get the for an existing instance
             ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultSubscriptionData(data);
 
             SubscriptionBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
@@ -504,13 +523,15 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var dataReader = subscriber.CreateDataReader(topic);
+            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
             Thread.Sleep(500);
             
             ReturnCode ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultSubscriptionData(data);
 
             // Lookup for an existing instance
             var handle = _dr.LookupInstance(data);
