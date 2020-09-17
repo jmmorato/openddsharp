@@ -105,7 +105,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -114,6 +116,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -148,7 +151,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -157,6 +162,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -191,7 +197,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -200,6 +208,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             var handle = infos.First().InstanceHandle;
             data = new List<PublicationBuiltinTopicData>();
@@ -209,6 +218,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -243,7 +253,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -252,6 +264,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             var handle = infos.First().InstanceHandle;
             data = new List<PublicationBuiltinTopicData>();
@@ -261,6 +274,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -295,7 +309,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -304,6 +320,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -338,7 +355,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -347,6 +366,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
+            TestHelper.TestNonDefaultPublicationData(data.First());
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -379,13 +399,16 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
             ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultPublicationData(data);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -418,13 +441,16 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
 
             ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultPublicationData(data);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -458,7 +484,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -466,6 +494,7 @@ namespace OpenDDSharp.UnitTest
             // Get the for an existing instance
             ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultPublicationData(data);
 
             PublicationBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
@@ -504,7 +533,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            var dataWriter = publisher.CreateDataWriter(topic);
+            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
+            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
             Thread.Sleep(500);
@@ -518,6 +549,7 @@ namespace OpenDDSharp.UnitTest
 
              ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
+            TestHelper.TestNonDefaultPublicationData(data);
 
             ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, ret);
