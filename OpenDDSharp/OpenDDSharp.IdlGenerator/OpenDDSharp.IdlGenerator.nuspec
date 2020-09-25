@@ -2,27 +2,28 @@
 <package >
   <metadata>
     <id>OpenDDSharp.IdlGenerator</id>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
     <projectUrl>http://www.openddsharp.com</projectUrl>
-    <iconUrl>http://www.openddsharp.com/favicon.ico</iconUrl>
-    <licenseUrl>http://www.openddsharp.com/Home/License</licenseUrl>
+    <icon>favicon.ico</icon>
+    <license type="file">LICENSE.txt</license>
     <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenDDSharp IDL Generator</description>    
     <copyright>Jose Morato</copyright>
     <tags>OpenDDSharp OpenDDS DDS IDL CodeGenerator</tags>
-    <references>
-      <reference file="OpenDDSharp.dll" />
-    </references>
+    <references />
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+    </dependencies>
   </metadata>
   <files>
-    <file src="..\OpenDDSharp\bin\Win32\Release\OpenDDSharp.dll" target="lib\net461\x86\Release" />
-    <file src="..\OpenDDSharp\bin\Win32\Debug\OpenDDSharp.dll" target="lib\net461\x86\Debug" />
-    <file src="..\OpenDDSharp\bin\x64\Release\OpenDDSharp.dll" target="lib\net461\x64\Release" />
-    <file src="..\OpenDDSharp\bin\x64\Debug\OpenDDSharp.dll" target="lib\net461\x64\Debug" />
+    <file src="..\OpenDDSharp\bin\Win32\Release\OpenDDSharp.dll" target="lib\net472\x86\Release" />
+    <file src="..\OpenDDSharp\bin\Win32\Debug\OpenDDSharp.dll" target="lib\net472\x86\Debug" />
+    <file src="..\OpenDDSharp\bin\x64\Release\OpenDDSharp.dll" target="lib\net472\x64\Release" />
+    <file src="..\OpenDDSharp\bin\x64\Debug\OpenDDSharp.dll" target="lib\net472\x64\Debug" />
     
     <file src="..\OpenDDSharp.BuildTasks\bin\Release\OpenDDSharp.BuildTasks.dll" target="tools" />
     <file src="..\OpenDDSharp.ExportFileGenerator\bin\Release\export_file_generator.exe" target="tools\ACE\bin" />
@@ -79,5 +80,7 @@
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.lib" target="tools\DDS\lib_x64" />
 
     <file src=".\OpenDDSharp.IdlGenerator.targets" target="build\" />
+    <file src=".\..\..\LICENSE.txt" target="" />
+    <file src=".\..\..\favicon.ico" target="/" />    
   </files> 
 </package>

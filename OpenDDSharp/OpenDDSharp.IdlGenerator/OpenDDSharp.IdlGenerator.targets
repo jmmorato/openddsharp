@@ -28,16 +28,16 @@
   </Target>
   <ItemGroup Condition="'$(Language)' == 'C++'">
     <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x86\Debug\OpenDDSharp.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net472\x86\Debug\OpenDDSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x86\Release\OpenDDSharp.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net472\x86\Release\OpenDDSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x64\Debug\OpenDDSharp.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net472\x64\Debug\OpenDDSharp.dll</HintPath>
     </Reference>
     <Reference Include="OpenDDSharp.dll" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <HintPath>$(MSBuildThisFileDirectory)..\lib\net461\x64\Release\OpenDDSharp.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)..\lib\net472\x64\Release\OpenDDSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
