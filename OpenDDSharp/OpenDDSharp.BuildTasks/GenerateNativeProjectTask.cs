@@ -90,7 +90,7 @@ namespace OpenDDSharp.BuildTasks
         private void Initialize()
         {
             TemplatePath = Path.GetFullPath(TemplatePath);
-            IntDir = Path.GetFullPath(IntDir);
+            IntDir = Path.Combine(Path.GetFullPath(IntDir), OriginalProjectName);
 
             _solutionName = OriginalProjectName + "NativeSolution";
             _projectName = OriginalProjectName + "Native.vcxproj";

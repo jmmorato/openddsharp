@@ -19,10 +19,9 @@
     <Project TargetFileName="$projectname$.vcxproj" File="Test.vcxproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">Test.vcxproj.filters</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.idl" OpenInEditor="true">Test.idl</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$TypeSupport.h">TestTypeSupport.h</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$TypeSupport.cpp">TestTypeSupport.cpp</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="LNK4248.h">LNK4248.h</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="project.json">project.json_rename_me</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName=".gitignore">.gitignore</ProjectItem>
     </Project>
   </TemplateContent>
 </VSTemplate>
