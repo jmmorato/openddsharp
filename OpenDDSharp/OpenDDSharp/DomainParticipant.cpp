@@ -270,8 +270,22 @@ OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DomainParticipant::CreateSubscri
 };
 
 OpenDDSharp::DDS::Subscriber^ OpenDDSharp::DDS::DomainParticipant::GetBuiltinSubscriber() {
-	::DDS::Subscriber_ptr s = impl_entity->get_builtin_subscriber();	
-	return gcnew ::OpenDDSharp::DDS::Subscriber(s);	
+	::DDS::Subscriber_ptr s = impl_entity->get_builtin_subscriber();
+	
+	OpenDDSharp::DDS::Subscriber^ managedSubscriber = nullptr;
+
+	if (s != NULL) {
+		OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(s);
+		if (entity != nullptr) {
+			managedSubscriber = static_cast<OpenDDSharp::DDS::Subscriber^>(entity);
+		}
+		else {
+			managedSubscriber = gcnew OpenDDSharp::DDS::Subscriber(s);
+			EntityManager::get_instance()->add(s, managedSubscriber);
+		}
+	}
+	
+	return managedSubscriber;
 };
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DomainParticipant::GetDefaultSubscriberQos(OpenDDSharp::DDS::SubscriberQos^ qos) {
