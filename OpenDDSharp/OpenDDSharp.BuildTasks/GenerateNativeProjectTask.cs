@@ -101,7 +101,7 @@ namespace OpenDDSharp.BuildTasks
         private void Initialize()
         {
             TemplatePath = Path.GetFullPath(TemplatePath);
-            IntDir = Path.GetFullPath(IntDir);
+            IntDir = Path.Combine(Path.GetFullPath(IntDir), OriginalProjectName);
 
             if (IsWrapper)
             {

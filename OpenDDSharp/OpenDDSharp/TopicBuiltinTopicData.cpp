@@ -133,3 +133,28 @@ void OpenDDSharp::DDS::TopicBuiltinTopicData::FromNative(::DDS::TopicBuiltinTopi
 	topic_data = gcnew OpenDDSharp::DDS::TopicDataQosPolicy();
 	topic_data->FromNative(native.topic_data);
 }
+
+
+::DDS::TopicBuiltinTopicData OpenDDSharp::DDS::TopicBuiltinTopicData::ToNative() {
+	::DDS::TopicBuiltinTopicData native;
+	msclr::interop::marshal_context context;
+
+	native.key = key.ToNative();		
+	native.name = context.marshal_as<const char*>(name);
+	native.type_name = context.marshal_as<const char*>(type_name);	
+	native.durability = durability->ToNative();
+	native.durability_service = durability_service->ToNative();	
+	native.deadline = deadline->ToNative();	
+	native.latency_budget = latency_budget->ToNative();	
+	native.liveliness = liveliness->ToNative();	
+	native.reliability = reliability->ToNative();	
+	native.transport_priority = transport_priority->ToNative();	
+	native.lifespan = lifespan->ToNative();	
+	native.destination_order = destination_order->ToNative();	
+	native.history = history->ToNative();	
+	native.resource_limits = resource_limits->ToNative();	
+	native.ownership = ownership->ToNative();	
+	native.topic_data = topic_data->ToNative();
+
+	return native;
+}

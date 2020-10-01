@@ -15,7 +15,7 @@ module Test {
         SubscriptionReconnectedTest
     };
 
-	#pragma DCPS_DATA_TYPE "Test::BasicTestStruct"    
+	@topic
 	struct BasicTestStruct {
 		long Id;
 	};
@@ -33,10 +33,9 @@ module Test {
     const long TEST_CONST = 1;
 	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";
     
-	#pragma DCPS_DATA_TYPE "Test::TestStruct"
-	#pragma DCPS_DATA_KEY "Test::TestStruct Id"
+	@topic
     struct TestStruct {
-		long Id;
+		@key long Id;
 		string RawData;
 		long long TimeTicks;
         char CharType;
@@ -63,30 +62,27 @@ module Test {
         PrimitiveEnum TestEnum;
 	};
 
-	#pragma DCPS_DATA_TYPE "Test::Athlete"    
-	#pragma DCPS_DATA_KEY "Test::Athlete AthleteId"
+	@topic
 	struct Athlete
 	{
-		long AthleteId;
+		@key long AthleteId;
 		string FirstName;
 		string SecondName;
 		string Country;
 	};
 
-	#pragma DCPS_DATA_TYPE "Test::Result"
-	#pragma DCPS_DATA_KEY "Test::Result AthleteId"
+	@topic
 	struct Result
 	{				
-		long AthleteId;
+		@key long AthleteId;
 		long Rank;
 		float Score;		
 	};
 
-	#pragma DCPS_DATA_TYPE "Test::AthleteResult"    
-	#pragma DCPS_DATA_KEY "Test::AthleteResult AthleteId"
+	@topic
 	struct AthleteResult
 	{
-		long AthleteId;
+		@key long AthleteId;
 		string FirstName;
 		string SecondName;
 		string Country;

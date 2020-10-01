@@ -22,17 +22,17 @@
     <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
-    <ACE_ROOT>..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
-    <TAO_ROOT>..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{1AADF375-9149-4000-82AB-AF4CD15144DA}</ProjectGuid>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -293,10 +293,12 @@
     <ClCompile Include="OwnershipQosPolicy.cpp" />
     <ClCompile Include="OwnershipStrengthQosPolicy.cpp" />
     <ClCompile Include="ParticipantBuiltinTopicData.cpp" />
+    <ClCompile Include="ParticipantBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="ParticipantService.cpp" />
     <ClCompile Include="PartitionQosPolicy.cpp" />
     <ClCompile Include="PresentationQosPolicy.cpp" />
     <ClCompile Include="PublicationBuiltinTopicData.cpp" />
+    <ClCompile Include="PublicationBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="PublicationDisconnectedStatus.cpp" />
     <ClCompile Include="PublicationLostStatus.cpp" />
     <ClCompile Include="PublicationMatchedStatus.cpp" />
@@ -329,6 +331,7 @@
     <ClCompile Include="SubscriberListenerNative.cpp" />
     <ClCompile Include="SubscriberQos.cpp" />
     <ClCompile Include="SubscriptionBuiltinTopicData.cpp" />
+    <ClCompile Include="SubscriptionBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="SubscriptionDisconnectedStatus.cpp" />
     <ClCompile Include="SubscriptionLostStatus.cpp" />
     <ClCompile Include="SubscriptionMatchedStatus.cpp" />
@@ -338,6 +341,7 @@
     <ClCompile Include="Timestamp.cpp" />
     <ClCompile Include="Topic.cpp" />
     <ClCompile Include="TopicBuiltinTopicData.cpp" />
+    <ClCompile Include="TopicBuiltinTopicDataDataReader.cpp" />
     <ClCompile Include="TopicDataQosPolicy.cpp" />
     <ClCompile Include="TopicDescription.cpp" />
     <ClCompile Include="TopicListener.cpp" />
@@ -412,11 +416,13 @@
     <ClInclude Include="OwnershipQosPolicyKind.h" />
     <ClInclude Include="OwnershipStrengthQosPolicy.h" />
     <ClInclude Include="ParticipantBuiltinTopicData.h" />
+    <ClInclude Include="ParticipantBuiltinTopicDataDataReader.h" />
     <ClInclude Include="ParticipantService.h" />
     <ClInclude Include="PartitionQosPolicy.h" />
     <ClInclude Include="PresentationQosPolicy.h" />
     <ClInclude Include="PresentationQosPolicyAccessScopeKind.h" />
     <ClInclude Include="PublicationBuiltinTopicData.h" />
+    <ClInclude Include="PublicationBuiltinTopicDataDataReader.h" />
     <ClInclude Include="PublicationDisconnectedStatus.h" />
     <ClInclude Include="PublicationLostStatus.h" />
     <ClInclude Include="PublicationMatchedStatus.h" />
@@ -453,6 +459,7 @@
     <ClInclude Include="SubscriberListenerNative.h" />
     <ClInclude Include="SubscriberQos.h" />
     <ClInclude Include="SubscriptionBuiltinTopicData.h" />
+    <ClInclude Include="SubscriptionBuiltinTopicDataDataReader.h" />
     <ClInclude Include="SubscriptionDisconnectedStatus.h" />
     <ClInclude Include="SubscriptionLostStatus.h" />
     <ClInclude Include="SubscriptionMatchedStatus.h" />
@@ -463,6 +470,7 @@
     <ClInclude Include="TimeValue.h" />
     <ClInclude Include="Topic.h" />
     <ClInclude Include="TopicBuiltinTopicData.h" />
+    <ClInclude Include="TopicBuiltinTopicDataDataReader.h" />
     <ClInclude Include="TopicDataQosPolicy.h" />
     <ClInclude Include="ITopicDescription.h" />
     <ClInclude Include="TopicDescription.h" />

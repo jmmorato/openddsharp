@@ -66,12 +66,19 @@ namespace OpenDDSharp {
 
 		private:
 			delegate void onDataOnReadersDelegate(::DDS::Subscriber_ptr subscriber);
-			void onDataOnReaders(::DDS::Subscriber_ptr subscriber) {
-				OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(subscriber);
+			void onDataOnReaders(::DDS::Subscriber_ptr subscriber) {				
 				OpenDDSharp::DDS::Subscriber^ managedSubscriber = nullptr;
-				if (entity != nullptr) {
-					managedSubscriber = static_cast<OpenDDSharp::DDS::Subscriber^>(entity);
-				}
+
+                if (subscriber != NULL) {
+                    OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(subscriber);
+                    if (entity != nullptr) {
+                        managedSubscriber = static_cast<OpenDDSharp::DDS::Subscriber^>(entity);
+                    }
+                    else {
+                        managedSubscriber = gcnew OpenDDSharp::DDS::Subscriber(subscriber);
+                        EntityManager::get_instance()->add(subscriber, managedSubscriber);
+                    }
+                }
 				
 				OnDataOnReaders(managedSubscriber);
 			};

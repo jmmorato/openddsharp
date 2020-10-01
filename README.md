@@ -11,7 +11,7 @@ publish and subscribe model.
 OpenDDS Website: [http://www.opendds.org](http://www.opendds.org)  
 OpenDDS Repository: [https://github.com/objectcomputing/OpenDDS](https://github.com/objectcomputing/OpenDDS)
 
-OpenDDSharp has been compiled with OpenDDS v3.13.1
+OpenDDSharp has been compiled with OpenDDS v3.14
 
 | Package | NuGet |
 |---------|-------|

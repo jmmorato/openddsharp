@@ -1,3 +1,13 @@
+# Version 0.5.0
+
+### New Features
+- Updated to OpenDDS v3.14
+- Visual Studio 2019 migration
+- Implemented `ParticipantBuiltinTopicDataDataReader` class
+- Implemented `TopicBuiltinTopicDataDataReader` class
+- Implemented `PublicationBuiltinTopicDataDataReader` class
+- Implemented `SubsriptionBuiltinTopicDataDataReader` class
+
 # Version 0.4.1
 
 ### New Features

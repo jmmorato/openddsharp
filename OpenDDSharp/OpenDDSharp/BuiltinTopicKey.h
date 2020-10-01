@@ -40,10 +40,11 @@ namespace OpenDDSharp {
 			/// </summary>
 			property array<System::Int32, 1>^ Value {
 				array<System::Int32, 1>^ get();
-			};		
+			};
 
 		internal:
 			void FromNative(::DDS::BuiltinTopicKey_t native);
+			::DDS::BuiltinTopicKey_t ToNative();
 
 		};
 	};

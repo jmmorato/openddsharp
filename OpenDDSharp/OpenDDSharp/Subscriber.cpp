@@ -118,7 +118,15 @@ OpenDDSharp::DDS::DataReader^ OpenDDSharp::DDS::Subscriber::LookupDataReader(Sys
 	msclr::interop::marshal_context context;
 
 	::DDS::DataReader_ptr dr = impl_entity->lookup_datareader(context.marshal_as<const char *>(topicName));
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(dr);
+
+	OpenDDSharp::DDS::Entity^ entity = nullptr;
+	if (dr != NULL) {
+		entity = EntityManager::get_instance()->find(dr);
+		if (entity == nullptr) {
+			entity = gcnew DataReader(dr);
+			EntityManager::get_instance()->add(dr, entity);
+		}
+	}
 
 	return static_cast<OpenDDSharp::DDS::DataReader^>(entity);	
 };

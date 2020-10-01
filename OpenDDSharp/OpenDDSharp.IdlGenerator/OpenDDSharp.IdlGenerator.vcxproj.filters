@@ -47,6 +47,12 @@
     <ClCompile Include="cli_generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="annotations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="topic_keys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="csharp_generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,6 +77,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cli_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="annotations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="topic_keys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="csharp_generator.h">

@@ -86,7 +86,7 @@ namespace OpenDDSharp {
                 /// <summary>
                 /// The number of datagrams to retain in order to
                 /// service repair requests (reliable only).
-                /// The default value is 32.
+                /// The default value is 0.
                 /// </summary>
                 property size_t NakDepth {
                     size_t get();

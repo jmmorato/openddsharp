@@ -95,6 +95,12 @@ namespace OpenDDSharp {
                 void AddDiscovery(::OpenDDSharp::OpenDDS::DCPS::Discovery^ discovery);
 
                 /// <summary>
+                /// Get the <see cref="::OpenDDSharp::OpenDDS::DCPS::Discovery" /> associated to the domain.
+                /// </summary>
+                /// <param name="domain">The domain id.</param>
+                OpenDDSharp::OpenDDS::DCPS::Discovery^ GetDiscovery(System::Int32 domain);
+
+                /// <summary>
                 /// Set the discovery repository for a specifi domain id.
                 /// </summary>
                 /// <param name="domain">The domain id.</param>

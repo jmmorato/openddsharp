@@ -201,6 +201,7 @@ namespace OpenDDSharp {
 
 		internal:
 			void FromNative(::DDS::SubscriptionBuiltinTopicData native);
+			::DDS::SubscriptionBuiltinTopicData ToNative();
 		};
 	};
 };

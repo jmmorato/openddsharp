@@ -13,7 +13,7 @@
     <RootNamespace>OpenDDSharp.Doc</RootNamespace>
     <Name>OpenDDSharp.Doc</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.6.1</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <OutputPath>bin\</OutputPath>
     <HtmlHelpName>OpenDDSharp.Doc</HtmlHelpName>
     <Language>en-US</Language>
@@ -39,7 +39,7 @@
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <HelpTitle>OpenDDSharp</HelpTitle>
-    <HelpFileVersion>0.4.1</HelpFileVersion>
+    <HelpFileVersion>0.5.1</HelpFileVersion>
     <NamingMethod>MemberName</NamingMethod>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <NamespaceGrouping>False</NamespaceGrouping>
@@ -89,7 +89,7 @@
       </Filter>
     </ApiFilter>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
-    <CopyrightText>Copyright &amp;#169%3b 2018-2019 Jose Morat&amp;#243%3b</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2018-2020 Jose Morat&amp;#243%3b</CopyrightText>
     <HeaderText>&amp;lt%3bscript type=&amp;quot%3btext/javascript&amp;quot%3b src=&amp;quot%3b//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&amp;quot%3b&amp;gt%3b&amp;lt%3b/script&amp;gt%3b 
 &amp;lt%3bdiv style=&amp;quot%3btext-align:center%3b&amp;quot%3b&amp;gt%3b
 &amp;lt%3bins class=&amp;quot%3badsbygoogle&amp;quot%3b style=&amp;quot%3bdisplay:block&amp;quot%3b data-ad-client=&amp;quot%3bca-pub-4366666401981011&amp;quot%3b data-ad-slot=&amp;quot%3b6527324727&amp;quot%3b data-ad-format=&amp;quot%3bauto&amp;quot%3b&amp;gt%3b&amp;lt%3b/ins&amp;gt%3b
@@ -103,6 +103,7 @@
     </FeedbackEMailAddress>
     <FeedbackEMailLinkText>
     </FeedbackEMailLinkText>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->

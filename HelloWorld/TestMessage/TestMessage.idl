@@ -1,5 +1,5 @@
 module HelloWorld{
-	#pragma DCPS_DATA_TYPE "HelloWorld::Message"
+	@topic
 	struct Message {
 		string Content;
 	};
