@@ -21,6 +21,24 @@ jobs:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
+    - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
+      inputs:
+        versionSpec: 5.4.0
+    - task: NuGetCommand@2
+      displayName: "NuGet Restore OpenDDSharp"
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet restore"
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
+        projects: '**/*.csproj'
+        workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - script: |
         git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
@@ -131,8 +149,25 @@ jobs:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
+    - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
+      inputs:
+        versionSpec: 5.4.0
+    - task: NuGetCommand@2
+      displayName: "NuGet Restore OpenDDSharp"
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet restore"
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
+        projects: '**/*.csproj'
+        workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - script: |
-        hostname
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
