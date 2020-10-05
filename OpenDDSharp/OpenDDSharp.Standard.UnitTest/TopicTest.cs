@@ -203,6 +203,13 @@ namespace OpenDDSharp.Standard.UnitTest
             result = otherTopic.SetQos(qos);
             Assert.AreEqual(ReturnCode.InconsistentPolicy, result);
 
+            // TODO: Investigate
+            // If don't enable the entity before delete it, it fails on OpenDDS:
+            // DomainParticipantImpl::delete_topic_i, remove_topic failed with return value 3
+            // That didn't happen in OpenDDS 3.13.x.
+            result = otherTopic.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             // Test SetQos with null parameter
             result = topic.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);

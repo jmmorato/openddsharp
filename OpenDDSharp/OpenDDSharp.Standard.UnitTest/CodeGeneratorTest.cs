@@ -924,12 +924,12 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 UnboundedStringField = "Hello, I love you, won't you tell me your name?",
                 UnboundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
-                BoundedStringField = "Hello, I love you, won't you tell me your name?",
-                BoundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
+                BoundedStringField = "Hello, I love you, won't you te",
+                BoundedWStringField = "Hello, I love you, won't you te",
             };
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // To allow to change the thread context.

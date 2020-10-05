@@ -93,7 +93,7 @@ bool cwrapper_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AS
 	return true;
 }
 
-bool cwrapper_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
+bool cwrapper_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
 {			
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
@@ -116,9 +116,8 @@ bool cwrapper_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const 
 					   << implement_struct_from_native(fields, short_name, scoped_name).c_str()
 					   << implement_struct_release(fields, short_name, scoped_name)
 					   << "};\n\n";
-
-	IDL_GlobalData::DCPS_Data_Type_Info* info = idl_global->is_dcps_type(name);
-	if (info) {
+	
+	if (be_global->is_topic_type(structure)) {
 		std::string header = header_template_;
 		replaceAll(header, replacements);
 		be_global->header_ << header;

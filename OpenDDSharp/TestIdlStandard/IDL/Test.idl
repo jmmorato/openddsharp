@@ -84,7 +84,7 @@ module Test {
 	typedef string StringMultiArrayType[3][4][2];
 	typedef wstring WStringMultiArrayType[3][4][2];
 	
-	#pragma DCPS_DATA_TYPE "Test::NestedTestStruct"
+	@topic
 	struct NestedStruct {
 		long Id;
 		string Message;
@@ -121,10 +121,9 @@ module Test {
 
 	typedef TestEnum EnumMultiArrayType[3][4][2];
 
-    #pragma DCPS_DATA_TYPE "Test::TestStruct"
-	#pragma DCPS_DATA_KEY "Test::TestStruct Id"
+	@topic	
     struct TestStruct {
-		long Id;
+		@key long Id;
         short ShortField;
         unsigned short UnsignedShortField;
         long LongField;

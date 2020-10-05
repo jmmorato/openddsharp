@@ -1,9 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <!--  VS doesn't call MSBuild to check if projects are up-to-date and it doesn't check the inputs of custom target.
+          The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,13 +16,33 @@
   <ItemGroup>
     <ProjectReference Include="..\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
+  <ItemGroup>
+    <ClCompile Include="TestTypeSupport.cs" />
+  </ItemGroup>
+  
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <!-- Clean up generated code before rebuild -->
+  <PropertyGroup>
+    <CleanDependsOn>CustomBeforeClean;$(CleanDependsOn);</CleanDependsOn>
+  </PropertyGroup>
+  <Target Name="CustomBeforeClean" Inputs="@(IdlFiles)" Outputs="AlwaysExecuteDummy">
+    <Message Text="Cleaning %(IdlFiles.FileName).idl auto-generated files..." Importance="High" />
+    <Delete Files="%(RootDir)%(Directory)..\%(IdlFiles.FileName)TypeSupport.cs;" ContinueOnError="true" />
+    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))NativeProject" />
+    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))WrapperProject" />
+  </Target>
+  
+  <!-- Add VC++ to the PATH -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.AddPathVC" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent">
+  <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="$(Platform)" />
   </Target>
-  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
+        
+  <!-- Set environment variables -->
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
+  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Set the enviroment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
@@ -28,24 +51,30 @@
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />    
   </Target>
+  
+  <!-- Generate native OpenDDS project -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent">
-    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)\NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" />
+  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" />
   </Target>
-  <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent">
-    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)\WrapperProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\StandardWrapperIdlProject.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsWrapper="True" />
+  
+  <!-- Generate wrapper C project -->
+  <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\StandardWrapperIdlProject.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsWrapper="True" />
   </Target>
-  <Target Name="OpenDDSharpIdlx64" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'">
+  
+  <!-- Generate OpenDDSharp IDL files-->
+  <Target Name="OpenDDSharpIdlx64" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlx86" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x86'">
+  <Target Name="OpenDDSharpIdlx86" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x86'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
-  <Target Name="CopyNative" AfterTargets="AfterBuild">
-    <!--PostBuildEvent-->
+  <!-- Copy DLLs after build-->
+  <Target Name="CopyNative" AfterTargets="AfterBuild">    
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
       <Dlls Include="$(IntermediateOutputPath)WrapperProject\bin\Win32\Debug\$(ProjectName)Wrapperd_Win32.dll" />
     </ItemGroup>

@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "csharp_generator.h"
 #include "be_extern.h"
+#include "be_util.h"
 
 #include "utl_identifier.h"
 
@@ -31,23 +32,18 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 namespace {
-	std::string read_template(const char* prefix) {		
-		const char* dds_root = ACE_OS::getenv("DDS_ROOT");
-		if (!dds_root) {
-			ACE_ERROR((LM_ERROR, "The environment variable DDS_ROOT must be set.\n"));
-			BE_abort();
-		}
-		std::string path = dds_root;
+	std::string read_template(const char* prefix) {
+		std::string path = be_util::dds_root();
 		path.append("/dds/idl/");
 		path.append(prefix);
-		path.append("Template.txt");		
+		path.append("Template.txt");
 		std::ifstream ifs(path.c_str());
 		std::ostringstream oss;
 		oss << ifs.rdbuf();
 		return oss.str();
 	}
 
-	void replaceAll(std::string& s,	const std::map<std::string, std::string>& rep) {
+	void replaceAll(std::string& s, const std::map<std::string, std::string>& rep) {
 		typedef std::map<std::string, std::string>::const_iterator mapiter_t;
 		for (size_t i = s.find("<%"); i < s.length(); i = s.find("<%", i + 1)) {
 			size_t n = s.find("%>", i) - i + 2;
@@ -214,7 +210,7 @@ bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_
 	return true;
 }
 
-bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
+bool csharp_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
 {		
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
@@ -258,8 +254,8 @@ bool csharp_generator::gen_struct(AST_Structure*, UTL_ScopedName* name, const st
 					 << declare_marshal_fields(fields, "        ").c_str()
 					 << "    }\n\n";
 
-	IDL_GlobalData::DCPS_Data_Type_Info* info = idl_global->is_dcps_type(name);
-	if (info) {
+	
+	if (be_global->is_topic_type(structure)) {
 		std::string impl = impl_template_;
 		replaceAll(impl, replacements);
 		be_global->impl_ << impl;

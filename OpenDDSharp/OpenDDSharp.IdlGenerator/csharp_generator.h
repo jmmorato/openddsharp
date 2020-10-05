@@ -20,7 +20,7 @@ class csharp_generator : public dds_generator {
 public:
 	csharp_generator();
 
-	bool gen_struct(AST_Structure* node, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE size, const char* repoid);
+	bool gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE size, const char* repoid);
 
 	bool gen_union(AST_Union*, UTL_ScopedName*, const std::vector<AST_UnionBranch*>&, AST_Type*, const char*);
 
