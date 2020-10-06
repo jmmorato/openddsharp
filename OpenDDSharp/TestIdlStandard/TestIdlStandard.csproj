@@ -7,6 +7,7 @@
     <!--  VS doesn't call MSBuild to check if projects are up-to-date and it doesn't check the inputs of custom target.
           The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +18,8 @@
     <ProjectReference Include="..\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestTypeSupport.cs" />
+    <Compile Include="TestTypeSupport.cs" />
+    <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>
   
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
