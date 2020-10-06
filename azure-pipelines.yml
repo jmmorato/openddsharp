@@ -1,6 +1,6 @@
 jobs:
 - job: VisualStudio2019
-  timeoutInMinutes: 90
+  timeoutInMinutes: 120
   pool:
     vmImage: windows-2019
   strategy:
@@ -38,7 +38,7 @@ jobs:
         command: 'restore'
         feedsToUse: 'select'
         projects: '**/*.csproj'
-        workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
+        workingDirectory: '$(Build.SourcesDirectory)\OpenDDSharp'
     - script: |
         git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
@@ -116,7 +116,7 @@ jobs:
         msbuildArgs: /p:PlatformToolset=v142
         maximumCpuCount: true
     - task: VSTest@2
-      displayName: Execute Unit Tests
+      displayName: Execute CppCli Unit Tests
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
@@ -127,8 +127,20 @@ jobs:
         runTestsInIsolation: true
         runInParallel: false
         codeCoverageEnabled: true
+    - task: VSTest@2
+      displayName: Execute Standard Unit Tests
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.Standard.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\netcoreapp2.1\OpenDDSharp.Standard.UnitTest.dll'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
+        platform: '$(BuildPlatform)'
+        configuration: '$(BuildConfiguration)'
+        runTestsInIsolation: true
+        runInParallel: false
+        codeCoverageEnabled: true
 - job: VisualStudio2017
-  timeoutInMinutes: 90
+  timeoutInMinutes: 120
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
@@ -241,10 +253,22 @@ jobs:
         configuration: $(BuildConfiguration)
         maximumCpuCount: true
     - task: VSTest@2
-      displayName: Execute Unit Tests
+      displayName: Execute CppCli Unit Tests
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
+        platform: '$(BuildPlatform)'
+        configuration: '$(BuildConfiguration)'
+        runTestsInIsolation: true
+        runInParallel: false
+        codeCoverageEnabled: true
+    - task: VSTest@2
+      displayName: Execute Standard Unit Tests
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.Standard.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\netcoreapp2.1\OpenDDSharp.Standard.UnitTest.dll'
         searchFolder: '$(System.DefaultWorkingDirectory)'
         runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
         platform: '$(BuildPlatform)'
