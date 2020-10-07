@@ -127,18 +127,12 @@ jobs:
         runTestsInIsolation: true
         runInParallel: false
         codeCoverageEnabled: true
-    - task: VSTest@2
+    - task: DotNetCoreCLI@2
       displayName: Execute Standard Unit Tests
       inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.Standard.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\netcoreapp2.1\OpenDDSharp.Standard.UnitTest.dll'
-        searchFolder: '$(System.DefaultWorkingDirectory)'
-        runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
-        platform: '$(BuildPlatform)'
-        configuration: '$(BuildConfiguration)'
-        runTestsInIsolation: true
-        runInParallel: false
-        codeCoverageEnabled: true
+        command: 'test'
+        projects: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.Standard.UnitTest\*.csproj'
+        arguments: '--no-build -p:Platform=$(BuildPlatform) -c $(BuildConfiguration) --settings OpenDDSharp\CodeCoverage.runsettings --logger trx'
 - job: VisualStudio2017
   timeoutInMinutes: 120
   pool:
@@ -264,15 +258,9 @@ jobs:
         runTestsInIsolation: true
         runInParallel: false
         codeCoverageEnabled: true
-    - task: VSTest@2
+    - task: DotNetCoreCLI@2
       displayName: Execute Standard Unit Tests
       inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.Standard.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\netcoreapp2.1\OpenDDSharp.Standard.UnitTest.dll'
-        searchFolder: '$(System.DefaultWorkingDirectory)'
-        runSettingsFile: OpenDDSharp\CodeCoverage.runsettings
-        platform: '$(BuildPlatform)'
-        configuration: '$(BuildConfiguration)'
-        runTestsInIsolation: true
-        runInParallel: false
-        codeCoverageEnabled: true
+        command: 'test'
+        projects: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.Standard.UnitTest\*.csproj'
+        arguments: '--no-build -p:Platform=$(BuildPlatform) -c $(BuildConfiguration) --settings OpenDDSharp\CodeCoverage.runsettings --logger trx'
