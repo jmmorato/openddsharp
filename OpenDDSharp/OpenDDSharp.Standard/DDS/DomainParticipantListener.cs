@@ -69,6 +69,9 @@ namespace OpenDDSharp.DDS
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnLivelinessLostDelegate(IntPtr writer, ref LivelinessLostStatus status);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void OnPublicationMatchedDelegate(IntPtr writer, ref PublicationMatchedStatus status);
         #endregion
 
         #region Fields
@@ -96,6 +99,8 @@ namespace OpenDDSharp.DDS
         private readonly OnOfferedIncompatibleQosDelegate _onOfferedIncompatibleQos;
         [MarshalAs(UnmanagedType.FunctionPtr)]
         private readonly OnLivelinessLostDelegate _onLivelinessLost;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        private readonly OnPublicationMatchedDelegate _onPublicationMatched;
 
         private GCHandle _gchDataOnReaders;
         private GCHandle _gchDataAvailable;
@@ -108,6 +113,7 @@ namespace OpenDDSharp.DDS
         private GCHandle _gchOfferedDeadlineMissed;
         private GCHandle _gchOfferedIncompatibleQos;
         private GCHandle _gchLivelinessLost;
+        private GCHandle _gchPublicationMatched;
         #endregion
 
         #region Constructors
@@ -146,8 +152,11 @@ namespace OpenDDSharp.DDS
             _onOfferedIncompatibleQos = new OnOfferedIncompatibleQosDelegate(OnOfferedIncompatibleQosHandler);
             _gchOfferedIncompatibleQos = GCHandle.Alloc(_onOfferedIncompatibleQos);
 
-            _onLivelinessLost = new OnLivelinessLostDelegate(OnLivelinessLostStatusHandler);
+            _onLivelinessLost = new OnLivelinessLostDelegate(OnLivelinessLostHandler);
             _gchLivelinessLost = GCHandle.Alloc(_onLivelinessLost);
+
+            _onPublicationMatched = new OnPublicationMatchedDelegate(OnPublicationMatchedHandler);
+            _gchPublicationMatched = GCHandle.Alloc(_onPublicationMatched);
 
             _native = NewDomainParticipantListener(_onDataOnReaders,
                                                    _onDataAvailable,
@@ -159,7 +168,8 @@ namespace OpenDDSharp.DDS
                                                    _onSampleLost,
                                                    _onOfferedDeadlineMissed,
                                                    _onOfferedIncompatibleQos,
-                                                   _onLivelinessLost);
+                                                   _onLivelinessLost,
+                                                   _onPublicationMatched);
         }
 
         /// <summary>
@@ -220,6 +230,11 @@ namespace OpenDDSharp.DDS
             if (_gchLivelinessLost.IsAllocated)
             {
                 _gchLivelinessLost.Free();
+            }
+
+            if (_gchPublicationMatched.IsAllocated)
+            {
+                _gchPublicationMatched.Free();
             }
 
             MarshalHelper.ReleaseNativePointer(_native);
@@ -325,6 +340,16 @@ namespace OpenDDSharp.DDS
         /// <param name="writer">The <see cref="DataWriter" /> that triggered the event.</param>
         /// <param name="status">The current <see cref="LivelinessLostStatus" />.</param>
         public abstract void OnLivelinessLost(DataWriter writer, LivelinessLostStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.PublicationMatchedStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.PublicationMatchedStatus" /> indicates that the liveliness that the <see cref="DataWriter" /> committed
+        /// through its Liveliness QoS has not been respected. This means that any connected <see cref="DataReader" />s 
+        /// will consider this <see cref="DataWriter" /> no longer active.</para>
+        /// </summary>
+        /// <param name="writer">The <see cref="DataWriter" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="PublicationMatchedStatus" />.</param>
+        public abstract void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status);
 
         private void OnDataOnReadersHandler(IntPtr subscriber)
         {
@@ -462,7 +487,7 @@ namespace OpenDDSharp.DDS
             OnOfferedIncompatibleQos(dataWriter, ret);
         }
 
-        private void OnLivelinessLostStatusHandler(IntPtr writer, ref LivelinessLostStatus status)
+        private void OnLivelinessLostHandler(IntPtr writer, ref LivelinessLostStatus status)
         {
             Entity entity = EntityManager.Instance.Find(writer);
 
@@ -475,6 +500,19 @@ namespace OpenDDSharp.DDS
             OnLivelinessLost(dataWriter, status);
         }
 
+        private void OnPublicationMatchedHandler(IntPtr writer, ref PublicationMatchedStatus status)
+        {
+            Entity entity = EntityManager.Instance.Find(writer);
+
+            DataWriter dataWriter = null;
+            if (entity != null)
+            {
+                dataWriter = entity as DataWriter;
+            }
+
+            OnPublicationMatched(dataWriter, status);
+        }
+
         private IntPtr NewDomainParticipantListener(OnDataOnReadersDelegate onDataOnReaders,
                                                     OnDataAvailableDelegate onDataAvailabe,
                                                     OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
@@ -485,7 +523,8 @@ namespace OpenDDSharp.DDS
                                                     OnSampleLostDelegate onSampleLost,
                                                     OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                     OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                    OnLivelinessLostDelegate onLivelinessLost)
+                                                    OnLivelinessLostDelegate onLivelinessLost,
+                                                    OnPublicationMatchedDelegate onPublicationMatched)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NewDomainParticipantListener86(onDataOnReaders,
                                                                                                         onDataAvailabe,
@@ -497,7 +536,8 @@ namespace OpenDDSharp.DDS
                                                                                                         onSampleLost,
                                                                                                         onOfferedDeadlineMissed,
                                                                                                         onOfferedIncompatibleQos,
-                                                                                                        onLivelinessLost),
+                                                                                                        onLivelinessLost,
+                                                                                                        onPublicationMatched),
                                                () => UnsafeNativeMethods.NewDomainParticipantListener64(onDataOnReaders,
                                                                                                         onDataAvailabe,
                                                                                                         onRequestedDeadlineMissed,
@@ -508,7 +548,8 @@ namespace OpenDDSharp.DDS
                                                                                                         onSampleLost,
                                                                                                         onOfferedDeadlineMissed,
                                                                                                         onOfferedIncompatibleQos,
-                                                                                                        onLivelinessLost));
+                                                                                                        onLivelinessLost,
+                                                                                                        onPublicationMatched));
         }
 
         internal IntPtr ToNative()
@@ -538,7 +579,8 @@ namespace OpenDDSharp.DDS
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost);
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantListener_New", CallingConvention = CallingConvention.StdCall)]
@@ -552,7 +594,8 @@ namespace OpenDDSharp.DDS
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost);
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
 
         }
         #endregion

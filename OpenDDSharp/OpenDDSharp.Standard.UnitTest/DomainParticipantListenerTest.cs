@@ -837,6 +837,59 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
         }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnPublicationMatched(DataWriter, PublicationMatchedStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnPublicationMatched()
+        {
+            DataWriter dw = null;
+            int currentCount = 0;
+            int currentCountChange = 0;
+            int totalCount = 0;
+            int totalCountChange = 0;
+            InstanceHandle handle = InstanceHandle.HandleNil;
+
+            // Attach to the event
+            int count = 0;
+            _listener.PublicationMatched += (w, s) =>
+            {
+                dw = w;
+                currentCount = s.CurrentCount;
+                currentCountChange = s.CurrentCountChange;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+                handle = s.LastSubscriptionHandle;
+
+                count++;
+            };
+
+            // Enable entities
+            ReturnCode result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery
+            bool found = _writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            Thread.Sleep(100);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(_writer, dw);
+            Assert.AreEqual(1, currentCount);
+            Assert.AreEqual(1, currentCountChange);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
+            Assert.AreEqual(_reader.InstanceHandle, handle);
+
+            // Remove the listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
         #endregion
     }
 }

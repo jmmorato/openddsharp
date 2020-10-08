@@ -38,7 +38,7 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
         public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
         public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
-        //public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
+        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
         //public Action<DataWriter> ConnectionDataWriterDeleted;
 
         //public override void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)
@@ -106,10 +106,10 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
             OfferedIncompatibleQos?.Invoke(writer, status);
         }
 
-        //public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
-        //{
-        //    PublicationMatched?.Invoke(writer, status);
-        //}
+        public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
+        {
+            PublicationMatched?.Invoke(writer, status);
+        }
 
         //public override void OnConnectionDeleted(DataWriter writer)
         //{
