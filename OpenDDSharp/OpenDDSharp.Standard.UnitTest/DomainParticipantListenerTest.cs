@@ -890,6 +890,55 @@ namespace OpenDDSharp.Standard.UnitTest
             result = _participant.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnInconsistentTopic(Topic, InconsistentTopicStatus)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnInconsistentTopic()
+        {
+            using ManualResetEventSlim evt = new ManualResetEventSlim(false);
+
+            Topic topic = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+
+            // Attach to the event
+            int count = 0;
+            _listener.InconsistentTopic += (t, s) =>
+            {
+                topic = t;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
+
+                count++;
+                evt.Set();
+            };
+
+            // Enable entities
+            ReturnCode result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
+
+            // Wait the signal
+            bool wait = evt.Wait(20000);
+            Assert.IsTrue(wait);
+            Assert.AreEqual(_topic, topic);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
+
+            // Kill the process
+            supportProcess.KillProcess(process);
+
+            Assert.AreEqual(1, count);
+
+            // Remove listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
         #endregion
     }
 }

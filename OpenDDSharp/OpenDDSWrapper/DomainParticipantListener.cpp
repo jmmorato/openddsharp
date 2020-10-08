@@ -32,10 +32,8 @@ OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantLi
 																						   onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissed,
 																						   onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
 																						   onLivelinessLostDeclaration onLivelinessLost,
-																						   onPublicationMatchedDeclaration onPublicationMatched/*,
-																						   onInconsistentTopicDeclaration onInconsistentTopic*/) {		
-	onInconsistentTopicDeclaration onInconsistentTopic = NULL;
-
+																						   onPublicationMatchedDeclaration onPublicationMatched,
+																						   onInconsistentTopicDeclaration onInconsistentTopic) {
 	return new OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl(onDataOnReaders, 
 																	    onDataAvalaible,
 																		onRequestedDeadlineMissed,

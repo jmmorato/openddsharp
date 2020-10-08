@@ -25,8 +25,7 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
 {
     internal class MyParticipantListener : DomainParticipantListener
     {
-        //public Action<Topic, InconsistentTopicStatus> InconsistentTopic;
-        //public Action<DataReader> ConnectionDataReaderDeleted;
+        public Action<Topic, InconsistentTopicStatus> InconsistentTopic;
         public Action<DataReader> DataAvailable { get; set; }
         public Action<Subscriber> DataOnReaders { get; set; }
         public Action<DataReader, LivelinessChangedStatus> LivelinessChanged { get; set; }
@@ -38,18 +37,12 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
         public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
         public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
-        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;
-        //public Action<DataWriter> ConnectionDataWriterDeleted;
+        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;        
 
-        //public override void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)
-        //{
-        //    InconsistentTopic?.Invoke(topic, status);
-        //}
-
-        //public override void OnConnectionDeleted(DataReader reader)
-        //{
-        //    ConnectionDataReaderDeleted?.Invoke(reader);
-        //}
+        public override void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)
+        {
+            InconsistentTopic?.Invoke(topic, status);
+        }
 
         public override void OnDataAvailable(DataReader reader)
         {
@@ -110,10 +103,5 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         {
             PublicationMatched?.Invoke(writer, status);
         }
-
-        //public override void OnConnectionDeleted(DataWriter writer)
-        //{
-        //    ConnectionDataWriterDeleted?.Invoke(writer);
-        //}
     }
 }

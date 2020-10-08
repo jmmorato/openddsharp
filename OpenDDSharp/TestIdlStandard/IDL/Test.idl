@@ -1,5 +1,16 @@
 
 module Test {
+
+	enum SupportTestKind {
+		InconsistentTopicTest,
+		PublicationDisconnectedTest,
+		PublicationLostTest,
+		PublicationReconnectedTest,
+		SubscriptionDisconnectedTest,
+		SubscriptionLostTest,
+		SubscriptionReconnectedTest
+	};
+
 	const short TEST_SHORT_CONST = -1;
 	const unsigned short TEST_USHORT_CONST = 1;
 	const long TEST_LONG_CONST = -2;

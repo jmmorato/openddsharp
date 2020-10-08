@@ -72,6 +72,9 @@ namespace OpenDDSharp.DDS
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnPublicationMatchedDelegate(IntPtr writer, ref PublicationMatchedStatus status);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void OnInconsistentTopicDelegate(IntPtr topic, ref InconsistentTopicStatus status);
         #endregion
 
         #region Fields
@@ -101,6 +104,8 @@ namespace OpenDDSharp.DDS
         private readonly OnLivelinessLostDelegate _onLivelinessLost;
         [MarshalAs(UnmanagedType.FunctionPtr)]
         private readonly OnPublicationMatchedDelegate _onPublicationMatched;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        private readonly OnInconsistentTopicDelegate _onInconsistentTopic;
 
         private GCHandle _gchDataOnReaders;
         private GCHandle _gchDataAvailable;
@@ -114,6 +119,7 @@ namespace OpenDDSharp.DDS
         private GCHandle _gchOfferedIncompatibleQos;
         private GCHandle _gchLivelinessLost;
         private GCHandle _gchPublicationMatched;
+        private GCHandle _gchInconsistentTopic;
         #endregion
 
         #region Constructors
@@ -158,6 +164,9 @@ namespace OpenDDSharp.DDS
             _onPublicationMatched = new OnPublicationMatchedDelegate(OnPublicationMatchedHandler);
             _gchPublicationMatched = GCHandle.Alloc(_onPublicationMatched);
 
+            _onInconsistentTopic = new OnInconsistentTopicDelegate(OnInconsistentTopicHandler);
+            _gchInconsistentTopic = GCHandle.Alloc(_onInconsistentTopic);
+
             _native = NewDomainParticipantListener(_onDataOnReaders,
                                                    _onDataAvailable,
                                                    _onRequestedDeadlineMissed,
@@ -169,7 +178,8 @@ namespace OpenDDSharp.DDS
                                                    _onOfferedDeadlineMissed,
                                                    _onOfferedIncompatibleQos,
                                                    _onLivelinessLost,
-                                                   _onPublicationMatched);
+                                                   _onPublicationMatched,
+                                                   _onInconsistentTopic);
         }
 
         /// <summary>
@@ -235,6 +245,11 @@ namespace OpenDDSharp.DDS
             if (_gchPublicationMatched.IsAllocated)
             {
                 _gchPublicationMatched.Free();
+            }
+
+            if (_gchInconsistentTopic.IsAllocated)
+            {
+                _gchInconsistentTopic.Free();
             }
 
             MarshalHelper.ReleaseNativePointer(_native);
@@ -350,6 +365,15 @@ namespace OpenDDSharp.DDS
         /// <param name="writer">The <see cref="DataWriter" /> that triggered the event.</param>
         /// <param name="status">The current <see cref="PublicationMatchedStatus" />.</param>
         public abstract void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.InconsistentTopicStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.InconsistentTopicStatus" /> indicates that a <see cref="Topic" /> was attempted to be registered that
+        /// already exists with different characteristics. Typically, the existing <see cref="Topic" /> may have a different type associated with it.</para>
+        /// </summary>
+        /// <param name="topic">The <see cref="Topic" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="InconsistentTopicStatus" />.</param>
+        public abstract void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status);
 
         private void OnDataOnReadersHandler(IntPtr subscriber)
         {
@@ -513,6 +537,19 @@ namespace OpenDDSharp.DDS
             OnPublicationMatched(dataWriter, status);
         }
 
+        private void OnInconsistentTopicHandler(IntPtr topic, ref InconsistentTopicStatus status)
+        {
+            Entity entity = EntityManager.Instance.Find(topic);
+
+            Topic t = null;
+            if (entity != null)
+            {
+                t = entity as Topic;
+            }
+
+            OnInconsistentTopic(t, status);
+        }
+
         private IntPtr NewDomainParticipantListener(OnDataOnReadersDelegate onDataOnReaders,
                                                     OnDataAvailableDelegate onDataAvailabe,
                                                     OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
@@ -524,7 +561,8 @@ namespace OpenDDSharp.DDS
                                                     OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                     OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
                                                     OnLivelinessLostDelegate onLivelinessLost,
-                                                    OnPublicationMatchedDelegate onPublicationMatched)
+                                                    OnPublicationMatchedDelegate onPublicationMatched,
+                                                    OnInconsistentTopicDelegate onInconsistentTopic)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NewDomainParticipantListener86(onDataOnReaders,
                                                                                                         onDataAvailabe,
@@ -537,7 +575,8 @@ namespace OpenDDSharp.DDS
                                                                                                         onOfferedDeadlineMissed,
                                                                                                         onOfferedIncompatibleQos,
                                                                                                         onLivelinessLost,
-                                                                                                        onPublicationMatched),
+                                                                                                        onPublicationMatched,
+                                                                                                        onInconsistentTopic),
                                                () => UnsafeNativeMethods.NewDomainParticipantListener64(onDataOnReaders,
                                                                                                         onDataAvailabe,
                                                                                                         onRequestedDeadlineMissed,
@@ -549,7 +588,8 @@ namespace OpenDDSharp.DDS
                                                                                                         onOfferedDeadlineMissed,
                                                                                                         onOfferedIncompatibleQos,
                                                                                                         onLivelinessLost,
-                                                                                                        onPublicationMatched));
+                                                                                                        onPublicationMatched,
+                                                                                                        onInconsistentTopic));
         }
 
         internal IntPtr ToNative()
@@ -580,7 +620,8 @@ namespace OpenDDSharp.DDS
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantListener_New", CallingConvention = CallingConvention.StdCall)]
@@ -595,8 +636,8 @@ namespace OpenDDSharp.DDS
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
                                                                        [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
-
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched,
+                                                                       [MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
         }
         #endregion
     }
