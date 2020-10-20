@@ -17,16 +17,19 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.Linq;
 using System.Collections.Generic;
-using OpenDDSharp.DDS;
-using Test;
-using OpenDDSharp.Standard.UnitTest.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenDDSharp.DDS;
+using OpenDDSharp.Standard.UnitTest.Helpers;
+using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
+    /// <summary>
+    /// <see cref="Topic"/> unit test class.
+    /// </summary>
     [TestClass]
     public class TopicTest
     {
@@ -39,6 +42,9 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Initialization/Cleanup
+        /// <summary>
+        /// The test initializer method.
+        /// </summary>
         [TestInitialize]
         public void TestInitialize()
         {
@@ -47,6 +53,9 @@ namespace OpenDDSharp.Standard.UnitTest
             _participant.BindRtpsUdpTransportConfig();
         }
 
+        /// <summary>
+        /// The test cleanup method.
+        /// </summary>
         [TestCleanup]
         public void TestCleanup()
         {

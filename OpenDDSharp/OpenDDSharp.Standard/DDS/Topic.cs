@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -53,6 +54,8 @@ namespace OpenDDSharp.DDS
         /// Gets the <see cref="DomainParticipant" /> to which the <see cref="ITopicDescription" /> belongs.
         /// </summary>
         public DomainParticipant Participant => GetParticipant();
+
+        internal TopicListener Listener { get; set; }
         #endregion
 
         #region Constructors
@@ -122,6 +125,45 @@ namespace OpenDDSharp.DDS
 
             return ret;
 
+        }
+
+        /// <summary>
+        /// Allows access to the attached <see cref="TopicListener" />.
+        /// </summary>
+        /// <returns>The attached <see cref="TopicListener" />.</returns>
+        [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
+        public TopicListener GetListener()
+        {
+            return Listener;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="TopicListener" /> using the <see cref="StatusMask.DefaultStatusMask" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="TopicListener" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(TopicListener listener)
+        {
+            return SetListener(listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Sets the <see cref="TopicListener" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="TopicListener" /> to be set.</param>
+        /// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(TopicListener listener, StatusMask mask)
+        {
+            Listener = listener;
+            IntPtr ptr = IntPtr.Zero;
+            if (listener != null)
+            {
+                ptr = listener.ToNative();
+            }
+
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetListener86(_native, ptr, mask),
+                                               () => UnsafeNativeMethods.SetListener64(_native, ptr, mask));
         }
 
         private string GetTypeName()
@@ -203,6 +245,13 @@ namespace OpenDDSharp.DDS
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_SetQos", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
 
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener64(IntPtr dp, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener86(IntPtr dp, IntPtr listener, uint mask);
         }
         #endregion
     }

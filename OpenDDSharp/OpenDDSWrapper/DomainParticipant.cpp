@@ -71,9 +71,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
                                                const char * topic_name,
                                                const char * type_name,
                                                TopicQosWrapper qos,
-                                               ::DDS::TopicListener_ptr a_listener,
-                                               ::DDS::StatusMask mask) {
-    return dp->create_topic(topic_name, type_name, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+                                               OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr a_listener,
+                                               ::DDS::StatusMask mask) {    
+    return dp->create_topic(topic_name, type_name, qos, a_listener, mask);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_GetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper& qos_wrapper) {

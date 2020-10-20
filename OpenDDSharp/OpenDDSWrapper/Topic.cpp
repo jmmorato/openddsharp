@@ -41,3 +41,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t Topic_SetQos(::DDS::Topic_ptr t, TopicQosWrapper qos_wrapper) {
     return t->set_qos(qos_wrapper);
 }
+
+::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, ::DDS::TopicListener_ptr listener, ::DDS::StatusMask status) {
+    return t->set_listener(listener, status);
+}

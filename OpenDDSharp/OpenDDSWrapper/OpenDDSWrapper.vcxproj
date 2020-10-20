@@ -208,6 +208,8 @@
     <ClInclude Include="Statuses.h" />
     <ClInclude Include="Subscriber.h" />
     <ClInclude Include="Topic.h" />
+    <ClInclude Include="TopicListener.h" />
+    <ClInclude Include="TopicListenerImpl.h" />
     <ClInclude Include="TransportConfig.h" />
     <ClInclude Include="TransportRegistry.h" />
     <ClInclude Include="Utils.h" />
@@ -229,6 +231,8 @@
     <ClCompile Include="StatusCondition.cpp" />
     <ClCompile Include="Subscriber.cpp" />
     <ClCompile Include="Topic.cpp" />
+    <ClCompile Include="TopicListener.cpp" />
+    <ClCompile Include="TopicListenerImpl.cpp" />
     <ClCompile Include="TransportConfig.cpp" />
     <ClCompile Include="TransportRegistry.cpp" />
     <ClCompile Include="Utils.cpp" />

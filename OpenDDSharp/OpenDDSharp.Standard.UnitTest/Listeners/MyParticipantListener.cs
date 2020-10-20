@@ -19,13 +19,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using OpenDDSharp.DDS;
-using OpenDDSharp.OpenDDS.DCPS;
 
 namespace OpenDDSharp.Standard.UnitTest.Listeners
 {
     internal class MyParticipantListener : DomainParticipantListener
     {
-        public Action<Topic, InconsistentTopicStatus> InconsistentTopic;
+        public Action<Topic, InconsistentTopicStatus> InconsistentTopic { get; set; }
         public Action<DataReader> DataAvailable { get; set; }
         public Action<Subscriber> DataOnReaders { get; set; }
         public Action<DataReader, LivelinessChangedStatus> LivelinessChanged { get; set; }
@@ -34,10 +33,10 @@ namespace OpenDDSharp.Standard.UnitTest.Listeners
         public Action<DataReader, SampleLostStatus> SampleLost { get; set; }
         public Action<DataReader, SampleRejectedStatus> SampleRejected { get; set; }
         public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched { get; set; }
-        public Action<DataWriter, LivelinessLostStatus> LivelinessLost;
-        public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed;
-        public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos;
-        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched;        
+        public Action<DataWriter, LivelinessLostStatus> LivelinessLost { get; set; }
+        public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed { get; set; }
+        public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos { get; set; }
+        public Action<DataWriter, PublicationMatchedStatus> PublicationMatched { get; set; }
 
         public override void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)
         {

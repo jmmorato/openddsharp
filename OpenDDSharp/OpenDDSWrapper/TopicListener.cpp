@@ -18,20 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
-#include "Utils.h"
-#include "QosPolicies.h"
 
-EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Topic_NarrowBase(::DDS::Topic_ptr t);
+#include "TopicListener.h"
 
-EXTERN_METHOD_EXPORT
-::DDS::TopicDescription_ptr Topic_NarrowTopicDescription(::DDS::Topic_ptr t);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_GetQos(::DDS::Topic_ptr t, TopicQosWrapper& qos_wrapper);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_SetQos(::DDS::Topic_ptr t, TopicQosWrapper qos_wrapper);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, ::DDS::TopicListener_ptr listener, ::DDS::StatusMask status);
+OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr TopicListener_New(onInconsistentTopicDeclaration onInconsistentTopic) {
+	OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr test = new OpenDDSharp::OpenDDS::DDS::TopicListenerImpl(onInconsistentTopic);
+	return test;
+}

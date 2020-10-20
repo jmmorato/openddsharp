@@ -23,6 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "QosPolicies.h"
 #include "dds\DCPS\Marked_Default_Qos.h"
 #include "DomainParticipantListenerImpl.h"
+#include "TopicListenerImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DomainParticipant_NarrowBase(::DDS::DomainParticipant_ptr dp);
@@ -56,7 +57,7 @@ EXTERN_METHOD_EXPORT
                                                const char * topic_name,
                                                const char * type_name,
                                                TopicQosWrapper qos,
-                                               ::DDS::TopicListener_ptr a_listener,
+                                               OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr a_listener,
                                                ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT

@@ -29,7 +29,7 @@ namespace OpenDDSharp.DDS
     /// <summary>
     /// <para>The DomainParticipant represents the participation of the application on a communication plane that isolates applications
     /// running on the same set of physical computers from each other.</para>
-    /// <para>A domain establishes a virtual network linking all applications that share the same <see cref="DomainId" /> and isolating them from applications running on different domains.
+    /// <para>A domain establishes a virtual network linking all applications that share the same Domain ID and isolating them from applications running on different domains.
     /// In this way, several independent distributed applications can coexist in the same physical network without interfering, or even being aware of each other.</para>
     /// </summary>
     /// <remarks>
@@ -309,6 +309,46 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
         public Topic CreateTopic(string topicName, string typeName, TopicQos qos)
         {
+            return CreateTopic(topicName, typeName, qos, null);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Topic" /> with the desired QoS policies and attaches to it the specified <see cref="TopicListener" />.
+        /// The specified <see cref="TopicListener" /> will be attached with the default <see cref="StatusMask" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Topic" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>The <see cref="Topic" /> is bound to a type described by the <paramref name="typeName"/> argument. Prior to creating a <see cref="Topic" /> the type must have been
+        /// registered. This is done using the RegisterType operation on a derived class of the TypeSupport interface.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Topic" /> will be created.</para>
+        /// </remarks>
+        /// <param name="topicName">The name for the new topic.</param>
+        /// <param name="typeName">The name of the type which the new <see cref="Topic" /> will be bound.</param>
+        /// <param name="qos">The <see cref="TopicQos" /> policies to be used for creating the new <see cref="Topic" />.</param>
+        /// <param name="listener">The <see cref="TopicListener" /> to be attached to the newly created <see cref="Topic" />.</param>
+        /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
+        public Topic CreateTopic(string topicName, string typeName, TopicQos qos, TopicListener listener)
+        {
+            return CreateTopic(topicName, typeName, qos, listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Topic" /> with the desired QoS policies and attaches to it the specified <see cref="TopicListener" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Topic" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>The <see cref="Topic" /> is bound to a type described by the <paramref name="typeName"/> argument. Prior to creating a <see cref="Topic" /> the type must have been
+        /// registered. This is done using the RegisterType operation on a derived class of the TypeSupport interface.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Topic" /> will be created.</para>
+        /// </remarks>
+        /// <param name="topicName">The name for the new topic.</param>
+        /// <param name="typeName">The name of the type which the new <see cref="Topic" /> will be bound.</param>
+        /// <param name="qos">The <see cref="TopicQos" /> policies to be used for creating the new <see cref="Topic" />.</param>
+        /// <param name="listener">The <see cref="TopicListener" /> to be attached to the newly created <see cref="Topic" />.</param>
+        /// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns> The newly created <see cref="Topic" /> on success, otherwise <see langword="null"/>.</returns>
+        public Topic CreateTopic(string topicName, string typeName, TopicQos qos, TopicListener listener, StatusMask statusMask)
+        {
             if (string.IsNullOrWhiteSpace(topicName))
             {
                 return null;
@@ -334,8 +374,14 @@ namespace OpenDDSharp.DDS
                 qosWrapper = qos.ToNative();
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, qosWrapper, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, qosWrapper, IntPtr.Zero, 0u));
+            IntPtr nativeListener = IntPtr.Zero;
+            if (listener != null)
+            {
+                nativeListener = listener.ToNative();
+            }
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateTopic86(_native, topicName, typeName, qosWrapper, nativeListener, statusMask),
+                                                        () => UnsafeNativeMethods.CreateTopic64(_native, topicName, typeName, qosWrapper, nativeListener, statusMask));
 
             qos.Release();
 
@@ -344,7 +390,10 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            var t = new Topic(native);
+            var t = new Topic(native)
+            {
+                Listener = listener,
+            };
 
             EntityManager.Instance.Add((t as Entity).ToNative(), t);
             ContainedEntities.Add(t);

@@ -11,27 +11,24 @@ the Free Software Foundation, either version 3 of the License, or
 
 OpenDDSharp is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
-#include "Utils.h"
-#include "QosPolicies.h"
+#include "TopicListenerImpl.h"
 
-EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Topic_NarrowBase(::DDS::Topic_ptr t);
+::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(std::function<void(::DDS::Entity_ptr, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
+	_onInconsistentTopic = onInconsistentTopic;
+}
 
-EXTERN_METHOD_EXPORT
-::DDS::TopicDescription_ptr Topic_NarrowTopicDescription(::DDS::Topic_ptr t);
+::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::~TopicListenerImpl() {
+	_onInconsistentTopic = NULL;
+};
 
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_GetQos(::DDS::Topic_ptr t, TopicQosWrapper& qos_wrapper);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_SetQos(::DDS::Topic_ptr t, TopicQosWrapper qos_wrapper);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, ::DDS::TopicListener_ptr listener, ::DDS::StatusMask status);
+void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
+	if (_onInconsistentTopic != NULL) {
+		_onInconsistentTopic(static_cast<::DDS::Entity_ptr>(topic), status);
+	}
+};

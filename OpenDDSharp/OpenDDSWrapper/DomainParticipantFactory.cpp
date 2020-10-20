@@ -22,7 +22,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::DomainParticipantFactory_ptr dpf,
                                                                       ::DDS::DomainId_t domainId,
                                                                       DomainParticipantQosWrapper qos,
-                                                                      ::DDS::DomainParticipantListener_ptr a_listener,
+																	  OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr a_listener,
                                                                       ::DDS::StatusMask mask)
 {
     return dpf->create_participant(domainId, qos, a_listener, mask);
