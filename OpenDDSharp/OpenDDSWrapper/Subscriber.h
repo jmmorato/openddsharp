@@ -21,6 +21,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "QosPolicies.h"
 #include "dds\DCPS\Marked_Default_Qos.h"
+#include "SubscriberListenerImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr sub);
@@ -43,3 +44,6 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr sub, SubscriberQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_SetListener(::DDS::Subscriber_ptr sub, OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr listener, ::DDS::StatusMask mask);

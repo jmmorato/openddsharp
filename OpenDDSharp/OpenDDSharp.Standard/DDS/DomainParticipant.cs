@@ -45,7 +45,11 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Properties
-        internal DomainParticipantListener Listener { get; set; }
+        /// <summary>
+        /// Gets the attached <see cref="DomainParticipantListener"/>.
+        /// </summary>
+        [SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Keep coherency with the setter method and DDS API.")]
+        public DomainParticipantListener Listener { get; internal set; }
         #endregion
 
         #region Constructors
@@ -189,6 +193,38 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
         public Subscriber CreateSubscriber(SubscriberQos qos)
         {
+            return CreateSubscriber(qos, null, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Subscriber" /> with the desired QoS policies and attaches to it the specified <see cref="SubscriberListener" />.
+        /// The specified <see cref="SubscriberListener" /> will be attached with the default <see cref="StatusMask" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Subscriber" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Subscriber" /> will be created.</para>
+        /// </remarks>
+        /// <param name="qos">The <see cref="SubscriberQos" /> policies to be used for creating the new <see cref="Subscriber" />.</param>
+        /// <param name="listener">The <see cref="SubscriberListener" /> to be attached to the newly created <see cref="Subscriber" />.</param>
+        /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
+        public Subscriber CreateSubscriber(SubscriberQos qos, SubscriberListener listener)
+        {
+            return CreateSubscriber(qos, listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Subscriber" /> with the desired QoS policies and attaches to it the specified <see cref="SubscriberListener" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Subscriber" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Subscriber" /> will be created.</para>
+        /// </remarks>
+        /// <param name="qos">The <see cref="SubscriberQos" /> policies to be used for creating the new <see cref="Subscriber" />.</param>
+        /// <param name="listener">The <see cref="SubscriberListener" /> to be attached to the newly created <see cref="Subscriber" />.</param>
+        /// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The newly created <see cref="Subscriber" /> on success, otherwise <see langword="null"/>.</returns>
+        public Subscriber CreateSubscriber(SubscriberQos qos, SubscriberListener listener, StatusMask statusMask)
+        {
             SubscriberQosWrapper qosWrapper = default;
             if (qos is null)
             {
@@ -204,8 +240,14 @@ namespace OpenDDSharp.DDS
                 qosWrapper = qos.ToNative();
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, qosWrapper, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateSubscriber64(_native, qosWrapper, IntPtr.Zero, 0u));
+            IntPtr nativeListener = IntPtr.Zero;
+            if (listener != null)
+            {
+                nativeListener = listener.ToNative();
+            }
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateSubscriber86(_native, qosWrapper, nativeListener, statusMask),
+                                                        () => UnsafeNativeMethods.CreateSubscriber64(_native, qosWrapper, nativeListener, statusMask));
 
             qos.Release();
 
@@ -214,7 +256,10 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            var s = new Subscriber(native);
+            var s = new Subscriber(native)
+            {
+                Listener = listener,
+            };
 
             EntityManager.Instance.Add((s as Entity).ToNative(), s);
             ContainedEntities.Add(s);
@@ -507,6 +552,7 @@ namespace OpenDDSharp.DDS
         /// Allows access to the attached <see cref="DomainParticipantListener" />.
         /// </summary>
         /// <returns>The attached <see cref="DomainParticipantListener" />.</returns>
+        [Obsolete(nameof(GetListener) + " is deprecated, please use Listener property instead.")]
         [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
         public DomainParticipantListener GetListener()
         {

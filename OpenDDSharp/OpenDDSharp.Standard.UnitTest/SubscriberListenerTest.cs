@@ -19,25 +19,25 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.Standard.UnitTest;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using OpenDDSharp.Standard.UnitTest.Listeners;
 using Test;
 
-namespace OpenDDSharp.Standard.UnitTest
+namespace OpenDDSharp.UnitTest.Standard
 {
     /// <summary>
-    /// <see cref="DomainParticipantListener"/> unit test class.
+    /// <see cref="SubscriberListener"/> unit test class.
     /// </summary>
     [TestClass]
-    public class DomainParticipantListenerTest
+    public class SubscriberListenerTest
     {
         #region Constants
-        private const string TEST_CATEGORY = "DomainParticipantListener";
+        private const string TEST_CATEGORY = "SubscriberListener";
         #endregion
 
         #region Fields
@@ -47,7 +47,7 @@ namespace OpenDDSharp.Standard.UnitTest
         private Publisher _publisher;
         private DataWriter _writer;
         private TestStructDataWriter _dataWriter;
-        private MyParticipantListener _listener;
+        private MySubscriberListener _listener;
         private DataReader _reader;
         #endregion
 
@@ -65,8 +65,7 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _listener = new MyParticipantListener();
-            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, null, _listener);
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
@@ -77,17 +76,17 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(_topic);
-            // TODO: Uncomment when implemented
-            //Assert.IsNull(_topic.GetListener());
+            Assert.IsNull(_topic.Listener);
             //Assert.AreEqual(TestContext.TestName, _topic.Name);
             //Assert.AreEqual(typeName, _topic.TypeName);
 
+            _listener = new MySubscriberListener();
             SubscriberQos sQos = new SubscriberQos();
             sQos.EntityFactory.AutoenableCreatedEntities = false;
             sQos.Presentation.OrderedAccess = true;
             sQos.Presentation.CoherentAccess = true;
             sQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
-            _subscriber = _participant.CreateSubscriber(sQos);
+            _subscriber = _participant.CreateSubscriber(sQos, _listener);
             Assert.IsNotNull(_subscriber);
 
             PublisherQos pQos = new PublisherQos();
@@ -101,7 +100,7 @@ namespace OpenDDSharp.Standard.UnitTest
             _writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(_writer);
             _dataWriter = new TestStructDataWriter(_writer);
-
+           
             DataReaderQos qos = new DataReaderQos();
             qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
             _reader = _subscriber.CreateDataReader(_topic, qos);
@@ -125,35 +124,28 @@ namespace OpenDDSharp.Standard.UnitTest
                 ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
-
-            _participant = null;
-            _publisher = null;
-            _subscriber = null;
-            _topic = null;
-            _writer = null;
-            _dataWriter = null;
-            _reader = null;
         }
         #endregion
 
         #region Test Methods
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnDataOnReaders(Subscriber)" /> event.
+        /// Test the <see cref="SubscriberListener.OnDataOnReaders(Subscriber)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnDataOnReaders()
         {
+            Subscriber subscriber = null;
+
             // Attach to the event
             int count = 0;
-            Subscriber subscriber = null;
             _listener.DataOnReaders += (s) =>
             {
                 subscriber = s;
                 count++;
             };
 
-            //// Enable entities
+            // Enable entities
             ReturnCode result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -178,7 +170,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            Thread.Sleep(100);
+            System.Threading.Thread.Sleep(100);
 
             Assert.AreEqual(total, count);
             Assert.IsNotNull(subscriber);
@@ -186,16 +178,16 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnDataAvailable(DataReader)" /> event.
+        /// Test the <see cref="SubscriberListener.OnDataAvailable(DataReader)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnDataAvailable()
         {
             // Prepare status mask:
-            // If a ParticipantListener has both on_data_on_readers() and on_data_available() callbacks enabled
+            // If a SubscriberListener has both on_data_on_readers() and on_data_available() callbacks enabled  
             // (by turning on both status bits), only on_data_on_readers() is called.
-            ReturnCode result = _participant.SetListener(_listener, StatusKind.DataAvailableStatus);
+            ReturnCode result = _subscriber.SetListener(_listener, StatusKind.DataAvailableStatus);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Attach to the event
@@ -232,7 +224,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            Thread.Sleep(100);
+            System.Threading.Thread.Sleep(100);
 
             Assert.AreEqual(total, count);
             Assert.IsNotNull(reader);
@@ -240,7 +232,7 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnRequestedDeadlineMissed(DataReader, RequestedDeadlineMissedStatus)" /> event.
+        /// Test the <see cref="SubscriberListener.OnRequestedDeadlineMissed(DataReader, RequestedDeadlineMissedStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -288,11 +280,11 @@ namespace OpenDDSharp.Standard.UnitTest
             _dataWriter.Write(new TestStruct { Id = 1 });
 
             // After half second deadline should not be lost yet
-            Thread.Sleep(500);
+            System.Threading.Thread.Sleep(500);
             Assert.AreEqual(0, count);
 
             // After one second and a half one deadline should be lost
-            Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1000);
             Assert.AreEqual(1, count);
             Assert.AreEqual(_reader, reader);
             Assert.AreEqual(1, totalCount);
@@ -301,7 +293,7 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnRequestedIncompatibleQos(DataReader, RequestedIncompatibleQosStatus)" /> event.
+        /// Test the <see cref="SubscriberListener.OnRequestedIncompatibleQos(DataReader, RequestedIncompatibleQosStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -347,7 +339,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(found);
 
             // Check the number of incompatible DataWriter
-            Thread.Sleep(100);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(1, count);
             Assert.AreEqual(_reader, dr);
             Assert.AreEqual(1, totalCount);
@@ -360,7 +352,7 @@ namespace OpenDDSharp.Standard.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnSampleRejected(DataReader, SampleRejectedStatus)" /> event.
+        /// Test the <see cref="SubscriberListener.OnSampleRejected(DataReader, SampleRejectedStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -410,7 +402,7 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 result = _dataWriter.Write(new TestStruct
                 {
-                    Id = 1,
+                    Id = 1
                 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -418,7 +410,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            Thread.Sleep(100);
+            System.Threading.Thread.Sleep(100);
             Assert.AreEqual(1, count);
             Assert.AreEqual(_reader, dataReader);
             Assert.AreEqual(1, totalCount);
@@ -427,12 +419,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(SampleRejectedStatusKind.RejectedBySamplesPerInstanceLimit, lastReason);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            result = _subscriber.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnLivelinessChanged(DataReader, LivelinessChangedStatus)" /> event.
+        /// Test the <see cref="SubscriberListener.OnLivelinessChanged(DataReader, LivelinessChangedStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -457,6 +449,8 @@ namespace OpenDDSharp.Standard.UnitTest
             // Attach to the event
             _listener.LivelinessChanged += (r, s) =>
             {
+                Assert.AreEqual(_reader, r);
+
                 if (count == 0)
                 {
                     // Liveliness alive
@@ -531,12 +525,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(_writer.InstanceHandle, secondLastPublicationHandle);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            result = _subscriber.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnSubscriptionMatched(DataReader, SubscriptionMatchedStatus)" /> event.
+        /// Test the <see cref="SubscriberListener.OnSubscriptionMatched(DataReader, SubscriptionMatchedStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -561,8 +555,6 @@ namespace OpenDDSharp.Standard.UnitTest
             // Attach to the event
             _listener.SubscriptionMatched += (r, s) =>
             {
-                Assert.AreEqual(_reader, r);
-
                 if (count == 0)
                 {
                     // Liveliness alive
@@ -623,12 +615,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(_writer.InstanceHandle, secondHandle);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            result = _subscriber.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnSampleLost(DataReader, SampleLostStatus)" /> event.
+        /// Test the <see cref="SubscriberListener.OnSampleLost(DataReader, SampleLostStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -641,7 +633,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 int totalCount = 0;
                 int totalCountChange = 0;
 
-                // Attach to the event.
+                // Attach to the event
                 _listener.SampleLost += (r, s) =>
                 {
                     reader = r;
@@ -653,7 +645,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     evt.Set();
                 };
 
-                // Prepare QoS for the test.
+                // Prepare QoS for the test
                 DataReaderQos drQos = new DataReaderQos();
                 drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
                 drQos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
@@ -662,18 +654,18 @@ namespace OpenDDSharp.Standard.UnitTest
                 ReturnCode result = _reader.SetQos(drQos);
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                // Enable entities.
+                // Enable entities
                 result = _writer.Enable();
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 result = _reader.Enable();
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                // Wait for discovery.
+                // Wait for discovery
                 bool found = _writer.WaitForSubscriptions(1, 1000);
                 Assert.IsTrue(found);
 
-                // Write two samples of the same instances.
+                // Write two samples of the same instances
                 InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
                 Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
@@ -693,279 +685,8 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(1, totalCount);
                 Assert.AreEqual(1, totalCountChange);
 
-                // Remove the listener to avoid extra messages.
-                result = _participant.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
-        }
-
-        /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnOfferedDeadlineMissed(DataWriter, OfferedDeadlineMissedStatus)" /> event.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnOfferedDeadlineMissed()
-        {
-            DataWriter writer = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
-            var lastInstanceHandle = InstanceHandle.HandleNil;
-
-            // Attach to the event
-            int count = 0;
-            _listener.OfferedDeadlineMissed += (w, s) =>
-            {
-                writer = w;
-                totalCount = s.TotalCount;
-                totalCountChange = s.TotalCountChange;
-                lastInstanceHandle = s.LastInstanceHandle;
-                count++;
-            };
-
-            // Prepare QoS for the test
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Deadline.Period = new Duration { Seconds = 1 };
-            ReturnCode result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Wait for discovery and write an instance
-            bool found = _writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-
-            _dataWriter.Write(new TestStruct { Id = 1 });
-
-            // After half second deadline should not be lost yet
-            Thread.Sleep(500);
-            Assert.AreEqual(0, count);
-
-            // After one second and a half one deadline should be lost
-            Thread.Sleep(1000);
-            Assert.AreEqual(1, count);
-            Assert.AreEqual(_writer, writer);
-            Assert.AreEqual(1, totalCount);
-            Assert.AreEqual(1, totalCountChange);
-
-            // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-        }
-
-        /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnOfferedIncompatibleQos(DataWriter, OfferedIncompatibleQosStatus)" /> event.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnOfferedIncompatibleQos()
-        {
-            DataWriter dw = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
-            int lastPolicyId = 0;
-            ICollection<QosPolicyCount> policies = new List<QosPolicyCount>();
-
-            // Attach to the event
-            int count = 0;
-            _listener.OfferedIncompatibleQos += (w, s) =>
-            {
-                dw = w;
-                totalCount = s.TotalCount;
-                totalCountChange = s.TotalCountChange;
-                lastPolicyId = s.LastPolicyId;
-                policies = s.Policies;
-
-                count++;
-            };
-
-            // Prepare QoS for the test
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-            ReturnCode result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            result = _reader.SetQos(drQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Wait for discovery
-            System.Threading.Thread.Sleep(100);
-            Assert.AreEqual(1, count);
-
-            Assert.AreEqual(_writer, dw);
-            Assert.AreEqual(1, totalCount);
-            Assert.AreEqual(1, totalCountChange);
-            Assert.AreEqual(11, lastPolicyId);
-            Assert.IsNotNull(policies);
-            Assert.AreEqual(1, policies.Count);
-            Assert.AreEqual(1, policies.First().Count);
-            Assert.AreEqual(11, policies.First().PolicyId);
-
-            // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-        }
-
-        /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnLivelinessLost(DataWriter, LivelinessLostStatus)" /> event.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnLivelinessLost()
-        {
-            DataWriter dw = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
-
-            // Attach to the event
-            int count = 0;
-            _listener.LivelinessLost += (w, s) =>
-            {
-                dw = w;
-                totalCount = s.TotalCount;
-                totalCountChange = s.TotalCountChange;
-
-                count++;
-            };
-
-            // Prepare QoS for the test
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-            dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
-            ReturnCode result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // After half second liveliness should not be lost yet
-            System.Threading.Thread.Sleep(500);
-            Assert.AreEqual(0, count);
-
-            // After one second and a half one liveliness should be lost
-            Thread.Sleep(1000);
-            Assert.AreEqual(1, count);
-
-            // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, totalCount);
-            Assert.AreEqual(1, totalCountChange);
-        }
-
-        /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnPublicationMatched(DataWriter, PublicationMatchedStatus)" /> event.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnPublicationMatched()
-        {
-            DataWriter dw = null;
-            int currentCount = 0;
-            int currentCountChange = 0;
-            int totalCount = 0;
-            int totalCountChange = 0;
-            InstanceHandle handle = InstanceHandle.HandleNil;
-
-            // Attach to the event
-            int count = 0;
-            _listener.PublicationMatched += (w, s) =>
-            {
-                dw = w;
-                currentCount = s.CurrentCount;
-                currentCountChange = s.CurrentCountChange;
-                totalCount = s.TotalCount;
-                totalCountChange = s.TotalCountChange;
-                handle = s.LastSubscriptionHandle;
-
-                count++;
-            };
-
-            // Enable entities
-            ReturnCode result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-
-            Thread.Sleep(100);
-            Assert.AreEqual(1, count);
-            Assert.AreEqual(_writer, dw);
-            Assert.AreEqual(1, currentCount);
-            Assert.AreEqual(1, currentCountChange);
-            Assert.AreEqual(1, totalCount);
-            Assert.AreEqual(1, totalCountChange);
-            Assert.AreEqual(_reader.InstanceHandle, handle);
-
-            // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-        }
-
-        /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnInconsistentTopic(Topic, InconsistentTopicStatus)" /> event.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnInconsistentTopic()
-        {
-            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
-            {
-                Topic topic = null;
-                int totalCount = 0;
-                int totalCountChange = 0;
-
-                // Attach to the event
-                int count = 0;
-                _listener.InconsistentTopic += (t, s) =>
-                {
-                    topic = t;
-                    totalCount = s.TotalCount;
-                    totalCountChange = s.TotalCountChange;
-
-                    count++;
-                    evt.Set();
-                };
-
-                // Enable entities
-                ReturnCode result = _writer.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-                Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
-
-                // Wait the signal
-                bool wait = evt.Wait(20000);
-                Assert.IsTrue(wait);
-                Assert.AreEqual(_topic, topic);
-                Assert.AreEqual(1, totalCount);
-                Assert.AreEqual(1, totalCountChange);
-
-                // Kill the process
-                supportProcess.KillProcess(process);
-
-                Assert.AreEqual(1, count);
-
-                // Remove listener to avoid extra messages
-                result = _participant.SetListener(null);
+                // Remove the listener to avoid extra messages
+                result = _subscriber.SetListener(null);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
         }

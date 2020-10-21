@@ -47,9 +47,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 ::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(::DDS::DomainParticipant_ptr dp,
                                                          SubscriberQosWrapper qos,
-                                                         ::DDS::SubscriberListener_ptr a_listener,
+                                                         OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr a_listener,
                                                          ::DDS::StatusMask mask) {
-    return dp->create_subscriber(qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+    return dp->create_subscriber(qos, a_listener, mask);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_GetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper& qos_wrapper) {

@@ -55,7 +55,11 @@ namespace OpenDDSharp.DDS
         /// </summary>
         public DomainParticipant Participant => GetParticipant();
 
-        internal TopicListener Listener { get; set; }
+        /// <summary>
+        /// Gets the attached <see cref="SubscriberListener"/>.
+        /// </summary>
+        [SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Keep coherency with the setter method and DDS API.")]
+        public TopicListener Listener { get; internal set; }
         #endregion
 
         #region Constructors
@@ -131,6 +135,7 @@ namespace OpenDDSharp.DDS
         /// Allows access to the attached <see cref="TopicListener" />.
         /// </summary>
         /// <returns>The attached <see cref="TopicListener" />.</returns>
+        [Obsolete(nameof(GetListener) + " is deprecated, please use Listener property instead.")]
         [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
         public TopicListener GetListener()
         {

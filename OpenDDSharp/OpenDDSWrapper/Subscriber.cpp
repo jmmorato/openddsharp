@@ -74,3 +74,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	OutputDebugString(buf);
 	return sub->set_qos(qos_wrapper);
 }
+
+::DDS::ReturnCode_t Subscriber_SetListener(::DDS::Subscriber_ptr sub, OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr listener, ::DDS::StatusMask mask) {
+	return sub->set_listener(listener, mask);
+}
