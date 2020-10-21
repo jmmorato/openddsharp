@@ -202,6 +202,8 @@
     <ClInclude Include="marshal.h" />
     <ClInclude Include="ParticipantService.h" />
     <ClInclude Include="Publisher.h" />
+    <ClInclude Include="PublisherListener.h" />
+    <ClInclude Include="PublisherListenerImpl.h" />
     <ClInclude Include="QosPolicies.h" />
     <ClInclude Include="RtpsDiscovery.h" />
     <ClInclude Include="StatusCondition.h" />
@@ -229,6 +231,8 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="ParticipantService.cpp" />
     <ClCompile Include="Publisher.cpp" />
+    <ClCompile Include="PublisherListener.cpp" />
+    <ClCompile Include="PublisherListenerImpl.cpp" />
     <ClCompile Include="RtpsDiscovery.cpp" />
     <ClCompile Include="StatusCondition.cpp" />
     <ClCompile Include="Subscriber.cpp" />

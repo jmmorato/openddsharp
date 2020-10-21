@@ -234,7 +234,7 @@ namespace OpenDDSharp.DDS
 
             if (_gchOfferedIncompatibleQos.IsAllocated)
             {
-                _gchRequestedIncompatibleQos.Free();
+                _gchOfferedIncompatibleQos.Free();
             }
 
             if (_gchLivelinessLost.IsAllocated)

@@ -22,6 +22,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "QosPolicies.h"
 #include "dds\DCPS\Marked_Default_Qos.h"
+#include "PublisherListenerImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr pub);
@@ -47,3 +48,6 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_DeleteDataWriter(::DDS::Publisher_ptr pub, ::DDS::DataWriter_ptr dw);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Publisher_SetListener(::DDS::Publisher_ptr pub, OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr listener, ::DDS::StatusMask mask);

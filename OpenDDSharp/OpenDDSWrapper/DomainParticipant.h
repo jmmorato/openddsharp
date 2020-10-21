@@ -25,6 +25,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DomainParticipantListenerImpl.h"
 #include "TopicListenerImpl.h"
 #include "SubscriberListenerImpl.h"
+#include "PublisherListenerImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DomainParticipant_NarrowBase(::DDS::DomainParticipant_ptr dp);
@@ -32,7 +33,7 @@ EXTERN_METHOD_EXPORT
 EXTERN_METHOD_EXPORT 
 ::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp, 
                                                        PublisherQosWrapper qos, 
-                                                       ::DDS::PublisherListener_ptr a_listener, 
+                                                       OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr a_listener,
                                                        ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT

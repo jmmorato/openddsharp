@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -40,6 +41,14 @@ namespace OpenDDSharp.DDS
     {
         #region Fields
         private readonly IntPtr _native;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the attached <see cref="PublisherListener"/>.
+        /// </summary>
+        [SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Keep coherency with the setter method and DDS API.")]
+        public PublisherListener Listener { get; internal set; }
         #endregion
 
         #region Constructors
@@ -228,7 +237,7 @@ namespace OpenDDSharp.DDS
         /// <remarks>
         /// <para>The DeleteDataWriter operation must be called on the same <see cref="Publisher" /> object used to create the <see cref="DataWriter" />. If
         /// DeleteDataWriter operation is called on a different <see cref="Publisher" />, the operation will have no effect and it will return
-        ///	<see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
         /// <para>The deletion of the <see cref="DataWriter" /> will automatically unregister all instances. Depending on the settings of the
         /// <see cref="WriterDataLifecycleQosPolicy" />, the deletion of the <see cref="DataWriter" /> may also dispose all instances.</para>
         /// </remarks>
@@ -251,6 +260,46 @@ namespace OpenDDSharp.DDS
             }
 
             return ret;
+        }
+
+        /// <summary>
+        /// Allows access to the attached <see cref="PublisherListener" />.
+        /// </summary>
+        /// <returns>The attached <see cref="PublisherListener" />.</returns>
+        [Obsolete(nameof(GetListener) + " is deprecated, please use Listener property instead.")]
+        [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
+        public PublisherListener GetListener()
+        {
+            return Listener;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="PublisherListener" /> using the <see cref="StatusMask.DefaultStatusMask" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="PublisherListener" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(PublisherListener listener)
+        {
+            return SetListener(listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Sets the <see cref="PublisherListener" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="PublisherListener" /> to be set.</param>
+        /// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(PublisherListener listener, StatusMask mask)
+        {
+            Listener = listener;
+            IntPtr ptr = IntPtr.Zero;
+            if (listener != null)
+            {
+                ptr = listener.ToNative();
+            }
+
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetListener86(_native, ptr, mask),
+                                               () => UnsafeNativeMethods.SetListener64(_native, ptr, mask));
         }
 
         private static IntPtr NarrowBase(IntPtr ptr)
@@ -324,6 +373,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_DeleteDataWriter", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode DeleteDataWriter86(IntPtr pub, IntPtr dataWriter);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Publisher_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener64(IntPtr pub, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Publisher_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener86(IntPtr pub, IntPtr listener, uint mask);
         }
         #endregion
     }

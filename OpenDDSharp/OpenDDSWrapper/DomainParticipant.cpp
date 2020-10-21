@@ -25,9 +25,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 ::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp, 
                                                        PublisherQosWrapper qos, 
-                                                       ::DDS::PublisherListener_ptr a_listener, 
+                                                       OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr a_listener,
                                                        ::DDS::StatusMask mask) {
-    return dp->create_publisher(qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+    return dp->create_publisher(qos, a_listener, mask);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_GetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper& qos_wrapper) {

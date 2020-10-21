@@ -802,9 +802,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
-
             Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
@@ -853,7 +852,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // After half second liveliness should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
             Assert.AreEqual(0, count);
 
             // After one second and a half one liveliness should be lost

@@ -64,3 +64,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t Publisher_DeleteDataWriter(::DDS::Publisher_ptr pub, ::DDS::DataWriter_ptr dw) {
 	return pub->delete_datawriter(dw);
 }
+
+::DDS::ReturnCode_t Publisher_SetListener(::DDS::Publisher_ptr pub, OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr listener, ::DDS::StatusMask mask) {
+	return pub->set_listener(listener, mask);
+}

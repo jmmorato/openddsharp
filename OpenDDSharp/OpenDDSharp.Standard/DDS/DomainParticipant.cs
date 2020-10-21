@@ -83,6 +83,38 @@ namespace OpenDDSharp.DDS
         /// <returns> The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
         public Publisher CreatePublisher(PublisherQos qos)
         {
+            return CreatePublisher(qos, null, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Publisher" /> with the desired QoS policies and attaches to it the specified <see cref="PublisherListener" />.
+        /// The specified <see cref="PublisherListener" /> will be attached with the default <see cref="StatusMask" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Publisher" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Publisher" /> will be created.</para>
+        /// </remarks>
+        /// <param name="qos">The <see cref="PublisherQos" /> policies to be used for creating the new <see cref="Publisher" />.</param>
+        /// <param name="listener">The <see cref="PublisherListener" /> to be attached to the newly created <see cref="Publisher" />.</param>
+        /// <returns>The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
+        public Publisher CreatePublisher(PublisherQos qos, PublisherListener listener)
+        {
+            return CreatePublisher(qos, listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Publisher" /> with the desired QoS policies and attaches to it the specified <see cref="PublisherListener" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The created <see cref="Publisher" /> belongs to the <see cref="DomainParticipant" /> that is its factory.</para>
+        /// <para>If the specified QoS policies are not consistent, the operation will fail and no <see cref="Publisher" /> will be created.</para>
+        /// </remarks>
+        /// <param name="qos">The <see cref="PublisherQos" /> policies to be used for creating the new <see cref="Publisher" />.</param>
+        /// <param name="listener">The <see cref="PublisherListener" /> to be attached to the newly created <see cref="Publisher" />.</param>
+        /// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The newly created <see cref="Publisher" /> on success, otherwise <see langword="null"/>.</returns>
+        public Publisher CreatePublisher(PublisherQos qos, PublisherListener listener, StatusMask statusMask)
+        {
             PublisherQosWrapper qosWrapper = default;
             if (qos is null)
             {
@@ -98,15 +130,24 @@ namespace OpenDDSharp.DDS
                 qosWrapper = qos.ToNative();
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, qosWrapper, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreatePublisher64(_native, qosWrapper, IntPtr.Zero, 0u));
+            IntPtr nativeListener = IntPtr.Zero;
+            if (listener != null)
+            {
+                nativeListener = listener.ToNative();
+            }
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreatePublisher86(_native, qosWrapper, nativeListener, statusMask),
+                                                        () => UnsafeNativeMethods.CreatePublisher64(_native, qosWrapper, nativeListener, statusMask));
 
             if (native.Equals(IntPtr.Zero))
             {
                 return null;
             }
 
-            var p = new Publisher(native);
+            var p = new Publisher(native)
+            {
+                Listener = listener,
+            };
 
             EntityManager.Instance.Add((p as Entity).ToNative(), p);
             ContainedEntities.Add(p);
