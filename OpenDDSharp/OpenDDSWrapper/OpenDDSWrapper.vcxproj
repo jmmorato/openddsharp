@@ -192,6 +192,8 @@
     <ClInclude Include="Condition.h" />
     <ClInclude Include="DataReader.h" />
     <ClInclude Include="DataWriter.h" />
+    <ClInclude Include="DataWriterListener.h" />
+    <ClInclude Include="DataWriterListenerImpl.h" />
     <ClInclude Include="Discovery.h" />
     <ClInclude Include="DomainParticipant.h" />
     <ClInclude Include="DomainParticipantFactory.h" />
@@ -223,6 +225,8 @@
     <ClCompile Include="Condition.cpp" />
     <ClCompile Include="DataReader.cpp" />
     <ClCompile Include="DataWriter.cpp" />
+    <ClCompile Include="DataWriterListener.cpp" />
+    <ClCompile Include="DataWriterListenerImpl.cpp" />
     <ClCompile Include="Discovery.cpp" />
     <ClCompile Include="DomainParticipant.cpp" />
     <ClCompile Include="DomainParticipantFactory.cpp" />

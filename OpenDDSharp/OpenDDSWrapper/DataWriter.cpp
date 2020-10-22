@@ -56,3 +56,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t DataWriter_AssertLiveliness(::DDS::DataWriter_ptr dw) {
 	return dw->assert_liveliness();
 }
+
+::DDS::ReturnCode_t DataWriter_SetListener(::DDS::DataWriter_ptr dw, OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr listener, ::DDS::StatusMask mask) {
+	return dw->set_listener(listener, mask);
+}

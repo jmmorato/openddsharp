@@ -26,9 +26,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
 												 ::DDS::Topic_ptr topic,
 												 DataWriterQosWrapper qos,
-												 ::DDS::DataWriterListener_ptr a_listener,
+												 OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr a_listener,
 												 ::DDS::StatusMask mask) {
-    return pub->create_datawriter(topic, qos, NULL, ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+    return pub->create_datawriter(topic, qos, a_listener, mask);
 }
 
 ::DDS::ReturnCode_t Publisher_GetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper& qos_wrapper) {

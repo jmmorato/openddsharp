@@ -28,10 +28,10 @@ using Test;
 namespace OpenDDSharp.Standard.UnitTest
 {
     /// <summary>
-    /// <see cref="PublisherListener"/> unit test class.
+    /// <see cref="DataWriterListener"/> unit test class.
     /// </summary>
     [TestClass]
-    public class PublisherListenerTest
+    public class DataWriterListenerTest
     {
         #region Constants
         private const string TEST_CATEGORY = "PublisherListener";
@@ -44,7 +44,7 @@ namespace OpenDDSharp.Standard.UnitTest
         private Publisher _publisher;
         private DataWriter _writer;
         private TestStructDataWriter _dataWriter;
-        private MyPublisherListener _listener;
+        private MyDataWriterListener _listener;
         private DataReader _reader;
         #endregion
 
@@ -85,16 +85,16 @@ namespace OpenDDSharp.Standard.UnitTest
             _subscriber = _participant.CreateSubscriber(sQos);
             Assert.IsNotNull(_subscriber);
 
-            _listener = new MyPublisherListener();
             PublisherQos pQos = new PublisherQos();
             pQos.EntityFactory.AutoenableCreatedEntities = false;
             pQos.Presentation.OrderedAccess = true;
             pQos.Presentation.CoherentAccess = true;
             pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
-            _publisher = _participant.CreatePublisher(pQos, _listener);
+            _publisher = _participant.CreatePublisher(pQos);
             Assert.IsNotNull(_publisher);
 
-            _writer = _publisher.CreateDataWriter(_topic);
+            _listener = new MyDataWriterListener();
+            _writer = _publisher.CreateDataWriter(_topic, null, _listener);
             Assert.IsNotNull(_writer);
             _dataWriter = new TestStructDataWriter(_writer);
 
@@ -126,7 +126,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
         #region Test Methods
         /// <summary>
-        /// Test the <see cref="PublisherListener.OnOfferedDeadlineMissed(DataWriter, OfferedDeadlineMissedStatus)" /> event.
+        /// Test the <see cref="DataWriterListener.OnOfferedDeadlineMissed(DataWriter, OfferedDeadlineMissedStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -179,12 +179,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, totalCountChange);
 
             // Remove the listener to avoid extra messages
-            result = _publisher.SetListener(null);
+            result = _dataWriter.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
-        /// Test the <see cref="PublisherListener.OnOfferedIncompatibleQos(DataWriter, OfferedIncompatibleQosStatus)" /> event.
+        /// Test the <see cref="DataWriterListener.OnOfferedIncompatibleQos(DataWriter, OfferedIncompatibleQosStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -240,12 +240,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(11, policies.First().PolicyId);
 
             // Remove the listener to avoid extra messages
-            result = _publisher.SetListener(null);
+            result = _dataWriter.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
-        /// Test the <see cref="PublisherListener.OnLivelinessLost(DataWriter, LivelinessLostStatus)" /> event.
+        /// Test the <see cref="DataWriterListener.OnLivelinessLost(DataWriter, LivelinessLostStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -288,12 +288,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, totalCountChange);
 
             // Remove the listener to avoid extra messages
-            result = _publisher.SetListener(null);
+            result = _dataWriter.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
-        /// Test the <see cref="PublisherListener.OnPublicationMatched(DataWriter, PublicationMatchedStatus)" /> event.
+        /// Test the <see cref="DataWriterListener.OnPublicationMatched(DataWriter, PublicationMatchedStatus)" /> event.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -341,7 +341,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(_reader.InstanceHandle, handle);
 
             // Remove the listener to avoid extra messages
-            result = _publisher.SetListener(null);
+            result = _dataWriter.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion

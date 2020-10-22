@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "Utils.h"
 #include "QosPolicies.h"
+#include "DataWriterListenerImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataWriter_NarrowBase(::DDS::DataWriter_ptr dp);
@@ -38,4 +39,7 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_AssertLiveliness(::DDS::DataWriter_ptr dw);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_SetListener(::DDS::DataWriter_ptr dw, OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr listener, ::DDS::StatusMask mask);
 
