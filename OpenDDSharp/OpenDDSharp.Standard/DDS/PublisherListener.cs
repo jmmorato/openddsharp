@@ -64,7 +64,7 @@ namespace OpenDDSharp.DDS
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="DomainParticipantListener"/> class.
+        /// Initializes a new instance of the <see cref="PublisherListener"/> class.
         /// </summary>
         protected PublisherListener()
         {
@@ -87,7 +87,7 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="DomainParticipantListener"/> class.
+        /// Finalizes an instance of the <see cref="PublisherListener"/> class.
         /// </summary>
         ~PublisherListener()
         {
