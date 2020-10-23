@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 This file is part of OpenDDSharp.
 
 OpenDDSharp is a .NET wrapper for OpenDDS
@@ -17,14 +17,17 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+#pragma once
 
-namespace OpenDDSharp.OpenDDS.DCPS
-{
-    /// <summary>
-    /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DataReader" />
-    /// such that the application can be notified of relevant status changes.
-    /// </summary>
-    public abstract class DataReaderListener
-    {
-    }
-}
+#include "Utils.h"
+#include "DataReaderListenerImpl.h"
+#include "ListenerDelegates.h"
+
+EXTERN_METHOD_EXPORT
+OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onDataAvailabeDeclaration onDataAvalaible,
+																			 onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
+																			 onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+																			 onSampleRejectedDeclaration onSampleRejected,
+																			 onLivelinessChangedDeclaration onLivelinessChanged,
+																			 onSubscriptionMatchedDeclaration onSubscriptionMatched,
+																			 onSampleLostDeclaration onSampleLost);

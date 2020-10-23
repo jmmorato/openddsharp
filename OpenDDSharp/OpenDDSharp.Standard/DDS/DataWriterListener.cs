@@ -25,7 +25,7 @@ using OpenDDSharp.Helpers;
 namespace OpenDDSharp.DDS
 {
     /// <summary>
-    /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DataWriterListener" />
+    /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DataWriter" />
     /// such that the application can be notified of relevant status changes.
     /// </summary>
     public abstract class DataWriterListener

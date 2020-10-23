@@ -89,6 +89,38 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
         public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos)
         {
+            return CreateDataReader(topicDescription, qos, null, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="DataReaderListener" />.
+        /// The specified <see cref="DataReaderListener" /> will be attached with the default <see cref="StatusMask" />.
+        /// </summary>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
+        /// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos, DataReaderListener listener)
+        {
+            return CreateDataReader(topicDescription, qos, listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="DataReaderListener" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
+        /// <para>The <see cref="ITopicDescription"/> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to
+        /// create this <see cref="Subscriber" />. If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation will fail and
+        /// return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
+        /// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+        /// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos, DataReaderListener listener, StatusMask statusMask)
+        {
             if (topicDescription is null)
             {
                 throw new ArgumentNullException(nameof(topicDescription));
@@ -109,8 +141,14 @@ namespace OpenDDSharp.DDS
                 qosWrapper = qos.ToNative();
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u),
-                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, IntPtr.Zero, 0u));
+            IntPtr nativeListener = IntPtr.Zero;
+            if (listener != null)
+            {
+                nativeListener = listener.ToNative();
+            }
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, nativeListener, statusMask),
+                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, nativeListener, statusMask));
 
             qos.Release();
 
@@ -119,7 +157,10 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            var dr = new DataReader(native);
+            var dr = new DataReader(native)
+            {
+                Listener = listener,
+            };
 
             EntityManager.Instance.Add((dr as Entity).ToNative(), dr);
             ContainedEntities.Add(dr);

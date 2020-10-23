@@ -21,6 +21,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "marshal.h"
 #include "QosPolicies.h"
+#include "DataReaderListenerImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataReader_NarrowBase(::DDS::DataReader_ptr dp);
@@ -36,3 +37,6 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataReader_SetQos(::DDS::DataReader_ptr dr, DataReaderQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_SetListener(::DDS::DataReader_ptr dr, OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr listener, ::DDS::StatusMask mask);

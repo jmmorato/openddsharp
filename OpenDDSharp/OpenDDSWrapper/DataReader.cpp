@@ -52,3 +52,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t DataReader_SetQos(::DDS::DataReader_ptr dr, DataReaderQosWrapper qos_wrapper) {
 	return dr->set_qos(qos_wrapper);
 }
+
+::DDS::ReturnCode_t DataReader_SetListener(::DDS::DataReader_ptr dr, OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr listener, ::DDS::StatusMask mask) {
+	return dr->set_listener(listener, mask);
+}

@@ -191,6 +191,8 @@
     <ClInclude Include="Ace.h" />
     <ClInclude Include="Condition.h" />
     <ClInclude Include="DataReader.h" />
+    <ClInclude Include="DataReaderListener.h" />
+    <ClInclude Include="DataReaderListenerImpl.h" />
     <ClInclude Include="DataWriter.h" />
     <ClInclude Include="DataWriterListener.h" />
     <ClInclude Include="DataWriterListenerImpl.h" />
@@ -224,6 +226,8 @@
     <ClCompile Include="Ace.cpp" />
     <ClCompile Include="Condition.cpp" />
     <ClCompile Include="DataReader.cpp" />
+    <ClCompile Include="DataReaderListener.cpp" />
+    <ClCompile Include="DataReaderListenerImpl.cpp" />
     <ClCompile Include="DataWriter.cpp" />
     <ClCompile Include="DataWriterListener.cpp" />
     <ClCompile Include="DataWriterListenerImpl.cpp" />

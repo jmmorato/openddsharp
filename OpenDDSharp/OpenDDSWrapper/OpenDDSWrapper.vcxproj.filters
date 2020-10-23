@@ -108,6 +108,12 @@
     <ClInclude Include="DataWriterListenerImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DataReaderListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataReaderListenerImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DomainParticipant.cpp">
@@ -189,6 +195,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataWriterListenerImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataReaderListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataReaderListenerImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
