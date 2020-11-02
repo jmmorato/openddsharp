@@ -61,10 +61,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(_topic);
-            // TODO: Uncomment when implemented.
-            //Assert.IsNull(_topic.GetListener());
-            //Assert.AreEqual(TestContext.TestName, _topic.Name);
-            //Assert.AreEqual(typeName, _topic.TypeName);
+            Assert.IsNull(_topic.Listener);
+            Assert.AreEqual(TestContext.TestName, _topic.Name);
+            Assert.AreEqual(typeName, _topic.TypeName);
 
             _publisher = _participant.CreatePublisher();
             Assert.IsNotNull(_publisher);

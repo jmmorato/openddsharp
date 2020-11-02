@@ -60,7 +60,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ViewStateMask"/> value.</returns>
         public static ViewStateMask BitwiseOr(ViewStateKind left, ViewStateKind right)
         {
-            return left | right;
+            return left | (ViewStateMask)right;
         }
 
         /// <summary>

@@ -193,10 +193,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestGetDefaultDataReaderQos), typeName);
             Assert.IsNotNull(topic);
-            // TODO: Uncomment when properties implemented.
-            //Assert.IsNull(topic.GetListener());
-            //Assert.AreEqual(nameof(TestGetDefaultDataReaderQos), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
+            Assert.IsNull(topic.Listener);
+            Assert.AreEqual(nameof(TestGetDefaultDataReaderQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
 
             Subscriber subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
@@ -224,10 +223,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestSetDefaultDataReaderQos), typeName);
             Assert.IsNotNull(topic);
-            // TODO: Uncomment when properties implemented.
-            //Assert.IsNull(topic.GetListener());
-            //Assert.AreEqual(nameof(TestSetDefaultDataReaderQos), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
+            Assert.IsNull(topic.Listener);
+            Assert.AreEqual(nameof(TestSetDefaultDataReaderQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
 
             Subscriber subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);

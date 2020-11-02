@@ -34,10 +34,6 @@ bool TransportRegistry_GetReleased() {
 }
 
 OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name) {
-	char buf[2048];
-	sprintf(buf, "Create Config %s \n", name);
-	OutputDebugString(buf);
-
 	::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->create_config(std::string(name));
 	if (native.is_nil()) {
 		return NULL;
@@ -50,13 +46,6 @@ OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name
 }
 
 ::OpenDDS::DCPS::TransportInst* TransportRegistry_CreateInst(const char * name, const char * transportType) {
-	char buf[2048];
-	sprintf(buf, "Create Inst name %s \n", name);
-	OutputDebugString(buf);
-
-	sprintf(buf, "Create Inst transport type %s \n", transportType);
-	OutputDebugString(buf);
-
 	::OpenDDS::DCPS::TransportInst_rch native = TheTransportRegistry->create_inst(std::string(name), transportType);
 	if (native.is_nil()) {
 		return NULL;
@@ -69,24 +58,13 @@ OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name
 }
 
 void TransportRegistry_BindConfigName(const char * name, ::DDS::Entity_ptr entity) {
-	char buf[2048];	
-	sprintf(buf, "Bind Config Starts %s \n", name);
-	OutputDebugString(buf);
-	
-	//::DDS::Entity_ptr entity = static_cast<::DDS::Entity_ptr>(ptr);
 	try {
 		const std::string str(name);
-		
-		sprintf(buf, "Bind Config InstanceHandle %d \n", entity->get_instance_handle());
-		OutputDebugString(buf);
 		TheTransportRegistry->bind_config(str, entity);
 	}
 	catch (std::exception& e) {
-		buf[2048];
+		char buf[2047];
 		sprintf(buf, "Bind Config Exception %s \n", e.what());
 		OutputDebugString(buf);
 	}
-
-	sprintf(buf, "Bind Config Ends %s \n", name);
-	OutputDebugString(buf);
 }

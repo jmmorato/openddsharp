@@ -189,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ace.h" />
+    <ClInclude Include="BuiltinTopicData.h" />
     <ClInclude Include="Condition.h" />
     <ClInclude Include="DataReader.h" />
     <ClInclude Include="DataReaderListener.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="DomainParticipantListener.h" />
     <ClInclude Include="DomainParticipantListenerImpl.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="InfoRepoDiscovery.h" />
     <ClInclude Include="ListenerDelegates.h" />
     <ClInclude Include="marshal.h" />
     <ClInclude Include="ParticipantService.h" />
@@ -237,6 +239,7 @@
     <ClCompile Include="DomainParticipantListener.cpp" />
     <ClCompile Include="DomainParticipantListenerImpl.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="InfoRepoDiscovery.cpp" />
     <ClCompile Include="ParticipantService.cpp" />
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="PublisherListener.cpp" />

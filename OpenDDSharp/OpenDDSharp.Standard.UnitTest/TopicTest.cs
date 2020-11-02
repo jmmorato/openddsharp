@@ -98,9 +98,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestGetQos), typeName, qos);
             Assert.IsNotNull(topic);
+            Assert.AreEqual(nameof(TestGetQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
             // TODO: Uncomment when properties implemented.
-            //Assert.AreEqual(nameof(TestGetQos), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
             //Assert.AreEqual(_participant, topic.Participant);
 
             // Get the QoS and check it.
@@ -126,9 +126,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestSetQos), typeName);
             Assert.IsNotNull(topic);
+            Assert.AreEqual(nameof(TestSetQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
             // TODO: Uncomment when properties implemented.
-            //Assert.AreEqual(nameof(TestSetQos), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
             //Assert.AreEqual(_participant, topic.Participant);
 
             // Get the qos to ensure that is using the default properties.
@@ -199,9 +199,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic otherTopic = _participant.CreateTopic("Other" + nameof(TestSetQos), typeName);
             Assert.IsNotNull(otherTopic);
+            Assert.AreEqual("Other" + nameof(TestSetQos), otherTopic.Name);
+            Assert.AreEqual(typeName, otherTopic.TypeName);
             // TODO: Uncomment when properties implemented.
-            //Assert.AreEqual("Other" + nameof(TestSetQos), otherTopic.Name);
-            //Assert.AreEqual(typeName, otherTopic.TypeName);
             //Assert.AreEqual(_participant, otherTopic.Participant);
 
             qos = new TopicQos();

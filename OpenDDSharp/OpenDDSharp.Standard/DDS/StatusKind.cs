@@ -117,7 +117,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="StatusMask"/> value.</returns>
         public static StatusMask BitwiseOr(StatusKind left, StatusKind right)
         {
-            return left | right;
+            return left | (StatusMask)right;
         }
 
         /// <summary>

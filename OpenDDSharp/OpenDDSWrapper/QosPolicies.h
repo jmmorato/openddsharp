@@ -430,8 +430,6 @@ public:
 EXTERN_STRUCT_EXPORT OwnershipStrengthQosPolicyWrapper
 {
     ::CORBA::Long value;
-    ::CORBA::Long max_instances;
-    ::CORBA::Long max_samples_per_instance;
 
 public:
     OwnershipStrengthQosPolicyWrapper() {

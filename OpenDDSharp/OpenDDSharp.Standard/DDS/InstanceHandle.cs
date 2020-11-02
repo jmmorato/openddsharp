@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Globalization;
 
 namespace OpenDDSharp.DDS
 {
@@ -61,6 +62,15 @@ namespace OpenDDSharp.DDS
         {
             return _value;
         }
+
+        /// <summary>
+        /// Returns the string representation of this instance.
+        /// </summary>
+        /// <returns>The string representation of the instance.</returns>
+        public override string ToString()
+        {
+            return _value.ToString(CultureInfo.InvariantCulture);
+        }
         #endregion
 
         #region IEquatable<InstanceHandle> Members
@@ -76,22 +86,17 @@ namespace OpenDDSharp.DDS
                 return false;
             }
 
-            if (GetType() != obj.GetType() && !(obj is int))
+            if (obj is int integer)
             {
-                return false;
+                return _value == integer;
             }
 
-            InstanceHandle aux;
-            if (obj is int)
+            if (obj is InstanceHandle handle)
             {
-                aux = (int)obj;
-            }
-            else
-            {
-                aux = (InstanceHandle)obj;
+                return Equals(handle);
             }
 
-            return _value == aux._value;
+            return false;
         }
 
         /// <summary>
@@ -101,7 +106,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
         public bool Equals(InstanceHandle other)
         {
-            return _value == other._value;
+            return _value.Equals(other._value);
         }
 
         /// <summary>

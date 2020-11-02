@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -353,6 +353,17 @@ namespace OpenDDSharp.DDS
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));
+        }
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal new IntPtr ToNative()
+        {
+            return _native;
         }
         #endregion
 

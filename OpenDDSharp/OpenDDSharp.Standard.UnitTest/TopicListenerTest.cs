@@ -71,10 +71,9 @@ namespace OpenDDSharp.Standard.UnitTest
             _listener = new MyTopicListener();
             _topic = _participant.CreateTopic(TestContext.TestName, typeName, null, _listener);
             Assert.IsNotNull(_topic);
-            // TODO: Uncomment when implemented
-            //Assert.IsNotNull(_topic.GetListener());
-            //Assert.AreEqual(TestContext.TestName, _topic.Name);
-            //Assert.AreEqual(typeName, _topic.TypeName);
+            Assert.IsNotNull(_topic.Listener);
+            Assert.AreEqual(TestContext.TestName, _topic.Name);
+            Assert.AreEqual(typeName, _topic.TypeName);
 
             PublisherQos pQos = new PublisherQos();
             pQos.EntityFactory.AutoenableCreatedEntities = false;

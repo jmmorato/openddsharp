@@ -50,16 +50,29 @@ namespace OpenDDSharp.DDS
         public const uint ZeroNanoseconds = 0U;
         #endregion
 
+        #region Fields
+        private int _seconds;
+        private uint _nSeconds;
+        #endregion
+
         #region Property
         /// <summary>
         /// Gets or sets the seconds.
         /// </summary>
-        public int Seconds { get; set; }
+        public int Seconds
+        {
+            get => _seconds;
+            set => _seconds = value;
+        }
 
         /// <summary>
         /// Gets or sets the nanoseconds.
         /// </summary>
-        public uint NanoSeconds { get; set; }
+        public uint NanoSeconds
+        {
+            get => _nSeconds;
+            set => _nSeconds = value;
+        }
         #endregion
 
         #region IEquatable<Duration> Members

@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -225,6 +226,38 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
+        /// Deletes a <see cref="DataReader" /> that belongs to the <see cref="Subscriber" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>If the <see cref="DataReader" /> does not belong to the <see cref="Subscriber" />, the operation returns the error <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>The deletion of a <see cref="DataReader" /> is not allowed if there are any existing <see cref="ReadCondition" /> or <see cref="QueryCondition" /> objects that are
+        /// attached to the <see cref="DataReader" />. If the DeleteDataReader operation is called on a <see cref="DataReader" /> with any of these existing objects
+        /// attached to it, it will return <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>The DeleteDataReader operation must be called on the same <see cref="Subscriber" /> object used to create the <see cref="DataReader" />. If
+        /// DeleteDataReader is called on a different <see cref="Subscriber" />, the operation will have no effect and it will return
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// </remarks>
+        /// <param name="dataReader">The <see cref="DataReader" /> to be deleted.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode DeleteDataReader(DataReader dataReader)
+        {
+            if (dataReader == null)
+            {
+                return ReturnCode.Ok;
+            }
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteDataReader86(_native, dataReader.ToNative()),
+                                                         () => UnsafeNativeMethods.DeleteDataReader64(_native, dataReader.ToNative()));
+            if (ret == ReturnCode.Ok)
+            {
+                EntityManager.Instance.Remove((dataReader as Entity).ToNative());
+                ContainedEntities.Remove(dataReader);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// Gets the <see cref="Subscriber" /> QoS policies.
         /// </summary>
         /// <param name="qos">The <see cref="SubscriberQos" /> to be filled up.</param>
@@ -317,6 +350,17 @@ namespace OpenDDSharp.DDS
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));
         }
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal new IntPtr ToNative()
+        {
+            return _native;
+        }
         #endregion
 
         #region Unsafe Native Methods
@@ -383,6 +427,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_SetListener", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetListener86(IntPtr sub, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteDataReader64(IntPtr s, IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteDataReader86(IntPtr s, IntPtr dr);
         }
         #endregion
     }

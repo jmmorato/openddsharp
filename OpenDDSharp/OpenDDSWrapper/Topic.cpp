@@ -45,3 +45,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, ::DDS::TopicListener_ptr listener, ::DDS::StatusMask status) {
     return t->set_listener(listener, status);
 }
+
+char* Topic_GetTypeName(::DDS::Topic_ptr t) {
+    return t->get_type_name();
+}
+
+char* Topic_GetName(::DDS::Topic_ptr t) {
+    return t->get_name();
+}

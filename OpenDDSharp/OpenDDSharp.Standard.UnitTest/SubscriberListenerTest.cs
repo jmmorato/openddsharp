@@ -77,8 +77,8 @@ namespace OpenDDSharp.UnitTest.Standard
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(_topic);
             Assert.IsNull(_topic.Listener);
-            //Assert.AreEqual(TestContext.TestName, _topic.Name);
-            //Assert.AreEqual(typeName, _topic.TypeName);
+            Assert.AreEqual(TestContext.TestName, _topic.Name);
+            Assert.AreEqual(typeName, _topic.TypeName);
 
             _listener = new MySubscriberListener();
             SubscriberQos sQos = new SubscriberQos();

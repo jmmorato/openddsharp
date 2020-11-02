@@ -19,25 +19,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 #include "Utils.h"
-#include "QosPolicies.h"
+#include <dds\DCPS\InfoRepoDiscovery\InfoRepoDiscovery.h>
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Topic_NarrowBase(::DDS::Topic_ptr t);
+::OpenDDS::DCPS::Discovery* InfoRepoDiscovery_NarrowBase(::OpenDDS::DCPS::InfoRepoDiscovery* d);
 
 EXTERN_METHOD_EXPORT
-::DDS::TopicDescription_ptr Topic_NarrowTopicDescription(::DDS::Topic_ptr t);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_GetQos(::DDS::Topic_ptr t, TopicQosWrapper& qos_wrapper);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_SetQos(::DDS::Topic_ptr t, TopicQosWrapper qos_wrapper);
-
-EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, ::DDS::TopicListener_ptr listener, ::DDS::StatusMask status);
-
-EXTERN_METHOD_EXPORT
-char* Topic_GetTypeName(::DDS::Topic_ptr t);
-
-EXTERN_METHOD_EXPORT
-char* Topic_GetName(::DDS::Topic_ptr t);
+::OpenDDS::DCPS::InfoRepoDiscovery* InfoRepoDiscovery_new(const char* key, const char* ior);

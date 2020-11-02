@@ -206,10 +206,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestGetDefaultDataWriterQos), typeName);
             Assert.IsNotNull(topic);
-            // TODO: Uncomment when properties implemented.
-            //Assert.IsNull(topic.GetListener());
-            //Assert.AreEqual(nameof(TestGetDefaultDataWriterQos), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
+            Assert.IsNull(topic.Listener);
+            Assert.AreEqual(nameof(TestGetDefaultDataWriterQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
 
             Publisher publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
@@ -240,10 +239,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestSetDefaultDataWriterQos), typeName);
             Assert.IsNotNull(topic);
-            // TODO: Uncomment when properties implemented.
-            //Assert.IsNull(topic.GetListener());
-            //Assert.AreEqual(nameof(TestSetDefaultDataWriterQos), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
+            Assert.IsNull(topic.Listener);
+            Assert.AreEqual(nameof(TestSetDefaultDataWriterQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
 
             Publisher publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
@@ -304,10 +302,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic topic = _participant.CreateTopic(nameof(TestDeleteDataWriter), typeName);
             Assert.IsNotNull(topic);
-            // TODO: Uncomment when implemented
-            //Assert.IsNull(topic.GetListener());
-            //Assert.AreEqual(nameof(TestDeleteDataWriter), topic.Name);
-            //Assert.AreEqual(typeName, topic.TypeName);
+            Assert.IsNull(topic.Listener);
+            Assert.AreEqual(nameof(TestDeleteDataWriter), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
 
             Publisher publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);

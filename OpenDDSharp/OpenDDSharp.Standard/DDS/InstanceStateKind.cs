@@ -71,7 +71,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="InstanceStateMask"/> value.</returns>
         public static InstanceStateMask BitwiseOr(InstanceStateKind left, InstanceStateKind right)
         {
-            return left | right;
+            return left | (InstanceStateMask)right;
         }
 
         /// <summary>

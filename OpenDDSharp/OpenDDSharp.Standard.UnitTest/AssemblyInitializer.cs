@@ -17,16 +17,20 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.IO;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
-using System.Diagnostics.CodeAnalysis;
+using OpenDDSharp.Standard.UnitTest.Helpers;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
+    /// <summary>
+    /// The assemble initializer class.
+    /// </summary>
     [TestClass]
     public static class AssemblyInitializer
     {
@@ -37,13 +41,20 @@ namespace OpenDDSharp.Standard.UnitTest
         internal const int RTPS_DOMAIN = 42;
         internal const int RTPS_OTHER_DOMAIN = 43;
 
-        //private static SupportProcessHelper _supportProcess;
-        //private static Process _infoProcess;
+        private static SupportProcessHelper _supportProcess;
+        private static Process _infoProcess;
 
+        /// <summary>
+        /// Gets the <see cref="DomainParticipantFactory" /> singleton instance.
+        /// </summary>
         public static DomainParticipantFactory Factory { get; private set; }
 
+        /// <summary>
+        /// The assembly initializer method.
+        /// </summary>
+        /// <param name="context">The received <see cref="TestContext"/>.</param>
         [AssemblyInitialize]
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Require by the AssemblyInitialize method signature")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required by the AssemblyInitialize method signature")]
         public static void AssemblyInitialize(TestContext context)
         {
             Ace.Init();
@@ -56,13 +67,13 @@ namespace OpenDDSharp.Standard.UnitTest
             ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
             ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
-            //InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
-            //ParticipantService.Instance.AddDiscovery(infoRepo);
-            //ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
+            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
+            ParticipantService.Instance.AddDiscovery(infoRepo);
+            ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
 
-            //_supportProcess = new SupportProcessHelper(context);
-            //_infoProcess = _supportProcess.SpawnDCPSInfoRepo();
-            //System.Threading.Thread.Sleep(1000);
+            _supportProcess = new SupportProcessHelper(context);
+            _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
+            System.Threading.Thread.Sleep(1000);
 
             Factory = ParticipantService.Instance.GetDomainParticipantFactory(); //, "-DCPSConfigFile", "rtps.ini", "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10"
 
@@ -70,14 +81,17 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
         }
 
+        /// <summary>
+        /// The assembly clean-up method.
+        /// </summary>
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
-            //_supportProcess.KillProcess(_infoProcess);
-            //if (File.Exists(INFOREPO_IOR))
-            //{
-            //    File.Delete(INFOREPO_IOR);
-            //}
+            _supportProcess.KillProcess(_infoProcess);
+            if (File.Exists(INFOREPO_IOR))
+            {
+                File.Delete(INFOREPO_IOR);
+            }
 
             TransportRegistry.Instance.Release();
             Assert.IsTrue(TransportRegistry.Instance.Released);

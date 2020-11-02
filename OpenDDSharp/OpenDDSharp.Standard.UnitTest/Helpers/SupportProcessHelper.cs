@@ -40,9 +40,9 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         #endregion
 
         #region Fields
+        private readonly TestContext _testContext;
         private string _platformFolder;
         private string _targetFolder;
-        private TestContext _testContext;
         #endregion
 
         #region Constructors
@@ -129,6 +129,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             return process;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log all exceptions")]
         public void KillProcess(Process process)
         {
             process.OutputDataReceived -= SupportProcessOnOutputDataReceived;

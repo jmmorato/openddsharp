@@ -173,12 +173,14 @@ namespace OpenDDSharp.DDS
 
         private string GetTypeName()
         {
-            throw new NotImplementedException();
+            return MarshalHelper.ExecuteAnyCpu(() => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName86(_native)),
+                                               () => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName64(_native)));
         }
 
         private string GetName()
         {
-            throw new NotImplementedException();
+            return MarshalHelper.ExecuteAnyCpu(() => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName86(_native)),
+                                               () => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName64(_native)));
         }
 
         private DomainParticipant GetParticipant()
@@ -236,27 +238,43 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicQosWrapper qos);
+            public static extern ReturnCode GetQos64(IntPtr t, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicQosWrapper qos);
+            public static extern ReturnCode GetQos86(IntPtr t, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
+            public static extern ReturnCode SetQos64(IntPtr t, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
+            public static extern ReturnCode SetQos86(IntPtr t, [MarshalAs(UnmanagedType.Struct), In] TopicQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_SetListener", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetListener64(IntPtr dp, IntPtr listener, uint mask);
+            public static extern ReturnCode SetListener64(IntPtr t, IntPtr listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_SetListener", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetListener86(IntPtr dp, IntPtr listener, uint mask);
+            public static extern ReturnCode SetListener86(IntPtr t, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetTypeName64(IntPtr t);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetTypeName86(IntPtr t);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetName64(IntPtr t);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetName86(IntPtr t);
         }
         #endregion
     }

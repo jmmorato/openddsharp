@@ -114,6 +114,12 @@
     <ClInclude Include="DataReaderListenerImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InfoRepoDiscovery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuiltinTopicData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DomainParticipant.cpp">
@@ -201,6 +207,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataReaderListenerImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoRepoDiscovery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
