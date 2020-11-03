@@ -340,8 +340,6 @@ namespace OpenDDSharp.DDS
         [MarshalAs(UnmanagedType.Struct)]
         public OwnershipStrengthQosPolicyWrapper OwnershipStrength;
         [MarshalAs(UnmanagedType.Struct)]
-        public TimeBasedFilterQosPolicyWrapper TimeBasedFilter;
-        [MarshalAs(UnmanagedType.Struct)]
         public WriterDataLifecycleQosPolicyWrapper WriterDataLifecycle;
         #endregion
     }
