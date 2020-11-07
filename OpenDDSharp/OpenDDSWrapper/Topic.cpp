@@ -42,7 +42,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
     return t->set_qos(qos_wrapper);
 }
 
-::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, ::DDS::TopicListener_ptr listener, ::DDS::StatusMask status) {
+::DDS::ReturnCode_t Topic_SetListener(::DDS::Topic_ptr t, OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr listener, ::DDS::StatusMask status) {
     return t->set_listener(listener, status);
 }
 
@@ -52,4 +52,12 @@ char* Topic_GetTypeName(::DDS::Topic_ptr t) {
 
 char* Topic_GetName(::DDS::Topic_ptr t) {
     return t->get_name();
+}
+
+::DDS::DomainParticipant_ptr Topic_GetParticipant(::DDS::Topic_ptr t) {
+    return t->get_participant();
+}
+
+::DDS::ReturnCode_t Topic_GetInconsistentTopicStatus(::DDS::Topic_ptr t, ::DDS::InconsistentTopicStatus_out status) {
+    return t->get_inconsistent_topic_status(status);
 }

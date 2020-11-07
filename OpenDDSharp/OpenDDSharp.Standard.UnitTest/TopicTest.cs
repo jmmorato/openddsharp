@@ -23,6 +23,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
+using OpenDDSharp.Standard.UnitTest.Listeners;
 using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
@@ -74,6 +75,28 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        /// <summary>
+        /// Tests the <see cref="Topic"/> class properties.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestProperties()
+        {
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestProperties), typeName);
+            Assert.IsNotNull(topic);
+            Assert.AreEqual(nameof(TestProperties), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+            Assert.AreEqual(_participant, topic.Participant);
+        }
+
+        /// <summary>
+        /// Test the <see cref="TopicQos"/> default constructor.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
@@ -83,6 +106,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestHelper.TestDefaultTopicQos(qos);
         }
 
+        /// <summary>
+        /// Test the <see cref="Topic.GetQos(TopicQos)"/> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
@@ -100,8 +126,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(topic);
             Assert.AreEqual(nameof(TestGetQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
-            // TODO: Uncomment when properties implemented.
-            //Assert.AreEqual(_participant, topic.Participant);
+            Assert.AreEqual(_participant, topic.Participant);
 
             // Get the QoS and check it.
             TopicQos getQos = new TopicQos();
@@ -114,6 +139,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
+        /// <summary>
+        /// Test the <see cref="Topic.SetQos(TopicQos)"/> method.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
@@ -128,8 +156,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(topic);
             Assert.AreEqual(nameof(TestSetQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
-            // TODO: Uncomment when properties implemented.
-            //Assert.AreEqual(_participant, topic.Participant);
+            Assert.AreEqual(_participant, topic.Participant);
 
             // Get the qos to ensure that is using the default properties.
             TopicQos getQos = new TopicQos();
@@ -201,8 +228,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(otherTopic);
             Assert.AreEqual("Other" + nameof(TestSetQos), otherTopic.Name);
             Assert.AreEqual(typeName, otherTopic.TypeName);
-            // TODO: Uncomment when properties implemented.
-            //Assert.AreEqual(_participant, otherTopic.Participant);
+            Assert.AreEqual(_participant, otherTopic.Participant);
 
             qos = new TopicQos();
             qos.History.Kind = HistoryQosPolicyKind.KeepLastHistoryQos;
@@ -222,6 +248,100 @@ namespace OpenDDSharp.Standard.UnitTest
             // Test SetQos with null parameter
             result = topic.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Topic.GetListener"/> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetListener()
+        {
+            // Create a new Topic with a listener
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            MyTopicListener listener = new MyTopicListener();
+            Topic topic = _participant.CreateTopic(nameof(TestGetQos), typeName, null, listener);
+            Assert.IsNotNull(topic);
+            Assert.AreEqual(nameof(TestGetQos), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+            Assert.AreEqual(_participant, topic.Participant);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            // Call to GetListener and check the listener returned
+            MyTopicListener received = (MyTopicListener)topic.GetListener();
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            Assert.IsNotNull(received);
+            Assert.AreEqual(listener, received);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Topic.SetListener(TopicListener, StatusMask)"/> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestSetListener()
+        {
+            // Create a new Topic without listener
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestSetListener), typeName);
+            Assert.IsNotNull(topic);
+            Assert.AreEqual(nameof(TestSetListener), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+            Assert.AreEqual(_participant, topic.Participant);
+
+            MyTopicListener listener = (MyTopicListener)topic.Listener;
+            Assert.IsNull(listener);
+
+            // Create a listener, set it and check that is correctly setted
+            listener = new MyTopicListener();
+            result = topic.SetListener(listener);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            MyTopicListener received = (MyTopicListener)topic.Listener;
+            Assert.IsNotNull(received);
+            Assert.AreEqual(listener, received);
+
+            // Remove the listener calling SetListener with null and check it
+            result = topic.SetListener(null, StatusMask.NoStatusMask);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            received = (MyTopicListener)topic.Listener;
+            Assert.IsNull(received);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Topic.GetInconsistentTopicStatus(ref InconsistentTopicStatus)"/> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGetInconsistentTopicStatus()
+        {
+            // Create a new Topic and call GetInconsistentTopicStatus
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestGetInconsistentTopicStatus), typeName);
+            Assert.IsNotNull(topic);
+            Assert.AreEqual(nameof(TestGetInconsistentTopicStatus), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+            Assert.AreEqual(_participant, topic.Participant);
+
+            InconsistentTopicStatus status = default;
+            result = topic.GetInconsistentTopicStatus(ref status);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(0, status.TotalCount);
+            Assert.AreEqual(0, status.TotalCountChange);
         }
         #endregion
     }

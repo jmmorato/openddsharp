@@ -71,18 +71,6 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
-        private static IntPtr NarrowBase(IntPtr ptr)
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
-                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
-        }
-
-        private static IntPtr NarrowTopicDescription(IntPtr ptr)
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowTopicDescription86(ptr),
-                                               () => UnsafeNativeMethods.NarrowTopicDescription64(ptr));
-        }
-
         /// <summary>
         /// Gets the <see cref="Topic" /> QoS policies.
         /// </summary>
@@ -171,21 +159,21 @@ namespace OpenDDSharp.DDS
                                                () => UnsafeNativeMethods.SetListener64(_native, ptr, mask));
         }
 
-        private string GetTypeName()
+        /// <summary>
+        /// This method allows the application to retrieve the <see cref="InconsistentTopicStatus" /> of the <see cref="Topic" />.
+        /// </summary>
+        /// <param name="status">The <see cref="InconsistentTopicStatus" /> structure to be fill up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetInconsistentTopicStatus(ref InconsistentTopicStatus status)
         {
-            return MarshalHelper.ExecuteAnyCpu(() => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName86(_native)),
-                                               () => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName64(_native)));
-        }
+            InconsistentTopicStatus aux = default;
 
-        private string GetName()
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName86(_native)),
-                                               () => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName64(_native)));
-        }
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetInconsistentTopicStatus86(_native, ref aux),
+                                                         () => UnsafeNativeMethods.GetInconsistentTopicStatus64(_native, ref aux));
 
-        private DomainParticipant GetParticipant()
-        {
-            throw new NotImplementedException();
+            status = aux;
+
+            return ret;
         }
 
         /// <summary>
@@ -208,6 +196,56 @@ namespace OpenDDSharp.DDS
         public IntPtr ToNativeTopicDescription()
         {
             return _nativeTopicDescription;
+        }
+
+        private static IntPtr NarrowBase(IntPtr ptr)
+        {
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
+                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
+        }
+
+        private static IntPtr NarrowTopicDescription(IntPtr ptr)
+        {
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowTopicDescription86(ptr),
+                                               () => UnsafeNativeMethods.NarrowTopicDescription64(ptr));
+        }
+
+        private string GetTypeName()
+        {
+            return MarshalHelper.ExecuteAnyCpu(() => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName86(_native)),
+                                               () => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName64(_native)));
+        }
+
+        private string GetName()
+        {
+            return MarshalHelper.ExecuteAnyCpu(() => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName86(_native)),
+                                               () => Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName64(_native)));
+        }
+
+        private DomainParticipant GetParticipant()
+        {
+            IntPtr ptrParticipant = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetParticipant86(_native),
+                                                                () => UnsafeNativeMethods.GetParticipant64(_native));
+
+            DomainParticipant participant = null;
+
+            if (!ptrParticipant.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = DomainParticipant.NarrowBase(ptrParticipant);
+
+                Entity entity = EntityManager.Instance.Find(ptr);
+                if (entity != null)
+                {
+                    participant = (DomainParticipant)entity;
+                }
+                else
+                {
+                    participant = new DomainParticipant(ptrParticipant);
+                    EntityManager.Instance.Add(ptrParticipant, participant);
+                }
+            }
+
+            return participant;
         }
         #endregion
 
@@ -275,6 +313,22 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
             public static extern IntPtr GetName86(IntPtr t);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetParticipant64(IntPtr t);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetParticipant86(IntPtr t);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Topic_GetInconsistentTopicStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetInconsistentTopicStatus64(IntPtr t, [MarshalAs(UnmanagedType.Struct), In, Out] ref InconsistentTopicStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Topic_GetInconsistentTopicStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetInconsistentTopicStatus86(IntPtr t, [MarshalAs(UnmanagedType.Struct), In, Out] ref InconsistentTopicStatus status);
         }
         #endregion
     }
