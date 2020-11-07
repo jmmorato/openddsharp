@@ -23,21 +23,21 @@ using System.Runtime.InteropServices;
 namespace OpenDDSharp.DDS
 {
     /// <summary>
-    /// Represent a bit-mask of <see cref="ViewStateKind" />.
+    /// Indicates whether or not a sample has ever been read.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct ViewStateKind : IEquatable<ViewStateKind>
+    public struct SampleStateKind : IEquatable<SampleStateKind>
     {
         #region Constants
         /// <summary>
         /// New view state.
         /// </summary>
-        public static readonly ViewStateKind NewViewState = 1U;
+        public static readonly SampleStateKind ReadSampleState = 1U;
 
         /// <summary>
         /// Not new view state.
         /// </summary>
-        public static readonly ViewStateKind NotNewViewState = 2U;
+        public static readonly SampleStateKind NotReadSampleState = 2U;
         #endregion
 
         #region Fields
@@ -45,7 +45,7 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Constructors
-        internal ViewStateKind(uint value)
+        internal SampleStateKind(uint value)
         {
             _value = value;
         }
@@ -53,28 +53,28 @@ namespace OpenDDSharp.DDS
 
         #region Methods
         /// <summary>
-        /// Gets the bitwise <see cref="ViewStateMask"/> value from the <see cref="ViewStateKind"/> entry parameters.
+        /// Gets the bitwise <see cref="ViewStateMask"/> value from the <see cref="SampleStateKind"/> entry parameters.
         /// </summary>
         /// <param name="left">The left value of the operator.</param>
         /// <param name="right">The right value of the operator.</param>
         /// <returns>The <see cref="ViewStateMask"/> value.</returns>
-        public static ViewStateMask BitwiseOr(ViewStateKind left, ViewStateKind right)
+        public static ViewStateMask BitwiseOr(SampleStateKind left, SampleStateKind right)
         {
             return left | (ViewStateMask)right;
         }
 
         /// <summary>
-        /// Creates a new <see cref="ViewStateKind"/> from an <see cref="uint"/> value.
+        /// Creates a new <see cref="SampleStateKind"/> from an <see cref="uint"/> value.
         /// </summary>
         /// <param name="value">The <see cref="uint"/> value.</param>
-        /// <returns>A newly created <see cref="ViewStateKind"/> object.</returns>
-        public static ViewStateKind FromUInt32(uint value)
+        /// <returns>A newly created <see cref="SampleStateKind"/> object.</returns>
+        public static SampleStateKind FromUInt32(uint value)
         {
-            return new ViewStateKind(value);
+            return new SampleStateKind(value);
         }
 
         /// <summary>
-        /// Gets the <see cref="uint"/> value of the <see cref="ViewStateKind"/>.
+        /// Gets the <see cref="uint"/> value of the <see cref="SampleStateKind"/>.
         /// </summary>
         /// <returns>The <see cref="uint"/> value.</returns>
         public uint ToUInt32()
@@ -92,13 +92,13 @@ namespace OpenDDSharp.DDS
         }
         #endregion
 
-        #region IEquatable<ViewStateKind> Members
+        #region IEquatable<SampleStateKind> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-        public bool Equals(ViewStateKind other)
+        public bool Equals(SampleStateKind other)
         {
             return _value == other._value;
         }
@@ -120,14 +120,14 @@ namespace OpenDDSharp.DDS
                 return false;
             }
 
-            ViewStateKind aux;
+            SampleStateKind aux;
             if (obj is uint)
             {
                 aux = (uint)obj;
             }
             else
             {
-                aux = (ViewStateKind)obj;
+                aux = (SampleStateKind)obj;
             }
 
             return _value == aux._value;
@@ -145,21 +145,21 @@ namespace OpenDDSharp.DDS
 
         #region Operators
         /// <summary>
-        /// Implicit conversion operator from <see cref="ViewStateKind" /> to <see cref="uint" />.
+        /// Implicit conversion operator from <see cref="SampleStateKind" /> to <see cref="uint" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="uint" /> value.</returns>
-        public static implicit operator uint(ViewStateKind value)
+        public static implicit operator uint(SampleStateKind value)
         {
             return value.ToUInt32();
         }
 
         /// <summary>
-        /// Implicit conversion operator from <see cref="uint" /> to <see cref="ViewStateKind" />.
+        /// Implicit conversion operator from <see cref="uint" /> to <see cref="SampleStateKind" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="ViewStateKind" /> value.</returns>
-        public static implicit operator ViewStateKind(uint value)
+        /// <returns>The <see cref="SampleStateKind" /> value.</returns>
+        public static implicit operator SampleStateKind(uint value)
         {
             return FromUInt32(value);
         }
@@ -169,7 +169,7 @@ namespace OpenDDSharp.DDS
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="ViewStateMask" /> value.</returns>
-        public static implicit operator ViewStateMask(ViewStateKind value)
+        public static implicit operator ViewStateMask(SampleStateKind value)
         {
             return value.ToViewStateMask();
         }
@@ -180,7 +180,7 @@ namespace OpenDDSharp.DDS
         /// <param name="x">The left value for the comparison.</param>
         /// <param name="y">The right value for the comparison.</param>
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(ViewStateKind x, ViewStateKind y)
+        public static bool operator ==(SampleStateKind x, SampleStateKind y)
         {
             return x.Equals(y);
         }
@@ -191,7 +191,7 @@ namespace OpenDDSharp.DDS
         /// <param name="x">The left value for the comparison.</param>
         /// <param name="y">The right value for the comparison.</param>
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-        public static bool operator !=(ViewStateKind x, ViewStateKind y)
+        public static bool operator !=(SampleStateKind x, SampleStateKind y)
         {
             return !x.Equals(y);
         }

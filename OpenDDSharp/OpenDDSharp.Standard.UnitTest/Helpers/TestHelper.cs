@@ -898,6 +898,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
 
+        public static void BindTcpTransportConfig(this Entity entity)
+        {
+            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            string configName = "openddsharp_tcp_" + guid;
+            string instName = "internal_openddsharp_tcp_transport_" + guid;
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
+            _ = new TcpInst(inst);
+            config.Insert(inst);
+
+            TransportRegistry.Instance.BindConfig(configName, entity);
+        }
+
         public static Timestamp ToTimestamp(this DateTime dateTime)
         {
             DateTime epoc = new DateTime(1970, 1, 1);

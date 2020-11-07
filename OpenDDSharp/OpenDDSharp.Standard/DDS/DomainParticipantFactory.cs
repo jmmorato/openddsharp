@@ -130,7 +130,7 @@ namespace OpenDDSharp.DDS
                 Listener = listener,
             };
 
-            EntityManager.Instance.Add(native, p);
+            EntityManager.Instance.Add((p as Entity).ToNative(), p);
 
             return p;
         }

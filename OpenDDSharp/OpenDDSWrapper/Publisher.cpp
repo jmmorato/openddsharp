@@ -68,3 +68,35 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t Publisher_SetListener(::DDS::Publisher_ptr pub, OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr listener, ::DDS::StatusMask mask) {
 	return pub->set_listener(listener, mask);
 }
+
+::DDS::DomainParticipant_ptr Publisher_GetParticipant(::DDS::Publisher_ptr pub) {
+	return pub->get_participant();
+}
+
+::DDS::Entity_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName) {
+	return static_cast<::DDS::Entity_ptr>(pub->lookup_datawriter(topicName));
+}
+
+::DDS::ReturnCode_t Publisher_DeleteContainedEntities(::DDS::Publisher_ptr pub) {
+	return pub->delete_contained_entities();
+}
+
+::DDS::ReturnCode_t Publisher_WaitForAcknowledgments(::DDS::Publisher_ptr pub, ::DDS::Duration_t maxWait) {
+	return pub->wait_for_acknowledgments(maxWait);
+}
+
+::DDS::ReturnCode_t Publisher_SuspendPublications(::DDS::Publisher_ptr pub) {
+	return pub->suspend_publications();
+}
+
+::DDS::ReturnCode_t Publisher_ResumePublications(::DDS::Publisher_ptr pub) {
+	return pub->resume_publications();
+}
+
+::DDS::ReturnCode_t Publisher_BeginCoherentChanges(::DDS::Publisher_ptr pub) {
+	return pub->begin_coherent_changes();
+}
+
+::DDS::ReturnCode_t Publisher_EndCoherentChanges(::DDS::Publisher_ptr pub) {
+	return pub->end_coherent_changes();
+}

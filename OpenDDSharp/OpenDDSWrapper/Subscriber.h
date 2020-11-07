@@ -23,6 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "dds\DCPS\Marked_Default_Qos.h"
 #include "SubscriberListenerImpl.h"
 #include "DataReaderListenerImpl.h"
+#include "marshal.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr sub);
@@ -51,3 +52,25 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Subscriber_DeleteDataReader(::DDS::Subscriber_ptr sub, ::DDS::DataReader_ptr dataReader);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_BeginAccess(::DDS::Subscriber_ptr sub);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_EndAccess(::DDS::Subscriber_ptr sub);
+
+EXTERN_METHOD_EXPORT
+::DDS::DomainParticipant_ptr Subscriber_GetParticipant(::DDS::Subscriber_ptr sub);
+
+EXTERN_METHOD_EXPORT
+::DDS::Entity_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_DeleteContainedEntities(::DDS::Subscriber_ptr sub);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_NotifyDataReaders(::DDS::Subscriber_ptr sub);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t Subscriber_GetDataReaders(::DDS::Subscriber_ptr sub, void*& lst, ::DDS::SampleStateMask sampleState, ::DDS::ViewStateMask viewState, ::DDS::InstanceStateMask instanceState);
+

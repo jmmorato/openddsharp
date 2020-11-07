@@ -65,17 +65,50 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     return (int)ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_Read(<%SCOPED%>DataReader_ptr dr)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
-    ::DDS::ReturnCode_t ret = dr->read(received_data, info_seq, ::DDS::LENGTH_UNLIMITED, ::DDS::ANY_SAMPLE_STATE, ::DDS::ANY_VIEW_STATE, ::DDS::ANY_INSTANCE_STATE);
+    ::DDS::ReturnCode_t ret = dr->read(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        // TODO
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
     }
 
     dr->return_loan(received_data, info_seq);
 
-    return (int)ret;
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::ReturnCode_t ret = dr->take(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
 }

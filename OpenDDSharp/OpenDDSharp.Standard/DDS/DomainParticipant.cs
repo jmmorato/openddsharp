@@ -423,15 +423,20 @@ namespace OpenDDSharp.DDS
 
             if (!s.Equals(IntPtr.Zero))
             {
-                Entity entity = EntityManager.Instance.Find(s);
-                if (entity != null)
+                IntPtr ptr = Subscriber.NarrowBase(s);
+
+                if (!ptr.Equals(IntPtr.Zero))
                 {
-                    managedSubscriber = (Subscriber)entity;
-                }
-                else
-                {
-                    managedSubscriber = new Subscriber(s);
-                    EntityManager.Instance.Add(s, managedSubscriber);
+                    Entity entity = EntityManager.Instance.Find(ptr);
+                    if (entity != null)
+                    {
+                        managedSubscriber = (Subscriber)entity;
+                    }
+                    else
+                    {
+                        managedSubscriber = new Subscriber(s);
+                        EntityManager.Instance.Add((managedSubscriber as Entity).ToNative(), managedSubscriber);
+                    }
                 }
             }
 
@@ -1167,7 +1172,7 @@ namespace OpenDDSharp.DDS
             return _native;
         }
 
-        private static IntPtr NarrowBase(IntPtr ptr)
+        internal static IntPtr NarrowBase(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));

@@ -50,6 +50,17 @@ namespace OpenDDSharp.DDS
         /// </summary>
         [SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Keep coherency with the setter method and DDS API.")]
         public DataWriterListener Listener { get; internal set; }
+
+        /// <summary>
+        /// Gets the <see cref="Topic" /> associated with the <see cref="DataWriter" />.
+        /// This is the same <see cref="Topic" /> that was used to create the <see cref="DataWriter" />.
+        /// </summary>
+        public Topic Topic => GetTopic();
+
+        /// <summary>
+        /// Gets the <see cref="Publisher" /> to which the <see cref="DataWriter" /> belongs.
+        /// </summary>
+        public Publisher Publisher => GetPublisher();
         #endregion
 
         #region Constructors
@@ -210,6 +221,55 @@ namespace OpenDDSharp.DDS
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));
         }
 
+        private Topic GetTopic()
+        {
+            IntPtr ptrTopic = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTopic86(_native),
+                                                          () => UnsafeNativeMethods.GetTopic64(_native));
+
+            Topic topic = null;
+
+            if (!ptrTopic.Equals(IntPtr.Zero))
+            {
+                Entity entity = EntityManager.Instance.Find(ptrTopic);
+                if (entity != null)
+                {
+                    topic = (Topic)entity;
+                }
+                else
+                {
+                    topic = new Topic(ptrTopic);
+                    EntityManager.Instance.Add(ptrTopic, topic);
+                }
+            }
+
+            return topic;
+        }
+
+        private Publisher GetPublisher()
+        {
+            IntPtr ptrPublisher = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetPublisher86(_native),
+                                                              () => UnsafeNativeMethods.GetPublisher64(_native));
+
+            Publisher publisher = null;
+
+            if (!ptrPublisher.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = Publisher.NarrowBase(ptrPublisher);
+                Entity entity = EntityManager.Instance.Find(ptr);
+                if (entity != null)
+                {
+                    publisher = (Publisher)entity;
+                }
+                else
+                {
+                    publisher = new Publisher(ptrPublisher);
+                    EntityManager.Instance.Add((publisher as Entity).ToNative(), publisher);
+                }
+            }
+
+            return publisher;
+        }
+
         /// <summary>
         /// Internal use only.
         /// </summary>
@@ -286,6 +346,22 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_SetListener", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetListener86(IntPtr dw, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetPublisher64(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetPublisher86(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetTopic", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetTopic64(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetTopic86(IntPtr ptr);
         }
         #endregion
     }

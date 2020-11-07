@@ -71,3 +71,44 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t Subscriber_DeleteDataReader(::DDS::Subscriber_ptr sub, ::DDS::DataReader_ptr dataReader) {
 	return sub->delete_datareader(dataReader);
 }
+
+::DDS::ReturnCode_t Subscriber_BeginAccess(::DDS::Subscriber_ptr sub) {
+	return sub->begin_access();
+}
+
+::DDS::ReturnCode_t Subscriber_EndAccess(::DDS::Subscriber_ptr sub) {
+	return sub->end_access();
+}
+
+::DDS::DomainParticipant_ptr Subscriber_GetParticipant(::DDS::Subscriber_ptr sub) {
+	return sub->get_participant();
+}
+
+::DDS::Entity_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName) {
+	return static_cast<::DDS::Entity_ptr>(sub->lookup_datareader(topicName));
+}
+
+::DDS::ReturnCode_t Subscriber_DeleteContainedEntities(::DDS::Subscriber_ptr sub) {
+	return sub->delete_contained_entities();
+}
+
+::DDS::ReturnCode_t Subscriber_NotifyDataReaders(::DDS::Subscriber_ptr sub) {
+	return sub->notify_datareaders();
+}
+
+::DDS::ReturnCode_t Subscriber_GetDataReaders(::DDS::Subscriber_ptr sub, void*& lst, ::DDS::SampleStateMask sampleState, ::DDS::ViewStateMask viewState, ::DDS::InstanceStateMask instanceState) {
+	::DDS::DataReaderSeq seq;
+	::DDS::ReturnCode_t ret = sub->get_datareaders(seq, sampleState, viewState, instanceState);
+	if (ret == ::DDS::RETCODE_OK) {
+		CORBA::ULong length = seq.length();
+		TAO::unbounded_value_sequence<::DDS::DataReader_ptr> readers(length);
+		readers.length(length);
+		for (int i = 0; i < length; i++) {			
+			readers[i] = seq[i].in();
+		}
+
+		unbounded_sequence_to_ptr(readers, lst);
+	}
+
+	return ret;
+}

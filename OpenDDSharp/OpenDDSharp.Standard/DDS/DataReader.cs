@@ -374,7 +374,7 @@ namespace OpenDDSharp.DDS
             _conditions.Clear();
         }
 
-        private static IntPtr NarrowBase(IntPtr ptr)
+        internal static IntPtr NarrowBase(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));
@@ -382,7 +382,27 @@ namespace OpenDDSharp.DDS
 
         private Subscriber GetSubscriber()
         {
-            throw new NotImplementedException();
+            IntPtr ptrSubscriber = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetSubscriber86(_native),
+                                                               () => UnsafeNativeMethods.GetSubscriber64(_native));
+
+            Subscriber subscriber = null;
+
+            if (!ptrSubscriber.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = Publisher.NarrowBase(ptrSubscriber);
+                Entity entity = EntityManager.Instance.Find(ptr);
+                if (entity != null)
+                {
+                    subscriber = (Subscriber)entity;
+                }
+                else
+                {
+                    subscriber = new Subscriber(ptrSubscriber);
+                    EntityManager.Instance.Add((subscriber as Entity).ToNative(), subscriber);
+                }
+            }
+
+            return subscriber;
         }
 
         private ITopicDescription GetTopicDescription()
@@ -458,6 +478,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_SetListener", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetListener86(IntPtr dr, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetSubscriber", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetSubscriber64(IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetSubscriber", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetSubscriber86(IntPtr dr);
         }
         #endregion
     }

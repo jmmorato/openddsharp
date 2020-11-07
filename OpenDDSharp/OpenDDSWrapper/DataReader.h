@@ -40,3 +40,6 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataReader_SetListener(::DDS::DataReader_ptr dr, OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr listener, ::DDS::StatusMask mask);
+
+EXTERN_METHOD_EXPORT
+::DDS::Subscriber_ptr DataReader_GetSubscriber(::DDS::DataReader_ptr dr);

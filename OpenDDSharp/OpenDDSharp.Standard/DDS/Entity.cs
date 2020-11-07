@@ -186,11 +186,11 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Entity_GetInstanceHandle", CallingConvention = CallingConvention.Cdecl)]
-            public static extern InstanceHandle GetInstanceHandle64(IntPtr e);
+            public static extern int GetInstanceHandle64(IntPtr e);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Entity_GetInstanceHandle", CallingConvention = CallingConvention.Cdecl)]
-            public static extern InstanceHandle GetInstanceHandle86(IntPtr e);
+            public static extern int GetInstanceHandle86(IntPtr e);
         }
         #endregion
     }

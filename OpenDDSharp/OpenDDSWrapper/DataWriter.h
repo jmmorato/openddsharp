@@ -43,3 +43,8 @@ EXTERN_METHOD_EXPORT
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_SetListener(::DDS::DataWriter_ptr dw, OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr listener, ::DDS::StatusMask mask);
 
+EXTERN_METHOD_EXPORT
+::DDS::Publisher_ptr DataWriter_GetPublisher(::DDS::DataWriter_ptr dw);
+
+EXTERN_METHOD_EXPORT
+::DDS::Topic_ptr DataWriter_GetTopic(::DDS::DataWriter_ptr dw);

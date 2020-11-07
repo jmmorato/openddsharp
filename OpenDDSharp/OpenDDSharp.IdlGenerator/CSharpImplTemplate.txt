@@ -252,28 +252,142 @@
         #endregion
 
         #region Methods
-        public ReturnCode Read()
+        public ReturnCode Read(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo)
         {
+            return Read(receivedData, receivedInfo, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+        }
+
+        public ReturnCode Read(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples)
+        {
+            return Read(receivedData, receivedInfo, maxSamples, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+        }
+
+        public ReturnCode Read(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples, ReadCondition condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnCode Read(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples, SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
+        {
+            if (receivedData == null || receivedInfo == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            receivedData.Clear();
+            receivedInfo.Clear();
+
+            IntPtr rd = IntPtr.Zero;
+            IntPtr ri = IntPtr.Zero;
+
+            ReturnCode ret = ReturnCode.Error;
             if (Environment.Is64BitProcess)
             {
-                ReturnCode ret = (ReturnCode)Read64(_native);
-                if (ret == ReturnCode.Ok)
-                {
-                    // TODO
-                }
-
-                return ret;
+                ret = (ReturnCode)Read64(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
             }
             else
             {
-                ReturnCode ret = (ReturnCode)Read86(_native);
-                if (ret == ReturnCode.Ok)
+                ret = (ReturnCode)Read86(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);          
+            }
+
+            if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
+            {
+                IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
+                IList<SampleInfo> info = new List<SampleInfo>();
+
+                MarshalHelper.PtrToSequence(rd, ref data);
+                MarshalHelper.PtrToSequence(ri, ref info);
+
+                if (data != null)
                 {
-                    // TODO
+                    foreach (var d in data)
+                    {
+                        var aux = new <%TYPE%>();
+                        aux.FromNative(d);
+                        receivedData.Add(aux);
+                    }
                 }
 
-                return ret;
+                if (info != null && info.Count > 0)
+                {
+                    foreach (var i in info)
+                    {
+                        SampleInfo aux = i;
+                        receivedInfo.Add(i);
+                    }
+                }
             }
+
+            return ret;
+        }
+
+        public ReturnCode Take(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo)
+        {
+            return Take(receivedData, receivedInfo, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+        }
+
+        public ReturnCode Take(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples)
+        {
+            return Take(receivedData, receivedInfo, maxSamples, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+        }
+
+        public ReturnCode Take(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples, ReadCondition condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnCode Take(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples, SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
+        {
+            if (receivedData == null || receivedInfo == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            receivedData.Clear();
+            receivedInfo.Clear();
+
+            IntPtr rd = IntPtr.Zero;
+            IntPtr ri = IntPtr.Zero;
+
+            ReturnCode ret = ReturnCode.Error;
+            if (Environment.Is64BitProcess)
+            {
+                ret = (ReturnCode)Take64(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
+            }
+            else
+            {
+                ret = (ReturnCode)Take86(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);          
+            }
+
+            if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
+            {
+                IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
+                IList<SampleInfo> info = new List<SampleInfo>();
+
+                MarshalHelper.PtrToSequence(rd, ref data);
+                MarshalHelper.PtrToSequence(ri, ref info);
+
+                if (data != null)
+                {
+                    foreach (var d in data)
+                    {
+                        var aux = new <%TYPE%>();
+                        aux.FromNative(d);
+                        receivedData.Add(aux);
+                    }
+                }
+
+                if (info != null && info.Count > 0)
+                {
+                    foreach (var i in info)
+                    {
+                        SampleInfo aux = i;
+                        receivedInfo.Add(i);
+                    }
+                }
+            }
+
+            return ret;
         }
 
         public ReturnCode ReadNextSample(<%TYPE%> data)
@@ -327,19 +441,27 @@
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Narrow64(IntPtr dw);
+        private static extern IntPtr Narrow64(IntPtr dr);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Narrow86(IntPtr dw);
+        private static extern IntPtr Narrow86(IntPtr dr);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Read64(IntPtr dr);
+        private static extern int Read64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Read86(IntPtr dr);
+        private static extern int Read86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Take64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Take86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]

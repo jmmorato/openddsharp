@@ -56,3 +56,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t DataReader_SetListener(::DDS::DataReader_ptr dr, OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr listener, ::DDS::StatusMask mask) {
 	return dr->set_listener(listener, mask);
 }
+
+::DDS::Subscriber_ptr DataReader_GetSubscriber(::DDS::DataReader_ptr dr) {
+	return dr->get_subscriber();
+}

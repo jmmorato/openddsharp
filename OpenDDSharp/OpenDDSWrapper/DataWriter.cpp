@@ -60,3 +60,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::ReturnCode_t DataWriter_SetListener(::DDS::DataWriter_ptr dw, OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr listener, ::DDS::StatusMask mask) {
 	return dw->set_listener(listener, mask);
 }
+
+::DDS::Publisher_ptr DataWriter_GetPublisher(::DDS::DataWriter_ptr dw) {
+	return dw->get_publisher();
+}
+
+::DDS::Topic_ptr DataWriter_GetTopic(::DDS::DataWriter_ptr dw) {
+	return dw->get_topic();
+}
