@@ -152,7 +152,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataReader::Read(List<<%TYPE
 
 OpenDDSharp::DDS::ReturnCode OpenDDSharp::<%SCOPED%>DataReader::Read(List<<%TYPE%>^>^ receivedData, List<::OpenDDSharp::DDS::SampleInfo^>^ receivedInfo, System::Int32 maxSamples, OpenDDSharp::DDS::SampleStateMask sampleStates, OpenDDSharp::DDS::ViewStateMask viewStates, OpenDDSharp::DDS::InstanceStateMask instanceStates) {
     if (receivedData == nullptr || receivedInfo == nullptr) {
-		return ReturnCode.BadParameter;
+		return OpenDDSharp::DDS::ReturnCode::BadParameter;
 	}
 
     receivedData->Clear();
