@@ -189,6 +189,7 @@ jobs:
       failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
+        git apply $(Build.SourcesDirectory)\Patches\configure.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
