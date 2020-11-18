@@ -1425,7 +1425,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(indent);
 				ret.append("                wrapper.");
 				ret.append(name);
-				if (base_node_type = AST_Decl::NT_string) {
+				if (base_node_type == AST_Decl::NT_string) {
 					ret.append("[i] = Marshal.StringToHGlobalAnsi(");
 				}
 				else {
@@ -1959,45 +1959,17 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			case AST_Decl::NT_union:
 			case AST_Decl::NT_struct:
 			{
-				ret.append("    for (int i = 0; i < ");
-				ret.append(std::to_string(dims[0]->ev()->u.ulval));
-				ret.append("; i++)\n");
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != null)\n");
 
 				ret.append(indent);
 				ret.append("    {\n");
 
 				ret.append(indent);
-				ret.append("        ");
+				ret.append("        if (");
 				ret.append(name);
-				ret.append("[i] = new ");
-				ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
-				ret.append("();\n");
-
-				ret.append(indent);
-				ret.append("        ");
-				ret.append(name);
-				ret.append("[i].FromNative(wrapper.");
-				ret.append(name);
-				ret.append("[i]);\n");
-
-				ret.append(indent);
-				ret.append("    }\n");
-				break;
-			}
-			case AST_Decl::NT_string:
-			case AST_Decl::NT_wstring:
-			{
-				ret.append("    for (int i = 0; i < ");
-				ret.append(std::to_string(dims[0]->ev()->u.ulval));
-				ret.append("; i++)\n");
-
-				ret.append(indent);
-				ret.append("    {\n");
-
-				ret.append(indent);
-				ret.append("        if (wrapper.");
-				ret.append(name);
-				ret.append("[i] != null)\n");
+				ret.append(" == null)\n");
 
 				ret.append(indent);
 				ret.append("        {\n");
@@ -2005,12 +1977,32 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append(indent);
 				ret.append("            ");
 				ret.append(name);
-				if (base_node_type = AST_Decl::NT_string) {
-					ret.append("[i] = Marshal.PtrToStringAnsi(wrapper.");
-				}
-				else {
-					ret.append("[i] = Marshal.PtrToStringUni(wrapper.");
-				}
+				ret.append(" = ");
+				ret.append(get_csharp_default_value(type));
+				ret.append(";\n");
+
+				ret.append(indent);
+				ret.append("        }\n");
+
+				ret.append(indent);
+				ret.append("        for (int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append(indent);
+				ret.append("        {\n");
+
+				ret.append(indent);
+				ret.append("            ");
+				ret.append(name);
+				ret.append("[i] = new ");
+				ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+				ret.append("();\n");
+
+				ret.append(indent);
+				ret.append("            ");
+				ret.append(name);
+				ret.append("[i].FromNative(wrapper.");
 				ret.append(name);
 				ret.append("[i]);\n");
 
@@ -2020,19 +2012,114 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append(indent);
 				ret.append("    }\n");
 				break;
+			}
+			case AST_Decl::NT_string:
+			case AST_Decl::NT_wstring:
+			{
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != null)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        if (");
+				ret.append(name);
+				ret.append(" == null)\n");
+
+				ret.append(indent);
+				ret.append("        {\n");
+
+				ret.append(indent);
+				ret.append("            ");
+				ret.append(name);
+				ret.append(" = ");
+				ret.append(get_csharp_default_value(type));
+				ret.append(";\n");
+
+				ret.append(indent);
+				ret.append("        }\n");
+
+				ret.append(indent);
+				ret.append("        for (int i = 0; i < ");
+				ret.append(std::to_string(dims[0]->ev()->u.ulval));
+				ret.append("; i++)\n");
+
+				ret.append(indent);
+				ret.append("        {\n");
+
+				ret.append(indent);
+				ret.append("            if (wrapper.");
+				ret.append(name);
+				ret.append("[i] != IntPtr.Zero)\n");
+
+				ret.append(indent);
+				ret.append("            {\n");
+
+				ret.append(indent);
+				ret.append("                ");
+				ret.append(name);
+				if (base_node_type == AST_Decl::NT_string) {
+					ret.append("[i] = Marshal.PtrToStringAnsi(wrapper.");
+				}
+				else {
+					ret.append("[i] = Marshal.PtrToStringUni(wrapper.");
+				}
+				ret.append(name);
+				ret.append("[i]);\n");
+
+				ret.append(indent);
+				ret.append("            }\n");
+
+				ret.append(indent);
+				ret.append("        }\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
+				break;
+			}
 			case AST_Decl::NT_pre_defined:
 			{
 				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
 
 				if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
-					ret.append("    ");
+					ret.append("    if (wrapper.");
+					ret.append(name);
+					ret.append(" != null)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        if (");
+					ret.append(name);
+					ret.append(" == null)\n");
+
+					ret.append(indent);
+					ret.append("        {\n");
+
+					ret.append(indent);
+					ret.append("            ");
+					ret.append(name);
+					ret.append(" = ");
+					ret.append(get_csharp_default_value(type));
+					ret.append(";\n");
+
+					ret.append(indent);
+					ret.append("        }\n");
+					
+					ret.append(indent);
+					ret.append("        ");
 					ret.append(name);
 					ret.append(" = Array.ConvertAll(wrapper.");
 					ret.append(name);
 					ret.append(", e => Convert.ToDecimal(e));\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
 					break;
 				}
-			}
 			}
 			default:
 			{
@@ -2054,32 +2141,33 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ACE_UINT32 total_dim = 1;
 				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
 					total_dim *= dims[i]->ev()->u.ulval;
-				}
-
-				ret.append("    if (wrapper.");
-				ret.append(name);
-				ret.append(" != null)\n");
+				}								
 
 				ret.append(indent);
-				ret.append("    {\n");				
-
-				ret.append(indent);
-				ret.append("        if (");
+				ret.append("    if (");
 				ret.append(name);
 				ret.append(" == null)\n");
 
 				ret.append(indent);
-				ret.append("        {\n");
+				ret.append("    {\n");
 
 				ret.append(indent);
-				ret.append("            ");
+				ret.append("        ");
 				ret.append(name);
 				ret.append(" = ");
 				ret.append(get_csharp_default_value(type));
 				ret.append(";\n");
 
 				ret.append(indent);
-				ret.append("        }\n");
+				ret.append("    }\n");
+
+				ret.append(indent);
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != IntPtr.Zero)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
 
 				ret.append(indent);
 				ret.append("        ");
@@ -2167,7 +2255,15 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append("    }\n");
 
 				ret.append(indent);
-				ret.append("    MarshalHelper.PtrToStringMultiArray(wrapper.");
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != IntPtr.Zero)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        MarshalHelper.PtrToStringMultiArray(wrapper.");
 				ret.append(name);
 				ret.append(", ");
 				ret.append(name);
@@ -2177,6 +2273,9 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				else {
 					ret.append(", true);\n");
 				}
+
+				ret.append(indent);
+				ret.append("    }\n");
 				break;
 			}
 			case AST_Decl::NT_enum:
@@ -2199,13 +2298,24 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append("    }\n");
 
 				ret.append(indent);
-				ret.append("    MarshalHelper.PtrToEnumMultiArray<");
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != IntPtr.Zero)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        MarshalHelper.PtrToEnumMultiArray<");
 				ret.append(base_type);
 				ret.append(">(wrapper.");
 				ret.append(name);
 				ret.append(", ");
 				ret.append(name);
 				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
 				break;
 			}
 			case AST_Decl::NT_pre_defined:
@@ -2231,11 +2341,22 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("    }\n");
 
 					ret.append(indent);
-					ret.append("    MarshalHelper.PtrToBooleanMultiArray(wrapper.");
+					ret.append("    if (wrapper.");
+					ret.append(name);
+					ret.append(" != IntPtr.Zero)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.PtrToBooleanMultiArray(wrapper.");
 					ret.append(name);
 					ret.append(", ");
 					ret.append(name);
 					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_char) {
@@ -2257,11 +2378,22 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("    }\n");
 
 					ret.append(indent);
-					ret.append("    MarshalHelper.PtrToMultiArray<byte>(wrapper.");					
+					ret.append("    if (wrapper.");
+					ret.append(name);
+					ret.append(" != IntPtr.Zero)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.PtrToMultiArray<byte>(wrapper.");					
 					ret.append(name);
 					ret.append(", ");
 					ret.append(name);
 					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
@@ -2283,10 +2415,18 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("    }\n");
 
 					ret.append(indent);
+					ret.append("    if (wrapper.");
+					ret.append(name);
+					ret.append(" != IntPtr.Zero)\n");
+
+					ret.append(indent);
 					ret.append("    {\n");
 
 					ret.append(indent);
-					ret.append("        double[");
+					ret.append("        {\n");
+
+					ret.append(indent);
+					ret.append("            double[");
 					for (ACE_UINT32 i = 1; i < arr_type->n_dims(); i++) {
 						ret.append(",");
 					}
@@ -2300,12 +2440,12 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("];\n");
 
 					ret.append(indent);
-					ret.append("        MarshalHelper.PtrToMultiArray<Double>(wrapper.");
+					ret.append("            MarshalHelper.PtrToMultiArray<Double>(wrapper.");
 					ret.append(name);
 					ret.append(", aux);\n");
 
 					std::string loop_indent(indent);
-					loop_indent.append("        ");
+					loop_indent.append("            ");
 					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
 						ret.append(loop_indent);
 						ret.append("for (int i");
@@ -2348,12 +2488,15 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					}
 
 					ret.append(indent);
+					ret.append("        }\n");
+
+					ret.append(indent);
 					ret.append("    }\n");
 					break;
 				}
 			}
 			default:
-			{				
+			{
 				ret.append("    if (");
 				ret.append(name);
 				ret.append(" == null)\n");
@@ -2372,13 +2515,24 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append("    }\n");
 
 				ret.append(indent);
-				ret.append("    MarshalHelper.PtrToMultiArray<");
+				ret.append("    if (wrapper.");
+				ret.append(name);
+				ret.append(" != IntPtr.Zero)\n");
+
+				ret.append(indent);
+				ret.append("    {\n");
+
+				ret.append(indent);
+				ret.append("        MarshalHelper.PtrToMultiArray<");
 				ret.append(base_type);
 				ret.append(">(wrapper.");
 				ret.append(name);
 				ret.append(", ");
 				ret.append(name);
 				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("    }\n");
 				break;
 			}
 			}

@@ -1050,7 +1050,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     "Pressing down on you, no man ask for",
                     "Under pressure that burns a building down",
                     "Splits a family in two",
-                    "Puts people on streets"
+                    "Puts people on streets",
                 },
                 WStringArrayField = new[]
                 {
@@ -1058,13 +1058,13 @@ namespace OpenDDSharp.Standard.UnitTest
                     "Rebel Rebel, your face is a mess",
                     "Rebel Rebel, how could they know?",
                     "Hot tramp,",
-                    "I love you so!"
+                    "I love you so!",
                 },
             };
 
             _dataWriter.Write(data);
 
-            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });            
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // To allow to change the thread context.

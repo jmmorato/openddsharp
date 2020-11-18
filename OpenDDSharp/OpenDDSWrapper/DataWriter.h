@@ -21,6 +21,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "QosPolicies.h"
 #include "DataWriterListenerImpl.h"
+#include "Statuses.h"
+#include "BuiltinTopicData.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataWriter_NarrowBase(::DDS::DataWriter_ptr dp);
@@ -48,3 +50,18 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::Topic_ptr DataWriter_GetTopic(::DDS::DataWriter_ptr dw);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_GetLivelinessLostStatus(::DDS::DataWriter_ptr dw, ::DDS::LivelinessLostStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_GetOfferedDeadlineMissedStatus(::DDS::DataWriter_ptr dw, ::DDS::OfferedDeadlineMissedStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_GetOfferedIncompatibleQosStatus(::DDS::DataWriter_ptr dw, OfferedIncompatibleQosStatusWrapper& status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptions(::DDS::DataWriter_ptr dw, void*& ptr);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptionData(::DDS::DataWriter_ptr dw, SubscriptionBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle);

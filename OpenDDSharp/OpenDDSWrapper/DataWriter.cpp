@@ -23,14 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	return static_cast<::DDS::Entity_ptr>(dw);
 }
 
-::DDS::ReturnCode_t DataWriter_WaitForAcknowledgments(::DDS::DataWriter_ptr dw, ::DDS::Duration_t max_wait) {	
-	/*char buf_seconds[2048];
-	char buf_nanoseconds[2048];
-	sprintf(buf_seconds, "DURATION SECONDS %d \n", max_wait.sec);
-	sprintf(buf_nanoseconds, "DURATION NANOSECONDS %d \n", max_wait.nanosec);
-	OutputDebugStringA(buf_seconds);
-	OutputDebugStringA(buf_nanoseconds);*/
-
+::DDS::ReturnCode_t DataWriter_WaitForAcknowledgments(::DDS::DataWriter_ptr dw, ::DDS::Duration_t max_wait) {
 	return dw->wait_for_acknowledgments(max_wait);
 };
 
@@ -67,4 +60,45 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 ::DDS::Topic_ptr DataWriter_GetTopic(::DDS::DataWriter_ptr dw) {
 	return dw->get_topic();
+}
+
+::DDS::ReturnCode_t DataWriter_GetLivelinessLostStatus(::DDS::DataWriter_ptr dw, ::DDS::LivelinessLostStatus_out status) {
+	return dw->get_liveliness_lost_status(status);
+}
+
+::DDS::ReturnCode_t DataWriter_GetOfferedDeadlineMissedStatus(::DDS::DataWriter_ptr dw, ::DDS::OfferedDeadlineMissedStatus_out status) {
+	return dw->get_offered_deadline_missed_status(status);
+}
+
+::DDS::ReturnCode_t DataWriter_GetOfferedIncompatibleQosStatus(::DDS::DataWriter_ptr dw, OfferedIncompatibleQosStatusWrapper& status) {
+	::DDS::OfferedIncompatibleQosStatus s;
+	::DDS::ReturnCode_t ret = dw->get_offered_incompatible_qos_status(s);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		status = s;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptions(::DDS::DataWriter_ptr dw, void*& ptr) {
+	::DDS::InstanceHandleSeq seq;
+	::DDS::ReturnCode_t ret = dw->get_matched_subscriptions(seq);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		unbounded_sequence_to_ptr(seq, ptr);
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptionData(::DDS::DataWriter_ptr dw, SubscriptionBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle) {
+	::DDS::SubscriptionBuiltinTopicData d;
+	DDS::ReturnCode_t ret = dw->get_matched_subscription_data(d, handle);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		data = d;
+	}
+
+	return ret;
 }

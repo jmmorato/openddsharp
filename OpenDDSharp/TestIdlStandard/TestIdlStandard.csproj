@@ -45,7 +45,7 @@
   <!-- Set environment variables -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-    <Message Text="Set the enviroment variables:" Importance="High" />
+    <Message Text="Set the environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
     <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />    

@@ -198,13 +198,13 @@ namespace OpenDDSharp.DDS
             return _nativeTopicDescription;
         }
 
-        private static IntPtr NarrowBase(IntPtr ptr)
+        internal static IntPtr NarrowBase(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));
         }
 
-        private static IntPtr NarrowTopicDescription(IntPtr ptr)
+        internal static IntPtr NarrowTopicDescription(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowTopicDescription86(ptr),
                                                () => UnsafeNativeMethods.NarrowTopicDescription64(ptr));
