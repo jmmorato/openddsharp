@@ -33,7 +33,7 @@ namespace OpenDDSharp.Standard.UnitTest
         private const string TEST_CATEGORY = "CodeGenerator";
         #endregion
 
-        #region Fields        
+        #region Fields
         private DomainParticipant _participant;
         private Publisher _publisher;
         private Subscriber _subscriber;
@@ -140,7 +140,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.AreEqual(data.ShortField, received.ShortField);
@@ -235,7 +236,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(data.BoundedBooleanSequenceField.SequenceEqual(received.BoundedBooleanSequenceField));
@@ -375,9 +377,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             // To allow to change the thread context.
             System.Threading.Thread.Sleep(10);
-
+            SampleInfo sampleInfo = new SampleInfo();
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsTrue(data.BooleanArrayField.SequenceEqual(received.BooleanArrayField));
@@ -791,7 +793,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
@@ -936,7 +939,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.AreEqual(data.UnboundedStringField, received.UnboundedStringField);
@@ -1013,7 +1017,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(data.BoundedStringSequenceField.SequenceEqual(received.BoundedStringSequenceField));
@@ -1071,7 +1076,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
@@ -1156,7 +1162,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(CompareMultiArray(data.StringMultiArrayField, received.StringMultiArrayField));
@@ -1200,7 +1207,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsNotNull(received.NestedStructField);
@@ -1250,7 +1258,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             for (int i = 1; i < data.BoundedStructSequenceField.Count; i++)
@@ -1300,7 +1309,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             for (int i = 0; i < 5; i++)
@@ -1359,7 +1369,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             for (int i0 = 0; i0 < 3; i0++)
@@ -1404,7 +1415,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.AreEqual(data.TestEnumField, received.TestEnumField);
@@ -1435,7 +1447,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
@@ -1470,7 +1483,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
@@ -1525,7 +1539,8 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(10);
 
             TestStruct received = new TestStruct();
-            ret = _dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(CompareMultiArray(data.EnumMultiArrayField, received.EnumMultiArrayField));

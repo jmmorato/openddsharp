@@ -20,11 +20,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include "Utils.h"
 
-EXTERN_METHOD_EXPORT
-::DDS::Condition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition);
+EXTERN_METHOD_EXPORT ::DDS::Condition_ptr ReadCondition_NarrowBase(::DDS::ReadCondition_ptr ptr);
 
-EXTERN_METHOD_EXPORT
-::DDS::StatusMask StatusCondition_GetEnabledStatuses(::DDS::StatusCondition_ptr status_condition);
+EXTERN_METHOD_EXPORT void ReadCondition_Release(::DDS::ReadCondition_ptr ptr);
 
-EXTERN_METHOD_EXPORT
-void StatusCondition_SetEnabledStatuses(::DDS::StatusCondition_ptr status_condition, ::DDS::StatusMask value);
+EXTERN_METHOD_EXPORT::DDS::SampleStateMask ReadCondition_GetSampleStateMask(::DDS::ReadCondition_ptr ptr);
+
+EXTERN_METHOD_EXPORT ::DDS::ViewStateMask ReadCondition_GetViewStateMask(::DDS::ReadCondition_ptr ptr);
+
+EXTERN_METHOD_EXPORT::DDS::InstanceStateMask ReadCondition_GetInstanceStateMask(::DDS::ReadCondition_ptr ptr);

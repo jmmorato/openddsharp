@@ -89,10 +89,10 @@ EXTERN_METHOD_EXPORT
 CORBA::Boolean DomainParticipant_ContainsEntity(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr DomainParticipant_FindTopic(::DDS::DomainParticipant_ptr dp, char* topicName, ::DDS::Duration_t duration);
+::DDS::Topic_ptr DomainParticipant_FindTopic(::DDS::DomainParticipant_ptr dp, char* topicName, ::DDS::Duration_t duration);
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr DomainParticipant_LookupTopicDescription(::DDS::DomainParticipant_ptr dp, char* name);
+::DDS::TopicDescription_ptr DomainParticipant_LookupTopicDescription(::DDS::DomainParticipant_ptr dp, char* name);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_DeleteTopic(::DDS::DomainParticipant_ptr dp, ::DDS::Topic_ptr topic);

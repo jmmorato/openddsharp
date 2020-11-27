@@ -143,7 +143,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 // Wait the signal
                 bool wait = evt.Wait(20000);
                 Assert.IsTrue(wait);
-                Assert.AreEqual(_topic, topic);
+                Assert.AreSame(_topic, topic);
                 Assert.AreEqual(1, totalCount);
                 Assert.AreEqual(1, totalCountChange);
 

@@ -81,7 +81,7 @@ namespace OpenDDSharp.DDS
         public abstract void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status);
 
         private void OnInconsistentTopicHandler(IntPtr topic, ref InconsistentTopicStatus status)
-        {
+        {            
             Entity entity = EntityManager.Instance.Find(topic);
 
             Topic t = null;

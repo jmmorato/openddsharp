@@ -583,7 +583,7 @@ namespace OpenDDSharp.DDS
                 Listener = listener,
             };
 
-            EntityManager.Instance.Add((t as Entity).ToNative(), t);
+            EntityManager.Instance.Add(t.ToNativeTopicDescription(), t);
             ContainedEntities.Add(t);
 
             return t;
@@ -669,7 +669,9 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return (Topic)EntityManager.Instance.Find(native);
+            IntPtr ptrTopicDescription = Topic.NarrowTopicDescription(native);
+
+            return (Topic)EntityManager.Instance.Find(ptrTopicDescription);
         }
 
         /// <summary>

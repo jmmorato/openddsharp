@@ -40,4 +40,4 @@ typedef void(__stdcall* onLivelinessLostDeclaration)(::DDS::Entity_ptr writer, c
 typedef void(__stdcall* onPublicationMatchedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 
 // Topic delegates
-typedef void(__stdcall* onInconsistentTopicDeclaration)(::DDS::Entity_ptr topic, const ::DDS::InconsistentTopicStatus& status);
+typedef void(__stdcall* onInconsistentTopicDeclaration)(::DDS::TopicDescription_ptr topic, const ::DDS::InconsistentTopicStatus& status);

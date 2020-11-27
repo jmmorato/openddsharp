@@ -125,12 +125,12 @@ CORBA::Boolean DomainParticipant_ContainsEntity(::DDS::DomainParticipant_ptr dp,
     return dp->contains_entity(handle);
 }
 
-::DDS::Entity_ptr DomainParticipant_FindTopic(::DDS::DomainParticipant_ptr dp, char* topicName, ::DDS::Duration_t duration) {
-    return DDS::Entity::_narrow(dp->find_topic(topicName, duration));
+::DDS::Topic_ptr DomainParticipant_FindTopic(::DDS::DomainParticipant_ptr dp, char* topicName, ::DDS::Duration_t duration) {
+    return dp->find_topic(topicName, duration);
 }
 
-::DDS::Entity_ptr DomainParticipant_LookupTopicDescription(::DDS::DomainParticipant_ptr dp, char* name) {
-    return DDS::Entity::_narrow(dp->lookup_topicdescription(name));
+::DDS::TopicDescription_ptr DomainParticipant_LookupTopicDescription(::DDS::DomainParticipant_ptr dp, char* name) {
+    return dp->lookup_topicdescription(name);
 }
 
 ::DDS::ReturnCode_t DomainParticipant_DeleteTopic(::DDS::DomainParticipant_ptr dp, ::DDS::Topic_ptr topic) {

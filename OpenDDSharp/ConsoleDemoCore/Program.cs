@@ -108,7 +108,8 @@ namespace ConsoleDemoCore
             System.Threading.Thread.Sleep(500);
 
             TestStruct received = new TestStruct();
-            ret = dataReader.ReadNextSample(received);
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
             if (ret == ReturnCode.Ok)
             {
                 #region Integer Types

@@ -30,7 +30,7 @@ using Test;
 namespace OpenDDSharp.Standard.UnitTest
 {
     /// <summary>
-    /// <see cref="Subscriber"/> unit test class.
+    /// <see cref="DataWriter"/> unit test class.
     /// </summary>
     [TestClass]
     public class DataWriterTest
@@ -47,7 +47,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
         #region Properties
         /// <summary>
-        /// The <see cref="TestContext"/> property.
+        /// Gets or sets the <see cref="TestContext"/> property.
         /// </summary>
         public TestContext TestContext { get; set; }
         #endregion
@@ -109,8 +109,10 @@ namespace OpenDDSharp.Standard.UnitTest
             // Create a DataWriter and check the Topic and Participant properties
             DataWriter writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            Assert.AreEqual(_topic, writer.Topic);
-            Assert.AreEqual(_publisher, writer.Publisher);
+            Assert.IsNotNull(writer.Topic);
+            Assert.IsNotNull(writer.Publisher);
+            Assert.AreSame(_topic, writer.Topic);
+            Assert.AreSame(_publisher, writer.Publisher);
             Assert.IsNull(writer.Listener);
         }
 

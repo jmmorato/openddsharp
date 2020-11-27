@@ -207,3 +207,91 @@ public:
         return native;
     }
 };
+
+EXTERN_STRUCT_EXPORT PublicationBuiltinTopicDataWrapper
+{
+    ::DDS::BuiltinTopicKey_t key;
+    ::DDS::BuiltinTopicKey_t participant_key;
+    CORBA::Char* topic_name;
+    CORBA::Char* type_name;
+    DurabilityQosPolicyWrapper durability;
+    DurabilityServiceQosPolicyWrapper durability_service;
+    DeadlineQosPolicyWrapper deadline;
+    LatencyBudgetQosPolicyWrapper latency_budget;
+    LivelinessQosPolicyWrapper liveliness;
+    ReliabilityQosPolicyWrapper reliability;
+    LifespanQosPolicyWrapper lifespan;
+    UserDataQosPolicyWrapper user_data;
+    OwnershipQosPolicyWrapper ownership;
+    OwnershipStrengthQosPolicyWrapper ownership_strength;
+    DestinationOrderQosPolicyWrapper destination_order;
+    PresentationQosPolicyWrapper presentation;
+    PartitionQosPolicyWrapper partition;
+    TopicDataQosPolicyWrapper topic_data;
+    GroupDataQosPolicyWrapper group_data;
+
+public:
+    PublicationBuiltinTopicDataWrapper();
+
+    PublicationBuiltinTopicDataWrapper(const ::DDS::PublicationBuiltinTopicData native) {
+        key = native.key;
+        participant_key = native.participant_key;
+        if (native.topic_name != NULL) {
+            topic_name = CORBA::string_dup(native.topic_name);
+        }
+        else {
+            topic_name = NULL;
+        }
+        if (native.type_name != NULL) {
+            type_name = CORBA::string_dup(native.type_name);
+        }
+        else {
+            type_name = NULL;
+        }
+        durability = native.durability;
+        durability_service = native.durability_service;
+        deadline = native.deadline;
+        latency_budget = native.latency_budget;
+        liveliness = native.liveliness;
+        reliability = native.reliability;
+        lifespan = native.lifespan;
+        user_data = native.user_data;
+        ownership = native.ownership;
+        ownership_strength = native.ownership_strength;
+        destination_order = native.destination_order;                
+        presentation = native.presentation;
+        partition = native.partition;
+        topic_data = native.topic_data;
+        group_data = native.group_data;
+    }
+
+    operator ::DDS::PublicationBuiltinTopicData() const {
+        ::DDS::PublicationBuiltinTopicData native;
+
+        native.key = key;
+        native.participant_key = participant_key;
+        if (topic_name != NULL) {
+            native.topic_name = CORBA::string_dup(topic_name);
+        }
+        if (type_name != NULL) {
+            native.type_name = CORBA::string_dup(type_name);
+        }
+        native.durability = durability;
+        native.durability_service = durability_service;
+        native.deadline = deadline;
+        native.latency_budget = latency_budget;
+        native.liveliness = liveliness;
+        native.reliability = reliability;
+        native.lifespan = lifespan;
+        native.user_data = user_data;
+        native.ownership = ownership;
+        native.ownership_strength = ownership_strength;
+        native.destination_order = destination_order;                
+        native.presentation = presentation;
+        native.partition = partition;
+        native.topic_data = topic_data;
+        native.group_data = group_data;
+
+        return native;
+    }
+};

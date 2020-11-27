@@ -31,7 +31,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	std::function<void(::DDS::Entity_ptr, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
 	std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
 	std::function<void(::DDS::Entity_ptr, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
-	std::function<void(::DDS::Entity_ptr, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
+	std::function<void(::DDS::TopicDescription_ptr, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
 	_onDataOnReaders = onDataOnReaders;
 	_onDataAvalaible = onDataAvalaible;
 	_onRequestedDeadlineMissed = onRequestedDeadlineMissed;
@@ -137,6 +137,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_publication_
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
 	if (_onInconsistentTopic != NULL) {
-		_onInconsistentTopic(static_cast<::DDS::Entity_ptr>(topic), status);
+		_onInconsistentTopic(static_cast<::DDS::TopicDescription_ptr>(topic), status);
 	}
 };

@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -88,7 +89,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="ReadCondition" /> on success, otherwise <see langword="null"/>.</returns>
         public ReadCondition CreateReadCondition()
         {
-            throw new NotImplementedException();
+            return CreateReadCondition(SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
         }
 
         /// <summary>
@@ -100,7 +101,17 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="ReadCondition" /> on success, otherwise <see langword="null"/>.</returns>
         public ReadCondition CreateReadCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
         {
-            throw new NotImplementedException();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateReadCondition86(_native, sampleStates, viewStates, instanceStates),
+                                                        () => UnsafeNativeMethods.CreateReadCondition64(_native, sampleStates, viewStates, instanceStates));
+
+            ReadCondition readCondition = null;
+            if (native != IntPtr.Zero)
+            {
+                readCondition = new ReadCondition(native, this);
+                _conditions.Add(readCondition);
+            }
+
+            return readCondition;
         }
 
         /// <summary>
@@ -114,7 +125,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="QueryCondition" /> on success, otherwise <see langword="null"/>.</returns>
         public QueryCondition CreateQueryCondition(string queryExpression, params string[] queryParameters)
         {
-            throw new NotImplementedException();
+            return CreateQueryCondition(SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState, queryExpression, queryParameters);
         }
 
         /// <summary>
@@ -131,7 +142,21 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="QueryCondition" /> on success, otherwise <see langword="null"/>.</returns>
         public QueryCondition CreateQueryCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates, string queryExpression, params string[] queryParameters)
         {
-            throw new NotImplementedException();
+            IntPtr seq = IntPtr.Zero;
+            IList<string> parameters = queryParameters.ToList();
+            parameters.StringSequenceToPtr(ref seq, false);
+
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateQueryCondition86(_native, sampleStates, viewStates, instanceStates, queryExpression, seq),
+                                                        () => UnsafeNativeMethods.CreateQueryCondition64(_native, sampleStates, viewStates, instanceStates, queryExpression, seq));
+
+            QueryCondition queryCondition = null;
+            if (native != IntPtr.Zero)
+            {
+                queryCondition = new QueryCondition(native, this);
+                _conditions.Add(queryCondition);
+            }
+
+            return queryCondition;
         }
 
         /// <summary>
@@ -145,7 +170,43 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteReadCondition(ReadCondition condition)
         {
-            throw new NotImplementedException();
+            if (condition == null)
+            {
+                return ReturnCode.Ok;
+            }
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteReadCondition86(_native, condition.ToNative()),
+                                                         () => UnsafeNativeMethods.DeleteReadCondition64(_native, condition.ToNative()));
+
+            if (ret == ReturnCode.Ok)
+            {
+                _conditions.Remove(condition);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Deletes all the entities that were created by means of the "create" operations on the <see cref="DataReader" />. That is, it
+        /// deletes all contained <see cref="ReadCondition" /> and <see cref="QueryCondition" /> objects.
+        /// </summary>
+        /// <remarks>
+        /// <para>The operation will return <see cref="ReturnCode.PreconditionNotMet" /> if the any of the contained entities is in a state where it cannot be deleted.</para>
+        /// <para>Once DeleteContainedEntities returns successfully, the application may delete the <see cref="DataReader" /> knowing that it has no
+        /// contained <see cref="ReadCondition" /> and <see cref="QueryCondition" /> objects.</para>
+        /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode DeleteContainedEntities()
+        {
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteContainedEntities86(_native),
+                                                         () => UnsafeNativeMethods.DeleteContainedEntities64(_native));
+
+            if (ret == ReturnCode.Ok)
+            {
+                ClearContainedEntities();
+            }
+
+            return ret;
         }
 
         /// <summary>
@@ -243,7 +304,13 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetSampleRejectedStatus(ref SampleRejectedStatus status)
         {
-            throw new NotImplementedException();
+            SampleRejectedStatus s = default;
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetSampleRejectedStatus86(_native, ref s),
+                                                         () => UnsafeNativeMethods.GetSampleRejectedStatus64(_native, ref s));
+            status = s;
+
+            return ret;
         }
 
         /// <summary>
@@ -253,7 +320,13 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetLivelinessChangedStatus(ref LivelinessChangedStatus status)
         {
-            throw new NotImplementedException();
+            LivelinessChangedStatus s = default;
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetLivelinessChangedStatus86(_native, ref s),
+                                                         () => UnsafeNativeMethods.GetLivelinessChangedStatus64(_native, ref s));
+            status = s;
+
+            return ret;
         }
 
         /// <summary>
@@ -263,7 +336,13 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetRequestedDeadlineMissedStatus(ref RequestedDeadlineMissedStatus status)
         {
-            throw new NotImplementedException();
+            RequestedDeadlineMissedStatus s = default;
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetRequestedDeadlineMissedStatus86(_native, ref s),
+                                                         () => UnsafeNativeMethods.GetRequestedDeadlineMissedStatus64(_native, ref s));
+            status = s;
+
+            return ret;
         }
 
         /// <summary>
@@ -273,7 +352,13 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetRequestedIncompatibleQosStatus(ref RequestedIncompatibleQosStatus status)
         {
-            throw new NotImplementedException();
+            RequestedIncompatibleQosStatusWrapper s = default;
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetRequestedIncompatibleQosStatus86(_native, ref s),
+                                                         () => UnsafeNativeMethods.GetRequestedIncompatibleQosStatus64(_native, ref s));
+            status.FromNative(s);
+
+            return ret;
         }
 
         /// <summary>
@@ -281,9 +366,15 @@ namespace OpenDDSharp.DDS
         /// </summary>
         /// <param name="status">The <see cref="SubscriptionMatchedStatus" /> to be filled up.</param>
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-        public ReturnCode GetSubscriptionMatchedStatus(SubscriptionMatchedStatus status)
+        public ReturnCode GetSubscriptionMatchedStatus(ref SubscriptionMatchedStatus status)
         {
-            throw new NotImplementedException();
+            SubscriptionMatchedStatus s = default;
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetSubscriptionMatchedStatus86(_native, ref s),
+                                                         () => UnsafeNativeMethods.GetSubscriptionMatchedStatus64(_native, ref s));
+            status = s;
+
+            return ret;
         }
 
         /// <summary>
@@ -293,7 +384,13 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetSampleLostStatus(ref SampleLostStatus status)
         {
-            throw new NotImplementedException();
+            SampleLostStatus s = default;
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetSampleLostStatus86(_native, ref s),
+                                                         () => UnsafeNativeMethods.GetSampleLostStatus64(_native, ref s));
+            status = s;
+
+            return ret;
         }
 
         /// <summary>
@@ -329,7 +426,7 @@ namespace OpenDDSharp.DDS
         {
             if (publicationHandles == null)
             {
-                throw new ArgumentNullException(nameof(publicationHandles));
+                return ReturnCode.BadParameter;
             }
 
             IntPtr ptr = IntPtr.Zero;
@@ -339,7 +436,6 @@ namespace OpenDDSharp.DDS
             if (ret == ReturnCode.Ok && ptr != IntPtr.Zero)
             {
                 ptr.PtrToSequence(ref publicationHandles);
-
                 ptr.ReleaseNativePointer();
             }
 
@@ -361,23 +457,33 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetMatchedPublicationData(InstanceHandle publicationHandle, ref PublicationBuiltinTopicData publicationData)
         {
-            throw new NotImplementedException();
-        }
+            PublicationBuiltinTopicDataWrapper data = default;
 
-        internal override void ClearContainedEntities()
-        {
-            foreach (ReadCondition c in _conditions)
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetMatchedPublicationData86(_native, ref data, publicationHandle),
+                                                         () => UnsafeNativeMethods.GetMatchedPublicationData64(_native, ref data, publicationHandle));
+
+            if (ret == ReturnCode.Ok)
             {
-                MarshalHelper.ReleaseNativePointer(c.ToNative());
+                publicationData.FromNative(data);
             }
 
-            _conditions.Clear();
+            return ret;
         }
 
         internal static IntPtr NarrowBase(IntPtr ptr)
         {
             return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
                                                () => UnsafeNativeMethods.NarrowBase64(ptr));
+        }
+
+        internal override void ClearContainedEntities()
+        {
+            foreach (ReadCondition c in _conditions)
+            {
+                c.Release();
+            }
+
+            _conditions.Clear();
         }
 
         private Subscriber GetSubscriber()
@@ -407,7 +513,15 @@ namespace OpenDDSharp.DDS
 
         private ITopicDescription GetTopicDescription()
         {
-            throw new NotImplementedException();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTopicDescription86(_native),
+                                                        () => UnsafeNativeMethods.GetTopicDescription64(_native));
+
+            if (native.Equals(IntPtr.Zero))
+            {
+                return null;
+            }
+
+            return (ITopicDescription)EntityManager.Instance.Find(native);
         }
 
         /// <summary>
@@ -486,6 +600,102 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetSubscriber", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr GetSubscriber86(IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetTopicDescription", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetTopicDescription64(IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetTopicDescription", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetTopicDescription86(IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_CreateReadCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateReadCondition64(IntPtr dr, uint sampleMask, uint viewMask, uint instanceMask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_CreateReadCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateReadCondition86(IntPtr dr, uint sampleMask, uint viewMask, uint instanceMask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_CreateQueryCondition", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateQueryCondition64(IntPtr dr, uint sampleMask, uint viewMask, uint instanceMask, string expr, IntPtr parameters);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_CreateQueryCondition", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateQueryCondition86(IntPtr dr, uint sampleMask, uint viewMask, uint instanceMask, string expr, IntPtr parameters);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_DeleteReadCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteReadCondition64(IntPtr dr, IntPtr rc);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_DeleteReadCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteReadCondition86(IntPtr dr, IntPtr rc);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteContainedEntities64(IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteContainedEntities86(IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetSampleRejectedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetSampleRejectedStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SampleRejectedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetSampleRejectedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetSampleRejectedStatus86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SampleRejectedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetLivelinessChangedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetLivelinessChangedStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref LivelinessChangedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetLivelinessChangedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetLivelinessChangedStatus86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref LivelinessChangedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetRequestedDeadlineMissedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetRequestedDeadlineMissedStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref RequestedDeadlineMissedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetRequestedDeadlineMissedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetRequestedDeadlineMissedStatus86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref RequestedDeadlineMissedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetRequestedIncompatibleQosStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetRequestedIncompatibleQosStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref RequestedIncompatibleQosStatusWrapper status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetRequestedIncompatibleQosStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetRequestedIncompatibleQosStatus86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref RequestedIncompatibleQosStatusWrapper status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetSubscriptionMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetSubscriptionMatchedStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriptionMatchedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetSubscriptionMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetSubscriptionMatchedStatus86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriptionMatchedStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetSampleLostStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetSampleLostStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SampleLostStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetSampleLostStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetSampleLostStatus86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SampleLostStatus status);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataReader_GetMatchedPublicationData", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetMatchedPublicationData64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationBuiltinTopicDataWrapper data, int handle);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataReader_GetMatchedPublicationData", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetMatchedPublicationData86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationBuiltinTopicDataWrapper data, int handle);
         }
         #endregion
     }

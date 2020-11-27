@@ -60,3 +60,68 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::DDS::Subscriber_ptr DataReader_GetSubscriber(::DDS::DataReader_ptr dr) {
 	return dr->get_subscriber();
 }
+
+::DDS::TopicDescription_ptr DataReader_GetTopicDescription(::DDS::DataReader_ptr dr) {
+	return dr->get_topicdescription();
+}
+
+::DDS::ReadCondition_ptr DataReader_CreateReadCondition(::DDS::DataReader_ptr dr, ::DDS::SampleStateMask sampleMask, ::DDS::ViewStateMask viewMask, ::DDS::InstanceStateMask instanceMask) {
+	return dr->create_readcondition(sampleMask, viewMask, instanceMask);
+}
+
+::DDS::QueryCondition_ptr DataReader_CreateQueryCondition(::DDS::DataReader_ptr dr, ::DDS::SampleStateMask sampleMask, ::DDS::ViewStateMask viewMask, ::DDS::InstanceStateMask instanceMask, char* expr, void* parameters) {
+	::DDS::StringSeq seq;
+	ptr_to_unbounded_basic_string_sequence(parameters, seq);
+
+	return dr->create_querycondition(sampleMask, viewMask, instanceMask, expr, seq);
+}
+
+::DDS::ReturnCode_t DataReader_DeleteReadCondition(::DDS::DataReader_ptr dr, ::DDS::ReadCondition_ptr rc) {
+	return dr->delete_readcondition(rc);
+}
+
+::DDS::ReturnCode_t DataReader_DeleteContainedEntities(::DDS::DataReader_ptr dr) {
+	return dr->delete_contained_entities();
+}
+
+::DDS::ReturnCode_t DataReader_GetSampleRejectedStatus(::DDS::DataReader_ptr dr, ::DDS::SampleRejectedStatus_out status) {
+	return dr->get_sample_rejected_status(status);
+}
+
+::DDS::ReturnCode_t DataReader_GetLivelinessChangedStatus(::DDS::DataReader_ptr dr, ::DDS::LivelinessChangedStatus_out status) {
+	return dr->get_liveliness_changed_status(status);
+}
+
+::DDS::ReturnCode_t DataReader_GetRequestedDeadlineMissedStatus(::DDS::DataReader_ptr dr, ::DDS::RequestedDeadlineMissedStatus_out status) {
+	return dr->get_requested_deadline_missed_status(status);
+}
+
+::DDS::ReturnCode_t DataReader_GetRequestedIncompatibleQosStatus(::DDS::DataReader_ptr dr, RequestedIncompatibleQosStatusWrapper& status) {
+	::DDS::RequestedIncompatibleQosStatus s;
+	::DDS::ReturnCode_t ret = dr->get_requested_incompatible_qos_status(s);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		status = s;
+	}
+
+	return ret;
+}
+
+::DDS::ReturnCode_t DataReader_GetSubscriptionMatchedStatus(::DDS::DataReader_ptr dr, ::DDS::SubscriptionMatchedStatus_out status) {
+	return dr->get_subscription_matched_status(status);
+}
+
+::DDS::ReturnCode_t DataReader_GetSampleLostStatus(::DDS::DataReader_ptr dr, ::DDS::SampleLostStatus_out status) {
+	return dr->get_sample_lost_status(status);
+}
+
+::DDS::ReturnCode_t DataReader_GetMatchedPublicationData(::DDS::DataReader_ptr dr, PublicationBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle) {
+	::DDS::PublicationBuiltinTopicData d;
+	DDS::ReturnCode_t ret = dr->get_matched_publication_data(d, handle);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		data = d;
+	}
+
+	return ret;
+}

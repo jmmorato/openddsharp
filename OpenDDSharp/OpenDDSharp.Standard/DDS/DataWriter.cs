@@ -342,9 +342,9 @@ namespace OpenDDSharp.DDS
 
             if (!ptrTopic.Equals(IntPtr.Zero))
             {
-                var ptrEntity = Topic.NarrowBase(ptrTopic);
+                var ptrTopicDescription = Topic.NarrowTopicDescription(ptrTopic);
 
-                Entity entity = EntityManager.Instance.Find(ptrEntity);
+                Entity entity = EntityManager.Instance.Find(ptrTopicDescription);
                 if (entity != null)
                 {
                     topic = (Topic)entity;
@@ -352,7 +352,7 @@ namespace OpenDDSharp.DDS
                 else
                 {
                     topic = new Topic(ptrTopic);
-                    EntityManager.Instance.Add((topic as Entity).ToNative(), topic);
+                    EntityManager.Instance.Add(topic.ToNativeTopicDescription(), topic);
                 }
             }
 

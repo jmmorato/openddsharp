@@ -1800,7 +1800,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		else {
 			ret.append("    _");
 			ret.append(name);
-			ret.append(" = Convert.ToDecimal(wrapper.");
+			ret.append(" = MarshalHelper.ToDecimal(wrapper.");
 			ret.append(name);
 			ret.append(");\n");
 		}
@@ -2114,7 +2114,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append(name);
 					ret.append(" = Array.ConvertAll(wrapper.");
 					ret.append(name);
-					ret.append(", e => Convert.ToDecimal(e));\n");
+					ret.append(", e => MarshalHelper.ToDecimal(e));\n");
 
 					ret.append(indent);
 					ret.append("    }\n");
@@ -2471,7 +2471,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 							ret.append(", ");
 						}
 					}
-					ret.append("] = Convert.ToDecimal(aux[");
+					ret.append("] = MarshalHelper.ToDecimal(aux[");
 					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
 						ret.append("i");
 						ret.append(std::to_string(i));

@@ -23,12 +23,11 @@ using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
-using OpenDDSharp.Standard.UnitTest;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using OpenDDSharp.Standard.UnitTest.Listeners;
 using Test;
 
-namespace OpenDDSharp.UnitTest.Standard
+namespace OpenDDSharp.Standard.UnitTest
 {
     /// <summary>
     /// <see cref="DataReaderListener"/> unit test class.

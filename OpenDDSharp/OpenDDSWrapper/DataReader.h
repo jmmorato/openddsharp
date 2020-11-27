@@ -22,6 +22,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "marshal.h"
 #include "QosPolicies.h"
 #include "DataReaderListenerImpl.h"
+#include "Statuses.h"
+#include "BuiltinTopicData.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataReader_NarrowBase(::DDS::DataReader_ptr dp);
@@ -43,3 +45,39 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::Subscriber_ptr DataReader_GetSubscriber(::DDS::DataReader_ptr dr);
+
+EXTERN_METHOD_EXPORT
+::DDS::TopicDescription_ptr DataReader_GetTopicDescription(::DDS::DataReader_ptr dr);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReadCondition_ptr DataReader_CreateReadCondition(::DDS::DataReader_ptr dr, ::DDS::SampleStateMask sampleMask, ::DDS::ViewStateMask viewMask, ::DDS::InstanceStateMask instanceMask);
+
+EXTERN_METHOD_EXPORT
+::DDS::QueryCondition_ptr DataReader_CreateQueryCondition(::DDS::DataReader_ptr dr, ::DDS::SampleStateMask sampleMask, ::DDS::ViewStateMask viewMask, ::DDS::InstanceStateMask instanceMask, char* expr, void* parameters);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_DeleteReadCondition(::DDS::DataReader_ptr dr, ::DDS::ReadCondition_ptr rc);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_DeleteContainedEntities(::DDS::DataReader_ptr dr);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetSampleRejectedStatus(::DDS::DataReader_ptr dr, ::DDS::SampleRejectedStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetLivelinessChangedStatus(::DDS::DataReader_ptr dr, ::DDS::LivelinessChangedStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetRequestedDeadlineMissedStatus(::DDS::DataReader_ptr dr, ::DDS::RequestedDeadlineMissedStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetRequestedIncompatibleQosStatus(::DDS::DataReader_ptr dr, RequestedIncompatibleQosStatusWrapper& status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetSubscriptionMatchedStatus(::DDS::DataReader_ptr dr, ::DDS::SubscriptionMatchedStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetSampleLostStatus(::DDS::DataReader_ptr dr, ::DDS::SampleLostStatus_out status);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DataReader_GetMatchedPublicationData(::DDS::DataReader_ptr dr, PublicationBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle);

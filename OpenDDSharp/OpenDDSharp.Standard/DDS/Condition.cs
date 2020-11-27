@@ -35,10 +35,17 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets a value indicating whether the trigger value of the <see cref="Condition" /> is active or not.
+        /// </summary>
         public bool TriggerValue => GetTriggerValue();
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Condition"/> class.
+        /// </summary>
+        /// <param name="native">The underlying native pointer.</param>
         protected Condition(IntPtr native)
         {
             _native = native;
@@ -48,7 +55,7 @@ namespace OpenDDSharp.DDS
         #region Methods
         private bool GetTriggerValue()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTriggerValue86(_native), 
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTriggerValue86(_native),
                                                () => UnsafeNativeMethods.GetTriggerValue64(_native));
         }
 

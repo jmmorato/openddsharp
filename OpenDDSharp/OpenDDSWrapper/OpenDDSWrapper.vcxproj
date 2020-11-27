@@ -211,6 +211,8 @@
     <ClInclude Include="PublisherListener.h" />
     <ClInclude Include="PublisherListenerImpl.h" />
     <ClInclude Include="QosPolicies.h" />
+    <ClInclude Include="QueryCondition.h" />
+    <ClInclude Include="ReadCondition.h" />
     <ClInclude Include="RtpsDiscovery.h" />
     <ClInclude Include="StatusCondition.h" />
     <ClInclude Include="Statuses.h" />
@@ -244,6 +246,8 @@
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="PublisherListener.cpp" />
     <ClCompile Include="PublisherListenerImpl.cpp" />
+    <ClCompile Include="QueryCondition.cpp" />
+    <ClCompile Include="ReadCondition.cpp" />
     <ClCompile Include="RtpsDiscovery.cpp" />
     <ClCompile Include="StatusCondition.cpp" />
     <ClCompile Include="Subscriber.cpp" />

@@ -17,14 +17,24 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
-#include "Utils.h"
+#include "ReadCondition.h"
 
-EXTERN_METHOD_EXPORT
-::DDS::Condition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition);
+::DDS::Condition_ptr ReadCondition_NarrowBase(::DDS::ReadCondition_ptr ptr) {
+	return static_cast<::DDS::Condition_ptr>(ptr);
+}
 
-EXTERN_METHOD_EXPORT
-::DDS::StatusMask StatusCondition_GetEnabledStatuses(::DDS::StatusCondition_ptr status_condition);
+void ReadCondition_Release(::DDS::ReadCondition_ptr ptr) {
+	::DDS::ReadCondition::_tao_release(ptr);
+}
 
-EXTERN_METHOD_EXPORT
-void StatusCondition_SetEnabledStatuses(::DDS::StatusCondition_ptr status_condition, ::DDS::StatusMask value);
+::DDS::SampleStateMask ReadCondition_GetSampleStateMask(::DDS::ReadCondition_ptr ptr) {
+	return ptr->get_sample_state_mask();
+}
+
+::DDS::ViewStateMask ReadCondition_GetViewStateMask(::DDS::ReadCondition_ptr ptr) {
+	return ptr->get_view_state_mask();
+}
+
+::DDS::InstanceStateMask ReadCondition_GetInstanceStateMask(::DDS::ReadCondition_ptr ptr) {
+	return ptr->get_instance_state_mask();
+}

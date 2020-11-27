@@ -104,11 +104,22 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPE
     return <%SCOPED%>DataReader::_narrow(dr);
 }
 
-int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data)
+int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo sampleInfo)
 {
     <%SCOPED%> nativeData;
-    ::DDS::SampleInfo sampleInfo;
     ::DDS::ReturnCode_t ret = dr->read_next_sample(nativeData, sampleInfo);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        data->from_native(nativeData);
+    }
+
+    return (int)ret;
+}
+
+int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo sampleInfo)
+{
+    <%SCOPED%> nativeData;    
+    ::DDS::ReturnCode_t ret = dr->take_next_sample(nativeData, sampleInfo);
     if (ret == ::DDS::RETCODE_OK)
     {
         data->from_native(nativeData);
@@ -120,8 +131,34 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::SampleInfoSeq info_seq;
+
     ::DDS::ReturnCode_t ret = dr->read(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;
+
+    ::DDS::ReturnCode_t ret = dr->read_w_condition(received_data, info_seq, maxSamples, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
@@ -146,6 +183,31 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->take(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;
+
+    ::DDS::ReturnCode_t ret = dr->take_w_condition(received_data, info_seq, maxSamples, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
@@ -195,6 +257,80 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;
+
+    ::DDS::ReturnCode_t ret = dr->read_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::ReturnCode_t ret = dr->take_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;
+
+    ::DDS::ReturnCode_t ret = dr->take_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
@@ -215,6 +351,92 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     }
 
     dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::ReturnCode_t ret = dr->read_next_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::ReturnCode_t ret = dr->take_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+{
+    <%SCOPED%>Seq received_data;
+    ::DDS::SampleInfoSeq info_seq;    
+    ::DDS::ReturnCode_t ret = dr->take_next_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        seq.length(received_data.length());
+        for (int i = 0; i < received_data.length(); i++) {
+            <%SCOPED_METHOD%>Wrapper aux;
+            aux.from_native(received_data[i]);
+            seq[i] = aux;
+        }
+
+        marshal::unbounded_sequence_to_ptr(seq, receivedData);
+        marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
+    }
+
+    dr->return_loan(received_data, info_seq);
+
+    return ret;
+}
+
+int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, int handle)
+{
+    <%SCOPED%> nativeData;
+
+    ::DDS::ReturnCode_t ret = dr->get_key_value(nativeData, handle);
+
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        data->from_native(nativeData);
+    }
 
     return ret;
 }

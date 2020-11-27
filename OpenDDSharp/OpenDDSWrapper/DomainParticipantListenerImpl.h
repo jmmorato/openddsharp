@@ -44,7 +44,7 @@ namespace OpenDDSharp {
 				std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> _onLivelinessLost;
 				std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> _onPublicationMatched;
 
-				std::function<void(::DDS::Entity_ptr topic, ::DDS::InconsistentTopicStatus status)> _onInconsistentTopic;
+				std::function<void(::DDS::TopicDescription_ptr topic, ::DDS::InconsistentTopicStatus status)> _onInconsistentTopic;
 
 			public:
 				DomainParticipantListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataOnReaders,
@@ -59,7 +59,7 @@ namespace OpenDDSharp {
 											  std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
 											  std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
 											  std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
-											  std::function<void(::DDS::Entity_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic);
+											  std::function<void(::DDS::TopicDescription_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic);
 
 			protected:
 				virtual ~DomainParticipantListenerImpl();

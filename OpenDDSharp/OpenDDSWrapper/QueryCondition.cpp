@@ -17,14 +17,24 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
-#include "Utils.h"
+#include "QueryCondition.h"
 
-EXTERN_METHOD_EXPORT
-::DDS::Condition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition);
+::DDS::ReadCondition_ptr QueryCondition_NarrowBase(::DDS::QueryCondition_ptr ptr) {
+	return static_cast<::DDS::ReadCondition_ptr>(ptr);
+}
 
-EXTERN_METHOD_EXPORT
-::DDS::StatusMask StatusCondition_GetEnabledStatuses(::DDS::StatusCondition_ptr status_condition);
+char* QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr) {
+	return ptr->get_query_expression();
+}
 
-EXTERN_METHOD_EXPORT
-void StatusCondition_SetEnabledStatuses(::DDS::StatusCondition_ptr status_condition, ::DDS::StatusMask value);
+::DDS::ReturnCode_t QueryCondition_GetQueryParameters(::DDS::QueryCondition_ptr ptr, void*& seq) {
+	::DDS::StringSeq parameters;
+
+	::DDS::ReturnCode_t ret = ptr->get_query_parameters(parameters);
+
+	if (ret == ::DDS::RETCODE_OK) {
+		unbounded_basic_string_sequence_to_ptr(parameters, seq);
+	}
+
+	return ret;
+}

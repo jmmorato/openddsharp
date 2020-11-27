@@ -53,14 +53,14 @@ namespace OpenDDSharp.DDS
 
         #region Methods
         /// <summary>
-        /// Gets the bitwise <see cref="ViewStateMask"/> value from the <see cref="SampleStateKind"/> entry parameters.
+        /// Gets the bitwise <see cref="SampleStateMask"/> value from the <see cref="SampleStateKind"/> entry parameters.
         /// </summary>
         /// <param name="left">The left value of the operator.</param>
         /// <param name="right">The right value of the operator.</param>
-        /// <returns>The <see cref="ViewStateMask"/> value.</returns>
-        public static ViewStateMask BitwiseOr(SampleStateKind left, SampleStateKind right)
+        /// <returns>The <see cref="SampleStateMask"/> value.</returns>
+        public static SampleStateMask BitwiseOr(SampleStateKind left, SampleStateKind right)
         {
-            return left | (ViewStateMask)right;
+            return left | (SampleStateMask)right;
         }
 
         /// <summary>
@@ -83,10 +83,10 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Gets the <see cref="ViewStateMask"/> value of the <see cref="StatusKind"/>.
+        /// Gets the <see cref="SampleStateMask"/> value of the <see cref="StatusKind"/>.
         /// </summary>
-        /// <returns>The <see cref="ViewStateMask"/> value.</returns>
-        public ViewStateMask ToViewStateMask()
+        /// <returns>The <see cref="SampleStateMask"/> value.</returns>
+        public SampleStateMask ToSampleStateMask()
         {
             return _value;
         }
@@ -168,10 +168,10 @@ namespace OpenDDSharp.DDS
         /// Implicit conversion operator from <see cref="StatusKind" /> to <see cref="StatusMask" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="ViewStateMask" /> value.</returns>
-        public static implicit operator ViewStateMask(SampleStateKind value)
+        /// <returns>The <see cref="SampleStateMask" /> value.</returns>
+        public static implicit operator SampleStateMask(SampleStateKind value)
         {
-            return value.ToViewStateMask();
+            return value.ToSampleStateMask();
         }
 
         /// <summary>

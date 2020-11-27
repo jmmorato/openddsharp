@@ -19,8 +19,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "StatusCondition.h"
 
-::DDS::StatusCondition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition) {
-	return static_cast<::DDS::StatusCondition_ptr>(status_condition);
+::DDS::Condition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition) {
+	return static_cast<::DDS::Condition_ptr>(status_condition);
 }
 
 ::DDS::StatusMask StatusCondition_GetEnabledStatuses(::DDS::StatusCondition_ptr status_condition) {

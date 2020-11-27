@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public static class MarshalHelper
+internal static class MarshalHelper
 {
     public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
     {
@@ -522,6 +522,22 @@ public static class MarshalHelper
                 array.SetValue(Marshal.PtrToStringUni(pointer), dimensions);
             else
                 array.SetValue(Marshal.PtrToStringAnsi(pointer), dimensions);
+        }
+    }
+
+    public static decimal ToDecimal(this double d)
+    {        
+        if (d < (double)decimal.MinValue)
+        {
+            return Decimal.MinValue;
+        }
+        else if (d > (double)decimal.MaxValue)
+        {
+            return Decimal.MaxValue;
+        }
+        else
+        {
+            return Convert.ToDecimal(d);
         }
     }
 
