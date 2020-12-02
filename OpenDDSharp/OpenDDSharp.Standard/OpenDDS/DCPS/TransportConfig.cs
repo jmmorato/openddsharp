@@ -31,6 +31,9 @@ namespace OpenDDSharp.OpenDDS.DCPS
     public class TransportConfig
     {
         #region Constants
+        /// <summary>
+        /// The default passive connection duration
+        /// </summary>
         public const uint DEFAULT_PASSIVE_CONNECT_DURATION = 60000U;
         #endregion
 
@@ -67,6 +70,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
             set => SetSwapBytes(value);
         }
 
+        /// <summary>
+        /// Gets or sets the timeout (milliseconds) for initial passive
+        /// connection establishment. By default, this option
+        /// waits for 60 seconds. A value of zero would wait
+        /// indefnitely (not recommended).
+        /// </summary>
         public uint PassiveConnectDuration
         {
             get => GetPassiveConnectDuration();

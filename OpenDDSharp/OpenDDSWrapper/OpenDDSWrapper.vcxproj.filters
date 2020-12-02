@@ -126,6 +126,12 @@
     <ClInclude Include="QueryCondition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WaitSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuardCondition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DomainParticipant.cpp">
@@ -222,6 +228,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QueryCondition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuardCondition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -203,6 +203,7 @@
     <ClInclude Include="DomainParticipantListener.h" />
     <ClInclude Include="DomainParticipantListenerImpl.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="GuardCondition.h" />
     <ClInclude Include="InfoRepoDiscovery.h" />
     <ClInclude Include="ListenerDelegates.h" />
     <ClInclude Include="marshal.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="TransportConfig.h" />
     <ClInclude Include="TransportRegistry.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="WaitSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ace.cpp" />
@@ -241,6 +243,7 @@
     <ClCompile Include="DomainParticipantListener.cpp" />
     <ClCompile Include="DomainParticipantListenerImpl.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GuardCondition.cpp" />
     <ClCompile Include="InfoRepoDiscovery.cpp" />
     <ClCompile Include="ParticipantService.cpp" />
     <ClCompile Include="Publisher.cpp" />
@@ -259,6 +262,7 @@
     <ClCompile Include="TransportConfig.cpp" />
     <ClCompile Include="TransportRegistry.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="WaitSet.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

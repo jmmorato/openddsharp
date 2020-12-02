@@ -103,7 +103,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 		CORBA::ULong length = seq.length();
 		TAO::unbounded_value_sequence<::DDS::DataReader_ptr> readers(length);
 		readers.length(length);
-		for (int i = 0; i < length; i++) {			
+		for (CORBA::ULong i = 0; i < length; i++) {
 			readers[i] = seq[i].in();
 		}
 

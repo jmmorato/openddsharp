@@ -21,6 +21,15 @@ using System;
 
 namespace OpenDDSharp.OpenDDS.DCPS
 {
+    /// <summary>
+    /// Provides access to the configurable options for the TCP/IP transport.
+    /// </summary>
+    /// <remarks>
+    /// A properly confgured transport provides added resilience to underlying stack disturbances.Almost all of the
+    /// options available to customize the connection and reconnection strategies have reasonable
+    /// defaults, but ultimately these values should to be chosen based upon a careful study of the
+    /// quality of the network and the desired QoS in the specifc DDS application and target environment.
+    /// </remarks>
     public class TcpInst : TransportInst
     {
         #region Constructors

@@ -863,11 +863,10 @@ namespace OpenDDSharp.Standard.UnitTest
             List<TestStruct> data = new List<TestStruct>();
             List<SampleInfo> sampleInfos = new List<SampleInfo>();
 
-            #region OpenDDS Issue
+            // TODO - OpenDDS Issue:
             // Coherent sets for PRESENTATION QoS not Currently implemented on RTPS
-            //result = dataReader.Read(data, sampleInfos);
-            //Assert.AreEqual(ReturnCode.NoData, result);
-            #endregion
+            // result = dataReader.Read(data, sampleInfos);
+            // Assert.AreEqual(ReturnCode.NoData, result);
 
             // End coherent access and check the samples
             result = publisher.EndCoherentChanges();

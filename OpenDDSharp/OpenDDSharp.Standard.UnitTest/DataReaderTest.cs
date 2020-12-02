@@ -44,8 +44,6 @@ namespace OpenDDSharp.Standard.UnitTest
         private Publisher _publisher;
         private Subscriber _subscriber;
         private Topic _topic;
-        private DataWriter _dw;
-        private TestStructDataWriter _dataWriter;
         #endregion
 
         #region Properties
@@ -103,7 +101,6 @@ namespace OpenDDSharp.Standard.UnitTest
             _publisher = null;
             _subscriber = null;
             _topic = null;
-            _dw = null;
         }
         #endregion
 

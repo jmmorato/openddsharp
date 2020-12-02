@@ -37,6 +37,9 @@ namespace OpenDDSharp.OpenDDS.DCPS
         #endregion
 
         #region Singleton
+        /// <summary>
+        /// Gets the singleton instance.
+        /// </summary>
         public static ParticipantService Instance
         {
             get

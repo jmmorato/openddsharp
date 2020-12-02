@@ -28,6 +28,9 @@ namespace OpenDDSharp.DDS
     public struct InstanceHandle : IEquatable<InstanceHandle>
     {
         #region Constants
+        /// <summary>
+        /// Represent a nil instance handle
+        /// </summary>
         public static readonly InstanceHandle HandleNil = 0;
         #endregion
 

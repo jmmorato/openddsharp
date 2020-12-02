@@ -149,6 +149,10 @@ namespace OpenDDSharp.OpenDDS.DCPS
             set => SetDatalinkReleaseDelay(value);
         }
 
+        /// <summary>
+        /// Gets or sets the number of chunks used to size allocators for transport control
+        /// samples. The default value is 32.
+        /// </summary>
         public ulong DatalinkControlChunks
         {
             get => GetDatalinkControlChunks();

@@ -22,6 +22,10 @@ using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.DDS
 {
+    /// <summary>
+    /// The InconsistentTopic status indicates that a topic was attempted to be registered that already exists with different characteristics.
+    /// Typically, the existing topic may have a different type associated with it.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct InconsistentTopicStatus : IEquatable<InconsistentTopicStatus>
     {

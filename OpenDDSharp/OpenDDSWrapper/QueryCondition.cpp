@@ -38,3 +38,12 @@ char* QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr) {
 
 	return ret;
 }
+
+::DDS::ReturnCode_t QueryCondition_SetQueryParameters(::DDS::QueryCondition_ptr ptr, void* seq) {
+	::DDS::StringSeq parameters;
+	ptr_to_unbounded_basic_string_sequence(seq, parameters);
+
+	::DDS::ReturnCode_t ret = ptr->set_query_parameters(parameters);
+
+	return ret;
+}

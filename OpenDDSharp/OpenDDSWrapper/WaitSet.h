@@ -19,12 +19,23 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 #include "Utils.h"
+#include <dds/DCPS/WaitSet.h>
 #include "marshal.h"
 
-EXTERN_METHOD_EXPORT ::DDS::ReadCondition_ptr QueryCondition_NarrowBase(::DDS::QueryCondition_ptr ptr);
+EXTERN_METHOD_EXPORT
+::DDS::WaitSet_ptr WaitSet_New();
 
-EXTERN_METHOD_EXPORT char* QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr);
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t WaitSet_Wait(::DDS::WaitSet_ptr ws, void*& sequence, ::DDS::Duration_t duration);
 
-EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t QueryCondition_GetQueryParameters(::DDS::QueryCondition_ptr ptr, void*& seq);
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t WaitSet_AttachCondition(::DDS::WaitSet_ptr ws, ::DDS::Condition_ptr condition);
 
-EXTERN_METHOD_EXPORT::DDS::ReturnCode_t QueryCondition_SetQueryParameters(::DDS::QueryCondition_ptr ptr, void* seq);
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t WaitSet_DetachCondition(::DDS::WaitSet_ptr ws, ::DDS::Condition_ptr condition);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t WaitSet_GetConditions(::DDS::WaitSet_ptr ws, void*& sequence);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t WaitSet_DetachConditions(::DDS::WaitSet_ptr ws, void* sequence);

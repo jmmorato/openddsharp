@@ -75,7 +75,7 @@ namespace OpenDDSharp.Standard.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory(); //, "-DCPSConfigFile", "rtps.ini", "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10"
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory();
 
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);

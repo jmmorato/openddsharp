@@ -17,14 +17,20 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
-#include "Utils.h"
-#include "marshal.h"
+#include "GuardCondition.h"
 
-EXTERN_METHOD_EXPORT ::DDS::ReadCondition_ptr QueryCondition_NarrowBase(::DDS::QueryCondition_ptr ptr);
+::DDS::GuardCondition_ptr GuardCondition_CreateGuardCondition() {
+	return new ::DDS::GuardCondition();
+}
 
-EXTERN_METHOD_EXPORT char* QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr);
+::DDS::Condition_ptr GuardCondition_NarrowBase(::DDS::GuardCondition_ptr gc) {
+	return static_cast<::DDS::Condition_ptr>(gc);
+}
 
-EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t QueryCondition_GetQueryParameters(::DDS::QueryCondition_ptr ptr, void*& seq);
+::CORBA::Boolean GuardCondition_GetTriggerValue(::DDS::GuardCondition_ptr gc) {
+	return gc->get_trigger_value();
+}
 
-EXTERN_METHOD_EXPORT::DDS::ReturnCode_t QueryCondition_SetQueryParameters(::DDS::QueryCondition_ptr ptr, void* seq);
+void GuardCondition_SetTriggerValue(::DDS::GuardCondition_ptr gc, ::CORBA::Boolean value) {
+	gc->set_trigger_value(value);
+}

@@ -17,8 +17,8 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
@@ -26,6 +26,9 @@ using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
+    /// <summary>
+    /// Code generator unit test class.
+    /// </summary>
     [TestClass]
     public class CodeGeneratorTest
     {
@@ -45,10 +48,16 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets test context object.
+        /// </summary>
         public TestContext TestContext { get; set; }
         #endregion
 
         #region Initialization/Cleanup
+        /// <summary>
+        /// The test initializer method.
+        /// </summary>
         [TestInitialize]
         public void TestInitialize()
         {
@@ -84,6 +93,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(_dataReader.WaitForPublications(1, 1000));
         }
 
+        /// <summary>
+        /// The test cleanup method.
+        /// </summary>
         [TestCleanup]
         public void TestCleanup()
         {
@@ -109,6 +121,9 @@ namespace OpenDDSharp.Standard.UnitTest
         #endregion
 
         #region Test Methods
+        /// <summary>
+        /// Test the code generated for the basic types.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypes()
@@ -187,6 +202,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0.0m, defaultStruct.LongDoubleField);
         }
 
+        /// <summary>
+        /// Test the code generated for the sequences of basic types.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeSequences()
@@ -348,6 +366,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
         }
 
+        /// <summary>
+        /// Test the code generated for the arrays of basic types.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeArrays()
@@ -502,6 +523,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the multiarray of basic types.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeMultiArrays()
@@ -917,6 +941,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the string types.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringTypes()
@@ -961,6 +988,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
         }
 
+        /// <summary>
+        /// Test the code generated for the sequences of strings.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringSequences()
@@ -1041,6 +1071,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedWStringSequenceField.Count);
         }
 
+        /// <summary>
+        /// Test the code generated for the array of strings.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringArrays()
@@ -1101,6 +1134,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the multiarray of strings.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringMultiArrays()
@@ -1187,6 +1223,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the structures types.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructuresTypes()
@@ -1222,6 +1261,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(string.Empty, defaultStruct.NestedStructField.Message);
         }
 
+        /// <summary>
+        /// Test the code generated for the sequence of structures.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureSequences()
@@ -1282,6 +1324,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedStructSequenceField.Count);
         }
 
+        /// <summary>
+        /// Test the code generated for the array of structures.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureArrays()
@@ -1329,6 +1374,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the multiarray of structures.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureMultiArrays()
@@ -1395,6 +1443,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the enumerations.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumType()
@@ -1426,6 +1477,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(TestEnum.ENUM1, defaultStruct.TestEnumField);
         }
 
+        /// <summary>
+        /// Test the code generated for the sequence of enumerations.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumSequences()
@@ -1463,6 +1517,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedEnumSequenceField.Count);
         }
 
+        /// <summary>
+        /// Test the code generated for the array of enumerations.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumArrays()
@@ -1499,6 +1556,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the multiarray of enumerations.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumMultiArrays()
@@ -1555,6 +1615,9 @@ namespace OpenDDSharp.Standard.UnitTest
             }
         }
 
+        /// <summary>
+        /// Test the code generated for the constants.
+        /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedConstants()

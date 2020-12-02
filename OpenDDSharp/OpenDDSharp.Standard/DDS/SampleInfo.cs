@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.DDS
@@ -47,6 +48,7 @@ namespace OpenDDSharp.DDS
         private int _absoluteGenerationRank;
         [MarshalAs(UnmanagedType.I1)]
         private bool _validData;
+        [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Required to keep the alignment with the underlying structure.")]
         private long _openddsReservedPublicationSeq;
         #endregion
 

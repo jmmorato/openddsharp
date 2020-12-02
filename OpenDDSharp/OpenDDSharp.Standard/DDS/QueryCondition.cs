@@ -88,7 +88,22 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode SetQueryParameters(params string[] queryParameters)
         {
-            throw new NotImplementedException();
+            if (queryParameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            IntPtr seq = IntPtr.Zero;
+            MarshalHelper.StringSequenceToPtr(queryParameters, ref seq, false);
+            if (seq.Equals(IntPtr.Zero))
+            {
+                return ReturnCode.Error;
+            }
+
+            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQueryParameters86(_native, seq),
+                                                         () => UnsafeNativeMethods.SetQueryParameters64(_native, seq));
+
+            return ret;
         }
 
         private static IntPtr NarrowBase(IntPtr ptr)
@@ -141,6 +156,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "QueryCondition_GetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetQueryParameters64(IntPtr ptr, ref IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "QueryCondition_SetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQueryParameters86(IntPtr ptr, IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "QueryCondition_SetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQueryParameters64(IntPtr ptr, IntPtr seq);
         }
         #endregion
     }

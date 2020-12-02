@@ -79,12 +79,14 @@ namespace OpenDDSharp.DDS
 
         private bool GetTriggerValue()
         {
-            throw new NotImplementedException();
+            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTriggerValue86(_native),
+                                               () => UnsafeNativeMethods.GetTriggerValue64(_native));
         }
 
         private void SetTriggerValue(bool value)
         {
-            throw new NotImplementedException();
+            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetTriggerValue86(_native, value),
+                                        () => UnsafeNativeMethods.SetTriggerValue64(_native, value));
         }
         #endregion
 
@@ -98,7 +100,7 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "GuardCondition_CreateGuardConditione", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "GuardCondition_CreateGuardCondition", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr CreateGuardCondition64();
 
             [SuppressUnmanagedCodeSecurity]
@@ -112,6 +114,24 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "GuardCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NarrowBase86(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "GuardCondition_GetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static extern bool GetTriggerValue64(IntPtr gc);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "GuardCondition_GetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static extern bool GetTriggerValue86(IntPtr gc);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "GuardCondition_SetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetTriggerValue64(IntPtr gc, [MarshalAs(UnmanagedType.I1)] bool value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "GuardCondition_SetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetTriggerValue86(IntPtr gc, [MarshalAs(UnmanagedType.I1)] bool value);
         }
         #endregion
     }
