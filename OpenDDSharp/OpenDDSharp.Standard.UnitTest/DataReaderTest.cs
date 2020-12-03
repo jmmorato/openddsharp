@@ -1762,6 +1762,8 @@ namespace OpenDDSharp.Standard.UnitTest
             // Wait for discovery
             bool found = reader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
 
             // Write two samples of two different instances
             for (short i = 1; i <= 2; i++)
