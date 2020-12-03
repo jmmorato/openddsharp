@@ -529,7 +529,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -548,8 +548,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -583,7 +584,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -602,8 +603,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -652,7 +654,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -671,8 +673,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -706,7 +709,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -725,8 +728,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -775,7 +779,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -794,8 +798,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -829,7 +834,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -848,8 +853,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -898,7 +904,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -917,8 +923,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -952,7 +959,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -971,8 +978,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -1021,7 +1029,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -1040,8 +1048,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -1075,7 +1084,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -1094,8 +1103,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -1144,7 +1154,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -1163,8 +1173,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -1198,7 +1209,7 @@
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
-                IList<SampleInfo> info = new List<SampleInfo>();
+                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
                 MarshalHelper.PtrToSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
@@ -1217,8 +1228,9 @@
                 {
                     foreach (var i in info)
                     {
-                        SampleInfo aux = i;
-                        receivedInfo.Add(i);
+                        SampleInfo aux = new SampleInfo();
+                        aux.FromNative(i);
+                        receivedInfo.Add(aux);
                     }
                 }
             }
@@ -1228,19 +1240,21 @@
 
         public ReturnCode ReadNextSample(<%TYPE%> data, SampleInfo sampleInfo)
         {
-            if (data == null)
+            if (data == null || sampleInfo == null)
             {
                 return ReturnCode.BadParameter;
             }
 
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper wrapper = new <%TYPE%>Wrapper();
+            SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
             if (Environment.Is64BitProcess)
             {                
-                ret = (ReturnCode)ReadNextSample64(_native, ref wrapper, sampleInfo);
+                ret = (ReturnCode)ReadNextSample64(_native, ref wrapper, ref infoWrapper);
                 if (ret == ReturnCode.Ok)
                 {
                     data.FromNative(wrapper);
+                    sampleInfo.FromNative(infoWrapper);
 
                     // Always free the unmanaged memory.
                     // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
@@ -1251,10 +1265,11 @@
             }
             else
             {
-                ret = (ReturnCode)ReadNextSample86(_native, ref wrapper, sampleInfo);
+                ret = (ReturnCode)ReadNextSample86(_native, ref wrapper, ref infoWrapper);
                 if (ret == ReturnCode.Ok)
                 {
                     data.FromNative(wrapper);
+                    sampleInfo.FromNative(infoWrapper);
 
                     // Always free the unmanaged memory.
                     // As the unmanaged memory was reserved in C++ we need a method to release it from C++.                    
@@ -1267,19 +1282,21 @@
 
         public ReturnCode TakeNextSample(<%TYPE%> data, SampleInfo sampleInfo)
         {
-            if (data == null)
+            if (data == null || sampleInfo == null)
             {
                 return ReturnCode.BadParameter;
             }
 
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper wrapper = new <%TYPE%>Wrapper();
+            SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
             if (Environment.Is64BitProcess)
             {                
-                ret = (ReturnCode)TakeNextSample64(_native, ref wrapper, sampleInfo);
+                ret = (ReturnCode)TakeNextSample64(_native, ref wrapper, ref infoWrapper);
                 if (ret == ReturnCode.Ok)
                 {
                     data.FromNative(wrapper);
+                    sampleInfo.FromNative(infoWrapper);
 
                     // Always free the unmanaged memory.
                     // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
@@ -1290,10 +1307,11 @@
             }
             else
             {
-                ret = (ReturnCode)TakeNextSample86(_native, ref wrapper, sampleInfo);
+                ret = (ReturnCode)TakeNextSample86(_native, ref wrapper, ref infoWrapper);
                 if (ret == ReturnCode.Ok)
                 {
                     data.FromNative(wrapper);
+                    sampleInfo.FromNative(infoWrapper);
 
                     // Always free the unmanaged memory.
                     // As the unmanaged memory was reserved in C++ we need a method to release it from C++.                    
@@ -1470,19 +1488,19 @@
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [MarshalAs(UnmanagedType.LPStruct), In, Out] SampleInfo sampleInfo);
+        private static extern int ReadNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [MarshalAs(UnmanagedType.LPStruct), In, Out] SampleInfo sampleInfo);
+        private static extern int ReadNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
                 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [MarshalAs(UnmanagedType.LPStruct), In, Out] SampleInfo sampleInfo);
+        private static extern int TakeNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [MarshalAs(UnmanagedType.LPStruct), In, Out] SampleInfo sampleInfo);
+        private static extern int TakeNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance", CallingConvention = CallingConvention.Cdecl)]

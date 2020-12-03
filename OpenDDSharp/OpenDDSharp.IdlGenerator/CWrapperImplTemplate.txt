@@ -104,25 +104,27 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPE
     return <%SCOPED%>DataReader::_narrow(dr);
 }
 
-int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo sampleInfo)
+int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo)
 {
-    <%SCOPED%> nativeData;
-    ::DDS::ReturnCode_t ret = dr->read_next_sample(nativeData, sampleInfo);
+    <%SCOPED%> nativeData;    
+    ::DDS::ReturnCode_t ret = dr->read_next_sample(nativeData, *sampleInfo);
+
     if (ret == ::DDS::RETCODE_OK)
     {
-        data->from_native(nativeData);
+        data->from_native(nativeData);        
     }
-
+    
     return (int)ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo sampleInfo)
+int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo)
 {
-    <%SCOPED%> nativeData;    
-    ::DDS::ReturnCode_t ret = dr->take_next_sample(nativeData, sampleInfo);
+    <%SCOPED%> nativeData;
+
+    ::DDS::ReturnCode_t ret = dr->take_next_sample(nativeData, *sampleInfo);
     if (ret == ::DDS::RETCODE_OK)
     {
-        data->from_native(nativeData);
+        data->from_native(nativeData);        
     }
 
     return (int)ret;

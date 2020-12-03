@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.DDS
@@ -31,139 +31,110 @@ namespace OpenDDSharp.DDS
     /// One vector contains Sample(s) and the other contains SampleInfo(s). There is a one-to-one correspondence between items in these two vectors.
     /// Each Sample is described by the corresponding SampleInfo instance.
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
     public sealed class SampleInfo : IEquatable<SampleInfo>
     {
-        #region Fields
-        private uint _sampleState;
-        private uint _viewState;
-        private uint _instanceState;
-        private Timestamp _sourceTimestamp;
-        private int _instanceHandle;
-        private int _publicationHandle;
-        private int _disposedGenerationCount;
-        private int _noWritersGenerationCount;
-        private int _sampleRank;
-        private int _generationRank;
-        private int _absoluteGenerationRank;
-        [MarshalAs(UnmanagedType.I1)]
-        private bool _validData;
-        [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Required to keep the alignment with the underlying structure.")]
-        private long _openddsReservedPublicationSeq;
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets a value indicating whether the associated DataSample contains data.
         /// The associated DataSample may not contain data if it this sample indicates a change in sample state (for example Alive -> Disposed).
         /// </summary>
-        public bool ValidData
-        {
-            get => _validData;
-            internal set => _validData = value;
-        }
+        public bool ValidData { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether the associated data sample has/has not been read previously.
         /// </summary>
-        public SampleStateKind SampleState
-        {
-            get => _sampleState;
-            internal set => _sampleState = value;
-        }
+        public SampleStateKind SampleState { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether  the associated instance has/has not been seen before. ViewState indicates whether the <see cref="DataReader" /> has already seen
         /// samples for the most current generation of the related instance.
         /// </summary>
-        public ViewStateKind ViewState
-        {
-            get => _viewState;
-            internal set => _viewState = value;
-        }
+        public ViewStateKind ViewState { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether the associated instance currently exists.
         /// </summary>
-        public InstanceStateKind InstanceState
-        {
-            get => _instanceState;
-            internal set => _instanceState = value;
-        }
+        public InstanceStateKind InstanceState { get; internal set; }
 
         /// <summary>
         /// Gets the time provided by the <see cref="DataWriter" /> when the sample was written.
         /// </summary>
-        public Timestamp SourceTimestamp
-        {
-            get => _sourceTimestamp;
-            internal set => _sourceTimestamp = value;
-        }
+        public Timestamp SourceTimestamp { get; internal set; }
 
         /// <summary>
         /// Gets the handle that locally identifies the associated instance.
         /// </summary>
-        public InstanceHandle InstanceHandle
-        {
-            get => _instanceHandle;
-            internal set => _instanceHandle = value;
-        }
+        public InstanceHandle InstanceHandle { get; internal set; }
 
         /// <summary>
         /// Gets the local handle of the source <see cref="DataWriter" />.
         /// </summary>
-        public InstanceHandle PublicationHandle
-        {
-            get => _publicationHandle;
-            internal set => _publicationHandle = value;
-        }
+        public InstanceHandle PublicationHandle { get; internal set; }
 
         /// <summary>
         /// Gets the number of times the instance has become 'Alive' after being explicitly disposed.
         /// </summary>
-        public int DisposedGenerationCount
-        {
-            get => _disposedGenerationCount;
-            internal set => _disposedGenerationCount = value;
-        }
+        public int DisposedGenerationCount { get; internal set; }
 
         /// <summary>
         /// Gets the number of times the instance has become 'Alive' after being automatically disposed due to no active writers.
         /// </summary>
-        public int NoWritersGenerationCount
-        {
-            get => _noWritersGenerationCount;
-            internal set => _noWritersGenerationCount = value;
-        }
+        public int NoWritersGenerationCount { get; internal set; }
 
         /// <summary>
         /// Gets number of samples related to this instances that follow in the collection returned by the <see cref="DataReader" /> read or take operations.
         /// </summary>
-        public int SampleRank
-        {
-            get => _sampleRank;
-            internal set => _sampleRank = value;
-        }
+        public int SampleRank { get; internal set; }
 
         /// <summary>
         /// Gets the generation difference of this sample and the most recent sample in the collection. GenerationRank indicates the generation difference 
         /// (ie, the number of times the instance was disposed and became alive again) between this sample, and the most recent sample in the collection related to this instance.
         /// </summary>
-        public int GenerationRank
-        {
-            get => _generationRank;
-            internal set => _generationRank = value;
-        }
+        public int GenerationRank { get; internal set; }
 
         /// <summary>
         /// Gets the generation difference between this sample and the most recent sample. The AbsoluteGenerationRank indicates the generation difference 
         /// (ie, the number of times the instance was disposed and became alive again) between this sample, and the most recent sample 
         /// (possibly not in the returned collection) of this instance.
         /// </summary>
-        public int AbsoluteGenerationRank
+        public int AbsoluteGenerationRank { get; internal set; }
+        #endregion
+
+        #region Methods
+        internal SampleInfoWrapper ToNative()
         {
-            get => _absoluteGenerationRank;
-            internal set => _absoluteGenerationRank = value;
+            return new SampleInfoWrapper
+            {
+                AbsoluteGenerationRank = AbsoluteGenerationRank,
+                DisposedGenerationCount = DisposedGenerationCount,
+                GenerationRank = GenerationRank,
+                InstanceHandle = InstanceHandle,
+                InstanceState = InstanceState,
+                NoWritersGenerationCount = NoWritersGenerationCount,
+                PublicationHandle = PublicationHandle,
+                SampleRank = SampleRank,
+                SampleState = SampleState,
+                SourceTimestamp = SourceTimestamp,
+                ValidData = ValidData,
+                ViewState = ViewState,
+            };
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void FromNative(SampleInfoWrapper wrapper)
+        {
+            AbsoluteGenerationRank = wrapper.AbsoluteGenerationRank;
+            DisposedGenerationCount = wrapper.DisposedGenerationCount;
+            GenerationRank = wrapper.GenerationRank;
+            InstanceHandle = wrapper.InstanceHandle;
+            InstanceState = wrapper.InstanceState;
+            NoWritersGenerationCount = wrapper.NoWritersGenerationCount;
+            PublicationHandle = wrapper.PublicationHandle;
+            SampleRank = wrapper.SampleRank;
+            SampleState = wrapper.SampleState;
+            SourceTimestamp = wrapper.SourceTimestamp;
+            ValidData = wrapper.ValidData;
+            ViewState = wrapper.ViewState;
         }
         #endregion
 
@@ -270,4 +241,26 @@ namespace OpenDDSharp.DDS
         }
         #endregion
     }
+
+#pragma warning disable
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SampleInfoWrapper
+    {
+        public uint SampleState;
+        public uint ViewState;
+        public uint InstanceState;
+        public Timestamp SourceTimestamp;
+        public int InstanceHandle;
+        public int PublicationHandle;
+        public int DisposedGenerationCount;
+        public int NoWritersGenerationCount;
+        public int SampleRank;
+        public int GenerationRank;
+        public int AbsoluteGenerationRank;
+        [MarshalAs(UnmanagedType.I1)]
+        public bool ValidData;
+        public long OpenddsReservedPublicationSeq;
+    }
+#pragma warning enable
 }
