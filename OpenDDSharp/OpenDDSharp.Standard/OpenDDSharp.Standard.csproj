@@ -37,22 +37,22 @@
 
   <Target Name="CopyNative" AfterTargets="AfterBuild">    
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperWin32d.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapperWin32.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperx64d.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapperx64.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperd_Win32.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperd_x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperWin32d.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperx64d.dll;" />
     </ItemGroup> 
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper_Win32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper_x64.dll;" />
+      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapperWin32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapperx64.dll;" />
     </ItemGroup>
     <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
