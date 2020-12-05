@@ -225,13 +225,8 @@ bool csharp_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name
 					 << "    public class " << short_name << "\n"
 					 << "    {\n"
 					 << "        #region Constants\n"
-					 << "#if DEBUG\n"
-					 << "        internal const string API_DLL_X86 = \"" << be_global->project_name() << "WrapperWin32d\";\n"
-					 << "        internal const string API_DLL_X64 = \"" << be_global->project_name() << "Wrapperx64d\";\n"
-				     << "#else\n"
 					 << "        internal const string API_DLL_X86 = \"" << be_global->project_name() << "WrapperWin32\";\n"
 					 << "        internal const string API_DLL_X64 = \"" << be_global->project_name() << "Wrapperx64\";\n"
-					 << "#endif\n"
 					 << "        #endregion\n\n"
 					 << "        #region Fields" << "\n"
 					 << declare_struct_fields(fields, "        ").c_str()

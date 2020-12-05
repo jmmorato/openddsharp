@@ -18,15 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Collections.Generic;
-using OpenDDSharp.DDS;
-using Test;
-using OpenDDSharp.OpenDDS.DCPS;
-using OpenDDSharp.Standard.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenDDSharp.DDS;
+using OpenDDSharp.Standard.UnitTest.Helpers;
 using OpenDDSharp.Standard.UnitTest.Listeners;
+using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
 {

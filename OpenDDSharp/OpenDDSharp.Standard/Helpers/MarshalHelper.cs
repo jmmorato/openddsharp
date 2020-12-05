@@ -27,13 +27,8 @@ namespace OpenDDSharp.Helpers
     internal static class MarshalHelper
     {
         #region Constants
-#if DEBUG
-        internal const string API_DLL_X64 = @"OpenDDSWrapperx64d";
-        internal const string API_DLL_X86 = @"OpenDDSWrapperdWin32d";
-#else
         internal const string API_DLL_X64 = @"OpenDDSWrapperx64";
         internal const string API_DLL_X86 = @"OpenDDSWrapperWin32";
-#endif
         #endregion
 
         #region Methods

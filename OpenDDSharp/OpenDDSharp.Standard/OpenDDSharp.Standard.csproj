@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,6 +9,28 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
+
+    <Authors>Jose Morato</Authors>    
+    <Company>OpenDDSharp</Company>
+    <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>    
+    <Description>OpenDDS wrapper for .NET languages.
+      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
+    </Description>
+  </PropertyGroup>
+
+  <!-- NuGet properties -->
+  <PropertyGroup>
+    <PackageProjectUrl>http://www.openddsharp.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
+    <PackageIcon>favicon.ico</PackageIcon>
+    <PackageTags>OpenDDSharp DDS OpenDDS</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <!-- Create a ref assembly to include in the ref NuGet dir. It makes a warning: https://github.com/NuGet/Home/issues/4184 -->
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <NoWarn>NU5131</NoWarn>
+    <Version>0.6.0</Version>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
   
   <ItemGroup>
@@ -35,25 +58,122 @@
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
   </ItemGroup>
 
-  <Target Name="CopyNative" AfterTargets="AfterBuild">    
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperWin32d.dll;" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapperWin32.dll;" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperx64d.dll;" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <Dlls Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapperx64.dll;" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperWin32d.dll;..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperx64d.dll;" />
-    </ItemGroup> 
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCpu'">
-      <Dlls Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapperWin32.dll;..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapperx64.dll;" />
-    </ItemGroup>
-    <Copy SourceFiles="@(Dlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
-  </Target>
+  <!-- NuGet package content. -->
+  <ItemGroup>
+    <None Include="..\..\favicon.ico" Pack="true" PackagePath="\" Visible="false" />    
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
+
+    <!-- OpenDDS Win32/Release native Libraries -->
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscovery.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udp.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmem.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcp.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicast.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udp.dll" />
+    <None Include="@(OpenDDSReleaseWin32)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+    <!-- OpenDDS Win32/Debug native Libraries -->
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udpd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmemd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcpd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicastd.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udpd.dll" />
+    <None Include="@(OpenDDSReleaseWin32)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+    <!-- OpenDDS x64/Release native Libraries -->
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACE.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactory.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCode.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOP.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PI.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServer.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcps.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscovery.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps_Udp.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Shmem.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcp.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicast.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udp.dll" />
+    <None Include="@(OpenDDSReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x64' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+    <!-- OpenDDS x64/Debug native Libraries -->
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAOd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactoryd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCoded.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOPd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PId.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServerd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtpsd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscoveryd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps_Udpd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Shmemd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcpd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicastd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udpd.dll" />
+    <None Include="@(OpenDDSDebugx64)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+    <!-- Native dependency from this project. -->
+    <ProjectNativeDepsReleasex64 Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapperx64.dll" Condition="'$(Configuration)|$(Platform)'=='Release|x64' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
+    <None Include="@(ProjectNativeDepsReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperx64.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+    <None Include="@(ProjectNativeDepsDebugx64)" Pack="false" Visible="false">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <ProjectNativeDepsReleasex86 Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapperWin32.dll" />
+    <None Include="@(ProjectNativeDepsReleasex86)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false"  Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <ProjectNativeDepsDebugx86 Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperWin32.dll" />
+    <None Include="@(ProjectNativeDepsDebugx86)" Pack="false" Visible="false"  Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    
+    <!-- As we put libraries in the `runtimes\{rid}\lib` folder, .NET Core will ignore
+         the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
+         directories. We keep the one in the `lib` for applications using .NET Framework. -->
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/ref/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+  </ItemGroup>
 </Project>
