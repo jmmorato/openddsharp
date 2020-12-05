@@ -74,5 +74,38 @@
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  
+
+  <ItemGroup>
+    <!-- OpenDDS Win32/Release native Libraries -->    
+    <WrapperReleaseWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\x86\Release\TestIdlStandardWrapperWin32.dll" />
+    <ContentWithTargetPath Include="@(WrapperReleaseWin32)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>TestIdlStandardWrapperWin32.dll</TargetPath>
+    </ContentWithTargetPath>
+
+    <!-- OpenDDS Win32/Debug native Libraries -->
+    <WrapperDebugWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\x86\Debug\TestIdlStandardWrapperWin32.dll" />
+    <ContentWithTargetPath Include="@(WrapperDebugWin32)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>TestIdlStandardWrapperWin32.dll</TargetPath>
+    </ContentWithTargetPath>
+
+    <!-- OpenDDS x64/Release native Libraries -->
+    <WrapperReleasex64 Include="$(IntermediateOutputPath)WrapperProject\bin\x64\Release\TestIdlStandardWrapperx64.dll" />
+    <ContentWithTargetPath Include="@(WrapperReleasex64)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>TestIdlStandardWrapperx64.dll</TargetPath>
+    </ContentWithTargetPath>
+
+    <!-- OpenDDS x64/Debug native Libraries -->
+    <WrapperDebugx64 Include="$(IntermediateOutputPath)WrapperProject\bin\x64\Debug\TestIdlStandardWrapperx64.dll" />
+    <ContentWithTargetPath Include="@(WrapperDebugx64)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>TestIdlStandardWrapperx64.dll</TargetPath>
+    </ContentWithTargetPath>
+</ItemGroup>
 </Project>
