@@ -77,7 +77,7 @@
 
   <ItemGroup>
     <!-- OpenDDS Win32/Release native Libraries -->    
-    <WrapperReleaseWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\x86\Release\TestIdlStandardWrapperWin32.dll" />
+    <WrapperReleaseWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\Win32\Release\TestIdlStandardWrapperWin32.dll" />
     <ContentWithTargetPath Include="@(WrapperReleaseWin32)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -85,7 +85,7 @@
     </ContentWithTargetPath>
 
     <!-- OpenDDS Win32/Debug native Libraries -->
-    <WrapperDebugWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\x86\Debug\TestIdlStandardWrapperWin32.dll" />
+    <WrapperDebugWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\Win32\Debug\TestIdlStandardWrapperWin32.dll" />
     <ContentWithTargetPath Include="@(WrapperDebugWin32)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
