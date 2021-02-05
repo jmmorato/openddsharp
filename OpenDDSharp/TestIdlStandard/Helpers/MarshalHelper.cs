@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 
 internal static class MarshalHelper
 {
@@ -105,6 +106,88 @@ internal static class MarshalHelper
         {
             // Newly-allocated space has no existing object, so the last param is false 
             Marshal.StructureToPtr(Convert.ToDouble(sequence[i]), ptr + sizeof(int) + (elSiz * i), false);
+        }
+    }
+
+    public static void PtrToWCharSequence(this IntPtr ptr, ref IList<char> sequence, int capacity = 0)
+    {
+        // Ensure a not null empty list to populate
+        if (sequence == null)
+        {
+            if (capacity > 0)
+            {
+                sequence = new List<char>(capacity);
+            }
+            else
+            {
+                sequence = new List<char>();
+            }
+        }
+        else
+        {
+            sequence.Clear();
+        }
+
+        if (ptr == IntPtr.Zero)
+        {
+            return;
+        }
+
+        // Start by reading the size of the array
+        int length = Marshal.ReadInt32(ptr);
+
+        // For efficiency, only compute the element size once
+#if Windows
+        int elSiz = 2;
+#else
+        int elSiz = 4;
+#endif
+
+        // Populate the list
+        for (int i = 0; i < length; i++)
+        {
+#if Windows
+            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
+#else
+            int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));            
+            sequence.Add(char.ConvertFromUtf32(utf32)[0]);
+#endif
+        }
+    }
+
+    public static void WCharSequenceToPtr(this IList<char> sequence, ref IntPtr ptr)
+    {
+        if (sequence == null || sequence.Count == 0)
+        {
+            // No structures in the list. Write 0 and return
+            ptr = Marshal.AllocHGlobal(sizeof(int));
+            Marshal.WriteInt32(ptr, 0);
+            return;
+        }
+
+#if Windows
+        int elSiz = 2;
+#else
+        int elSiz = 4;
+#endif
+        // Get the total size of unmanaged memory that is needed (length + elements)
+        int size = sizeof(int) + (elSiz * sequence.Count);
+
+        // Allocate unmanaged space.
+        ptr = Marshal.AllocHGlobal(size);
+
+        // Write the "Length" field first
+        Marshal.WriteInt32(ptr, sequence.Count);
+
+        // Write the list data
+        for (int i = 0; i < sequence.Count; i++)
+        {
+            // Newly-allocated space has no existing object, so the last param is false 
+#if Windows
+            Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
+#else
+            Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
+#endif
         }
     }
 
@@ -226,6 +309,51 @@ internal static class MarshalHelper
         }
     }
 
+    public static string PtrToWideString(this IntPtr ptr)
+    {
+#if Windows
+        int length = 0;
+        while (Marshal.ReadInt16(ptr, length) != 0)
+        {
+            length += 2;
+        }
+        byte[] buffer = new byte[length];
+        Marshal.Copy(ptr, buffer, 0, buffer.Length);
+
+        return Encoding.Unicode.GetString(buffer);        
+#else
+        int length = 0;
+        while (Marshal.ReadInt32(ptr, length) != 0)
+        {
+            length += 4;
+        }
+        byte[] buffer = new byte[length];
+        Marshal.Copy(ptr, buffer, 0, buffer.Length);   
+
+        return Encoding.UTF32.GetString(buffer);
+#endif
+    }
+
+    public static IntPtr WideStringToPtr(this string str)
+    {
+#if Windows        
+        var utfBytes = Encoding.Unicode.GetBytes(str);
+
+        byte[] bytes = new byte[utfBytes.Length + 2];
+        Array.Copy(utfBytes, bytes, utfBytes.Length);  
+#else
+        var utfBytes = Encoding.UTF32.GetBytes(str);
+
+        byte[] bytes = new byte[utfBytes.Length + 4];
+        Array.Copy(utfBytes, bytes, utfBytes.Length);
+#endif
+
+        IntPtr unmanagedPointer = Marshal.AllocHGlobal(bytes.Length);        
+        Marshal.Copy(bytes, 0, unmanagedPointer, bytes.Length);
+
+        return unmanagedPointer;
+    }
+
     public static void PtrToStringSequence(this IntPtr ptr, ref IList<string> sequence, bool isUnicode, int capacity = 0)
     {
         // Ensure a not null empty list to populate
@@ -255,7 +383,7 @@ internal static class MarshalHelper
 
             // Convert the pointer in a string
             if (isUnicode)
-                sequence.Add(Marshal.PtrToStringUni(pointer));
+                sequence.Add(PtrToWideString(pointer));
             else
                 sequence.Add(Marshal.PtrToStringAnsi(pointer));
         }
@@ -283,9 +411,9 @@ internal static class MarshalHelper
         for (int i = 0; i < sequence.Count; i++)
         {
             // Create a pointer to the string in unmanaged memory
-            IntPtr sPtr = IntPtr.Zero;
+            IntPtr sPtr;
             if (isUnicode)
-                sPtr = Marshal.StringToHGlobalUni(sequence[i]);
+                sPtr = WideStringToPtr(sequence[i]);
             else
                 sPtr = Marshal.StringToHGlobalAnsi(sequence[i]);
 
@@ -313,7 +441,7 @@ internal static class MarshalHelper
         }
 
         int[] dimensions = new int[array.Rank];
-        int[] dIndex = new int[array.Rank];
+        //int[] dIndex = new int[array.Rank];
         for (int i = 0; i < length; i++)
         {
             if (i > 0)
@@ -344,6 +472,11 @@ internal static class MarshalHelper
             if (enumerator.Current is char && elSiz == 1)
             {
                 byte aux = Convert.ToByte(enumerator.Current);
+                Marshal.StructureToPtr(aux, ptr + (elSiz * i), false);
+            }
+            else if (enumerator.Current is char && elSiz == 4)
+            {
+                int aux = char.ConvertToUtf32(enumerator.Current.ToString(), 0);
                 Marshal.StructureToPtr(aux, ptr + (elSiz * i), false);
             }
             else
@@ -429,7 +562,7 @@ internal static class MarshalHelper
             }
 
             byte aux = Marshal.PtrToStructure<byte>(ptr + i);
-            array.SetValue(aux == 1 ? true : false, dimensions);
+            array.SetValue(aux == 1, dimensions);
         }
     }
 
@@ -455,6 +588,42 @@ internal static class MarshalHelper
         }
     }
 
+    public static void PtrToWCharMultiArray(this IntPtr ptr, Array array)
+    {
+        // We need to ensure that the array is not null before the call 
+        if (array == null)
+            return;
+
+        int length = 1;
+        for (int i = 0; i < array.Rank; i++)
+        {
+            length *= array.GetLength(i);
+        }
+
+#if Windows
+        int elSiz = Marshal.SizeOf<char>();
+#else
+        int elSiz = Marshal.SizeOf<int>();
+#endif
+
+        int[] dimensions = new int[array.Rank];
+        for (int i = 0; i < length; i++)
+        {
+            if (i > 0)
+            {
+                UpdateDimensionsArray(array, dimensions);
+            }
+
+#if Windows
+            char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
+#else
+            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
+            char value = char.ConvertFromUtf32(aux)[0];
+#endif
+            array.SetValue(value, dimensions);
+        }
+    }
+
     public static List<IntPtr> StringMultiArrayToPtr(this Array array, ref IntPtr ptr, bool isUnicode)
     {
         List<IntPtr> toRelease = new List<IntPtr>();
@@ -475,9 +644,9 @@ internal static class MarshalHelper
         while (enumerator.MoveNext())
         {
             // Create a pointer to the string in unmanaged memory
-            IntPtr sPtr = IntPtr.Zero;
+            IntPtr sPtr;
             if (isUnicode)
-                sPtr = Marshal.StringToHGlobalUni((string)enumerator.Current);
+                sPtr = WideStringToPtr((string)enumerator.Current);
             else
                 sPtr = Marshal.StringToHGlobalAnsi((string)enumerator.Current);
 
@@ -519,25 +688,31 @@ internal static class MarshalHelper
             IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + (IntPtr.Size * i));
             // Convert the pointer in a string
             if (isUnicode)
-                array.SetValue(Marshal.PtrToStringUni(pointer), dimensions);
+                array.SetValue(PtrToWideString(pointer), dimensions);
             else
                 array.SetValue(Marshal.PtrToStringAnsi(pointer), dimensions);
         }
     }
 
     public static decimal ToDecimal(this double d)
-    {        
-        if (d < (double)decimal.MinValue)
+    {
+        if (double.IsNaN(d))
         {
-            return Decimal.MinValue;
+            return decimal.MinValue;
         }
-        else if (d > (double)decimal.MaxValue)
+
+        Console.WriteLine("ToDecimal: " + d);
+        if (d <= (double)decimal.MinValue)
         {
-            return Decimal.MaxValue;
+            return decimal.MinValue;
+        }
+        else if (d >= (double)decimal.MaxValue)
+        {
+            return decimal.MaxValue;
         }
         else
         {
-            return Convert.ToDecimal(d);
+            return (decimal)d;
         }
     }
 

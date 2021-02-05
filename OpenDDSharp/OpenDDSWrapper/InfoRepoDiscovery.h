@@ -19,7 +19,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 #include "Utils.h"
-#include <dds\DCPS\InfoRepoDiscovery\InfoRepoDiscovery.h>
+
+#include <dds/DCPS/InfoRepoDiscovery/InfoRepoDiscovery.h>
 
 EXTERN_METHOD_EXPORT
 ::OpenDDS::DCPS::Discovery* InfoRepoDiscovery_NarrowBase(::OpenDDS::DCPS::InfoRepoDiscovery* d);

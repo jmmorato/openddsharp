@@ -58,9 +58,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::DDS::ReturnCode_t Subscriber_SetQos(::DDS::Subscriber_ptr sub, SubscriberQosWrapper qos_wrapper) {
-	char buf[2048];
-	sprintf(buf, "Subscriber_SetQos autoenable_created_entities: %s \n", qos_wrapper.entity_factory.autoenable_created_entities ? "true" : "false");
-	OutputDebugString(buf);
 	return sub->set_qos(qos_wrapper);
 }
 

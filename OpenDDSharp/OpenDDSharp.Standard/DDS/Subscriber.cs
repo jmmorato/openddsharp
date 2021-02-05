@@ -153,8 +153,9 @@ namespace OpenDDSharp.DDS
                 nativeListener = listener.ToNative();
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, nativeListener, statusMask),
-                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, topicDescription.ToNativeTopicDescription(), qosWrapper, nativeListener, statusMask));
+            IntPtr td = topicDescription.ToNativeTopicDescription();
+            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, td, qosWrapper, nativeListener, statusMask),
+                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, td, qosWrapper, nativeListener, statusMask));
 
             qos.Release();
 

@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Utils.h"
+
 #include <dds/DCPS/Service_Participant.h>
 
 EXTERN_METHOD_EXPORT

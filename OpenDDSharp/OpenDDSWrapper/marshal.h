@@ -18,31 +18,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
+
 #include "Utils.h"
+
 #include "ace/Basic_Types.h"
 #include "tao/Unbounded_Value_Sequence_T.h"
+#include "tao/Unbounded_Basic_String_Sequence_T.h"
 
 template <typename T>
-static void unbounded_sequence_to_ptr(TAO::unbounded_value_sequence<T> sequence, void* & ptr)
+static void unbounded_sequence_to_ptr(TAO::unbounded_value_sequence<T> sequence, void*& ptr)
 {
-	ACE_UINT32 length = sequence.length();
-	const ACE_UINT64 struct_size = sizeof T;
-	const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
-	char* bytes = new char[buffer_size];
-	ACE_OS::memcpy(bytes, &length, sizeof length);
+    ACE_UINT32 length = sequence.length();
+    const ACE_UINT64 struct_size = sizeof(T);
+    const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+    char* bytes = new char[buffer_size];
+    ACE_OS::memcpy(bytes, &length, sizeof length);
 
-	for (ACE_UINT32 i = 0; i < length; i++)
-	{
-		ACE_OS::memcpy(&bytes[(i * struct_size) + sizeof length], &sequence[i], struct_size);
-	}
+    for (ACE_UINT32 i = 0; i < length; i++)
+    {
+        ACE_OS::memcpy(&bytes[(i * struct_size) + sizeof length], &sequence[i], struct_size);
+    }
 
-	// Alloc memory for the pointer
-	ptr = ACE_OS::malloc(buffer_size);
-	// Copy the bytes in the pointer
-	ACE_OS::memcpy(ptr, bytes, buffer_size);
+    // Alloc memory for the pointer
+    ptr = ACE_OS::malloc(buffer_size);
 
-	// Free temporally allocated memory
-	delete[] bytes;
+    // Copy the bytes in the pointer
+    ACE_OS::memcpy(ptr, bytes, buffer_size);
+
+    // Free temporally allocated memory
+    delete[] bytes;
 }
 
 template <typename T>
@@ -62,7 +66,7 @@ static void ptr_to_unbounded_sequence(void* ptr, TAO::unbounded_value_sequence<T
 
     // The rest of the memory is the structures aligned one after the other
     const ACE_UINT64 structs_offset = sizeof length;
-    const ACE_UINT64 struct_size = sizeof T;
+    const ACE_UINT64 struct_size = sizeof(T);
     for (ACE_UINT32 i = 0; i < length; i++)
     {
         ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
@@ -119,5 +123,4 @@ static void ptr_to_unbounded_basic_string_sequence(void* ptr, TAO::unbounded_bas
     delete[] pointers;
 }
 
-EXTERN_METHOD_EXPORT
-inline void release_native_ptr(void* ptr) { ACE_OS::free(ptr); }
+EXTERN_METHOD_EXPORT void release_native_ptr(void* ptr);

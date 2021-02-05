@@ -21,9 +21,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include "Utils.h"
 #include "QosPolicies.h"
-#include "dds\DCPS\Marked_Default_Qos.h"
 #include "PublisherListenerImpl.h"
 #include "DataWriterListenerImpl.h"
+
+#include "dds/DCPS/Marked_Default_Qos.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr pub);

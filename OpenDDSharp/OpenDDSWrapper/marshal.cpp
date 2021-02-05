@@ -17,15 +17,8 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
+#include "marshal.h"
 
-#include "Utils.h"
-
-EXTERN_METHOD_EXPORT
-::DDS::Condition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition);
-
-EXTERN_METHOD_EXPORT
-::DDS::StatusMask StatusCondition_GetEnabledStatuses(::DDS::StatusCondition_ptr status_condition);
-
-EXTERN_METHOD_EXPORT
-void StatusCondition_SetEnabledStatuses(::DDS::StatusCondition_ptr status_condition, ::DDS::StatusMask value);
+void release_native_ptr(void* ptr) {
+    ACE_OS::free(ptr);
+}

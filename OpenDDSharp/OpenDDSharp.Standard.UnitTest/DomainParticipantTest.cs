@@ -988,6 +988,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// OPENDDS ISSUE: Not working correctly with RTPS.
         /// OPENDDS ISSUE: Only discover local topics.
         /// </remarks>
+        //[Ignore]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
@@ -1027,6 +1028,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// <summary>
         /// Test the <see cref="DomainParticipant.GetDiscoveredTopicData(ref TopicBuiltinTopicData, InstanceHandle)" /> method.
         /// </summary>
+        //[Ignore]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
@@ -1068,6 +1070,6 @@ namespace OpenDDSharp.Standard.UnitTest
             participant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(participant);
         }
-        #endregion
+#endregion
     }
 }

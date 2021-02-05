@@ -305,14 +305,36 @@ std::string csharp_generator::declare_marshal_fields(const std::vector<AST_Field
 		if (!marshalas.empty()) {
 			ret.append(indent + marshalas);
 		}
-		std::string type_name = get_marshal_type(type);
 
-		ret.append(indent);
-		ret.append("public ");
-		ret.append(type_name.c_str());
-		ret.append(" ");
-		ret.append(name);
-		ret.append(";\n");
+		std::string type_name = get_marshal_type(type);
+		std::string linux_type_name = get_linux_marshal_type(type);
+
+		if (linux_type_name == "" || type_name == linux_type_name) {
+			ret.append(indent);
+			ret.append("public ");
+			ret.append(type_name.c_str());
+			ret.append(" ");
+			ret.append(name);
+			ret.append(";\n");
+		}
+		else {
+			ret.append("#if Windows\n");
+			ret.append(indent);
+			ret.append("public ");
+			ret.append(type_name.c_str());
+			ret.append(" ");
+			ret.append(name);
+			ret.append(";\n");
+			ret.append("#elif Linux\n");
+			ret.append(indent);
+			ret.append("public ");
+			ret.append(linux_type_name.c_str());
+			ret.append(" ");
+			ret.append(name);
+			ret.append(";\n");
+			ret.append("#endif\n");
+
+		}
 	}
 
 	return ret;
@@ -331,8 +353,7 @@ std::string csharp_generator::implement_struct_constructor(const std::vector<AST
 		AST_Type* type = field->field_type();
 
 		if (type->node_type() != AST_Decl::NT_enum) {
-			char* field_name = field->local_name()->get_string();
-			//field_name[0] = tolower(field_name[0]);
+			char* field_name = field->local_name()->get_string();			
 			std::string default_value = get_csharp_default_value(type);
 			std::string initialization = get_csharp_constructor_initialization(type, field_name);
 
@@ -544,7 +565,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 }
 
 std::string csharp_generator::get_marshal_type(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();
+	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret(type->flat_name());
 
 	switch (node_type)
@@ -582,59 +603,63 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
-		switch (predefined_type->pt())
-		{
-		case AST_PredefinedType::PT_short:
-			ret = "Int16";
-			break;
-		case AST_PredefinedType::PT_long:
-			ret = "Int32";
-			break;
-		case AST_PredefinedType::PT_longlong:
-			ret = "Int64";
-			break;
-		case AST_PredefinedType::PT_ushort:
-			ret = "UInt16";
-			break;
-		case AST_PredefinedType::PT_ulong:
-			ret = "UInt32";
-			break;
-		case AST_PredefinedType::PT_ulonglong:
-			ret = "UInt64";
-			break;
-		case AST_PredefinedType::PT_float:
-			ret = "Single";
-			break;
-		case AST_PredefinedType::PT_double:
-			ret = "Double";
-			break;
-		case AST_PredefinedType::PT_longdouble:
-			ret = "Double";
-			break;
-		case AST_PredefinedType::PT_octet:
-			ret = "Byte";
-			break;
-		case AST_PredefinedType::PT_char:
-		case AST_PredefinedType::PT_wchar:
-			ret = "Char";
-			break;
-		case AST_PredefinedType::PT_boolean:
-			ret = "Boolean";
-			break;
+		if (predefined_type != NULL) {
+			switch (predefined_type->pt())
+			{
+			case AST_PredefinedType::PT_short:
+				ret = "Int16";
+				break;
+			case AST_PredefinedType::PT_long:
+				ret = "Int32";
+				break;
+			case AST_PredefinedType::PT_longlong:
+				ret = "Int64";
+				break;
+			case AST_PredefinedType::PT_ushort:
+				ret = "UInt16";
+				break;
+			case AST_PredefinedType::PT_ulong:
+				ret = "UInt32";
+				break;
+			case AST_PredefinedType::PT_ulonglong:
+				ret = "UInt64";
+				break;
+			case AST_PredefinedType::PT_float:
+				ret = "Single";
+				break;
+			case AST_PredefinedType::PT_double:
+				ret = "Double";
+				break;
+			case AST_PredefinedType::PT_longdouble:
+				ret = "Double";
+				break;
+			case AST_PredefinedType::PT_octet:
+				ret = "Byte";
+				break;
+			case AST_PredefinedType::PT_char:
+			case AST_PredefinedType::PT_wchar:
+				ret = "Char";
+				break;
+			case AST_PredefinedType::PT_boolean:
+				ret = "Boolean";
+				break;
+			}
 		}
 		break;
 	}
 	case AST_Decl::NT_array:
 	{
 		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		std::string base_type = get_marshal_type(arr_type->base_type());
+		if (arr_type != NULL) {
+			std::string base_type = get_marshal_type(arr_type->base_type());
 
-		if (arr_type->n_dims() > 1) {
-			ret = "IntPtr";
-		} 
-		else {
-			ret = base_type;
-			ret.append("[]");			
+			if (arr_type->n_dims() > 1) {
+				ret = "IntPtr";
+			}
+			else {
+				ret = base_type;
+				ret.append("[]");
+			}
 		}
 		break;
 	}
@@ -650,8 +675,58 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	return ret;
 }
 
+std::string csharp_generator::get_linux_marshal_type(AST_Type* type) {
+	const AST_Decl::NodeType node_type = type->node_type();
+	std::string ret("");
+
+	switch (node_type)
+	{
+	case AST_Decl::NT_typedef:
+	{
+		const AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		if (typedef_type != NULL) {
+			ret = get_linux_marshal_type(typedef_type->base_type());
+		}
+		break;
+	}
+	case AST_Decl::NT_pre_defined:
+	{
+		AST_PredefinedType* predefined_type = AST_PredefinedType::narrow_from_decl(type);
+
+		if (predefined_type != NULL) {
+			switch (predefined_type->pt())
+			{
+			case AST_PredefinedType::PT_wchar:
+				ret = "int";
+				break;
+			}
+		}
+		break;
+	}
+	case AST_Decl::NT_array:
+	{
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
+		if (arr_type != NULL) {						
+			if (arr_type->n_dims() > 1) {
+				ret = "IntPtr";
+			}
+			else {
+				std::string base_type = get_linux_marshal_type(arr_type->base_type());
+				if (base_type != "") {
+					ret = base_type;
+					ret.append("[]");
+				}
+			}
+		}
+		break;
+	}
+	}
+
+	return ret;
+}
+
 std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();
+	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret;
 
 	switch (node_type)
@@ -685,8 +760,8 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 		case AST_PredefinedType::PT_char:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
 			break;
-		case AST_PredefinedType::PT_wchar:
-			ret = "[MarshalAs(UnmanagedType.I2)]\n";
+		case AST_PredefinedType::PT_wchar:			
+			ret = "#if Windows\n[MarshalAs(UnmanagedType.I2)]\n#elif Linux\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
@@ -698,15 +773,36 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 	{
 		AST_Array* arr_type = AST_Array::narrow_from_decl(type);		
 
-		if (arr_type->n_dims() == 1) {
+		if (arr_type != NULL && arr_type->n_dims() == 1) {
 			AST_Expression** dims = arr_type->dims();
-			std::string unmanagedType = get_marshal_attribute_unmanaged_type(arr_type->base_type());
+			AST_Type* base_type = arr_type->base_type();
+			if (dims != NULL) {
+				std::string unmanagedType = get_marshal_attribute_unmanaged_type(base_type);
+				std::string linuxUmanagedType = get_linux_marshal_attribute_unmanaged_type(base_type);
 
-			ret = "[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.";
-			ret.append(unmanagedType);
-			ret.append(", SizeConst = ");
-			ret.append(std::to_string(dims[0]->ev()->u.ulval));
-			ret.append(")]\n");
+				if (linuxUmanagedType == "" || linuxUmanagedType == unmanagedType) {
+					ret = "[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.";
+					ret.append(unmanagedType);
+					ret.append(", SizeConst = ");
+					ret.append(std::to_string(dims[0]->ev()->u.ulval));
+					ret.append(")]\n");
+				}
+				else {
+					ret = "#if Windows\n";
+					ret.append("[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.");
+					ret.append(unmanagedType);
+					ret.append(", SizeConst = ");
+					ret.append(std::to_string(dims[0]->ev()->u.ulval));
+					ret.append(")]\n");
+					ret.append("#elif Linux\n");
+					ret.append("[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.");
+					ret.append(linuxUmanagedType);
+					ret.append(", SizeConst = ");
+					ret.append(std::to_string(dims[0]->ev()->u.ulval));
+					ret.append(")]\n");
+					ret.append("#endif\n");
+				}
+			}
 		}
 		break;
 	}
@@ -718,7 +814,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 }
 
 std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();
+	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
 	switch (node_type)
@@ -731,8 +827,10 @@ std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* typ
 	}
 	case AST_Decl::NT_typedef:
 	{
-		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-		ret = get_marshal_attribute_unmanaged_type(typedef_type->base_type());
+		const AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		if (typedef_type != NULL) {
+			ret = get_marshal_attribute_unmanaged_type(typedef_type->base_type());
+		}
 		break;
 	}
 	case AST_Decl::NT_fixed:
@@ -752,49 +850,141 @@ std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* typ
 	}
 	case AST_Decl::NT_pre_defined:
 	{
-		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
+		AST_PredefinedType* predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
-		switch (predefined_type->pt())
-		{
-		case AST_PredefinedType::PT_short:
-			ret = "I2";
-			break;
-		case AST_PredefinedType::PT_long:
-			ret = "I4";
-			break;
-		case AST_PredefinedType::PT_longlong:
-			ret = "I8";
-			break;
-		case AST_PredefinedType::PT_ushort:
-			ret = "U2";
-			break;
-		case AST_PredefinedType::PT_ulong:
-			ret = "U4";
-			break;
-		case AST_PredefinedType::PT_ulonglong:
-			ret = "U8";
-			break;
-		case AST_PredefinedType::PT_float:
-			ret = "R4";
-			break;
-		case AST_PredefinedType::PT_double:
-			ret = "R8";
-			break;
-		case AST_PredefinedType::PT_longdouble:
-			ret = "R8";
-			break;
-		case AST_PredefinedType::PT_octet:
-			ret = "U1";
-			break;
-		case AST_PredefinedType::PT_char:
-			ret = "I1";
-			break;
-		case AST_PredefinedType::PT_wchar:
-			ret = "I2";
-			break;
-		case AST_PredefinedType::PT_boolean:
-			ret = "I1";
-			break;
+		if (predefined_type != NULL) {
+			switch (predefined_type->pt())
+			{
+			case AST_PredefinedType::PT_short:
+				ret = "I2";
+				break;
+			case AST_PredefinedType::PT_long:
+				ret = "I4";
+				break;
+			case AST_PredefinedType::PT_longlong:
+				ret = "I8";
+				break;
+			case AST_PredefinedType::PT_ushort:
+				ret = "U2";
+				break;
+			case AST_PredefinedType::PT_ulong:
+				ret = "U4";
+				break;
+			case AST_PredefinedType::PT_ulonglong:
+				ret = "U8";
+				break;
+			case AST_PredefinedType::PT_float:
+				ret = "R4";
+				break;
+			case AST_PredefinedType::PT_double:
+				ret = "R8";
+				break;
+			case AST_PredefinedType::PT_longdouble:
+				ret = "R8";
+				break;
+			case AST_PredefinedType::PT_octet:
+				ret = "U1";
+				break;
+			case AST_PredefinedType::PT_char:
+				ret = "I1";
+				break;
+			case AST_PredefinedType::PT_wchar:
+				ret = "I2";
+				break;
+			case AST_PredefinedType::PT_boolean:
+				ret = "I1";
+				break;
+			}
+		}
+		break;
+	}
+	}
+
+	return ret;
+}
+
+std::string csharp_generator::get_linux_marshal_attribute_unmanaged_type(AST_Type* type) {
+	const AST_Decl::NodeType node_type = type->node_type();
+	std::string ret("");
+
+	switch (node_type)
+	{
+	case AST_Decl::NT_union:
+	case AST_Decl::NT_struct:
+	{
+		ret = "Struct";
+		break;
+	}
+	case AST_Decl::NT_typedef:
+	{
+		const AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
+		if (typedef_type != NULL) {
+			ret = get_marshal_attribute_unmanaged_type(typedef_type->base_type());
+		}
+		break;
+	}
+	case AST_Decl::NT_fixed:
+	{
+		break;
+	}
+	case AST_Decl::NT_enum:
+	{
+		ret = "I4";
+		break;
+	}
+	case AST_Decl::NT_string:
+	case AST_Decl::NT_wstring:
+	{
+		ret = "SysInt";
+		break;
+	}
+	case AST_Decl::NT_pre_defined:
+	{
+		AST_PredefinedType* predefined_type = AST_PredefinedType::narrow_from_decl(type);
+
+		if (predefined_type != NULL) {
+			switch (predefined_type->pt())
+			{
+			case AST_PredefinedType::PT_short:
+				ret = "I2";
+				break;
+			case AST_PredefinedType::PT_long:
+				ret = "I4";
+				break;
+			case AST_PredefinedType::PT_longlong:
+				ret = "I8";
+				break;
+			case AST_PredefinedType::PT_ushort:
+				ret = "U2";
+				break;
+			case AST_PredefinedType::PT_ulong:
+				ret = "U4";
+				break;
+			case AST_PredefinedType::PT_ulonglong:
+				ret = "U8";
+				break;
+			case AST_PredefinedType::PT_float:
+				ret = "R4";
+				break;
+			case AST_PredefinedType::PT_double:
+				ret = "R8";
+				break;
+			case AST_PredefinedType::PT_longdouble:
+				ret = "R8";
+				break;
+			case AST_PredefinedType::PT_octet:
+				ret = "U1";
+				break;
+			case AST_PredefinedType::PT_char:
+				ret = "I1";
+				break;
+			case AST_PredefinedType::PT_wchar:
+				ret = "I4";
+				break;
+			case AST_PredefinedType::PT_boolean:
+				ret = "I1";
+				break;
+			}
 		}
 		break;
 	}
@@ -1051,7 +1241,7 @@ std::string csharp_generator::get_csharp_constructor_initialization(AST_Type* ty
 
 std::string csharp_generator::get_field_to_native(AST_Type* type, const char * name, const std::string indent) {
 	std::string ret("");
-	AST_Decl::NodeType node_type = type->node_type();
+	const AST_Decl::NodeType node_type = type->node_type();
 	switch (node_type)
 	{
 	case AST_Decl::NT_union:
@@ -1094,7 +1284,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(" = Marshal.StringToHGlobalAnsi(");
 		}
 		else {
-			ret.append(" = Marshal.StringToHGlobalUni(");
+			ret.append(" = MarshalHelper.WideStringToPtr(");
 		}
 		ret.append(name);
 		ret.append(");\n");
@@ -1148,9 +1338,9 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 	}
 	case AST_Decl::NT_sequence:
 	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
+		const AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(seq_type->base_type());
-		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+		const AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
 
 		switch (base_node_type)
 		{
@@ -1272,6 +1462,20 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 
 				break;
 			}
+			else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+				ret.append(indent);
+				ret.append("    MarshalHelper.WCharSequenceToPtr(");
+				ret.append(name);
+				ret.append(", ref wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+
+				ret.append(indent);
+				ret.append("    toRelease.Add(wrapper.");
+				ret.append(name);
+				ret.append(");\n");
+				break;
+			}
 			else if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {
 				ret.append(indent);
 				ret.append("    MarshalHelper.BooleanSequenceToPtr(");
@@ -1324,7 +1528,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(arr_type->base_type());
 		AST_Expression** dims = arr_type->dims();
-		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+		const AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
 
 		if (arr_type->n_dims() == 1)
 		{
@@ -1424,7 +1628,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					ret.append("[i] = Marshal.StringToHGlobalAnsi(");
 				}
 				else {
-					ret.append("[i] = Marshal.StringToHGlobalUni(");
+					ret.append("[i] = MarshalHelper.WideStringToPtr(");
 				}
 				ret.append(name);
 				ret.append("[i]);\n");
@@ -1456,6 +1660,28 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					ret.append(" = Array.ConvertAll(");
 					ret.append(name);
 					ret.append(", e => Convert.ToDouble(e));\n");
+					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+					ret.append("#if Windows\n");
+
+					ret.append(indent);
+					ret.append("    wrapper.");
+					ret.append(name);
+					ret.append(" = ");
+					ret.append(name);
+					ret.append(";\n");
+
+					ret.append("#elif Linux\n");
+
+					ret.append(indent);
+					ret.append("    wrapper.");
+					ret.append(name);
+					ret.append(" = Array.ConvertAll(");
+					ret.append(name);
+					ret.append(", c => Char.ConvertToUtf32(c.ToString(), 0));\n");
+
+					ret.append("#endif\n");
 					break;
 				}
 			}
@@ -1609,6 +1835,35 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					ret.append(");\n");
 					break;
 				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+					ret.append("#if Windows\n");
+					
+					ret.append(indent);
+					ret.append("        MarshalHelper.MultiArrayToPtr<");
+					ret.append(base_type);
+					ret.append(">(");
+					ret.append(name);
+					ret.append(", ref wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+
+					ret.append("#else\n");
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.MultiArrayToPtr<int>(");
+					ret.append(name);
+					ret.append(", ref wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+
+					ret.append("#endif\n");
+
+					ret.append(indent);
+					ret.append("        toRelease.Add(wrapper.");
+					ret.append(name);
+					ret.append(");\n");
+					break;
+				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
 					ret.append(indent);
 					ret.append("        double[");
@@ -1713,7 +1968,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 
 std::string csharp_generator::get_field_from_native(AST_Type* type, const char * name, const std::string indent) {
 	std::string ret(indent);
-	AST_Decl::NodeType node_type = type->node_type();
+	const AST_Decl::NodeType node_type = type->node_type();
 	switch (node_type)
 	{
 	case AST_Decl::NT_union:
@@ -1743,7 +1998,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			ret.append("= Marshal.PtrToStringAnsi(wrapper.");
 		}
 		else {
-			ret.append("= Marshal.PtrToStringUni(wrapper.");
+			ret.append("= MarshalHelper.PtrToWideString(wrapper.");
 		}
 		ret.append(name);
 		ret.append(");\n");
@@ -1785,19 +2040,26 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 	case AST_Decl::NT_pre_defined:
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
+		if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
 			ret.append("    _");
 			ret.append(name);
-			ret.append(" = wrapper.");
+			ret.append(" = MarshalHelper.ToDecimal(wrapper.");
+			ret.append(name);
+			ret.append(");\n");
+		}
+		else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+			ret.append("    _");
+			ret.append(name);
+			ret.append(" = (char)wrapper.");
 			ret.append(name);
 			ret.append(";\n");
 		}
 		else {
 			ret.append("    _");
 			ret.append(name);
-			ret.append(" = MarshalHelper.ToDecimal(wrapper.");
+			ret.append(" = wrapper.");
 			ret.append(name);
-			ret.append(");\n");
+			ret.append(";\n");
 		}
 		break;
 	}
@@ -1805,8 +2067,8 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 	{
 		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(seq_type->base_type());
-		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
-		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
+		const AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
+		const unsigned int bound = seq_type->max_size()->ev()->u.ulval;
 
 		switch (base_node_type)
 		{
@@ -1911,6 +2173,18 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ret.append(");\n");
 				break;
 			}
+			else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+				ret.append("    MarshalHelper.PtrToWCharSequence(wrapper.");
+				ret.append(name);
+				ret.append(", ref _");
+				ret.append(name);
+				if (bound > 0) {
+					ret.append(", ");
+					ret.append(std::to_string(bound));
+				}
+				ret.append(");\n");
+				break;
+			}
 			else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
 				ret.append("    MarshalHelper.PtrToLongDoubleSequence(wrapper.");
 				ret.append(name);
@@ -1945,7 +2219,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
 		std::string base_type = get_csharp_type(arr_type->base_type());
 		AST_Expression** dims = arr_type->dims();
-		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+		const AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
 
 		if (arr_type->n_dims() == 1)
 		{
@@ -2059,7 +2333,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("[i] = Marshal.PtrToStringAnsi(wrapper.");
 				}
 				else {
-					ret.append("[i] = Marshal.PtrToStringUni(wrapper.");
+					ret.append("[i] = MarshalHelper.PtrToWideString(wrapper.");
 				}
 				ret.append(name);
 				ret.append("[i]);\n");
@@ -2113,6 +2387,26 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 
 					ret.append(indent);
 					ret.append("    }\n");
+					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+					ret.append("#if Windows\n");
+
+					ret.append("    ");
+					ret.append(name);
+					ret.append(" = wrapper.");
+					ret.append(name);
+					ret.append(";\n");
+
+					ret.append("#elif Linux\n");
+
+					ret.append("    ");
+					ret.append(name);
+					ret.append(" = Array.ConvertAll(wrapper.");
+					ret.append(name);
+					ret.append(", c => Char.ConvertFromUtf32(c)[0]);\n");
+
+					ret.append("#endif\n");
 					break;
 				}
 			}
@@ -2316,7 +2610,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			case AST_Decl::NT_pre_defined:
 			{
 				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
-
+				
 				if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {					
 					ret.append("    if (");
 					ret.append(name);
@@ -2390,6 +2684,45 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append(indent);
 					ret.append("    }\n");
 					break;
+				}
+				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+					ret.append("    if (");
+					ret.append(name);
+					ret.append(" == null)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        ");
+					ret.append(name);
+					ret.append(" = ");
+					ret.append(get_csharp_default_value(type));
+					ret.append(";\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
+
+					ret.append(indent);
+					ret.append("    if (wrapper.");
+					ret.append(name);
+					ret.append(" != IntPtr.Zero)\n");
+
+					ret.append(indent);
+					ret.append("    {\n");
+
+					ret.append(indent);
+					ret.append("        MarshalHelper.PtrToWCharMultiArray");					
+					ret.append("(wrapper.");
+					ret.append(name);
+					ret.append(", ");
+					ret.append(name);
+					ret.append(");\n");
+
+					ret.append(indent);
+					ret.append("    }\n");
+					break;
+
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
 					ret.append("    if (");

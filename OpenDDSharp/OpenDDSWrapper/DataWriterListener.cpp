@@ -17,8 +17,6 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#pragma once
-
 #include "DataWriterListener.h"
 
 OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr DataWriterListener_New(onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissed,

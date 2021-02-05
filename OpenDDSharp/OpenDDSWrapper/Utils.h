@@ -19,10 +19,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 
-#include "dds\DdsDcpsDomainC.h"
+#include "dds/DdsDcpsDomainC.h"
 
 #ifndef EXTERN_METHOD_EXPORT
-    #define EXTERN_METHOD_EXPORT extern "C" __declspec(dllexport)
+    #ifdef _WIN32
+        #define EXTERN_METHOD_EXPORT extern "C" __declspec(dllexport)
+    #else
+        #define EXTERN_METHOD_EXPORT extern "C"
+    #endif
 #endif
 
 #ifndef EXTERN_STRUCT_EXPORT

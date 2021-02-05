@@ -59,15 +59,6 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS</DDS_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_wrappers</ACE_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_wrappers\TAO</TAO_ROOT>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -89,25 +80,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>.\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>.\obj\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>$(ProjectName)Wrapper$(Platform)</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>.\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>.\obj\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>$(ProjectName)Wrapper$(Platform)</TargetName>
     <LinkIncremental>
     </LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>.\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>.\obj\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>$(ProjectName)Wrapper$(Platform)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>.\obj\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>$(ProjectName)Wrapper$(Platform)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

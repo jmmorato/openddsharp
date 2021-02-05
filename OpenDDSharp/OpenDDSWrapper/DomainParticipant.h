@@ -22,12 +22,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "marshal.h"
 #include "QosPolicies.h"
-#include "dds\DCPS\Marked_Default_Qos.h"
 #include "DomainParticipantListenerImpl.h"
 #include "TopicListenerImpl.h"
 #include "SubscriberListenerImpl.h"
 #include "PublisherListenerImpl.h"
 #include "BuiltinTopicData.h"
+
+#include "dds/DCPS/Marked_Default_Qos.h"
+#include "dds/DCPS/PublisherImpl.h"
+#include "dds/DCPS/DomainParticipantImpl.h"
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DomainParticipant_NarrowBase(::DDS::DomainParticipant_ptr dp);

@@ -30,13 +30,22 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
     internal class SupportProcessHelper
     {
         #region Constants
-        private const string DEBUG_TARGET_FOLDER = @"Debug\";
-        private const string RELEASE_TARGET_FOLDER = @"Release\";
-        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64\";
-        private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86\";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"..\..\..\..\..\TestSupportProcess\bin\";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.exe";
+#if Windows
+        private const string DEBUG_TARGET_FOLDER = @"Debug/";
+        private const string RELEASE_TARGET_FOLDER = @"Release/";
+        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
+        private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86/";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
+#else
+        private const string DEBUG_TARGET_FOLDER = @"LinuxDebug/";
+        private const string RELEASE_TARGET_FOLDER = @"LinuxRelease/";
+        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";        
+        private const string TEST_SUPPORT_PROCESS_PATH = @"./../../../../TestSupportProcessCore/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
+#endif
         #endregion
 
         #region Fields
@@ -51,28 +60,41 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             _testContext = testContext;
             _platformFolder = SIXTY_FOUR_PLATFORM_FOLDER;
             _targetFolder = RELEASE_TARGET_FOLDER;
-            SetEightySixPlatform();
             SetDebugTarget();
+#if Windows
+            SetEightySixPlatform();
+#endif
         }
         #endregion
 
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)
         {
-            string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, TEST_SUPPORT_PROCESS_EXE_NAME);
+            string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "netcoreapp3.1", TEST_SUPPORT_PROCESS_EXE_NAME);
+            supportProcessPath = Path.GetFullPath(supportProcessPath);
+            Console.WriteLine(supportProcessPath);
             if (!File.Exists(supportProcessPath))
             {
                 _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
                 throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
             }
+#if Linux
+            var arguments = supportProcessPath + " " + teskKind.ToString();
 
+            return SpawnProcess("dotnet", arguments);
+#else
             return SpawnProcess(supportProcessPath, teskKind.ToString());
+#endif
         }
 
         public Process SpawnDCPSInfoRepo()
         {
             string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
+#if Windows
             string infoRepoPath = Path.Combine(ddsPath, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
+#else
+            string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
+#endif
             if (!File.Exists(infoRepoPath))
             {
                 _testContext.WriteLine($"The support process executable could not be located at {infoRepoPath}.");
@@ -96,7 +118,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Process process = new Process
             {
                 StartInfo = processInfo,
-                EnableRaisingEvents = true
+                EnableRaisingEvents = true,
             };
 
             process.OutputDataReceived += SupportProcessOnOutputDataReceived;
@@ -147,7 +169,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                     _testContext.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} Exception: {1}", nameof(KillProcess), ex.Message));
                 }
             }
-                        
+
             process.Dispose();
         }
 
@@ -167,17 +189,19 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             }
         }
 
+#if Windows
         [Conditional("X86")]
         private void SetEightySixPlatform()
         {
             _platformFolder = EIGHTY_SIX_PLATFORM_FOLDER;
         }
+#endif
 
         [Conditional("DEBUG")]
         private void SetDebugTarget()
         {
             _targetFolder = DEBUG_TARGET_FOLDER;
         }
-        #endregion
+#endregion
     }
 }

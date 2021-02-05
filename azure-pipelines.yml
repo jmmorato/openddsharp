@@ -48,8 +48,8 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.14
-      displayName: 'Checkout OpenDDS v3.14'
+        git checkout -q tags/DDS-3.14.1
+      displayName: 'Checkout OpenDDS v3.14.1'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
@@ -184,8 +184,8 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.14
-      displayName: 'Checkout OpenDDS v3.14'
+        git checkout -q tags/DDS-3.14.1
+      displayName: 'Checkout OpenDDS v3.14.1'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |

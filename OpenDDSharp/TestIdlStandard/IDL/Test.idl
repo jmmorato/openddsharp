@@ -1,4 +1,3 @@
-
 module Test {
 
 	enum SupportTestKind {
@@ -147,9 +146,9 @@ module Test {
 		octet OctetField;
 		float FloatField;
 		double DoubleField;
-		long double LongDoubleField;
+		//long double LongDoubleField;
 
-		string UnboundedStringField;		
+		string UnboundedStringField;
 		wstring UnboundedWStringField;
 		BoundedStringType BoundedStringField;
 		BoundedWStringType BoundedWStringField;
@@ -178,8 +177,8 @@ module Test {
 		BoundedFloatSequenceType BoundedFloatSequenceField;
 		UnboundedDoubleSequenceType UnboundedDoubleSequenceField;
 		BoundedDoubleSequenceType BoundedDoubleSequenceField;
-		UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-		BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+		//UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+		//BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
 
 		UnboundedStringSequenceType UnboundedStringSequenceField;
 		BoundedStringSequenceType BoundedStringSequenceField;
@@ -208,7 +207,7 @@ module Test {
 		OctetArrayType OctetArrayField;
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
-		LongDoubleArrayType LongDoubleArrayField;
+		//LongDoubleArrayType LongDoubleArrayField;
 
 		StringArrayType StringArrayField;
 		WStringArrayType WStringArrayField;
@@ -229,7 +228,7 @@ module Test {
 		OctetMultiArrayType OctetMultiArrayField;
 		FloatMultiArrayType FloatMultiArrayField;
 		DoubleMultiArrayType DoubleMultiArrayField;
-		LongDoubleMultiArrayType LongDoubleMultiArrayField;
+		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
 
 		EnumMultiArrayType EnumMultiArrayField;
 
@@ -238,4 +237,32 @@ module Test {
 
 		StructMultiArrayType StructMultiArrayField;
     };
+
+	@topic
+	struct Athlete
+	{
+		@key long AthleteId;
+		string FirstName;
+		string SecondName;
+		string Country;
+	};
+
+	@topic
+		struct Result
+	{
+		@key long AthleteId;
+		long Rank;
+		float Score;
+	};
+
+	@topic
+		struct AthleteResult
+	{
+		@key long AthleteId;
+		string FirstName;
+		string SecondName;
+		string Country;
+		long Rank;
+		float Score;
+	};
 };

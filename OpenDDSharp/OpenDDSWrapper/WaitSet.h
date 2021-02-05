@@ -18,9 +18,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
+
 #include "Utils.h"
-#include <dds/DCPS/WaitSet.h>
 #include "marshal.h"
+
+#include <dds/DCPS/WaitSet.h>
 
 EXTERN_METHOD_EXPORT
 ::DDS::WaitSet_ptr WaitSet_New();

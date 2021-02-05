@@ -54,7 +54,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         /// <param name="context">The received <see cref="TestContext"/>.</param>
         [AssemblyInitialize]
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required by the AssemblyInitialize method signature")]
         public static void AssemblyInitialize(TestContext context)
         {
             Ace.Init();

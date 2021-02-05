@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
+
 #include "Utils.h"
 
 EXTERN_METHOD_EXPORT ::DDS::Condition_ptr ReadCondition_NarrowBase(::DDS::ReadCondition_ptr ptr);

@@ -23,7 +23,7 @@ public:
 
         // The rest of the memory is the structures aligned one after the other
         const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof T;
+        const ACE_UINT64 struct_size = sizeof(T);
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
@@ -34,7 +34,7 @@ public:
     static void unbounded_sequence_to_ptr(TAO::unbounded_value_sequence<T> sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof T;
+        const ACE_UINT64 struct_size = sizeof(T);
         const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
@@ -385,7 +385,7 @@ public:
 
         // The rest of the memory is the structures aligned one after the other
         const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof T;
+        const ACE_UINT64 struct_size = sizeof(T);
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
@@ -396,7 +396,7 @@ public:
     static void bounded_sequence_to_ptr(TAO::bounded_value_sequence<T, MAX> sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof T;
+        const ACE_UINT64 struct_size = sizeof(T);
         const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);

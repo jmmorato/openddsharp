@@ -111,7 +111,7 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        data->from_native(nativeData);        
+        data->from_native(nativeData);
     }
     
     return (int)ret;
@@ -123,8 +123,8 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
 
     ::DDS::ReturnCode_t ret = dr->take_next_sample(nativeData, *sampleInfo);
     if (ret == ::DDS::RETCODE_OK)
-    {
-        data->from_native(nativeData);        
+    {        
+        data->from_native(nativeData);
     }
 
     return (int)ret;

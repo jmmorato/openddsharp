@@ -68,6 +68,8 @@ namespace OpenDDSharp.BuildTasks
         public bool IsStandard { get; set; }
 
         public bool IsWrapper { get; set; }
+
+        public bool IsLinux { get; set; }
         #endregion
 
         #region Methods
@@ -88,7 +90,7 @@ namespace OpenDDSharp.BuildTasks
             Log.LogMessage(MessageImportance.High, "IntDir: " + IntDir);
             Log.LogMessage(MessageImportance.High, "_projectName: " + _projectName);
 #endif
-
+            Configuration = Configuration.Replace("Linux", string.Empty);
             GenerateSolutionFile();
             GenerateProjectFile();
             CopyIdlFiles();
@@ -297,43 +299,46 @@ namespace OpenDDSharp.BuildTasks
 
                     _project.Save();
 
-                    // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
-                    // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(_project.FullName);
-                    XmlNode root = doc.DocumentElement;
-                    XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
-                    ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-                    XmlNodeList nodes = root.SelectNodes("//msbld:PreprocessorDefinitions", ns);
-                    foreach (XmlNode node in nodes)
+                    if (!IsLinux)
                     {
-                        foreach (ITaskItem s in IdlFiles)
-                        {
-                            string fileName = s.GetMetadata("Filename");
-                            node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
-                        }
-                    }
+                        // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
+                        // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(_project.FullName);
+                        XmlNode root = doc.DocumentElement;
+                        XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
+                        ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-                    if (IsWrapper)
-                    {
-                        nodes = root.SelectNodes("//msbld:AdditionalDependencies", ns);
+                        XmlNodeList nodes = root.SelectNodes("//msbld:PreprocessorDefinitions", ns);
                         foreach (XmlNode node in nodes)
                         {
-                            node.InnerXml = string.Format("{0}Native.lib;{1}", OriginalProjectName, node.InnerXml);
+                            foreach (ITaskItem s in IdlFiles)
+                            {
+                                string fileName = s.GetMetadata("Filename");
+                                node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
+                            }
                         }
-                    }
 
-                    if (_platformToolsets.ContainsKey(_msbuildVersion))
-                    {
-                        nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
-                        foreach (XmlNode node in nodes)
+                        if (IsWrapper)
                         {
-                            node.InnerXml = _platformToolsets[_msbuildVersion];
+                            nodes = root.SelectNodes("//msbld:AdditionalDependencies", ns);
+                            foreach (XmlNode node in nodes)
+                            {
+                                node.InnerXml = string.Format("{0}Native.lib;{1}", OriginalProjectName, node.InnerXml);
+                            }
                         }
+
+                        if (_platformToolsets.ContainsKey(_msbuildVersion))
+                        {
+                            nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
+                            foreach (XmlNode node in nodes)
+                            {
+                                node.InnerXml = _platformToolsets[_msbuildVersion];
+                            }
+                        }
+
+                        doc.Save(_project.FullName);
                     }
-                    
-                    doc.Save(_project.FullName);
                     success = true;
                 }
 #if DEBUG
@@ -370,7 +375,7 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
+                    _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
 
                     success = true;
                 }
@@ -480,8 +485,7 @@ namespace OpenDDSharp.BuildTasks
             }
             else if (Platform == "AnyCPU")
             {
-                platforms.Add("x86");
-                platforms.Add("x64");
+                platforms.Add("x86");                
             }
 
             foreach (string platform in platforms)

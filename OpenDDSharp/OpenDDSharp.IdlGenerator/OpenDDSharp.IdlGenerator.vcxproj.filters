@@ -133,12 +133,36 @@
     <None Include="StandardWrapperIdlProject.vstemplate">
       <Filter>Project Template</Filter>
     </None>
+    <None Include="NativeIdlProject.Linux.vcxproj">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="NativeIdlProject.Linux.vcxproj.filters">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="NativeIdlProjectTemplate.Linux.vstemplate">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.Linux.vcxproj">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.Linux.vcxproj.filters">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.Linux.vstemplate">
+      <Filter>Project Template</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="NativeIdlProjectTemplate.ico">
       <Filter>Project Template</Filter>
     </Image>
     <Image Include="StandardWrapperIdlProject.ico">
+      <Filter>Project Template</Filter>
+    </Image>
+    <Image Include="NativeIdlProjectTemplate.Linux.ico">
+      <Filter>Project Template</Filter>
+    </Image>
+    <Image Include="StandardWrapperIdlProject.Linux.ico">
       <Filter>Project Template</Filter>
     </Image>
   </ItemGroup>

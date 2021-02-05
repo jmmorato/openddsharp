@@ -18,12 +18,16 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
+
 #include "Utils.h"
 #include "QosPolicies.h"
-#include "dds\DCPS\Marked_Default_Qos.h"
 #include "SubscriberListenerImpl.h"
 #include "DataReaderListenerImpl.h"
 #include "marshal.h"
+
+#pragma warning(push, 0)
+#include "dds/DCPS/Marked_Default_Qos.h"
+#pragma warning(pop)
 
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr sub);

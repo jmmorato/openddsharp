@@ -58,13 +58,6 @@ OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name
 }
 
 void TransportRegistry_BindConfigName(const char * name, ::DDS::Entity_ptr entity) {
-	try {
-		const std::string str(name);
-		TheTransportRegistry->bind_config(str, entity);
-	}
-	catch (std::exception& e) {
-		char buf[2047];
-		sprintf(buf, "Bind Config Exception %s \n", e.what());
-		OutputDebugString(buf);
-	}
+	const std::string str(name);
+	TheTransportRegistry->bind_config(str, entity);
 }

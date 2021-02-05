@@ -1,19 +1,27 @@
-<Project>
+﻿<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Platforms>x64;x86</Platforms>
+    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
     <!--  VS doesn't call MSBuild to check if projects are up-to-date and it doesn't check the inputs of custom target.
           The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IsWindows Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">true</IsWindows>     
+    <IsLinux Condition="'$(Configuration)'=='LinuxDebug' Or '$(Configuration)'=='LinuxRelease'">true</IsLinux>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstants);Linux</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
@@ -21,6 +29,26 @@
     <Compile Include="TestTypeSupport.cs" />
     <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>
+
+  <PropertyGroup Label="OpenDDS Home">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="ACE Home">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="TAO Home">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="OpenDDS Home">
+    <DDS_ROOT_LINUX>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_Linux</DDS_ROOT_LINUX>
+  </PropertyGroup>
+  <PropertyGroup Label="ACE Home">
+    <ACE_ROOT_LINUX>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_Linux\ACE_TAO\ACE</ACE_ROOT_LINUX>
+  </PropertyGroup>
+  <PropertyGroup Label="TAO Home">
+    <TAO_ROOT_LINUX>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_Linux\ACE_TAO\TAO</TAO_ROOT_LINUX>
+  </PropertyGroup>
   
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
@@ -33,6 +61,8 @@
     <Delete Files="%(RootDir)%(Directory)..\%(IdlFiles.FileName)TypeSupport.cs;" ContinueOnError="true" />
     <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))NativeProject" />
     <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))WrapperProject" />
+    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))LinuxNativeProject" />
+    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))LinuxWrapperProject" />
   </Target>
   
   <!-- Add VC++ to the PATH -->
@@ -42,7 +72,7 @@
     <AddPathVC Platform="$(Platform)" />
   </Target>
         
-  <!-- Set environment variables -->
+  <!-- Set Windos environment variables -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Set the environment variables:" Importance="High" />
@@ -54,17 +84,63 @@
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />    
   </Target>
   
-  <!-- Generate native OpenDDS project -->
+  <!-- Generate Windows native OpenDDS project -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
   <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" />
-  </Target>
+  </Target>  
   
-  <!-- Generate wrapper C project -->
+  <!-- Generate Windows wrapper C project -->
   <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\StandardWrapperIdlProject.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsWrapper="True" />
   </Target>
+
+  <!-- Set Linux environment variables -->
+  <Target Name="SetLinuxEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
+    <Message Text="Set the Linux environment variables:" Importance="High" />
+    <Message Text="DDS_ROOT=$(DDS_ROOT_LINUX)" Importance="High" />
+    <Message Text="ACE_ROOT=$(ACE_ROOT_LINUX)" Importance="High" />
+    <Message Text="TAO_ROOT=$(TAO_ROOT_LINUX)" Importance="High" />
+    <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT_LINUX)" />
+    <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT_LINUX)" />
+    <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT_LINUX)" />
+  </Target>
   
+  <!-- Generate Linux native OpenDDS project -->
+  <Target Name="GenerateLinuxNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
+    <ItemGroup>
+      <HToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))\*.h" />
+      <CPPToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))\*.cpp" />
+      <INLToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))\*.inl" />
+    </ItemGroup>
+    <Copy SourceFiles="@(HToCopy)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxNativeProject'))" />
+    <Copy SourceFiles="@(CPPToCopy)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxNativeProject'))" />
+    <Copy SourceFiles="@(INLToCopy)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxNativeProject'))" />
+    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxNativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.Linux.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsLinux="True" />
+  </Target>
+  
+  <!-- Generate Linux wrapper C project -->
+  <Target Name="GenerateLinuxWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
+    <ItemGroup>
+      <HWrapperToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))\*.h" />
+      <CPPWrapperToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))\*.cpp" />      
+    </ItemGroup>
+    <Copy SourceFiles="@(HWrapperToCopy)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxWrapperProject'))" />
+    <Copy SourceFiles="@(CPPWrapperToCopy)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxWrapperProject'))" />
+    <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)LinuxWrapperProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\OpenDDSharp.IdlGenerator\StandardWrapperIdlProject.Linux.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsWrapper="True" IsLinux="True" />
+  </Target>
+
+  <!-- Set environment variables -->
+  <Target Name="ReSetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+    <Message Text="Set the environment variables:" Importance="High" />
+    <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
+    <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
+    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />
+    <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
+    <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
+    <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
+  </Target>
+
   <!-- Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlx64" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
@@ -107,5 +183,21 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <TargetPath>TestIdlStandardWrapperx64.dll</TargetPath>
     </ContentWithTargetPath>
-</ItemGroup>
+
+    <!-- OpenDDS x64/Linux Release native Libraries -->
+    <LinuxWrapperReleasex64 Include="$(IntermediateOutputPath)LinuxWrapperProject\bin\x64\Release\libTestIdlStandardWrapperx64.so" />
+    <ContentWithTargetPath Include="@(LinuxWrapperReleasex64)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>libTestIdlStandardWrapperx64.so</TargetPath>
+    </ContentWithTargetPath>
+
+    <!-- OpenDDS x64/Linux Debug native Libraries -->
+    <LinuxWrapperDebugx64 Include="$(IntermediateOutputPath)LinuxWrapperProject\bin\x64\Debug\libTestIdlStandardWrapperx64.so" />
+    <ContentWithTargetPath Include="@(LinuxWrapperDebugx64)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>libTestIdlStandardWrapperx64.so</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
 </Project>
