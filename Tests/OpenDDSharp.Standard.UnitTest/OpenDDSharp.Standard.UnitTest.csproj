@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -16,7 +16,7 @@
     <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <DefineConstants Condition="'$(IsLinux)'=='true'">TRACE;DEBUG;Linux</DefineConstants>
+    <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstants);Linux</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\TestIdlStandard\TestIdlStandard.csproj" />
+    <ProjectReference Include="..\..\Tests\TestIdlStandard\TestIdlStandard.csproj" />
   </ItemGroup>
 
   <ItemGroup>

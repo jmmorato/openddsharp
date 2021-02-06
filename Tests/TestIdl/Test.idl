@@ -1,3 +1,4 @@
+
 module Test {
 	enum PrimitiveEnum {
 		ENUM1,

@@ -74,11 +74,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenDDSharp\OpenDDSharp.vcxproj">
+    <ProjectReference Include="..\..\Sources\OpenDDSharp\OpenDDSharp.vcxproj">
       <Project>{1aadf375-9149-4000-82ab-af4cd15144da}</Project>
       <Name>OpenDDSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestIdl\TestIdl.vcxproj">
+    <ProjectReference Include="..\..\Tests\TestIdl\TestIdl.vcxproj">
       <Project>{a2b3a918-e652-41b0-ac1b-121e51360497}</Project>
       <Name>TestIdl</Name>
     </ProjectReference>

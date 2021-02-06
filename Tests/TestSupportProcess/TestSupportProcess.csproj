@@ -72,7 +72,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenDDSharp\OpenDDSharp.vcxproj">
+    <ProjectReference Include="..\..\Sources\OpenDDSharp\OpenDDSharp.vcxproj">
       <Project>{1aadf375-9149-4000-82ab-af4cd15144da}</Project>
       <Name>OpenDDSharp</Name>
     </ProjectReference>
