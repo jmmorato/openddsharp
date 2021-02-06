@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
+    <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
+    <ACE_ROOT>..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
+    <TAO_ROOT>..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{1AADF375-9149-4000-82AB-AF4CD15144DA}</ProjectGuid>
+    <RootNamespace>OpenDDSharp</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetExt>.dll</TargetExt>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetExt>.dll</TargetExt>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.;$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WIN32;_CONSOLE;_CRT_NONSTDC_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;MPC_LIB_MODIFIER="d";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <DisableSpecificWarnings>4635;4461;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <CallingConvention>Cdecl</CallingConvention>
+      <OmitFramePointers />
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_InfoRepoDiscoveryd.lib;OpenDDS_Rtps_Udpd.lib;OpenDDS_Shmemd.lib;OpenDDS_Tcpd.lib;OpenDDS_Udpd.lib;OpenDDS_Multicastd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <Profile>true</Profile>
+      <OptimizeReferences>false</OptimizeReferences>
+      <LargeAddressAware>
+      </LargeAddressAware>
+    </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.;$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_AMD64_;_WIN64;_CONSOLE;_CRT_NONSTDC_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;MPC_LIB_MODIFIER="d";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <DisableSpecificWarnings>4635;4461;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <CallingConvention>Cdecl</CallingConvention>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x64;$(DDS_ROOT)\lib_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ACEd.lib;TAOd.lib;OpenDDS_Dcpsd.lib;OpenDDS_Rtpsd.lib;OpenDDS_InfoRepoDiscoveryd.lib;OpenDDS_Rtps_Udpd.lib;OpenDDS_Shmemd.lib;OpenDDS_Tcpd.lib;OpenDDS_Udpd.lib;OpenDDS_Multicastd.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
+      <AdditionalOptions>/machine:AMD64 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <Profile>true</Profile>
+      <OptimizeReferences>false</OptimizeReferences>
+    </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.;$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_CONSOLE;_CRT_NONSTDC_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <DisableSpecificWarnings>4635;4461;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ACE.lib;TAO.lib;OpenDDS_Dcps.lib;OpenDDS_Rtps.lib;OpenDDS_InfoRepoDiscovery.lib;OpenDDS_Rtps_Udp.lib;OpenDDS_Shmem.lib;OpenDDS_Tcp.lib;OpenDDS_Udp.lib;OpenDDS_Multicast.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x86;$(DDS_ROOT)\lib_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AssemblyDebug>
+      </AssemblyDebug>
+      <NoEntryPoint>false</NoEntryPoint>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <CLRUnmanagedCodeCheck>
+      </CLRUnmanagedCodeCheck>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.;$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_AMD64_;_WIN64;_CONSOLE;_CRT_NONSTDC_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <DisableSpecificWarnings>4635;4461;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ACE.lib;TAO.lib;OpenDDS_Dcps.lib;OpenDDS_Rtps.lib;OpenDDS_InfoRepoDiscovery.lib;OpenDDS_Rtps_Udp.lib;OpenDDS_Shmem.lib;OpenDDS_Tcp.lib;OpenDDS_Udp.lib;OpenDDS_Multicast.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.;$(ACE_ROOT)\lib_x64;$(DDS_ROOT)\lib_x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AssemblyDebug>
+      </AssemblyDebug>
+      <NoEntryPoint>false</NoEntryPoint>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <CLRUnmanagedCodeCheck>
+      </CLRUnmanagedCodeCheck>
+      <AdditionalOptions>/machine:AMD64 %(AdditionalOptions)</AdditionalOptions>
+      <Profile>true</Profile>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Ace.cpp" />
+    <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="BudgetExceededStatus.cpp" />
+    <ClCompile Include="BuiltinTopicKey.cpp" />
+    <ClCompile Include="Condition.cpp" />
+    <ClCompile Include="ContentFilteredTopic.cpp" />
+    <ClCompile Include="DataReader.cpp" />
+    <ClCompile Include="DataReaderListener.cpp" />
+    <ClCompile Include="DataReaderListenerNative.cpp" />
+    <ClCompile Include="DataReaderQos.cpp" />
+    <ClCompile Include="DataWriter.cpp" />
+    <ClCompile Include="DataWriterListener.cpp" />
+    <ClCompile Include="DataWriterListenerNative.cpp" />
+    <ClCompile Include="DataWriterQos.cpp" />
+    <ClCompile Include="DeadlineQosPolicy.cpp" />
+    <ClCompile Include="DestinationOrderQosPolicy.cpp" />
+    <ClCompile Include="DomainParticipant.cpp" />
+    <ClCompile Include="DomainParticipantFactory.cpp" />
+    <ClCompile Include="DomainParticipantFactoryQos.cpp" />
+    <ClCompile Include="DomainParticipantListener.cpp" />
+    <ClCompile Include="DomainParticipantListenerNative.cpp" />
+    <ClCompile Include="DomainParticipantQos.cpp" />
+    <ClCompile Include="DurabilityQosPolicy.cpp" />
+    <ClCompile Include="DurabilityServiceQosPolicy.cpp" />
+    <ClCompile Include="Duration.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityFactoryQosPolicy.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="GroupDataQosPolicy.cpp" />
+    <ClCompile Include="GuardCondition.cpp" />
+    <ClCompile Include="HistoryQosPolicy.cpp" />
+    <ClCompile Include="InconsistentTopicStatus.cpp" />
+    <ClCompile Include="InfoRepoDiscovery.cpp" />
+    <ClCompile Include="InstanceHandle.cpp" />
+    <ClCompile Include="InstanceStateKind.cpp" />
+    <ClCompile Include="InstanceStateMask.cpp" />
+    <ClCompile Include="LatencyBudgetQosPolicy.cpp" />
+    <ClCompile Include="LifespanQosPolicy.cpp" />
+    <ClCompile Include="LivelinessChangedStatus.cpp" />
+    <ClCompile Include="LivelinessLostStatus.cpp" />
+    <ClCompile Include="LivelinessQosPolicy.cpp" />
+    <ClCompile Include="MulticastInst.cpp" />
+    <ClCompile Include="MultiTopic.cpp" />
+    <ClCompile Include="OfferedDeadlineMissedStatus.cpp" />
+    <ClCompile Include="OfferedIncompatibleQosStatus.cpp" />
+    <ClCompile Include="OwnershipQosPolicy.cpp" />
+    <ClCompile Include="OwnershipStrengthQosPolicy.cpp" />
+    <ClCompile Include="ParticipantBuiltinTopicData.cpp" />
+    <ClCompile Include="ParticipantBuiltinTopicDataDataReader.cpp" />
+    <ClCompile Include="ParticipantService.cpp" />
+    <ClCompile Include="PartitionQosPolicy.cpp" />
+    <ClCompile Include="PresentationQosPolicy.cpp" />
+    <ClCompile Include="PublicationBuiltinTopicData.cpp" />
+    <ClCompile Include="PublicationBuiltinTopicDataDataReader.cpp" />
+    <ClCompile Include="PublicationDisconnectedStatus.cpp" />
+    <ClCompile Include="PublicationLostStatus.cpp" />
+    <ClCompile Include="PublicationMatchedStatus.cpp" />
+    <ClCompile Include="PublicationReconnectedStatus.cpp" />
+    <ClCompile Include="Publisher.cpp" />
+    <ClCompile Include="PublisherListener.cpp" />
+    <ClCompile Include="PublisherListenerNative.cpp" />
+    <ClCompile Include="PublisherQos.cpp" />
+    <ClCompile Include="QosPolicyCount.cpp" />
+    <ClCompile Include="QueryCondition.cpp" />
+    <ClCompile Include="ReadCondition.cpp" />
+    <ClCompile Include="ReaderDataLifecycleQosPolicy.cpp" />
+    <ClCompile Include="ReliabilityQosPolicy.cpp" />
+    <ClCompile Include="RequestedDeadlineMissedStatus.cpp" />
+    <ClCompile Include="RequestedIncompatibleQosStatus.cpp" />
+    <ClCompile Include="ResourceLimitsQosPolicy.cpp" />
+    <ClCompile Include="RtpsDiscovery.cpp" />
+    <ClCompile Include="RtpsUdpInst.cpp" />
+    <ClCompile Include="SampleInfo.cpp" />
+    <ClCompile Include="SampleLostStatus.cpp" />
+    <ClCompile Include="SampleRejectedStatus.cpp" />
+    <ClCompile Include="SampleStateKind.cpp" />
+    <ClCompile Include="SampleStateMask.cpp" />
+    <ClCompile Include="ShmemInst.cpp" />
+    <ClCompile Include="StatusCondition.cpp" />
+    <ClCompile Include="StatusKind.cpp" />
+    <ClCompile Include="StatusMask.cpp" />
+    <ClCompile Include="Subscriber.cpp" />
+    <ClCompile Include="SubscriberListener.cpp" />
+    <ClCompile Include="SubscriberListenerNative.cpp" />
+    <ClCompile Include="SubscriberQos.cpp" />
+    <ClCompile Include="SubscriptionBuiltinTopicData.cpp" />
+    <ClCompile Include="SubscriptionBuiltinTopicDataDataReader.cpp" />
+    <ClCompile Include="SubscriptionDisconnectedStatus.cpp" />
+    <ClCompile Include="SubscriptionLostStatus.cpp" />
+    <ClCompile Include="SubscriptionMatchedStatus.cpp" />
+    <ClCompile Include="SubscriptionReconnectedStatus.cpp" />
+    <ClCompile Include="TcpInst.cpp" />
+    <ClCompile Include="TimeBasedFilterQosPolicy.cpp" />
+    <ClCompile Include="Timestamp.cpp" />
+    <ClCompile Include="Topic.cpp" />
+    <ClCompile Include="TopicBuiltinTopicData.cpp" />
+    <ClCompile Include="TopicBuiltinTopicDataDataReader.cpp" />
+    <ClCompile Include="TopicDataQosPolicy.cpp" />
+    <ClCompile Include="TopicDescription.cpp" />
+    <ClCompile Include="TopicListener.cpp" />
+    <ClCompile Include="TopicListenerNative.cpp" />
+    <ClCompile Include="TopicQos.cpp" />
+    <ClCompile Include="TransportConfig.cpp" />
+    <ClCompile Include="TransportConfigManager.cpp" />
+    <ClCompile Include="TransportInst.cpp" />
+    <ClCompile Include="TransportInstManager.cpp" />
+    <ClCompile Include="TransportPriorityQosPolicy.cpp" />
+    <ClCompile Include="TransportRegistry.cpp" />
+    <ClCompile Include="UdpInst.cpp" />
+    <ClCompile Include="UserDataQosPolicy.cpp" />
+    <ClCompile Include="ViewStateKind.cpp" />
+    <ClCompile Include="ViewStateMask.cpp" />
+    <ClCompile Include="WaitSet.cpp" />
+    <ClCompile Include="WriterDataLifecycleQosPolicy.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ace.h" />
+    <ClInclude Include="AssemblyInfo.h" />
+    <ClInclude Include="BudgetExceededStatus.h" />
+    <ClInclude Include="BuiltinTopicKey.h" />
+    <ClInclude Include="Condition.h" />
+    <ClInclude Include="ContentFilteredTopic.h" />
+    <ClInclude Include="DataReader.h" />
+    <ClInclude Include="DataReaderListener.h" />
+    <ClInclude Include="DataReaderListenerNative.h" />
+    <ClInclude Include="DataReaderQos.h" />
+    <ClInclude Include="DataWriter.h" />
+    <ClInclude Include="DataWriterListener.h" />
+    <ClInclude Include="DataWriterListenerNative.h" />
+    <ClInclude Include="DataWriterQos.h" />
+    <ClInclude Include="DeadlineQosPolicy.h" />
+    <ClInclude Include="DestinationOrderQosPolicy.h" />
+    <ClInclude Include="DestinationOrderQosPolicyKind.h" />
+    <ClInclude Include="Discovery.h" />
+    <ClInclude Include="DomainParticipant.h" />
+    <ClInclude Include="DomainParticipantFactory.h" />
+    <ClInclude Include="DomainParticipantFactoryQos.h" />
+    <ClInclude Include="DomainParticipantListener.h" />
+    <ClInclude Include="DomainParticipantListenerNative.h" />
+    <ClInclude Include="DomainParticipantQos.h" />
+    <ClInclude Include="DurabilityQosPolicy.h" />
+    <ClInclude Include="DurabilityQosPolicyKind.h" />
+    <ClInclude Include="DurabilityServiceQosPolicy.h" />
+    <ClInclude Include="Duration.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityFactoryQosPolicy.h" />
+    <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="GroupDataQosPolicy.h" />
+    <ClInclude Include="GuardCondition.h" />
+    <ClInclude Include="HistoryQosPolicy.h" />
+    <ClInclude Include="HistoryQosPolicyKind.h" />
+    <ClInclude Include="InconsistentTopicStatus.h" />
+    <ClInclude Include="InfoRepoDiscovery.h" />
+    <ClInclude Include="InstanceHandle.h" />
+    <ClInclude Include="InstanceStateKind.h" />
+    <ClInclude Include="InstanceStateMask.h" />
+    <ClInclude Include="LatencyBudgetQosPolicy.h" />
+    <ClInclude Include="LifespanQosPolicy.h" />
+    <ClInclude Include="LivelinessChangedStatus.h" />
+    <ClInclude Include="LivelinessLostStatus.h" />
+    <ClInclude Include="LivelinessQosPolicy.h" />
+    <ClInclude Include="LivelinessQosPolicyKind.h" />
+    <ClInclude Include="LNK4248.h" />
+    <ClInclude Include="MulticastInst.h" />
+    <ClInclude Include="MultiTopic.h" />
+    <ClInclude Include="OfferedDeadlineMissedStatus.h" />
+    <ClInclude Include="OfferedIncompatibleQosStatus.h" />
+    <ClInclude Include="OwnershipQosPolicy.h" />
+    <ClInclude Include="OwnershipQosPolicyKind.h" />
+    <ClInclude Include="OwnershipStrengthQosPolicy.h" />
+    <ClInclude Include="ParticipantBuiltinTopicData.h" />
+    <ClInclude Include="ParticipantBuiltinTopicDataDataReader.h" />
+    <ClInclude Include="ParticipantService.h" />
+    <ClInclude Include="PartitionQosPolicy.h" />
+    <ClInclude Include="PresentationQosPolicy.h" />
+    <ClInclude Include="PresentationQosPolicyAccessScopeKind.h" />
+    <ClInclude Include="PublicationBuiltinTopicData.h" />
+    <ClInclude Include="PublicationBuiltinTopicDataDataReader.h" />
+    <ClInclude Include="PublicationDisconnectedStatus.h" />
+    <ClInclude Include="PublicationLostStatus.h" />
+    <ClInclude Include="PublicationMatchedStatus.h" />
+    <ClInclude Include="PublicationReconnectedStatus.h" />
+    <ClInclude Include="Publisher.h" />
+    <ClInclude Include="PublisherListener.h" />
+    <ClInclude Include="PublisherListenerNative.h" />
+    <ClInclude Include="PublisherQos.h" />
+    <ClInclude Include="QosPolicyCount.h" />
+    <ClInclude Include="QueryCondition.h" />
+    <ClInclude Include="ReadCondition.h" />
+    <ClInclude Include="ReaderDataLifecycleQosPolicy.h" />
+    <ClInclude Include="ReliabilityQosPolicy.h" />
+    <ClInclude Include="ReliabilityQosPolicyKind.h" />
+    <ClInclude Include="RequestedDeadlineMissedStatus.h" />
+    <ClInclude Include="RequestedIncompatibleQosStatus.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ResourceLimitsQosPolicy.h" />
+    <ClInclude Include="ReturnCode.h" />
+    <ClInclude Include="RtpsDiscovery.h" />
+    <ClInclude Include="RtpsUdpInst.h" />
+    <ClInclude Include="SampleInfo.h" />
+    <ClInclude Include="SampleLostStatus.h" />
+    <ClInclude Include="SampleRejectedStatus.h" />
+    <ClInclude Include="SampleRejectedStatusKind.h" />
+    <ClInclude Include="SampleStateKind.h" />
+    <ClInclude Include="SampleStateMask.h" />
+    <ClInclude Include="ShmemInst.h" />
+    <ClInclude Include="StatusCondition.h" />
+    <ClInclude Include="StatusKind.h" />
+    <ClInclude Include="StatusMask.h" />
+    <ClInclude Include="Subscriber.h" />
+    <ClInclude Include="SubscriberListener.h" />
+    <ClInclude Include="SubscriberListenerNative.h" />
+    <ClInclude Include="SubscriberQos.h" />
+    <ClInclude Include="SubscriptionBuiltinTopicData.h" />
+    <ClInclude Include="SubscriptionBuiltinTopicDataDataReader.h" />
+    <ClInclude Include="SubscriptionDisconnectedStatus.h" />
+    <ClInclude Include="SubscriptionLostStatus.h" />
+    <ClInclude Include="SubscriptionMatchedStatus.h" />
+    <ClInclude Include="SubscriptionReconnectedStatus.h" />
+    <ClInclude Include="TcpInst.h" />
+    <ClInclude Include="TimeBasedFilterQosPolicy.h" />
+    <ClInclude Include="Timestamp.h" />
+    <ClInclude Include="TimeValue.h" />
+    <ClInclude Include="Topic.h" />
+    <ClInclude Include="TopicBuiltinTopicData.h" />
+    <ClInclude Include="TopicBuiltinTopicDataDataReader.h" />
+    <ClInclude Include="TopicDataQosPolicy.h" />
+    <ClInclude Include="ITopicDescription.h" />
+    <ClInclude Include="TopicDescription.h" />
+    <ClInclude Include="TopicListener.h" />
+    <ClInclude Include="TopicListenerNative.h" />
+    <ClInclude Include="TopicQos.h" />
+    <ClInclude Include="TransportConfig.h" />
+    <ClInclude Include="TransportConfigManager.h" />
+    <ClInclude Include="TransportInst.h" />
+    <ClInclude Include="TransportInstManager.h" />
+    <ClInclude Include="TransportPriorityQosPolicy.h" />
+    <ClInclude Include="TransportRegistry.h" />
+    <ClInclude Include="UdpInst.h" />
+    <ClInclude Include="UserDataQosPolicy.h" />
+    <ClInclude Include="ViewStateKind.h" />
+    <ClInclude Include="ViewStateMask.h" />
+    <ClInclude Include="WaitSet.h" />
+    <ClInclude Include="WriterDataLifecycleQosPolicy.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenDDSharp.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="OpenDDSharp.targets">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
