@@ -53,6 +53,12 @@
     <ClCompile Include="topic_keys.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="csharp_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cwrapper_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="be_extern.h">
@@ -79,12 +85,30 @@
     <ClInclude Include="topic_keys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="csharp_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cwrapper_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="marshal.h">
+      <Filter>Project Template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="HeaderTemplate.txt">
       <Filter>Template Files</Filter>
     </Text>
     <Text Include="ImplTemplate.txt">
+      <Filter>Template Files</Filter>
+    </Text>
+    <Text Include="CSharpImplTemplate.txt">
+      <Filter>Template Files</Filter>
+    </Text>
+    <Text Include="CWrapperHeaderTemplate.txt">
+      <Filter>Template Files</Filter>
+    </Text>
+    <Text Include="CWrapperImplTemplate.txt">
       <Filter>Template Files</Filter>
     </Text>
   </ItemGroup>
@@ -100,9 +124,45 @@
     </None>
     <None Include="OpenDDSharp.IdlGenerator.nuspec" />
     <None Include="OpenDDSharp.IdlGenerator.targets" />
+    <None Include="StandardWrapperIdlProject.vcxproj">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.vcxproj.filters">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.vstemplate">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="NativeIdlProject.Linux.vcxproj">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="NativeIdlProject.Linux.vcxproj.filters">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="NativeIdlProjectTemplate.Linux.vstemplate">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.Linux.vcxproj">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.Linux.vcxproj.filters">
+      <Filter>Project Template</Filter>
+    </None>
+    <None Include="StandardWrapperIdlProject.Linux.vstemplate">
+      <Filter>Project Template</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="NativeIdlProjectTemplate.ico">
+      <Filter>Project Template</Filter>
+    </Image>
+    <Image Include="StandardWrapperIdlProject.ico">
+      <Filter>Project Template</Filter>
+    </Image>
+    <Image Include="NativeIdlProjectTemplate.Linux.ico">
+      <Filter>Project Template</Filter>
+    </Image>
+    <Image Include="StandardWrapperIdlProject.Linux.ico">
       <Filter>Project Template</Filter>
     </Image>
   </ItemGroup>

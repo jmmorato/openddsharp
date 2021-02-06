@@ -24,7 +24,7 @@ class AST_Finder;
 
 class dds_visitor : public ast_visitor {
 public:
-  dds_visitor(AST_Decl* scope, bool java_ts_only);
+	dds_visitor(AST_Decl* scope, bool java_ts_only, BE_GlobalData* be_global);
 
   virtual ~dds_visitor();
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConsoleDemoCore": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

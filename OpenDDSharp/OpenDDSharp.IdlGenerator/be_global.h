@@ -135,8 +135,17 @@ public:
   bool face_ts() const;
   void face_ts(bool b);
 
-  ACE_CString java_arg() const;
-  void java_arg(const ACE_CString& str);
+	bool cppcli() const;
+	void cppcli(bool b);
+
+	bool csharp() const;
+	void csharp(bool b);
+
+	bool cwrapper() const;
+	void cwrapper(bool b);
+
+	ACE_CString java_arg() const;
+	void java_arg(const ACE_CString& str);
 
   enum LanguageMapping {
     LANGMAP_NONE, ///< Don't generate, let tao_idl handle it
@@ -151,8 +160,11 @@ public:
   ACE_CString sequence_suffix() const;
   void sequence_suffix(const ACE_CString& str);
 
-  bool suppress_idl() const { return suppress_idl_; }
-  bool suppress_typecode() const { return suppress_typecode_; }
+	ACE_CString project_name() const;
+	void project_name(const ACE_CString& str);
+
+	bool suppress_idl() const { return suppress_idl_; }
+	bool suppress_typecode() const { return suppress_typecode_; }
 
   static bool writeFile(const char* fileName, const std::string &content);
 
@@ -208,11 +220,12 @@ private:
 
   bool java_, suppress_idl_, suppress_typecode_,
     no_default_gen_, generate_itl_, generate_v8_,
-    generate_rapidjson_, face_ts_;
+    generate_rapidjson_, face_ts_,
+	cppcli_, csharp_, cwrapper_;
 
   ACE_CString export_macro_, export_include_,
     versioning_name_, versioning_begin_, versioning_end_,
-    pch_include_, java_arg_, seq_;
+    pch_include_, java_arg_, seq_, project_name_;
   std::set<std::string> cpp_includes_;
 
   LanguageMapping language_mapping_;

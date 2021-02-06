@@ -16,7 +16,7 @@ set DDS_ROOT=
 
 REM If not already set in your build environment, set VSINSTALLDIR to your Visual Studio installation path.
 REM TITLE Set VSINSTALLDIR
-REM set VSINSTALLDIR=<SET TO YOUR VS INSTALLATION PATH>
+set VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\
 
 REM Checkout OpenDDS to the version 3.14
 TITLE Checkout OpenDDS to the version 3.14

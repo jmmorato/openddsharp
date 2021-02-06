@@ -63,13 +63,26 @@ namespace OpenDDSharp.BuildTasks
         public string Configuration { get; set; }
 
         [Required]
-        public string Platform { get; set; }       
+        public string Platform { get; set; }
+
+        public bool IsStandard { get; set; }
+
+        public bool IsWrapper { get; set; }
+
+        public bool IsLinux { get; set; }
         #endregion
 
         #region Methods
         public override bool Execute()
         {
-            Log.LogMessage(MessageImportance.High, "Generating native IDL library...");            
+            if (!IsWrapper)
+            {
+                Log.LogMessage(MessageImportance.High, "Generating native IDL library...");
+            }
+            else
+            {
+                Log.LogMessage(MessageImportance.High, "Generating wrapper IDL library...");
+            }
 
             Initialize();
 #if DEBUG
@@ -77,7 +90,7 @@ namespace OpenDDSharp.BuildTasks
             Log.LogMessage(MessageImportance.High, "IntDir: " + IntDir);
             Log.LogMessage(MessageImportance.High, "_projectName: " + _projectName);
 #endif
-
+            Configuration = Configuration.Replace("Linux", string.Empty);
             GenerateSolutionFile();
             GenerateProjectFile();
             CopyIdlFiles();
@@ -90,10 +103,17 @@ namespace OpenDDSharp.BuildTasks
         private void Initialize()
         {
             TemplatePath = Path.GetFullPath(TemplatePath);
-            IntDir = Path.Combine(Path.GetFullPath(IntDir), OriginalProjectName);
 
-            _solutionName = OriginalProjectName + "NativeSolution";
-            _projectName = OriginalProjectName + "Native.vcxproj";
+            if (IsWrapper)
+            {
+                _solutionName = OriginalProjectName + "WrapperSolution";
+                _projectName = OriginalProjectName + "Wrapper.vcxproj";
+            }
+            else
+            {
+                _solutionName = OriginalProjectName + "NativeSolution";
+                _projectName = OriginalProjectName + "Native.vcxproj";
+            }
 
             string fullPath = Path.Combine(IntDir, _projectName);
             if (File.Exists(fullPath))
@@ -252,52 +272,73 @@ namespace OpenDDSharp.BuildTasks
                     {
                         string filename = s.GetMetadata("Filename");
 
-                        _project.ProjectItems.AddFromFile(filename + "C.h");
-                        _project.ProjectItems.AddFromFile(filename + "IDL_Export.h");
-                        _project.ProjectItems.AddFromFile(filename + "S.h");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportC.h");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.h");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportS.h");
+                        if (!IsWrapper)
+                        {
+                            _project.ProjectItems.AddFromFile(filename + "C.h");
+                            _project.ProjectItems.AddFromFile(filename + "IDL_Export.h");
+                            _project.ProjectItems.AddFromFile(filename + "S.h");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportC.h");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.h");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportS.h");
 
-                        _project.ProjectItems.AddFromFile(filename + "C.cpp");
-                        _project.ProjectItems.AddFromFile(filename + "S.cpp");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportC.cpp");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.cpp");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportS.cpp");
+                            _project.ProjectItems.AddFromFile(filename + "C.cpp");
+                            _project.ProjectItems.AddFromFile(filename + "S.cpp");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportC.cpp");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.cpp");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportS.cpp");
 
-                        _project.ProjectItems.AddFromFile(filename + "C.inl");
-                        _project.ProjectItems.AddFromFile(filename + "TypeSupportC.inl");
+                            _project.ProjectItems.AddFromFile(filename + "C.inl");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupportC.inl");
+                        }
+                        else
+                        {                            
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupport.h");
+                            _project.ProjectItems.AddFromFile(filename + "TypeSupport.cpp");
+                        }
                     }
 
                     _project.Save();
 
-                    // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
-                    // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(_project.FullName);
-                    XmlNode root = doc.DocumentElement;
-                    XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
-                    ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
-                    XmlNodeList nodes = root.SelectNodes("//msbld:PreprocessorDefinitions", ns);
-                    foreach (XmlNode node in nodes)
+                    if (!IsLinux)
                     {
-                        foreach (ITaskItem s in IdlFiles)
-                        {
-                            string fileName = s.GetMetadata("Filename");
-                            node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
-                        }
-                    }
+                        // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
+                        // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(_project.FullName);
+                        XmlNode root = doc.DocumentElement;
+                        XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
+                        ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-                    if (_platformToolsets.ContainsKey(_msbuildVersion))
-                    {
-                        nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
+                        XmlNodeList nodes = root.SelectNodes("//msbld:PreprocessorDefinitions", ns);
                         foreach (XmlNode node in nodes)
                         {
-                            node.InnerXml = _platformToolsets[_msbuildVersion];
+                            foreach (ITaskItem s in IdlFiles)
+                            {
+                                string fileName = s.GetMetadata("Filename");
+                                node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
+                            }
                         }
+
+                        if (IsWrapper)
+                        {
+                            nodes = root.SelectNodes("//msbld:AdditionalDependencies", ns);
+                            foreach (XmlNode node in nodes)
+                            {
+                                node.InnerXml = string.Format("{0}Native.lib;{1}", OriginalProjectName, node.InnerXml);
+                            }
+                        }
+
+                        if (_platformToolsets.ContainsKey(_msbuildVersion))
+                        {
+                            nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
+                            foreach (XmlNode node in nodes)
+                            {
+                                node.InnerXml = _platformToolsets[_msbuildVersion];
+                            }
+                        }
+
+                        doc.Save(_project.FullName);
                     }
-                    
-                    doc.Save(_project.FullName);
                     success = true;
                 }
 #if DEBUG
@@ -334,7 +375,7 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _solution.AddFromTemplate(TemplatePath, IntDir, _projectName, false);
+                    _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
 
                     success = true;
                 }
@@ -408,9 +449,9 @@ namespace OpenDDSharp.BuildTasks
         private void CopyIdlFiles()
         {            
             foreach (ITaskItem s in IdlFiles)
-            {
-                string identity = s.GetMetadata("Identity");
-                string inputPath = s.GetMetadata("FullPath");                
+            {                
+                string identity = IsStandard ? s.GetMetadata("Filename") + s.GetMetadata("Extension") : s.GetMetadata("Identity");
+                string inputPath = s.GetMetadata("FullPath");
                 string outputPath = Path.Combine(IntDir, identity);
 
                 using (StreamReader reader = new StreamReader(inputPath))
@@ -432,52 +473,72 @@ namespace OpenDDSharp.BuildTasks
 
         private void BuildWithMSBuild()
         {
-            if (Platform == "Win32")
-                Platform = "x86";
+            List<string> platforms = new List<string>();
 
-            string solutionConfiguration = string.Format("{0}|{1}", Configuration, Platform);
-
-            int retry = 100;
-            bool success = false;
-
-            while (!success && retry > 0)
+            if (Platform == "Win32" || Platform == "x86")
             {
-                try
-                {                                       
-                   _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);                    
-                    if (_solution.SolutionBuild.LastBuildInfo > 0)
-                    {
-                        string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                        string logFile = Path.Combine(IntDir, "obj", Platform, Configuration, projectName + ".log");                        
-                        Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+                platforms.Add("x86");
+            }
+            else if (Platform == "x64")
+            {
+                platforms.Add("x64");
+            }
+            else if (Platform == "AnyCPU")
+            {
+                platforms.Add("x86");                
+            }
 
-                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
-                    }
-                    success = true;
-                }
-                catch(InvalidOperationException)
+            foreach (string platform in platforms)
+            {
+                string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
+
+                int retry = 100;
+                bool success = false;
+
+                while (!success && retry > 0)
                 {
-                    throw;
-                }
+                    try
+                    {
+                        _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+                        if (_solution.SolutionBuild.LastBuildInfo > 0)
+                        {
+                            string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                            string cppPlatform = platform;
+                            if (platform == "x86")
+                            {
+                                cppPlatform = "Win32";
+                            }
+                            string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                            Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+
+                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                        }
+                        success = true;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        throw;
+                    }
 #if DEBUG
-                catch (Exception ex)
+                    catch (Exception ex)
 #else
                 catch
 #endif
-                {
-                    success = false;
-                    retry--;
+                    {
+                        success = false;
+                        retry--;
 
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(150);
+                        if (retry > 0)
+                        {
+                            System.Threading.Thread.Sleep(150);
 #if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+                            Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
 #endif
-                    }
-                    else
-                    {
-                        throw;
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
             }

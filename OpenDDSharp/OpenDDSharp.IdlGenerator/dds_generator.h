@@ -230,12 +230,18 @@ struct Function {
 
 inline std::string scoped(UTL_ScopedName* sn)
 {
-  return dds_generator::scoped_helper(sn, "::");
+	if (!be_global->csharp())
+		return dds_generator::scoped_helper(sn, "::");
+	else
+		return dds_generator::scoped_helper(sn, ".");
 }
 
 inline std::string module_scope(UTL_ScopedName* sn)
 {
-  return dds_generator::module_scope_helper(sn, "::");
+	if(!be_global->csharp())
+		return dds_generator::module_scope_helper(sn, "::");
+	else
+		return dds_generator::module_scope_helper(sn, ".");
 }
 
 namespace AstTypeClassification {

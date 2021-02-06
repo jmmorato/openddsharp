@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index d052b2064..4c78a8b8f 100644
+--- a/configure
++++ b/configure
+@@ -763,7 +763,8 @@ if (!$ace_src || !$tao_src) {
+     my $urlbase = 'https://github.com/DOCGroup';
+ 
+     print "Cloning git repo: $urlbase/ACE_TAO\n";
+-    my $err = run_command(['git', 'clone', '-q', '--depth=1', "$urlbase/ACE_TAO"]);
++    my $err = run_command(['git', 'clone', '-q', '--depth=1',
++                           '-b', 'ace6tao2', "$urlbase/ACE_TAO"]);
+     die "ERROR: Failed to clone ACE/TAO from GitHub\nStopped"
+       if $err ||
+         ! -r 'ACE_TAO/ACE/ace/ACE.h' ||

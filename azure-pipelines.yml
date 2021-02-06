@@ -1,6 +1,6 @@
 jobs:
 - job: VisualStudio2019
-  timeoutInMinutes: 90
+  timeoutInMinutes: 120
   pool:
     vmImage: windows-2019
   strategy:
@@ -21,6 +21,24 @@ jobs:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
+    - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
+      inputs:
+        versionSpec: 5.4.0
+    - task: NuGetCommand@2
+      displayName: "NuGet Restore OpenDDSharp"
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet restore"
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
+        projects: '**/*.csproj'
+        workingDirectory: '$(Build.SourcesDirectory)\OpenDDSharp'
     - script: |
         git clone -q git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
@@ -30,12 +48,13 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.14
-      displayName: 'Checkout OpenDDS v3.14'
+        git checkout -q tags/DDS-3.14.1
+      displayName: 'Checkout OpenDDS v3.14.1'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
+        git apply $(Build.SourcesDirectory)\Patches\configure.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
@@ -71,6 +90,7 @@ jobs:
         solution: ext\OpenDDS\DDS_TAOv2.sln
         platform: $(VcArch)
         configuration: $(BuildConfiguration)
+        maximumCpuCount: true
     - script: |
         xcopy %ACE_ROOT%\lib\* %ACE_ROOT%\lib_$(BuildPlatform) /s /i
         xcopy %ACE_ROOT%\bin\* %ACE_ROOT%\bin_$(BuildPlatform) /s /i
@@ -96,9 +116,9 @@ jobs:
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
         msbuildArgs: /p:PlatformToolset=v142
-        maximumCpuCount: true
+        maximumCpuCount: false
     - task: VSTest@2
-      displayName: Execute Unit Tests
+      displayName: Execute CppCli Unit Tests
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
@@ -109,8 +129,14 @@ jobs:
         runTestsInIsolation: true
         runInParallel: false
         codeCoverageEnabled: true
+    - task: DotNetCoreCLI@2
+      displayName: Execute Standard Unit Tests
+      inputs:
+        command: 'test'
+        projects: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.Standard.UnitTest\*.csproj'
+        arguments: '--no-build -p:Platform=$(BuildPlatform) -c $(BuildConfiguration) --settings OpenDDSharp\CodeCoverage.runsettings --logger trx'
 - job: VisualStudio2017
-  timeoutInMinutes: 90
+  timeoutInMinutes: 120
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
@@ -131,8 +157,25 @@ jobs:
     VCPKG_ROOT: $(Build.SourcesDirectory)\ext\vcpkg
     OPENDDS_ROOT: $(Build.SourcesDirectory)\ext\OpenDDS
   steps:
+    - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
+      inputs:
+        versionSpec: 5.4.0
+    - task: NuGetCommand@2
+      displayName: "NuGet Restore OpenDDSharp"
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.sln'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet restore"
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
+        projects: '**/*.csproj'
+        workingDirectory: $(Build.SourcesDirectory)\OpenDDSharp
     - script: |
-        hostname
         git clone -q --depth 1 git://github.com/objectcomputing/OpenDDS.git %OPENDDS_ROOT%
         if %BuildPlatform%==x64 (set VC_ARCH=x64) else set VC_ARCH=Win32
         echo ##vso[task.setvariable variable=VcArch]%VC_ARCH%
@@ -141,12 +184,13 @@ jobs:
       failOnStderr: true
     - script: |
         git fetch -q && git fetch -q --tags
-        git checkout -q tags/DDS-3.14
-      displayName: 'Checkout OpenDDS v3.14'
+        git checkout -q tags/DDS-3.14.1
+      displayName: 'Checkout OpenDDS v3.14.1'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
     - script: |
         git apply $(Build.SourcesDirectory)\Patches\ConditionImpl.h.patch
+        git apply $(Build.SourcesDirectory)\Patches\configure.patch
       displayName: 'Apply OpenDDS->OpenDDSharp Patches'
       workingDirectory: '$(OpenDdsRoot)'
       failOnStderr: true
@@ -204,9 +248,9 @@ jobs:
         solution: OpenDDSharp\OpenDDSharp.sln
         platform: $(BuildPlatform)
         configuration: $(BuildConfiguration)
-        maximumCpuCount: true
+        maximumCpuCount: false
     - task: VSTest@2
-      displayName: Execute Unit Tests
+      displayName: Execute CppCli Unit Tests
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'OpenDDSharp\OpenDDSharp.UnitTest\bin\$(BuildPlatform)\$(BuildConfiguration)\OpenDDSharp.UnitTest.dll'
@@ -217,3 +261,9 @@ jobs:
         runTestsInIsolation: true
         runInParallel: false
         codeCoverageEnabled: true
+    - task: DotNetCoreCLI@2
+      displayName: Execute Standard Unit Tests
+      inputs:
+        command: 'test'
+        projects: '$(Build.SourcesDirectory)\OpenDDSharp\OpenDDSharp.Standard.UnitTest\*.csproj'
+        arguments: '--no-build -p:Platform=$(BuildPlatform) -c $(BuildConfiguration) --settings OpenDDSharp\CodeCoverage.runsettings --logger trx'

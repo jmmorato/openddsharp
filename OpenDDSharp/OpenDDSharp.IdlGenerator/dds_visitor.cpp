@@ -34,6 +34,8 @@
 
 #include "dds_visitor.h"
 #include "cli_generator.h"
+#include "csharp_generator.h"
+#include "cwrapper_generator.h"
 #include "topic_keys.h"
 
 #include <iostream>
@@ -45,13 +47,21 @@
 using namespace std;
 
 namespace {
+	cli_generator cli_gen_;
+	csharp_generator csharp_gen_;
+	cwrapper_generator cwrapper_gen_;
+	/*dds_generator* generators_[] = { &cli_gen_, &csharp_gen_ };
+	const size_t N_MAP = sizeof(generators_) / sizeof(generators_[0]);
 
+	composite_generator gen_target_(&generators_[0], &generators_[N_MAP]);*/
+	dds_generator* cli_generators_[] = { &cli_gen_ };
+	dds_generator* csharp_generators_[] = { &csharp_gen_ };
+	dds_generator* cwrapper_generators_[] = { &cwrapper_gen_ };
+	const size_t N_MAP_CLI = sizeof(cli_generators_) / sizeof(cli_generators_[0]);
+	const size_t N_MAP_CSHARP = sizeof(csharp_generators_) / sizeof(csharp_generators_[0]);
+	const size_t N_MAP_CWRAPPER = sizeof(cwrapper_generators_) / sizeof(cwrapper_generators_[0]);
 
-    cli_generator cli_gen_;
-    dds_generator* generators_[] = { &cli_gen_ };
-    const size_t N_MAP = sizeof(generators_) / sizeof(generators_[0]);
-
-    composite_generator gen_target_(&generators_[0], &generators_[N_MAP]);
+	composite_generator gen_target_(&cli_generators_[0], &cli_generators_[N_MAP_CLI]);
 
   template <typename T>
   void scope2vector(vector<T*>& v, UTL_Scope* s, AST_Decl::NodeType nt)
@@ -78,10 +88,18 @@ namespace {
   }
 } // namespace
 
-dds_visitor::dds_visitor(AST_Decl* scope, bool java_ts_only)
-  : scope_(scope), error_(false), java_ts_only_(java_ts_only)
+dds_visitor::dds_visitor(AST_Decl* scope, bool java_ts_only, BE_GlobalData* be_global)
+	: scope_(scope), error_(false), java_ts_only_(java_ts_only)
 {
- 
+	if (be_global->csharp()) {
+		gen_target_ = composite_generator(&csharp_generators_[0], &csharp_generators_[N_MAP_CSHARP]);
+	}
+	else if (be_global->cwrapper()) {
+		gen_target_ = composite_generator(&cwrapper_generators_[0], &cwrapper_generators_[N_MAP_CWRAPPER]);
+	}
+	else if (be_global->cppcli()) {
+		gen_target_ = composite_generator(&cli_generators_[0], &cli_generators_[N_MAP_CLI]);
+	}
 }
 
 dds_visitor::~dds_visitor()

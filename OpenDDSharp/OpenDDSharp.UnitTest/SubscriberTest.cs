@@ -384,7 +384,7 @@ namespace OpenDDSharp.UnitTest
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestCreateDataReaderr()
+        public void TestCreateDataReader()
         {
             // Initialize entities
             TestStructTypeSupport support = new TestStructTypeSupport();
@@ -392,10 +392,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestCreateDataReaderr), typeName);
+            Topic topic = _participant.CreateTopic(nameof(TestCreateDataReader), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.GetListener());
-            Assert.AreEqual(nameof(TestCreateDataReaderr), topic.Name);
+            Assert.AreEqual(nameof(TestCreateDataReader), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
             Subscriber subscriber = _participant.CreateSubscriber();

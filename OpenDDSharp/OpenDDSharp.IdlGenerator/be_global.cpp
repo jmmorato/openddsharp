@@ -41,6 +41,9 @@ BE_GlobalData* be_global = 0;
 BE_GlobalData::BE_GlobalData()
   : filename_(0)
   , java_(false)
+  , cppcli_(true)
+  , csharp_(false)
+  , cwrapper_(false)
   , suppress_idl_(false)
   , suppress_typecode_(false)
   , no_default_gen_(false)
@@ -176,6 +179,16 @@ ACE_CString BE_GlobalData::sequence_suffix() const
   return this->seq_;
 }
 
+void BE_GlobalData::project_name(const ACE_CString& str)
+{
+	this->project_name_ = str;
+}
+
+ACE_CString BE_GlobalData::project_name() const
+{
+	return this->project_name_;
+}
+
 void BE_GlobalData::java(bool b)
 {
   this->java_ = b;
@@ -184,6 +197,36 @@ void BE_GlobalData::java(bool b)
 bool BE_GlobalData::java() const
 {
   return this->java_;
+}
+
+void BE_GlobalData::cppcli(bool b)
+{
+	this->cppcli_ = b;
+}
+
+bool BE_GlobalData::cppcli() const
+{
+	return this->cppcli_;
+}
+
+void BE_GlobalData::csharp(bool b)
+{
+	this->csharp_ = b;
+}
+
+bool BE_GlobalData::csharp() const
+{
+	return this->csharp_;
+}
+
+void BE_GlobalData::cwrapper(bool b)
+{
+	this->cwrapper_ = b;
+}
+
+bool BE_GlobalData::cwrapper() const
+{
+	return this->cwrapper_;
 }
 
 void BE_GlobalData::no_default_gen(bool b)
@@ -254,8 +297,13 @@ BE_GlobalData::open_streams(const char* filename)
     filebase = filebase.substr(idx + 1);
   }
 
-  header_name_ = (filebase + "TypeSupport.h").c_str();
-  impl_name_ = (filebase + "TypeSupport.cpp").c_str();
+	if (csharp_) {
+		impl_name_ = (filebase + "TypeSupport.cs").c_str();
+	}
+	else {
+		header_name_ = (filebase + "TypeSupport.h").c_str();
+		impl_name_ = (filebase + "TypeSupport.cpp").c_str();
+	}
 }
 
 void
@@ -322,6 +370,23 @@ BE_GlobalData::parse_args(long& i, char** av)
   static const size_t NO_DCPS_DATA_TYPE_WARNINGS_FLAG_SIZE = sizeof(NO_DCPS_DATA_TYPE_WARNINGS_FLAG) - 1;
 
   switch (av[i][1]) {
+  case 'P':
+  {
+      std::string name(av[i]);
+      project_name_ = name.substr(2).c_str();
+      break;
+  }
+  case 'c':
+  {
+      cppcli_ = false;
+      if (0 == ACE_OS::strcmp(av[i], "-csharp"))
+          csharp_ = true;
+      else if (0 == ACE_OS::strcmp(av[i], "-cwrapper"))
+          cwrapper_ = true;
+      else if (0 == ACE_OS::strcmp(av[i], "-cppcli"))
+          cppcli_ = true;
+      break;
+  }
   case 'o':
     idl_global->append_idl_flag(av[i + 1]);
     if (ACE_OS::mkdir(av[i + 1]) != 0 && errno != EEXIST) {
@@ -415,7 +480,7 @@ BE_GlobalData::writeFile(const char* fileName, const string& content)
   ofstream ofs(file.c_str());
 
   if (!ofs) {
-    cerr << "ERROR - couldn't open " << file << " for writing.\n";
+    cerr << "ERROR - couldn't open " << file << " for writing.\nFileName:" << fileName;
     return false;
   }
 

@@ -294,8 +294,6 @@ namespace ConsoleDemo
         }
     }
 
-    
-
     public class MyDataListener : DataReaderListener
     {        
         public override void OnDataAvailable(DataReader reader)
