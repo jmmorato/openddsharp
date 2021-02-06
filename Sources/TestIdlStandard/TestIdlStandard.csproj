@@ -196,4 +196,8 @@
       <TargetPath>libTestIdlStandardWrapperx64.so</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
+  </ItemGroup>
 </Project>
