@@ -48,6 +48,5 @@ project.lock.json
 #Ignore folders
 PoC/
 Deprecated/
-Documentation/
 GeneratorCommands/
 ext/
