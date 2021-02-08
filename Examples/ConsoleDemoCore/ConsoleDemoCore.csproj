@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>x64;x86</Platforms>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;</RuntimeIdentifiers>
+    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>    
+  </PropertyGroup>  
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tests\TestIdlStandard\TestIdlStandard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="rtps.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+</Project>
