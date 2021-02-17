@@ -18,7 +18,7 @@ jobs:
         BuildPlatform: x86
         BuildConfiguration: Release
   variables:
-    DOTNET_SDK_VERSION: '3.1.12'
+    DOTNET_SDK_VERSION: '3.1.0'
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core SDK $(DOTNET_SDK_VERSION)'
