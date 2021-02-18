@@ -33,8 +33,8 @@ namespace OpenDDSharp.BuildTasks
     public class GenerateNativeProjectTask : Task
     {
         #region Fields
-        private DTE2 _dte;
-        private Solution4 _solution;
+        private DTE _dte;
+        private Solution _solution;
         private Project _project;
         private string _solutionName;
         private string _projectName;
@@ -151,7 +151,7 @@ namespace OpenDDSharp.BuildTasks
                     // Create the DTE instance
                     Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
-                    _dte = (DTE2)obj;                                        
+                    _dte = (DTE)obj;                                        
 
                     success = true;
                 }
@@ -228,7 +228,7 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _solution = (Solution4)_dte.Solution;
+                    _solution = _dte.Solution;
                     success = true;
                 }
 #if DEBUG
@@ -499,7 +499,8 @@ namespace OpenDDSharp.BuildTasks
                 {
                     try
                     {
-                        _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.FullName, true);
+                        SolutionBuild build = _solution.SolutionBuild;
+                        build.BuildProject(solutionConfiguration, _project.UniqueName, true);
                         if (_solution.SolutionBuild.LastBuildInfo > 0)
                         {
                             string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
