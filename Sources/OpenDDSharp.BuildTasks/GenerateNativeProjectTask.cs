@@ -499,22 +499,25 @@ namespace OpenDDSharp.BuildTasks
                 {
                     try
                     {
-                        SolutionBuild build = _solution.SolutionBuild;
-                        build.BuildProject(solutionConfiguration, _project.UniqueName, true);
-                        if (_solution.SolutionBuild.LastBuildInfo > 0)
+                        if (_solution.IsOpen)
                         {
-                            string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                            string cppPlatform = platform;
-                            if (platform == "x86")
+                            SolutionBuild build = _solution.SolutionBuild;
+                            build.BuildProject(solutionConfiguration, _project.UniqueName, true);
+                            if (_solution.SolutionBuild.LastBuildInfo > 0)
                             {
-                                cppPlatform = "Win32";
-                            }
-                            string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                            Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+                                string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                                string cppPlatform = platform;
+                                if (platform == "x86")
+                                {
+                                    cppPlatform = "Win32";
+                                }
+                                string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                                Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
 
-                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                            }
+                            success = true;
                         }
-                        success = true;
                     }
                     catch (InvalidOperationException)
                     {
@@ -531,7 +534,7 @@ namespace OpenDDSharp.BuildTasks
 
                         if (retry > 0)
                         {
-                            System.Threading.Thread.Sleep(150);
+                            System.Threading.Thread.Sleep(500);
 #if DEBUG
                             Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
 #endif
