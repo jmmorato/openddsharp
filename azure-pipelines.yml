@@ -24,12 +24,7 @@ jobs:
       displayName: 'Use .NET Core SDK $(DOTNET_SDK_VERSION)'
       inputs:
         version: '$(DOTNET_SDK_VERSION)'
-    - task: DotNetCoreCLI@2
-      displayName: dotnet restore
-      inputs:
-        command: restore
-        projects: '**/OpenDDSharp.Build.CppCli.csproj'
-        includeNuGetOrg: true
+
     - powershell: $(Build.SourcesDirectory)\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform)
-      displayName: 'Execute Cake PowerShell Bootstrapper'
+      displayName: 'Build & Test with Cake'
       workingDirectory: $(Build.SourcesDirectory)\Build
