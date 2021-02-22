@@ -33,8 +33,9 @@ namespace OpenDDSharp.BuildTasks
     public class GenerateNativeProjectTask : Task
     {
         #region Fields
-        private DTE _dte;
+        private DTE2 _dte;
         private Solution _solution;
+        private SolutionBuild _build;
         private Project _project;
         private string _solutionName;
         private string _projectName;
@@ -151,8 +152,8 @@ namespace OpenDDSharp.BuildTasks
                     // Create the DTE instance
                     Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
-                    _dte = (DTE)obj;                                        
-
+                    _dte = (DTE2)obj;
+                    
                     success = true;
                 }
 #if DEBUG
@@ -196,7 +197,7 @@ namespace OpenDDSharp.BuildTasks
                 {
                     _dte.Solution.Create(IntDir, _solutionName);
 
-                    success = true;
+                    success = _dte.Solution.IsOpen;
                 }
 #if DEBUG
                 catch (Exception ex)
@@ -229,6 +230,7 @@ namespace OpenDDSharp.BuildTasks
                 try
                 {
                     _solution = _dte.Solution;
+                    _build = _solution.SolutionBuild;
                     success = true;
                 }
 #if DEBUG
@@ -499,25 +501,22 @@ namespace OpenDDSharp.BuildTasks
                 {
                     try
                     {
-                        if (_solution.IsOpen)
+                        _build.BuildProject(solutionConfiguration, _project.UniqueName, true);
+                        if (_solution.SolutionBuild.LastBuildInfo > 0)
                         {
-                            SolutionBuild build = _solution.SolutionBuild;
-                            build.BuildProject(solutionConfiguration, _project.UniqueName, true);
-                            if (_solution.SolutionBuild.LastBuildInfo > 0)
+                            string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                            string cppPlatform = platform;
+                            if (platform == "x86")
                             {
-                                string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                                string cppPlatform = platform;
-                                if (platform == "x86")
-                                {
-                                    cppPlatform = "Win32";
-                                }
-                                string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                                Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
-
-                                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                                cppPlatform = "Win32";
                             }
-                            success = true;
+                            string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                            Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+
+                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
                         }
+                        success = true;
+                        
                     }
                     catch (InvalidOperationException)
                     {

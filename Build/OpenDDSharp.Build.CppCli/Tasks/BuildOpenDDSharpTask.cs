@@ -14,7 +14,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             {
                 Configuration = context.BuildConfiguration,
                 PlatformTarget = context.BuildPlatform,
-                Targets = { "Restore", "Build" },
+                Targets = { "Restore", "Clean", "Build" },
                 MaxCpuCount = 1,
                 WorkingDirectory = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER),
                 EnvironmentVariables =

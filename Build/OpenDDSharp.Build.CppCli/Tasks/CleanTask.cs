@@ -3,7 +3,7 @@
 namespace OpenDDSharp.Build.CppCli.Tasks
 {
     [TaskName("Clean")]
-    [IsDependentOn(typeof(CleanOpenDDSharpTask))]
+    //[IsDependentOn(typeof(CleanOpenDDSharpTask))]
     public class CleanTask : FrostingTask
     {
     }
