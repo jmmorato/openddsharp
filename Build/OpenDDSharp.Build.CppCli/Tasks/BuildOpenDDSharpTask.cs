@@ -1,4 +1,6 @@
 ﻿using Cake.Common.Tools.MSBuild;
+using Cake.Common.Tools.NuGet;
+using Cake.Common.Tools.NuGet.Restore;
 using Cake.Frosting;
 using System.IO;
 
@@ -10,11 +12,16 @@ namespace OpenDDSharp.Build.CppCli.Tasks
     {
         public override void Run(BuildContext context)
         {
+            context.NuGetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new NuGetRestoreSettings
+            {
+                NoCache = true
+            });
+
             context.MSBuild(BuildContext.OPENDDSHARP_SOLUTION_FILE, new MSBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 PlatformTarget = context.BuildPlatform,
-                Targets = { "Restore", "Clean", "Build" },
+                Targets = { "Clean", "Build" },
                 MaxCpuCount = 1,
                 WorkingDirectory = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER),
                 EnvironmentVariables =
