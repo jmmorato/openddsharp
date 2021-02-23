@@ -45,6 +45,7 @@ namespace OpenDDSharp.BuildTasks
             { 15, "v141" },
             { 16, "v142" }
         };
+        string _solutionFullPath;
         #endregion
 
         #region Properties
@@ -113,7 +114,14 @@ namespace OpenDDSharp.BuildTasks
             else
             {
                 _solutionName = OriginalProjectName + "NativeSolution";
-                _projectName = OriginalProjectName + "Native.vcxproj";
+                if (IsStandard)
+                {
+                    _projectName = OriginalProjectName + "Native.vcxproj";
+                }
+                else
+                {
+                    _projectName = OriginalProjectName + ".vcxproj";
+                }
             }
 
             string fullPath = Path.Combine(IntDir, _projectName);
@@ -153,7 +161,8 @@ namespace OpenDDSharp.BuildTasks
                     Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
                     _dte = (DTE2)obj;
-                    
+                    _dte.SuppressUI = true;
+
                     success = true;
                 }
 #if DEBUG
@@ -183,10 +192,15 @@ namespace OpenDDSharp.BuildTasks
 
         private void GenerateSolutionFile()
         {
-            string fullPath = Path.Combine(IntDir, _solutionName + ".sln");
-            if (File.Exists(fullPath))
+            _solutionFullPath = Path.Combine(IntDir, _solutionName + ".sln");
+            if (File.Exists(_solutionFullPath))
             {
-                File.Delete(fullPath);
+                File.Delete(_solutionFullPath);
+            }
+
+            if (!Directory.Exists(IntDir))
+            {
+                Directory.CreateDirectory(IntDir);
             }
 
             int retry = 100;
@@ -196,6 +210,7 @@ namespace OpenDDSharp.BuildTasks
                 try
                 {
                     _dte.Solution.Create(IntDir, _solutionName);
+                    _dte.Solution.SaveAs(_solutionFullPath);
 
                     success = _dte.Solution.IsOpen;
                 }
@@ -340,8 +355,11 @@ namespace OpenDDSharp.BuildTasks
                         }
 
                         doc.Save(_project.FullName);
+                        _project.Save();
                     }
-                    success = true;
+                    
+                    success = _project.Saved;
+
                 }
 #if DEBUG
                 catch (Exception ex)
@@ -502,7 +520,7 @@ namespace OpenDDSharp.BuildTasks
                     try
                     {
                         _build.BuildProject(solutionConfiguration, _project.UniqueName, true);
-                        if (_solution.SolutionBuild.LastBuildInfo > 0)
+                        if (_build.LastBuildInfo > 0)
                         {
                             string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
                             string cppPlatform = platform;
@@ -550,10 +568,14 @@ namespace OpenDDSharp.BuildTasks
         private void ShutDown()
         {
             try
-            {                
+            {
+                _dte.Solution.Close(true);
                 _dte.Quit();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log.LogError(ex.Message);
+            }
         }
         #endregion
     }
