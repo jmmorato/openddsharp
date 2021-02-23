@@ -1,6 +1,4 @@
-﻿using Cake.Common;
-using Cake.Common.Tools.MSBuild;
-using Cake.Common.Tools.MSTest;
+﻿using Cake.Common.Tools.MSBuild;
 using Cake.Common.Tools.VSTest;
 using Cake.Frosting;
 using System.IO;
@@ -14,7 +12,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
         {
             var path = $"../../Tests/OpenDDSharp.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/";
             var file = "OpenDDSharp.UnitTest.dll";
-            var platform = context.BuildPlatform == PlatformTarget.x64 ? VSTestPlatform.x64 : VSTestPlatform.x86;
+            var platform = context.BuildPlatform == PlatformTarget.x64 ? VSTestPlatform.x64 : VSTestPlatform.x86;            
             context.VSTest(path + file, new VSTestSettings
             {
                 ToolPath = context.Tools.Resolve("vstest.console.exe"),
