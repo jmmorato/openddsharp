@@ -34,7 +34,7 @@ namespace OpenDDSharp.BuildTasks
     {
         #region Fields
         private DTE2 _dte;
-        private Solution _solution;
+        private Solution4 _solution;
         private SolutionBuild _build;
         private Project _project;
         private string _solutionName;
@@ -244,7 +244,7 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _solution = _dte.Solution;
+                    _solution = _dte.Solution as Solution4;
                     _build = _solution.SolutionBuild;
                     success = true;
                 }
@@ -493,75 +493,102 @@ namespace OpenDDSharp.BuildTasks
 
         private void BuildWithMSBuild()
         {
-            List<string> platforms = new List<string>();
-
-            if (Platform == "Win32" || Platform == "x86")
+            string platform = "x64";
+            if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
             {
-                platforms.Add("x86");
+                platform = "x86";
             }
-            else if (Platform == "x64")
-            {
-                platforms.Add("x64");
-            }
-            else if (Platform == "AnyCPU")
-            {
-                platforms.Add("x86");                
-            }
+            string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
 
-            foreach (string platform in platforms)
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
             {
-                string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
-
-                int retry = 100;
-                bool success = false;
-
-                while (!success && retry > 0)
+                try
                 {
-                    try
-                    {
-                        _build.BuildProject(solutionConfiguration, _project.UniqueName, true);
-                        if (_build.LastBuildInfo > 0)
-                        {
-                            string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                            string cppPlatform = platform;
-                            if (platform == "x86")
-                            {
-                                cppPlatform = "Win32";
-                            }
-                            string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                            Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+                    string uniqueName = _project.UniqueName;
+                    _build.BuildProject(solutionConfiguration, _project.UniqueName, true);
 
-                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
-                        }
-                        success = true;
-                        
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        throw;
-                    }
+                    CheckBuildInfo(platform);
+                    success = true;
+
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
 #if DEBUG
-                    catch (Exception ex)
+                catch (Exception ex)
 #else
                 catch
 #endif
-                    {
-                        success = false;
-                        retry--;
+                {
+                    success = false;
+                    retry--;
 
-                        if (retry > 0)
-                        {
-                            System.Threading.Thread.Sleep(500);
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(500);
 #if DEBUG
-                            Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
 #endif
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
+            }            
+        }
+
+        private void CheckBuildInfo(string platform)
+        {
+            int retry = 100;
+            bool success = false;
+            int result = 1;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    result = _build.LastBuildInfo;
+                    Log.LogMessage(MessageImportance.High, "BUILD RESULT: {0}", result);
+                    success = true;
+                }
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(500);
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            if (result > 0)
+            {
+                string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                string cppPlatform = platform;
+                if (platform == "x86")
+                {
+                    cppPlatform = "Win32";
+                }
+                string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
             }
         }
 
