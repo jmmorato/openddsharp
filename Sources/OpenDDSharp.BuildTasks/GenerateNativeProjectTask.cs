@@ -34,8 +34,8 @@ namespace OpenDDSharp.BuildTasks
     {
         #region Fields
         private DTE2 _dte;
-        private Solution4 _solution;
-        private SolutionBuild _build;
+        private Solution2 _solution;
+        private SolutionBuild2 _build;
         private Project _project;
         private string _solutionName;
         private string _projectName;
@@ -114,14 +114,7 @@ namespace OpenDDSharp.BuildTasks
             else
             {
                 _solutionName = OriginalProjectName + "NativeSolution";
-                if (IsStandard)
-                {
-                    _projectName = OriginalProjectName + "Native.vcxproj";
-                }
-                else
-                {
-                    _projectName = OriginalProjectName + ".vcxproj";
-                }
+                _projectName = OriginalProjectName + "Native.vcxproj";                
             }
 
             string fullPath = Path.Combine(IntDir, _projectName);
@@ -244,8 +237,8 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    _solution = _dte.Solution as Solution4;
-                    _build = _solution.SolutionBuild;
+                    _solution = _dte.Solution as Solution2;
+                    _build = _solution.SolutionBuild as SolutionBuild2;
                     success = true;
                 }
 #if DEBUG
@@ -506,9 +499,17 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    string uniqueName = _project.UniqueName;
-                    _build.BuildProject(solutionConfiguration, uniqueName, true);
+                    foreach (SolutionConfiguration2 sc in _build.SolutionConfigurations)
+                    {
+                        if (sc.Name == Configuration && sc.PlatformName == platform)
+                        {
+                            sc.Activate();
+                        }
+                    }
+                    
+                    _build.Build(true);
                     success = true;
+
                     CheckBuildInfo(platform);
                 }
                 catch (InvalidOperationException)
