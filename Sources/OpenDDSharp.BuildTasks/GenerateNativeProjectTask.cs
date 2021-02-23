@@ -507,11 +507,9 @@ namespace OpenDDSharp.BuildTasks
                 try
                 {
                     string uniqueName = _project.UniqueName;
-                    _build.BuildProject(solutionConfiguration, _project.UniqueName, true);
-
-                    CheckBuildInfo(platform);
+                    _build.BuildProject(solutionConfiguration, uniqueName, true);
                     success = true;
-
+                    CheckBuildInfo(platform);
                 }
                 catch (InvalidOperationException)
                 {
@@ -538,21 +536,30 @@ namespace OpenDDSharp.BuildTasks
                         throw;
                     }
                 }
-            }            
+            }
         }
 
         private void CheckBuildInfo(string platform)
         {
             int retry = 100;
             bool success = false;
-            int result = 1;
+            int result = int.MaxValue;
             while (!success && retry > 0)
             {
                 try
                 {
-                    result = _build.LastBuildInfo;
-                    Log.LogMessage(MessageImportance.High, "BUILD RESULT: {0}", result);
-                    success = true;
+                    if (_build.BuildState == vsBuildState.vsBuildStateDone)
+                    {
+                        result = _build.LastBuildInfo;
+                        Log.LogMessage(MessageImportance.High, "BUILD RESULT: {0}", result);
+                        success = true;
+                    }
+                    else
+                    {
+                        Log.LogMessage(MessageImportance.High, "BUILD STATE NOT DONE: {0}", _build.BuildState);
+                        retry--;
+                        System.Threading.Thread.Sleep(500);
+                    }
                 }
 #if DEBUG
                 catch (Exception ex)
@@ -572,12 +579,12 @@ namespace OpenDDSharp.BuildTasks
                     }
                     else
                     {
-                        throw;
+                        Log.LogMessage(MessageImportance.High, "LASTBUILDINFO cannot be retrieved: ");
                     }
                 }
             }
 
-            if (result > 0)
+            if (result > 0 && result < int.MaxValue)
             {
                 string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
                 string cppPlatform = platform;
