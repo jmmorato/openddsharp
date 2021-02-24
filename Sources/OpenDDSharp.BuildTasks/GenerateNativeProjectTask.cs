@@ -169,7 +169,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception {0}: {1}", msbuildProcess.MainModule.FileVersionInfo.FileMajorPart, ex.ToString());
@@ -218,7 +218,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
@@ -253,7 +253,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
@@ -366,7 +366,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
@@ -414,7 +414,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
@@ -452,7 +452,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
@@ -489,7 +489,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(150);
+                        System.Threading.Thread.Sleep(1000);
 
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
@@ -568,7 +568,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(1000);
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
 #endif
@@ -600,7 +600,7 @@ namespace OpenDDSharp.BuildTasks
                     {
                         Log.LogMessage(MessageImportance.High, "BUILD STATE NOT DONE: {0}", _build.BuildState);
                         retry--;
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(1000);
                     }
                 }
 #if DEBUG
@@ -614,7 +614,7 @@ namespace OpenDDSharp.BuildTasks
 
                     if (retry > 0)
                     {
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(1000);
 #if DEBUG
                         Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
 #endif
