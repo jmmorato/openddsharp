@@ -87,6 +87,8 @@ namespace OpenDDSharp.BuildTasks
 
         private void ThreadProc()
         {
+            OleMessageFilter.Register();
+
             if (!IsWrapper)
             {
                 Log.LogMessage(MessageImportance.High, "Generating native IDL library...");
@@ -97,6 +99,7 @@ namespace OpenDDSharp.BuildTasks
             }
 
             Initialize();
+
 #if DEBUG
             Log.LogMessage(MessageImportance.High, "TemplatePath: " + TemplatePath);
             Log.LogMessage(MessageImportance.High, "IntDir: " + IntDir);
@@ -109,6 +112,8 @@ namespace OpenDDSharp.BuildTasks
             CopyIdlFiles();
             BuildWithMSBuild();
             ShutDown();
+
+            OleMessageFilter.Revoke();
         }
 
         private void Initialize()
@@ -163,6 +168,9 @@ namespace OpenDDSharp.BuildTasks
                     Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
                     _dte = (DTE2)obj;
+                    _dte.SuppressUI = true;
+                    _dte.MainWindow.Visible = false;
+                    _dte.UserControl = false;
 
                     success = true;
                 }
@@ -213,7 +221,7 @@ namespace OpenDDSharp.BuildTasks
                     _dte.Solution.Create(IntDir, _solutionName);
                     _dte.Solution.SaveAs(_solutionFullPath);
 
-                    success = _dte.Solution.IsOpen;
+                    success = true;
                 }
 #if DEBUG
                 catch (Exception ex)
