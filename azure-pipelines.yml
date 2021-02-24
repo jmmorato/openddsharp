@@ -25,6 +25,11 @@ jobs:
       inputs:
         version: '$(DOTNET_SDK_VERSION)'
 
+    - task: NuGetToolInstaller@1
+      displayName: "Install NuGet v5.4.0"
+      inputs:
+        versionSpec: 5.4.0
+
     - powershell: $(Build.SourcesDirectory)\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform)
       displayName: 'Build & Test with Cake'
       workingDirectory: $(Build.SourcesDirectory)\Build
