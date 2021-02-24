@@ -95,6 +95,7 @@ namespace OpenDDSharp.BuildTasks
             Configuration = Configuration.Replace("Linux", string.Empty);
             GenerateSolutionFile();
             GenerateProjectFile();
+            SetSolutionConfiguration();
             CopyIdlFiles();
             BuildWithMSBuild();
             ShutDown();
@@ -154,7 +155,6 @@ namespace OpenDDSharp.BuildTasks
                     Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
                     object obj = Activator.CreateInstance(type, true);
                     _dte = (DTE2)obj;
-                    _dte.SuppressUI = true;
 
                     success = true;
                 }
@@ -239,6 +239,7 @@ namespace OpenDDSharp.BuildTasks
                 {
                     _solution = _dte.Solution as Solution2;
                     _build = _solution.SolutionBuild as SolutionBuild2;
+                    
                     success = true;
                 }
 #if DEBUG
@@ -353,6 +354,54 @@ namespace OpenDDSharp.BuildTasks
                     
                     success = _project.Saved;
 
+                }
+#if DEBUG
+                catch (Exception ex)
+#else
+                catch
+#endif
+                {
+                    success = false;
+                    retry--;
+
+                    if (retry > 0)
+                    {
+                        System.Threading.Thread.Sleep(150);
+
+#if DEBUG
+                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
+#endif
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        private void SetSolutionConfiguration()
+        {
+            string platform = "x64";
+            if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
+            {
+                platform = "x86";
+            }
+
+            int retry = 100;
+            bool success = false;
+            while (!success && retry > 0)
+            {
+                try
+                {
+                    foreach (SolutionConfiguration2 sc in _build.SolutionConfigurations)
+                    {
+                        if (sc.Name == Configuration && sc.PlatformName == platform)
+                        {
+                            sc.Activate();
+                            success = true;
+                        }
+                    }
                 }
 #if DEBUG
                 catch (Exception ex)
@@ -499,14 +548,6 @@ namespace OpenDDSharp.BuildTasks
             {
                 try
                 {
-                    foreach (SolutionConfiguration2 sc in _build.SolutionConfigurations)
-                    {
-                        if (sc.Name == Configuration && sc.PlatformName == platform)
-                        {
-                            sc.Activate();
-                        }
-                    }
-                    
                     _build.Build(true);
                     success = true;
 
