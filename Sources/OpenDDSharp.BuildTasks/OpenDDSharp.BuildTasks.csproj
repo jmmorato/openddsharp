@@ -54,8 +54,20 @@
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\packages\EnvDTE.16.7.30508.193\lib\net45\EnvDTE.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\packages\EnvDTE80.16.7.30328.74\lib\net45\EnvDTE80.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\packages\stdole.16.7.30508.193\lib\net45\stdole.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -74,12 +86,7 @@
     <Compile Include="SetEnvVar.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EnvDTE">
-      <Version>16.7.30508.193</Version>
-    </PackageReference>
-    <PackageReference Include="EnvDTE80">
-      <Version>16.7.30328.74</Version>
-    </PackageReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
