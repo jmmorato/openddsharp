@@ -24,9 +24,9 @@ using System.Globalization;
 using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
-using EnvDTE100;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using System.Threading;
 
 namespace OpenDDSharp.BuildTasks
 {    
@@ -77,6 +77,16 @@ namespace OpenDDSharp.BuildTasks
         #region Methods
         public override bool Execute()
         {
+            System.Threading.Thread t = new System.Threading.Thread(ThreadProc);
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
+
+            return true;
+        }
+
+        private void ThreadProc()
+        {
             if (!IsWrapper)
             {
                 Log.LogMessage(MessageImportance.High, "Generating native IDL library...");
@@ -99,9 +109,7 @@ namespace OpenDDSharp.BuildTasks
             CopyIdlFiles();
             BuildWithMSBuild();
             ShutDown();
-
-            return true;
-        }       
+        }
 
         private void Initialize()
         {
