@@ -16,6 +16,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             context.VSTest(path + file, new VSTestSettings
             {
                 ToolPath = context.Tools.Resolve("vstest.console.exe"),
+                TestAdapterPath = Path.Combine(path, "Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll"),
                 EnableCodeCoverage = true,
                 PlatformArchitecture = platform,
                 WorkingDirectory = Path.GetFullPath(path),
