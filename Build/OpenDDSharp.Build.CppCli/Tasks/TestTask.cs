@@ -12,11 +12,15 @@ namespace OpenDDSharp.Build.CppCli.Tasks
         {
             var path = $"../../Tests/OpenDDSharp.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/";
             var file = "OpenDDSharp.UnitTest.dll";
-            var platform = context.BuildPlatform == PlatformTarget.x64 ? VSTestPlatform.x64 : VSTestPlatform.x86;            
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/MSTest.TestAdapter.2.1.2/build/_common");
+            var settingsFile = Path.Combine(Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER), "CodeCoverage.runsettings");
+            var platform = context.BuildPlatform == PlatformTarget.x64 ? VSTestPlatform.x64 : VSTestPlatform.x86;
+
             context.VSTest(path + file, new VSTestSettings
             {
                 ToolPath = context.Tools.Resolve("vstest.console.exe"),
-                TestAdapterPath = Path.Combine(path, "Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll"),
+                TestAdapterPath = Path.GetFullPath(testAdapterPath),
+                FrameworkVersion = VSTestFrameworkVersion.NET45,
                 EnableCodeCoverage = true,
                 PlatformArchitecture = platform,
                 WorkingDirectory = Path.GetFullPath(path),
@@ -27,7 +31,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
                     { nameof(BuildContext.TAO_ROOT), Path.GetFullPath(BuildContext.TAO_ROOT).TrimEnd('\\') },
                     { nameof(BuildContext.MPC_ROOT), Path.GetFullPath(BuildContext.MPC_ROOT).TrimEnd('\\') },
                 },
-                SettingsFile = Path.Combine(Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER), "CodeCoverage.runsettings"),
+                SettingsFile = settingsFile,
             });
         }
     }
