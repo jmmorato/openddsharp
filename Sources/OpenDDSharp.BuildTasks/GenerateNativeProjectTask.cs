@@ -27,9 +27,13 @@ using EnvDTE80;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using System.Threading;
+using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace OpenDDSharp.BuildTasks
-{    
+{
     public class GenerateNativeProjectTask : Task
     {
         #region Fields
@@ -191,9 +195,15 @@ namespace OpenDDSharp.BuildTasks
                 _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
 
                 // Create the DTE instance
-                Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
-                object obj = Activator.CreateInstance(type, true);
-                _dte = (DTE2)obj;
+                //Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
+                //object obj = Activator.CreateInstance(type, true);
+                //_dte = (DTE2)obj;
+                //_dte.SuppressUI = true;
+                //_dte.MainWindow.Visible = false;
+                //_dte.UserControl = false;
+
+                var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+                _dte = CreateDteInstance(devenvPath);
                 _dte.SuppressUI = true;
                 _dte.MainWindow.Visible = false;
                 _dte.UserControl = false;
@@ -442,8 +452,8 @@ namespace OpenDDSharp.BuildTasks
             }
             else
             {
-                Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);                
-            }               
+                Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);
+            }
 
             if (result > 0 && result < int.MaxValue)
             {
@@ -482,6 +492,125 @@ namespace OpenDDSharp.BuildTasks
                 Log.LogError(ex.Message);
             }
         }
+
+        private DTE2 CreateDteInstance(string devenvPath)
+        {
+            DTE2 dte;
+            System.Diagnostics.Process proc;
+
+            // start devenv
+            ProcessStartInfo procStartInfo = new ProcessStartInfo
+            {
+                Arguments = "-Embedding",
+                CreateNoWindow = true,
+                FileName = devenvPath,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                WorkingDirectory = Path.GetDirectoryName(devenvPath)
+            };
+
+            try
+            {
+                proc = System.Diagnostics.Process.Start(procStartInfo);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex.ToString());
+                returnValue = false;
+                return null;
+            }
+
+            if (proc == null)
+            {
+                Log.LogError("Visual Studio process cannot be created.");
+                returnValue = false;
+                return null;
+            }
+
+            // get DTE
+            dte = GetDTE(proc.Id, 120);
+
+            return dte;
+        }
+
+        private DTE2 GetDTE(int processId, int timeout)
+        {
+            DTE2 res = null;
+            DateTime startTime = DateTime.Now;
+
+            while (res == null && DateTime.Now.Subtract(startTime).Seconds < timeout)
+            {
+                System.Threading.Thread.Sleep(1000);
+                res = GetDTE(processId);
+            }
+
+            return res;
+        }
+
+        [DllImport("ole32.dll")]
+        private static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
+
+        private DTE2 GetDTE(int processId)
+        {
+            object runningObject = null;
+
+            IBindCtx bindCtx = null;
+            IRunningObjectTable rot = null;
+            IEnumMoniker enumMonikers = null;
+
+            try
+            {
+                Marshal.ThrowExceptionForHR(CreateBindCtx(reserved: 0, ppbc: out bindCtx));
+                bindCtx.GetRunningObjectTable(out rot);
+                rot.EnumRunning(out enumMonikers);
+
+                IMoniker[] moniker = new IMoniker[1];
+                IntPtr numberFetched = IntPtr.Zero;
+                while (enumMonikers.Next(1, moniker, numberFetched) == 0)
+                {
+                    IMoniker runningObjectMoniker = moniker[0];
+
+                    string name = null;
+
+                    try
+                    {
+                        if (runningObjectMoniker != null)
+                        {
+                            runningObjectMoniker.GetDisplayName(bindCtx, null, out name);
+                        }
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // Do nothing, there is something in the ROT that we do not have access to.
+                    }
+
+                    Regex monikerRegex = new Regex(@"!VisualStudio.DTE\.\d+\.\d+\:" + processId, RegexOptions.IgnoreCase);
+                    if (!string.IsNullOrEmpty(name) && monikerRegex.IsMatch(name))
+                    {
+                        Marshal.ThrowExceptionForHR(rot.GetObject(runningObjectMoniker, out runningObject));
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumMonikers != null)
+                {
+                    Marshal.ReleaseComObject(enumMonikers);
+                }
+
+                if (rot != null)
+                {
+                    Marshal.ReleaseComObject(rot);
+                }
+
+                if (bindCtx != null)
+                {
+                    Marshal.ReleaseComObject(bindCtx);
+                }
+            }
+
+            return runningObject as DTE2;
+        }
         #endregion
-    }
+    }    
 }
