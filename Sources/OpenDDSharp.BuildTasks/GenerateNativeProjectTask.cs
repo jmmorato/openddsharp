@@ -134,13 +134,6 @@ namespace OpenDDSharp.BuildTasks
                 return;
             }
 
-            SetSolutionConfiguration();
-            if (!returnValue)
-            {
-                ShutDown();
-                return;
-            }
-
             BuildWithMSBuild();
             if (!returnValue)
             {
@@ -334,41 +327,6 @@ namespace OpenDDSharp.BuildTasks
             }
         }
 
-        private void SetSolutionConfiguration()
-        {
-            try
-            {
-                Log.LogMessage(MessageImportance.High, "Setting solution configuration...");
-
-                string platform = "x64";
-                if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
-                {
-                    platform = "x86";
-                }
-
-                bool found = false;
-                foreach (SolutionConfiguration2 sc in _build.SolutionConfigurations)
-                {
-                    if (sc.Name == Configuration && sc.PlatformName == platform)
-                    {
-                        sc.Activate();
-                        found = true;
-                    }
-                }
-
-                if (!found)
-                {
-                    Log.LogError("Solution configuration not found: {0}|{1}", Configuration, platform);
-                    returnValue = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.LogError(ex.ToString());
-                returnValue = false;
-            }
-        }
-
         private void AddProjectTemplate()
         {
             _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
@@ -423,7 +381,7 @@ namespace OpenDDSharp.BuildTasks
         {
             try
             {
-                Log.LogMessage(MessageImportance.High, "Building solution...");
+                Log.LogMessage(MessageImportance.High, "Building project...");
 
                 string platform = "x64";
                 if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
@@ -431,7 +389,8 @@ namespace OpenDDSharp.BuildTasks
                     platform = "x86";
                 }
 
-                _build.Build(true);
+                var solutionConfig = $"{Configuration}|{platform}";
+                _build.BuildProject(solutionConfig, _project.UniqueName, true);
 
                 CheckBuildInfo(platform);
             }
