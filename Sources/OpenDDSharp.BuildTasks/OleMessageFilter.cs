@@ -42,6 +42,8 @@ namespace OpenDDSharp.BuildTasks
             {
                 _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(SERVERCALL.SERVERCALL_RETRYLATER));
 
+                Thread.Sleep(500);
+
                 // Retry immediately if return >=0 & <100
                 return 99;
             }
