@@ -195,7 +195,7 @@ namespace OpenDDSharp.BuildTasks
                 //_dte.MainWindow.Visible = false;
                 //_dte.UserControl = false;
 
-                var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+                var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.exe";
                 _dte = CreateDteInstance(devenvPath);
                 _dte.SuppressUI = true;
                 _dte.MainWindow.Visible = false;
@@ -388,40 +388,40 @@ namespace OpenDDSharp.BuildTasks
                 var solutionConfig = $"{Configuration}|{platform}";
                 _build.BuildProject(solutionConfig, _project.UniqueName, true);
 
-                int result = int.MaxValue;
-                if (_build.BuildState == vsBuildState.vsBuildStateDone)
-                {
-                    result = _build.LastBuildInfo;
-                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
-                }
-                else
-                {
-                    Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);
-                }
+                //int result = int.MaxValue;
+                //if (_build.BuildState == vsBuildState.vsBuildStateDone)
+                //{
+                //    result = _build.LastBuildInfo;
+                //    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+                //}
+                //else
+                //{
+                //    Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);
+                //}
 
-                if (result > 0 && result < int.MaxValue)
-                {
-                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+                //if (result > 0 && result < int.MaxValue)
+                //{
+                //    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
 
-                    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                    string cppPlatform = platform;
-                    if (platform == "x86")
-                    {
-                        cppPlatform = "Win32";
-                    }
-                    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                    if (File.Exists(logFile))
-                    {
-                        var logText = File.ReadAllText(logFile);
-                        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
-                    }
-                    else
-                    {
-                        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
-                    }
+                //    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                //    string cppPlatform = platform;
+                //    if (platform == "x86")
+                //    {
+                //        cppPlatform = "Win32";
+                //    }
+                //    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                //    if (File.Exists(logFile))
+                //    {
+                //        var logText = File.ReadAllText(logFile);
+                //        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
+                //    }
+                //    else
+                //    {
+                //        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
+                //    }
 
-                    returnValue = false;
-                }
+                //    returnValue = false;
+                //}
             }
             catch (Exception ex)
             {
@@ -434,8 +434,8 @@ namespace OpenDDSharp.BuildTasks
         {
             try
             {
-                _dte.Solution.Close(true);
-                _dte.Quit();
+                _dte?.Solution?.Close(true);
+                _dte?.Quit();
             }
             catch (Exception ex)
             {
@@ -476,7 +476,7 @@ namespace OpenDDSharp.BuildTasks
                 return null;
             }
 
-            // get DTE
+            // Get DTE
             dte = GetDTE(proc.Id, 120);
 
             return dte;
