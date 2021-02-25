@@ -392,7 +392,7 @@ namespace OpenDDSharp.BuildTasks
                 var solutionConfig = $"{Configuration}|{platform}";
                 _build.BuildProject(solutionConfig, _project.UniqueName, true);
 
-                CheckBuildInfo(platform);
+                //CheckBuildInfo(platform);
             }
             catch (Exception ex)
             {
