@@ -244,8 +244,14 @@ namespace OpenDDSharp.BuildTasks
             {
                 Log.LogMessage(MessageImportance.High, "Generating project file...");
 
-                AddProjectTemplate();
-                GetCreatedProject();
+                _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
+
+                _project = _solution.Projects.Item(1);
+
+                if (_project == null)
+                {
+                    throw new ApplicationException("The project couldn't be created.");
+                }
 
                 foreach (ITaskItem s in IdlFiles)
                 {
@@ -277,13 +283,16 @@ namespace OpenDDSharp.BuildTasks
                 }
 
                 _project.Save();
-
+                
                 if (!IsLinux)
                 {
+                    var projecFullName = _project.FullName;
+                    _dte.ExecuteCommand("Project.UnloadProject");
+
                     // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
                     // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
                     XmlDocument doc = new XmlDocument();
-                    doc.Load(_project.FullName);
+                    doc.Load(projecFullName);
                     XmlNode root = doc.DocumentElement;
                     XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
                     ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
@@ -316,29 +325,16 @@ namespace OpenDDSharp.BuildTasks
                         }
                     }
 
-                    doc.Save(_project.FullName);
-                    _project.Save();
+                    doc.Save(projecFullName);
+
+                    _dte.ExecuteCommand("Project.ReloadProject");
+                    _project = _solution.Projects.Item(1);
                 }
             }
             catch (Exception ex)
             {
                 Log.LogError(ex.ToString());
                 returnValue = false;
-            }
-        }
-
-        private void AddProjectTemplate()
-        {
-            _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
-        }
-
-        private void GetCreatedProject()
-        {
-            _project = _solution.Projects.Item(1);
-
-            if (_project == null)
-            {
-                throw new ApplicationException("The project couldn't be created.");
             }
         }
 
@@ -392,49 +388,44 @@ namespace OpenDDSharp.BuildTasks
                 var solutionConfig = $"{Configuration}|{platform}";
                 _build.BuildProject(solutionConfig, _project.UniqueName, true);
 
-                //CheckBuildInfo(platform);
+                int result = int.MaxValue;
+                if (_build.BuildState == vsBuildState.vsBuildStateDone)
+                {
+                    result = _build.LastBuildInfo;
+                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+                }
+                else
+                {
+                    Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);
+                }
+
+                if (result > 0 && result < int.MaxValue)
+                {
+                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+
+                    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                    string cppPlatform = platform;
+                    if (platform == "x86")
+                    {
+                        cppPlatform = "Win32";
+                    }
+                    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                    if (File.Exists(logFile))
+                    {
+                        var logText = File.ReadAllText(logFile);
+                        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
+                    }
+                    else
+                    {
+                        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
+                    }
+
+                    returnValue = false;
+                }
             }
             catch (Exception ex)
             {
                 Log.LogError(ex.ToString());
-                returnValue = false;
-            }
-        }
-
-        private void CheckBuildInfo(string platform)
-        {
-            int result = int.MaxValue;
-            if (_build.BuildState == vsBuildState.vsBuildStateDone)
-            {
-                result = _build.LastBuildInfo;
-                Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
-            }
-            else
-            {
-                Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);
-            }
-
-            if (result > 0 && result < int.MaxValue)
-            {
-                Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
-
-                string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                string cppPlatform = platform;
-                if (platform == "x86")
-                {
-                    cppPlatform = "Win32";
-                }
-                string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                if (File.Exists(logFile))
-                {
-                    var logText = File.ReadAllText(logFile);
-                    Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
-                }
-                else
-                {
-                    Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
-                }
-
                 returnValue = false;
             }
         }
@@ -503,10 +494,7 @@ namespace OpenDDSharp.BuildTasks
             }
 
             return res;
-        }
-
-        [DllImport("ole32.dll")]
-        private static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
+        }        
 
         private DTE2 GetDTE(int processId)
         {
@@ -570,6 +558,9 @@ namespace OpenDDSharp.BuildTasks
 
             return runningObject as DTE2;
         }
+
+        [DllImport("ole32.dll")]
+        private static extern int CreateBindCtx(uint reserved, out IBindCtx ppbc);
         #endregion
     }    
 }
