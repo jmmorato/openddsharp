@@ -45,7 +45,8 @@ namespace OpenDDSharp.BuildTasks
             { 15, "v141" },
             { 16, "v142" }
         };
-        string _solutionFullPath;
+        private string _solutionFullPath;
+        private bool returnValue;
         #endregion
 
         #region Properties
@@ -77,17 +78,19 @@ namespace OpenDDSharp.BuildTasks
         #region Methods
         public override bool Execute()
         {
+            returnValue = true;
+
             System.Threading.Thread t = new System.Threading.Thread(ThreadProc);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
             t.Join();
 
-            return true;
+            return returnValue;
         }
 
         private void ThreadProc()
         {
-            OleMessageFilter.Register();
+            OleMessageFilter.Register(Log);
 
             if (!IsWrapper)
             {
@@ -99,18 +102,48 @@ namespace OpenDDSharp.BuildTasks
             }
 
             Initialize();
+            if (!returnValue)
+            {
+                return;
+            }
 
-#if DEBUG
-            Log.LogMessage(MessageImportance.High, "TemplatePath: " + TemplatePath);
-            Log.LogMessage(MessageImportance.High, "IntDir: " + IntDir);
-            Log.LogMessage(MessageImportance.High, "_projectName: " + _projectName);
-#endif
             Configuration = Configuration.Replace("Linux", string.Empty);
+
             GenerateSolutionFile();
+            if (!returnValue)
+            {
+                ShutDown();
+                return;
+            }
+
             GenerateProjectFile();
-            SetSolutionConfiguration();
+            if (!returnValue)
+            {
+                ShutDown();
+                return;
+            }
+
             CopyIdlFiles();
+            if (!returnValue)
+            {
+                ShutDown();
+                return;
+            }
+
+            SetSolutionConfiguration();
+            if (!returnValue)
+            {
+                ShutDown();
+                return;
+            }
+
             BuildWithMSBuild();
+            if (!returnValue)
+            {
+                ShutDown();
+                return;
+            }
+
             ShutDown();
 
             OleMessageFilter.Revoke();
@@ -118,405 +151,222 @@ namespace OpenDDSharp.BuildTasks
 
         private void Initialize()
         {
-            TemplatePath = Path.GetFullPath(TemplatePath);
-
-            if (IsWrapper)
+            try
             {
-                _solutionName = OriginalProjectName + "WrapperSolution";
-                _projectName = OriginalProjectName + "Wrapper.vcxproj";
-            }
-            else
-            {
-                _solutionName = OriginalProjectName + "NativeSolution";
-                _projectName = OriginalProjectName + "Native.vcxproj";                
-            }
+                Log.LogMessage(MessageImportance.High, "Initializing DTE...");
 
-            string fullPath = Path.Combine(IntDir, _projectName);
-            if (File.Exists(fullPath))
-            {
-                File.Delete(fullPath);
-            }
+                TemplatePath = Path.GetFullPath(TemplatePath);
 
-            fullPath = Path.Combine(IntDir, _projectName + ".filters");
-            if (File.Exists(fullPath))
-            {
-                File.Delete(fullPath);
-            }
-
-            fullPath = Path.Combine(IntDir, _projectName + ".user");
-            if (File.Exists(fullPath))
-            {
-                File.Delete(fullPath);
-            }
-
-            InitializeDTE();
-        }
-
-        private void InitializeDTE()
-        {
-            // Get the current MSBuild version
-            var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
-            _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
-
-            int retry = 100;
-            bool success = false;
-            while (!success && retry > 0)
-            {
-                try
+                if (IsWrapper)
                 {
-                    // Create the DTE instance
-                    Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
-                    object obj = Activator.CreateInstance(type, true);
-                    _dte = (DTE2)obj;
-                    _dte.SuppressUI = true;
-                    _dte.MainWindow.Visible = false;
-                    _dte.UserControl = false;
-
-                    success = true;
+                    _solutionName = OriginalProjectName + "WrapperSolution";
+                    _projectName = OriginalProjectName + "Wrapper.vcxproj";
                 }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
+                else
                 {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception {0}: {1}", msbuildProcess.MainModule.FileVersionInfo.FileMajorPart, ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    _solutionName = OriginalProjectName + "NativeSolution";
+                    _projectName = OriginalProjectName + "Native.vcxproj";
                 }
+
+                string fullPath = Path.Combine(IntDir, _projectName);
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                }
+
+                fullPath = Path.Combine(IntDir, _projectName + ".filters");
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                }
+
+                fullPath = Path.Combine(IntDir, _projectName + ".user");
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                }
+
+                // Get the current MSBuild version
+                var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
+                _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
+
+                // Create the DTE instance
+                Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
+                object obj = Activator.CreateInstance(type, true);
+                _dte = (DTE2)obj;
+                _dte.SuppressUI = true;
+                _dte.MainWindow.Visible = false;
+                _dte.UserControl = false;
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex.ToString());
+                returnValue = false;
             }
         }
 
         private void GenerateSolutionFile()
         {
-            _solutionFullPath = Path.Combine(IntDir, _solutionName + ".sln");
-            if (File.Exists(_solutionFullPath))
+            try
             {
-                File.Delete(_solutionFullPath);
+                Log.LogMessage(MessageImportance.High, "Generating solution file...");
+
+                _solutionFullPath = Path.Combine(IntDir, _solutionName + ".sln");
+                if (File.Exists(_solutionFullPath))
+                {
+                    File.Delete(_solutionFullPath);
+                }
+
+                if (!Directory.Exists(IntDir))
+                {
+                    Directory.CreateDirectory(IntDir);
+                }
+
+                _dte.Solution.Create(IntDir, _solutionName);
+                _dte.Solution.SaveAs(_solutionFullPath);
+
+                _solution = _dte.Solution as Solution2;
+                _build = _solution.SolutionBuild as SolutionBuild2;
             }
-
-            if (!Directory.Exists(IntDir))
+            catch (Exception ex)
             {
-                Directory.CreateDirectory(IntDir);
-            }
-
-            int retry = 100;
-            bool success = false;
-            while (!success && retry > 0)
-            {
-                try
-                {
-                    _dte.Solution.Create(IntDir, _solutionName);
-                    _dte.Solution.SaveAs(_solutionFullPath);
-
-                    success = true;
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-
-            retry = 100;
-            success = false;
-            while (!success && retry > 0)
-            {
-                try
-                {
-                    _solution = _dte.Solution as Solution2;
-                    _build = _solution.SolutionBuild as SolutionBuild2;
-                    
-                    success = true;
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Log.LogError(ex.ToString());
+                returnValue = false;
             }
         }
 
         private void GenerateProjectFile()
         {
-            AddProjectTemplate();
-            GetCreatedProject();
-
-            int retry = 100;
-            bool success = false;
-
-            while (!success && retry > 0)
+            try
             {
-                try
+                Log.LogMessage(MessageImportance.High, "Generating project file...");
+
+                AddProjectTemplate();
+                GetCreatedProject();
+
+                foreach (ITaskItem s in IdlFiles)
                 {
-                    foreach (ITaskItem s in IdlFiles)
+                    string filename = s.GetMetadata("Filename");
+
+                    if (!IsWrapper)
                     {
-                        string filename = s.GetMetadata("Filename");
+                        _project.ProjectItems.AddFromFile(filename + "C.h");
+                        _project.ProjectItems.AddFromFile(filename + "IDL_Export.h");
+                        _project.ProjectItems.AddFromFile(filename + "S.h");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportC.h");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.h");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportS.h");
 
-                        if (!IsWrapper)
-                        {
-                            _project.ProjectItems.AddFromFile(filename + "C.h");
-                            _project.ProjectItems.AddFromFile(filename + "IDL_Export.h");
-                            _project.ProjectItems.AddFromFile(filename + "S.h");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportC.h");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.h");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportS.h");
+                        _project.ProjectItems.AddFromFile(filename + "C.cpp");
+                        _project.ProjectItems.AddFromFile(filename + "S.cpp");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportC.cpp");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.cpp");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportS.cpp");
 
-                            _project.ProjectItems.AddFromFile(filename + "C.cpp");
-                            _project.ProjectItems.AddFromFile(filename + "S.cpp");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportC.cpp");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportImpl.cpp");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportS.cpp");
-
-                            _project.ProjectItems.AddFromFile(filename + "C.inl");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupportC.inl");
-                        }
-                        else
-                        {                            
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupport.h");
-                            _project.ProjectItems.AddFromFile(filename + "TypeSupport.cpp");
-                        }
-                    }
-
-                    _project.Save();
-
-                    if (!IsLinux)
-                    {
-                        // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
-                        // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
-                        XmlDocument doc = new XmlDocument();
-                        doc.Load(_project.FullName);
-                        XmlNode root = doc.DocumentElement;
-                        XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
-                        ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-                        XmlNodeList nodes = root.SelectNodes("//msbld:PreprocessorDefinitions", ns);
-                        foreach (XmlNode node in nodes)
-                        {
-                            foreach (ITaskItem s in IdlFiles)
-                            {
-                                string fileName = s.GetMetadata("Filename");
-                                node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
-                            }
-                        }
-
-                        if (IsWrapper)
-                        {
-                            nodes = root.SelectNodes("//msbld:AdditionalDependencies", ns);
-                            foreach (XmlNode node in nodes)
-                            {
-                                node.InnerXml = string.Format("{0}Native.lib;{1}", OriginalProjectName, node.InnerXml);
-                            }
-                        }
-
-                        if (_platformToolsets.ContainsKey(_msbuildVersion))
-                        {
-                            nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
-                            foreach (XmlNode node in nodes)
-                            {
-                                node.InnerXml = _platformToolsets[_msbuildVersion];
-                            }
-                        }
-
-                        doc.Save(_project.FullName);
-                        _project.Save();
-                    }
-                    
-                    success = _project.Saved;
-
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
+                        _project.ProjectItems.AddFromFile(filename + "C.inl");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupportC.inl");
                     }
                     else
                     {
-                        throw;
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupport.h");
+                        _project.ProjectItems.AddFromFile(filename + "TypeSupport.cpp");
                     }
                 }
+
+                _project.Save();
+
+                if (!IsLinux)
+                {
+                    // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
+                    // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(_project.FullName);
+                    XmlNode root = doc.DocumentElement;
+                    XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
+                    ns.AddNamespace("msbld", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+                    XmlNodeList nodes = root.SelectNodes("//msbld:PreprocessorDefinitions", ns);
+                    foreach (XmlNode node in nodes)
+                    {
+                        foreach (ITaskItem s in IdlFiles)
+                        {
+                            string fileName = s.GetMetadata("Filename");
+                            node.InnerXml = string.Format("{0}IDL_BUILD_DLL;{1}", fileName.ToUpper(), node.InnerXml);
+                        }
+                    }
+
+                    if (IsWrapper)
+                    {
+                        nodes = root.SelectNodes("//msbld:AdditionalDependencies", ns);
+                        foreach (XmlNode node in nodes)
+                        {
+                            node.InnerXml = string.Format("{0}Native.lib;{1}", OriginalProjectName, node.InnerXml);
+                        }
+                    }
+
+                    if (_platformToolsets.ContainsKey(_msbuildVersion))
+                    {
+                        nodes = root.SelectNodes("//msbld:PlatformToolset", ns);
+                        foreach (XmlNode node in nodes)
+                        {
+                            node.InnerXml = _platformToolsets[_msbuildVersion];
+                        }
+                    }
+
+                    doc.Save(_project.FullName);
+                    _project.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex.ToString());
+                returnValue = false;
             }
         }
 
         private void SetSolutionConfiguration()
         {
-            string platform = "x64";
-            if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
+            try
             {
-                platform = "x86";
+                Log.LogMessage(MessageImportance.High, "Setting solution configuration...");
+
+                string platform = "x64";
+                if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
+                {
+                    platform = "x86";
+                }
+
+                bool found = false;
+                foreach (SolutionConfiguration2 sc in _build.SolutionConfigurations)
+                {
+                    if (sc.Name == Configuration && sc.PlatformName == platform)
+                    {
+                        sc.Activate();
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    Log.LogError("Solution configuration not found: {0}|{1}", Configuration, platform);
+                    returnValue = false;
+                }
             }
-
-            int retry = 100;
-            bool success = false;
-            while (!success && retry > 0)
+            catch (Exception ex)
             {
-                try
-                {
-                    foreach (SolutionConfiguration2 sc in _build.SolutionConfigurations)
-                    {
-                        if (sc.Name == Configuration && sc.PlatformName == platform)
-                        {
-                            sc.Activate();
-                            success = true;
-                        }
-                    }
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Log.LogError(ex.ToString());
+                returnValue = false;
             }
         }
 
         private void AddProjectTemplate()
         {
-            int retry = 100;
-            bool success = false;
-
-            while (!success && retry > 0)
-            {
-                try
-                {
-                    _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
-
-                    success = true;
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }            
+            _solution.AddFromTemplate(TemplatePath, IntDir, OriginalProjectName, false);
         }
 
         private void GetCreatedProject()
         {
-            int retry = 100;
-            bool success = false;
-            while (!success && retry > 0)
-            {
-                try
-                {
-                    _project = _solution.Projects.Item(1);                    
-
-                    success = true;
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
+            _project = _solution.Projects.Item(1);
 
             if (_project == null)
             {
@@ -525,125 +375,80 @@ namespace OpenDDSharp.BuildTasks
         }
 
         private void CopyIdlFiles()
-        {            
-            foreach (ITaskItem s in IdlFiles)
-            {                
-                string identity = IsStandard ? s.GetMetadata("Filename") + s.GetMetadata("Extension") : s.GetMetadata("Identity");
-                string inputPath = s.GetMetadata("FullPath");
-                string outputPath = Path.Combine(IntDir, identity);
+        {
+            try
+            {
+                Log.LogMessage(MessageImportance.High, "Copying IDL files...");
 
-                using (StreamReader reader = new StreamReader(inputPath))
-                using (StreamWriter writer = new StreamWriter(outputPath))
+                foreach (ITaskItem s in IdlFiles)
                 {
-                    writer.WriteLine("#include <tao/orb.idl> // Workaround for the error C2961: inconsistent explicit instantiations, a previous explicit instantiation did not specify '__declspec(dllimport)'");
-                    while (!reader.EndOfStream)
+                    string identity = IsStandard ? s.GetMetadata("Filename") + s.GetMetadata("Extension") : s.GetMetadata("Identity");
+                    string inputPath = s.GetMetadata("FullPath");
+                    string outputPath = Path.Combine(IntDir, identity);
+
+                    using (StreamReader reader = new StreamReader(inputPath))
+                    using (StreamWriter writer = new StreamWriter(outputPath))
                     {
-                        writer.WriteLine(reader.ReadLine());
+                        writer.WriteLine("#include <tao/orb.idl> // Workaround for the error C2961: inconsistent explicit instantiations, a previous explicit instantiation did not specify '__declspec(dllimport)'");
+                        while (!reader.EndOfStream)
+                        {
+                            writer.WriteLine(reader.ReadLine());
+                        }
+
+                        writer.Flush();
+
+                        writer.Close();
+                        reader.Close();
                     }
-
-                    writer.Flush();
-
-                    writer.Close();
-                    reader.Close();
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex.ToString());
+                returnValue = false;
             }
         }
 
         private void BuildWithMSBuild()
         {
-            string platform = "x64";
-            if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
+            try
             {
-                platform = "x86";
+                Log.LogMessage(MessageImportance.High, "Building solution...");
+
+                string platform = "x64";
+                if (Platform == "Win32" || Platform == "x86" || Platform == "AnyCPU")
+                {
+                    platform = "x86";
+                }
+
+                _build.Build(true);
+
+                CheckBuildInfo(platform);
             }
-            string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
-
-            int retry = 100;
-            bool success = false;
-            while (!success && retry > 0)
+            catch (Exception ex)
             {
-                try
-                {
-                    _build.Build(true);
-                    success = true;
-
-                    CheckBuildInfo(platform);
-                }
-                catch (InvalidOperationException)
-                {
-                    throw;
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Log.LogError(ex.ToString());
+                returnValue = false;
             }
         }
 
         private void CheckBuildInfo(string platform)
         {
-            int retry = 100;
-            bool success = false;
             int result = int.MaxValue;
-            while (!success && retry > 0)
+            if (_build.BuildState == vsBuildState.vsBuildStateDone)
             {
-                try
-                {
-                    if (_build.BuildState == vsBuildState.vsBuildStateDone)
-                    {
-                        result = _build.LastBuildInfo;
-                        Log.LogMessage(MessageImportance.High, "BUILD RESULT: {0}", result);
-                        success = true;
-                    }
-                    else
-                    {
-                        Log.LogMessage(MessageImportance.High, "BUILD STATE NOT DONE: {0}", _build.BuildState);
-                        retry--;
-                        System.Threading.Thread.Sleep(1000);
-                    }
-                }
-#if DEBUG
-                catch (Exception ex)
-#else
-                catch
-#endif
-                {
-                    success = false;
-                    retry--;
-
-                    if (retry > 0)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-#if DEBUG
-                        Log.LogMessage(MessageImportance.High, "Exception: " + ex.ToString());
-#endif
-                    }
-                    else
-                    {
-                        Log.LogMessage(MessageImportance.High, "LASTBUILDINFO cannot be retrieved: ");
-                    }
-                }
+                result = _build.LastBuildInfo;
+                Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
             }
+            else
+            {
+                Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);                
+            }               
 
             if (result > 0 && result < int.MaxValue)
             {
+                Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+
                 string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
                 string cppPlatform = platform;
                 if (platform == "x86")
@@ -651,9 +456,17 @@ namespace OpenDDSharp.BuildTasks
                     cppPlatform = "Win32";
                 }
                 string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                Log.LogMessage(MessageImportance.High, File.ReadAllText(logFile));
+                if (File.Exists(logFile))
+                {
+                    var logText = File.ReadAllText(logFile);
+                    Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
+                }
+                else
+                {
+                    Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
+                }
 
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "The project {0} failed to build.", _project.FullName));
+                returnValue = false;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Build.Utilities;
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -6,8 +7,12 @@ namespace OpenDDSharp.BuildTasks
 {
     class OleMessageFilter : IOleMessageFilter
     {
-        public static void Register()
+        private static TaskLoggingHelper _loggingHelper;
+
+        public static void Register(TaskLoggingHelper loggingHelper)
         {
+            _loggingHelper = loggingHelper;
+
             IOleMessageFilter newFilter = new OleMessageFilter();
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
@@ -26,6 +31,8 @@ namespace OpenDDSharp.BuildTasks
 
         int IOleMessageFilter.HandleInComingCall(int dwCallType, IntPtr hTaskCaller, int dwTickCount, IntPtr lpInterfaceInfo)
         {
+            _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(SERVERCALL.SERVERCALL_RETRYLATER));
+
             return (int)SERVERCALL.SERVERCALL_ISHANDLED;
         }
 
@@ -33,6 +40,9 @@ namespace OpenDDSharp.BuildTasks
         {
             if (dwRejectType == (int)SERVERCALL.SERVERCALL_RETRYLATER)
             {
+                _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(SERVERCALL.SERVERCALL_RETRYLATER));
+
+                // Retry immediately if return >=0 & <100
                 return 99;
             }
 
@@ -41,6 +51,8 @@ namespace OpenDDSharp.BuildTasks
 
         int IOleMessageFilter.MessagePending(IntPtr hTaskCallee, int dwTickCount, int dwPendingType)
         {
+            _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(PENDINGMSG.PENDINGMSG_WAITDEFPROCESS));
+
             return (int)PENDINGMSG.PENDINGMSG_WAITDEFPROCESS;
         }
 
