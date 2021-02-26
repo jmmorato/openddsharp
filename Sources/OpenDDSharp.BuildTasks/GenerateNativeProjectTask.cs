@@ -196,6 +196,10 @@ namespace OpenDDSharp.BuildTasks
                 //_dte.UserControl = false;
 
                 var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.exe";
+                if (_msbuildVersion == 16)
+                {
+                    devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+                }
                 _dte = CreateDteInstance(devenvPath);
                 _dte.SuppressUI = true;
                 _dte.MainWindow.Visible = false;
