@@ -1,6 +1,7 @@
 ﻿using Cake.Common.Tools.MSBuild;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Restore;
+using Cake.Core;
 using Cake.Frosting;
 using System.IO;
 
@@ -15,14 +16,14 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             context.NuGetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new NuGetRestoreSettings
             {
                 NoCache = true
-            });
+            });            
 
             context.MSBuild(BuildContext.OPENDDSHARP_SOLUTION_FILE, new MSBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 PlatformTarget = context.BuildPlatform,
                 Targets = { "Clean", "Build" },
-                MaxCpuCount = 1,
+                MaxCpuCount = 0,
                 WorkingDirectory = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER),
                 EnvironmentVariables =
                 {
@@ -31,6 +32,8 @@ namespace OpenDDSharp.Build.CppCli.Tasks
                     { nameof(BuildContext.TAO_ROOT), Path.GetFullPath(BuildContext.TAO_ROOT).TrimEnd('\\') },
                     { nameof(BuildContext.MPC_ROOT), Path.GetFullPath(BuildContext.MPC_ROOT).TrimEnd('\\') },
                 },
+                ToolVersion = context.VisualStudioVersion,
+                ArgumentCustomization = args => context.VisualStudioVersion == MSBuildToolVersion.VS2019 ? args.Append("/p:PlatformToolset=v142") : args.Append(string.Empty),
             });
         }
     }

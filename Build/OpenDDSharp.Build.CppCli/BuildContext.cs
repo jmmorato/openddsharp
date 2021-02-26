@@ -30,6 +30,7 @@ namespace OpenDDSharp.Build.CppCli
         public string PerlPath { get; set; }
         public bool ForceThirdPartySetup { get; set; }
         public string BuildConfiguration { get; internal set; }
+        public MSBuildToolVersion VisualStudioVersion { get; internal set; }
         public PlatformTarget BuildPlatform { get; internal set; }
         #endregion
 
@@ -72,6 +73,15 @@ namespace OpenDDSharp.Build.CppCli
             else
             {
                 BuildPlatform = DEFAULT_PLATFORM;
+            }
+
+            if (context.Arguments.HasArgument(nameof(VisualStudioVersion)))
+            {
+                VisualStudioVersion = Enum.Parse<MSBuildToolVersion>(context.Arguments.GetArgument(nameof(VisualStudioVersion)));
+            }
+            else
+            {
+                VisualStudioVersion = MSBuildToolVersion.VS2019;
             }
 
             var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);

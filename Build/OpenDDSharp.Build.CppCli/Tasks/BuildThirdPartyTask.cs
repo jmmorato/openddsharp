@@ -33,6 +33,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
                     { nameof(BuildContext.TAO_ROOT), Path.GetFullPath(BuildContext.TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar) },
                     { nameof(BuildContext.MPC_ROOT), Path.GetFullPath(BuildContext.MPC_ROOT).TrimEnd(Path.DirectorySeparatorChar) },
                 },
+                ToolVersion = context.VisualStudioVersion,
             });
 
             var ddsBinPlatform = Path.Combine(ddsPath, "bin_" + context.BuildPlatform);
