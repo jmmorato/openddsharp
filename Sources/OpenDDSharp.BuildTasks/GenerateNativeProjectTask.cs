@@ -20,7 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.IO;
 using System.Xml;
-using System.Globalization;
 using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
@@ -31,6 +30,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace OpenDDSharp.BuildTasks
 {
@@ -188,22 +188,22 @@ namespace OpenDDSharp.BuildTasks
                 _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
 
                 // Create the DTE instance
-                //Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
-                //object obj = Activator.CreateInstance(type, true);
-                //_dte = (DTE2)obj;
-                //_dte.SuppressUI = true;
-                //_dte.MainWindow.Visible = false;
-                //_dte.UserControl = false;
-
-                var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.exe";
-                if (_msbuildVersion == 16)
-                {
-                    devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
-                }
-                _dte = CreateDteInstance(devenvPath);
+                Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
+                object obj = Activator.CreateInstance(type, true);
+                _dte = (DTE2)obj;
                 _dte.SuppressUI = true;
                 _dte.MainWindow.Visible = false;
                 _dte.UserControl = false;
+
+                //var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.exe";
+                //if (_msbuildVersion == 16)
+                //{
+                //    devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+                //}
+                //_dte = CreateDteInstance(devenvPath);
+                //_dte.SuppressUI = true;
+                //_dte.MainWindow.Visible = false;
+                //_dte.UserControl = false;
             }
             catch (Exception ex)
             {
