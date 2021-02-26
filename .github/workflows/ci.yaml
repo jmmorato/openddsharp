@@ -17,5 +17,5 @@ jobs:
 
     - name: Run a one-line script
       shell: pwsh
-      run: ./Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --VisualStudioVersion=VS2019
-      working-directory: ./Build
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --VisualStudioVersion=VS2019
+      working-directory: ${{ github.workspace }}/Build
