@@ -39,6 +39,7 @@ jobs:
         command: run
         arguments: '--project OpenDDSharp.Build.CppCli/OpenDDSharp.Build.CppCli.csproj --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019'
       displayName: 'Build & Test with Cake'
+      workingDirectory: $(Build.SourcesDirectory)\Build
 
 - job: VisualStudio2017
   timeoutInMinutes: 120
