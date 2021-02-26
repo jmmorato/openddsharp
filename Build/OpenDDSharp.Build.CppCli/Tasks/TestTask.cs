@@ -20,7 +20,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             {
                 ToolPath = context.Tools.Resolve("vstest.console.exe"),
                 TestAdapterPath = Path.GetFullPath(testAdapterPath),
-                FrameworkVersion = VSTestFrameworkVersion.NET45,
+                FrameworkVersion = VSTestFrameworkVersion.Default,
                 EnableCodeCoverage = true,
                 PlatformArchitecture = platform,
                 WorkingDirectory = Path.GetFullPath(path),

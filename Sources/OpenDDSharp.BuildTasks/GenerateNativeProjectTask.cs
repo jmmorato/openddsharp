@@ -30,7 +30,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
-using System.Globalization;
+using EnvDTE100;
 
 namespace OpenDDSharp.BuildTasks
 {
@@ -38,8 +38,7 @@ namespace OpenDDSharp.BuildTasks
     {
         #region Fields
         private DTE2 _dte;
-        private Solution2 _solution;
-        private SolutionBuild2 _build;
+        private Solution4 _solution;        
         private Project _project;
         private string _solutionName;
         private string _projectName;
@@ -232,8 +231,7 @@ namespace OpenDDSharp.BuildTasks
                 _dte.Solution.Create(IntDir, _solutionName);
                 _dte.Solution.SaveAs(_solutionFullPath);
 
-                _solution = _dte.Solution as Solution2;
-                _build = _solution.SolutionBuild as SolutionBuild2;
+                _solution = _dte.Solution as Solution4;
             }
             catch (Exception ex)
             {
@@ -291,7 +289,7 @@ namespace OpenDDSharp.BuildTasks
                 if (!IsLinux)
                 {
                     var projecFullName = _project.FullName;
-                    _dte.ExecuteCommand("Project.UnloadProject");
+                    //_dte.ExecuteCommand("Project.UnloadProject");
 
                     // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
                     // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
@@ -331,8 +329,8 @@ namespace OpenDDSharp.BuildTasks
 
                     doc.Save(projecFullName);
 
-                    _dte.ExecuteCommand("Project.ReloadProject");
-                    _project = _solution.Projects.Item(1);
+                    //_dte.ExecuteCommand("Project.ReloadProject");
+                    //_project = _solution.Projects.Item(1);
                 }
             }
             catch (Exception ex)
@@ -389,8 +387,8 @@ namespace OpenDDSharp.BuildTasks
                     platform = "x86";
                 }
 
-                var solutionConfig = $"{Configuration}|{platform}";
-                _build.BuildProject(solutionConfig, _project.UniqueName, true);
+                string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
+                _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.UniqueName, true);
 
                 //int result = int.MaxValue;
                 //if (_build.BuildState == vsBuildState.vsBuildStateDone)
