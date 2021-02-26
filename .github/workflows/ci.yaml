@@ -1,0 +1,31 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    strategy:
+      matrix:
+        Debug64:
+          BuildPlatform: x64
+          BuildConfiguration: Debug
+        Release64:
+          BuildPlatform: x64
+          BuildConfiguration: Release
+        Debug32:
+          BuildPlatform: x86
+          BuildConfiguration: Debug
+        Release32:
+          BuildPlatform: x86
+          BuildConfiguration: Release
+          
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Run a one-line script
+      shell: pwsh
+      run: $(Build.SourcesDirectory)\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019
+      working-directory: $(Build.SourcesDirectory)\Build
