@@ -17,5 +17,5 @@ jobs:
 
     - name: Run a one-line script
       shell: pwsh
-      run: $(Build.SourcesDirectory)\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019
-      working-directory: $(Build.SourcesDirectory)\Build
+      run: $GITHUB_WORKSPACE\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019
+      working-directory: $GITHUB_WORKSPACE\Build
