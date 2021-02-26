@@ -30,9 +30,15 @@ jobs:
       inputs:
         versionSpec: 5.4.0
 
-    - powershell: $(Build.SourcesDirectory)\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019
+    #- powershell: $(Build.SourcesDirectory)\Build\OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019
+    #  displayName: 'Build & Test with Cake'
+    #  workingDirectory: $(Build.SourcesDirectory)\Build
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: run
+        arguments: '--project OpenDDSharp.Build.CppCli/OpenDDSharp.Build.CppCli.csproj --BuildConfiguration=$(BuildConfiguration) --BuildPlatform=$(BuildPlatform) --VisualStudioVersion=VS2019'
       displayName: 'Build & Test with Cake'
-      workingDirectory: $(Build.SourcesDirectory)\Build
 
 - job: VisualStudio2017
   timeoutInMinutes: 120
