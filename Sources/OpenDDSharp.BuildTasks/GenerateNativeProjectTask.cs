@@ -436,7 +436,8 @@ namespace OpenDDSharp.BuildTasks
         {
             try
             {
-                _dte?.Solution?.Close(true);
+                Log.LogMessage(MessageImportance.High, "Cleaning up resources...");
+                
                 _dte?.Quit();
             }
             catch (Exception ex)
