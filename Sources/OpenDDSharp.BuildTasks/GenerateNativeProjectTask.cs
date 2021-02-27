@@ -50,6 +50,7 @@ namespace OpenDDSharp.BuildTasks
         };
         private string _solutionFullPath;
         private bool returnValue;
+        System.Diagnostics.Process _proc;
         #endregion
 
         #region Properties
@@ -437,19 +438,31 @@ namespace OpenDDSharp.BuildTasks
             try
             {
                 Log.LogMessage(MessageImportance.High, "Cleaning up resources...");
-                
-                _dte?.Quit();
+
+                while (!_proc.HasExited)
+                {
+                    try
+                    {
+                        _proc.Kill();
+                        _proc.WaitForExit(5000);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogMessage(MessageImportance.High, "Couldn't kill the background Visual Studio process: {0}", ex.Message);
+                    }
+                }
+
+                _proc.Dispose();                
             }
             catch (Exception ex)
             {
-                Log.LogError(ex.Message);
+                Log.LogMessage(MessageImportance.High, "Couldn't dispose the background Visual Studio process: {0}", ex.Message);
             }
         }
 
         private DTE2 CreateDteInstance(string devenvPath)
         {
-            DTE2 dte;
-            System.Diagnostics.Process proc;
+            DTE2 dte;            
 
             // start devenv
             ProcessStartInfo procStartInfo = new ProcessStartInfo
@@ -463,7 +476,7 @@ namespace OpenDDSharp.BuildTasks
 
             try
             {
-                proc = System.Diagnostics.Process.Start(procStartInfo);
+                _proc = System.Diagnostics.Process.Start(procStartInfo);
             }
             catch (Exception ex)
             {
@@ -472,7 +485,7 @@ namespace OpenDDSharp.BuildTasks
                 return null;
             }
 
-            if (proc == null)
+            if (_proc == null)
             {
                 Log.LogError("Visual Studio process cannot be created.");
                 returnValue = false;
@@ -480,7 +493,7 @@ namespace OpenDDSharp.BuildTasks
             }
 
             // Get DTE
-            dte = GetDTE(proc.Id, 120);
+            dte = GetDTE(_proc.Id, 120);
 
             return dte;
         }
