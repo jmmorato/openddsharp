@@ -23,6 +23,7 @@ using System.Xml;
 using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
+using EnvDTE100;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using System.Threading;
@@ -30,7 +31,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
-using EnvDTE100;
+using Microsoft.VisualStudio.Setup.Configuration;
 
 namespace OpenDDSharp.BuildTasks
 {
@@ -186,24 +187,51 @@ namespace OpenDDSharp.BuildTasks
                 // Get the current MSBuild version
                 var msbuildProcess = System.Diagnostics.Process.GetCurrentProcess();
                 _msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
+                
+                var query = (ISetupConfiguration2)new SetupConfiguration();
+                var enumInstances = query.EnumInstances();
 
-                // Create the DTE instance
-                //Type type = Type.GetTypeFromProgID(string.Format(CultureInfo.InvariantCulture, "VisualStudio.DTE.{0}.0", _msbuildVersion));
-                //object obj = Activator.CreateInstance(type, true);
-                //_dte = (DTE2)obj;
-                //_dte.SuppressUI = true;
-                //_dte.MainWindow.Visible = false;
-                //_dte.UserControl = false;
-
-                var devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\devenv.exe";
-                if (_msbuildVersion == 16)
+                int fetched = 0;
+                string devenvPath = string.Empty;                
+                var instances = new ISetupInstance[1];
+                do
                 {
-                    devenvPath = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+                    enumInstances.Next(1, instances, out fetched);
+                    if (fetched <= 0)
+                    {
+                        continue;
+                    }
+
+                    if (!(instances[0] is ISetupInstance2 instance))
+                    {
+                        continue;
+                    }
+
+                    var version = instance.GetInstallationVersion();
+                    if (version.StartsWith(_msbuildVersion.ToString()))
+                    {
+                        devenvPath = instance.GetInstallationPath();
+                        break;
+                    }
+
+                } while (fetched > 0);
+
+                if (!string.IsNullOrEmpty(devenvPath))
+                {                    
+                    var executable = Path.Combine(devenvPath, @"Common7\IDE\devenv.exe");
+                    Log.LogMessage("Executable path: {0}", executable);
+
+                    // Create the DTE instance
+                    _dte = CreateDteInstance(executable);
+                    _dte.SuppressUI = true;
+                    _dte.MainWindow.Visible = false;
+                    _dte.UserControl = false;
                 }
-                _dte = CreateDteInstance(devenvPath);
-                _dte.SuppressUI = true;
-                _dte.MainWindow.Visible = false;
-                _dte.UserControl = false;
+                else
+                {
+                    Log.LogError("Couldn't find Visual Studio installation path. Related MSBuild version: {0}", _msbuildVersion);
+                    returnValue = false;
+                }
             }
             catch (Exception ex)
             {
@@ -290,7 +318,7 @@ namespace OpenDDSharp.BuildTasks
                 if (!IsLinux)
                 {
                     var projecFullName = _project.FullName;
-                    //_dte.ExecuteCommand("Project.UnloadProject");
+                    _dte.ExecuteCommand("Project.UnloadProject");
 
                     // No really elegant but I couldn't cast the project to VCProject because the "Interface not registered" and M$ says that it is not a bug :S
                     // https://developercommunity.visualstudio.com/content/problem/568/systeminvalidcastexception-unable-to-cast-com-obje.html
@@ -330,8 +358,8 @@ namespace OpenDDSharp.BuildTasks
 
                     doc.Save(projecFullName);
 
-                    //_dte.ExecuteCommand("Project.ReloadProject");
-                    //_project = _solution.Projects.Item(1);
+                    _dte.ExecuteCommand("Project.ReloadProject");
+                    _project = _solution.Projects.Item(1);
                 }
             }
             catch (Exception ex)
@@ -391,40 +419,40 @@ namespace OpenDDSharp.BuildTasks
                 string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
                 _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.UniqueName, true);
 
-                //int result = int.MaxValue;
-                //if (_build.BuildState == vsBuildState.vsBuildStateDone)
-                //{
-                //    result = _build.LastBuildInfo;
-                //    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
-                //}
-                //else
-                //{
-                //    Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _build.BuildState);
-                //}
+                int result = int.MaxValue;
+                if (_solution.SolutionBuild.BuildState == vsBuildState.vsBuildStateDone)
+                {
+                    result = _solution.SolutionBuild.LastBuildInfo;
+                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+                }
+                else
+                {
+                    Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _solution.SolutionBuild.BuildState);
+                }
 
-                //if (result > 0 && result < int.MaxValue)
-                //{
-                //    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+                if (result > 0 && result < int.MaxValue)
+                {
+                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
 
-                //    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                //    string cppPlatform = platform;
-                //    if (platform == "x86")
-                //    {
-                //        cppPlatform = "Win32";
-                //    }
-                //    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                //    if (File.Exists(logFile))
-                //    {
-                //        var logText = File.ReadAllText(logFile);
-                //        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
-                //    }
-                //    else
-                //    {
-                //        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
-                //    }
+                    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                    string cppPlatform = platform;
+                    if (platform == "x86")
+                    {
+                        cppPlatform = "Win32";
+                    }
+                    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                    if (File.Exists(logFile))
+                    {
+                        var logText = File.ReadAllText(logFile);
+                        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
+                    }
+                    else
+                    {
+                        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
+                    }
 
-                //    returnValue = false;
-                //}
+                    returnValue = false;
+                }
             }
             catch (Exception ex)
             {
@@ -439,20 +467,24 @@ namespace OpenDDSharp.BuildTasks
             {
                 Log.LogMessage(MessageImportance.High, "Cleaning up resources...");
 
-                while (!_proc.HasExited)
+                if (_proc != null)
                 {
-                    try
+                    while (!_proc.HasExited)
                     {
-                        _proc.Kill();
-                        _proc.WaitForExit(5000);
+                        try
+                        {
+                            _proc.Kill();
+                            _proc.WaitForExit(5000);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.LogMessage(MessageImportance.High, "Couldn't kill the background Visual Studio process: {0}", ex.Message);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.LogMessage(MessageImportance.High, "Couldn't kill the background Visual Studio process: {0}", ex.Message);
-                    }
-                }
 
-                _proc.Dispose();                
+                    _proc.Dispose();
+                    _proc = null;
+                }
             }
             catch (Exception ex)
             {

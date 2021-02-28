@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Utilities;
+﻿using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -31,7 +32,7 @@ namespace OpenDDSharp.BuildTasks
 
         int IOleMessageFilter.HandleInComingCall(int dwCallType, IntPtr hTaskCaller, int dwTickCount, IntPtr lpInterfaceInfo)
         {
-            _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(SERVERCALL.SERVERCALL_RETRYLATER));
+            _loggingHelper.LogMessage(MessageImportance.High, "Automation is handling an incoming call...");
 
             return (int)SERVERCALL.SERVERCALL_ISHANDLED;
         }
@@ -40,7 +41,7 @@ namespace OpenDDSharp.BuildTasks
         {
             if (dwRejectType == (int)SERVERCALL.SERVERCALL_RETRYLATER)
             {
-                _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(SERVERCALL.SERVERCALL_RETRYLATER));
+                _loggingHelper.LogMessage(MessageImportance.High, "Automation is busy, waiting 500ms and trying again...");
 
                 Thread.Sleep(500);
 
@@ -53,7 +54,7 @@ namespace OpenDDSharp.BuildTasks
 
         int IOleMessageFilter.MessagePending(IntPtr hTaskCallee, int dwTickCount, int dwPendingType)
         {
-            _loggingHelper.LogMessage(Microsoft.Build.Framework.MessageImportance.High, nameof(PENDINGMSG.PENDINGMSG_WAITDEFPROCESS));
+            _loggingHelper.LogMessage(MessageImportance.High, "Automation is waiting for pending messages...");
 
             return (int)PENDINGMSG.PENDINGMSG_WAITDEFPROCESS;
         }
