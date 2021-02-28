@@ -419,34 +419,34 @@ namespace OpenDDSharp.BuildTasks
                 string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
                 _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.UniqueName, true);
 
-                Log.LogMessage(MessageImportance.High, "Checking build result...");                 
+                //Log.LogMessage(MessageImportance.High, "Checking build result...");                 
 
-                int result = _solution.SolutionBuild.LastBuildInfo;
-                Log.LogMessage(MessageImportance.High, "Build result: {0}", result);               
+                //int result = _solution.SolutionBuild.LastBuildInfo;
+                //Log.LogMessage(MessageImportance.High, "Build result: {0}", result);               
 
-                if (result > 0 && result < int.MaxValue)
-                {
-                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
+                //if (result > 0 && result < int.MaxValue)
+                //{
+                //    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
 
-                    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
-                    string cppPlatform = platform;
-                    if (platform == "x86")
-                    {
-                        cppPlatform = "Win32";
-                    }
-                    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
-                    if (File.Exists(logFile))
-                    {
-                        var logText = File.ReadAllText(logFile);
-                        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
-                    }
-                    else
-                    {
-                        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
-                    }
+                //    string projectName = Path.GetFileNameWithoutExtension(_project.FullName);
+                //    string cppPlatform = platform;
+                //    if (platform == "x86")
+                //    {
+                //        cppPlatform = "Win32";
+                //    }
+                //    string logFile = Path.Combine(IntDir, "obj", cppPlatform, Configuration, projectName + ".log");
+                //    if (File.Exists(logFile))
+                //    {
+                //        var logText = File.ReadAllText(logFile);
+                //        Log.LogError("The project {0} failed to build. Last build log: ", _project.FullName, logText);
+                //    }
+                //    else
+                //    {
+                //        Log.LogError("The project {0} failed to build. No log file found in: ", _project.FullName, logFile);
+                //    }
 
-                    returnValue = false;
-                }
+                //    returnValue = false;
+                //}
             }
             catch (Exception ex)
             {
