@@ -419,16 +419,10 @@ namespace OpenDDSharp.BuildTasks
                 string solutionConfiguration = string.Format("{0}|{1}", Configuration, platform);
                 _solution.SolutionBuild.BuildProject(solutionConfiguration, _project.UniqueName, true);
 
-                int result = int.MaxValue;
-                if (_solution.SolutionBuild.BuildState == vsBuildState.vsBuildStateDone)
-                {
-                    result = _solution.SolutionBuild.LastBuildInfo;
-                    Log.LogMessage(MessageImportance.High, "Build result: {0}", result);
-                }
-                else
-                {
-                    Log.LogMessage(MessageImportance.High, "Unexpected build state: {0}", _solution.SolutionBuild.BuildState);
-                }
+                Log.LogMessage(MessageImportance.High, "Checking build result...");                 
+
+                int result = _solution.SolutionBuild.LastBuildInfo;
+                Log.LogMessage(MessageImportance.High, "Build result: {0}", result);               
 
                 if (result > 0 && result < int.MaxValue)
                 {
