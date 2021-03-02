@@ -35,6 +35,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64\";
         private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86\";
         private const string TEST_SUPPORT_PROCESS_PATH = @"..\..\..\..\TestSupportProcess\bin\";
+        private const string DDS_ROOT = @"..\..\..\..\..\ext\OpenDDS";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
         #endregion
@@ -71,8 +72,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         public Process SpawnDCPSInfoRepo()
         {
-            string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
-            string infoRepoPath = Path.Combine(ddsPath, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
+            string infoRepoPath = Path.Combine(DDS_ROOT, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
             if (!File.Exists(infoRepoPath))
             {
                 _testContext.WriteLine($"The support process executable could not be located at {infoRepoPath}.");
