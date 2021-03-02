@@ -1,7 +1,8 @@
-﻿using Cake.Common.Tools.MSBuild;
+﻿using System.IO;
+using Cake.Common.Tools.MSBuild;
 using Cake.Common.Tools.VSTest;
+using Cake.Core;
 using Cake.Frosting;
-using System.IO;
 
 namespace OpenDDSharp.Build.CppCli.Tasks
 {
@@ -32,6 +33,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
                     { nameof(BuildContext.MPC_ROOT), Path.GetFullPath(BuildContext.MPC_ROOT).TrimEnd('\\') },
                 },
                 SettingsFile = settingsFile,
+                Logger = "trx",
             });
         }
     }
