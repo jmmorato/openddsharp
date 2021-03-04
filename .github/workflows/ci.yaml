@@ -17,29 +17,73 @@ jobs:
 
     - name: Cache OpenDDS libraries
       uses: actions/cache@v2
-      env:
-        DllSuffix: ${{ if(${{ matrix.BuildConfiguration }} == "Debug", "d", "") }}
+      if: ${{ matrix.BuildConfiguration }} == "Debug"
       with:
         path: |          
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Dcps${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Rtps${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_InfoRepoDiscovery${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Rtps_Udp${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Shmem${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Tcp${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Multicast${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Udp${{ env.DllSuffix }}.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Dcpsd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Rtpsd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_InfoRepoDiscoveryd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Rtps_Udpd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Shmemd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Tcpd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Multicastd.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Udpd.dll
           ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
 
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/ACE${{ env.DllSuffix }}.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/ACEd.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAOd.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_CodecFactoryd.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_AnyTypeCoded.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_BiDirGIOPd.dl
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_PId.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_PortableServerd.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_IDL_FEd.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_IDL_BEd.dll                    
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/bin_${{ matrix.BuildPlatform }}/opendds_idl.exe
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/bin_${{ matrix.BuildPlatform }}/tao_idl.exe
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/bin_${{ matrix.BuildPlatform }}/ace_gperf.exe
+
+          ${{ github.workspace }}/ext/OpenDDS/dds/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/dds/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS/dds/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS/dds/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS/dds/**/*.pidl
+
+          ${{ github.workspace }}/ext/ACE_TAO/ACE/ace/**/*.h
+          ${{ github.workspace }}/ext/ACE_TAO/ACE/ace/**/*.inl
+          ${{ github.workspace }}/ext/ACE_TAO/ACE/ace/**/*.cpp
+
+          ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.h
+          ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.inl
+          ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.cpp
+          ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.idl
+          ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.pidl
+        key: opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
+
+    - name: Cache OpenDDS libraries
+      uses: actions/cache@v2
+      if: ${{ matrix.BuildConfiguration }} == "Release"
+      with:
+        path: |          
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Dcps.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Rtps.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_InfoRepoDiscovery.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Rtps_Udp.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Shmem.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Tcp.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Multicast.dll
+          ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Udp.dll
+          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/ACE.dll
           ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO.dll
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_CodecFactory${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_AnyTypeCode${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_BiDirGIOP${{ env.DllSuffix }}.dl
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_PI${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_PortableServer${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_IDL_FE${{ env.DllSuffix }}.dll
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_IDL_BE${{ env.DllSuffix }}.dll                    
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_CodecFactory.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_AnyTypeCode.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_BiDirGIOP.dl
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_PI.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_PortableServer.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_IDL_FE.dll
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/lib_${{ matrix.BuildPlatform }}/TAO_IDL_BE.dll                    
           ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/bin_${{ matrix.BuildPlatform }}/opendds_idl.exe
           ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/bin_${{ matrix.BuildPlatform }}/tao_idl.exe
           ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/bin_${{ matrix.BuildPlatform }}/ace_gperf.exe
@@ -63,7 +107,12 @@ jobs:
 
     - name: Build & Test with Cake
       shell: pwsh
-      env:
-        IgnoreThirdPartySetup: ${{ if(steps.opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}.outputs.cache-hit == true, "IgnoreThirdPartySetup", "") }}
+      if: steps.opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}.outputs.cache-hit == true
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} ${{ env.IgnoreThirdPartySetup }}
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build & Test with Cake
+      shell: pwsh
+      if: steps.opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}.outputs.cache-hit == false
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}/Build
