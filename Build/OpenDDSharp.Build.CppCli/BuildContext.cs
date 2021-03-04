@@ -28,7 +28,7 @@ namespace OpenDDSharp.Build.CppCli
         #region Properties
         public string OpenDdsVersion { get; set; }
         public string PerlPath { get; set; }
-        public bool ForceThirdPartySetup { get; set; }
+        public bool IgnoreThirdPartySetup { get; set; }
         public string BuildConfiguration { get; internal set; }
         public MSBuildToolVersion VisualStudioVersion { get; internal set; }
         public PlatformTarget BuildPlatform { get; internal set; }
@@ -37,7 +37,7 @@ namespace OpenDDSharp.Build.CppCli
         #region Constructors
         public BuildContext(ICakeContext context) : base(context)
         {
-            ForceThirdPartySetup = context.Arguments.HasArgument(nameof(ForceThirdPartySetup));
+            IgnoreThirdPartySetup = context.Arguments.HasArgument(nameof(IgnoreThirdPartySetup));
 
             if (context.Arguments.HasArgument(nameof(OpenDdsVersion)))
             {

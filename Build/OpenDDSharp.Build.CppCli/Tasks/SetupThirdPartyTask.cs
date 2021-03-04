@@ -20,9 +20,9 @@ namespace OpenDDSharp.Build.CppCli.Tasks
         {
             _versionTag = "DDS-" + context.OpenDdsVersion;
 
-            if (context.ForceThirdPartySetup)
+            if (context.IgnoreThirdPartySetup)
             {
-                return true;
+                return false;
             }
 
             if (!Directory.Exists(BuildContext.DDS_ROOT))
