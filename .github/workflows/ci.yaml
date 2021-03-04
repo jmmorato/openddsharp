@@ -108,7 +108,7 @@ jobs:
     - name: Build & Test with Cake
       shell: pwsh
       if: steps.opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}.outputs.cache-hit == true
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} ${{ env.IgnoreThirdPartySetup }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build & Test with Cake
