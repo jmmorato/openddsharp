@@ -17,7 +17,7 @@ jobs:
 
     - name: Cache OpenDDS libraries
       uses: actions/cache@v2
-      if: ${{ matrix.BuildConfiguration }} == "Debug"
+      if: ${{ matrix.BuildConfiguration == 'Debug' }}
       with:
         path: |          
           ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Dcpsd.dll
@@ -62,7 +62,7 @@ jobs:
 
     - name: Cache OpenDDS libraries
       uses: actions/cache@v2
-      if: ${{ matrix.BuildConfiguration }} == "Release"
+      if: ${{ matrix.BuildConfiguration == 'Release' }}
       with:
         path: |          
           ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/OpenDDS_Dcps.dll
@@ -108,11 +108,11 @@ jobs:
     - name: Build & Test with Cake
       shell: pwsh
       if: steps.opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}.outputs.cache-hit == true
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} ${{ env.IgnoreThirdPartySetup }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} ${{ env.IgnoreThirdPartySetup }}
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build & Test with Cake
       shell: pwsh
       if: steps.opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}.outputs.cache-hit == false
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }}
       working-directory: ${{ github.workspace }}/Build
