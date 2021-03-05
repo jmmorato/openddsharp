@@ -20,27 +20,16 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |          
-          '${{ github.workspace }}\ext\OpenDDS\lib_${{ matrix.BuildPlatform }}\*.dll'
-          '${{ github.workspace }}\ext\OpenDDS\lib_${{ matrix.BuildPlatform }}\*.lib'
-          '${{ github.workspace }}\ext\OpenDDS\bin_${{ matrix.BuildPlatform }}'
-          '${{ github.workspace }}\ext\OpenDDS\dds\idl\IDLTemplate.txt'
-          '${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\lib_${{ matrix.BuildPlatform }}\*.dll'
-          '${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\lib_${{ matrix.BuildPlatform }}\*.lib'         
-          '${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\bin_${{ matrix.BuildPlatform }}'
-          '${{ github.workspace }}\ext\OpenDDS\dds\**\*.h'
-          '${{ github.workspace }}\ext\OpenDDS\dds\**\*.cpp'
-          '${{ github.workspace }}\ext\OpenDDS\dds\**\*.inl'
-          '${{ github.workspace }}\ext\OpenDDS\dds\**\*.idl'
-          '${{ github.workspace }}\ext\OpenDDS\dds\**\*.pidl'
-          '${{ github.workspace }}\ext\ACE_TAO\ACE\ace\**\*.h'
-          '${{ github.workspace }}\ext\ACE_TAO\ACE\ace\**\*.inl'
-          '${{ github.workspace }}\ext\ACE_TAO\ACE\ace\**\*.cpp'
-          '${{ github.workspace }}\ext\ACE_TAO\TAO\tao\**\*.h'
-          '${{ github.workspace }}\ext\ACE_TAO\TAO\tao\**\*.inl'
-          '${{ github.workspace }}\ext\ACE_TAO\TAO\tao\**\*.cpp'
-          '${{ github.workspace }}\ext\ACE_TAO\TAO\tao\**\*.idl'
-          '${{ github.workspace }}\ext\ACE_TAO\TAO\tao\**\*.pidl'
-        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-2
+          'ext/**/*.dll'
+          'ext/**/*.lib'
+          'ext/**/*.exe'
+          'ext/OpenDDS/dds/idl/IDLTemplate.txt'          
+          'ext/**/*.h'
+          'ext/**/*.cpp'
+          'ext/**/*.inl'
+          'ext/**/*.idl'
+          'ext/**/*.pidl'          
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-3
 
     - name: Build & Test with Cake (OpenDDS cache found)
       shell: pwsh
