@@ -49,12 +49,12 @@ jobs:
 
     - name: Build & Test with Cake (OpenDDS cache found)
       shell: pwsh
-      if: steps.opendds-libraries.outputs.cache-hit == true
+      if: steps.opendds-libraries.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build & Test with Cake (OpenDDS cache not found)
       shell: pwsh
-      if: steps.opendds-libraries.outputs.cache-hit != true
+      if: steps.opendds-libraries.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }}
       working-directory: ${{ github.workspace }}/Build
