@@ -18,7 +18,6 @@ jobs:
     - name: Cache OpenDDS libraries
       id: opendds-libraries
       uses: actions/cache@v2
-      if: ${{ matrix.BuildConfiguration == 'Release' }}
       with:
         path: |          
           ${{ github.workspace }}/ext/OpenDDS/lib_${{ matrix.BuildPlatform }}/*.dll
@@ -45,7 +44,7 @@ jobs:
           ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.cpp
           ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.idl
           ${{ github.workspace }}/ext/ACE_TAO/TAO/tao/**/*.pidl
-        key: opendds-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-1
 
     - name: Build & Test with Cake (OpenDDS cache found)
       shell: pwsh
