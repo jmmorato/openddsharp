@@ -10,6 +10,16 @@ namespace OpenDDSharp.Build.CppCli.Tasks
     [IsDependentOn(typeof(SetupThirdPartyTask))]
     public class BuildThirdPartyTask : FrostingTask<BuildContext>
     {
+        public override bool ShouldRun(BuildContext context)
+        {
+            if (context.IgnoreThirdPartySetup)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public override void Run(BuildContext context)
         {
             var ddsPath = Path.GetFullPath(BuildContext.DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
