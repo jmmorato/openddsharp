@@ -20,15 +20,15 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |          
-          '**/ext/**/*.dll'
-          '**/ext/**/*.lib'
-          '**/ext/**/*.exe'
-          '**/ext/OpenDDS/dds/idl/IDLTemplate.txt'          
-          '**/ext/**/*.h'
-          '**/ext/**/*.cpp'
-          '**/ext/**/*.inl'
-          '**/ext/**/*.idl'
-          '**/ext/**/*.pidl'          
+          '~/ext/**/*.dll'
+          '~/ext/**/*.lib'
+          '~/ext/**/*.exe'
+          '~/ext/OpenDDS/dds/idl/IDLTemplate.txt'
+          '~/ext/**/*.h'
+          '~/ext/**/*.cpp'
+          '~/ext/**/*.inl'
+          '~/ext/**/*.idl'
+          '~/ext/**/*.pidl'
         key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-4
 
     - name: Build & Test with Cake (OpenDDS cache found)
