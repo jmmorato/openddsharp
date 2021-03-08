@@ -37,7 +37,14 @@ namespace OpenDDSharp.Build.CppCli
         #region Constructors
         public BuildContext(ICakeContext context) : base(context)
         {
-            IgnoreThirdPartySetup = context.Arguments.HasArgument(nameof(IgnoreThirdPartySetup));
+            if (context.Arguments.HasArgument(nameof(IgnoreThirdPartySetup)))
+            {
+                IgnoreThirdPartySetup = bool.Parse(context.Arguments.GetArgument(nameof(IgnoreThirdPartySetup)));
+            }
+            else
+            {
+                IgnoreThirdPartySetup = false;
+            }
 
             if (context.Arguments.HasArgument(nameof(OpenDdsVersion)))
             {
