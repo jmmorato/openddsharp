@@ -31,8 +31,14 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
         key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-5
 
-    - name: Build & Test with Cake
+    - name: Build & Test with Cake (No cached)
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=${{ steps.opendds-libraries.outputs.cache-hit }}
+      if: steps.opendds-libraries.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
-          
+      
+    - name: Build & Test with Cake (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      working-directory: ${{ github.workspace }}/Build
