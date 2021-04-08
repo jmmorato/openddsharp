@@ -9,7 +9,7 @@ namespace OpenDDSharp.Build.CppCli
     public class BuildContext : FrostingContext
     {
         #region Constants
-        public const string DEFAULT_OPENDDS_VERSION = "3.14.1";
+        public const string DEFAULT_OPENDDS_VERSION = "3.16";
         public const string DEFAULT_PERL_PATH = "C:/Strawberry/perl/bin";
         public const string DEFAULT_CONFIGURATION = "Release";
         public const PlatformTarget DEFAULT_PLATFORM = PlatformTarget.x64;
@@ -93,13 +93,21 @@ namespace OpenDDSharp.Build.CppCli
 
             var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
-            var ddsBin = Path.Combine(ddsPath, $"bin_{BuildPlatform}");
-            var ddsLib = Path.Combine(ddsPath, $"lib_{BuildPlatform}");
-            var aceBin = Path.Combine(acePath, $"bin_{BuildPlatform}");
-            var aceLib = Path.Combine(acePath, $"lib_{BuildPlatform}");
+            var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var ddsBin = Path.Combine(ddsPath, $"bin");
+            var ddsLib = Path.Combine(ddsPath, $"lib");
+            var aceBin = Path.Combine(acePath, $"bin");
+            var aceLib = Path.Combine(acePath, $"lib");
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{BuildPlatform}");
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{BuildPlatform}");
+            var aceBinPlatform = Path.Combine(acePath, $"bin_{BuildPlatform}");
+            var aceLibPlatform = Path.Combine(acePath, $"lib_{BuildPlatform}");
             var perlPath = Path.GetFullPath(PerlPath);
-            string path = $"{perlPath};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            string path = $"{perlPath};{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             System.Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
+            System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
+            System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
+            System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
         }
         #endregion
     }

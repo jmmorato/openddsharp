@@ -20,8 +20,8 @@
 void
 BE_version()
 {
-  ACE_DEBUG((LM_DEBUG, ACE_TEXT("OpenDDS version ") ACE_TEXT(DDS_VERSION)
-             ACE_TEXT("\n")));
+    ACE_DEBUG((LM_DEBUG, ACE_TEXT("OpenDDS version ") ACE_TEXT(OPENDDS_VERSION)
+        ACE_TEXT("\n")));
 }
 
 int

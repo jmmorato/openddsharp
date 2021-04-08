@@ -10,7 +10,7 @@ jobs:
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
     env:
-      OpenDdsVersion: "3.14.1"
+      OpenDdsVersion: "3.16"
         
     steps:
     - uses: actions/checkout@v2

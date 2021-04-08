@@ -32,7 +32,7 @@ System::Boolean OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::IsReliable::get() {
 };
 
 System::Boolean OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::RequiresCdr::get() {
-    return impl_entity->requires_cdr();
+    return impl_entity->requires_cdr_encapsulation();
 };
 
 System::Int32 OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::SendBufferSize::get() {
@@ -119,7 +119,7 @@ System::String^ OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::MulticastGroupAddress::
     msclr::interop::marshal_context context;
 
     char * buffer = new char[512];
-    if (impl_entity->multicast_group_address_.addr_to_string(buffer, 512) < 0) {
+    if (impl_entity->multicast_group_address().addr_to_string(buffer, 512) < 0) {
         return System::String::Empty;
     }
     
@@ -129,7 +129,13 @@ System::String^ OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::MulticastGroupAddress::
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::MulticastGroupAddress::set(System::String^ value) {
     msclr::interop::marshal_context context;
-    impl_entity->multicast_group_address_.set(context.marshal_as<const char *>(value));
+    System::String^ full = value;
+    if (!full->Contains(":"))
+    {
+        full += ":0";
+    }
+    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(context.marshal_as<const char*>(full));
+    impl_entity->multicast_group_address(addr);
 };
 
 System::String^ OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::MulticastInterface::get() {
@@ -144,10 +150,22 @@ void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::MulticastInterface::set(System::St
 
 System::String^ OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::LocalAddress::get() {
     msclr::interop::marshal_context context;
-    return context.marshal_as<System::String^>(impl_entity->local_address_string().c_str());
+    char* buffer = new char[512];
+    if (impl_entity->local_address().addr_to_string(buffer, 512) < 0) {
+        return System::String::Empty;
+    }
+
+    const char* s = buffer;
+    return context.marshal_as<System::String^>(s);
 };
 
 void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::LocalAddress::set(System::String^ value) {
     msclr::interop::marshal_context context;
-    impl_entity->local_address(context.marshal_as<const char *>(value));
+    System::String^ full = value;
+    if (!full->Contains(":"))
+    {
+        full += ":0";
+    }
+    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(context.marshal_as<const char*>(full));
+    impl_entity->local_address(addr);
 };

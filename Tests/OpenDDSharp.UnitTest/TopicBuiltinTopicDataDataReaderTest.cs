@@ -104,9 +104,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.Read(data, infos);
+            }
 
-            ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -145,9 +150,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.Take(data, infos);
+            }
 
-            ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -186,9 +196,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            }
 
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -236,9 +251,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            }
 
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count); Assert.AreEqual(typeName, data.First().TypeName);
@@ -288,9 +308,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            }
 
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -329,9 +354,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+            }
 
-            ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -368,9 +398,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextSample(ref data, infos);
+            }
 
-            ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret); 
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
@@ -405,9 +440,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.TakeNextSample(ref data, infos);
+            }
 
-            ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
@@ -443,10 +483,15 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                // Get the for an existing instance
+                ret = _dr.ReadNextSample(ref data, info);
+            }
 
-            // Get the for an existing instance
-            ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
@@ -455,7 +500,7 @@ namespace OpenDDSharp.UnitTest
             TopicBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, ret);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 16; i++)
             {
                 Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
             }
@@ -487,9 +532,14 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
             Assert.IsNotNull(topic);
 
-            Thread.Sleep(500);
-            
-            ReturnCode ret = _dr.ReadNextSample(ref data, info);
+            int count = 200;
+            ReturnCode ret = ReturnCode.NoData;
+            while (ret == ReturnCode.NoData && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextSample(ref data, info);
+            }
+             
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);

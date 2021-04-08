@@ -169,9 +169,9 @@
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeCoverage.16.9.1\build\netstandard1.0\Microsoft.CodeCoverage.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeCoverage.16.9.1\build\netstandard1.0\Microsoft.CodeCoverage.props'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeCoverage.16.9.1\build\netstandard1.0\Microsoft.CodeCoverage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeCoverage.16.9.1\build\netstandard1.0\Microsoft.CodeCoverage.targets'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets'))" />    
+    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets'))" />
   </Target>
   <Import Project="..\..\packages\MSTest.TestAdapter.2.1.2\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\packages\MSTest.TestAdapter.2.1.2\build\net45\MSTest.TestAdapter.targets')" />
   <Import Project="..\..\packages\Microsoft.CodeCoverage.16.9.1\build\netstandard1.0\Microsoft.CodeCoverage.targets" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.16.9.1\build\netstandard1.0\Microsoft.CodeCoverage.targets')" />
-  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets')" />  
+  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.16.9.1\build\net45\Microsoft.NET.Test.Sdk.targets')" />
 </Project>

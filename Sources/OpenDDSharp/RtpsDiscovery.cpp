@@ -95,22 +95,46 @@ void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::Ttl::set(System::Byte value) {
 
 System::String^ OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::SedpLocalAddress::get() {
     msclr::interop::marshal_context context;
-    return context.marshal_as<System::String^>(impl_entity->sedp_local_address().c_str());
+    char* buffer = new char[512];
+    if (impl_entity->sedp_local_address().addr_to_string(buffer, 512) < 0) {
+        return System::String::Empty;
+    }
+
+    const char* s = buffer;
+    return context.marshal_as<System::String^>(s);
 };
 
 void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::SedpLocalAddress::set(System::String^ value) {
     msclr::interop::marshal_context context;
-    impl_entity->sedp_local_address(context.marshal_as<const char*>(value));
+    System::String^ full = value;
+    if (!full->Contains(":"))
+    {
+        full += ":0";
+    }
+    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(context.marshal_as<const char*>(full));
+    impl_entity->sedp_local_address(addr);    
 };
 
 System::String^ OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::SpdpLocalAddress::get() {
     msclr::interop::marshal_context context;
-    return context.marshal_as<System::String^>(impl_entity->spdp_local_address().c_str());
+    char* buffer = new char[512];
+    if (impl_entity->spdp_local_address().addr_to_string(buffer, 512) < 0) {
+        return System::String::Empty;
+    }
+
+    const char* s = buffer;
+    return context.marshal_as<System::String^>(s);
 };
 
 void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::SpdpLocalAddress::set(System::String^ value) {
     msclr::interop::marshal_context context;
-    impl_entity->spdp_local_address(context.marshal_as<const char*>(value));
+    System::String^ full = value;
+    if (!full->Contains(":"))
+    {
+        full += ":0";
+    }
+    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(context.marshal_as<const char*>(full));
+    impl_entity->spdp_local_address(addr);
 };
 
 System::Boolean OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::SedpMulticast::get() {    
@@ -133,12 +157,24 @@ void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::MulticastInterface::set(System::
 
 System::String^ OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::DefaultMulticastGroup::get() {
     msclr::interop::marshal_context context;
-    return context.marshal_as<System::String^>(impl_entity->default_multicast_group().c_str());
+    char* buffer = new char[512];
+    if (impl_entity->default_multicast_group().addr_to_string(buffer, 512) < 0) {
+        return System::String::Empty;
+    }
+
+    const char* s = buffer;
+    return context.marshal_as<System::String^>(s);
 };
 
 void OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::DefaultMulticastGroup::set(System::String^ value) {
     msclr::interop::marshal_context context;
-    impl_entity->default_multicast_group(context.marshal_as<const char*>(value));
+    System::String^ full = value;
+    if (!full->Contains(":"))
+    {
+        full += ":0";
+    }
+    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(context.marshal_as<const char*>(full));
+    impl_entity->default_multicast_group(addr);
 };
 
 IEnumerable<System::String^>^ OpenDDSharp::OpenDDS::RTPS::RtpsDiscovery::SpdpSendAddrs::get() {
