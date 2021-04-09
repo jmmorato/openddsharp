@@ -13,6 +13,11 @@ namespace OpenDDSharp.Build.CppCli.Tasks
     {
         public override void Run(BuildContext context)
         {
+            var acePath = Path.GetFullPath(BuildContext.ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var taoPath = Path.GetFullPath(BuildContext.TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
+            System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+
             context.NuGetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new NuGetRestoreSettings
             {
                 NoCache = true
