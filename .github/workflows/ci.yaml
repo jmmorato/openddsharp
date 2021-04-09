@@ -25,11 +25,12 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.exe
           ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
           ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-5
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
