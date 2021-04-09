@@ -105,9 +105,7 @@ namespace OpenDDSharp.Build.CppCli
             var perlPath = Path.GetFullPath(PerlPath);
             string path = $"{perlPath};{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             System.Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
-            System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
-            System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
-            System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+            System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);            
         }
         #endregion
     }
