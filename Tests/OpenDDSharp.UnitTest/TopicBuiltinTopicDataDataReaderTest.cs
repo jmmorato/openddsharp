@@ -106,10 +106,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.Read(data, infos);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -152,10 +153,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.Take(data, infos);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -198,10 +200,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -253,10 +256,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -310,10 +314,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -356,10 +361,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -400,10 +406,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextSample(ref data, infos);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret); 
@@ -442,10 +449,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.TakeNextSample(ref data, infos);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -485,11 +493,12 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 // Get the for an existing instance
                 ret = _dr.ReadNextSample(ref data, info);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -534,10 +543,11 @@ namespace OpenDDSharp.UnitTest
 
             int count = 200;
             ReturnCode ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextSample(ref data, info);
+                count--;
             }
              
             Assert.AreEqual(ReturnCode.Ok, ret);

@@ -1383,23 +1383,31 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(topic);
 
             InstanceHandle handle = topic.InstanceHandle;
-            int count = 100;
+
+            int count = 200;
             result = ReturnCode.NoData;
-            while (result == ReturnCode.NoData && count > 0)
+            while (result != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 result = participant.GetDiscoveredTopics(handles);
+                count--;
             }
 
-            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(result, ReturnCode.Ok);
             Assert.AreEqual(1, handles.Count);
             Assert.AreEqual(handle, handles.First());
 
-            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter
-            Thread.Sleep(5_000);
-
+            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter            
             TopicBuiltinTopicData data = new TopicBuiltinTopicData();
-            result = participant.GetDiscoveredTopicData(ref data, handles.First());
+            count = 200;
+            result = ReturnCode.NoData;
+            while (result != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);                
+                result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                count--;
+            }
+
             Assert.AreEqual(result, ReturnCode.Ok);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);

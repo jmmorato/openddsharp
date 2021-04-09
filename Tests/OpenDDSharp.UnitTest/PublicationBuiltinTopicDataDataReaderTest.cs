@@ -112,15 +112,16 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.Read(data, infos);
+                count--;
             }
             
-            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.AreEqual(ret, ReturnCode.Ok);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
             TestHelper.TestNonDefaultPublicationData(data.First());
@@ -165,12 +166,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.Take(data, infos);
+                count--;
             }
             
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -218,12 +220,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
             
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -281,12 +284,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
             
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -344,12 +348,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
             
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -397,12 +402,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -448,12 +454,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.ReadNextSample(ref data, infos);
+                count--;
             }
             
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -497,12 +504,13 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 ret = _dr.TakeNextSample(ref data, infos);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -547,13 +555,14 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 // Get an existing instance
-                ret = _dr.ReadNextSample(ref data, info);                
+                ret = _dr.ReadNextSample(ref data, info);
+                count--;
             }
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
@@ -602,13 +611,14 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 100;
+            int count = 200;
             ReturnCode ret = ReturnCode.NoData;
-            while (ret == ReturnCode.NoData && count > 0)
+            while (ret != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(100);
                 // Get an existing instance
                 ret = _dr.ReadNextSample(ref data, info);
+                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);

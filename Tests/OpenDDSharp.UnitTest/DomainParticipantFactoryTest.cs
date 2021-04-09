@@ -238,7 +238,7 @@ namespace OpenDDSharp.UnitTest
             participant.BindRtpsUdpTransportConfig();
 
             DomainParticipant lookupParticipant = AssemblyInitializer.Factory.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
-            Assert.IsNotNull(participant);
+            Assert.IsNotNull(lookupParticipant);
             Assert.AreEqual(participant, lookupParticipant);
 
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
