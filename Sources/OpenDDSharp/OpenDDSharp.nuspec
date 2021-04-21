@@ -1,13 +1,13 @@
-<!--<?xml version="1.0"?>-->
-<package >
+﻿<!--<?xml version="1.0"?>-->
+<package>
   <metadata>
     <id>OpenDDSharp</id>
-    <version>0.5.1</version>
+    <version>0.6.21111.1-alpha1</version>
     <title>OpenDDSharp</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>    
     <projectUrl>http://www.openddsharp.com</projectUrl>
-    <icon>favicon.ico</icon>
+    <icon>icon_128.png</icon>
     <license type="file">LICENSE.txt</license>
     <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -102,6 +102,6 @@
     
     <file src=".\OpenDDSharp.targets" target="build\" />
     <file src=".\..\..\LICENSE.txt" target="" />
-    <file src=".\..\..\favicon.ico" target="/" />
+    <file src=".\..\..\icon_128.png" target="/" />
   </files>
 </package>

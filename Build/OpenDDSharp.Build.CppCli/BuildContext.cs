@@ -26,12 +26,18 @@ namespace OpenDDSharp.Build.CppCli
         #endregion
 
         #region Properties
-        public string OpenDdsVersion { get; set; }
-        public string PerlPath { get; set; }
-        public bool IgnoreThirdPartySetup { get; set; }
+        public string MajorVersion { get; internal set; }
+        public string MinorVersion { get; internal set; }
+        public string RunNumber { get; internal set; }
+        public bool IsDevelop { get; internal set; }
+        public string OpenDdsVersion { get; internal set; }
+        public string PerlPath { get; internal set; }
+        public bool IgnoreThirdPartySetup { get; internal set; }
         public string BuildConfiguration { get; internal set; }
         public MSBuildToolVersion VisualStudioVersion { get; internal set; }
         public PlatformTarget BuildPlatform { get; internal set; }
+        public string NugetApiKey { get; internal set; }
+        public string VsMarketplaceToken { get; internal set; }
         #endregion
 
         #region Constructors
@@ -44,6 +50,42 @@ namespace OpenDDSharp.Build.CppCli
             else
             {
                 IgnoreThirdPartySetup = false;
+            }
+
+            if (context.Arguments.HasArgument(nameof(IsDevelop)))
+            {
+                IsDevelop = bool.Parse(context.Arguments.GetArgument(nameof(IsDevelop)));
+            }
+            else
+            {
+                IsDevelop = true;
+            }
+
+            if (context.Arguments.HasArgument(nameof(MajorVersion)))
+            {
+                MajorVersion = context.Arguments.GetArgument(nameof(MajorVersion));
+            }
+            else
+            {
+                MajorVersion = "1";
+            }
+
+            if (context.Arguments.HasArgument(nameof(MinorVersion)))
+            {
+                MinorVersion = context.Arguments.GetArgument(nameof(MinorVersion));
+            }
+            else
+            {
+                MinorVersion = "0";
+            }
+
+            if (context.Arguments.HasArgument(nameof(RunNumber)))
+            {
+                RunNumber = context.Arguments.GetArgument(nameof(RunNumber));
+            }
+            else
+            {
+                RunNumber = "1";
             }
 
             if (context.Arguments.HasArgument(nameof(OpenDdsVersion)))
@@ -91,6 +133,24 @@ namespace OpenDDSharp.Build.CppCli
                 VisualStudioVersion = MSBuildToolVersion.VS2019;
             }
 
+            if (context.Arguments.HasArgument(nameof(NugetApiKey)))
+            {
+                NugetApiKey = context.Arguments.GetArgument(nameof(NugetApiKey));
+            }
+            else
+            {
+                NugetApiKey = string.Empty;
+            }
+
+            if (context.Arguments.HasArgument(nameof(VsMarketplaceToken)))
+            {
+                VsMarketplaceToken = context.Arguments.GetArgument(nameof(VsMarketplaceToken));
+            }
+            else
+            {
+                VsMarketplaceToken = string.Empty;
+            }
+
             var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);            
             var ddsBin = Path.Combine(ddsPath, $"bin");
@@ -105,6 +165,16 @@ namespace OpenDDSharp.Build.CppCli
             string path = $"{perlPath};{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             System.Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);            
+        }
+        #endregion
+
+        #region Methods
+        public string GetBuildRevisionVersion()
+        {
+            string year = DateTime.Now.ToString("yy");
+            string dayOfYear = DateTime.Now.DayOfYear.ToString();
+            int runNumber = int.Parse(RunNumber) % 65534;
+            return $"{year}{dayOfYear}.{runNumber}";
         }
         #endregion
     }
