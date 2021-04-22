@@ -6,6 +6,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
     [IsDependentOn(typeof(SetVersionAssemblyInfo))]
     [IsDependentOn(typeof(SetVersionNuspec))]
     [IsDependentOn(typeof(SetVersionVsix))]
+    [IsDependentOn(typeof(SetVersionProjectTemplate))]
     public class SetVersion : FrostingTask
     {
     }

@@ -11,6 +11,11 @@ namespace OpenDDSharp.Build.CppCli.Tasks
     [TaskName("PublishVsix")]    
     public class PublishVsix : FrostingTask<BuildContext>
     {
+        public override bool ShouldRun(BuildContext context)
+        {
+            return !context.IsDevelop;
+        }
+
         public override void Run(BuildContext context)
         {
             var vsPath = context.VSWhereLatest(new Cake.Common.Tools.VSWhere.Latest.VSWhereLatestSettings

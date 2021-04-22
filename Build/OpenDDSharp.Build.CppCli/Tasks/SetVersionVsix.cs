@@ -8,7 +8,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
 {
     [TaskName("SetVersionVsix")]    
     public class SetVersionVsix : FrostingTask<BuildContext>
-    {
+    {        
         public override void Run(BuildContext context)
         {
             int majorVersion = int.Parse(context.MajorVersion) + 1;
@@ -21,15 +21,6 @@ namespace OpenDDSharp.Build.CppCli.Tasks
                 {
                     Namespaces = new Dictionary<string, string> 
                     { 
-                        { "ns", "http://schemas.microsoft.com/developer/vsx-schema/2011" },
-                        { "d", "http://schemas.microsoft.com/developer/vsx-schema-design/2011" }
-                    }
-                });
-
-                context.XmlPoke(file, "/ns:PackageManifest/ns:Metadata/ns:Preview", context.IsDevelop ? "true" : "false", new XmlPokeSettings
-                {
-                    Namespaces = new Dictionary<string, string>
-                    {
                         { "ns", "http://schemas.microsoft.com/developer/vsx-schema/2011" },
                         { "d", "http://schemas.microsoft.com/developer/vsx-schema-design/2011" }
                     }
