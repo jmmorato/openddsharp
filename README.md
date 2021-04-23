@@ -19,9 +19,9 @@ OpenDDSharp has been compiled with OpenDDS v3.16
 | [OpenDDSharp.IdlGenerator][OpenDDSharpIdlGeneratorNuget] | [![OpenDDSharpIdlGeneratorShield]][OpenDDSharpIdlGeneratorNuget] |
 
 [OpenDDSharpNuget]: https://www.nuget.org/packages/OpenDDSharp/
-[OpenDDSharpShield]: https://img.shields.io/nuget/vpre/OpenDDSharp.svg
+[OpenDDSharpShield]: https://img.shields.io/nuget/v/OpenDDSharp.svg
 [OpenDDSharpIdlGeneratorNuget]: https://www.nuget.org/packages/OpenDDSharp.IdlGenerator/
-[OpenDDSharpIdlGeneratorShield]: https://img.shields.io/nuget/vpre/OpenDDSharp.IdlGenerator.svg
+[OpenDDSharpIdlGeneratorShield]: https://img.shields.io/nuget/v/OpenDDSharp.IdlGenerator.svg
 
 # How to Build
 
@@ -31,13 +31,13 @@ The script will download and compile OpenDDS in a new `ext` folder, then compile
 
 Some parameters can be provided to configure the compilation process:
 
-**BuildPlatform**: Defines the platform to build OpenDDSharp. The accepted values are `x64` and `x86`. The default value is `x64` if this parameter is not provided. 
+**BuildPlatform**: Defines the platform to build OpenDDSharp. The accepted values are `x64` and `x86`. If this parameter is not provided, the default value is `x64`. 
 
-**BuildConfiguration**: Defines the configuration to build OpenDDSharp. The accepted values are `Release` and `Debug`. The default value is `Release` if this parameter is not provided
+**BuildConfiguration**: Defines the configuration to build OpenDDSharp. The accepted values are `Release` and `Debug`. If this parameter is not provided, the default value is `Release` 
 
-**VisualStudioVersion**: Defines the Visual Studio version that will be used to compile OpenDDSharp. Obviously, the Visual Studio version must be installed in the system before call the script. The accepted values are `VS2017` and `VS2019`. The default and recommended value is `VS2019` if this parameter is not provided.
+**VisualStudioVersion**: Defines the Visual Studio version that will be used to compile OpenDDSharp. Obviously, the Visual Studio version must be installed in the system before call the script. The accepted values are `VS2017` and `VS2019`. If this parameter is not provided, the default value is `VS2019`.
 
-**OpenDdsVersion**: Defines the OpenDDS version that will be downloaded and compiled. The default value is `3.16` if this parameter is not provided. Changing the version of OpenDDS could require code adaptations on the OpenDDSharp layer.
+**OpenDdsVersion**: Defines the OpenDDS version that will be downloaded and compiled. If this parameter is not provided, the default value is `3.16`. Changing the version of OpenDDS could require code adaptations on the OpenDDSharp layer.
 
 **IgnoreThirdPartySetup**: You can ignore the OpenDDS compilation with this parameter if it was already compiled by a previous call to the script.
 
