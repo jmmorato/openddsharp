@@ -9,7 +9,7 @@ on:
      - closed
 jobs:
   release:
-    if: github.event.pull_request.merged == 'true'
+    if: github.event.pull_request.merged == true
     runs-on: windows-2019
     env:
       OpenDdsVersion: "3.16"
