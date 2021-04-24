@@ -1,0 +1,167 @@
+name: Continuous Delivery
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - master
+    types:
+     - closed
+jobs:
+  release:
+    if: github.event.pull_request.merged == 'true'
+    runs-on: windows-2019
+    env:
+      OpenDdsVersion: "3.16"
+      MajorVersion: "0"
+      MinorVersion: "7"
+
+    steps:
+    # Checkout sources
+    - uses: actions/checkout@v2
+
+    # Set Release version (Main)
+    - name: Set release version (Main)
+      shell: pwsh
+      if: github.event.pull_request.base.ref == 'main'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MajorVersion=${{ env.MinorVersion }} --RunNumber=${{ env.GITHUB_RUN_NUMBER }} --IsDevelop='false'
+      working-directory: ${{ github.workspace }}/Build
+
+    # Set Release version (Develop)
+    - name: Set release version (Develop)
+      shell: pwsh
+      if: github.event.pull_request.base.ref == 'develop'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MajorVersion=${{ env.MinorVersion }} --RunNumber=${{ env.GITHUB_RUN_NUMBER }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}/Build
+
+    # Build x86/Debug
+    - name: Cache OpenDDS libraries x86 Debug
+      id: opendds-libraries-Debug-x86
+      uses: actions/cache@v2
+      with:
+        path: |          
+          ${{ github.workspace }}/ext/OpenDDS/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Debug-x86
+
+    - name: Build & Test with Cake x86 Debug (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Debug-x86.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake x86 Debug (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Debug-x86.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      working-directory: ${{ github.workspace }}/Build
+
+    # Build x86/Release
+    - name: Cache OpenDDS libraries x86 Release
+      id: opendds-libraries-Release-x86
+      uses: actions/cache@v2
+      with:
+        path: |          
+          ${{ github.workspace }}/ext/OpenDDS/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Release-x86
+
+    - name: Build & Test with Cake x86 Release (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Release-x86.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake x86 Release (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Release-x86.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      working-directory: ${{ github.workspace }}/Build
+
+    # Build x64/Debug
+    - name: Cache OpenDDS libraries x64 Debug
+      id: opendds-libraries-Debug-x64
+      uses: actions/cache@v2
+      with:
+        path: |          
+          ${{ github.workspace }}/ext/OpenDDS/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Debug-x64
+
+    - name: Build & Test with Cake x64 Debug (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Debug-x64.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake x64 Debug (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Debug-x64.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      working-directory: ${{ github.workspace }}/Build
+
+    # Build x64/Release
+    - name: Cache OpenDDS libraries x64 Release
+      id: opendds-libraries-Release-x64
+      uses: actions/cache@v2
+      with:
+        path: |          
+          ${{ github.workspace }}/ext/OpenDDS/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Release-x64
+
+    - name: Build & Test with Cake x64 Release (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Release-x64.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake x64 Release (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-Release-x64.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      working-directory: ${{ github.workspace }}/Build
+
+    # Create release packages
+    - name: Create release packages
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Pack
+      working-directory: ${{ github.workspace }}/Build
+
+    # Publish release packages
+    - name: Publish release packages
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey=${{ secrets.NUGET_API_KEY }} --VsMarketplaceToken=${{ secrets.VSIX_MARKETPLACE_TOKEN }}
+      working-directory: ${{ github.workspace }}/Build

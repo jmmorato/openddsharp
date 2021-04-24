@@ -41,7 +41,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(rui.UseMulticast);
             Assert.AreEqual("239.255.0.2:7401", rui.MulticastGroupAddress);
             Assert.AreEqual(string.Empty, rui.MulticastInterface);
-            Assert.AreEqual(string.Empty, rui.LocalAddress);
+            Assert.AreEqual("0.0.0.0:0", rui.LocalAddress);
             Assert.AreEqual(0U, rui.NakDepth);
             Assert.IsNotNull(rui.NakResponseDelay);
             Assert.AreEqual(0, rui.NakResponseDelay.Seconds);
@@ -130,7 +130,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(rui.UseMulticast);
             Assert.AreEqual("239.255.0.1:7402", rui.MulticastGroupAddress);
             Assert.AreEqual("eth0", rui.MulticastInterface);
-            Assert.AreEqual("127.0.0.1:", rui.LocalAddress);
+            Assert.AreEqual("127.0.0.1:0", rui.LocalAddress);
             Assert.AreEqual(64U, rui.NakDepth);
             Assert.IsNotNull(rui.NakResponseDelay);
             Assert.AreEqual(1, rui.NakResponseDelay.Seconds);

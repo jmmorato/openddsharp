@@ -813,6 +813,26 @@ namespace OpenDDSharp.UnitTest.Helpers
             return true;
         }
 
+        public static bool WaitForParticipants(this DomainParticipant participant, int participantCount, int milliseconds)
+        {
+            List<InstanceHandle> handles = new List<InstanceHandle>();
+            participant.GetDiscoveredParticipants(handles);
+            int count = milliseconds / 100;
+            while (handles.Count != participantCount && count > 0)
+            {
+                System.Threading.Thread.Sleep(100);
+                participant.GetDiscoveredParticipants(handles);
+                count--;
+            }
+
+            if (count == 0 && handles.Count != participantCount)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public static void BindRtpsUdpTransportConfig(this Entity entity)
         {
             string guid = Guid.NewGuid().ToString("N");

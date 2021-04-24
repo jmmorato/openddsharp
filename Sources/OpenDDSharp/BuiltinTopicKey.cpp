@@ -24,17 +24,17 @@ array<System::Int32, 1>^ OpenDDSharp::DDS::BuiltinTopicKey::Value::get() {
 };
 
 void OpenDDSharp::DDS::BuiltinTopicKey::FromNative(::DDS::BuiltinTopicKey_t native) {
-	m_value = gcnew array<System::Int32, 1>(3);
-	for (int i = 0; i < 3; i++) {
+	m_value = gcnew array<System::Int32, 1>(16);
+	for (int i = 0; i < 16; i++) {
 		m_value[i] = native.value[i];
 	}
 }
 
 ::DDS::BuiltinTopicKey_t OpenDDSharp::DDS::BuiltinTopicKey::ToNative() {
-	::DDS::BuiltinTopicKey_t native;
+	::DDS::BuiltinTopicKey_t native{};
 
-	if (m_value != nullptr && m_value->Length == 3) {
-		for (int i = 0; i < 3; i++) {
+	if (m_value != nullptr && m_value->Length == 16) {
+		for (int i = 0; i < 16; i++) {
 			native.value[i] = m_value[i];
 		}
 	}

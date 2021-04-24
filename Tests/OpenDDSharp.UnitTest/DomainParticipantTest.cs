@@ -1272,7 +1272,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
             result = _participant.GetDiscoveredParticipants(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1301,7 +1302,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = _participant.GetDiscoveredParticipants(handles);
@@ -1382,15 +1383,32 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(topic);
 
             InstanceHandle handle = topic.InstanceHandle;
-            Thread.Sleep(100);
 
-            result = participant.GetDiscoveredTopics(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
+            int count = 200;
+            result = ReturnCode.NoData;
+            while (result != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                result = participant.GetDiscoveredTopics(handles);
+                count--;
+            }
+
+            Assert.AreEqual(result, ReturnCode.Ok);
             Assert.AreEqual(1, handles.Count);
             Assert.AreEqual(handle, handles.First());
 
+            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter            
             TopicBuiltinTopicData data = new TopicBuiltinTopicData();
-            result = participant.GetDiscoveredTopicData(ref data, handles.First());
+            count = 200;
+            result = ReturnCode.NoData;
+            while (result != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);                
+                result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                count--;
+            }
+
+            Assert.AreEqual(result, ReturnCode.Ok);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);

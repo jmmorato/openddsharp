@@ -96,7 +96,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -129,7 +129,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -162,7 +162,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -204,7 +204,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -248,7 +248,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -281,7 +281,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -312,7 +312,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -341,7 +341,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -371,7 +371,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
             // Get the for an existing instance
             ret = _dr.ReadNextSample(ref data, info);
@@ -407,7 +407,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
             
             ReturnCode ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);

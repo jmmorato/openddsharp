@@ -35,24 +35,49 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64\";
         private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86\";
         private const string TEST_SUPPORT_PROCESS_PATH = @"..\..\..\..\TestSupportProcess\bin\";
+        private const string DDS_ROOT = @"..\..\..\..\..\ext\OpenDDS";
+        private const string ACE_ROOT = @"..\..\..\..\..\ext\OpenDDS\ACE_TAO\ACE";
+        private const string TAO_ROOT = @"..\..\..\..\..\ext\OpenDDS\ACE_TAO\TAO";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
         #endregion
 
         #region Fields
-        private string _platformFolder;        
-        private string _targetFolder;
+        private static string _platformFolder;        
+        private static string _targetFolder;
         private TestContext _testContext;
         #endregion
 
         #region Constructors
-        public SupportProcessHelper(TestContext testContext)
+        static SupportProcessHelper()
         {
-            _testContext = testContext;
             _platformFolder = SIXTY_FOUR_PLATFORM_FOLDER;
             _targetFolder = RELEASE_TARGET_FOLDER;
             SetEightySixPlatform();
             SetDebugTarget();
+
+            var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var ddsBin = Path.Combine(ddsPath, $"bin");
+            var ddsLib = Path.Combine(ddsPath, $"lib");
+            var aceBin = Path.Combine(acePath, $"bin");
+            var aceLib = Path.Combine(acePath, $"lib");
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_x64");
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_x64");
+            var aceBinPlatform = Path.Combine(acePath, $"bin_x64");
+            var aceLibPlatform = Path.Combine(acePath, $"lib_x64");
+            string path = $"{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
+            Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
+            Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
+            Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+        }
+
+        public SupportProcessHelper(TestContext testContext)
+        {
+            _testContext = testContext;
+            
         }
         #endregion
 
@@ -71,14 +96,13 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         public Process SpawnDCPSInfoRepo()
         {
-            string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
-            string infoRepoPath = Path.Combine(ddsPath, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
+            string infoRepoPath = Path.Combine(DDS_ROOT, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);            
             if (!File.Exists(infoRepoPath))
             {
                 _testContext.WriteLine($"The support process executable could not be located at {infoRepoPath}.");
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
-
+            infoRepoPath = Path.GetFullPath(infoRepoPath);
             return SpawnProcess(infoRepoPath, string.Empty);
         }
 
@@ -167,13 +191,13 @@ namespace OpenDDSharp.UnitTest.Helpers
         }
 
         [Conditional("X86")]
-        private void SetEightySixPlatform()
+        private static void SetEightySixPlatform()
         {
             _platformFolder = EIGHTY_SIX_PLATFORM_FOLDER;
         }
 
         [Conditional("DEBUG")]
-        private void SetDebugTarget()
+        private static void SetDebugTarget()
         {
             _targetFolder = DEBUG_TARGET_FOLDER;
         }

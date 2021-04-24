@@ -94,6 +94,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -110,10 +112,16 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            ret = _dr.Read(data, infos);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.Read(data, infos);
+                count--;
+            }
+            
+            Assert.AreEqual(ret, ReturnCode.Ok);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
             TestHelper.TestNonDefaultPublicationData(data.First());
@@ -140,6 +148,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -156,9 +166,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            ret = _dr.Take(data, infos);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.Take(data, infos);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -186,6 +202,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -202,9 +220,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -242,6 +266,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -258,9 +284,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -298,6 +330,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -314,9 +348,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -344,6 +384,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -360,9 +402,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
 
-            ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -388,6 +436,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -404,9 +454,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextSample(ref data, infos);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextSample(ref data, infos);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
 
@@ -430,6 +486,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -446,9 +504,15 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.TakeNextSample(ref data, infos);
+                count--;
+            }
 
-            ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
 
@@ -473,6 +537,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -489,17 +555,22 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-
-            // Get the for an existing instance
-            ret = _dr.ReadNextSample(ref data, info);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                // Get an existing instance
+                ret = _dr.ReadNextSample(ref data, info);
+                count--;
+            }
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
 
             PublicationBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, ret);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 16; i++)
             {
                 Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
             }
@@ -522,6 +593,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             ReturnCode result = support.RegisterType(otherParticipant, typeName);
@@ -538,9 +611,16 @@ namespace OpenDDSharp.UnitTest
             DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            Thread.Sleep(500);
-            
-            ReturnCode ret = _dr.ReadNextSample(ref data, info);
+            int count = 200;
+            ReturnCode ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                // Get an existing instance
+                ret = _dr.ReadNextSample(ref data, info);
+                count--;
+            }
+
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // Lookup for an existing instance

@@ -109,9 +109,15 @@ namespace OpenDDSharp.UnitTest
             DataReader reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
 
-            Thread.Sleep(500);
-
-            ret = _dr.Read(data, infos);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.Read(data, infos);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -154,9 +160,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
-
-            ret = _dr.Take(data, infos);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.Take(data, infos);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -199,9 +211,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -254,9 +272,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
 
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -308,9 +332,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -353,9 +383,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+                count--;
+            }
 
-            ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -396,9 +432,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
-
-            ret = _dr.ReadNextSample(ref data, infos);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.ReadNextSample(ref data, infos);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
@@ -437,9 +479,15 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                ret = _dr.TakeNextSample(ref data, infos);
+                count--;
+            }
 
-            ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
@@ -479,17 +527,23 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
-
-            // Get the for an existing instance
-            ret = _dr.ReadNextSample(ref data, info);
+            int count = 200;
+            ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                // Get the for an existing instance
+                ret = _dr.ReadNextSample(ref data, info);
+                count--;
+            }
+            
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
             SubscriptionBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, ret);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 16; i++)
             {
                 Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
             }
@@ -527,9 +581,16 @@ namespace OpenDDSharp.UnitTest
             DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            Thread.Sleep(500);
-            
-            ReturnCode ret = _dr.ReadNextSample(ref data, info);
+            int count = 200;
+            ReturnCode ret = ReturnCode.NoData;
+            while (ret != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(100);
+                // Get the for an existing instance
+                ret = _dr.ReadNextSample(ref data, info);
+                count--;
+            }
+             
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 

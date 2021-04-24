@@ -213,13 +213,13 @@
       <Project>{1aadf375-9149-4000-82ab-af4cd15144da}</Project>
     </ProjectReference>
   </ItemGroup>
-  <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
+  <PropertyGroup Label="OpenDDS Home">
     <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
+  <PropertyGroup Label="ACE Home">
     <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
+  <PropertyGroup Label="TAO Home">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -230,7 +230,7 @@
   <Target Name="CustomBeforeClean" Inputs="@(IdlFiles)" Outputs="AlwaysExecuteDummy">
     <Message Text="Cleaning %(IdlFiles.FileName).idl auto-generated files..." Importance="High" />
     <Delete Files="%(RootDir)%(Directory)%(IdlFiles.FileName)TypeSupport.cpp;%(RootDir)%(Directory)%(IdlFiles.FileName)TypeSupport.h;" ContinueOnError="true" />
-    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntDir)'))\$(ProjectName)" />
+    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntDir)'))$(ProjectName)" />
   </Target>
   <!-- Set environment variables -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
