@@ -24,14 +24,14 @@ jobs:
     - name: Set release version (Main)
       shell: pwsh
       if: github.event.pull_request.base.ref == 'main'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MajorVersion=${{ env.MinorVersion }} --RunNumber=${GITHUB_RUN_NUMBER} --IsDevelop='false'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MajorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='false'
       working-directory: ${{ github.workspace }}/Build
 
     # Set Release version (Develop)
     - name: Set release version (Develop)
       shell: pwsh
       if: github.event.pull_request.base.ref == 'develop'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MajorVersion=${{ env.MinorVersion }} --RunNumber=${GITHUB_RUN_NUMBER} --IsDevelop='true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MajorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
       working-directory: ${{ github.workspace }}/Build
 
     # Build x86/Debug
