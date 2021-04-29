@@ -55,13 +55,13 @@ jobs:
     - name: Build & Test with Cake x86 Debug (No cached)
       shell: pwsh
       if: steps.opendds-libraries-Debug-x86.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Debug --BuildPlatform=x86 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake x86 Debug (Cached)
       shell: pwsh
       if: steps.opendds-libraries-Debug-x86.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Debug --BuildPlatform=x86 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
     # Build x86/Release
@@ -85,13 +85,13 @@ jobs:
     - name: Build & Test with Cake x86 Release (No cached)
       shell: pwsh
       if: steps.opendds-libraries-Release-x86.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x86 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake x86 Release (Cached)
       shell: pwsh
       if: steps.opendds-libraries-Release-x86.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x86 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x86 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
     # Build x64/Debug
@@ -115,13 +115,13 @@ jobs:
     - name: Build & Test with Cake x64 Debug (No cached)
       shell: pwsh
       if: steps.opendds-libraries-Debug-x64.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake x64 Debug (Cached)
       shell: pwsh
       if: steps.opendds-libraries-Debug-x64.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Debug --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
     # Build x64/Release
@@ -145,13 +145,13 @@ jobs:
     - name: Build & Test with Cake x64 Release (No cached)
       shell: pwsh
       if: steps.opendds-libraries-Release-x64.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake x64 Release (Cached)
       shell: pwsh
       if: steps.opendds-libraries-Release-x64.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
     # Create release packages
