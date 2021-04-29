@@ -64,6 +64,13 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Debug --BuildPlatform=x86 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
+    # Clean-up temporal files
+    - name: 'Clean-up temporal files'
+      run: |
+        rmdir ${{ github.workspace }}/ext/OpenDDS/dds/Debug /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/ace/Debug /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/TAO/tao/Debug /s /q
+
     # Build x86/Release
     - name: Cache OpenDDS libraries x86 Release
       id: opendds-libraries-Release-x86
@@ -93,6 +100,13 @@ jobs:
       if: steps.opendds-libraries-Release-x86.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x86 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
+
+    # Clean-up temporal files
+    - name: 'Clean-up temporal files'
+      run: |
+        rmdir ${{ github.workspace }}/ext/OpenDDS/dds/Release /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/ace/Release /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/TAO/tao/Release /s /q
 
     # Build x64/Debug
     - name: Cache OpenDDS libraries x64 Debug
@@ -124,6 +138,13 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
+    # Clean-up temporal files
+    - name: 'Clean-up temporal files'
+      run: |
+        rmdir ${{ github.workspace }}/ext/OpenDDS/dds/Debug /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/ace/Debug /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/TAO/tao/Debug /s /q
+
     # Build x64/Release
     - name: Cache OpenDDS libraries x64 Release
       id: opendds-libraries-Release-x64
@@ -153,6 +174,13 @@ jobs:
       if: steps.opendds-libraries-Release-x64.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
+    
+    # Clean-up temporal files
+    - name: 'Clean-up temporal files'
+      run: |
+        rmdir ${{ github.workspace }}/ext/OpenDDS/dds/Release /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/ace/Release /s /q
+        rmdir ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/TAO/tao/Release /s /q
 
     # Create release packages
     - name: Create release packages
