@@ -69,6 +69,43 @@ jobs:
       shell: cmd
       run: |
         rmdir ${{ github.workspace }}\ext\OpenDDS\dds\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\idl\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\InfoRepoDiscovery\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\rtps_udp\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\RTPS\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\rtpsrelay\lib\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\modeling\codegen\model\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\repoctl\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\dcpsinfo_dump\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\monitor\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\InfoRepo\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\udp\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\shmem\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\multicast\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\tcp\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\FACE\Simple\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger_ZeroCopy\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger.minimal\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\FACE\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORTable\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\BiDir_GIOP\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PI\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\ImR_Client\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORManipulation\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Valuetype\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\orbsvcs\orbsvcs\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\TAO_IDL\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\DynamicInterface\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CodecFactory\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PortableServer\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\AnyTypeCode\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Codeset\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Messaging\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_ThreadPool\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_Framework\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\apps\gperf\src\Debug /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\ace\Debug /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Debug /s /q
 
@@ -107,6 +144,43 @@ jobs:
       shell: cmd
       run: |
         rmdir ${{ github.workspace }}\ext\OpenDDS\dds\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\idl\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\InfoRepoDiscovery\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\rtps_udp\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\RTPS\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\rtpsrelay\lib\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\modeling\codegen\model\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\repoctl\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\dcpsinfo_dump\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\monitor\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\InfoRepo\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\udp\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\shmem\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\multicast\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\tcp\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\FACE\Simple\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger_ZeroCopy\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger.minimal\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\FACE\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORTable\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\BiDir_GIOP\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PI\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\ImR_Client\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORManipulation\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Valuetype\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\orbsvcs\orbsvcs\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\TAO_IDL\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\DynamicInterface\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CodecFactory\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PortableServer\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\AnyTypeCode\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Codeset\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Messaging\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_ThreadPool\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_Framework\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\apps\gperf\src\Release /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\ace\Release /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Release /s /q
 
@@ -145,6 +219,43 @@ jobs:
       shell: cmd
       run: |
         rmdir ${{ github.workspace }}\ext\OpenDDS\dds\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\idl\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\InfoRepoDiscovery\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\rtps_udp\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\RTPS\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\rtpsrelay\lib\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\modeling\codegen\model\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\repoctl\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\dcpsinfo_dump\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\monitor\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\InfoRepo\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\udp\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\shmem\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\multicast\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\tcp\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\FACE\Simple\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger_ZeroCopy\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger.minimal\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\FACE\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORTable\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\BiDir_GIOP\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PI\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\ImR_Client\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORManipulation\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Valuetype\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\orbsvcs\orbsvcs\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\TAO_IDL\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\DynamicInterface\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CodecFactory\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PortableServer\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\AnyTypeCode\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Codeset\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Messaging\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_ThreadPool\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_Framework\Debug /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\apps\gperf\src\Debug /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\ace\Debug /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Debug /s /q
 
@@ -183,6 +294,43 @@ jobs:
       shell: cmd
       run: |
         rmdir ${{ github.workspace }}\ext\OpenDDS\dds\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\idl\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\InfoRepoDiscovery\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\rtps_udp\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\RTPS\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\rtpsrelay\lib\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\modeling\codegen\model\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\repoctl\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\tools\dcpsinfo_dump\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\monitor\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\InfoRepo\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\udp\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\shmem\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\multicast\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\DCPS\transport\tcp\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\FACE\Simple\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger_ZeroCopy\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\DevGuideExamples\DCPS\Messenger.minimal\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\dds\FACE\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORTable\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\BiDir_GIOP\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PI\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\ImR_Client\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\IORManipulation\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Valuetype\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\orbsvcs\orbsvcs\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\TAO_IDL\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\DynamicInterface\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CodecFactory\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\PortableServer\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\AnyTypeCode\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Codeset\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Messaging\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_ThreadPool\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\CSD_Framework\Release /s /q
+        rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\apps\gperf\src\Release /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\ACE\ace\Release /s /q
         rmdir ${{ github.workspace }}\ext\OpenDDS\ACE_TAO\TAO\tao\Release /s /q
 
