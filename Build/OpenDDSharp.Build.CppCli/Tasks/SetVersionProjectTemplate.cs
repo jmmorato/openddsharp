@@ -40,7 +40,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
             if (context.IsDevelop)
             {
-                version += $"-alpha{context.RunNumber}";
+                version += $"-alpha";
             }
 
             var parsed = context.ParseJsonFromFile(filePath);
