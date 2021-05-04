@@ -1,0 +1,93 @@
+
+module Test {
+	enum PrimitiveEnum {
+		ENUM1,
+		ENUM2,
+		ENUM3
+	};
+
+    enum SupportTestKind {
+        InconsistentTopicTest,
+        PublicationDisconnectedTest,
+        PublicationLostTest,
+        PublicationReconnectedTest,
+        SubscriptionDisconnectedTest,
+        SubscriptionLostTest,
+        SubscriptionReconnectedTest
+    };
+
+	@topic
+	struct BasicTestStruct {
+		long Id;
+	};
+
+    typedef sequence<long, 20> LongList;
+	typedef sequence<string> StringList;
+	typedef sequence<BasicTestStruct, 20> StructList;	
+	typedef sequence<long double> LongDoubleList;
+    typedef long ArrayLong[3][4];
+	typedef string ArrayString[2][2];
+	typedef BasicTestStruct ArrayStruct[2][2];
+	typedef long double ArrayLongDouble[2][2];
+	typedef long TestPrimitiveTypedef;
+
+    const long TEST_CONST = 1;
+	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";
+    
+	@topic
+    struct TestStruct {
+		@key long Id;
+		string RawData;
+		long long TimeTicks;
+        char CharType;
+        wchar WcharType;
+        octet OctetType;
+        short ShortType;
+        unsigned short UnsignedShortType;
+        unsigned long UnsignedLongType;
+        unsigned long long UnsignedLongLongType;
+        float FloatType;
+        double DoubleType;
+        long double LongDoubleType;
+        boolean BooleanType; 
+        wstring WstringType; 		
+        LongList LongSequence;  
+		StringList StringSequence;	
+		StructList StructSequence;
+		LongDoubleList LongDoubleSequence;
+        ArrayLong LongArray;
+		ArrayString StringArray;
+		ArrayStruct StructArray;
+		ArrayLongDouble LongDoubleArray;
+		BasicTestStruct StructTest;		
+        PrimitiveEnum TestEnum;
+	};
+
+	@topic
+	struct Athlete
+	{
+		@key long AthleteId;
+		string FirstName;
+		string SecondName;
+		string Country;
+	};
+
+	@topic
+	struct Result
+	{				
+		@key long AthleteId;
+		long Rank;
+		float Score;		
+	};
+
+	@topic
+	struct AthleteResult
+	{
+		@key long AthleteId;
+		string FirstName;
+		string SecondName;
+		string Country;
+		long Rank;
+		float Score;
+	};
+};

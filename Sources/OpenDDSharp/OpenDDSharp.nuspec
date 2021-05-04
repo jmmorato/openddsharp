@@ -1,0 +1,107 @@
+﻿<!--<?xml version="1.0"?>-->
+<package>
+  <metadata>
+    <id>OpenDDSharp</id>
+    <version>0.6.21111.1-alpha1</version>
+    <title>OpenDDSharp</title>
+    <authors>Jose Morato</authors>
+    <owners>Jose Morato</owners>    
+    <projectUrl>http://www.openddsharp.com</projectUrl>
+    <icon>icon_128.png</icon>
+    <license type="file">LICENSE.txt</license>
+    <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>OpenDDS wrapper for .NET languages.</summary>
+    <description>
+      OpenDDS wrapper for .NET languages.
+      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
+    </description>    
+    <copyright>Jose Morato</copyright>
+    <tags>OpenDDSharp OpenDDS DDS</tags>
+    <references />
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+    </dependencies>
+  </metadata>
+  <files>   
+    <file src=".\bin\Win32\Release\OpenDDSharp.dll" target="lib\net472\x86\Release" />
+    <file src=".\bin\Win32\Release\OpenDDSharp.pdb" target="lib\net472\x86\Release" />
+    <file src=".\bin\Win32\Release\OpenDDSharp.xml" target="lib\net472\x86\Release" />
+    <file src=".\bin\Win32\Debug\OpenDDSharp.dll" target="lib\net472\x86\Debug" />
+    <file src=".\bin\Win32\Debug\OpenDDSharp.pdb" target="lib\net472\x86\Debug" />
+    <file src=".\bin\Win32\Debug\OpenDDSharp.xml" target="lib\net472\x86\Debug" />    
+
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscovery.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udp.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmem.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcp.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicast.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udp.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udpd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmemd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcpd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicastd.dll" target="build\net472\x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udpd.dll" target="build\net472\x86" />
+
+    <file src=".\bin\x64\Release\OpenDDSharp.dll" target="lib\net472\x64\Release" />
+    <file src=".\bin\x64\Release\OpenDDSharp.pdb" target="lib\net472\x64\Release" />
+    <file src=".\bin\x64\Release\OpenDDSharp.xml" target="lib\net472\x64\Release" />
+    <file src=".\bin\x64\Debug\OpenDDSharp.dll" target="lib\net472\x64\Debug" />
+    <file src=".\bin\x64\Debug\OpenDDSharp.pdb" target="lib\net472\x64\Debug" />
+    <file src=".\bin\x64\Debug\OpenDDSharp.xml" target="lib\net472\x64\Debug" />
+
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACE.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactory.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCode.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOP.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PI.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServer.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcps.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscovery.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps_Udp.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Shmem.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcp.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicast.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udp.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAOd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactoryd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCoded.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOPd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PId.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServerd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtpsd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscoveryd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps_Udpd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Shmemd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcpd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicastd.dll" target="build\net472\x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udpd.dll" target="build\net472\x64" />
+    
+    <file src=".\OpenDDSharp.targets" target="build\" />
+    <file src=".\..\..\LICENSE.txt" target="" />
+    <file src=".\..\..\icon_128.png" target="/" />
+  </files>
+</package>
