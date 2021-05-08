@@ -677,7 +677,7 @@ namespace OpenDDSharp.DDS
             public static extern ReturnCode EndAccess64(IntPtr s);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_BeginAccess", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_EndAccess", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode EndAccess86(IntPtr s);
 
             [SuppressUnmanagedCodeSecurity]

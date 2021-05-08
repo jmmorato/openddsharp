@@ -32,8 +32,8 @@ namespace OpenDDSharp.DDS
     public struct BuiltinTopicKey : IEquatable<BuiltinTopicKey>
     {
         #region Fields
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 3)]
-        private readonly int[] _value;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 16)]
+        private readonly byte[] _value;
         #endregion
 
         #region Properties
@@ -41,7 +41,7 @@ namespace OpenDDSharp.DDS
         /// Gets the value of the <see cref="BuiltinTopicKey" />.
         /// </summary>
         [SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Same type than OpenDDS.")]
-        public int[] Value => _value;
+        public byte[] Value => _value;
         #endregion
 
         #region IEquatable<BuiltinTopicKey> Members
@@ -81,7 +81,7 @@ namespace OpenDDSharp.DDS
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return -1939223833 + EqualityComparer<int[]>.Default.GetHashCode(_value);
+            return -1939223833 + EqualityComparer<byte[]>.Default.GetHashCode(_value);
         }
         #endregion
 

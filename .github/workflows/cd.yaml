@@ -50,7 +50,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-cache-${{ env.OpenDdsVersion }}-Debug-x86
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Debug-x86-cd
 
     - name: Build & Test with Cake x86 Debug (No cached)
       shell: pwsh
@@ -125,7 +125,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-cache-${{ env.OpenDdsVersion }}-Release-x86
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Release-x86-cd
 
     - name: Build & Test with Cake x86 Release (No cached)
       shell: pwsh
@@ -200,7 +200,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-cache-${{ env.OpenDdsVersion }}-Debug-x64
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Debug-x64-cd
 
     - name: Build & Test with Cake x64 Debug (No cached)
       shell: pwsh
@@ -275,7 +275,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-cache-${{ env.OpenDdsVersion }}-Release-x64
+        key: opendds-cache-${{ env.OpenDdsVersion }}-Release-x64-cd
 
     - name: Build & Test with Cake x64 Release (No cached)
       shell: pwsh
@@ -340,8 +340,16 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Pack
       working-directory: ${{ github.workspace }}/Build
 
-    # Publish release packages
+    # Publish release packages (Develop)
     - name: Publish release packages
+      if: github.event.pull_request.base.ref == 'develop'
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey=${{ secrets.NUGET_API_KEY }} --VsMarketplaceToken=${{ secrets.VSIX_MARKETPLACE_TOKEN }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey=${{ secrets.NUGET_API_KEY }} --VsMarketplaceToken=${{ secrets.VSIX_MARKETPLACE_TOKEN }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}/Build
+
+    # Publish release packages (Main)
+    - name: Publish release packages
+      if: github.event.pull_request.base.ref == 'main'
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey=${{ secrets.NUGET_API_KEY }} --VsMarketplaceToken=${{ secrets.VSIX_MARKETPLACE_TOKEN }} --IsDevelop='false'
       working-directory: ${{ github.workspace }}/Build

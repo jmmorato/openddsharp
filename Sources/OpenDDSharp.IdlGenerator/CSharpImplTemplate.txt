@@ -1435,7 +1435,7 @@
         private static extern int ReadInstanceWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
         private static extern int ReadInstanceWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
@@ -1451,7 +1451,7 @@
         private static extern int TakeInstanceWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
         private static extern int TakeInstanceWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
