@@ -121,7 +121,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestNewDataWriterQos()
         {
             DataWriterQos qos = new DataWriterQos();

@@ -930,7 +930,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
             result = _participant.GetDiscoveredParticipants(handles);
             Assert.AreEqual(ReturnCode.Ok, result);

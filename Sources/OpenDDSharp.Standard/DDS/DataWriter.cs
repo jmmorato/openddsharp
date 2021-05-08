@@ -474,7 +474,7 @@ namespace OpenDDSharp.DDS
             public static extern IntPtr GetTopic64(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetTopic", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr GetTopic86(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]

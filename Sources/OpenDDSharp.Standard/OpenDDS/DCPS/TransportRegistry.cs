@@ -443,10 +443,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_GetReleased", CallingConvention = CallingConvention.Cdecl)]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool GetReleased64();
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_GetReleased", CallingConvention = CallingConvention.Cdecl)]
+            [return: MarshalAs(UnmanagedType.U1)]
             public static extern bool GetReleased86();
         }
         #endregion
