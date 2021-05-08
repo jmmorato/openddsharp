@@ -6,7 +6,7 @@
     <AssemblyName>OpenDDSharp</AssemblyName>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Platforms>x64;x86</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
 
@@ -184,19 +184,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -204,7 +204,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -212,7 +212,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -220,7 +220,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -228,7 +228,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -236,7 +236,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.3.14.1" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

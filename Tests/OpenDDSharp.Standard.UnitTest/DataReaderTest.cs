@@ -116,6 +116,7 @@ namespace OpenDDSharp.Standard.UnitTest
             DataReader reader = _subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(reader);
             Assert.IsNotNull(reader.TopicDescription);
+            Assert.AreSame(_topic, reader.TopicDescription);
             Assert.AreEqual(_topic.Name, reader.TopicDescription.Name);
             Assert.AreSame(_topic.Participant, reader.TopicDescription.Participant);
             Assert.AreEqual(_topic.TypeName, reader.TopicDescription.TypeName);

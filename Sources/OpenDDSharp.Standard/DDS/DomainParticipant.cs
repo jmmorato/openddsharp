@@ -1249,7 +1249,7 @@ namespace OpenDDSharp.DDS
             public static extern ReturnCode SetQos64(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetDefaultPublisherQos", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipant_SetQos", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode SetQos86(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]

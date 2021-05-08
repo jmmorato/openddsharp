@@ -30,6 +30,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
     internal class SupportProcessHelper
     {
         #region Constants
+        private const string DDS_ROOT = @"..\..\..\..\..\..\ext\OpenDDS";
+        private const string ACE_ROOT = @"..\..\..\..\..\..\ext\OpenDDS\ACE_TAO\ACE";
+        private const string TAO_ROOT = @"..\..\..\..\..\..\ext\OpenDDS\ACE_TAO\TAO";
+
 #if Windows
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
@@ -64,6 +68,22 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 #if Windows
             SetEightySixPlatform();
 #endif
+            var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var ddsBin = Path.Combine(ddsPath, $"bin");
+            var ddsLib = Path.Combine(ddsPath, $"lib");
+            var aceBin = Path.Combine(acePath, $"bin");
+            var aceLib = Path.Combine(acePath, $"lib");
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{_platformFolder.TrimEnd('/')}");
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{_platformFolder.TrimEnd('/')}");
+            var aceBinPlatform = Path.Combine(acePath, $"bin_{_platformFolder.TrimEnd('/')}");
+            var aceLibPlatform = Path.Combine(acePath, $"lib_{_platformFolder.TrimEnd('/')}");
+            string path = $"{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
+            Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
+            Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
+            Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
         }
         #endregion
 
@@ -151,7 +171,6 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             return process;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log all exceptions")]
         public void KillProcess(Process process)
         {
             process.OutputDataReceived -= SupportProcessOnOutputDataReceived;
