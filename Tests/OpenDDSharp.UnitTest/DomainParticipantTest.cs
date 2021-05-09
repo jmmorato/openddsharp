@@ -1365,6 +1365,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetDiscoveredTopicData()
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            participant.BindTcpTransportConfig();
             Assert.IsNotNull(participant);
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
