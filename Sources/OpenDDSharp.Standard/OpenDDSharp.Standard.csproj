@@ -246,36 +246,36 @@
     </Content>
     
     <!-- Native dependency from this project. -->
-    <ProjectNativeDepsReleasex64 Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapperx64.dll" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <ProjectNativeDepsReleasex64 Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.dll" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <None Include="@(ProjectNativeDepsReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
     
-    <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapperx64.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapper.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
     <None Include="@(ProjectNativeDepsDebugx64)" Pack="false" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
     
-    <ProjectNativeDepsReleasex86 Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapperWin32.dll" />
+    <ProjectNativeDepsReleasex86 Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsReleasex86)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
     
-    <ProjectNativeDepsDebugx86 Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapperWin32.dll" />
+    <ProjectNativeDepsDebugx86 Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsDebugx86)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>       
     
-    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxRelease\libOpenDDSWrapperx64.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxRelease\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxDebug\libOpenDDSWrapperx64.so" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
+    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxDebug\libOpenDDSWrapper.so" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>

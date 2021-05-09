@@ -115,8 +115,7 @@ namespace OpenDDSharp.DDS
                 nativeListener = listener.ToNative();
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateParticipant86(_native, domainId, qosWrapper, nativeListener, statusMask),
-                                                        () => UnsafeNativeMethods.CreateParticipant64(_native, domainId, qosWrapper, nativeListener, statusMask));
+            IntPtr native = UnsafeNativeMethods.CreateParticipant(_native, domainId, qosWrapper, nativeListener, statusMask);
 
             qos.Release();
 
@@ -153,8 +152,7 @@ namespace OpenDDSharp.DDS
             }
 
             DomainParticipantQosWrapper qosWrapper = default;
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultParticipantQos86(_native, ref qosWrapper),
-                                                  () => UnsafeNativeMethods.GetDefaultParticipantQos64(_native, ref qosWrapper));
+            var ret = UnsafeNativeMethods.GetDefaultParticipantQos(_native, ref qosWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -184,8 +182,7 @@ namespace OpenDDSharp.DDS
             }
 
             var qosNative = qos.ToNative();
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultParticipantQos86(_native, qosNative),
-                                                  () => UnsafeNativeMethods.SetDefaultParticipantQos64(_native, qosNative));
+            var ret = UnsafeNativeMethods.SetDefaultParticipantQos(_native, qosNative);
             qos.Release();
 
             return ret;
@@ -207,8 +204,7 @@ namespace OpenDDSharp.DDS
                 throw new ArgumentNullException(nameof(dp));
             }
 
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteParticipant86(_native, dp.ToNative()),
-                                               () => UnsafeNativeMethods.DeleteParticipant64(_native, dp.ToNative()));
+            return UnsafeNativeMethods.DeleteParticipant(_native, dp.ToNative());
         }
         #endregion
 
@@ -222,36 +218,20 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipantFactory_CreateParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateParticipant64(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_CreateParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateParticipant(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantFactory_CreateParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateParticipant86(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_GetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultParticipantQos(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipantFactory_GetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDefaultParticipantQos64(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_SetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultParticipantQos(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantFactory_GetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDefaultParticipantQos86(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipantFactory_SetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetDefaultParticipantQos64(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantFactory_SetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetDefaultParticipantQos86(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode DeleteParticipant64(IntPtr dpf, IntPtr dp);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode DeleteParticipant86(IntPtr dpf, IntPtr dp);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteParticipant(IntPtr dpf, IntPtr dp);
         }
         #endregion
     }

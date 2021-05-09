@@ -7,87 +7,43 @@
         #region Constructors
         public <%TYPE%>TypeSupport()
         {
-            if (Environment.Is64BitProcess)
-            {
-                _native = <%TYPE%>TypeSupportNew64();
-            }
-            else
-            {
-                _native = <%TYPE%>TypeSupportNew86();
-            }
+            _native = <%TYPE%>TypeSupportNew();
         }
         #endregion
 
         #region Methods
         public string GetTypeName()
         {
-            if (Environment.Is64BitProcess)
-            {
-                return Marshal.PtrToStringAnsi(GetTypeName64(_native));                
-            }
-            else
-            {
-                return Marshal.PtrToStringAnsi(GetTypeName86(_native));                              
-            }
+            return Marshal.PtrToStringAnsi(GetTypeName(_native));
         }
 
         public ReturnCode RegisterType(DomainParticipant dp, string typeName)
         {
-            if (Environment.Is64BitProcess)
-            {
-                return (ReturnCode)RegisterType64(_native, dp.ToNative(), typeName);
-            }
-            else
-            {
-                return (ReturnCode)RegisterType86(_native, dp.ToNative(), typeName);
-            }
+            return (ReturnCode)RegisterType(_native, dp.ToNative(), typeName);
         }
 
         public ReturnCode UnregisterType(DomainParticipant dp, string typeName)
         {            
-            if (Environment.Is64BitProcess)
-            {
-                return (ReturnCode)UnregisterType64(_native, dp.ToNative(), typeName);
-            }
-            else
-            {
-                return (ReturnCode)UnregisterType86(_native, dp.ToNative(), typeName);
-            }
+            return (ReturnCode)UnregisterType(_native, dp.ToNative(), typeName);
         }
         #endregion
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr <%TYPE%>TypeSupportNew64();
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr <%TYPE%>TypeSupportNew();
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr <%TYPE%>TypeSupportNew86();
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern IntPtr GetTypeName(IntPtr native);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern IntPtr GetTypeName64(IntPtr native);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern int RegisterType(IntPtr native, IntPtr dp, string typeName);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern IntPtr GetTypeName86(IntPtr native);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern int RegisterType64(IntPtr native, IntPtr dp, string typeName);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern int RegisterType86(IntPtr native, IntPtr dp, string typeName);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern int UnregisterType64(IntPtr native, IntPtr dp, string typeName);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern int UnregisterType86(IntPtr native, IntPtr dp, string typeName);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        private static extern int UnregisterType(IntPtr native, IntPtr dp, string typeName);
         #endregion
     }
 
@@ -101,14 +57,7 @@
         public <%TYPE%>DataWriter(DataWriter dw) : base(dw.ToNative())
         {
 			IntPtr ptr = base.ToNative();
-            if (Environment.Is64BitProcess)
-            {
-                _native = Narrow64(ptr);
-            }
-            else
-            {
-                _native = Narrow86(ptr);
-            }
+            _native = Narrow(ptr);
         }
         #endregion
 
@@ -119,14 +68,7 @@
 
             List<IntPtr> toRelease = new List<IntPtr>();
             <%TYPE%>Wrapper wrapper = instance.ToNative(toRelease);
-            if (Environment.Is64BitProcess)
-            {                                
-                ret = RegisterInstance64(_native, wrapper);
-            }
-            else
-            {
-                ret = RegisterInstance86(_native, wrapper);
-            }
+            ret = RegisterInstance(_native, wrapper);
 
             return ret;
         }
@@ -137,14 +79,7 @@
 
             List<IntPtr> toRelease = new List<IntPtr>();
             <%TYPE%>Wrapper wrapper = instance.ToNative(toRelease);
-            if (Environment.Is64BitProcess)
-            {                                
-                ret = RegisterInstanceTimestamp64(_native, wrapper, timestamp);
-            }
-            else
-            {
-                ret = RegisterInstanceTimestamp86(_native, wrapper, timestamp);
-            }
+            ret = RegisterInstanceTimestamp(_native, wrapper, timestamp);
 
             return ret;
         }
@@ -160,14 +95,7 @@
                 return ReturnCode.PreconditionNotMet;
             }
 
-	        if (Environment.Is64BitProcess)
-            {                                
-                return (ReturnCode)UnregisterInstance64(_native, native, handle);
-            }
-            else
-            {
-                return (ReturnCode)UnregisterInstance86(_native, native, handle);
-            }
+	        return (ReturnCode)UnregisterInstance(_native, native, handle);
         }
 
 		public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle)
@@ -175,14 +103,7 @@
             List<IntPtr> toRelease = new List<IntPtr>();
             <%SCOPED%>Wrapper native = data.ToNative(toRelease);
 
-            if (Environment.Is64BitProcess)
-            {                                
-                return (ReturnCode)UnregisterInstance64(_native, native, handle);
-            }
-            else
-            {
-                return (ReturnCode)UnregisterInstance86(_native, native, handle);
-            }
+            return (ReturnCode)UnregisterInstance(_native, native, handle);
         }
 
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
@@ -190,14 +111,7 @@
             List<IntPtr> toRelease = new List<IntPtr>();
             <%SCOPED%>Wrapper native = data.ToNative(toRelease);
 
-            if (Environment.Is64BitProcess)
-            {                                
-                return (ReturnCode)UnregisterInstanceTimestamp64(_native, native, handle, timestamp);
-            }
-            else
-            {
-                return (ReturnCode)UnregisterInstanceTimestamp86(_native, native, handle, timestamp);
-            }
+            return (ReturnCode)UnregisterInstanceTimestamp(_native, native, handle, timestamp);
         }
 
         public ReturnCode Write(<%TYPE%> data)
@@ -216,14 +130,7 @@
             List<IntPtr> toRelease = new List<IntPtr>();
 
             <%TYPE%>Wrapper wrapper = data.ToNative(toRelease);
-            if (Environment.Is64BitProcess)
-            {                                
-                ret = (ReturnCode)Write64(_native, wrapper, handle);
-            }
-            else
-            {
-                ret = (ReturnCode)Write86(_native, wrapper, handle);
-            }
+            ret = (ReturnCode)Write(_native, wrapper, handle);
 
             // Always free the unmanaged memory.
             foreach (IntPtr ptr in toRelease)
@@ -245,14 +152,7 @@
             List<IntPtr> toRelease = new List<IntPtr>();
 
             <%TYPE%>Wrapper wrapper = data.ToNative(toRelease);
-            if (Environment.Is64BitProcess)
-            {                                
-                ret = (ReturnCode)WriteWithTimestamp64(_native, wrapper, handle, timestamp);
-            }
-            else
-            {
-                ret = (ReturnCode)WriteWithTimestamp86(_native, wrapper, handle, timestamp);
-            }
+            ret = (ReturnCode)WriteWithTimestamp(_native, wrapper, handle, timestamp);
 
             // Always free the unmanaged memory.
             foreach(IntPtr ptr in toRelease)
@@ -278,14 +178,7 @@
             ReturnCode ret = ReturnCode.Error;
             List<IntPtr> toRelease = new List<IntPtr>();
 
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)Dispose64(_native, data.ToNative(toRelease), handle);
-            }
-            else
-            {
-                ret = (ReturnCode)Dispose86(_native, data.ToNative(toRelease), handle);
-            }
+            ret = (ReturnCode)Dispose(_native, data.ToNative(toRelease), handle);
 
             // Always free the unmanaged memory.
             foreach (IntPtr ptr in toRelease)
@@ -306,14 +199,7 @@
             ReturnCode ret = ReturnCode.Error;
             List<IntPtr> toRelease = new List<IntPtr>();
 
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)DisposeTimestamp64(_native, data.ToNative(toRelease), handle, timestamp);
-            }
-            else
-            {
-                ret = (ReturnCode)DisposeTimestamp86(_native, data.ToNative(toRelease), handle, timestamp);
-            }
+            ret = (ReturnCode)DisposeTimestamp(_native, data.ToNative(toRelease), handle, timestamp);
 
             // Always free the unmanaged memory.
             foreach(IntPtr ptr in toRelease)
@@ -334,14 +220,7 @@
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper aux = new <%TYPE%>Wrapper();
 
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)GetKeyValue64(_native, ref aux, handle);
-            }
-            else
-            {
-                ret = (ReturnCode)GetKeyValue86(_native, ref aux, handle);
-            }
+            ret = (ReturnCode)GetKeyValue(_native, ref aux, handle);
 
             if (ret == ReturnCode.Ok)
             {
@@ -356,14 +235,7 @@
             InstanceHandle ret = InstanceHandle.HandleNil;
             List<IntPtr> toRelease = new List<IntPtr>();
 
-            if (Environment.Is64BitProcess)
-            {
-                ret = LookupInstance64(_native, instance.ToNative(toRelease));
-            }
-            else
-            {
-                ret = LookupInstance86(_native, instance.ToNative(toRelease));
-            }
+            ret = LookupInstance(_native, instance.ToNative(toRelease));
 
             // Always free the unmanaged memory.
             foreach (IntPtr ptr in toRelease)
@@ -377,92 +249,48 @@
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Narrow64(IntPtr dw);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Narrow(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Narrow86(IntPtr dw);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Write(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Write64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int WriteWithTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Write86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int RegisterInstance(IntPtr dw, <%TYPE%>Wrapper instance);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int WriteWithTimestamp64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int RegisterInstanceTimestamp(IntPtr dw, <%TYPE%>Wrapper instance, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int WriteWithTimestamp86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int UnregisterInstance(IntPtr dw, <%TYPE%>Wrapper instance, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstance64(IntPtr dw, <%TYPE%>Wrapper instance);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int UnregisterInstanceTimestamp(IntPtr dw, <%TYPE%>Wrapper instance, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstance86(IntPtr dw, <%TYPE%>Wrapper instance);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int LookupInstance(IntPtr dw, <%TYPE%>Wrapper instance);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstanceTimestamp64(IntPtr dw, <%TYPE%>Wrapper instance, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Dispose(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstanceTimestamp86(IntPtr dw, <%TYPE%>Wrapper instance, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int DisposeTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstance64(IntPtr dw, <%TYPE%>Wrapper instance, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstance86(IntPtr dw, <%TYPE%>Wrapper instance, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstanceTimestamp64(IntPtr dw, <%TYPE%>Wrapper instance, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstanceTimestamp86(IntPtr dw, <%TYPE%>Wrapper instance, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int LookupInstance64(IntPtr dw, <%TYPE%>Wrapper instance);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int LookupInstance86(IntPtr dw, <%TYPE%>Wrapper instance);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Dispose64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Dispose86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int DisposeTimestamp64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int DisposeTimestamp86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetKeyValue64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetKeyValue86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetKeyValue(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
         #endregion
     }
 
@@ -476,14 +304,7 @@
         public <%TYPE%>DataReader(DataReader dr) : base(dr.ToNative())
         {
 			IntPtr ptr = base.ToNative();
-            if (Environment.Is64BitProcess)
-            {
-                _native = Narrow64(ptr);
-            }
-            else
-            {
-                _native = Narrow86(ptr);
-            }
+            _native = Narrow(ptr);
         }
         #endregion
 
@@ -517,15 +338,8 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)ReadWithCondition64(_native, ref rd, ref ri, maxSamples, condition.ToNative());
-            }
-            else
-            {
-                ret = (ReturnCode)ReadWithCondition86(_native, ref rd, ref ri, maxSamples, condition.ToNative());          
-            }
-
+            ret = (ReturnCode)ReadWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
+            
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<<%TYPE%>Wrapper> data = new List<<%TYPE%>Wrapper>();
@@ -572,14 +386,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)Read64(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
-            }
-            else
-            {
-                ret = (ReturnCode)Read86(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);          
-            }
+            ret = (ReturnCode)Read(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);            
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -642,14 +449,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)TakeWithCondition64(_native, ref rd, ref ri, maxSamples, condition.ToNative());
-            }
-            else
-            {
-                ret = (ReturnCode)TakeWithCondition86(_native, ref rd, ref ri, maxSamples, condition.ToNative());          
-            }
+            ret = (ReturnCode)TakeWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());            
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -697,14 +497,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)Take64(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
-            }
-            else
-            {
-                ret = (ReturnCode)Take86(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);          
-            }
+            ret = (ReturnCode)Take(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -767,14 +560,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)ReadInstanceWithCondition64(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
-            }
-            else
-            {
-                ret = (ReturnCode)ReadInstanceWithCondition86(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());          
-            }
+            ret = (ReturnCode)ReadInstanceWithCondition(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -822,14 +608,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)ReadInstance64(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
-            }
-            else
-            {
-                ret = (ReturnCode)ReadInstance86(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);          
-            }
+            ret = (ReturnCode)ReadInstance(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -892,14 +671,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)TakeInstanceWithCondition64(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
-            }
-            else
-            {
-                ret = (ReturnCode)TakeInstanceWithCondition86(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());          
-            }
+            ret = (ReturnCode)TakeInstanceWithCondition(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -947,14 +719,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)TakeInstance64(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
-            }
-            else
-            {
-                ret = (ReturnCode)TakeInstance86(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);          
-            }
+            ret = (ReturnCode)TakeInstance(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1017,14 +782,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)ReadNextInstanceWithCondition64(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
-            }
-            else
-            {
-                ret = (ReturnCode)ReadNextInstanceWithCondition86(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());          
-            }
+            ret = (ReturnCode)ReadNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1072,14 +830,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)ReadNextInstance64(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
-            }
-            else
-            {
-                ret = (ReturnCode)ReadNextInstance86(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);          
-            }
+            ret = (ReturnCode)ReadNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1142,14 +893,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)TakeNextInstanceWithCondition64(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
-            }
-            else
-            {
-                ret = (ReturnCode)TakeNextInstanceWithCondition86(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());          
-            }
+            ret = (ReturnCode)TakeNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1197,14 +941,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)TakeNextInstance64(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
-            }
-            else
-            {
-                ret = (ReturnCode)TakeNextInstance86(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);          
-            }
+            ret = (ReturnCode)TakeNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1248,33 +985,15 @@
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper wrapper = new <%TYPE%>Wrapper();
             SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
-            if (Environment.Is64BitProcess)
-            {                
-                ret = (ReturnCode)ReadNextSample64(_native, ref wrapper, ref infoWrapper);
-                if (ret == ReturnCode.Ok)
-                {
-                    data.FromNative(wrapper);
-                    sampleInfo.FromNative(infoWrapper);
-
-                    // Always free the unmanaged memory.
-                    // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
-                    Release64(ref wrapper);
-                }
-
-                return ret;
-            }
-            else
+            ret = (ReturnCode)ReadNextSample(_native, ref wrapper, ref infoWrapper);
+            if (ret == ReturnCode.Ok)
             {
-                ret = (ReturnCode)ReadNextSample86(_native, ref wrapper, ref infoWrapper);
-                if (ret == ReturnCode.Ok)
-                {
-                    data.FromNative(wrapper);
-                    sampleInfo.FromNative(infoWrapper);
+                data.FromNative(wrapper);
+                sampleInfo.FromNative(infoWrapper);
 
-                    // Always free the unmanaged memory.
-                    // As the unmanaged memory was reserved in C++ we need a method to release it from C++.                    
-                    Release86(ref wrapper);
-                }
+                // Always free the unmanaged memory.
+                // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
+                Release(ref wrapper);
             }
 
             return ret;
@@ -1290,33 +1009,15 @@
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper wrapper = new <%TYPE%>Wrapper();
             SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
-            if (Environment.Is64BitProcess)
-            {                
-                ret = (ReturnCode)TakeNextSample64(_native, ref wrapper, ref infoWrapper);
-                if (ret == ReturnCode.Ok)
-                {
-                    data.FromNative(wrapper);
-                    sampleInfo.FromNative(infoWrapper);
-
-                    // Always free the unmanaged memory.
-                    // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
-                    Release64(ref wrapper);
-                }
-
-                return ret;
-            }
-            else
+            ret = (ReturnCode)TakeNextSample(_native, ref wrapper, ref infoWrapper);
+            if (ret == ReturnCode.Ok)
             {
-                ret = (ReturnCode)TakeNextSample86(_native, ref wrapper, ref infoWrapper);
-                if (ret == ReturnCode.Ok)
-                {
-                    data.FromNative(wrapper);
-                    sampleInfo.FromNative(infoWrapper);
+                data.FromNative(wrapper);
+                sampleInfo.FromNative(infoWrapper);
 
-                    // Always free the unmanaged memory.
-                    // As the unmanaged memory was reserved in C++ we need a method to release it from C++.                    
-                    Release86(ref wrapper);
-                }
+                // Always free the unmanaged memory.
+                // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
+                Release(ref wrapper);
             }
 
             return ret;
@@ -1332,14 +1033,7 @@
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper aux = new <%TYPE%>Wrapper();
 
-            if (Environment.Is64BitProcess)
-            {
-                ret = (ReturnCode)GetKeyValue64(_native, ref aux, handle);
-            }
-            else
-            {
-                ret = (ReturnCode)GetKeyValue86(_native, ref aux, handle);
-            }
+            ret = (ReturnCode)GetKeyValue(_native, ref aux, handle);            
 
             if (ret == ReturnCode.Ok)
             {
@@ -1354,14 +1048,7 @@
             InstanceHandle ret = InstanceHandle.HandleNil;
             List<IntPtr> toRelease = new List<IntPtr>();
 
-            if (Environment.Is64BitProcess)
-            {
-                ret = LookupInstance64(_native, instance.ToNative(toRelease));
-            }
-            else
-            {
-                ret = LookupInstance86(_native, instance.ToNative(toRelease));
-            }
+            ret = LookupInstance(_native, instance.ToNative(toRelease));
 
             // Always free the unmanaged memory.
             foreach (IntPtr ptr in toRelease)
@@ -1375,147 +1062,75 @@
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>Wrapper_release", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Release64([MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>Wrapper_release", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Release([MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>Wrapper_release", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Release86([MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr Narrow(IntPtr dr);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Narrow64(IntPtr dr);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Read(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Narrow86(IntPtr dr);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Read64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Take(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Read86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TakeWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Take64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TakeInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Take86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TakeInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadInstance64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TakeNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadInstance86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadInstanceWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadNextSample(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadInstanceWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TakeNextSample(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeInstance64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int LookupInstance(IntPtr dr, <%TYPE%>Wrapper instance);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeInstance86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeInstanceWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeInstanceWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextInstance64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextInstance86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextInstanceWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextInstanceWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextInstance64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextInstance86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextInstanceWithCondition64(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextInstanceWithCondition86(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
-                
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextSample64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int TakeNextSample86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int LookupInstance64(IntPtr dr, <%TYPE%>Wrapper instance);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int LookupInstance86(IntPtr dr, <%TYPE%>Wrapper instance);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X64, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetKeyValue64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL_X86, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetKeyValue86(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetKeyValue(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
         #endregion
     }

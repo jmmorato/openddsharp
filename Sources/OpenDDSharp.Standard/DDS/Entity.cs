@@ -104,8 +104,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode Enable()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Enable86(_native),
-                                               () => UnsafeNativeMethods.Enable64(_native));
+            return UnsafeNativeMethods.Enable(_native);
         }
 
         internal virtual void ClearContainedEntities()
@@ -121,22 +120,19 @@ namespace OpenDDSharp.DDS
 
         private StatusCondition GetStatusCondition()
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetStatusCondition86(_native),
-                                                     () => UnsafeNativeMethods.GetStatusCondition64(_native));
+            IntPtr ptr = UnsafeNativeMethods.GetStatusCondition(_native);
 
             return new StatusCondition(ptr, this);
         }
 
         private StatusMask GetStatusChanges()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetStatusChanges86(_native),
-                                               () => UnsafeNativeMethods.GetStatusChanges64(_native));
+            return UnsafeNativeMethods.GetStatusChanges(_native);
         }
 
         private InstanceHandle GetInstanceHandle()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetInstanceHandle86(_native),
-                                               () => UnsafeNativeMethods.GetInstanceHandle64(_native));
+            return UnsafeNativeMethods.GetInstanceHandle(_native);
         }
 
         /// <summary>
@@ -161,36 +157,20 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Entity_Enable", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode Enable64(IntPtr e);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Entity_Enable", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode Enable(IntPtr e);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Entity_Enable", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode Enable86(IntPtr e);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Entity_GetStatusCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetStatusCondition(IntPtr e);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Entity_GetStatusCondition", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetStatusCondition64(IntPtr e);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Entity_GetStatusChanges", CallingConvention = CallingConvention.Cdecl)]
+            public static extern StatusMask GetStatusChanges(IntPtr e);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Entity_GetStatusCondition", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetStatusCondition86(IntPtr e);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Entity_GetStatusChanges", CallingConvention = CallingConvention.Cdecl)]
-            public static extern StatusMask GetStatusChanges64(IntPtr e);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Entity_GetStatusChanges", CallingConvention = CallingConvention.Cdecl)]
-            public static extern StatusMask GetStatusChanges86(IntPtr e);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Entity_GetInstanceHandle", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int GetInstanceHandle64(IntPtr e);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Entity_GetInstanceHandle", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int GetInstanceHandle86(IntPtr e);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Entity_GetInstanceHandle", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int GetInstanceHandle(IntPtr e);
         }
         #endregion
     }

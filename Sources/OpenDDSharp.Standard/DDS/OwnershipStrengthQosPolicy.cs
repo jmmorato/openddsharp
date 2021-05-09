@@ -127,7 +127,7 @@ namespace OpenDDSharp.DDS
     [StructLayout(LayoutKind.Sequential)]
     internal struct OwnershipStrengthQosPolicyWrapper
     {
-         #region Fields
+        #region Fields
         public int Value;
         #endregion
 

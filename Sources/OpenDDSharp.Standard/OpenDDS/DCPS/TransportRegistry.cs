@@ -63,7 +63,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// Gets a value indicating whether the <see cref="TransportRegistry" /> has been released or not.
         /// </summary>
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
-        public bool Released => GetReleased();
+        public bool Released => UnsafeNativeMethods.GetReleased();
 
         /// <summary>
         /// Gets or sets the global <see cref="TransportConfig" />.
@@ -84,11 +84,9 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <summary>
         /// Close the singleton instance of this class.
         /// </summary>
-        [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public static void Close()
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Close86(),
-                                        () => UnsafeNativeMethods.Close64());
+            UnsafeNativeMethods.NativeClose();
         }
 
         /// <summary>
@@ -98,8 +96,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public void Release()
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Release86(),
-                                        () => UnsafeNativeMethods.Release64());
+            UnsafeNativeMethods.Release();
         }
 
         /// <summary>
@@ -111,8 +108,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportInst CreateInst(string name, string transportType)
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateInst86(name, transportType),
-                                                     () => UnsafeNativeMethods.CreateInst64(name, transportType));
+            IntPtr ptr = UnsafeNativeMethods.CreateInst(name, transportType);
 
             if (ptr != IntPtr.Zero)
             {
@@ -130,8 +126,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportInst GetInst(string name)
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetInst86(name),
-                                                     () => UnsafeNativeMethods.GetInst64(name));
+            IntPtr ptr = UnsafeNativeMethods.GetInst(name);
 
             if (ptr != IntPtr.Zero)
             {
@@ -153,8 +148,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(inst));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.RemoveInst86(inst.ToNative()),
-                                        () => UnsafeNativeMethods.RemoveInst64(inst.ToNative()));
+            UnsafeNativeMethods.RemoveInst(inst.ToNative());
         }
 
         /// <summary>
@@ -165,8 +159,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportConfig CreateConfig(string name)
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateConfig86(name),
-                                                     () => UnsafeNativeMethods.CreateConfig64(name));
+            IntPtr ptr = UnsafeNativeMethods.CreateConfig(name);
 
             if (ptr != IntPtr.Zero)
             {
@@ -184,8 +177,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportConfig GetConfig(string name)
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetConfig86(name),
-                                                     () => UnsafeNativeMethods.GetConfig64(name));
+            IntPtr ptr = UnsafeNativeMethods.GetConfig(name);
             if (ptr != IntPtr.Zero)
             {
                 return new TransportConfig(ptr);
@@ -206,8 +198,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(cfg));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.RemoveConfig86(cfg.ToNative()),
-                                        () => UnsafeNativeMethods.RemoveConfig64(cfg.ToNative()));
+            UnsafeNativeMethods.RemoveConfig(cfg.ToNative());
         }
 
         /// <summary>
@@ -218,8 +209,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportConfig GetDomainDefaultConfig(int domain)
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDomainDefaultConfig86(domain),
-                                                     () => UnsafeNativeMethods.GetDomainDefaultConfig64(domain));
+            IntPtr ptr = UnsafeNativeMethods.GetDomainDefaultConfig(domain);
 
             if (ptr != IntPtr.Zero)
             {
@@ -242,8 +232,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(cfg));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDomainDefaultConfig86(domain, cfg.ToNative()),
-                                        () => UnsafeNativeMethods.SetDomainDefaultConfig64(domain, cfg.ToNative()));
+            UnsafeNativeMethods.SetDomainDefaultConfig(domain, cfg.ToNative());
         }
 
         /// <summary>
@@ -262,8 +251,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
             IntPtr ptr = entity.ToNative();
             if (ptr != IntPtr.Zero)
             {
-                MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.BindConfigName86(name, ptr),
-                                            () => UnsafeNativeMethods.BindConfigName64(name, ptr));
+                UnsafeNativeMethods.BindConfigName(name, ptr);
             }
         }
 
@@ -285,14 +273,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.BindConfigTransport86(cfg.ToNative(), entity.ToNative()),
-                                        () => UnsafeNativeMethods.BindConfigTransport64(cfg.ToNative(), entity.ToNative()));
+            UnsafeNativeMethods.BindConfigTransport(cfg.ToNative(), entity.ToNative());
         }
 
         private static TransportConfig GetGlobalConfig()
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetGlobalConfig86(),
-                                                     () => UnsafeNativeMethods.GetGlobalConfig64());
+            IntPtr ptr = UnsafeNativeMethods.NativeGetGlobalConfig();
 
             if (ptr != IntPtr.Zero)
             {
@@ -309,14 +295,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(cfg));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetGlobalConfig86(cfg.ToNative()),
-                                        () => UnsafeNativeMethods.SetGlobalConfig64(cfg.ToNative()));
-        }
-
-        private static bool GetReleased()
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetReleased86(),
-                                               () => UnsafeNativeMethods.GetReleased64());
+            UnsafeNativeMethods.NativeSetGlobalConfig(cfg.ToNative());
         }
         #endregion
 
@@ -330,126 +309,65 @@ namespace OpenDDSharp.OpenDDS.DCPS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_Close", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Close64();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_Close", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void NativeClose();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_Close", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Close86();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_Release", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void Release();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_Release", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Release64();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_CreateInst", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateInst(string name, string transportType);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_Release", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Release86();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_GetInst", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetInst(string name);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_CreateInst", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr CreateInst64(string name, string transportType);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_RemoveInst", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr RemoveInst(IntPtr inst);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_CreateInst", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr CreateInst86(string name, string transportType);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_CreateConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateConfig(string name);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_GetInst", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetInst64(string name);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_GetConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetConfig(string name);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_GetInst", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetInst86(string name);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_RemoveConfig", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr RemoveConfig(IntPtr inst);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_RemoveInst", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr RemoveInst64(IntPtr inst);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_GetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetDomainDefaultConfig(int domain);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_RemoveInst", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr RemoveInst86(IntPtr inst);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_SetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetDomainDefaultConfig(int domain, IntPtr cfg);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_CreateConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr CreateConfig64(string name);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_BindConfigName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern void BindConfigName(string name, IntPtr cfg);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_CreateConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr CreateConfig86(string name);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_BindConfigTransport", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void BindConfigTransport(IntPtr tc, IntPtr cfg);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_GetConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetConfig64(string name);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_GetGlobalConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr NativeGetGlobalConfig();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_GetConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetConfig86(string name);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_SetGlobalConfig", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void NativeSetGlobalConfig(IntPtr cfg);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_RemoveConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr RemoveConfig64(IntPtr inst);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_RemoveConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr RemoveConfig86(IntPtr inst);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_GetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetDomainDefaultConfig64(int domain);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_GetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetDomainDefaultConfig86(int domain);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_SetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetDomainDefaultConfig64(int domain, IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_SetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetDomainDefaultConfig86(int domain, IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_BindConfigName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern void BindConfigName64(string name, IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_BindConfigName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern void BindConfigName86(string name, IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_BindConfigTransport", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void BindConfigTransport64(IntPtr tc, IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_BindConfigTransport", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void BindConfigTransport86(IntPtr tc, IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_GetGlobalConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetGlobalConfig64();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_GetGlobalConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetGlobalConfig86();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_SetGlobalConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetGlobalConfig64(IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_SetGlobalConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetGlobalConfig86(IntPtr cfg);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportRegistry_GetReleased", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_GetReleased", CallingConvention = CallingConvention.Cdecl)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool GetReleased64();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportRegistry_GetReleased", CallingConvention = CallingConvention.Cdecl)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool GetReleased86();
+            public static extern bool GetReleased();
         }
         #endregion
     }

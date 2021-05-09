@@ -29,7 +29,7 @@
   <PropertyGroup Label="TAO Home">
     <TAO_ROOT>../../ext/OpenDDS_Linux/ACE_TAO/TAO</TAO_ROOT>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />  
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WSL_1_0</PlatformToolset>
@@ -58,10 +58,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
     <IncludePath />
     <EnableASAN>false</EnableASAN>
-    <TargetName>libOpenDDSWrapperx64</TargetName>
+    <TargetName>libOpenDDSWrapper</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
-    <TargetName>libOpenDDSWrapperx64</TargetName>
+    <TargetName>libOpenDDSWrapper</TargetName>
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="..\OpenDDSWrapper\Ace.h" />
@@ -166,7 +166,6 @@
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
   </ItemDefinitionGroup>
-
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>.;$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);$(StlIncludeDirectories);%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
