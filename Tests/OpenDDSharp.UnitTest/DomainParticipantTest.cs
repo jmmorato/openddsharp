@@ -1388,12 +1388,12 @@ namespace OpenDDSharp.UnitTest
             result = ReturnCode.NoData;
             while (result != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(500);
                 result = participant.GetDiscoveredTopics(handles);
                 count--;
             }
 
-            Assert.AreEqual(result, ReturnCode.Ok);
+            Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
             Assert.AreEqual(handle, handles.First());
 
@@ -1403,12 +1403,12 @@ namespace OpenDDSharp.UnitTest
             result = ReturnCode.NoData;
             while (result != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);                
+                Thread.Sleep(500);                
                 result = participant.GetDiscoveredTopicData(ref data, handles.First());
                 count--;
             }
 
-            Assert.AreEqual(result, ReturnCode.Ok);
+            Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
