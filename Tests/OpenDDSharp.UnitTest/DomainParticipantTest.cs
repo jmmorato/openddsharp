@@ -1367,9 +1367,6 @@ namespace OpenDDSharp.UnitTest
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
 
-            DomainParticipant participant2 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(participant2);
-
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1392,7 +1389,7 @@ namespace OpenDDSharp.UnitTest
             while (result != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(500);
-                result = participant2.GetDiscoveredTopics(handles);
+                result = participant.GetDiscoveredTopics(handles);
                 count--;
             }
 
@@ -1406,7 +1403,7 @@ namespace OpenDDSharp.UnitTest
             while (result != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(500);                
-                result = participant2.GetDiscoveredTopicData(ref data, handles.First());
+                result = participant.GetDiscoveredTopicData(ref data, handles.First());
                 count--;
             }
 

@@ -228,7 +228,7 @@ namespace TestSupportProcess
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
             TcpInst tcpi = new TcpInst(inst)
             {
-                LocalAddress = "127.0.0.1:0"
+                LocalAddress = "localhost:"
             };
             config.Insert(inst);
 
