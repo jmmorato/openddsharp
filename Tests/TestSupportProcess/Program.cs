@@ -79,7 +79,7 @@ namespace TestSupportProcess
 
         private static void TestOnSubscriptionLostDisconnected()
         {
-            DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
+            DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory();
             DomainParticipant participant = dpf.CreateParticipant(INFOREPO_DOMAIN);
             if (participant == null)
             {
@@ -228,8 +228,7 @@ namespace TestSupportProcess
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
             TcpInst tcpi = new TcpInst(inst)
             {
-                PublicAddress = "localhost:5555",
-                LocalAddress = "localhost:5555",
+                LocalAddress = $"127.0.0.1:0",
             };
 
             config.Insert(inst);

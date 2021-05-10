@@ -535,7 +535,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 // Wait for discovery
-                bool found = reader.WaitForPublications(1, 20000);
+                bool found = reader.WaitForPublications(1, 50000);
                 Assert.IsTrue(found);
             }
             finally
@@ -543,7 +543,7 @@ namespace OpenDDSharp.UnitTest
                 supportProcess.KillProcess(process);
             }
 
-            bool resp = evt.Wait(20000);
+            bool resp = evt.Wait(50000);
             Assert.IsTrue(resp);
             Assert.AreEqual(1, count);
 
@@ -551,6 +551,10 @@ namespace OpenDDSharp.UnitTest
             result = reader.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            domainParticipant.DeleteSubscriber(subscriber);
+            domainParticipant.DeleteTopic(topic);
             domainParticipant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
         }
@@ -584,6 +588,7 @@ namespace OpenDDSharp.UnitTest
 
             MyDataReaderListener listener = new MyDataReaderListener();
             DataReader reader = subscriber.CreateDataReader(topic, listener);
+            Assert.IsNotNull(reader);
 
             int count = 0;
             listener.SubscriptionLost += (r, s) =>
@@ -600,7 +605,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 // Wait for discovery
-                bool found = reader.WaitForPublications(1, 20000);
+                bool found = reader.WaitForPublications(1, 50000);
                 Assert.IsTrue(found);
             }
             finally
@@ -608,7 +613,7 @@ namespace OpenDDSharp.UnitTest
                 supportProcess.KillProcess(process);
             }
 
-            bool resp = evt.Wait(20000);
+            bool resp = evt.Wait(50000);
             Assert.IsTrue(resp);
             Assert.AreEqual(1, count);
 
@@ -616,6 +621,10 @@ namespace OpenDDSharp.UnitTest
             result = reader.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            domainParticipant.DeleteSubscriber(subscriber);
+            domainParticipant.DeleteTopic(topic);
             domainParticipant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
         }
