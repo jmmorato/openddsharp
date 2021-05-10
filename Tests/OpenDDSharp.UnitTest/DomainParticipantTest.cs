@@ -1365,8 +1365,10 @@ namespace OpenDDSharp.UnitTest
         public void TestGetDiscoveredTopicData()
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            participant.BindTcpTransportConfig();
             Assert.IsNotNull(participant);
+
+            DomainParticipant participant2 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(participant2);
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1390,13 +1392,12 @@ namespace OpenDDSharp.UnitTest
             while (result != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(500);
-                result = participant.GetDiscoveredTopics(handles);
+                result = participant2.GetDiscoveredTopics(handles);
                 count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
-            Assert.AreEqual(handle, handles.First());
 
             // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter            
             TopicBuiltinTopicData data = new TopicBuiltinTopicData();
@@ -1405,7 +1406,7 @@ namespace OpenDDSharp.UnitTest
             while (result != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(500);                
-                result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                result = participant2.GetDiscoveredTopicData(ref data, handles.First());
                 count--;
             }
 
