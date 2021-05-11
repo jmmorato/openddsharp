@@ -1356,7 +1356,7 @@ namespace OpenDDSharp.UnitTest
 
                 participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(participant);
-                participant.BindRtpsUdpTransportConfig();
+                participant.BindTcpTransportConfig();
 
                 List<InstanceHandle> handles = new List<InstanceHandle>();
                 result = participant.GetDiscoveredTopics(handles);
@@ -1409,7 +1409,7 @@ namespace OpenDDSharp.UnitTest
             {
                 participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(participant);
-                participant.BindRtpsUdpTransportConfig();
+                participant.BindTcpTransportConfig();
 
                 List<InstanceHandle> handles = new List<InstanceHandle>();
                 result = participant.GetDiscoveredTopics(handles);
