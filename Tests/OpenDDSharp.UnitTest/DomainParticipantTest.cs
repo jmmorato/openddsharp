@@ -585,91 +585,98 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestContainsEntity()
         {
-            Subscriber builtin = _participant.GetBuiltinSubscriber();
-            Assert.IsNotNull(builtin);            
+            ReturnCode result;
+            DomainParticipant otherParticipant = null;
+            try
+            {
+                Subscriber builtin = _participant.GetBuiltinSubscriber();
+                Assert.IsNotNull(builtin);
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                result = support.RegisterType(_participant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestContainsEntity), typeName);
-            Assert.IsNotNull(topic);            
+                Topic topic = _participant.CreateTopic(nameof(TestContainsEntity), typeName);
+                Assert.IsNotNull(topic);
 
-            Publisher publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);            
+                Publisher publisher = _participant.CreatePublisher();
+                Assert.IsNotNull(publisher);
 
-            Subscriber subscriber = _participant.CreateSubscriber();            
-            Assert.IsNotNull(subscriber);                        
+                Subscriber subscriber = _participant.CreateSubscriber();
+                Assert.IsNotNull(subscriber);
 
-            DataWriter dataWriter = publisher.CreateDataWriter(topic);
-            Assert.IsNotNull(dataWriter);
+                DataWriter dataWriter = publisher.CreateDataWriter(topic);
+                Assert.IsNotNull(dataWriter);
 
-            DataReader dataReader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(dataReader);
+                DataReader dataReader = subscriber.CreateDataReader(topic);
+                Assert.IsNotNull(dataReader);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            Assert.AreNotEqual(otherParticipant.InstanceHandle, _participant.InstanceHandle);
-            otherParticipant.BindRtpsUdpTransportConfig();
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                Assert.AreNotEqual(otherParticipant.InstanceHandle, _participant.InstanceHandle);
+                otherParticipant.BindRtpsUdpTransportConfig();
 
-            result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestContainsEntity), typeName);
-            Assert.IsNotNull(otherTopic);
+                Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestContainsEntity), typeName);
+                Assert.IsNotNull(otherTopic);
 
-            Subscriber otherBuiltin = otherParticipant.GetBuiltinSubscriber();
-            Assert.IsNotNull(otherBuiltin);            
+                Subscriber otherBuiltin = otherParticipant.GetBuiltinSubscriber();
+                Assert.IsNotNull(otherBuiltin);
 
-            Subscriber otherSubscriber = otherParticipant.CreateSubscriber();
-            Assert.IsNotNull(otherSubscriber);
+                Subscriber otherSubscriber = otherParticipant.CreateSubscriber();
+                Assert.IsNotNull(otherSubscriber);
 
-            Publisher otherPublisher = otherParticipant.CreatePublisher();
-            Assert.IsNotNull(otherPublisher);
+                Publisher otherPublisher = otherParticipant.CreatePublisher();
+                Assert.IsNotNull(otherPublisher);
 
-            DataReader otherDataReader = otherSubscriber.CreateDataReader(otherTopic);
-            Assert.IsNotNull(otherDataReader);
+                DataReader otherDataReader = otherSubscriber.CreateDataReader(otherTopic);
+                Assert.IsNotNull(otherDataReader);
 
-            DataWriter otherDataWriter = otherPublisher.CreateDataWriter(otherTopic);
-            Assert.IsNotNull(otherDataWriter);
+                DataWriter otherDataWriter = otherPublisher.CreateDataWriter(otherTopic);
+                Assert.IsNotNull(otherDataWriter);
 
-            Assert.IsTrue(_participant.ContainsEntity(builtin.InstanceHandle));
-            Assert.IsTrue(_participant.ContainsEntity(topic.InstanceHandle));
-            Assert.IsTrue(_participant.ContainsEntity(publisher.InstanceHandle));
-            Assert.IsTrue(_participant.ContainsEntity(subscriber.InstanceHandle));
-            Assert.IsTrue(_participant.ContainsEntity(dataWriter.InstanceHandle));
-            Assert.IsTrue(_participant.ContainsEntity(dataReader.InstanceHandle));
+                Assert.IsTrue(_participant.ContainsEntity(builtin.InstanceHandle));
+                Assert.IsTrue(_participant.ContainsEntity(topic.InstanceHandle));
+                Assert.IsTrue(_participant.ContainsEntity(publisher.InstanceHandle));
+                Assert.IsTrue(_participant.ContainsEntity(subscriber.InstanceHandle));
+                Assert.IsTrue(_participant.ContainsEntity(dataWriter.InstanceHandle));
+                Assert.IsTrue(_participant.ContainsEntity(dataReader.InstanceHandle));
 
-            Assert.IsTrue(otherParticipant.ContainsEntity(otherBuiltin.InstanceHandle));
-            Assert.IsTrue(otherParticipant.ContainsEntity(otherTopic.InstanceHandle));
-            Assert.IsTrue(otherParticipant.ContainsEntity(otherSubscriber.InstanceHandle));
-            Assert.IsTrue(otherParticipant.ContainsEntity(otherPublisher.InstanceHandle));            
-            Assert.IsTrue(otherParticipant.ContainsEntity(otherDataWriter.InstanceHandle));
-            Assert.IsTrue(otherParticipant.ContainsEntity(otherDataReader.InstanceHandle));
+                Assert.IsTrue(otherParticipant.ContainsEntity(otherBuiltin.InstanceHandle));
+                Assert.IsTrue(otherParticipant.ContainsEntity(otherTopic.InstanceHandle));
+                Assert.IsTrue(otherParticipant.ContainsEntity(otherSubscriber.InstanceHandle));
+                Assert.IsTrue(otherParticipant.ContainsEntity(otherPublisher.InstanceHandle));
+                Assert.IsTrue(otherParticipant.ContainsEntity(otherDataWriter.InstanceHandle));
+                Assert.IsTrue(otherParticipant.ContainsEntity(otherDataReader.InstanceHandle));
 
-            #region OpenDDS ISSUE
-            // ISSUE: Instance handle overlap between participants.
-            // Possible solution: Move the InstanceHandleGenerator to the Service_Participant
-            //Assert.IsFalse(_participant.ContainsEntity(otherBuiltin.InstanceHandle));
-            //Assert.IsFalse(_participant.ContainsEntity(otherTopic.InstanceHandle));
-            //Assert.IsFalse(_participant.ContainsEntity(otherSubscriber.InstanceHandle));
-            //Assert.IsFalse(_participant.ContainsEntity(otherPublisher.InstanceHandle));            
-            //Assert.IsFalse(_participant.ContainsEntity(otherDataWriter.InstanceHandle));
-            //Assert.IsFalse(_participant.ContainsEntity(otherDataReader.InstanceHandle));
+                #region OpenDDS ISSUE
+                // ISSUE: Instance handle overlap between participants.
+                // Possible solution: Move the InstanceHandleGenerator to the Service_Participant
+                //Assert.IsFalse(_participant.ContainsEntity(otherBuiltin.InstanceHandle));
+                //Assert.IsFalse(_participant.ContainsEntity(otherTopic.InstanceHandle));
+                //Assert.IsFalse(_participant.ContainsEntity(otherSubscriber.InstanceHandle));
+                //Assert.IsFalse(_participant.ContainsEntity(otherPublisher.InstanceHandle));            
+                //Assert.IsFalse(_participant.ContainsEntity(otherDataWriter.InstanceHandle));
+                //Assert.IsFalse(_participant.ContainsEntity(otherDataReader.InstanceHandle));
 
-            //Assert.IsFalse(otherParticipant.ContainsEntity(builtin.InstanceHandle));
-            //Assert.IsFalse(otherParticipant.ContainsEntity(topic.InstanceHandle));
-            //Assert.IsFalse(otherParticipant.ContainsEntity(publisher.InstanceHandle));
-            //Assert.IsFalse(otherParticipant.ContainsEntity(subscriber.InstanceHandle));
-            //Assert.IsFalse(otherParticipant.ContainsEntity(dataWriter.InstanceHandle));
-            //Assert.IsFalse(otherParticipant.ContainsEntity(dataReader.InstanceHandle));
-            #endregion
-
-            result = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, result);            
+                //Assert.IsFalse(otherParticipant.ContainsEntity(builtin.InstanceHandle));
+                //Assert.IsFalse(otherParticipant.ContainsEntity(topic.InstanceHandle));
+                //Assert.IsFalse(otherParticipant.ContainsEntity(publisher.InstanceHandle));
+                //Assert.IsFalse(otherParticipant.ContainsEntity(subscriber.InstanceHandle));
+                //Assert.IsFalse(otherParticipant.ContainsEntity(dataWriter.InstanceHandle));
+                //Assert.IsFalse(otherParticipant.ContainsEntity(dataReader.InstanceHandle));
+                #endregion
+            }
+            finally
+            {
+                result = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
 
         [TestMethod]
@@ -1263,194 +1270,228 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredParticipants()
         {
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = _participant.GetDiscoveredParticipants(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(0, handles.Count);
+            ReturnCode result;
+            DomainParticipant otherParticipant = null;
+            try
+            {
+                List<InstanceHandle> handles = new List<InstanceHandle>();
+                result = _participant.GetDiscoveredParticipants(handles);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(0, handles.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
 
-            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
-            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
+                Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+                Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            result = _participant.GetDiscoveredParticipants(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
+                result = _participant.GetDiscoveredParticipants(handles);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(1, handles.Count);
 
-            handles = new List<InstanceHandle>();
-            result = otherParticipant.GetDiscoveredParticipants(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
+                handles = new List<InstanceHandle>();
+                result = otherParticipant.GetDiscoveredParticipants(handles);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(1, handles.Count);
 
-            // Test with null parameter
-            result = _participant.GetDiscoveredParticipants(null);
-            Assert.AreEqual(ReturnCode.BadParameter, result);            
-
-            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Test with null parameter
+                result = _participant.GetDiscoveredParticipants(null);
+                Assert.AreEqual(ReturnCode.BadParameter, result);
+            }
+            finally
+            {
+                result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredParticipantData()
         {
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.UserData.Value = new List<byte> { 0x42 };
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            ReturnCode result;
+            DomainParticipant otherParticipant = null;
+            try
+            {
+                DomainParticipantQos qos = new DomainParticipantQos();
+                qos.UserData.Value = new List<byte> { 0x42 };
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
 
-            Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+                Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
 
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = _participant.GetDiscoveredParticipants(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
+                List<InstanceHandle> handles = new List<InstanceHandle>();
+                result = _participant.GetDiscoveredParticipants(handles);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(1, handles.Count);
 
-            ParticipantBuiltinTopicData data = new ParticipantBuiltinTopicData();
-            result = _participant.GetDiscoveredParticipantData(ref data, handles.First());
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, data.UserData.Value.Count());
-            Assert.AreEqual(0x42, data.UserData.Value.First());
-            Assert.IsNotNull(data.Key);
-            Assert.IsNotNull(data.Key.Value);
-
-            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                ParticipantBuiltinTopicData data = new ParticipantBuiltinTopicData();
+                result = _participant.GetDiscoveredParticipantData(ref data, handles.First());
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(1, data.UserData.Value.Count());
+                Assert.AreEqual(0x42, data.UserData.Value.First());
+                Assert.IsNotNull(data.Key);
+                Assert.IsNotNull(data.Key.Value);
+            }
+            finally
+            {
+                result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
         {
-            // OPENDDS ISSUE: Not working correctly with RTPS
-            // OPENDDS ISSUE: Only discover local topics
+            ReturnCode result;
+            DomainParticipant participant = null;
+            Topic topic = null;
+            try
+            {
+                // OPENDDS ISSUE: Not working correctly with RTPS
+                // OPENDDS ISSUE: Only discover local topics
 
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
+                participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(participant);
+                participant.BindRtpsUdpTransportConfig();
 
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = participant.GetDiscoveredTopics(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(0, handles.Count);
+                List<InstanceHandle> handles = new List<InstanceHandle>();
+                result = participant.GetDiscoveredTopics(handles);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(0, handles.Count);
 
-            // Create a new topic and check that is discovered
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            result = support.RegisterType(participant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Create a new topic and check that is discovered
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                result = support.RegisterType(participant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
-            Assert.IsNotNull(topic);
-            InstanceHandle handle = topic.InstanceHandle;
+                topic = participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
+                Assert.IsNotNull(topic);
+                InstanceHandle handle = topic.InstanceHandle;
 
-            result = participant.GetDiscoveredTopics(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
-            Assert.AreEqual(handle, handles.First());
+                result = participant.GetDiscoveredTopics(handles);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(1, handles.Count);
+                Assert.AreEqual(handle, handles.First());
 
-            // Test with null parameter
-            result = participant.GetDiscoveredTopics(null);
-            Assert.AreEqual(ReturnCode.BadParameter, result);
-
-            // Remove the participant
-            result = participant.DeleteTopic(topic);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = participant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = AssemblyInitializer.Factory.DeleteParticipant(participant);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Test with null parameter
+                result = participant.GetDiscoveredTopics(null);
+                Assert.AreEqual(ReturnCode.BadParameter, result);
+            }
+            finally
+            {
+                // Remove the participant
+                result = participant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = AssemblyInitializer.Factory.DeleteParticipant(participant);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
         {
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
-
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = participant.GetDiscoveredTopics(handles);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(0, handles.Count);
-
-            // Create a new topic and check that is discovered
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            result = support.RegisterType(participant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = new TopicQos();
-            qos.TopicData.Value = new byte[] { 0x42 };
-            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
-            Assert.IsNotNull(topic);
-            InstanceHandle handle = topic.InstanceHandle;
-
-            Subscriber subscriber = participant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
-            var reader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(reader);
-
-            Publisher publisher = participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-            var writer = publisher.CreateDataWriter(topic);
-            Assert.IsNotNull(writer);
-
-            int count = 200;
-            result = ReturnCode.NoData;
-            while (result != ReturnCode.Ok && count > 0)
+            ReturnCode result;
+            DomainParticipant participant = null;
+            Topic topic = null;
+            Subscriber subscriber = null;
+            DataReader reader = null;
+            DataWriter writer = null;
+            Publisher publisher = null;
+            try
             {
-                Thread.Sleep(500);
+                participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(participant);
+                participant.BindRtpsUdpTransportConfig();
+
+                List<InstanceHandle> handles = new List<InstanceHandle>();
                 result = participant.GetDiscoveredTopics(handles);
-                count--;
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(0, handles.Count);
+
+                // Create a new topic and check that is discovered
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                result = support.RegisterType(participant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = new TopicQos();
+                qos.TopicData.Value = new byte[] { 0x42 };
+                topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+                Assert.IsNotNull(topic);
+                InstanceHandle handle = topic.InstanceHandle;
+
+                subscriber = participant.CreateSubscriber();
+                Assert.IsNotNull(subscriber);
+                reader = subscriber.CreateDataReader(topic);
+                Assert.IsNotNull(reader);
+
+                publisher = participant.CreatePublisher();
+                Assert.IsNotNull(publisher);
+                writer = publisher.CreateDataWriter(topic);
+                Assert.IsNotNull(writer);
+
+                int count = 200;
+                result = ReturnCode.NoData;
+                while (result != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(500);
+                    result = participant.GetDiscoveredTopics(handles);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(1, handles.Count);
+
+                // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter            
+                TopicBuiltinTopicData data = new TopicBuiltinTopicData();
+                count = 200;
+                result = ReturnCode.NoData;
+                while (result != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(500);
+                    result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
+                Assert.AreEqual(typeName, data.TypeName);
+                Assert.IsNotNull(data.Key);
+                Assert.IsNotNull(data.TopicData);
+                Assert.IsNotNull(data.TopicData.Value);
+                Assert.AreEqual(1, data.TopicData.Value.Count());
+                Assert.AreEqual(0x42, data.TopicData.Value.First());
             }
-
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
-
-            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter            
-            TopicBuiltinTopicData data = new TopicBuiltinTopicData();
-            count = 200;
-            result = ReturnCode.NoData;
-            while (result != ReturnCode.Ok && count > 0)
+            finally
             {
-                Thread.Sleep(500);                
-                result = participant.GetDiscoveredTopicData(ref data, handles.First());
-                count--;
+                // Remove the participant
+                result = subscriber.DeleteDataReader(reader);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = subscriber.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = publisher.DeleteDataWriter(writer);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = publisher.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeletePublisher(publisher);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeleteSubscriber(subscriber);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = AssemblyInitializer.Factory.DeleteParticipant(participant);
+                Assert.AreEqual(ReturnCode.Ok, result);
             }
-
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
-            Assert.AreEqual(typeName, data.TypeName);
-            Assert.IsNotNull(data.Key);
-            Assert.IsNotNull(data.TopicData);
-            Assert.IsNotNull(data.TopicData.Value);
-            Assert.AreEqual(1, data.TopicData.Value.Count());
-            Assert.AreEqual(0x42, data.TopicData.Value.First());
-
-            // Remove the participant
-            result = subscriber.DeleteDataReader(reader);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = subscriber.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = publisher.DeleteDataWriter(writer);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = publisher.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = participant.DeletePublisher(publisher);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = participant.DeleteSubscriber(subscriber);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = participant.DeleteTopic(topic);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = participant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-            result = AssemblyInitializer.Factory.DeleteParticipant(participant);
-            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }
