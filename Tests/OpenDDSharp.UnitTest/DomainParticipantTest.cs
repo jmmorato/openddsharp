@@ -1330,7 +1330,7 @@ namespace OpenDDSharp.UnitTest
 
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
+            participant.BindRtpsUdpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1357,6 +1357,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Remove the participant
+            participant.DeleteTopic(topic);
             participant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(participant);
         }
@@ -1367,7 +1368,7 @@ namespace OpenDDSharp.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
+            participant.BindRtpsUdpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1416,6 +1417,7 @@ namespace OpenDDSharp.UnitTest
             TestHelper.TestNonDefaultTopicData(data);
 
             // Remove the participant
+            participant.DeleteTopic(topic);
             participant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(participant);           
         }

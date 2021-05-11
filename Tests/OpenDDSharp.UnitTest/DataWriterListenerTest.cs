@@ -333,7 +333,11 @@ namespace OpenDDSharp.UnitTest
             result = writer.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            domainParticipant.DeleteContainedEntities();
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            domainParticipant.DeletePublisher(publisher);
+            domainParticipant.DeleteTopic(topic);
+            domainParticipant.DeleteContainedEntities();            
             AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);                       
         }
 
@@ -398,6 +402,10 @@ namespace OpenDDSharp.UnitTest
             result = writer.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            domainParticipant.DeletePublisher(publisher);
+            domainParticipant.DeleteTopic(topic);
             domainParticipant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
 

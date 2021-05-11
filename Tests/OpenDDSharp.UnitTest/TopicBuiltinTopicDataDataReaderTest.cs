@@ -120,6 +120,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.First().Key);
             TestHelper.TestNonDefaultTopicData(data.First());
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -167,6 +168,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.First().Key);
             TestHelper.TestNonDefaultTopicData(data.First());
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -223,6 +225,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.First().Key);
             TestHelper.TestNonDefaultTopicData(data.First());
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -281,6 +284,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.First().Key);
             TestHelper.TestNonDefaultTopicData(data.First());
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -328,6 +332,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.First().Key);
             TestHelper.TestNonDefaultTopicData(data.First());
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -375,6 +380,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.First().Key);
             TestHelper.TestNonDefaultTopicData(data.First());
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -418,6 +424,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.Key);
             TestHelper.TestNonDefaultTopicData(data);
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -461,6 +468,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.Key);
             TestHelper.TestNonDefaultTopicData(data);
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -514,6 +522,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
             }
 
+            otherParticipant.DeleteTopic(topic);
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -559,7 +568,8 @@ namespace OpenDDSharp.UnitTest
             var handle = _dr.LookupInstance(data);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-             ret = otherParticipant.DeleteContainedEntities();
+            otherParticipant.DeleteTopic(topic);
+            ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
