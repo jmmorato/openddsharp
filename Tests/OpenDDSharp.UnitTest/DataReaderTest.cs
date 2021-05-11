@@ -22,7 +22,6 @@ using System.Linq;
 using System.Collections.Generic;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Test;
-using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Listeners;
 using OpenDDSharp.UnitTest.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
