@@ -1357,9 +1357,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Remove the participant
-            participant.DeleteTopic(topic);
-            participant.DeleteContainedEntities();
-            AssemblyInitializer.Factory.DeleteParticipant(participant);
+            result = participant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = participant.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = AssemblyInitializer.Factory.DeleteParticipant(participant);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         [TestMethod]
@@ -1381,7 +1384,8 @@ namespace OpenDDSharp.UnitTest
             result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            TopicQos qos = new TopicQos();
+            qos.TopicData.Value = new byte[] { 0x42 };
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
@@ -1414,12 +1418,18 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
+            Assert.IsNotNull(data.TopicData);
+            Assert.IsNotNull(data.TopicData.Value);
+            Assert.AreEqual(1, data.TopicData.Value.Count());
+            Assert.AreEqual(0x42, data.TopicData.Value.First());
 
             // Remove the participant
-            participant.DeleteTopic(topic);
-            participant.DeleteContainedEntities();
-            AssemblyInitializer.Factory.DeleteParticipant(participant);           
+            result = participant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = participant.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = AssemblyInitializer.Factory.DeleteParticipant(participant);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }
