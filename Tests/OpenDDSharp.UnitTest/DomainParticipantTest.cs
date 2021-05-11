@@ -1388,8 +1388,17 @@ namespace OpenDDSharp.UnitTest
             qos.TopicData.Value = new byte[] { 0x42 };
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
-
             InstanceHandle handle = topic.InstanceHandle;
+
+            Subscriber subscriber = participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+            var reader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(reader);
+
+            Publisher publisher = participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+            var writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
 
             int count = 200;
             result = ReturnCode.NoData;
@@ -1424,6 +1433,18 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0x42, data.TopicData.Value.First());
 
             // Remove the participant
+            result = subscriber.DeleteDataReader(reader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = subscriber.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = publisher.DeleteDataWriter(writer);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = publisher.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = participant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            result = participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, result);
             result = participant.DeleteTopic(topic);
             Assert.AreEqual(ReturnCode.Ok, result);
             result = participant.DeleteContainedEntities();
