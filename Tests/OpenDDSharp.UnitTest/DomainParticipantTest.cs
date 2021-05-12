@@ -1349,6 +1349,10 @@ namespace OpenDDSharp.UnitTest
             ReturnCode result;
             DomainParticipant participant = null;
             Topic topic = null;
+            Subscriber subscriber = null;
+            DataReader reader = null;
+            DataWriter writer = null;
+            Publisher publisher = null;
             try
             {
                 // OPENDDS ISSUE: Not working correctly with RTPS
@@ -1373,6 +1377,16 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsNotNull(topic);
                 InstanceHandle handle = topic.InstanceHandle;
 
+                subscriber = participant.CreateSubscriber();
+                Assert.IsNotNull(subscriber);
+                reader = subscriber.CreateDataReader(topic);
+                Assert.IsNotNull(reader);
+
+                publisher = participant.CreatePublisher();
+                Assert.IsNotNull(publisher);
+                writer = publisher.CreateDataWriter(topic);
+                Assert.IsNotNull(writer);
+
                 result = participant.GetDiscoveredTopics(handles);
                 Assert.AreEqual(ReturnCode.Ok, result);
                 Assert.AreEqual(1, handles.Count);
@@ -1385,6 +1399,18 @@ namespace OpenDDSharp.UnitTest
             finally
             {
                 // Remove the participant
+                result = subscriber.DeleteDataReader(reader);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = subscriber.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = publisher.DeleteDataWriter(writer);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = publisher.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeletePublisher(publisher);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                result = participant.DeleteSubscriber(subscriber);
+                Assert.AreEqual(ReturnCode.Ok, result);
                 result = participant.DeleteTopic(topic);
                 Assert.AreEqual(ReturnCode.Ok, result);
                 result = participant.DeleteContainedEntities();
