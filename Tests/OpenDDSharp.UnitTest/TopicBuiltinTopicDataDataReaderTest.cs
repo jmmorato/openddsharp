@@ -51,6 +51,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();
 
             _subscriber = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(_subscriber);
@@ -97,7 +98,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -155,7 +156,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -212,7 +213,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -278,7 +279,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -346,7 +347,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -403,7 +404,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -458,7 +459,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -511,7 +512,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -565,7 +566,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();
@@ -625,7 +626,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
 
                 TestStructTypeSupport support = new TestStructTypeSupport();
                 string typeName = support.GetTypeName();

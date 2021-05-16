@@ -1433,7 +1433,8 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-                Assert.IsNotNull(participant);                
+                Assert.IsNotNull(participant);
+                participant.BindRtpsUdpTransportConfig();
 
                 List<InstanceHandle> handles = new List<InstanceHandle>();
                 result = participant.GetDiscoveredTopics(handles);
