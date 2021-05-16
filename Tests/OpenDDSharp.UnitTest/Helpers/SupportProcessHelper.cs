@@ -103,7 +103,8 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
             infoRepoPath = Path.GetFullPath(infoRepoPath);
-            return SpawnProcess(infoRepoPath, string.Empty);
+            //-ORBLogFile DCPSInfoRepo.log -ORBDebugLevel 1 -ORBVerboseLogging 1 -DCPSDebugLevel 2 -DCPSTransportDebugLevel 3
+            return SpawnProcess(infoRepoPath, "-ORBDottedDecimalAddresses 1 -DCPSDefaultAddress 127.0.0.1 -ORBListenEndpoints iiop://:12345");
         }
 
         private Process SpawnProcess(string path, string arguments)

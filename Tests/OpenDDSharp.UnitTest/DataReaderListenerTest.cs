@@ -549,6 +549,7 @@ namespace OpenDDSharp.UnitTest
                     finally
                     {
                         supportProcess.KillProcess(process);
+                        Thread.Sleep(1500);
                     }
 
                     bool resp = evt.Wait(50000);
@@ -637,6 +638,7 @@ namespace OpenDDSharp.UnitTest
                     finally
                     {
                         supportProcess.KillProcess(process);
+                        Thread.Sleep(1500);
                     }
 
                     bool resp = evt.Wait(50000);
