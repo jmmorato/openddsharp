@@ -1461,15 +1461,6 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsNotNull(publisher);
                 writer = publisher.CreateDataWriter(topic);
                 Assert.IsNotNull(writer);
-                TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
-
-                Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
-                Assert.IsTrue(reader.WaitForPublications(1, 5_000));
-
-                dataWriter.Write(new TestStruct
-                {
-                    Id = 1,
-                });
 
                 int count = 200;
                 result = ReturnCode.NoData;
