@@ -1360,7 +1360,6 @@ namespace OpenDDSharp.UnitTest
 
                 participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(participant);
-                participant.BindTcpTransportConfig();
 
                 List<InstanceHandle> handles = new List<InstanceHandle>();
                 result = participant.GetDiscoveredTopics(handles);
@@ -1434,8 +1433,7 @@ namespace OpenDDSharp.UnitTest
             try
             {
                 participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-                Assert.IsNotNull(participant);
-                participant.BindTcpTransportConfig();
+                Assert.IsNotNull(participant);                
 
                 List<InstanceHandle> handles = new List<InstanceHandle>();
                 result = participant.GetDiscoveredTopics(handles);
@@ -1463,6 +1461,15 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsNotNull(publisher);
                 writer = publisher.CreateDataWriter(topic);
                 Assert.IsNotNull(writer);
+                TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+                Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+                Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+
+                dataWriter.Write(new TestStruct
+                {
+                    Id = 1,
+                });
 
                 int count = 200;
                 result = ReturnCode.NoData;
@@ -1475,6 +1482,7 @@ namespace OpenDDSharp.UnitTest
 
                 Assert.AreEqual(ReturnCode.Ok, result);
                 Assert.AreEqual(1, handles.Count);
+                Assert.AreEqual(topic.InstanceHandle, handles.First());
 
                 // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter            
                 TopicBuiltinTopicData data = new TopicBuiltinTopicData();

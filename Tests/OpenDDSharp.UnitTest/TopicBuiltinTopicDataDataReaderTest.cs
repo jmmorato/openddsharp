@@ -51,7 +51,6 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindTcpTransportConfig();
 
             _subscriber = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(_subscriber);
