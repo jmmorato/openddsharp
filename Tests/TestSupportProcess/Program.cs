@@ -226,7 +226,13 @@ namespace TestSupportProcess
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
-            TcpInst tcpi = new TcpInst(inst);                    
+            TcpInst tcpi = new TcpInst(inst)
+            {
+                LocalAddress = "127.0.0.1:0",
+                DatalinkReleaseDelay = 1000,
+                
+            };
+
             config.Insert(inst);
 
             TransportRegistry.Instance.BindConfig(config, entity);

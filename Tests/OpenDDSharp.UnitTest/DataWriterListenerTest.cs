@@ -283,58 +283,79 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnPublicationDisconnected()
         {
-            ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            DomainParticipant domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(domainParticipant);
-            domainParticipant.BindTcpTransportConfig();
-
-            Publisher publisher = domainParticipant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(domainParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            Topic topic = domainParticipant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
-            Assert.IsNotNull(topic);
-
-            MyDataWriterListener listener = new MyDataWriterListener();
-            DataWriter writer = publisher.CreateDataWriter(topic, listener);
-
-            int count = 0;
-            listener.PublicationDisconnected += (w, s) =>
+            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
             {
-                Assert.AreEqual(writer, w);
-                Assert.AreEqual(1, s.SubscriptionHandles.Count());
-                Assert.AreNotEqual(InstanceHandle.HandleNil, s.SubscriptionHandles.First());
-                count++;
-                evt.Set();
-            };
+                ReturnCode result;
+                DomainParticipant domainParticipant = null;
+                Publisher publisher = null;
+                Topic topic = null;
+                DataWriter writer = null;
+                try
+                {
+                    domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                    Assert.IsNotNull(domainParticipant);
+                    domainParticipant.BindTcpTransportConfig();
 
-            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.PublicationDisconnectedTest);
-            try
-            {
-                // Wait for discovery
-                bool found = writer.WaitForSubscriptions(1, 20000);
-                Assert.IsTrue(found);
+                    publisher = domainParticipant.CreatePublisher();
+                    Assert.IsNotNull(publisher);
+
+                    TestStructTypeSupport support = new TestStructTypeSupport();
+                    string typeName = support.GetTypeName();
+                    result = support.RegisterType(domainParticipant, typeName);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+
+                    topic = domainParticipant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
+                    Assert.IsNotNull(topic);
+
+                    MyDataWriterListener listener = new MyDataWriterListener();
+                    writer = publisher.CreateDataWriter(topic, listener);
+
+                    int count = 0;
+                    listener.PublicationDisconnected += (w, s) =>
+                    {
+                        Assert.AreEqual(writer, w);
+                        Assert.AreEqual(1, s.SubscriptionHandles.Count());
+                        Assert.AreNotEqual(InstanceHandle.HandleNil, s.SubscriptionHandles.First());
+                        count++;
+                        evt.Set();
+                    };
+
+                    SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+                    Process process = supportProcess.SpawnSupportProcess(SupportTestKind.PublicationDisconnectedTest);
+                    try
+                    {
+                        // Wait for discovery
+                        bool found = writer.WaitForSubscriptions(1, 20000);
+                        Assert.IsTrue(found);
+                    }
+                    finally
+                    {
+                        supportProcess.KillProcess(process);
+                    }
+
+                    bool resp = evt.Wait(10000);
+                    Assert.IsTrue(resp);
+                    Assert.AreEqual(1, count);
+                }
+                finally
+                {
+                    // Remove the listener to avoid extra messages
+                    result = writer.SetListener(null);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = publisher.DeleteDataWriter(writer);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = publisher.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeletePublisher(publisher);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteTopic(topic);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
             }
-            finally
-            {
-                supportProcess.KillProcess(process);
-            }
-
-            bool resp = evt.Wait(10000);
-            Assert.IsTrue(resp);
-            Assert.AreEqual(1, count);
-
-            // Remove the listener to avoid extra messages
-            result = writer.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            domainParticipant.DeleteContainedEntities();
-            AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);                       
         }
 
         [TestMethod]
@@ -348,60 +369,79 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnPublicationLost()
         {
-            ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            DomainParticipant domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(domainParticipant);
-            domainParticipant.BindTcpTransportConfig();
-
-            Publisher publisher = domainParticipant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(domainParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            Topic topic = domainParticipant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
-            Assert.IsNotNull(topic);
-
-            MyDataWriterListener listener = new MyDataWriterListener();
-            DataWriter writer = publisher.CreateDataWriter(topic, listener);
-
-            int count = 0;
-            listener.PublicationLost += (w, s) =>
+            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
             {
-                Assert.AreEqual(writer, w);
-                Assert.AreEqual(1, s.SubscriptionHandles.Count());
-                Assert.AreNotEqual(InstanceHandle.HandleNil, s.SubscriptionHandles.First());
-                count++;
-                evt.Set();
-            };
+                ReturnCode result;
+                DomainParticipant domainParticipant = null;
+                Publisher publisher = null;
+                Topic topic = null;
+                DataWriter writer = null;
+                try
+                {
+                    domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                    Assert.IsNotNull(domainParticipant);
+                    domainParticipant.BindTcpTransportConfig();
 
-            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.PublicationLostTest);
-            try
-            {
-                // Wait for discovery
-                bool found = writer.WaitForSubscriptions(1, 20000);
-                Assert.IsTrue(found);
+                    publisher = domainParticipant.CreatePublisher();
+                    Assert.IsNotNull(publisher);
+
+                    TestStructTypeSupport support = new TestStructTypeSupport();
+                    string typeName = support.GetTypeName();
+                    result = support.RegisterType(domainParticipant, typeName);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+
+                    topic = domainParticipant.CreateTopic("TestOnPublicationLostDisconnected", typeName);
+                    Assert.IsNotNull(topic);
+
+                    MyDataWriterListener listener = new MyDataWriterListener();
+                    writer = publisher.CreateDataWriter(topic, listener);
+
+                    int count = 0;
+                    listener.PublicationLost += (w, s) =>
+                    {
+                        Assert.AreEqual(writer, w);
+                        Assert.AreEqual(1, s.SubscriptionHandles.Count());
+                        Assert.AreNotEqual(InstanceHandle.HandleNil, s.SubscriptionHandles.First());
+                        count++;
+                        evt.Set();
+                    };
+
+                    SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+                    Process process = supportProcess.SpawnSupportProcess(SupportTestKind.PublicationLostTest);
+                    try
+                    {
+                        // Wait for discovery
+                        bool found = writer.WaitForSubscriptions(1, 20000);
+                        Assert.IsTrue(found);
+                    }
+                    finally
+                    {
+                        supportProcess.KillProcess(process);
+                    }
+
+                    bool resp = evt.Wait(20000);
+                    Assert.IsTrue(resp);
+                    Assert.AreEqual(1, count);
+                }
+                finally
+                {
+                    // Remove the listener to avoid extra messages
+                    result = writer.SetListener(null);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = publisher.DeleteDataWriter(writer);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = publisher.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeletePublisher(publisher);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteTopic(topic);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
             }
-            finally
-            {
-                supportProcess.KillProcess(process);
-            }
-
-            bool resp = evt.Wait(20000);
-            Assert.IsTrue(resp);
-            Assert.AreEqual(1, count);
-
-            // Remove the listener to avoid extra messages
-            result = writer.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            domainParticipant.DeleteContainedEntities();
-            AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
-
-            evt.Dispose();
         }
         #endregion
     }

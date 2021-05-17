@@ -363,22 +363,14 @@ namespace OpenDDSharp.DDS
                                              OnSubscriptionMatchedDelegate onSubscriptionMatched,
                                              OnSampleLostDelegate onSampleLost)
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NewSubscriberListener86(onDataOnReaders,
-                                                                                                 onDataAvailabe,
-                                                                                                 onRequestedDeadlineMissed,
-                                                                                                 onRequestedIncompatibleQos,
-                                                                                                 onSampleRejected,
-                                                                                                 onLivelinessChanged,
-                                                                                                 onSubscriptionMatched,
-                                                                                                 onSampleLost),
-                                               () => UnsafeNativeMethods.NewSubscriberListener64(onDataOnReaders,
-                                                                                                 onDataAvailabe,
-                                                                                                 onRequestedDeadlineMissed,
-                                                                                                 onRequestedIncompatibleQos,
-                                                                                                 onSampleRejected,
-                                                                                                 onLivelinessChanged,
-                                                                                                 onSubscriptionMatched,
-                                                                                                 onSampleLost));
+            return UnsafeNativeMethods.NewSubscriberListener(onDataOnReaders,
+                                                             onDataAvailabe,
+                                                             onRequestedDeadlineMissed,
+                                                             onRequestedIncompatibleQos,
+                                                             onSampleRejected,
+                                                             onLivelinessChanged,
+                                                             onSubscriptionMatched,
+                                                             onSampleLost);
         }
 
         internal IntPtr ToNative()
@@ -397,26 +389,15 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "SubscriberListener_New", CallingConvention = CallingConvention.StdCall)]
-            public static extern IntPtr NewSubscriberListener64([MarshalAs(UnmanagedType.FunctionPtr)] OnDataOnReadersDelegate onDataOnReaders,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "SubscriberListener_New", CallingConvention = CallingConvention.StdCall)]
-            public static extern IntPtr NewSubscriberListener86([MarshalAs(UnmanagedType.FunctionPtr)] OnDataOnReadersDelegate onDataOnReaders,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "SubscriberListener_New", CallingConvention = CallingConvention.StdCall)]
+            public static extern IntPtr NewSubscriberListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataOnReadersDelegate onDataOnReaders,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
         }
         #endregion
     }

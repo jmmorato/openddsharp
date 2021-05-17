@@ -40,7 +40,7 @@ namespace OpenDDSharp
         /// </returns>
         public static int Init()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Init86(), () => UnsafeNativeMethods.Init64());
+            return UnsafeNativeMethods.NativeInit();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace OpenDDSharp
         /// </returns>
         public static int Fini()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Fini86(), () => UnsafeNativeMethods.Fini64());
+            return UnsafeNativeMethods.NativeFini();
         }
         #endregion
 
@@ -68,20 +68,12 @@ namespace OpenDDSharp
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int Init64();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int NativeInit();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Ace_Init", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int Init86();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int Fini64();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int Fini86();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Ace_Fini", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int NativeFini();
         }
         #endregion
     }

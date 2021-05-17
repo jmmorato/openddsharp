@@ -44,19 +44,19 @@ namespace OpenDDSharp.DDS
         /// Gets the set of sample-states that are taken into account to determine the trigger value of the <see cref="ReadCondition" />.
         /// These are the sample-states specified when the <see cref="ReadCondition" /> was created.
         /// </summary>
-        public SampleStateMask SampleStateMask => GetSampleStateMask();
+        public SampleStateMask SampleStateMask => UnsafeNativeMethods.GetSampleStateMask(_native);
 
         /// <summary>
         /// Gets the set of view-states that are taken into account to determine the trigger value of the <see cref="ReadCondition" />.
         /// These are the view-states specified when the <see cref="ReadCondition" /> was created.
         /// </summary>
-        public ViewStateMask ViewStateMask => GetViewStateMask();
+        public ViewStateMask ViewStateMask => UnsafeNativeMethods.GetViewStateMask(_native);
 
         /// <summary>
         /// Gets the set of instance-states that are taken into account to determine the trigger value of the <see cref="ReadCondition" />.
         /// These are the instance-states specified when the ReadCondition was created.
         /// </summary>
-        public InstanceStateMask InstanceStateMask => GetInstanceStateMask();
+        public InstanceStateMask InstanceStateMask => UnsafeNativeMethods.GetInstanceStateMask(_native);
 
         /// <summary>
         /// Gets the <see cref="DataReader" /> associated with the <see cref="ReadCondition" />.
@@ -68,7 +68,7 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Constructors
-        internal ReadCondition(IntPtr native, DataReader reader) : base(NarrowBase(native))
+        internal ReadCondition(IntPtr native, DataReader reader) : base(UnsafeNativeMethods.NarrowBase(native))
         {
             _native = native;
             DataReader = reader;
@@ -76,34 +76,9 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
-        private static IntPtr NarrowBase(IntPtr ptr)
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
-                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
-        }
-
-        private SampleStateMask GetSampleStateMask()
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetSampleStateMask86(_native),
-                                               () => UnsafeNativeMethods.GetSampleStateMask64(_native));
-        }
-
-        private ViewStateMask GetViewStateMask()
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetViewStateMask86(_native),
-                                               () => UnsafeNativeMethods.GetViewStateMask64(_native));
-        }
-
-        private InstanceStateMask GetInstanceStateMask()
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetInstanceStateMask86(_native),
-                                               () => UnsafeNativeMethods.GetInstanceStateMask64(_native));
-        }
-
         internal void Release()
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Release86(_native),
-                                        () => UnsafeNativeMethods.Release64(_native));
+            UnsafeNativeMethods.Release(_native);
         }
 
         /// <summary>
@@ -128,44 +103,24 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ReadCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ReadCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ReadCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase86(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ReadCondition_Release", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr Release(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ReadCondition_Release", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr Release64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ReadCondition_GetSampleStateMask", CallingConvention = CallingConvention.Cdecl)]
+            public static extern SampleStateMask GetSampleStateMask(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ReadCondition_Release", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr Release86(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ReadCondition_GetViewStateMask", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ViewStateMask GetViewStateMask(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ReadCondition_GetSampleStateMask", CallingConvention = CallingConvention.Cdecl)]
-            public static extern SampleStateMask GetSampleStateMask64(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ReadCondition_GetSampleStateMask", CallingConvention = CallingConvention.Cdecl)]
-            public static extern SampleStateMask GetSampleStateMask86(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ReadCondition_GetViewStateMask", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ViewStateMask GetViewStateMask64(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ReadCondition_GetViewStateMask", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ViewStateMask GetViewStateMask86(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ReadCondition_GetInstanceStateMask", CallingConvention = CallingConvention.Cdecl)]
-            public static extern InstanceStateMask GetInstanceStateMask64(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ReadCondition_GetInstanceStateMask", CallingConvention = CallingConvention.Cdecl)]
-            public static extern InstanceStateMask GetInstanceStateMask86(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ReadCondition_GetInstanceStateMask", CallingConvention = CallingConvention.Cdecl)]
+            public static extern InstanceStateMask GetInstanceStateMask(IntPtr ptr);
         }
         #endregion
     }

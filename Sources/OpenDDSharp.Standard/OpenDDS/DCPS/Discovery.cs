@@ -59,8 +59,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         #region Methods
         private string GetKey()
         {
-            var ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetKey86(_native),
-                                                  () => UnsafeNativeMethods.GetKey64(_native));
+            var ptr = UnsafeNativeMethods.GetKey(_native);
 
             var key = Marshal.PtrToStringAnsi(ptr);
             ptr.ReleaseNativePointer();
@@ -89,12 +88,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Discovery_GetKey", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetKey64(IntPtr d);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Discovery_GetKey", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetKey86(IntPtr d);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Discovery_GetKey", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetKey(IntPtr d);
         }
         #endregion
     }

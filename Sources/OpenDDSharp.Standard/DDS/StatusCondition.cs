@@ -61,7 +61,7 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Constructors
-        internal StatusCondition(IntPtr native, Entity entity) : base(NarrowBase(native))
+        internal StatusCondition(IntPtr native, Entity entity) : base(UnsafeNativeMethods.NarrowBase(native))
         {
             _native = native;
             Entity = entity;
@@ -69,22 +69,14 @@ namespace OpenDDSharp.DDS
         #endregion
 
         #region Methods
-        private static IntPtr NarrowBase(IntPtr ptr)
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
-                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
-        }
-
         private StatusMask GetEnabledStatuses()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetEnabledStatuses86(_native),
-                                               () => UnsafeNativeMethods.GetEnabledStatuses64(_native));
+            return UnsafeNativeMethods.GetEnabledStatuses(_native);
         }
 
         private void SetEnabledStatuses(StatusMask value)
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetEnabledStatuses64(_native, value), 
-                                        () => UnsafeNativeMethods.SetEnabledStatuses86(_native, value));
+            UnsafeNativeMethods.SetEnabledStatuses(_native, value);
         }
         #endregion
 
@@ -98,28 +90,16 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "StatusCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "StatusCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "StatusCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase86(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "StatusCondition_GetEnabledStatuses", CallingConvention = CallingConvention.Cdecl)]
+            public static extern StatusMask GetEnabledStatuses(IntPtr sc);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "StatusCondition_GetEnabledStatuses", CallingConvention = CallingConvention.Cdecl)]
-            public static extern StatusMask GetEnabledStatuses64(IntPtr sc);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "StatusCondition_GetEnabledStatuses", CallingConvention = CallingConvention.Cdecl)]
-            public static extern StatusMask GetEnabledStatuses86(IntPtr sc);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "StatusCondition_SetEnabledStatuses", CallingConvention = CallingConvention.Cdecl)]
-            public static extern StatusMask SetEnabledStatuses64(IntPtr sc, uint value);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "StatusCondition_SetEnabledStatuses", CallingConvention = CallingConvention.Cdecl)]
-            public static extern StatusMask SetEnabledStatuses86(IntPtr sc, uint value);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "StatusCondition_SetEnabledStatuses", CallingConvention = CallingConvention.Cdecl)]
+            public static extern StatusMask SetEnabledStatuses(IntPtr sc, uint value);
         }
         #endregion
     }

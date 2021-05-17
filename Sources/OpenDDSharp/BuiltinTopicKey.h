@@ -32,14 +32,14 @@ namespace OpenDDSharp {
 		public value struct BuiltinTopicKey {
 
 		private:
-			array<System::Int32, 1>^ m_value;
+			array<System::Byte, 1>^ m_value;
 
 		public:
 			/// <summary>
 			/// Gets the value of the <see cref="BuiltinTopicKey" />
 			/// </summary>
-			property array<System::Int32, 1>^ Value {
-				array<System::Int32, 1>^ get();
+			property array<System::Byte, 1>^ Value {
+				array<System::Byte, 1>^ get();
 			};
 
 		internal:
