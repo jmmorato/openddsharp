@@ -69,7 +69,7 @@ namespace OpenDDSharp.DDS
         /// Initializes a new instance of the <see cref="DataWriter"/> class.
         /// </summary>
         /// <param name="native">The native pointer.</param>
-        protected internal DataWriter(IntPtr native) : base(NarrowBase(native))
+        protected internal DataWriter(IntPtr native) : base(UnsafeNativeMethods.NarrowBase(native))
         {
             _native = native;
         }
@@ -89,8 +89,7 @@ namespace OpenDDSharp.DDS
             }
 
             DataWriterQosWrapper qosWrapper = default;
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetQos86(_native, ref qosWrapper),
-                                                  () => UnsafeNativeMethods.GetQos64(_native, ref qosWrapper));
+            var ret = UnsafeNativeMethods.GetQos64(_native, ref qosWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -116,8 +115,7 @@ namespace OpenDDSharp.DDS
 
             var qosNative = qos.ToNative();
 
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
-                                                  () => UnsafeNativeMethods.SetQos64(_native, qosNative));
+            var ret = UnsafeNativeMethods.SetQos(_native, qosNative);
 
             qos.Release();
 
@@ -160,8 +158,7 @@ namespace OpenDDSharp.DDS
                 ptr = listener.ToNative();
             }
 
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetListener86(_native, ptr, mask),
-                                               () => UnsafeNativeMethods.SetListener64(_native, ptr, mask));
+            return UnsafeNativeMethods.SetListener(_native, ptr, mask);
         }
 
         /// <summary>
@@ -180,8 +177,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode WaitForAcknowledgments(Duration maxWait)
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.WaitForAcknowledgments86(_native, maxWait),
-                                               () => UnsafeNativeMethods.WaitForAcknowledgments64(_native, maxWait));
+            return UnsafeNativeMethods.WaitForAcknowledgments(_native, maxWait);
         }
 
         /// <summary>
@@ -193,8 +189,7 @@ namespace OpenDDSharp.DDS
         {
             LivelinessLostStatus s = default;
 
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetLivelinessLostStatus86(_native, ref s),
-                                                         () => UnsafeNativeMethods.GetLivelinessLostStatus64(_native, ref s));
+            ReturnCode ret = UnsafeNativeMethods.GetLivelinessLostStatus(_native, ref s);
             status = s;
 
             return ret;
@@ -209,8 +204,7 @@ namespace OpenDDSharp.DDS
         {
             OfferedDeadlineMissedStatus s = default;
 
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetOfferedDeadlineMissedStatus86(_native, ref s),
-                                                         () => UnsafeNativeMethods.GetOfferedDeadlineMissedStatus64(_native, ref s));
+            ReturnCode ret = UnsafeNativeMethods.GetOfferedDeadlineMissedStatus(_native, ref s);
             status = s;
 
             return ret;
@@ -225,8 +219,7 @@ namespace OpenDDSharp.DDS
         {
             OfferedIncompatibleQosStatusWrapper s = default;
 
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetOfferedIncompatibleQosStatus86(_native, ref s),
-                                                         () => UnsafeNativeMethods.GetOfferedIncompatibleQosStatus64(_native, ref s));
+            ReturnCode ret = UnsafeNativeMethods.GetOfferedIncompatibleQosStatus(_native, ref s);
             status.FromNative(s);
 
             return ret;
@@ -241,8 +234,7 @@ namespace OpenDDSharp.DDS
         {
             PublicationMatchedStatus s = default;
 
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetPublicationMatchedStatus86(_native, ref s),
-                                                         () => UnsafeNativeMethods.GetPublicationMatchedStatus64(_native, ref s));
+            ReturnCode ret = UnsafeNativeMethods.GetPublicationMatchedStatus(_native, ref s);
             status = s;
 
             return ret;
@@ -261,8 +253,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode AssertLiveliness()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.AssertLiveliness86(_native),
-                                               () => UnsafeNativeMethods.AssertLiveliness64(_native));
+            return UnsafeNativeMethods.AssertLiveliness(_native);
         }
 
         /// <summary>
@@ -287,8 +278,7 @@ namespace OpenDDSharp.DDS
             subscriptionHandles.Clear();
 
             IntPtr seq = IntPtr.Zero;
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetMatchedSubscriptions86(_native, ref seq),
-                                                         () => UnsafeNativeMethods.GetMatchedSubscriptions64(_native, ref seq));
+            ReturnCode ret = UnsafeNativeMethods.GetMatchedSubscriptions64(_native, ref seq);
 
             if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
             {
@@ -316,8 +306,7 @@ namespace OpenDDSharp.DDS
         {
             SubscriptionBuiltinTopicDataWrapper data = default;
 
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetMatchedSubscriptionData86(_native, ref data, subscriptionHandle),
-                                                         () => UnsafeNativeMethods.GetMatchedSubscriptionData64(_native, ref data, subscriptionHandle));
+            ReturnCode ret = UnsafeNativeMethods.GetMatchedSubscriptionData64(_native, ref data, subscriptionHandle);
 
             if (ret == ReturnCode.Ok)
             {
@@ -327,16 +316,9 @@ namespace OpenDDSharp.DDS
             return ret;
         }
 
-        private static IntPtr NarrowBase(IntPtr ptr)
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
-                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
-        }
-
         private Topic GetTopic()
         {
-            IntPtr ptrTopic = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTopic86(_native),
-                                                          () => UnsafeNativeMethods.GetTopic64(_native));
+            IntPtr ptrTopic = UnsafeNativeMethods.GetTopic(_native);
 
             Topic topic = null;
 
@@ -361,8 +343,7 @@ namespace OpenDDSharp.DDS
 
         private Publisher GetPublisher()
         {
-            IntPtr ptrPublisher = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetPublisher86(_native),
-                                                              () => UnsafeNativeMethods.GetPublisher64(_native));
+            IntPtr ptrPublisher = UnsafeNativeMethods.GetPublisher(_native);
 
             Publisher publisher = null;
 
@@ -406,116 +387,60 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase86(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetQos", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetQos64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataWriterQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataWriterQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_WaitForAcknowledgments", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode WaitForAcknowledgments(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] Duration duration);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] DataWriterQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetPublicationMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetPublicationMatchedStatus(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationMatchedStatus status);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_WaitForAcknowledgments", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode WaitForAcknowledgments64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] Duration duration);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_AssertLiveliness", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode AssertLiveliness(IntPtr dw);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_WaitForAcknowledgments", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode WaitForAcknowledgments86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] Duration duration);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener(IntPtr dw, IntPtr listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetPublicationMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetPublicationMatchedStatus64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationMatchedStatus status);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetPublisher(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetPublicationMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetPublicationMatchedStatus86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationMatchedStatus status);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetTopic", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetTopic(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_AssertLiveliness", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode AssertLiveliness64(IntPtr dw);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetLivelinessLostStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetLivelinessLostStatus(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref LivelinessLostStatus status);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_AssertLiveliness", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode AssertLiveliness86(IntPtr dw);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetOfferedDeadlineMissedStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetOfferedDeadlineMissedStatus(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref OfferedDeadlineMissedStatus status);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_SetListener", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetListener64(IntPtr dw, IntPtr listener, uint mask);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetOfferedIncompatibleQosStatus", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetOfferedIncompatibleQosStatus(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref OfferedIncompatibleQosStatusWrapper status);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_SetListener", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetListener86(IntPtr dw, IntPtr listener, uint mask);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetPublisher64(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetPublisher", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetPublisher86(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetTopic", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetTopic64(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetTopic", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetTopic86(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetLivelinessLostStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetLivelinessLostStatus64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref LivelinessLostStatus status);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetLivelinessLostStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetLivelinessLostStatus86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref LivelinessLostStatus status);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetOfferedDeadlineMissedStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetOfferedDeadlineMissedStatus64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref OfferedDeadlineMissedStatus status);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetOfferedDeadlineMissedStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetOfferedDeadlineMissedStatus86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref OfferedDeadlineMissedStatus status);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetOfferedIncompatibleQosStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetOfferedIncompatibleQosStatus64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref OfferedIncompatibleQosStatusWrapper status);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetOfferedIncompatibleQosStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetOfferedIncompatibleQosStatus86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref OfferedIncompatibleQosStatusWrapper status);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetMatchedSubscriptions", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetMatchedSubscriptions", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetMatchedSubscriptions64(IntPtr dw, ref IntPtr handles);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetMatchedSubscriptions", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetMatchedSubscriptions86(IntPtr dw, ref IntPtr handles);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriter_GetMatchedSubscriptionData", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetMatchedSubscriptionData", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetMatchedSubscriptionData64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriptionBuiltinTopicDataWrapper data, int handle);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriter_GetMatchedSubscriptionData", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetMatchedSubscriptionData86(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriptionBuiltinTopicDataWrapper data, int handle);
         }
         #endregion
     }

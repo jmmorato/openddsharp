@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)bin/$(Platform)/$(Configuration)/</OutDir>
     <IntDir>$(ProjectDir)obj/$(Platform)/$(Configuration)/</IntDir>
-    <TargetName>lib$(ProjectName)Wrapper$(Platform)</TargetName>
+    <TargetName>lib$(ProjectName)Wrapper</TargetName>
     <TargetExt>.so</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)bin/$(Platform)/$(Configuration)/</OutDir>
     <IntDir>$(ProjectDir)obj/$(Platform)/$(Configuration)/</IntDir>
-    <TargetName>lib$(ProjectName)Wrapper$(Platform)</TargetName>
+    <TargetName>lib$(ProjectName)Wrapper</TargetName>
     <TargetExt>.so</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

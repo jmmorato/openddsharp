@@ -45,16 +45,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <param name="ior">Repository IOR or host:port.</param>
         public InfoRepoDiscovery(string key, string ior)
         {
-            _native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.InfoRepoDiscoveryNew86(key, ior), () => UnsafeNativeMethods.InfoRepoDiscoveryNew64(key, ior));
-            FromNative(NarrowBase(_native));
-        }
-        #endregion
-
-        #region Methods
-        private static IntPtr NarrowBase(IntPtr ptr)
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
-                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
+            _native = UnsafeNativeMethods.InfoRepoDiscoveryNew(key, ior);
+            FromNative(UnsafeNativeMethods.NarrowBase(_native));
         }
         #endregion
 
@@ -68,21 +60,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "InfoRepoDiscovery_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "InfoRepoDiscovery_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "InfoRepoDiscovery_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase86(IntPtr ptr);
-
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "InfoRepoDiscovery_new", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr InfoRepoDiscoveryNew64(string key, string ior);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "InfoRepoDiscovery_new", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr InfoRepoDiscoveryNew86(string key, string ior);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "InfoRepoDiscovery_new", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr InfoRepoDiscoveryNew(string key, string ior);
         }
         #endregion
     }

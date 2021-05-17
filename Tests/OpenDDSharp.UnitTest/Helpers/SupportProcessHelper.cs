@@ -63,10 +63,10 @@ namespace OpenDDSharp.UnitTest.Helpers
             var ddsLib = Path.Combine(ddsPath, $"lib");
             var aceBin = Path.Combine(acePath, $"bin");
             var aceLib = Path.Combine(acePath, $"lib");
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_x64");
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_x64");
-            var aceBinPlatform = Path.Combine(acePath, $"bin_x64");
-            var aceLibPlatform = Path.Combine(acePath, $"lib_x64");
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{_platformFolder.TrimEnd('\\')}");
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{_platformFolder.TrimEnd('\\')}");
+            var aceBinPlatform = Path.Combine(acePath, $"bin_{_platformFolder.TrimEnd('\\')}");
+            var aceLibPlatform = Path.Combine(acePath, $"lib_{_platformFolder.TrimEnd('\\')}");
             string path = $"{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
@@ -103,7 +103,8 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
             infoRepoPath = Path.GetFullPath(infoRepoPath);
-            return SpawnProcess(infoRepoPath, string.Empty);
+            //-ORBLogFile DCPSInfoRepo.log -ORBDebugLevel 1 -ORBVerboseLogging 1 -DCPSDebugLevel 2 -DCPSTransportDebugLevel 3
+            return SpawnProcess(infoRepoPath, "-ORBDottedDecimalAddresses 1 -DCPSDefaultAddress 127.0.0.1 -ORBListenEndpoints iiop://:12345");
         }
 
         private Process SpawnProcess(string path, string arguments)

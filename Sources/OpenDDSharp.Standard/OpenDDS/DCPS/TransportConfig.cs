@@ -102,8 +102,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(inst));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Insert86(_native, inst.ToNative()),
-                                        () => UnsafeNativeMethods.Insert64(_native, inst.ToNative()));
+            UnsafeNativeMethods.Insert(_native, inst.ToNative());
         }
 
         /// <summary>
@@ -163,12 +162,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TransportConfig_Insert", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Insert64(IntPtr cfg, IntPtr inst);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TransportConfig_Insert", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Insert86(IntPtr cfg, IntPtr inst);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_Insert", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void Insert(IntPtr cfg, IntPtr inst);
         }
         #endregion
     }

@@ -51,22 +51,8 @@ namespace OpenDDSharp.OpenDDS.RTPS
         /// <param name="key">The discovery unique key.</param>
         public RtpsDiscovery(string key)
         {
-            _native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.RtpsDiscoveryNew86(key), () => UnsafeNativeMethods.RtpsDiscoveryNew64(key));
-            FromNative(NarrowBase(_native));
-        }
-        #endregion
-
-        #region Methods
-        private static IntPtr NarrowBase(IntPtr ptr)
-        {
-            if (Environment.Is64BitProcess)
-            {
-                return UnsafeNativeMethods.NarrowBase64(ptr);
-            }
-            else
-            {
-                return UnsafeNativeMethods.NarrowBase86(ptr);
-            }
+            _native = UnsafeNativeMethods.RtpsDiscoveryNew(key);
+            FromNative(UnsafeNativeMethods.NarrowBase(_native));
         }
         #endregion
 
@@ -80,21 +66,12 @@ namespace OpenDDSharp.OpenDDS.RTPS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "RtpsDiscovery_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "RtpsDiscovery_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase86(IntPtr ptr);
-
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "RtpsDiscovery_new", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr RtpsDiscoveryNew64(string key);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "RtpsDiscovery_new", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr RtpsDiscoveryNew86(string key);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_new", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr RtpsDiscoveryNew(string key);
         }
         #endregion
     }

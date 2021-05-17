@@ -27,6 +27,7 @@ using System.Threading;
 
 namespace OpenDDSharp.UnitTest
 {
+    [Ignore]
     [TestClass]
     public class TopicBuiltinTopicDataDataReaderTest
     {
@@ -51,7 +52,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindTcpTransportConfig();
+            _participant.BindRtpsUdpTransportConfig();
 
             _subscriber = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(_subscriber);
@@ -83,487 +84,588 @@ namespace OpenDDSharp.UnitTest
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestRead()
-        {            
-            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();            
-            ReturnCode ret = _dr.Read(data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(0, infos.Count);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+        {
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
+                List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
+                List<SampleInfo> infos = new List<SampleInfo>();
                 ret = _dr.Read(data, infos);
-                count--;
+                Assert.AreEqual(ReturnCode.NoData, ret);
+                Assert.AreEqual(0, data.Count);
+                Assert.AreEqual(0, infos.Count);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.Read(data, infos);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+                Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
+
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-            Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestTake()
         {
-            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Take(data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(0, infos.Count);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
+                List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
+                List<SampleInfo> infos = new List<SampleInfo>();
                 ret = _dr.Take(data, infos);
-                count--;
+                Assert.AreEqual(ReturnCode.NoData, ret);
+                Assert.AreEqual(0, data.Count);
+                Assert.AreEqual(0, infos.Count);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.Take(data, infos);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+                Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-            Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestReadInstance()
         {
-            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(0, infos.Count);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
+                List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
+                List<SampleInfo> infos = new List<SampleInfo>();
+                ret = _dr.Read(data, infos);
+                Assert.AreEqual(ReturnCode.NoData, ret);
+                Assert.AreEqual(0, data.Count);
+                Assert.AreEqual(0, infos.Count);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+
+                var handle = infos.First().InstanceHandle;
+                data = new List<TopicBuiltinTopicData>();
+                infos = new List<SampleInfo>();
+
+                ret = _dr.ReadInstance(data, infos, handle);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+                Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-
-            var handle = infos.First().InstanceHandle;
-            data = new List<TopicBuiltinTopicData>();
-            infos = new List<SampleInfo>();
-
-            ret = _dr.ReadInstance(data, infos, handle);
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-            Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestTakeInstance()
         {
-            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(0, infos.Count);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
+                List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
+                List<SampleInfo> infos = new List<SampleInfo>();
+                ret = _dr.Read(data, infos);
+                Assert.AreEqual(ReturnCode.NoData, ret);
+                Assert.AreEqual(0, data.Count);
+                Assert.AreEqual(0, infos.Count);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count); Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
+
+                var handle = infos.First().InstanceHandle;
+                data = new List<TopicBuiltinTopicData>();
+                infos = new List<SampleInfo>();
+
+                ret = _dr.TakeInstance(data, infos, handle);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+                Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count); Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            var handle = infos.First().InstanceHandle;
-            data = new List<TopicBuiltinTopicData>();
-            infos = new List<SampleInfo>();
-
-            ret = _dr.TakeInstance(data, infos, handle);
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-            Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestReadNextInstance()
         {
-            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(0, infos.Count);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
+                List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
+                List<SampleInfo> infos = new List<SampleInfo>();
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
+                Assert.AreEqual(ReturnCode.NoData, ret);
+                Assert.AreEqual(0, data.Count);
+                Assert.AreEqual(0, infos.Count);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+                Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-            Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestTakeNextInstance()
         {
-            List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(0, infos.Count);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
+                List<TopicBuiltinTopicData> data = new List<TopicBuiltinTopicData>();
+                List<SampleInfo> infos = new List<SampleInfo>();
                 ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
+                Assert.AreEqual(ReturnCode.NoData, ret);
+                Assert.AreEqual(0, data.Count);
+                Assert.AreEqual(0, infos.Count);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(1, data.Count);
+                Assert.AreEqual(1, infos.Count);
+                Assert.AreEqual(typeName, data.First().TypeName);
+                Assert.IsNotNull(data.First().Key);
+                TestHelper.TestNonDefaultTopicData(data.First());
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, infos.Count);
-            Assert.AreEqual(typeName, data.First().TypeName);
-            Assert.IsNotNull(data.First().Key);
-            TestHelper.TestNonDefaultTopicData(data.First());
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestReadNextSample()
         {
-            TopicBuiltinTopicData data = default;
-            SampleInfo infos = new SampleInfo();
-            ReturnCode ret = _dr.ReadNextSample(ref data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
+                TopicBuiltinTopicData data = default;
+                SampleInfo infos = new SampleInfo();
                 ret = _dr.ReadNextSample(ref data, infos);
-                count--;
+                Assert.AreEqual(ReturnCode.NoData, ret);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.ReadNextSample(ref data, infos);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(typeName, data.TypeName);
+                Assert.IsNotNull(data.Key);
+                TestHelper.TestNonDefaultTopicData(data);
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret); 
-            Assert.AreEqual(typeName, data.TypeName);
-            Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestTakeNextSample()
         {
-            TopicBuiltinTopicData data = default;
-            SampleInfo infos = new SampleInfo();
-            ReturnCode ret = _dr.TakeNextSample(ref data, infos);
-            Assert.AreEqual(ReturnCode.NoData, ret);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
+                TopicBuiltinTopicData data = default;
+                SampleInfo infos = new SampleInfo();
                 ret = _dr.TakeNextSample(ref data, infos);
-                count--;
+                Assert.AreEqual(ReturnCode.NoData, ret);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.TakeNextSample(ref data, infos);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(typeName, data.TypeName);
+                Assert.IsNotNull(data.Key);
+                TestHelper.TestNonDefaultTopicData(data);
             }
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(typeName, data.TypeName);
-            Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetKeyValue()
         {
-            // Call GetKeyValue with HandleNil
-            TopicBuiltinTopicData data = default;
-            SampleInfo info = new SampleInfo();
-            ReturnCode ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
-            Assert.AreEqual(ReturnCode.BadParameter, ret);
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
-                // Get the for an existing instance
-                ret = _dr.ReadNextSample(ref data, info);
-                count--;
+                // Call GetKeyValue with HandleNil
+                TopicBuiltinTopicData data = default;
+                SampleInfo info = new SampleInfo();
+                ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
+                Assert.AreEqual(ReturnCode.BadParameter, ret);
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    // Get the for an existing instance
+                    ret = _dr.ReadNextSample(ref data, info);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(typeName, data.TypeName);
+                Assert.IsNotNull(data.Key);
+                TestHelper.TestNonDefaultTopicData(data);
+
+                TopicBuiltinTopicData aux = default;
+                ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                for (int i = 0; i < 16; i++)
+                {
+                    Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
+                }
             }
-
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(typeName, data.TypeName);
-            Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
-
-            TopicBuiltinTopicData aux = default;
-            ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            for (int i = 0; i < 16; i++)
+            finally
             {
-                Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
+
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
             }
-
-            ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
         }
 
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestLookupInstance()
         {
-            TopicBuiltinTopicData data = default;
-            SampleInfo info = new SampleInfo();
-
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
-            Assert.IsNotNull(topic);
-
-            int count = 200;
-            ReturnCode ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
+            ReturnCode ret;
+            DomainParticipant otherParticipant = null;
+            Topic topic = null;
+            try
             {
-                Thread.Sleep(100);
-                ret = _dr.ReadNextSample(ref data, info);
-                count--;
+                TopicBuiltinTopicData data = default;
+                SampleInfo info = new SampleInfo();
+
+                otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                Assert.IsNotNull(otherParticipant);
+                otherParticipant.BindRtpsUdpTransportConfig();
+
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(otherParticipant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+                topic = otherParticipant.CreateTopic(TestContext.TestName, typeName, qos);
+                Assert.IsNotNull(topic);
+
+                int count = 200;
+                ret = ReturnCode.NoData;
+                while (ret != ReturnCode.Ok && count > 0)
+                {
+                    Thread.Sleep(100);
+                    ret = _dr.ReadNextSample(ref data, info);
+                    count--;
+                }
+
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                Assert.AreEqual(typeName, data.TypeName);
+                Assert.IsNotNull(data.Key);
+                TestHelper.TestNonDefaultTopicData(data);
+
+                // Lookup for an existing instance
+                var handle = _dr.LookupInstance(data);
+                Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
             }
-             
-            Assert.AreEqual(ReturnCode.Ok, ret);
-            Assert.AreEqual(typeName, data.TypeName);
-            Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
+            finally
+            {
+                ret = otherParticipant.DeleteTopic(topic);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = otherParticipant.DeleteContainedEntities();
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // Lookup for an existing instance
-            var handle = _dr.LookupInstance(data);
-            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
-
-             ret = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, ret);
+                ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+                Assert.AreEqual(ReturnCode.Ok, ret);
+            }
         }
         #endregion
     }

@@ -27,8 +27,7 @@ namespace OpenDDSharp.Helpers
     internal static class MarshalHelper
     {
         #region Constants
-        internal const string API_DLL_X64 = @"OpenDDSWrapperx64";
-        internal const string API_DLL_X86 = @"OpenDDSWrapperWin32";
+        internal const string API_DLL = @"OpenDDSWrapper";
         #endregion
 
         #region Methods
@@ -117,10 +116,13 @@ namespace OpenDDSharp.Helpers
             }
 
             int elSiz = Marshal.SizeOf<T>();
+
             // Get the total size of unmanaged memory that is needed (length + elements)
             int size = sizeof(int) + (elSiz * sequence.Count);
+
             // Allocate unmanaged space.
             ptr = Marshal.AllocHGlobal(size);
+
             // Write the "Length" field first
             Marshal.WriteInt32(ptr, sequence.Count);
 
@@ -145,12 +147,16 @@ namespace OpenDDSharp.Helpers
             }
 
             int elSiz = Marshal.SizeOf<T>();
+
             // Get the total size of unmanaged memory that is needed (length + elements)
             int size = sizeof(int) + (elSiz * sequence.Count);
+
             // Allocate unmanaged space.
             ptr = Marshal.AllocHGlobal(size);
+
             // Write the "Length" field first
             Marshal.WriteInt32(ptr, sequence.Count);
+
             // Write the list data
             for (int i = 0; i < sequence.Count; i++)
             {
@@ -249,33 +255,9 @@ namespace OpenDDSharp.Helpers
             return toRelease;
         }
 
-        public static void ExecuteAnyCpu(Action x86Code, Action x64Code)
-        {
-            if (Environment.Is64BitProcess)
-            {
-                x64Code();
-            }
-            else
-            {
-                x86Code();
-            }
-        }
-
-        public static T ExecuteAnyCpu<T>(Func<T> x86Code, Func<T> x64Code)
-        {
-            if (Environment.Is64BitProcess)
-            {
-                return x64Code();
-            }
-            else
-            {
-                return x86Code();
-            }
-        }
-
         public static void ReleaseNativePointer(this IntPtr ptr)
         {
-            ExecuteAnyCpu(() => UnsafeNativeMethods.ReleaseNativePointer86(ptr), () => UnsafeNativeMethods.ReleaseNativePointer64(ptr));
+            UnsafeNativeMethods.ReleaseNative(ptr);
         }
         #endregion
 
@@ -289,12 +271,8 @@ namespace OpenDDSharp.Helpers
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void ReleaseNativePointer64(IntPtr ptr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void ReleaseNativePointer86(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void ReleaseNative(IntPtr ptr);
         }
         #endregion
     }

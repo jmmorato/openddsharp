@@ -95,8 +95,7 @@ namespace OpenDDSharp.DDS
 
         private IntPtr NewTopicListener(OnInconsistentTopicDelegate onInconsistentTopic)
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NewTopicListener86(onInconsistentTopic),
-                                               () => UnsafeNativeMethods.NewTopicListener64(onInconsistentTopic));
+            return UnsafeNativeMethods.NewTopicListener(onInconsistentTopic);
         }
 
         internal IntPtr ToNative()
@@ -115,12 +114,8 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.StdCall)]
-            public static extern IntPtr NewTopicListener64([MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.StdCall)]
-            public static extern IntPtr NewTopicListener86([MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.StdCall)]
+            public static extern IntPtr NewTopicListener([MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
         }
         #endregion
     }

@@ -55,8 +55,7 @@ namespace OpenDDSharp.DDS
         #region Methods
         private bool GetTriggerValue()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetTriggerValue86(_native),
-                                               () => UnsafeNativeMethods.GetTriggerValue64(_native));
+            return UnsafeNativeMethods.GetTriggerValue(_native);
         }
 
         internal IntPtr ToNative()
@@ -75,14 +74,9 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Condition_GetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Condition_GetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
             [return: MarshalAs(UnmanagedType.I1)]
-            public static extern bool GetTriggerValue64(IntPtr c);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Condition_GetTriggerValue", CallingConvention = CallingConvention.Cdecl)]
-            [return: MarshalAs(UnmanagedType.I1)]
-            public static extern bool GetTriggerValue86(IntPtr c);
+            public static extern bool GetTriggerValue(IntPtr c);
         }
         #endregion
     }

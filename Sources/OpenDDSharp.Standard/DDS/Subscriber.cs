@@ -154,8 +154,7 @@ namespace OpenDDSharp.DDS
             }
 
             IntPtr td = topicDescription.ToNativeTopicDescription();
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.CreateDataReader86(_native, td, qosWrapper, nativeListener, statusMask),
-                                                        () => UnsafeNativeMethods.CreateDataReader64(_native, td, qosWrapper, nativeListener, statusMask));
+            IntPtr native = UnsafeNativeMethods.CreateDataReader(_native, td, qosWrapper, nativeListener, statusMask);
 
             qos.Release();
 
@@ -196,8 +195,7 @@ namespace OpenDDSharp.DDS
                 return ReturnCode.Ok;
             }
 
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteDataReader86(_native, dataReader.ToNative()),
-                                                         () => UnsafeNativeMethods.DeleteDataReader64(_native, dataReader.ToNative()));
+            ReturnCode ret = UnsafeNativeMethods.DeleteDataReader(_native, dataReader.ToNative());
             if (ret == ReturnCode.Ok)
             {
                 EntityManager.Instance.Remove((dataReader as Entity).ToNative());
@@ -221,8 +219,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteContainedEntities()
         {
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.DeleteContainedEntities86(_native),
-                                                         () => UnsafeNativeMethods.DeleteContainedEntities64(_native));
+            ReturnCode ret = UnsafeNativeMethods.DeleteContainedEntities(_native);
             if (ret == ReturnCode.Ok)
             {
                 foreach (Entity e in ContainedEntities)
@@ -250,8 +247,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="DataReader" />, if it exists, otherwise <see langword="null"/>.</returns>
         public DataReader LookupDataReader(string topicName)
         {
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.LookupDataReader86(_native, topicName),
-                                                        () => UnsafeNativeMethods.LookupDataReader64(_native, topicName));
+            IntPtr native = UnsafeNativeMethods.LookupDataReader(_native, topicName);
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -327,8 +323,7 @@ namespace OpenDDSharp.DDS
             readers.Clear();
 
             IntPtr ptr = IntPtr.Zero;
-            ReturnCode ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDataReaders86(_native, ref ptr, sampleStates, viewStates, instanceStates),
-                                                         () => UnsafeNativeMethods.GetDataReaders64(_native, ref ptr, sampleStates, viewStates, instanceStates));
+            ReturnCode ret = UnsafeNativeMethods.GetDataReaders(_native, ref ptr, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !ptr.Equals(IntPtr.Zero))
             {
@@ -367,8 +362,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode NotifyDataReaders()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NotifyDataReaders86(_native),
-                                               () => UnsafeNativeMethods.NotifyDataReaders64(_native));
+            return UnsafeNativeMethods.NotifyDataReaders(_native);
         }
 
         /// <summary>
@@ -384,8 +378,7 @@ namespace OpenDDSharp.DDS
             }
 
             SubscriberQosWrapper qosWrapper = default;
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetQos86(_native, ref qosWrapper),
-                                                  () => UnsafeNativeMethods.GetQos64(_native, ref qosWrapper));
+            var ret = UnsafeNativeMethods.GetQos(_native, ref qosWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -411,8 +404,7 @@ namespace OpenDDSharp.DDS
 
             var qosNative = qos.ToNative();
 
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetQos86(_native, qosNative),
-                                                  () => UnsafeNativeMethods.SetQos64(_native, qosNative));
+            var ret = UnsafeNativeMethods.SetQos(_native, qosNative);
 
             qos.Release();
 
@@ -455,8 +447,7 @@ namespace OpenDDSharp.DDS
                 ptr = listener.ToNative();
             }
 
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetListener86(_native, ptr, mask),
-                                               () => UnsafeNativeMethods.SetListener64(_native, ptr, mask));
+            return UnsafeNativeMethods.SetListener(_native, ptr, mask);
         }
 
         /// <summary>
@@ -477,8 +468,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode BeginAccess()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.BeginAccess86(_native),
-                                               () => UnsafeNativeMethods.BeginAccess64(_native));
+            return UnsafeNativeMethods.BeginAccess(_native);
         }
 
         /// <summary>
@@ -493,8 +483,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode EndAccess()
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.EndAccess86(_native),
-                                               () => UnsafeNativeMethods.EndAccess64(_native));
+            return UnsafeNativeMethods.EndAccess(_native);
         }
 
         /// <summary>
@@ -515,8 +504,7 @@ namespace OpenDDSharp.DDS
             }
 
             DataReaderQosWrapper qosWrapper = default;
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultDataReaderQos86(_native, ref qosWrapper),
-                                                  () => UnsafeNativeMethods.GetDefaultDataReaderQos64(_native, ref qosWrapper));
+            var ret = UnsafeNativeMethods.GetDefaultDataReaderQos(_native, ref qosWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -546,8 +534,7 @@ namespace OpenDDSharp.DDS
             }
 
             var qosNative = qos.ToNative();
-            var ret = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultDataReaderQos86(_native, qosNative),
-                                                  () => UnsafeNativeMethods.SetDefaultDataReaderQos64(_native, qosNative));
+            var ret = UnsafeNativeMethods.SetDefaultDataReaderQos(_native, qosNative);
             qos.Release();
 
             return ret;
@@ -555,8 +542,7 @@ namespace OpenDDSharp.DDS
 
         internal static IntPtr NarrowBase(IntPtr ptr)
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NarrowBase86(ptr),
-                                               () => UnsafeNativeMethods.NarrowBase64(ptr));
+            return UnsafeNativeMethods.NativeNarrowBase(ptr);
         }
 
         internal new IntPtr ToNative()
@@ -566,8 +552,7 @@ namespace OpenDDSharp.DDS
 
         private DomainParticipant GetParticipant()
         {
-            IntPtr ptrParticipant = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetParticipant86(_native),
-                                                                () => UnsafeNativeMethods.GetParticipant64(_native));
+            IntPtr ptrParticipant = UnsafeNativeMethods.GetParticipant64(_native);
 
             DomainParticipant participant = null;
 
@@ -601,124 +586,64 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase64(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NativeNarrowBase(IntPtr ptr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NarrowBase86(IntPtr ptr);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateDataReader(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateDataReader64(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateDataReader86(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDefaultDataReaderQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDefaultDataReaderQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetDefaultDataReaderQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener(IntPtr sub, IntPtr listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetDefaultDataReaderQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteDataReader(IntPtr s, IntPtr dr);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_BeginAccess", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode BeginAccess(IntPtr s);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_EndAccess", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode EndAccess(IntPtr s);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos64(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetQos86(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_SetListener", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetListener64(IntPtr sub, IntPtr listener, uint mask);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_SetListener", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetListener86(IntPtr sub, IntPtr listener, uint mask);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern ReturnCode DeleteDataReader64(IntPtr s, IntPtr dr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern ReturnCode DeleteDataReader86(IntPtr s, IntPtr dr);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_BeginAccess", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode BeginAccess64(IntPtr s);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_BeginAccess", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode BeginAccess86(IntPtr s);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_EndAccess", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode EndAccess64(IntPtr s);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_EndAccess", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode EndAccess86(IntPtr s);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr GetParticipant64(IntPtr pub);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetParticipant86(IntPtr pub);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_LookupDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr LookupDataReader(IntPtr pub, string topicName);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_LookupDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr LookupDataReader64(IntPtr pub, string topicName);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteContainedEntities(IntPtr sub);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_LookupDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr LookupDataReader86(IntPtr pub, string topicName);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NotifyDataReaders", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode NotifyDataReaders(IntPtr sub);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode DeleteContainedEntities64(IntPtr sub);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode DeleteContainedEntities86(IntPtr sub);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_NotifyDataReaders", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode NotifyDataReaders64(IntPtr sub);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_NotifyDataReaders", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode NotifyDataReaders86(IntPtr sub);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "Subscriber_GetDataReaders", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDataReaders64(IntPtr sub, ref IntPtr lst, uint sampleMask, uint viewMask, uint instanceMask);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "Subscriber_GetDataReaders", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDataReaders86(IntPtr sub, ref IntPtr lst, uint sampleMask, uint viewMask, uint instanceMask);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDataReaders", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDataReaders(IntPtr sub, ref IntPtr lst, uint sampleMask, uint viewMask, uint instanceMask);
         }
         #endregion
     }

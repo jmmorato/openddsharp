@@ -67,13 +67,11 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <summary>
         /// Gets a value indicating whether the participant has been shutdown or not.
         /// </summary>
-        [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
-        public bool IsShutdown => GetIsShutdown();
+        public bool IsShutdown => UnsafeNativeMethods.GetIsShutdown();
 
         /// <summary>
         /// Gets or sets the default discovery.
         /// </summary>
-        [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public string DefaultDiscovery
         {
             get => GetDefaultDiscovery();
@@ -89,8 +87,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public DomainParticipantFactory GetDomainParticipantFactory()
         {
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDomainParticipantFactory86(),
-                                                        () => UnsafeNativeMethods.GetDomainParticipantFactory64());
+            IntPtr native = UnsafeNativeMethods.GetDomainParticipantFactory();
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -119,8 +116,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 argv[i + 1] = args[i];
             }
 
-            IntPtr native = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDomainParticipantFactory86(argc, argv),
-                                                        () => UnsafeNativeMethods.GetDomainParticipantFactory64(argc, argv));
+            IntPtr native = UnsafeNativeMethods.GetDomainParticipantFactory(argc, argv);
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -142,8 +138,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
                 throw new ArgumentNullException(nameof(discovery));
             }
 
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.AddDiscovery86(discovery.ToNative()),
-                                        () => UnsafeNativeMethods.AddDiscovery64(discovery.ToNative()));
+            UnsafeNativeMethods.AddDiscovery(discovery.ToNative());
         }
 
         /// <summary>
@@ -165,8 +160,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public void SetRepoDomain(int domain, string repo, bool attachParticipant)
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetRepoDomain86(domain, repo, attachParticipant),
-                                        () => UnsafeNativeMethods.SetRepoDomain64(domain, repo, attachParticipant));
+            UnsafeNativeMethods.SetRepoDomain(domain, repo, attachParticipant);
         }
 
         /// <summary>
@@ -178,20 +172,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public void Shutdown()
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.Shutdown86(),
-                                        () => UnsafeNativeMethods.Shutdown64());
-        }
-
-        private static bool GetIsShutdown()
-        {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetIsShutdown86(),
-                                               () => UnsafeNativeMethods.GetIsShutdown64());
+            UnsafeNativeMethods.Shutdown();
         }
 
         private static string GetDefaultDiscovery()
         {
-            IntPtr ptr = MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.GetDefaultDiscovery86(),
-                                                     () => UnsafeNativeMethods.GetDefaultDiscovery64());
+            IntPtr ptr = UnsafeNativeMethods.NativeGetDefaultDiscovery();
 
             string defaultDiscovery = Marshal.PtrToStringAnsi(ptr);
             ptr.ReleaseNativePointer();
@@ -201,8 +187,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
         private static void SetDefaultDiscovery(string value)
         {
-            MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.SetDefaultDiscovery86(value),
-                                        () => UnsafeNativeMethods.SetDefaultDiscovery64(value));
+            UnsafeNativeMethods.NativeSetDefaultDiscovery(value);
         }
         #endregion
 
@@ -216,78 +201,41 @@ namespace OpenDDSharp.OpenDDS.DCPS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_new", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void ParticipantServiceNew64();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_new", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void ParticipantServiceNew();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_new", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void ParticipantServiceNew86();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetDomainParticipantFactory", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetDomainParticipantFactory();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_GetDomainParticipantFactory", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetDomainParticipantFactory64();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetDomainParticipantFactoryParameters", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetDomainParticipantFactory(int argc, string[] argv);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_GetDomainParticipantFactoryParameters", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetDomainParticipantFactory64(int argc, string[] argv);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_AddDiscovery", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void AddDiscovery(IntPtr discovery);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_GetDomainParticipantFactory")]
-            public static extern IntPtr GetDomainParticipantFactory86();
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetDefaultDiscovery", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NativeGetDefaultDiscovery();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_GetDomainParticipantFactoryParameters", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetDomainParticipantFactory86(int argc, string[] argv);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_SetDefaultDiscovery", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern void NativeSetDefaultDiscovery(string defaultDiscovery);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_AddDiscovery", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void AddDiscovery64(IntPtr discovery);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_SetRepoDomain", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern void SetRepoDomain(int domain, string repo, bool attachParticipant);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_AddDiscovery", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void AddDiscovery86(IntPtr discovery);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_Shutdown", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void Shutdown();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_GetDefaultDiscovery", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetDefaultDiscovery64();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_GetDefaultDiscovery", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetDefaultDiscovery86();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_SetDefaultDiscovery", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern void SetDefaultDiscovery64(string defaultDiscovery);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_SetDefaultDiscovery", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr SetDefaultDiscovery86(string defaultDiscovery);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_SetRepoDomain", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern void SetRepoDomain64(int domain, string repo, bool attachParticipant);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_SetRepoDomain", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern void SetRepoDomain86(int domain, string repo, bool attachParticipant);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_Shutdown", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Shutdown64();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_Shutdown", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Shutdown86();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "ParticipantService_GetIsShutdown", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetIsShutdown", CallingConvention = CallingConvention.Cdecl)]
             [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool GetIsShutdown64();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "ParticipantService_GetIsShutdown", CallingConvention = CallingConvention.Cdecl)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            public static extern bool GetIsShutdown86();
+            public static extern bool GetIsShutdown();
         }
         #endregion
     }

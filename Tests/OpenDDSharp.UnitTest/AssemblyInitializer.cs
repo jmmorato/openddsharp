@@ -65,7 +65,7 @@ namespace OpenDDSharp.UnitTest
             System.Threading.Thread.Sleep(1000);
 
             // "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10"
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory();
 
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
@@ -74,18 +74,17 @@ namespace OpenDDSharp.UnitTest
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
-            _supportProcess.KillProcess(_infoProcess);
-            if (File.Exists(INFOREPO_IOR))
-            {
-                File.Delete(INFOREPO_IOR);
-            }
-
-
             TransportRegistry.Instance.Release();
             Assert.IsTrue(TransportRegistry.Instance.Released);
             TransportRegistry.Close();
             ParticipantService.Instance.Shutdown();
             Assert.IsTrue(ParticipantService.Instance.IsShutdown);
+
+            _supportProcess.KillProcess(_infoProcess);
+            if (File.Exists(INFOREPO_IOR))
+            {
+                File.Delete(INFOREPO_IOR);
+            }
 
             Ace.Fini();
         }

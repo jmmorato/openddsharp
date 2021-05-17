@@ -214,14 +214,10 @@ namespace OpenDDSharp.DDS
                                              OnLivelinessLostDelegate onLivelinessLost,
                                              OnPublicationMatchedDelegate onPublicationMatched)
         {
-            return MarshalHelper.ExecuteAnyCpu(() => UnsafeNativeMethods.NewDataWriterListener86(onOfferedDeadlineMissed,
-                                                                                                 onOfferedIncompatibleQos,
-                                                                                                 onLivelinessLost,
-                                                                                                 onPublicationMatched),
-                                               () => UnsafeNativeMethods.NewDataWriterListener64(onOfferedDeadlineMissed,
-                                                                                                 onOfferedIncompatibleQos,
-                                                                                                 onLivelinessLost,
-                                                                                                 onPublicationMatched));
+            return UnsafeNativeMethods.NewDataWriterListener(onOfferedDeadlineMissed,
+                                                             onOfferedIncompatibleQos,
+                                                             onLivelinessLost,
+                                                             onPublicationMatched);
         }
 
         internal IntPtr ToNative()
@@ -240,18 +236,11 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X64, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.StdCall)]
-            public static extern IntPtr NewDataWriterListener64([MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL_X86, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.StdCall)]
-            public static extern IntPtr NewDataWriterListener86([MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                                [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.StdCall)]
+            public static extern IntPtr NewDataWriterListener([MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
         }
         #endregion
     }

@@ -141,7 +141,7 @@ OpenDDSharp::DDS::ReturnCode OpenDDSharp::DDS::DataReader::SetListener(OpenDDSha
 		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(listener->impl_entity, (::DDS::StatusMask)mask);
 	}
 	else {
-		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(NULL, (::DDS::StatusMask)mask);
+		return (OpenDDSharp::DDS::ReturnCode)impl_entity->set_listener(NULL, DDS::StatusMask::NoStatusMask);
 	}
 }
 

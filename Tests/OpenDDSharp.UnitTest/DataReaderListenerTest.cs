@@ -501,58 +501,81 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnSubscriptionDisconnected()
         {
-            ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            DomainParticipant domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(domainParticipant);
-            domainParticipant.BindTcpTransportConfig();
-
-            Subscriber subscriber = domainParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(domainParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            Topic topic = domainParticipant.CreateTopic("TestOnSubscriptionLostDisconnected", typeName);
-            Assert.IsNotNull(topic);
-
-            MyDataReaderListener listener = new MyDataReaderListener();
-            DataReader reader = subscriber.CreateDataReader(topic, listener);
-
-            int count = 0;
-            listener.SubscriptionDisconnected += (r, s) =>
+            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
             {
-                Assert.AreEqual(reader, r);
-                Assert.AreEqual(1, s.PublicationHandles.Count());
-                Assert.AreNotEqual(InstanceHandle.HandleNil, s.PublicationHandles.First());
-                count++;
-                evt.Set();
-            };
+                ReturnCode result;
+                DomainParticipant domainParticipant = null;
+                Subscriber subscriber = null;
+                Topic topic = null;
+                DataReader reader = null;
+                try
+                {
+                    domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                    Assert.IsNotNull(domainParticipant);
+                    domainParticipant.BindTcpTransportConfig();
 
-            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.SubscriptionDisconnectedTest);
-            try
-            {
-                // Wait for discovery
-                bool found = reader.WaitForPublications(1, 20000);
-                Assert.IsTrue(found);
+                    subscriber = domainParticipant.CreateSubscriber();
+                    Assert.IsNotNull(subscriber);
+
+                    TestStructTypeSupport support = new TestStructTypeSupport();
+                    string typeName = support.GetTypeName();
+                    result = support.RegisterType(domainParticipant, typeName);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+
+                    topic = domainParticipant.CreateTopic("TestOnSubscriptionLostDisconnected", typeName);
+                    Assert.IsNotNull(topic);
+
+                    MyDataReaderListener listener = new MyDataReaderListener();
+                    reader = subscriber.CreateDataReader(topic, listener);
+
+                    int count = 0;
+                    listener.SubscriptionDisconnected += (r, s) =>
+                    {
+                        Assert.AreEqual(reader, r);
+                        Assert.AreEqual(1, s.PublicationHandles.Count());
+                        Assert.AreNotEqual(InstanceHandle.HandleNil, s.PublicationHandles.First());
+                        count++;
+                        evt.Set();
+                    };
+
+                    SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+                    Process process = supportProcess.SpawnSupportProcess(SupportTestKind.SubscriptionDisconnectedTest);
+                    try
+                    {
+                        // Wait for discovery
+                        bool found = reader.WaitForPublications(1, 50000);
+                        Assert.IsTrue(found);
+                    }
+                    finally
+                    {
+                        supportProcess.KillProcess(process);
+                        Thread.Sleep(1500);
+                    }
+
+                    bool resp = evt.Wait(50000);
+                    Assert.IsTrue(resp);
+                    Assert.AreEqual(1, count);
+
+                    // Remove the listener to avoid extra messages
+                    result = reader.SetListener(null);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
+                finally
+                {
+                    result = subscriber.DeleteDataReader(reader);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = subscriber.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteSubscriber(subscriber);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteTopic(topic);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
             }
-            finally
-            {
-                supportProcess.KillProcess(process);
-            }
-
-            bool resp = evt.Wait(20000);
-            Assert.IsTrue(resp);
-            Assert.AreEqual(1, count);
-
-            // Remove the listener to avoid extra messages
-            result = reader.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            domainParticipant.DeleteContainedEntities();
-            AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
         }
 
         [TestMethod]
@@ -566,58 +589,82 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnSubscriptionLost()
         {
-            ManualResetEventSlim evt = new ManualResetEventSlim(false);
-            DomainParticipant domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
-            Assert.IsNotNull(domainParticipant);
-            domainParticipant.BindTcpTransportConfig();
-
-            Subscriber subscriber = domainParticipant.CreateSubscriber();
-            Assert.IsNotNull(subscriber);
-
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(domainParticipant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            Topic topic = domainParticipant.CreateTopic("TestOnSubscriptionLostDisconnected", typeName);
-            Assert.IsNotNull(topic);
-
-            MyDataReaderListener listener = new MyDataReaderListener();
-            DataReader reader = subscriber.CreateDataReader(topic, listener);
-
-            int count = 0;
-            listener.SubscriptionLost += (r, s) =>
+            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
             {
-                Assert.AreEqual(reader, r);
-                Assert.AreEqual(1, s.PublicationHandles.Count());
-                Assert.AreNotEqual(InstanceHandle.HandleNil, s.PublicationHandles.First());
-                count++;
-                evt.Set();
-            };
+                ReturnCode result;
+                DomainParticipant domainParticipant = null;
+                Subscriber subscriber = null;
+                Topic topic = null;
+                DataReader reader = null;
+                try
+                {
+                    domainParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+                    Assert.IsNotNull(domainParticipant);
+                    domainParticipant.BindTcpTransportConfig();
 
-            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.SubscriptionLostTest);
-            try
-            {
-                // Wait for discovery
-                bool found = reader.WaitForPublications(1, 20000);
-                Assert.IsTrue(found);
+                    subscriber = domainParticipant.CreateSubscriber();
+                    Assert.IsNotNull(subscriber);
+
+                    TestStructTypeSupport support = new TestStructTypeSupport();
+                    string typeName = support.GetTypeName();
+                    result = support.RegisterType(domainParticipant, typeName);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+
+                    topic = domainParticipant.CreateTopic("TestOnSubscriptionLostDisconnected", typeName);
+                    Assert.IsNotNull(topic);
+
+                    MyDataReaderListener listener = new MyDataReaderListener();
+                    reader = subscriber.CreateDataReader(topic, listener);
+                    Assert.IsNotNull(reader);
+
+                    int count = 0;
+                    listener.SubscriptionLost += (r, s) =>
+                    {
+                        Assert.AreEqual(reader, r);
+                        Assert.AreEqual(1, s.PublicationHandles.Count());
+                        Assert.AreNotEqual(InstanceHandle.HandleNil, s.PublicationHandles.First());
+                        count++;
+                        evt.Set();
+                    };
+
+                    SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+                    Process process = supportProcess.SpawnSupportProcess(SupportTestKind.SubscriptionLostTest);
+                    try
+                    {
+                        // Wait for discovery
+                        bool found = reader.WaitForPublications(1, 50000);
+                        Assert.IsTrue(found);
+                    }
+                    finally
+                    {
+                        supportProcess.KillProcess(process);
+                        Thread.Sleep(1500);
+                    }
+
+                    bool resp = evt.Wait(50000);
+                    Assert.IsTrue(resp);
+                    Assert.AreEqual(1, count);
+
+                    // Remove the listener to avoid extra messages
+                    result = reader.SetListener(null);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
+                finally
+                {
+                    result = subscriber.DeleteDataReader(reader);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = subscriber.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteSubscriber(subscriber);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteTopic(topic);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = domainParticipant.DeleteContainedEntities();
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    result = AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
             }
-            finally
-            {
-                supportProcess.KillProcess(process);
-            }
-
-            bool resp = evt.Wait(20000);
-            Assert.IsTrue(resp);
-            Assert.AreEqual(1, count);
-
-            // Remove the listener to avoid extra messages
-            result = reader.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            domainParticipant.DeleteContainedEntities();
-            AssemblyInitializer.Factory.DeleteParticipant(domainParticipant);
         }
 
         [TestMethod]
@@ -677,10 +724,9 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(ret);
                 Assert.AreEqual(1, count);
 
-                // TODO: Investigate why randomly crash when removing the listener after receive this event
-                //// Remove the listener to avoid extra messages
-                //result = _reader.SetListener(null);
-                //Assert.AreEqual(ReturnCode.Ok, result);
+                // Remove the listener to avoid extra messages
+                result = _reader.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
             }
         }
         #endregion
