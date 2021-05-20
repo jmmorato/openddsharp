@@ -24,12 +24,12 @@
   <Target Name="CustomBeforeClean" Inputs="@(IdlFiles)" Outputs="AlwaysExecuteDummy">
     <Message Text="Cleaning %(IdlFiles.FileName).idl auto-generated files..." Importance="High" />
     <Delete Files="%(RootDir)%(Directory)%(IdlFiles.FileName)TypeSupport.cpp;%(RootDir)%(Directory)%(IdlFiles.FileName)TypeSupport.h;" ContinueOnError="true" />
-    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntDir)'))\$(ProjectName)" />
+    <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntDir)'))$(ProjectName)" />
   </Target>
   
   <!--Set environment variables-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)%(filename)TypeSupport.cpp')">
+  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
@@ -37,7 +37,7 @@
   
   <!--Generate native OpenDDS project-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)%(filename)TypeSupport.cpp')">
+  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)$(IntDir)$(ProjectName)\%(filename).idl')">
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntDir)'))$(ProjectName)" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\tools\native_project_tempate\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" />
   </Target>
   

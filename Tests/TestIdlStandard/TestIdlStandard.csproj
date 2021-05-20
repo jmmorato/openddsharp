@@ -63,15 +63,15 @@
   
   <!-- Add VC++ to the PATH -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.AddPathVC" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+  <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="$(Platform)" />
   </Target>
         
   <!-- Set Windos environment variables -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-    <Message Text="Set the environment variables:" Importance="High" />
+  <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
+    <Message Text="Set Windows environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
     <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />    
@@ -82,18 +82,20 @@
   
   <!-- Generate Windows native OpenDDS project -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeProjectTask" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+  <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename).idl')">
+    <Message Text="Generate Windows Native OpenDDS project" Importance="High" />
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" />
   </Target>  
   
   <!-- Generate Windows wrapper C project -->
-  <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+  <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)WrapperProject\%(filename).idl')">
+    <Message Text="Generate Windows Wrapper OpenDDS project" Importance="High" />
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\StandardWrapperIdlProject.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" IsWrapper="True" />
   </Target>
 
   <!-- Set Linux environment variables -->
-  <Target Name="SetLinuxEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
-    <Message Text="Set the Linux environment variables:" Importance="High" />
+  <Target Name="SetLinuxEnvVarTarget" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'">
+    <Message Text="Set Linux environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT_LINUX)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT_LINUX)" Importance="High" />
     <Message Text="TAO_ROOT=$(TAO_ROOT_LINUX)" Importance="High" />
@@ -103,7 +105,8 @@
   </Target>
   
   <!-- Generate Linux native OpenDDS project -->
-  <Target Name="GenerateLinuxNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
+  <Target Name="GenerateLinuxNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)LinuxNativeProject\%(filename).idl')" Condition="'$(IsLinux)'=='true'">
+    <Message Text="Generate Linux Native OpenDDS project" Importance="High" />
     <ItemGroup>
       <HToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))\*.h" />
       <CPPToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))\*.cpp" />
@@ -116,7 +119,8 @@
   </Target>
   
   <!-- Generate Linux wrapper C project -->
-  <Target Name="GenerateLinuxWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
+  <Target Name="GenerateLinuxWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)LinuxWrappreProject\%(filename).idl')" Condition="'$(IsLinux)'=='true'">
+    <Message Text="Generate Linux Wrapper OpenDDS project" Importance="High" />
     <ItemGroup>
       <HWrapperToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))\*.h" />
       <CPPWrapperToCopy Include="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)WrapperProject'))\*.cpp" />      
@@ -127,7 +131,7 @@
   </Target>
 
   <!-- Set environment variables -->
-  <Target Name="ReSetEnvVarTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
+  <Target Name="ReSetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Set the environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
@@ -139,11 +143,11 @@
 
   <!-- Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlx64" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-    <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlx86" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x86'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-    <Message Text="Generating %(IdlFiles.Identity) code..." Importance="High" />
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
