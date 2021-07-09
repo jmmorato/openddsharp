@@ -51,5 +51,5 @@ Some parameters can be provided to configure the compilation process:
 Example:
 
 ```ps
-OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=x64 --BuildPlatform=Release --OpenDdsVersion=3.16 --IgnoreThirdPartySetup=False --VisualStudioVersion=VS2019
+OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=3.16 --IgnoreThirdPartySetup=False --VisualStudioVersion=VS2019
 ```
