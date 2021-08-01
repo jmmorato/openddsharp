@@ -97,6 +97,8 @@
     <None Include="OpenDDSharp.IdlGenerator.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="OpenDDSharp.Standard.IdlGenerator.nuspec" />
+    <None Include="OpenDDSharp.Standard.IdlGenerator.targets" />
     <None Include="StandardWrapperIdlProject.Linux.vcxproj" />
     <None Include="StandardWrapperIdlProject.Linux.vcxproj.filters" />
     <None Include="StandardWrapperIdlProject.Linux.vstemplate" />

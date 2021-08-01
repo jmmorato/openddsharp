@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <!-- Downgraded to < 3.0 because VS2017 doesn't support targeting .NET Standard on analyzers -->
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.9.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
