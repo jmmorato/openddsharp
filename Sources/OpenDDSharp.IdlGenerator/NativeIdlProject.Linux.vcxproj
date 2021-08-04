@@ -75,7 +75,6 @@
       <AdditionalIncludeDirectories>.;$(ACE_ROOT);$(TAO_ROOT);$(DDS_ROOT);$(StlIncludeDirectories);%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;ACE_AS_STATIC_LIBS;TAO_AS_STATIC_LIBS;ACE_HAS_CUSTOM_EXPORT_MACROS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PositionIndependentCode>true</PositionIndependentCode>
-      <!--<AdditionalOptions>-Wnon-virtual-dtor -ggdb %(AdditionalOptions)</AdditionalOptions>-->
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>

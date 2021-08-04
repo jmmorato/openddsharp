@@ -34,13 +34,13 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <PropertyGroup Condition="'$(DDS_ROOT)'==''" Label="OpenDDS Home">
+  <PropertyGroup Label="OpenDDS Home">
     <DDS_ROOT>..\..\ext\OpenDDS</DDS_ROOT>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(ACE_ROOT)'==''" Label="ACE Home">
+  <PropertyGroup Label="ACE Home">
     <ACE_ROOT>..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TAO_ROOT)'==''" Label="TAO Home">
+  <PropertyGroup Label="TAO Home">
     <TAO_ROOT>..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
   <ItemGroup>
@@ -616,31 +616,32 @@
   </ImportGroup>
   <Target Name="AfterBuild">
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FEd.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FEd.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_BEd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Utild.dll;" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|Win32'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FEd.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACEd.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FEd.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_BEd.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Utild.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACE.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FE.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACE.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FE.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_BE.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Util.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|Win32'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACE.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FE.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x86\ACE.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_FE.dll;$(ACE_ROOT)\lib_x86\TAO_IDL_BE.dll;$(DDS_ROOT)\lib_x86\OpenDDS_Util.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACEd.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FEd.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACEd.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FEd.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_BEd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Utild.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACEd.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FEd.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACEd.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FEd.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_BEd.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Utild.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_BE.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Util.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
-      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll" />
+      <ACEDlls Include="$(ACE_ROOT)\lib_x64\ACE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_FE.dll;$(ACE_ROOT)\lib_x64\TAO_IDL_BE.dll;$(DDS_ROOT)\lib_x64\OpenDDS_Util.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(DDS_ROOT)\bin" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ACEDlls)" DestinationFolder="$(ACE_ROOT)\bin" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(OutDir)openddsharp_idl.exe" DestinationFolder="$(DDS_ROOT)\bin" SkipUnchangedFiles="true" />
     <Copy SourceFiles=".\HeaderTemplate.txt;.\ImplTemplate.txt;.\CSharpImplTemplate.txt;.\CWrapperHeaderTemplate.txt;.\CWrapperImplTemplate.txt" DestinationFolder="$(DDS_ROOT)\dds\idl" SkipUnchangedFiles="true" />
   </Target>

@@ -30,11 +30,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
     internal class SupportProcessHelper
     {
         #region Constants
-        private const string DDS_ROOT = @"..\..\..\..\..\..\ext\OpenDDS";
-        private const string ACE_ROOT = @"..\..\..\..\..\..\ext\OpenDDS\ACE_TAO\ACE";
-        private const string TAO_ROOT = @"..\..\..\..\..\..\ext\OpenDDS\ACE_TAO\TAO";
-
 #if Windows
+        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/ACE";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
@@ -43,10 +42,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
 #else
+        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_Linux";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/ACE";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/TAO";
         private const string DEBUG_TARGET_FOLDER = @"LinuxDebug/";
         private const string RELEASE_TARGET_FOLDER = @"LinuxRelease/";
-        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";        
-        private const string TEST_SUPPORT_PROCESS_PATH = @"./../../../../TestSupportProcessCore/bin/";
+        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #endif
@@ -65,6 +67,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             _platformFolder = SIXTY_FOUR_PLATFORM_FOLDER;
             _targetFolder = RELEASE_TARGET_FOLDER;
             SetDebugTarget();
+
 #if Windows
             SetEightySixPlatform();
 #endif
@@ -85,9 +88,9 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
         }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)
         {
             string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "netcoreapp3.1", TEST_SUPPORT_PROCESS_EXE_NAME);

@@ -12,15 +12,33 @@
     <IsLinux Condition="'$(Configuration)'=='LinuxDebug' Or '$(Configuration)'=='LinuxRelease'">true</IsLinux>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
+    <Optimize>false</Optimize>
+    <DefineConstant>DEBUG;TRACE</DefineConstant>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Optimize>true</Optimize>
+    <DefineConstant>TRACE</DefineConstant>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Optimize>false</Optimize>
+    <DefineConstant>DEBUG;TRACE</DefineConstant>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Optimize>true</Optimize>
+    <DefineConstant>TRACE</DefineConstant>
+  </PropertyGroup>
+  
   <PropertyGroup>
-    <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
+    <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstant);DEBUG;Windows</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstants);Linux</DefineConstants>
+    <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstant);Linux</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <DefineConstants Condition="'$(Platform)'=='x86'">$(DefineConstants);X86</DefineConstants>
+    <DefineConstants Condition="'$(Platform)'=='x86'">$(DefineConstant);X86</DefineConstants>
   </PropertyGroup>
+  
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />

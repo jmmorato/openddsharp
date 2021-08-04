@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenDDSharp.IdlGenerator", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDDSharp.BuildTasks", "Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj", "{97F88957-84D4-48DA-A8AF-56CF035DD5DA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevKit", "DevKit", "{FC22C429-D8DB-453C-BFCB-C739F084B1A0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{892C06BC-E34F-46C8-AB2A-738A288D8D9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDDSharp.ExportFileGenerator", "Sources\OpenDDSharp.ExportFileGenerator\OpenDDSharp.ExportFileGenerator.csproj", "{31E6D26F-AA5F-4763-8633-5B3FD2F4CA08}"
@@ -61,6 +59,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Native", "Sourc
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Templates", "Sources\OpenDDSharp.Templates\OpenDDSharp.Templates.csproj", "{9536541B-5FC0-4F7E-986B-7AA4872AEB65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BEAB5E70-13D0-47EE-B7DD-9056EFFF5567}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Build.Standard", "Build\OpenDDSharp.Build.Standard\OpenDDSharp.Build.Standard.csproj", "{F456B7F5-5018-4337-9771-CB335304827A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -330,6 +332,26 @@ Global
 		{9536541B-5FC0-4F7E-986B-7AA4872AEB65}.Release|x64.Build.0 = Release|Any CPU
 		{9536541B-5FC0-4F7E-986B-7AA4872AEB65}.Release|x86.ActiveCfg = Release|Any CPU
 		{9536541B-5FC0-4F7E-986B-7AA4872AEB65}.Release|x86.Build.0 = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Debug|x86.Build.0 = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxDebug|Any CPU.Build.0 = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxDebug|x64.ActiveCfg = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxDebug|x86.ActiveCfg = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxDebug|x86.Build.0 = Debug|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxRelease|x64.ActiveCfg = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxRelease|x86.ActiveCfg = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.LinuxRelease|x86.Build.0 = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Release|x64.ActiveCfg = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Release|x86.ActiveCfg = Release|Any CPU
+		{F456B7F5-5018-4337-9771-CB335304827A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -342,7 +364,7 @@ Global
 		{C8E20403-7589-4002-9721-E42D025FB344} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
 		{DA9645FE-381E-495E-9652-3DF086570B71} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
 		{BF64F3F0-4B74-47CB-BE56-D7755E4E120E} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
-		{9536541B-5FC0-4F7E-986B-7AA4872AEB65} = {FC22C429-D8DB-453C-BFCB-C739F084B1A0}
+		{F456B7F5-5018-4337-9771-CB335304827A} = {BEAB5E70-13D0-47EE-B7DD-9056EFFF5567}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F982C01-616F-4A76-9E24-30312AAD0A53}

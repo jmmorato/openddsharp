@@ -144,31 +144,31 @@
     </None>
 
     <!-- OpenDDS Linux/Release native Libraries -->
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.6.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.6.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.2.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.2.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.2.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.2.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.2.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.2.5.12" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
