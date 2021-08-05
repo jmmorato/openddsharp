@@ -42,7 +42,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/");
             context.Log.Information($"Unit test path: {path}");
             var file = "OpenDDSharp.Standard.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/MSTest.TestAdapter.2.1.2/build/_common");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/MSTest.TestAdapter.2.2.3/build/_common");
             var settingsFile = Path.Combine(solutionFullPath, "CodeCoverage.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
@@ -59,7 +59,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
                         { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                         { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                     },
-                    Configuration = context.BuildConfiguration,
                     Verbosity = DotNetCoreVerbosity.Normal,
                     Settings = settingsFile,
                 });
@@ -68,9 +67,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 try
                 {
-                    //var projectFile = BuildContext.ToWslPath(Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/", "OpenDDSharp.Standard.UnitTest.csproj"));
-                    //context.Log.Information($"WSL full path: {projectFile}");
-
                     var dllPath = BuildContext.ToWslPath(Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/", "OpenDDSharp.Standard.UnitTest.dll"));
                     context.Log.Information($"DLL WSL path: {dllPath}");
 
