@@ -144,11 +144,11 @@
   <!-- Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlx64" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlx86" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x86'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <ItemGroup>

@@ -22,6 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard", "Sou
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleDemoCore", "Examples\ConsoleDemoCore\ConsoleDemoCore.csproj", "{12F78B1F-EBE5-4A82-A98F-62AE1B21D57A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9282A186-FECA-1BAD-F74D-08556236AF2C} = {9282A186-FECA-1BAD-F74D-08556236AF2C}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIdlStandard", "Tests\TestIdlStandard\TestIdlStandard.csproj", "{C8E20403-7589-4002-9721-E42D025FB344}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -34,6 +37,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard.UnitTest", "Tests\OpenDDSharp.Standard.UnitTest\OpenDDSharp.Standard.UnitTest.csproj", "{DA9645FE-381E-495E-9652-3DF086570B71}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4D76F728-5BEC-41B1-BC54-A6D35AB267E5} = {4D76F728-5BEC-41B1-BC54-A6D35AB267E5}
+		{9282A186-FECA-1BAD-F74D-08556236AF2C} = {9282A186-FECA-1BAD-F74D-08556236AF2C}
 		{DC38F78E-FDBC-4775-A4CB-988F60B5E414} = {DC38F78E-FDBC-4775-A4CB-988F60B5E414}
 		{BF64F3F0-4B74-47CB-BE56-D7755E4E120E} = {BF64F3F0-4B74-47CB-BE56-D7755E4E120E}
 	EndProjectSection
