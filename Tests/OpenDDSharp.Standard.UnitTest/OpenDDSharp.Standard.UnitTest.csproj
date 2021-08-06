@@ -30,7 +30,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstant);DEBUG;Windows</DefineConstants>
+    <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstant);Windows</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstant);Linux</DefineConstants>
