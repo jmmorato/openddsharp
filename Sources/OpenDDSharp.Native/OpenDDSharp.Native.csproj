@@ -54,22 +54,22 @@
     </None>
 
     <!-- OpenDDS Win32/Debug native Libraries -->
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udpd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmemd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcpd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicastd.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udpd.dll" />
-    <None Include="@(OpenDDSReleaseWin32)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udpd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmemd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcpd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicastd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udpd.dll" />
+    <None Include="@(OpenDDSDebugWin32)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
