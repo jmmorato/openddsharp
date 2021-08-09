@@ -127,7 +127,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 {
                     int exitCode = context.StartProcess("wsl", new ProcessSettings
                     {
-                        Arguments = "git apply " + BuildContext.ToWslPath(System.IO.Path.GetFullPath(patchDirectory.FullPath)),
+                        Arguments = "git apply --whitespace=fix " + BuildContext.ToWslPath(System.IO.Path.GetFullPath(patchDirectory.FullPath)),
                         WorkingDirectory = context.DdsRoot,
                     });
                     if (exitCode != 0)
