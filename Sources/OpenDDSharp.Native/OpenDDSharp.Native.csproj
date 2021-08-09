@@ -90,7 +90,7 @@
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcp.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicast.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udp.dll" />
-    <None Include="@(OpenDDSReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <None Include="@(OpenDDSReleasex64)" Pack="true" Visible="false" PackagePath="runtimes\win-x64\native" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
