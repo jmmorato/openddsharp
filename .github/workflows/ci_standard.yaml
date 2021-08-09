@@ -55,6 +55,7 @@ jobs:
         
     steps:
     - uses: actions/checkout@v2
+    - uses: Vampire/setup-wsl@v1
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux

@@ -69,7 +69,7 @@
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcpd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicastd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udpd.dll" />
-    <None Include="@(OpenDDSDebugWin32)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <None Include="@(OpenDDSDebugWin32)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -94,27 +94,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
-    <None Include="@(OpenDDSReleasex64)" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <Pack>true</Pack>
-      <PackagePath>runtimes\win-x64\native</PackagePath>
-      <Visible>false</Visible>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <None Include="@(OpenDDSReleasex64)" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
-      <Pack>true</Pack>
-      <PackagePath>runtimes\win-x64\native</PackagePath>
-      <Visible>false</Visible>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <None Include="@(OpenDDSReleasex64)" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x86'">
-      <Pack>true</Pack>
-      <PackagePath>runtimes\win-x64\native</PackagePath>
-      <Visible>false</Visible>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
 
     <!-- OpenDDS x64/Debug native Libraries -->
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.dll" />
@@ -133,12 +112,6 @@
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicastd.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udpd.dll" />
     <None Include="@(OpenDDSDebugx64)" Pack="false" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <None Include="@(OpenDDSDebugx64)" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-      <Pack>false</Pack>
-      <Visible>false</Visible>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -243,7 +216,7 @@
 
     <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapper.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
 
-    <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapper.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" />
+    <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapper.dll" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
     <None Include="@(ProjectNativeDepsDebugx64)" Pack="false" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -266,7 +239,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxRelease\libOpenDDSWrapper.so" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x86'">
+    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxRelease\libOpenDDSWrapper.so" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <Pack>true</Pack>
       <PackagePath>runtimes/linux-x64/native</PackagePath>
       <Visible>false</Visible>
@@ -279,7 +252,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxDebug\libOpenDDSWrapper.so" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x86'">
+    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxDebug\libOpenDDSWrapper.so" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
       <Pack>false</Pack>
       <Visible>false</Visible>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
