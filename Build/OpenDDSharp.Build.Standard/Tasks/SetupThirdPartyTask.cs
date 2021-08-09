@@ -174,7 +174,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 {
                     Version = "[\"15.0\", \"17.0\"]",
                 });
-                var arguments = "/c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
+                var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
                 context.Log.Information(configurePath + arguments);
 
                 var exit = context.StartProcess("cmd.exe", new ProcessSettings

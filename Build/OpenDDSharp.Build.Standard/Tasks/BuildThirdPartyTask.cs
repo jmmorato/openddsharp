@@ -55,7 +55,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 platform = PlatformTarget.Win32;
             }
 
-            if (!context.BuildConfiguration.StartsWith("Linux"))
+            if (!context.IsLinuxBuild)
             {
                 context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
                 {
