@@ -18,6 +18,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard", "Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj", "{E9C9793D-5761-4222-850D-DF8B42C2A920}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4D76F728-5BEC-41B1-BC54-A6D35AB267E5} = {4D76F728-5BEC-41B1-BC54-A6D35AB267E5}
+		{97F88957-84D4-48DA-A8AF-56CF035DD5DA} = {97F88957-84D4-48DA-A8AF-56CF035DD5DA}
 		{DC38F78E-FDBC-4775-A4CB-988F60B5E414} = {DC38F78E-FDBC-4775-A4CB-988F60B5E414}
 	EndProjectSection
 EndProject
@@ -44,6 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard.UnitTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CC7E7B3-C89B-44E8-8467-D0CD29A85700}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\cd.yaml = .github\workflows\cd.yaml
+		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+		.github\workflows\ci_standard.yaml = .github\workflows\ci_standard.yaml
 		CodeCoverage.runsettings = CodeCoverage.runsettings
 		OpenDDSharpRules.ruleset = OpenDDSharpRules.ruleset
 	EndProjectSection
@@ -51,6 +55,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenDDSWrapper.Linux", "Sources\OpenDDSWrapper.Linux\OpenDDSWrapper.Linux.vcxproj", "{DC38F78E-FDBC-4775-A4CB-988F60B5E414}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupportProcessCore", "Tests\TestSupportProcessCore\TestSupportProcessCore.csproj", "{BF64F3F0-4B74-47CB-BE56-D7755E4E120E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{97F88957-84D4-48DA-A8AF-56CF035DD5DA} = {97F88957-84D4-48DA-A8AF-56CF035DD5DA}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DF5853C0-2D9B-4FB2-8DC1-F61F87E8FD91}"
 EndProject
