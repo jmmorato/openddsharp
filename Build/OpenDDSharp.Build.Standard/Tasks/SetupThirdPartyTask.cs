@@ -131,7 +131,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
 
                     int exitCode = context.StartProcess("wsl", new ProcessSettings
                     {
-                        Arguments = "git apply --whitespace=fix " + linuxPath,
+                        Arguments = "git apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath,
                         WorkingDirectory = context.DdsRoot,
                     });
                     if (exitCode != 0)
