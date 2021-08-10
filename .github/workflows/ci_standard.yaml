@@ -58,6 +58,7 @@ jobs:
     - uses: Vampire/setup-wsl@v1
       with:
         additional-packages:
+          build-essential
           git
 
     - name: Cache OpenDDS libraries
