@@ -125,9 +125,13 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 DirectoryPath patchDirectory = new DirectoryPath(patchPath);
                 if (context.IsLinuxBuild)
                 {
+                    var linuxPath = BuildContext.ToWslPath(System.IO.Path.GetFullPath(patchDirectory.FullPath));
+
+                    context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
+
                     int exitCode = context.StartProcess("wsl", new ProcessSettings
                     {
-                        Arguments = "git apply --whitespace=fix " + BuildContext.ToWslPath(System.IO.Path.GetFullPath(patchDirectory.FullPath)),
+                        Arguments = "git apply --whitespace=fix " + linuxPath,
                         WorkingDirectory = context.DdsRoot,
                     });
                     if (exitCode != 0)
