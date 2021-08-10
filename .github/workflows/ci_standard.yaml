@@ -65,14 +65,14 @@ jobs:
           git
 
     - name: Install .NET 5
-      shell: bash
+      shell: pwsh
       run: |
-        sudo apt-get install wget
-        wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        rm packages-microsoft-prod.deb
-        sudo apt-get update;
-        sudo apt-get install -y apt-transport-https && sudo apt-get update && sudo apt-get install -y dotnet-sdk-5.0
+        wsl sudo apt-get install wget
+        wsl wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        wsl sudo dpkg -i packages-microsoft-prod.deb
+        wsl rm packages-microsoft-prod.deb
+        wsl sudo apt-get update;
+        wsl sudo apt-get install -y apt-transport-https && sudo apt-get update && sudo apt-get install -y dotnet-sdk-5.0
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
