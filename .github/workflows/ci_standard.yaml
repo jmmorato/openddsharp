@@ -56,8 +56,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    
-
     - uses: Vampire/setup-wsl@v1
       with:
         additional-packages:
@@ -81,7 +79,7 @@ jobs:
       id: opendds-libraries-linux
       uses: actions/cache@v2
       with:
-        path: |          
+        path: |
           ${{ github.workspace }}/ext/OpenDDS/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS/**/*.lib
           ${{ github.workspace }}/ext/OpenDDS/**/*.exe
@@ -104,16 +102,28 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
         key: opendds-standard-linux-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
 
-    - name: Build & Test with Cake (Windows - No cached)
+    - name: Build & Test with Cake (Windows Release - No cached)
       shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true' && matrix.BuildConfiguration == 'LinuxRelease'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
       
-    - name: Build & Test with Cake (Windows - Cached)
+    - name: Build & Test with Cake (Windows Release - Cached)
       shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true' && matrix.BuildConfiguration == 'LinuxRelease'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build & Test with Cake (Windows Debug - No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true' && matrix.BuildConfiguration == 'LinuxDebug'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake (Windows Debug - Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true' && matrix.BuildConfiguration == 'LinuxDebug'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build & Test with Cake (Linux - No cached)
