@@ -101,7 +101,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="ReadCondition" /> on success, otherwise <see langword="null"/>.</returns>
         public ReadCondition CreateReadCondition(SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
         {
-            IntPtr native = UnsafeNativeMethods.CreateReadCondition64(_native, sampleStates, viewStates, instanceStates);
+            IntPtr native = UnsafeNativeMethods.CreateReadCondition(_native, sampleStates, viewStates, instanceStates);
 
             ReadCondition readCondition = null;
             if (native != IntPtr.Zero)
@@ -359,7 +359,7 @@ namespace OpenDDSharp.DDS
         {
             SubscriptionMatchedStatus s = default;
 
-            ReturnCode ret = UnsafeNativeMethods.GetSubscriptionMatchedStatus64(_native, ref s);
+            ReturnCode ret = UnsafeNativeMethods.GetSubscriptionMatchedStatus(_native, ref s);
             status = s;
 
             return ret;
@@ -374,7 +374,7 @@ namespace OpenDDSharp.DDS
         {
             SampleLostStatus s = default;
 
-            ReturnCode ret = UnsafeNativeMethods.GetSampleLostStatus64(_native, ref s);
+            ReturnCode ret = UnsafeNativeMethods.GetSampleLostStatus(_native, ref s);
             status = s;
 
             return ret;
@@ -444,7 +444,7 @@ namespace OpenDDSharp.DDS
         {
             PublicationBuiltinTopicDataWrapper data = default;
 
-            ReturnCode ret = UnsafeNativeMethods.GetMatchedPublicationData64(_native, ref data, publicationHandle);
+            ReturnCode ret = UnsafeNativeMethods.GetMatchedPublicationData(_native, ref data, publicationHandle);
 
             if (ret == ReturnCode.Ok)
             {
@@ -494,7 +494,7 @@ namespace OpenDDSharp.DDS
 
         private ITopicDescription GetTopicDescription()
         {
-            IntPtr native = UnsafeNativeMethods.GetTopicDescription64(_native);
+            IntPtr native = UnsafeNativeMethods.GetTopicDescription(_native);
 
             if (native.Equals(IntPtr.Zero))
             {
@@ -555,11 +555,11 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReader_GetTopicDescription", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr GetTopicDescription64(IntPtr dr);
+            public static extern IntPtr GetTopicDescription(IntPtr dr);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReader_CreateReadCondition", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr CreateReadCondition64(IntPtr dr, uint sampleMask, uint viewMask, uint instanceMask);
+            public static extern IntPtr CreateReadCondition(IntPtr dr, uint sampleMask, uint viewMask, uint instanceMask);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReader_CreateQueryCondition", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
@@ -591,15 +591,15 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReader_GetSubscriptionMatchedStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetSubscriptionMatchedStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriptionMatchedStatus status);
+            public static extern ReturnCode GetSubscriptionMatchedStatus(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriptionMatchedStatus status);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReader_GetSampleLostStatus", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetSampleLostStatus64(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SampleLostStatus status);
+            public static extern ReturnCode GetSampleLostStatus(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref SampleLostStatus status);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReader_GetMatchedPublicationData", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetMatchedPublicationData64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationBuiltinTopicDataWrapper data, int handle);
+            public static extern ReturnCode GetMatchedPublicationData(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref PublicationBuiltinTopicDataWrapper data, int handle);
         }
         #endregion
     }

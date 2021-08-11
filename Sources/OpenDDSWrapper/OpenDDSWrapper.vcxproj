@@ -357,6 +357,7 @@
     <ClInclude Include="Ace.h" />
     <ClInclude Include="BuiltinTopicData.h" />
     <ClInclude Include="Condition.h" />
+    <ClInclude Include="ContentFilteredTopic.h" />
     <ClInclude Include="DataReader.h" />
     <ClInclude Include="DataReaderListener.h" />
     <ClInclude Include="DataReaderListenerImpl.h" />
@@ -397,6 +398,7 @@
   <ItemGroup>
     <ClCompile Include="Ace.cpp" />
     <ClCompile Include="Condition.cpp" />
+    <ClCompile Include="ContentFilteredTopic.cpp" />
     <ClCompile Include="DataReader.cpp" />
     <ClCompile Include="DataReaderListener.cpp" />
     <ClCompile Include="DataReaderListenerImpl.cpp" />

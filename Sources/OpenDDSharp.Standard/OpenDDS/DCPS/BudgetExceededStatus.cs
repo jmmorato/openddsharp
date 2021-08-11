@@ -18,39 +18,51 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
+using OpenDDSharp.DDS;
 
-namespace OpenDDSharp.DDS
+namespace OpenDDSharp.OpenDDS.DCPS
 {
     /// <summary>
-    /// Global unique identifier of the built-in topics.
+    /// The BudgetExceeded status indicates delays in excess of the <see cref="LatencyBudgetQosPolicy" /> duration.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct BuiltinTopicKey : IEquatable<BuiltinTopicKey>
+    public struct BudgetExceededStatus : IEquatable<BudgetExceededStatus>
     {
         #region Fields
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 16)]
-        private readonly byte[] _value;
+        private int _totalCount;
+        private int _totalCountChange;
+        private InstanceHandle _lastInstanceHandle;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the value of the <see cref="BuiltinTopicKey" />.
+        /// Gets the cumulative count of reported latency budget exceeded.
         /// </summary>
-        public byte[] Value => _value;
+        public int TotalCount => _totalCount;
+
+        /// <summary>
+        /// Gets the incremental count of latency budget exceeded reported since the last time this status was accessed.
+        /// </summary>
+        public int TotalCountChange => _totalCountChange;
+
+        /// <summary>
+        /// Gets the instance handle of the last latency budged exceeded.
+        /// </summary>
+        public InstanceHandle LastInstanceHandle => _lastInstanceHandle;
         #endregion
 
-        #region IEquatable<BuiltinTopicKey> Members
+        #region IEquatable<BudgetExceededStatus> Members
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-        public bool Equals(BuiltinTopicKey other)
+        public bool Equals(BudgetExceededStatus other)
         {
-            return _value.SequenceEqual(other.Value);
+            return TotalCount == other.TotalCount &&
+                   TotalCountChange == other.TotalCountChange &&
+                   LastInstanceHandle == other.LastInstanceHandle;
         }
 
         /// <summary>
@@ -60,17 +72,7 @@ namespace OpenDDSharp.DDS
         /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((BuiltinTopicKey)obj);
+            return (obj is BudgetExceededStatus other) && Equals(other);
         }
 
         /// <summary>
@@ -79,7 +81,11 @@ namespace OpenDDSharp.DDS
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return -1939223833 + EqualityComparer<byte[]>.Default.GetHashCode(_value);
+            var hashCode = 543595584;
+            hashCode = (hashCode * -1521134295) + TotalCount.GetHashCode();
+            hashCode = (hashCode * -1521134295) + TotalCountChange.GetHashCode();
+            hashCode = (hashCode * -1521134295) + LastInstanceHandle.GetHashCode();
+            return hashCode;
         }
         #endregion
 
@@ -90,7 +96,7 @@ namespace OpenDDSharp.DDS
         /// <param name="left">The left value for the comparison.</param>
         /// <param name="right">The right value for the comparison.</param>
         /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(BuiltinTopicKey left, BuiltinTopicKey right)
+        public static bool operator ==(BudgetExceededStatus left, BudgetExceededStatus right)
         {
             return left.Equals(right);
         }
@@ -101,9 +107,9 @@ namespace OpenDDSharp.DDS
         /// <param name="left">The left value for the comparison.</param>
         /// <param name="right">The right value for the comparison.</param>
         /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-        public static bool operator !=(BuiltinTopicKey left, BuiltinTopicKey right)
+        public static bool operator !=(BudgetExceededStatus left, BudgetExceededStatus right)
         {
-            return !left.Equals(right);
+            return !(left == right);
         }
         #endregion
     }
