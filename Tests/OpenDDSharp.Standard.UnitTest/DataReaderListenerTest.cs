@@ -441,6 +441,8 @@ namespace OpenDDSharp.Standard.UnitTest
             // Wait for discovery
             bool found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
+            found = _reader.WaitForPublications(1, 1000);
+            Assert.IsTrue(found);
 
             // Assert liveliness in the writer
             result = _writer.AssertLiveliness();
@@ -607,6 +609,8 @@ namespace OpenDDSharp.Standard.UnitTest
 
                 // Wait for discovery
                 bool found = _writer.WaitForSubscriptions(1, 1000);
+                Assert.IsTrue(found);
+                found = _reader.WaitForPublications(1, 1000);
                 Assert.IsTrue(found);
 
                 // Write two samples of the same instances
