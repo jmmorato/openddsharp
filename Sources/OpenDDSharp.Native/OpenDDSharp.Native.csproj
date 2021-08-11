@@ -117,47 +117,47 @@
     </None>
 
     <!-- OpenDDS Linux/Release native Libraries -->
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.6.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.2.5.13" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -165,7 +165,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -173,7 +173,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -181,7 +181,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -189,7 +189,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -197,7 +197,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.3.16.0" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
+    <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
