@@ -53,15 +53,6 @@ char* ContentFilteredTopic_GetFilterExpression(::DDS::ContentFilteredTopic_ptr t
     }
 
     return ret;
-    /*::DDS::StringSeq parameters;
-
-    ::DDS::ReturnCode_t ret = t->get_expression_parameters(parameters);
-
-    if (ret == ::DDS::RETCODE_OK) {
-        unbounded_basic_string_sequence_to_ptr(parameters, seq);
-    }
-
-    return ret;*/
 }
 
 ::DDS::ReturnCode_t ContentFilteredTopic_SetExpressionParameters(::DDS::ContentFilteredTopic_ptr t, void* seq) {

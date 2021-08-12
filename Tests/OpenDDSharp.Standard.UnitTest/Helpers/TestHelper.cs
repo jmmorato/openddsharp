@@ -912,8 +912,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-            _ = new RtpsUdpInst(inst);
-            config.Insert(inst);
+            RtpsUdpInst rui = new RtpsUdpInst(inst);
+            config.Insert(rui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
@@ -926,8 +926,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
-            _ = new TcpInst(inst);
-            config.Insert(inst);
+            TcpInst tcpi = new TcpInst(inst);
+            config.Insert(tcpi);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
