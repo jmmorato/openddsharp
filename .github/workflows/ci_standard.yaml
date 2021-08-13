@@ -58,6 +58,7 @@ jobs:
 
     - uses: Vampire/setup-wsl@v1
       with:
+        distribution: Ubuntu-18.04
         additional-packages:
           build-essential
           git

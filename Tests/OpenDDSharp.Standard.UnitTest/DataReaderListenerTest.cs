@@ -375,104 +375,107 @@ namespace OpenDDSharp.Standard.UnitTest
         public void TestOnLivelinessChanged()
         {
             int count = 0;
-
-            DataReader firstDataReader = null;
-            int firstAliveCount = 0;
-            int firstAliveCountChange = 0;
-            int firstNotAliveCount = 1;
-            int firstNotAliveCountChange = 1;
-            InstanceHandle firstLastPublicationHandle = InstanceHandle.HandleNil;
-
-            DataReader secondDataReader = null;
-            int secondAliveCount = 1;
-            int secondAliveCountChange = 1;
-            int secondNotAliveCount = 0;
-            int secondNotAliveCountChange = 0;
-            InstanceHandle secondLastPublicationHandle = InstanceHandle.HandleNil;
-
-            // Attach to the event
-            _listener.LivelinessChanged += (r, s) =>
+            using (ManualResetEventSlim evt1 = new ManualResetEventSlim(false))
+            using (ManualResetEventSlim evt2 = new ManualResetEventSlim(false))
             {
-                Assert.AreEqual(_reader, r);
+                DataReader firstDataReader = null;
+                int firstAliveCount = 0;
+                int firstAliveCountChange = 0;
+                int firstNotAliveCount = 1;
+                int firstNotAliveCountChange = 1;
+                InstanceHandle firstLastPublicationHandle = InstanceHandle.HandleNil;
 
-                if (count == 0)
+                DataReader secondDataReader = null;
+                int secondAliveCount = 1;
+                int secondAliveCountChange = 1;
+                int secondNotAliveCount = 0;
+                int secondNotAliveCountChange = 0;
+                InstanceHandle secondLastPublicationHandle = InstanceHandle.HandleNil;
+
+                // Attach to the event
+                _listener.LivelinessChanged += (r, s) =>
                 {
-                    // Liveliness alive
-                    firstDataReader = r;
-                    firstAliveCount = s.AliveCount;
-                    firstAliveCountChange = s.AliveCountChange;
-                    firstNotAliveCount = s.NotAliveCount;
-                    firstNotAliveCountChange = s.NotAliveCountChange;
-                    firstLastPublicationHandle = s.LastPublicationHandle;
-                }
-                else
-                {
-                    // Liveliness not alive
-                    secondDataReader = r;
-                    secondAliveCount = s.AliveCount;
-                    secondAliveCountChange = s.AliveCountChange;
-                    secondNotAliveCount = s.NotAliveCount;
-                    secondNotAliveCountChange = s.NotAliveCountChange;
-                    secondLastPublicationHandle = s.LastPublicationHandle;
-                }
+                    if (count == 0)
+                    {
+                        // Liveliness alive
+                        firstDataReader = r;
+                        firstAliveCount = s.AliveCount;
+                        firstAliveCountChange = s.AliveCountChange;
+                        firstNotAliveCount = s.NotAliveCount;
+                        firstNotAliveCountChange = s.NotAliveCountChange;
+                        firstLastPublicationHandle = s.LastPublicationHandle;
+                        evt1.Set();
+                    }
+                    else
+                    {
+                        // Liveliness not alive
+                        secondDataReader = r;
+                        secondAliveCount = s.AliveCount;
+                        secondAliveCountChange = s.AliveCountChange;
+                        secondNotAliveCount = s.NotAliveCount;
+                        secondNotAliveCountChange = s.NotAliveCountChange;
+                        secondLastPublicationHandle = s.LastPublicationHandle;
+                        evt2.Set();
+                    }
 
-                count++;
-            };
+                    count++;
+                };
 
-            // Prepare the QoS for the test
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
-            ReturnCode result = _reader.SetQos(drQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Prepare the QoS for the test
+                DataReaderQos drQos = new DataReaderQos();
+                drQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
+                ReturnCode result = _reader.SetQos(drQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-            dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
-            result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                DataWriterQos dwQos = new DataWriterQos();
+                dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
+                dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
+                result = _writer.SetQos(dwQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Enable entities
+                result = _writer.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                result = _reader.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-            found = _reader.WaitForPublications(1, 1000);
-            Assert.IsTrue(found);
+                // Wait for discovery
+                bool found = _writer.WaitForSubscriptions(1, 1000);
+                Assert.IsTrue(found);
+                found = _reader.WaitForPublications(1, 1000);
+                Assert.IsTrue(found);
 
-            // Assert liveliness in the writer
-            result = _writer.AssertLiveliness();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Assert liveliness in the writer
+                result = _writer.AssertLiveliness();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // After half second liveliness should not be lost yet
-            Thread.Sleep(500);
-            Assert.AreEqual(1, count);
-            Assert.IsNotNull(firstDataReader);
-            Assert.AreEqual(_reader, firstDataReader);
-            Assert.AreEqual(1, firstAliveCount);
-            Assert.AreEqual(1, firstAliveCountChange);
-            Assert.AreEqual(0, firstNotAliveCount);
-            Assert.AreEqual(0, firstNotAliveCountChange);
-            Assert.AreEqual(_writer.InstanceHandle, firstLastPublicationHandle);
+                // Check alive reader
+                Assert.IsTrue(evt1.Wait(5000));
+                Assert.AreEqual(1, count);
+                Assert.IsNotNull(firstDataReader);
+                Assert.AreEqual(_reader, firstDataReader);
+                Assert.AreEqual(1, firstAliveCount);
+                Assert.AreEqual(1, firstAliveCountChange);
+                Assert.AreEqual(0, firstNotAliveCount);
+                Assert.AreEqual(0, firstNotAliveCountChange);
+                Assert.AreEqual(_writer.InstanceHandle, firstLastPublicationHandle);
 
-            // After one second and a half one liveliness should be lost
-            Thread.Sleep(1000);
-            Assert.AreEqual(2, count);
-            Assert.IsNotNull(secondDataReader);
-            Assert.AreEqual(_reader, secondDataReader);
-            Assert.AreEqual(0, secondAliveCount);
-            Assert.AreEqual(-1, secondAliveCountChange);
-            Assert.AreEqual(1, secondNotAliveCount);
-            Assert.AreEqual(1, secondNotAliveCountChange);
-            Assert.AreEqual(_writer.InstanceHandle, secondLastPublicationHandle);
+                // Check lost reader
+                Assert.IsTrue(evt2.Wait(5000));
+                Assert.AreEqual(2, count);
+                Assert.IsNotNull(secondDataReader);
+                Assert.AreEqual(_reader, secondDataReader);
+                Assert.AreEqual(0, secondAliveCount);
+                Assert.AreEqual(-1, secondAliveCountChange);
+                Assert.AreEqual(1, secondNotAliveCount);
+                Assert.AreEqual(1, secondNotAliveCountChange);
+                Assert.AreEqual(_writer.InstanceHandle, secondLastPublicationHandle);
 
-            // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Remove the listener to avoid extra messages
+                result = _reader.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
 
         /// <summary>
@@ -535,6 +538,8 @@ namespace OpenDDSharp.Standard.UnitTest
             // Wait for discovery
             bool found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
+            found = _reader.WaitForPublications(1, 1000);
+            Assert.IsTrue(found);
 
             // Check subscription matched call
             Thread.Sleep(500);
@@ -549,6 +554,9 @@ namespace OpenDDSharp.Standard.UnitTest
             // Delete the writer
             result = _publisher.DeleteDataWriter(_writer);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            found = _writer.WaitForSubscriptions(0, 1000);
+            Assert.IsTrue(found);
 
             // Check subscription matched call
             Thread.Sleep(500);
