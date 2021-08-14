@@ -364,8 +364,8 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic foundTopic = _participant.FindTopic(nameof(TestFindTopic), new Duration
             {
-                Seconds = Duration.InfiniteSeconds,
-                NanoSeconds = Duration.InfiniteNanoseconds,
+                Seconds = 60,
+                NanoSeconds = 0,
             });
 
             Assert.IsNotNull(foundTopic);
@@ -1120,7 +1120,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     ICollection<Condition> conditions = new List<Condition>();
                     Duration duration = new Duration
                     {
-                        Seconds = Duration.InfiniteSeconds,
+                        Seconds = 60,
                     };
                     waitSet.Wait(conditions, duration);
 
@@ -1173,7 +1173,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     ICollection<Condition> conditions = new List<Condition>();
                     Duration duration = new Duration
                     {
-                        Seconds = Duration.InfiniteSeconds
+                        Seconds = 60,
                     };
                     waitSetFiltered.Wait(conditions, duration);
 
