@@ -45,7 +45,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
   build_linux:
-    runs-on: windows-2019
+    runs-on: windows-2022
     strategy:
       matrix:        
         BuildPlatform: [x64]
