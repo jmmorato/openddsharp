@@ -85,6 +85,11 @@ namespace OpenDDSharp.Build.Standard
         public bool IgnoreThirdPartySetup { get; internal set; }
 
         /// <summary>
+        /// Gets a value indicating whether ignore the third-party build.
+        /// </summary>
+        public bool IgnoreThirdPartyBuild { get; internal set; }
+
+        /// <summary>
         /// Gets the build configuration to use.
         /// </summary>
         public string BuildConfiguration { get; internal set; }
@@ -137,6 +142,15 @@ namespace OpenDDSharp.Build.Standard
             else
             {
                 IgnoreThirdPartySetup = false;
+            }
+
+            if (context.Arguments.HasArgument(nameof(IgnoreThirdPartyBuild)))
+            {
+                IgnoreThirdPartyBuild = bool.Parse(context.Arguments.GetArgument(nameof(IgnoreThirdPartyBuild)));
+            }
+            else
+            {
+                IgnoreThirdPartyBuild = false;
             }
 
             if (context.Arguments.HasArgument(nameof(IsDevelop)))
