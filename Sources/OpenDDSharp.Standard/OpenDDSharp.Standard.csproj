@@ -69,12 +69,12 @@
     <!-- As we put libraries in the `runtimes\{rid}\lib` folder, .NET Core will ignore
          the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
          directories. We keep the one in the `lib` for applications using .NET Framework. -->
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86'" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="false" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="false" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="false" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
     <None Include="$(OutputPath)/ref/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
     <None Include="$(OutputPath)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
   </ItemGroup>  

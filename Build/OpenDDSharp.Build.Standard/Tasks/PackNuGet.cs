@@ -17,10 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using Cake.Common.Tools.NuGet;
-using Cake.Frosting;
-using Cake.Common.Tools.NuGet.Pack;
 using System.IO;
+using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNetCore.Pack;
+using Cake.Core;
+using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -33,18 +34,36 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
+            string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
+            if (context.IsDevelop)
+            {
+                version += $"-beta";
+            }
+
             string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
             string path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Standard", "OpenDDSharp.Standard.csproj");
-            Cake.Core.IO.FilePath filePath = new Cake.Core.IO.FilePath(path);
-            context.NuGetPack(filePath, new NuGetPackSettings());
-            
-            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Templates", "OpenDDSharp.Templates.csproj");
-            filePath = new Cake.Core.IO.FilePath(path);
-            context.NuGetPack(filePath, new NuGetPackSettings());
+            context.DotNetCorePack(path, new DotNetCorePackSettings
+            {
+                Configuration = "Release",
+                NoBuild = true,
+                ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
+            });
 
-            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.IdlGenerator", "OpenDDSharp.Standard.IdlGenerator.nuspec");
-            filePath = new Cake.Core.IO.FilePath(path);
-            context.NuGetPack(filePath, new NuGetPackSettings());
+            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Templates", "OpenDDSharp.Templates.csproj");
+            context.DotNetCorePack(path, new DotNetCorePackSettings
+            {
+                Configuration = "Release",
+                NoBuild = true,
+                ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
+            });
+
+            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Native", "OpenDDSharp.Native.csproj");
+            context.DotNetCorePack(path, new DotNetCorePackSettings
+            {
+                Configuration = "Release",
+                NoBuild = true,
+                ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
+            });
 
             string releaseFolder = Path.Combine(solutionPath, "Release");
             if (!Directory.Exists(releaseFolder))
