@@ -18,17 +18,32 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Frosting;
+using Cake.Common.Xml;
+using Cake.Core.IO;
+using Cake.Common.IO;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
     /// <summary>
-    /// Set product version task.
+    /// Set version in the assembly info files.
     /// </summary>
-    [TaskName("SetVersion")]
-    [IsDependentOn(typeof(SetVersionAssemblyInfo))]
-    [IsDependentOn(typeof(SetVersionNuspec))]
-    [IsDependentOn(typeof(SetVersionProjectTemplate))]
-    public class SetVersion : FrostingTask
+    [TaskName("SetVersionNuspec")]
+    public class SetVersionNuspec : FrostingTask<BuildContext>
     {
+        /// <inheritdoc/>
+        public override void Run(BuildContext context)
+        {
+            string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
+            if (context.IsDevelop)
+            {
+                version += $"-beta";
+            }
+            DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
+
+            foreach (var file in context.GetFiles($"{path}/**/*.Standard.IdlGenerator.nuspec"))
+            {
+                context.XmlPoke(file, "/package/metadata/version", version);
+            }
+        }
     }
 }
