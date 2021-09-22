@@ -36,7 +36,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override bool ShouldRun(BuildContext context)
         {
-            if (context.IgnoreThirdPartySetup)
+            if (context.IgnoreThirdPartyBuild)
             {
                 return false;
             }
