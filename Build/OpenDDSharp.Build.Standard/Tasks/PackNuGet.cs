@@ -20,6 +20,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System.IO;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Pack;
+using Cake.Common.Tools.NuGet;
+using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Frosting;
 
@@ -64,6 +66,10 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 NoBuild = true,
                 ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
             });
+
+            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.IdlGenerator", "OpenDDSharp.Standard.IdlGenerator.nuspec");
+            var filePath = new Cake.Core.IO.FilePath(path);
+            context.NuGetPack(filePath, new NuGetPackSettings());
 
             string releaseFolder = Path.Combine(solutionPath, "Release");
             if (!Directory.Exists(releaseFolder))
