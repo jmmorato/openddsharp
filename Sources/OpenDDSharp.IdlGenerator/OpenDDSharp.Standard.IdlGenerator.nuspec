@@ -92,22 +92,38 @@
 
     <!--Required OpenDDS libarires-->
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.lib" target="tools\ACE\lib_x86" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.lib" target="tools\ACE\lib_x86" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.lib" target="tools\ACE\lib_x86" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.lib" target="tools\ACE\lib_x86" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.lib" target="tools\ACE\lib_x86" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.lib" target="tools\ACE\lib_x86" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.lib" target="tools\ACE\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.lib" target="tools\ACE\lib_x86" />    
     <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.lib" target="tools\DDS\lib_x86" />
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.lib" target="tools\DDS\lib_x86" />
 
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACE.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAOd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCode.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCoded.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServer.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServerd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactory.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactoryd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PI.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PId.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOP.lib" target="tools\ACE\lib_x64" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOPd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcps.lib" target="tools\DDS\lib_x64" />
+    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.lib" target="tools\DDS\lib_x64" />
 
     <!--Target file-->
     <file src=".\OpenDDSharp.Standard.IdlGenerator.targets" target="build\" />
