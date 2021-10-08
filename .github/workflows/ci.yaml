@@ -9,8 +9,7 @@ jobs:
       matrix:        
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
-    env:
-      OpenDdsVersion: "3.16"
+        OpenDdsVersion: ["3.16", "3.16.1", "3.18"]
         
     steps:
     - uses: actions/checkout@v2
@@ -30,16 +29,16 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
+        key: opendds-cache-${{ matrix.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
       if: steps.opendds-libraries.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ matrix.OpenDdsVersion }} --IgnoreThirdPartySetup=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake (Cached)
       shell: pwsh
       if: steps.opendds-libraries.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ matrix.OpenDdsVersion }} --IgnoreThirdPartySetup=True
       working-directory: ${{ github.workspace }}/Build
