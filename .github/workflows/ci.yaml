@@ -1,11 +1,20 @@
 name: Continuous Integration
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '0 1 * * SUN'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: windows-2019
     strategy:
+      fail-fast: false
       matrix:        
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
