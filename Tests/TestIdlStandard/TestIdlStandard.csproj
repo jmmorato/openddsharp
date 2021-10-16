@@ -155,7 +155,7 @@
     <!-- OpenDDS Win32/Release native Libraries -->    
     <WrapperReleaseWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\Win32\Release\TestIdlStandardWrapper.dll" />
     <ContentWithTargetPath Include="@(WrapperReleaseWin32)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <TargetPath>TestIdlStandardWrapper.dll</TargetPath>
     </ContentWithTargetPath>

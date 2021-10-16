@@ -48,7 +48,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 Configuration = "Release",
                 NoBuild = true,
-                ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
+                ArgumentCustomization = args => args.Append($"/p:Version={version}"),
+                OutputDirectory = ".",
             });
 
             path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Templates", "OpenDDSharp.Templates.csproj");
@@ -56,7 +57,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 Configuration = "Release",
                 NoBuild = true,
-                ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
+                ArgumentCustomization = args => args.Append($"/p:Version={version}"),
+                OutputDirectory = ".",
             });
 
             path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Native", "OpenDDSharp.Native.csproj");
@@ -64,7 +66,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 Configuration = "Release",
                 NoBuild = true,
-                ArgumentCustomization = args => args.Append($"/p:Version={version} /p:Platform=x86"),
+                ArgumentCustomization = args => args.Append($"/p:Version={version}"),
+                OutputDirectory = ".",
             });
 
             path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.IdlGenerator", "OpenDDSharp.Standard.IdlGenerator.nuspec");

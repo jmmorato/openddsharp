@@ -49,6 +49,9 @@ namespace OpenDDSharp.Build.Standard.Tasks
         {
             var ddsPath = Path.GetFullPath(context.DdsRoot).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(context.AceRoot).TrimEnd(Path.DirectorySeparatorChar);
+
+            RestoreOriginalBinLibFolders(context, ddsPath, acePath);
+
             var platform = context.BuildPlatform;
             if (platform == PlatformTarget.x86)
             {
@@ -81,13 +84,14 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     Arguments = "make",
                     WorkingDirectory = ddsPath,
                 });
+
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
                 }
             }
 
-            var ddsBinPlatform = Path.Combine(ddsPath, "bin_" + context.BuildPlatform);
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{context.BuildPlatform}_{context.BuildConfiguration}");
             if (context.DirectoryExists(ddsBinPlatform))
             {
                 context.DeleteDirectory(ddsBinPlatform, new DeleteDirectorySettings
@@ -99,7 +103,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(ddsBinPlatform);
             context.CopyFiles(Path.Combine(ddsPath, "bin/*"), ddsBinPlatform);
 
-            var ddsLibPlatform = Path.Combine(ddsPath, "lib_" + context.BuildPlatform);
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{context.BuildPlatform}_{context.BuildConfiguration}");
             if (context.DirectoryExists(ddsLibPlatform))
             {
                 context.DeleteDirectory(ddsLibPlatform, new DeleteDirectorySettings
@@ -111,7 +115,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(ddsLibPlatform);
             context.CopyFiles(Path.Combine(ddsPath, "lib/*"), ddsLibPlatform);
 
-            var aceBinPlatform = Path.Combine(acePath, "bin_" + context.BuildPlatform);
+            var aceBinPlatform = Path.Combine(acePath, $"bin_{context.BuildPlatform}_{context.BuildConfiguration}");
             if (context.DirectoryExists(aceBinPlatform))
             {
                 context.DeleteDirectory(aceBinPlatform, new DeleteDirectorySettings
@@ -123,7 +127,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(aceBinPlatform);
             context.CopyFiles(Path.Combine(acePath, "bin/*"), aceBinPlatform);
 
-            var aceLibPlatform = Path.Combine(acePath, "lib_" + context.BuildPlatform);
+            var aceLibPlatform = Path.Combine(acePath, $"lib_{context.BuildPlatform}_{context.BuildConfiguration}");
             if (context.DirectoryExists(aceLibPlatform))
             {
                 context.DeleteDirectory(aceLibPlatform, new DeleteDirectorySettings
@@ -132,8 +136,125 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     Recursive = true,
                 });
             }
+
             context.CreateDirectory(aceLibPlatform);
             context.CopyFiles(Path.Combine(acePath, "lib/*"), aceLibPlatform);
+
+            CleanupTemporalFiles(context, ddsPath);
+        }
+
+        private static void RestoreOriginalBinLibFolders(BuildContext context, string ddsPath, string acePath)
+        {
+            string ddsBin = Path.Combine(ddsPath, "bin");
+            string ddsLib = Path.Combine(ddsPath, "lib");
+            string ddsBinOriginal = Path.Combine(ddsPath, "original_bin");
+            string ddsLibOriginal = Path.Combine(ddsPath, "original_lib");
+
+            if (Directory.Exists(ddsBinOriginal) && Directory.Exists(ddsLibOriginal))
+            {
+                context.DeleteDirectory(ddsBin, new DeleteDirectorySettings
+                {
+                    Force = true,
+                    Recursive = true,
+                });
+
+                context.CreateDirectory(ddsBin);
+                context.CopyFiles(ddsBinOriginal, ddsBin);
+
+                context.DeleteDirectory(ddsLib, new DeleteDirectorySettings
+                {
+                    Force = true,
+                    Recursive = true,
+                });
+
+                context.CreateDirectory(ddsLib);
+                context.CopyFiles(ddsLibOriginal, ddsLib);
+            }
+
+            string aceBin = Path.Combine(acePath, "bin");
+            string aceLib = Path.Combine(acePath, "lib");
+            string aceBinOriginal = Path.Combine(acePath, "original_bin");
+            string aceLibOriginal = Path.Combine(acePath, "original_lib");
+
+            if (Directory.Exists(aceBinOriginal) && Directory.Exists(aceLibOriginal))
+            {
+                context.DeleteDirectory(aceBin, new DeleteDirectorySettings
+                {
+                    Force = true,
+                    Recursive = true,
+                });
+
+                context.CreateDirectory(aceBin);
+                context.CopyFiles(aceBinOriginal, aceBin);
+
+                context.DeleteDirectory(aceLib, new DeleteDirectorySettings
+                {
+                    Force = true,
+                    Recursive = true,
+                });
+
+                context.CreateDirectory(aceLib);
+                context.CopyFiles(aceLibOriginal, aceLib);
+            }
+        }
+
+        private static void CleanupTemporalFiles(BuildContext context, string ddsPath)
+        {
+            string[] cleanupFolders =
+            {
+                Path.Combine(ddsPath, "dds", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\idl", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\InfoRepoDiscovery", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\transport\rtps_udp", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\RTPS", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"tools\rtpsrelay\lib", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"tools\modeling\codegen\model", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"tools\repoctl", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"tools\dcpsinfo_dump", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\monitor", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\InfoRepo", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\transport\udp", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\transport\shmem", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\transport\multicast", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\DCPS\transport\tcp", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"dds\FACE", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"DevGuideExamples\FACE\Simple", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"DevGuideExamples\DCPS\Messenger", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"DevGuideExamples\DCPS\Messenger_ZeroCopy", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"DevGuideExamples\DCPS\Messenger.minimal", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\IORTable", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\BiDir_GIOP", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\PI", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\ImR_Client", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\IORManipulation", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\Valuetype", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\orbsvcs\orbsvcs", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\TAO_IDL", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\DynamicInterface", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\CodecFactory", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\PortableServer", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\AnyTypeCode", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\Codeset", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\Messaging", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\CSD_ThreadPool", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao\CSD_Framework", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\ACE\apps\gperf\src", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\ACE\ace", context.BuildConfiguration),
+                Path.Combine(ddsPath, @"ACE_TAO\TAO\tao", context.BuildConfiguration),
+            };
+
+            foreach (var folder in cleanupFolders)
+            {
+                if (Directory.Exists(folder))
+                {
+                    context.DeleteDirectory(folder, new DeleteDirectorySettings
+                    {
+                        Force = true,
+                        Recursive = true,
+                    });
+                }
+            }
         }
     }
 }

@@ -34,10 +34,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/ACE";
         private const string TAO_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/TAO";
-        private const string DEBUG_TARGET_FOLDER = @"Debug/";
-        private const string RELEASE_TARGET_FOLDER = @"Release/";
-        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
-        private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86/";
+        private const string DEBUG_TARGET_FOLDER = @"Debug";
+        private const string RELEASE_TARGET_FOLDER = @"Release";
+        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64";
+        private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86";
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
@@ -78,10 +78,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             var ddsLib = Path.Combine(ddsPath, $"lib");
             var aceBin = Path.Combine(acePath, $"bin");
             var aceLib = Path.Combine(acePath, $"lib");
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{_platformFolder.TrimEnd('/')}");
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{_platformFolder.TrimEnd('/')}");
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{_platformFolder.TrimEnd('/')}");
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{_platformFolder.TrimEnd('/')}");
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{_platformFolder}");
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{_platformFolder}");
+            var aceBinPlatform = Path.Combine(acePath, $"bin_{_platformFolder}");
+            var aceLibPlatform = Path.Combine(acePath, $"lib_{_platformFolder}");
             string path = $"{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
@@ -90,7 +90,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         }
 #endregion
 
-#region Methods
+        #region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)
         {
             string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "netcoreapp3.1", TEST_SUPPORT_PROCESS_EXE_NAME);
@@ -114,7 +114,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         {
             string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
 #if Windows
-            string infoRepoPath = Path.Combine(ddsPath, "bin_" + _platformFolder, DCPSINFOREPO_PROCESS_EXE_NAME);
+            string infoRepoPath = Path.Combine(ddsPath, $"bin_{_platformFolder}", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
             string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #endif
@@ -224,6 +224,6 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         {
             _targetFolder = DEBUG_TARGET_FOLDER;
         }
-#endregion
+        #endregion
     }
 }

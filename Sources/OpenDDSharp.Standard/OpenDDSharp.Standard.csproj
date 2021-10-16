@@ -6,7 +6,7 @@
     <AssemblyName>OpenDDSharp.Standard</AssemblyName>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
-    <Platforms>x64;x86</Platforms>
+    <Platforms>x64;x86;AnyCPU</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
 
@@ -17,6 +17,7 @@
       OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <!-- NuGet properties -->
@@ -68,14 +69,11 @@
     
     <!-- As we put libraries in the `runtimes\{rid}\lib` folder, .NET Core will ignore
          the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
-         directories. We keep the one in the `lib` for applications using .NET Framework. -->
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="false" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="false" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="false" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/ref/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
-    <None Include="$(OutputPath)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+         directories. We keep the one in the `lib` for applications using .NET Framework. -->    
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />    
+    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />    
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/LinuxRelease/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/ref/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+    <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
   </ItemGroup>  
 </Project>

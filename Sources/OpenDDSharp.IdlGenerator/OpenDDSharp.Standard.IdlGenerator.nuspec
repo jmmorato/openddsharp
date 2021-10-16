@@ -51,10 +51,10 @@
     <file src=".\StandardWrapperIdlProject.vcxproj.filters" target="tools\native_project_tempate" />
     <file src=".\StandardWrapperIdlProject.ico" target="tools\native_project_tempate" />
     <file src=".\StandardWrapperIdlProject.vstemplate" target="tools\native_project_tempate" />
-    <file src=".\StandardWrapperIdlProject.vcxproj" target="tools\native_project_tempate" />
-    <file src=".\StandardWrapperIdlProject.vcxproj.filters" target="tools\native_project_tempate" />
-    <file src=".\StandardWrapperIdlProject.ico" target="tools\native_project_tempate" />
-    <file src=".\StandardWrapperIdlProject.vstemplate" target="tools\native_project_tempate" />
+    <file src=".\StandardWrapperIdlProject.Linux.vcxproj" target="tools\native_project_tempate" />
+    <file src=".\StandardWrapperIdlProject.Linux.vcxproj.filters" target="tools\native_project_tempate" />
+    <file src=".\StandardWrapperIdlProject.Linux.ico" target="tools\native_project_tempate" />
+    <file src=".\StandardWrapperIdlProject.Linux.vstemplate" target="tools\native_project_tempate" />
     <file src=".\marshal.h" target="tools\native_project_tempate" />
     
     <!--Header files-->
@@ -91,39 +91,57 @@
     <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\**\*.pidl" target="tools\ACE_Linux\TAO\tao" />
 
     <!--Required OpenDDS libarires-->
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.lib" target="tools\ACE\lib_x86" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.lib" target="tools\ACE\lib_x86" />    
-    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.lib" target="tools\DDS\lib_x86" />
-    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.lib" target="tools\DDS\lib_x86" />
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.lib" target="tools\ACE\lib_x86" />    
+    <file src="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.lib" target="tools\DDS\lib_x86" />    
 
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACE.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAOd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCode.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCoded.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServer.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServerd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactory.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactoryd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PI.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PId.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOP.lib" target="tools\ACE\lib_x64" />
-    <file src="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOPd.lib" target="tools\ACE\lib_x64" />
     <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcps.lib" target="tools\DDS\lib_x64" />
-    <file src="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.lib" target="tools\DDS\lib_x64" />
+
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.*" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.*" target="tools\DDS_Linux\lib" />
+
+    <!--<file src="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so" target="tools\ACE_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so" target="tools\DDS_Linux\lib" />
+    <file src="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so" target="tools\DDS_Linux\lib" />-->
 
     <!--Target file-->
     <file src=".\OpenDDSharp.Standard.IdlGenerator.targets" target="build\" />
