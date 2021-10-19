@@ -91,7 +91,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 }
             }
 
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{context.BuildPlatform}_{context.BuildConfiguration}");
+            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{context.BuildPlatform}");
             if (context.DirectoryExists(ddsBinPlatform))
             {
                 context.DeleteDirectory(ddsBinPlatform, new DeleteDirectorySettings
@@ -103,7 +103,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(ddsBinPlatform);
             context.CopyFiles(Path.Combine(ddsPath, "bin/*"), ddsBinPlatform);
 
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{context.BuildPlatform}_{context.BuildConfiguration}");
+            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{context.BuildPlatform}");
             if (context.DirectoryExists(ddsLibPlatform))
             {
                 context.DeleteDirectory(ddsLibPlatform, new DeleteDirectorySettings
@@ -115,7 +115,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(ddsLibPlatform);
             context.CopyFiles(Path.Combine(ddsPath, "lib/*"), ddsLibPlatform);
 
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{context.BuildPlatform}_{context.BuildConfiguration}");
+            var aceBinPlatform = Path.Combine(acePath, $"bin_{context.BuildPlatform}");
             if (context.DirectoryExists(aceBinPlatform))
             {
                 context.DeleteDirectory(aceBinPlatform, new DeleteDirectorySettings
@@ -127,7 +127,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(aceBinPlatform);
             context.CopyFiles(Path.Combine(acePath, "bin/*"), aceBinPlatform);
 
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{context.BuildPlatform}_{context.BuildConfiguration}");
+            var aceLibPlatform = Path.Combine(acePath, $"lib_{context.BuildPlatform}");
             if (context.DirectoryExists(aceLibPlatform))
             {
                 context.DeleteDirectory(aceLibPlatform, new DeleteDirectorySettings
