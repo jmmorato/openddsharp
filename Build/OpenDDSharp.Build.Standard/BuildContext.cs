@@ -90,6 +90,11 @@ namespace OpenDDSharp.Build.Standard
         public bool IgnoreThirdPartyBuild { get; internal set; }
 
         /// <summary>
+        /// Gets a value indicating whether cleanup OpenDDS temporal files.
+        /// </summary>
+        public bool CleanupTemporalFiles { get; internal set; }
+
+        /// <summary>
         /// Gets the build configuration to use.
         /// </summary>
         public string BuildConfiguration { get; internal set; }
@@ -142,6 +147,15 @@ namespace OpenDDSharp.Build.Standard
             else
             {
                 IgnoreThirdPartySetup = false;
+            }
+
+            if (context.Arguments.HasArgument(nameof(CleanupTemporalFiles)))
+            {
+                CleanupTemporalFiles = bool.Parse(context.Arguments.GetArgument(nameof(CleanupTemporalFiles)));
+            }
+            else
+            {
+                CleanupTemporalFiles = false;
             }
 
             if (context.Arguments.HasArgument(nameof(IgnoreThirdPartyBuild)))

@@ -140,7 +140,10 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.CreateDirectory(aceLibPlatform);
             context.CopyFiles(Path.Combine(acePath, "lib/*"), aceLibPlatform);
 
-            CleanupTemporalFiles(context, ddsPath);
+            if (context.CleanupTemporalFiles)
+            {
+                CleanupTemporalFiles(context, ddsPath);
+            }
         }
 
         private static void RestoreOriginalBinLibFolders(BuildContext context, string ddsPath, string acePath)
