@@ -42,7 +42,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/");
             context.Log.Information($"Unit test path: {path}");
             var file = "OpenDDSharp.Standard.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.3/build/_common");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.7/build/_common");
             var settingsFile = Path.Combine(solutionFullPath, "CodeCoverage.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
