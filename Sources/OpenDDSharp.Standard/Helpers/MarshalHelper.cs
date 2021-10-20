@@ -259,7 +259,7 @@ namespace OpenDDSharp.Helpers
         {
             UnsafeNativeMethods.ReleaseNative(ptr);
         }
-        #endregion
+#endregion
 
         #region UnsafeNativeMethods
         /// <summary>
@@ -271,7 +271,7 @@ namespace OpenDDSharp.Helpers
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(API_DLL, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void ReleaseNative(IntPtr ptr);
         }
         #endregion

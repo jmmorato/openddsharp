@@ -1,0 +1,12 @@
+// OpenDDSharp IDL example.
+// Adapt the type as desired.
+
+module TestExample
+{
+    @topic
+    struct Test
+    {
+        @key long Key;
+        string<128> Message;
+    };
+};

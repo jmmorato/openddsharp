@@ -842,7 +842,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
             RtpsUdpInst rui = new RtpsUdpInst(inst);
-            config.Insert(inst);
+            config.Insert(rui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
@@ -861,7 +861,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                 DatalinkReleaseDelay = 1000,
 
             };
-            config.Insert(inst);
+            config.Insert(tcpi);
 
             TransportRegistry.Instance.BindConfig(config, entity);
         }

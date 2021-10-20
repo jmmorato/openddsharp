@@ -151,6 +151,8 @@
     <None Include="StandardWrapperIdlProject.Linux.vstemplate">
       <Filter>Project Template</Filter>
     </None>
+    <None Include="OpenDDSharp.Standard.IdlGenerator.nuspec" />
+    <None Include="OpenDDSharp.Standard.IdlGenerator.targets" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="NativeIdlProjectTemplate.ico">

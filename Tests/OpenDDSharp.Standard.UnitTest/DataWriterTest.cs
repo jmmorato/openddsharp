@@ -641,6 +641,7 @@ namespace OpenDDSharp.Standard.UnitTest
             // Get the matched subscription data
             SubscriptionBuiltinTopicData data = default;
             result = writer.GetMatchedSubscriptionData(list.First(), ref data);
+            Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
             // Destroy the other participant

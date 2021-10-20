@@ -54,8 +54,6 @@ namespace OpenDDSharp.BuildTasks
 
         int IOleMessageFilter.MessagePending(IntPtr hTaskCallee, int dwTickCount, int dwPendingType)
         {
-            _loggingHelper.LogMessage(MessageImportance.High, "Automation is waiting for pending messages...");
-
             return (int)PENDINGMSG.PENDINGMSG_WAITDEFPROCESS;
         }
 

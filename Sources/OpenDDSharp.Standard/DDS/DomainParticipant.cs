@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
@@ -956,7 +957,39 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="ContentFilteredTopic" /> on success, otherwise <see langword="null"/>.</returns>
         public ContentFilteredTopic CreateContentFilteredTopic(string name, Topic relatedTopic, string filterExpression, params string[] expressionParameters)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            if (relatedTopic == null)
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(filterExpression))
+            {
+                return null;
+            }
+
+            IntPtr seq = IntPtr.Zero;
+            IList<string> parameters = new List<string>();
+            if (expressionParameters != null)
+            {
+                
+                parameters = expressionParameters.ToList();
+                parameters.StringSequenceToPtr(ref seq, false);
+            }
+
+            IntPtr native = UnsafeNativeMethods.CreateContentFilteredTopic(_native, name, relatedTopic.ToNative(), filterExpression, seq);
+
+            ContentFilteredTopic cft = null;
+            if (native != IntPtr.Zero)
+            {
+                cft = new ContentFilteredTopic(native);
+            }
+
+            return cft;
         }
 
         /// <summary>
@@ -974,7 +1007,12 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteContentFilteredTopic(ContentFilteredTopic contentFilteredTopic)
         {
-            throw new NotImplementedException();
+            if (contentFilteredTopic == null)
+            {
+                return ReturnCode.Ok;
+            }
+
+            return UnsafeNativeMethods.DeleteContentFilteredTopic(_native, contentFilteredTopic.ToNative());
         }
 
         /// <summary>
@@ -1292,6 +1330,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipant_GetDiscoveredTopicData", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetDiscoveredTopicData(IntPtr dp, [MarshalAs(UnmanagedType.Struct), In, Out] ref TopicBuiltinTopicDataWrapper data, int handle);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipant_CreateContentFilteredTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateContentFilteredTopic(IntPtr dp, string name, IntPtr relatedTopic, string filterExpression, IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipant_DeleteContentFilteredTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteContentFilteredTopic(IntPtr dp, IntPtr cft);
         }
         #endregion
     }

@@ -364,8 +364,8 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Topic foundTopic = _participant.FindTopic(nameof(TestFindTopic), new Duration
             {
-                Seconds = Duration.InfiniteSeconds,
-                NanoSeconds = Duration.InfiniteNanoseconds,
+                Seconds = 60,
+                NanoSeconds = 0,
             });
 
             Assert.IsNotNull(foundTopic);
@@ -989,7 +989,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// OPENDDS ISSUE: Not working correctly with RTPS.
         /// OPENDDS ISSUE: Only discover local topics.
         /// </remarks>
-        //[Ignore]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
@@ -1029,7 +1028,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// <summary>
         /// Test the <see cref="DomainParticipant.GetDiscoveredTopicData(ref TopicBuiltinTopicData, InstanceHandle)" /> method.
         /// </summary>
-        //[Ignore]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
@@ -1062,6 +1060,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TopicBuiltinTopicData data = default;
             result = participant.GetDiscoveredTopicData(ref data, handles.First());
+            Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
@@ -1071,6 +1070,296 @@ namespace OpenDDSharp.Standard.UnitTest
             participant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(participant);
         }
-#endregion
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipant.CreateContentFilteredTopic(string, Topic, string, string[])" /> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestCreateContentFilteredTopic()
+        {
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestCreateContentFilteredTopic), typeName);
+            Assert.IsNotNull(topic);
+
+            int totalInstances = 10;
+            int filterCount = 5;
+            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNotNull(filteredTopic);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            Assert.IsNotNull(reader);
+
+            DataReader filteredReader = subscriber.CreateDataReader(filteredTopic, drQos);
+            Assert.IsNotNull(filteredReader);
+
+            TestStructDataReader dataReader = new TestStructDataReader(reader);
+            TestStructDataReader filteredDataReader = new TestStructDataReader(filteredReader);
+
+            WaitSet waitSet = new WaitSet();
+            GuardCondition cancelConditionReader = new GuardCondition();
+            StatusCondition statusConditionReader = reader.StatusCondition;
+            waitSet.AttachCondition(cancelConditionReader);
+            waitSet.AttachCondition(statusConditionReader);
+            statusConditionReader.EnabledStatuses = StatusKind.DataAvailableStatus;
+
+            int countReader = 0;
+            Thread threadReader = new Thread(() =>
+            {
+                while (true)
+                {
+                    ICollection<Condition> conditions = new List<Condition>();
+                    Duration duration = new Duration
+                    {
+                        Seconds = 60,
+                    };
+                    waitSet.Wait(conditions, duration);
+
+                    foreach (Condition cond in conditions)
+                    {
+                        if (cond == statusConditionReader && cond.TriggerValue)
+                        {
+                            StatusCondition sCond = (StatusCondition)cond;
+                            StatusMask mask = sCond.EnabledStatuses;
+                            if ((mask & StatusKind.DataAvailableStatus) != 0)
+                            {
+                                List<TestStruct> receivedData = new List<TestStruct>();
+                                List<SampleInfo> sampleInfos = new List<SampleInfo>();
+                                dataReader.Take(receivedData, sampleInfos);
+
+                                foreach (var sampleInfo in sampleInfos)
+                                {
+                                    if (sampleInfo.ValidData && sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState)
+                                    {
+                                        countReader++;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (cond == cancelConditionReader && cond.TriggerValue)
+                        {
+                            // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
+                            cancelConditionReader.TriggerValue = false;
+
+                            // The thread activity has been canceled.
+                            return;
+                        }
+                    }
+                }
+            });
+
+            WaitSet waitSetFiltered = new WaitSet();
+            GuardCondition cancelConditionFilteredReader = new GuardCondition();
+            StatusCondition statusConditionFilteredReader = filteredReader.StatusCondition;
+            waitSetFiltered.AttachCondition(cancelConditionFilteredReader);
+            waitSetFiltered.AttachCondition(statusConditionFilteredReader);
+            statusConditionFilteredReader.EnabledStatuses = StatusKind.DataAvailableStatus;
+
+            int countFilteredReader = 0;
+            Thread threadFilteredReader = new Thread(() =>
+            {
+                while (true)
+                {
+                    ICollection<Condition> conditions = new List<Condition>();
+                    Duration duration = new Duration
+                    {
+                        Seconds = 60,
+                    };
+                    waitSetFiltered.Wait(conditions, duration);
+
+                    foreach (Condition cond in conditions)
+                    {
+                        if (cond == statusConditionFilteredReader && cond.TriggerValue)
+                        {
+                            StatusCondition sCond = (StatusCondition)cond;
+                            StatusMask mask = sCond.EnabledStatuses;
+                            if ((mask & StatusKind.DataAvailableStatus) != 0)
+                            {
+                                List<TestStruct> receivedData = new List<TestStruct>();
+                                List<SampleInfo> sampleInfos = new List<SampleInfo>();
+                                filteredDataReader.Take(receivedData, sampleInfos);
+
+                                foreach (var sampleInfo in sampleInfos)
+                                {
+                                    if (sampleInfo.ValidData && sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState)
+                                    {
+                                        countFilteredReader++;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (cond == cancelConditionFilteredReader && cond.TriggerValue)
+                        {
+                            // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
+                            cancelConditionFilteredReader.TriggerValue = false;
+
+                            // The thread activity has been canceled.
+                            return;
+                        }
+                    }
+                }
+            });
+
+            threadReader.IsBackground = true;
+            threadReader.Priority = ThreadPriority.Highest;
+            threadReader.Start();
+
+            threadFilteredReader.IsBackground = true;
+            threadFilteredReader.Priority = ThreadPriority.Highest;
+            threadFilteredReader.Start();
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataWriter writer = publisher.CreateDataWriter(topic, dwQos);
+            Assert.IsNotNull(writer);
+
+            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+            // Wait for subscriptions
+            PublicationMatchedStatus status = default;
+            do
+            {
+                dataWriter.GetPublicationMatchedStatus(ref status);
+                Thread.Sleep(100);
+            }
+            while (status.CurrentCount < 2);
+
+            for (int i = 1; i <= totalInstances; i++)
+            {
+                result = dataWriter.Write(new TestStruct
+                {
+                    Id = i,
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(new Duration
+                {
+                    Seconds = 5,
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
+
+            cancelConditionReader.TriggerValue = true;
+            cancelConditionFilteredReader.TriggerValue = true;
+            threadFilteredReader.Join();
+            threadReader.Join();
+
+            result = waitSet.DetachCondition(cancelConditionReader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = waitSet.DetachCondition(statusConditionReader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = waitSetFiltered.DetachCondition(cancelConditionFilteredReader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = waitSetFiltered.DetachCondition(statusConditionFilteredReader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = subscriber.DeleteDataReader(reader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = subscriber.DeleteDataReader(filteredReader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = publisher.DeleteDataWriter(writer);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteContentFilteredTopic(filteredTopic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(totalInstances, countReader);
+            Assert.AreEqual(filterCount, countFilteredReader);
+
+            // Test with null name
+            ContentFilteredTopic nullFilteredTopic = _participant.CreateContentFilteredTopic(null, topic, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test with null related topic
+            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test with null expression
+            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, null, filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test wrong topic creation (same name than other topic is not allowed)
+            nullFilteredTopic = _participant.CreateContentFilteredTopic(nameof(TestCreateContentFilteredTopic), topic, "(Id <= %0)", filterCount.ToString());
+            Assert.IsNull(nullFilteredTopic);
+
+            // Test without expression parameters
+            ContentFilteredTopic filteredTopic1 = _participant.CreateContentFilteredTopic("FilteredTopic1", topic, "(Id <= 1)");
+            Assert.IsNotNull(filteredTopic1);
+
+            // Test with null expression parameters
+            ContentFilteredTopic filteredTopic2 = _participant.CreateContentFilteredTopic("FilteredTopic2", topic, "(Id <= 1)", null);
+            Assert.IsNotNull(filteredTopic2);
+
+            ContentFilteredTopic filteredTopic3 = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %1 AND Id <= %2)", filterCount.ToString(), "2");
+            Assert.IsNull(filteredTopic3);
+
+            result = _participant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipant.DeleteContentFilteredTopic(ContentFilteredTopic)" /> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestDeleteContentFilteredTopic()
+        {
+            TestStructTypeSupport support = new TestStructTypeSupport();
+            string typeName = support.GetTypeName();
+            ReturnCode result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic topic = _participant.CreateTopic(nameof(TestDeleteContentFilteredTopic), support.GetTypeName());
+            Assert.IsNotNull(topic);
+
+            int filterCount = 5;
+            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, "(Id < %0)", filterCount.ToString());
+            Assert.IsNotNull(filteredTopic);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReader reader = subscriber.CreateDataReader(filteredTopic);
+            Assert.IsNotNull(reader);
+
+            result = _participant.DeleteContentFilteredTopic(filteredTopic);
+            Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
+
+            result = subscriber.DeleteDataReader(reader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteContentFilteredTopic(filteredTopic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeleteContentFilteredTopic(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
+        #endregion
     }
 }

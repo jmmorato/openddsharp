@@ -48,7 +48,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             {
                 return true;
             }
-                        
+
             string currentHead = context.GitDescribe(_clonePath);
             if (_versionTag != currentHead)
             {
@@ -106,6 +106,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
                 Version = "[\"15.0\", \"17.0\"]"
             });
             var arguments = "/c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
+            context.Log.Information(configurePath + arguments);
             var exit = context.StartProcess("cmd.exe", new ProcessSettings
             {
                 Arguments = arguments,
