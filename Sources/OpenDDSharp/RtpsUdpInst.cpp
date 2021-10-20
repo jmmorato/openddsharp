@@ -83,21 +83,6 @@ void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HeartbeatResponseDelay::set(OpenDD
     impl_entity->heartbeat_response_delay_ = value;
 };
 
-OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HandshakeTimeout::get() {
-    return impl_entity->handshake_timeout_;
-};
-
-void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::HandshakeTimeout::set(OpenDDSharp::TimeValue value) {
-    impl_entity->handshake_timeout_ = value;
-};
-
-OpenDDSharp::TimeValue OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::DurableDataTimeout::get() {
-    return impl_entity->durable_data_timeout_;
-};
-
-void OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::DurableDataTimeout::set(OpenDDSharp::TimeValue value) {
-    impl_entity->durable_data_timeout_ = value;
-};
 
 System::Boolean OpenDDSharp::OpenDDS::DCPS::RtpsUdpInst::UseMulticast::get() {
     return impl_entity->use_multicast_;

@@ -426,8 +426,18 @@ OpenDDSharp::DDS::Topic^ OpenDDSharp::DDS::DomainParticipant::FindTopic(System::
 
 	::DDS::Topic_ptr topic = impl_entity->find_topic(context.marshal_as<const char *>(topicName), timeout.ToNative());
 
-	OpenDDSharp::DDS::Entity^ entity = EntityManager::get_instance()->find(topic);
-	return static_cast<OpenDDSharp::DDS::Topic^>(entity);	
+	// Due to https://github.com/objectcomputing/OpenDDS/pull/2731 each topic returned by find_topic is a new entity
+	if (topic != NULL) {
+		OpenDDSharp::DDS::Topic^ t = gcnew OpenDDSharp::DDS::Topic(topic);
+
+		EntityManager::get_instance()->add(topic, t);
+		contained_entities->Add(t);
+
+		return t;
+	}
+	else {
+		return nullptr;
+	}
 };
 
 OpenDDSharp::DDS::ITopicDescription^ OpenDDSharp::DDS::DomainParticipant::LookupTopicDescription(System::String^ name) {

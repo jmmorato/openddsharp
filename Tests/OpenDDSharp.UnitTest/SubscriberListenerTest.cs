@@ -465,12 +465,8 @@ namespace OpenDDSharp.UnitTest
             result = _reader.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-
             // Check subscription matched call
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(1500);
             Assert.AreEqual(1, count);
 
             // Delete the writer
