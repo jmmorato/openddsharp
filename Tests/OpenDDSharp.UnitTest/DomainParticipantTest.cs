@@ -1342,7 +1342,7 @@ namespace OpenDDSharp.UnitTest
             }
         }
 
-        [Ignore]
+        //[Ignore]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
@@ -1420,7 +1420,7 @@ namespace OpenDDSharp.UnitTest
             }
         }
 
-        [Ignore]
+        //[Ignore]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
