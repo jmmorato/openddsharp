@@ -835,7 +835,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataReader dataReader = new TestStructDataReader(reader);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // OpenDDS Issue: Wait for historical data is not actually implemented. It returns always ReturnCode.Ok
@@ -1263,7 +1263,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1375,7 +1375,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1495,7 +1495,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1693,7 +1693,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances
@@ -1777,9 +1777,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
-            found = writer.WaitForSubscriptions(1, 1000);
+            found = writer.WaitForSubscriptions(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances

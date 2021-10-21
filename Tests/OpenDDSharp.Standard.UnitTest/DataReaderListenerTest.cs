@@ -536,14 +536,8 @@ namespace OpenDDSharp.Standard.UnitTest
             result = _reader.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-            found = _reader.WaitForPublications(1, 1000);
-            Assert.IsTrue(found);
-
             // Check subscription matched call
-            Thread.Sleep(500);
+            Thread.Sleep(1500);
             Assert.AreEqual(1, count);
             Assert.AreEqual(_reader, firstDataReader);
             Assert.AreEqual(1, firstTotalCount);
@@ -556,11 +550,8 @@ namespace OpenDDSharp.Standard.UnitTest
             result = _publisher.DeleteDataWriter(_writer);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            found = _writer.WaitForSubscriptions(0, 1000);
-            Assert.IsTrue(found);
-
             // Check subscription matched call
-            Thread.Sleep(500);
+            Thread.Sleep(1500);
             Assert.AreEqual(2, count);
             Assert.AreEqual(_reader, secondDataReader);
             Assert.AreEqual(1, secondTotalCount);
