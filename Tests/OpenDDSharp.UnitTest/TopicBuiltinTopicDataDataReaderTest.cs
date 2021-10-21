@@ -27,7 +27,7 @@ using System.Threading;
 
 namespace OpenDDSharp.UnitTest
 {
-    //[Ignore]
+    [Ignore]
     [TestClass]
     public class TopicBuiltinTopicDataDataReaderTest
     {
