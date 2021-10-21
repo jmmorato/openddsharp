@@ -702,7 +702,7 @@ namespace OpenDDSharp.UnitTest
             result = publisher.ResumePublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2000);
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();

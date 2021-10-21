@@ -749,7 +749,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataReader dataReader = new TestStructDataReader(reader);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             #region OpenDDS issue
@@ -935,7 +935,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1036,7 +1036,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1163,7 +1163,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1272,7 +1272,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1389,7 +1389,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1485,7 +1485,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1581,7 +1581,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances
@@ -1662,7 +1662,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances
