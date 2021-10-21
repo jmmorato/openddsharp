@@ -202,6 +202,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(5, count);
         }
 
+        [Ignore("Ignored until https://github.com/objectcomputing/OpenDDS/issues/2684 is fixed.")]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnRequestedDeadlineMissed()
