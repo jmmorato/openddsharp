@@ -659,7 +659,12 @@ namespace OpenDDSharp.DDS
 
             IntPtr ptrTopicDescription = Topic.NarrowTopicDescription(native);
 
-            return (Topic)EntityManager.Instance.Find(ptrTopicDescription);
+            if (ptrTopicDescription != IntPtr.Zero)
+            {
+                return new Topic(ptrTopicDescription);
+            }
+
+            return null;
         }
 
         /// <summary>
