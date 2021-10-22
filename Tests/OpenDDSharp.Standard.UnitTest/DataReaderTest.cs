@@ -1029,7 +1029,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1133,7 +1133,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1594,7 +1594,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
