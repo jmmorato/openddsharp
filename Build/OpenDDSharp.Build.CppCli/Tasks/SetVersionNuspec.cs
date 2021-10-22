@@ -36,7 +36,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
             }
             DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
-            foreach (var file in context.GetFiles($"{path}/**/*.nuspec"))
+            foreach (var file in context.GetFiles($"{path}/Sources/**/*.nuspec"))
             {
                 context.XmlPoke(file, "/package/metadata/version", version);
             }

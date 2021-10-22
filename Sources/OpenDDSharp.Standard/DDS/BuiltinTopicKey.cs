@@ -19,7 +19,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -40,7 +39,6 @@ namespace OpenDDSharp.DDS
         /// <summary>
         /// Gets the value of the <see cref="BuiltinTopicKey" />.
         /// </summary>
-        [SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Same type than OpenDDS.")]
         public byte[] Value => _value;
         #endregion
 

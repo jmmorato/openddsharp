@@ -85,7 +85,7 @@
   <Target Name="GenerateNativeProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename).idl')">
     <Message Text="Generate Windows Native OpenDDS project" Importance="High" />
     <GenerateNativeProjectTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\NativeIdlProjectTemplate.vstemplate" Configuration="$(Configuration)" Platform="$(Platform)" IsStandard="True" />
-  </Target>  
+  </Target>
   
   <!-- Generate Windows wrapper C project -->
   <Target Name="GenerateWrapperProjectTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)WrapperProject\%(filename).idl')">
@@ -144,18 +144,18 @@
   <!-- Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlx64" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x64'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\x64\$(Configuration)\openddsharp_idl.exe&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlx86" BeforeTargets="PreBuildEvent" Condition="'$(Platform)'=='x86'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.IdlGenerator\bin\Win32\$(Configuration)\openddsharp_idl.exe&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <ItemGroup>
     <!-- OpenDDS Win32/Release native Libraries -->    
     <WrapperReleaseWin32 Include="$(IntermediateOutputPath)WrapperProject\bin\Win32\Release\TestIdlStandardWrapper.dll" />
     <ContentWithTargetPath Include="@(WrapperReleaseWin32)" Visible="false" Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <TargetPath>TestIdlStandardWrapper.dll</TargetPath>
     </ContentWithTargetPath>

@@ -215,3 +215,13 @@ CORBA::Boolean DomainParticipant_ContainsEntity(::DDS::DomainParticipant_ptr dp,
 
     return ret;
 }
+
+::DDS::ContentFilteredTopic_ptr DomainParticipant_CreateContentFilteredTopic(::DDS::DomainParticipant_ptr dp, char* name, ::DDS::Topic_ptr relatedTopic, char* filterExpression, void* seq) {
+    ::DDS::StringSeq parameters;
+    ptr_to_unbounded_basic_string_sequence(seq, parameters);
+    return dp->create_contentfilteredtopic(name, relatedTopic, filterExpression, parameters);
+}
+
+::DDS::ReturnCode_t DomainParticipant_DeleteContentFilteredTopic(::DDS::DomainParticipant_ptr dp, ::DDS::ContentFilteredTopic_ptr cft) {
+    return dp->delete_contentfilteredtopic(cft);
+}

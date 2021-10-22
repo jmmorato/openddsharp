@@ -18,8 +18,7 @@ jobs:
       matrix:        
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
-        OpenDdsVersion: ["3.16"]
-        
+        OpenDdsVersion: ["3.18.1"]
     steps:
     - uses: actions/checkout@v2
 

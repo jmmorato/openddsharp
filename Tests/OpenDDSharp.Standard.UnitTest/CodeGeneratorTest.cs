@@ -89,8 +89,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(_dw);
             _dataWriter = new TestStructDataWriter(_dw);
 
-            Assert.IsTrue(_dataWriter.WaitForSubscriptions(1, 1000));
-            Assert.IsTrue(_dataReader.WaitForPublications(1, 1000));
+            Assert.IsTrue(_dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(_dataReader.WaitForPublications(1, 5000));
         }
 
         /// <summary>

@@ -635,7 +635,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(writer);
 
             // Wait for discovery and check the status
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(2000);
 
             result = reader.GetSubscriptionMatchedStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -650,9 +650,16 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherWriter);
 
             // Wait for discovery and check the status
-            System.Threading.Thread.Sleep(100);
-
+            System.Threading.Thread.Sleep(1000);
             result = reader.GetSubscriptionMatchedStatus(ref status);
+            int tries = 10;
+            while (status.CurrentCount != 1 && tries > 0)
+            {
+                System.Threading.Thread.Sleep(1000);
+                result = reader.GetSubscriptionMatchedStatus(ref status);
+                tries--;
+            }
+
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, status.CurrentCount);
             Assert.AreEqual(1, status.CurrentCountChange);
@@ -742,7 +749,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataReader dataReader = new TestStructDataReader(reader);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             #region OpenDDS issue
@@ -820,9 +827,15 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherWriter);
 
             // Wait for discovery and check the matched subscriptions
-            System.Threading.Thread.Sleep(100);
-
+            System.Threading.Thread.Sleep(1000);
             result = reader.GetMatchedPublications(list);
+            int tries = 10;
+            while(list.Count != 1 && tries > 0)
+            {
+                System.Threading.Thread.Sleep(1000);
+                result = reader.GetMatchedPublications(list);
+                tries--;
+            }
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(otherWriter.InstanceHandle, list.First());
@@ -922,7 +935,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1023,7 +1036,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1150,7 +1163,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1259,7 +1272,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1376,7 +1389,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1472,7 +1485,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1568,7 +1581,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances
@@ -1649,7 +1662,7 @@ namespace OpenDDSharp.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = reader.WaitForPublications(1, 1000);
+            bool found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances

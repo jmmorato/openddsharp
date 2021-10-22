@@ -1,0 +1,149 @@
+name: Continuous Integration (Standard)
+
+on:
+  push:
+  schedule:
+    - cron: '0 1 * * SUN'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_windows:
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:        
+        BuildPlatform: [x64, x86]
+        BuildConfiguration: [Release, Debug]
+    env:
+      OpenDdsVersion: "3.18.1"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-windows
+      uses: actions/cache@v2
+      with:
+        path: |          
+          ${{ github.workspace }}/ext/OpenDDS/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
+
+    - name: Build & Test with Cake (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+
+  #build_linux:
+  #  runs-on: windows-2019
+  #  strategy:
+  #    matrix:        
+  #      BuildPlatform: [x64]
+  #      BuildConfiguration: [LinuxRelease, LinuxDebug]
+  #  env:
+  #    OpenDdsVersion: "3.16"
+        
+  #  steps:
+  #  - uses: actions/checkout@v2
+
+  #  - uses: Vampire/setup-wsl@v1
+  #    with:
+  #      distribution: Ubuntu-18.04
+  #      additional-packages:
+  #        build-essential
+  #        git
+
+  #  - name: Install .NET 5
+  #    shell: pwsh
+  #    run: |
+  #      wsl sudo apt-get install -y wget
+  #      wsl wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+  #      wsl sudo dpkg -i packages-microsoft-prod.deb
+  #      wsl rm packages-microsoft-prod.deb
+  #      wsl sudo apt-get update
+  #      wsl sudo apt-get install -y apt-transport-https
+  #      wsl sudo apt-get update
+  #      wsl sudo apt-get install -y dotnet-sdk-3.1
+  #      wsl sudo apt-get install -y dotnet-sdk-5.0
+
+  #  - name: Cache OpenDDS libraries
+  #    id: opendds-libraries-linux
+  #    uses: actions/cache@v2
+  #    with:
+  #      path: |
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.dll
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.lib
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.exe
+  #        ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.h
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.inl
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.idl
+  #        ${{ github.workspace }}/ext/OpenDDS/**/*.pidl          
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/bin/DCPSInfoRepo
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/bin/opendds_idl
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
+  #        ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
+  #      key: opendds-standard-linux-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
+
+  #  - name: Build & Test with Cake (Windows Release - No cached)
+  #    shell: pwsh
+  #    if: steps.opendds-libraries-linux.outputs.cache-hit != 'true' && matrix.BuildConfiguration == 'LinuxRelease'
+  #    run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+  #    working-directory: ${{ github.workspace }}/Build
+      
+  #  - name: Build & Test with Cake (Windows Release - Cached)
+  #    shell: pwsh
+  #    if: steps.opendds-libraries-linux.outputs.cache-hit == 'true' && matrix.BuildConfiguration == 'LinuxRelease'
+  #    run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+  #    working-directory: ${{ github.workspace }}/Build
+
+  #  - name: Build & Test with Cake (Windows Debug - No cached)
+  #    shell: pwsh
+  #    if: steps.opendds-libraries-linux.outputs.cache-hit != 'true' && matrix.BuildConfiguration == 'LinuxDebug'
+  #    run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+  #    working-directory: ${{ github.workspace }}/Build
+      
+  #  - name: Build & Test with Cake (Windows Debug - Cached)
+  #    shell: pwsh
+  #    if: steps.opendds-libraries-linux.outputs.cache-hit == 'true' && matrix.BuildConfiguration == 'LinuxDebug'
+  #    run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Debug --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+  #    working-directory: ${{ github.workspace }}/Build
+
+  #  - name: Build & Test with Cake (Linux - No cached)
+  #    shell: pwsh
+  #    if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+  #    run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False
+  #    working-directory: ${{ github.workspace }}/Build
+      
+  #  - name: Build & Test with Cake (Linux - Cached)
+  #    shell: pwsh
+  #    if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+  #    run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True
+  #    working-directory: ${{ github.workspace }}/Build

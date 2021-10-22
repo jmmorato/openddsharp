@@ -616,7 +616,7 @@ namespace OpenDDSharp.UnitTest
             DataReader reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2000);
 
             result = dataWriter.Write(new TestStruct
             {
@@ -690,7 +690,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2000);
 
             // Check that not samples arrived
             List<TestStruct> data = new List<TestStruct>();
@@ -702,7 +702,7 @@ namespace OpenDDSharp.UnitTest
             result = publisher.ResumePublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2000);
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();
@@ -781,7 +781,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2000);
 
             // Check that not samples arrived
             List<TestStruct> data = new List<TestStruct>();
@@ -797,7 +797,7 @@ namespace OpenDDSharp.UnitTest
             result = publisher.EndCoherentChanges();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2000);
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();

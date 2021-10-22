@@ -180,42 +180,12 @@ namespace OpenDDSharp {
                     void set(TimeValue value);
                 }
 
-                /// <summary>
-                /// The maximum number of milliseconds to wait
-                /// before giving up on a handshake response during
-                /// association. The default is 30000 (30 seconds).
-                /// </summary>
-                property TimeValue HandshakeTimeout {
-                    TimeValue get();
-                    void set(TimeValue value);
-                }
-
-                /// <summary>
-                /// The durable data timeout.
-                /// The default value is 60 seconds.
-                /// </summary>
-                property TimeValue DurableDataTimeout {
-                    TimeValue get();
-                    void set(TimeValue value);
-                }
-
             public:
                 /// <summary>
                 /// Creates a new instance of <see cref="RtpsUdpInst" />.
                 /// </summary>
                 /// <param name="inst">The base <see cref="TransportInst" /> object created with the <see cref="TransportRegistry" />.</param>
                 RtpsUdpInst(TransportInst^ inst);
-            
-            /*public:
-                /// <summary>
-                /// Implicit conversion operator from <see cref="TransportInst" /> to <see cref="RtpsUdpInst" />.
-                /// </summary>
-                /// <param name="value">The value to transform.</param>
-                /// <returns>The <see cref="RtpsUdpInst" /> value.</returns>
-                static operator RtpsUdpInst^ (TransportInst^ value) {
-                    RtpsUdpInst^ rui = gcnew RtpsUdpInst(value);
-                    return rui;
-                }*/
 
             };
         }

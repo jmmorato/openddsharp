@@ -22,8 +22,8 @@ public:
         sequence.length(length);
 
         // The rest of the memory is the structures aligned one after the other
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(T);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(T);
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
@@ -34,8 +34,8 @@ public:
     static void unbounded_sequence_to_ptr(TAO::unbounded_value_sequence<T> sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof(T);
-        const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+        const size_t struct_size = sizeof(T);
+        const size_t buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
 
@@ -67,8 +67,8 @@ public:
         ACE_OS::memcpy(&length, bytes, sizeof length);
         sequence.length(length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(char*);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(char*);
         char** pointers = new char*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -94,8 +94,8 @@ public:
         ACE_OS::memcpy(&length, bytes, sizeof length);
         sequence.length(length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(wchar_t*);
         wchar_t** pointers = new wchar_t*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -110,8 +110,8 @@ public:
     static void unbounded_basic_string_sequence_to_ptr(TAO::unbounded_basic_string_sequence<char> & sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof(char*);
-        const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+        const size_t struct_size = sizeof(char*);
+        const size_t buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
 
@@ -133,8 +133,8 @@ public:
     static void unbounded_wide_string_sequence_to_ptr(TAO::unbounded_basic_string_sequence<wchar_t> & sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
-        const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+        const size_t struct_size = sizeof(wchar_t*);
+        const size_t buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
 
@@ -166,8 +166,8 @@ public:
         ACE_UINT32 length = 0;
         ACE_OS::memcpy(&length, bytes, sizeof length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(char*);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(char*);
         char** pointers = new char*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -194,8 +194,8 @@ public:
         ACE_UINT32 length = 0;
         ACE_OS::memcpy(&length, bytes, sizeof length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(wchar_t*);
         wchar_t** pointers = new wchar_t*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -223,8 +223,8 @@ public:
         ACE_UINT32 length = 0;
         ACE_OS::memcpy(&length, bytes, sizeof length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(T);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(T);
         T* structures = new T[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -247,7 +247,7 @@ public:
 
         char* bytes = (char*)ptr;
 
-        const ACE_UINT64 struct_size = sizeof(char*);
+        const size_t struct_size = sizeof(char*);
         char** pointers = new char*[length];
         for (ACE_INT32 i = 0; i < length; i++)
         {
@@ -268,7 +268,7 @@ public:
 
         char* bytes = (char*)ptr;
 
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
+        const size_t struct_size = sizeof(wchar_t*);
         wchar_t** pointers = new wchar_t*[length];
         for (ACE_INT32 i = 0; i < length; i++)
         {
@@ -282,8 +282,8 @@ public:
 
     static void basic_string_multi_array_to_ptr(char** & arr, void* & ptr, int length)
     {
-        const ACE_UINT64 struct_size = sizeof(char*);
-        const ACE_UINT64 buffer_size = length * struct_size;
+        const size_t struct_size = sizeof(char*);
+        const size_t buffer_size = length * struct_size;
         char* bytes = new char[buffer_size];
 
         for (ACE_INT32 i = 0; i < length; i++)
@@ -303,8 +303,8 @@ public:
 
     static void wide_string_multi_array_to_ptr(wchar_t** & arr, void* & ptr, int length)
     {
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
-        const ACE_UINT64 buffer_size = length * struct_size;
+        const size_t struct_size = sizeof(wchar_t*);
+        const size_t buffer_size = length * struct_size;
         char* bytes = new char[buffer_size];
 
         for (ACE_INT32 i = 0; i < length; i++)
@@ -331,7 +331,7 @@ public:
 
         char* bytes = (char*)ptr;
        
-        const ACE_UINT64 struct_size = sizeof(char*);
+        const size_t struct_size = sizeof(char*);
         char** pointers = new char*[length];
         for (ACE_INT32 i = 0; i < length; i++)
         {
@@ -354,7 +354,7 @@ public:
 
         char* bytes = (char*)ptr;
 
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
+        const size_t struct_size = sizeof(wchar_t*);
         wchar_t** pointers = new wchar_t*[length];
         for (ACE_INT32 i = 0; i < length; i++)
         {
@@ -384,8 +384,8 @@ public:
         sequence.length(length);
 
         // The rest of the memory is the structures aligned one after the other
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(T);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(T);
         for (ACE_UINT32 i = 0; i < length; i++)
         {
             ACE_OS::memcpy(&sequence[i], &bytes[(i * struct_size) + structs_offset], struct_size);
@@ -396,8 +396,8 @@ public:
     static void bounded_sequence_to_ptr(TAO::bounded_value_sequence<T, MAX> sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof(T);
-        const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+        const size_t struct_size = sizeof(T);
+        const size_t buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
 
@@ -430,8 +430,8 @@ public:
         ACE_OS::memcpy(&length, bytes, sizeof length);
         sequence.length(length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(char*);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(char*);
         char** pointers = new char*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -458,8 +458,8 @@ public:
         ACE_OS::memcpy(&length, bytes, sizeof length);
         sequence.length(length);
 
-        const ACE_UINT64 structs_offset = sizeof length;
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
+        const size_t structs_offset = sizeof length;
+        const size_t struct_size = sizeof(wchar_t*);
         wchar_t** pointers = new wchar_t*[length];
         for (ACE_UINT32 i = 0; i < length; i++)
         {
@@ -475,8 +475,8 @@ public:
     static void bounded_basic_string_sequence_to_ptr(TAO::bounded_basic_string_sequence<char, MAX> & sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof(char*);
-        const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+        const size_t struct_size = sizeof(char*);
+        const size_t buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
 
@@ -499,8 +499,8 @@ public:
     static void bounded_wide_string_sequence_to_ptr(TAO::bounded_basic_string_sequence<wchar_t, MAX> & sequence, void* & ptr)
     {
         ACE_UINT32 length = sequence.length();
-        const ACE_UINT64 struct_size = sizeof(wchar_t*);
-        const ACE_UINT64 buffer_size = (length * struct_size) + sizeof length;
+        const size_t struct_size = sizeof(wchar_t*);
+        const size_t buffer_size = (length * struct_size) + sizeof length;
         char* bytes = new char[buffer_size];
         ACE_OS::memcpy(bytes, &length, sizeof length);
 
