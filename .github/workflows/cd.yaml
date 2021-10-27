@@ -347,7 +347,7 @@ jobs:
         VS_MARKETPLACE_TOKEN: ${{ secrets.VSIX_MARKETPLACE_TOKEN }}
       if: github.event.pull_request.base.ref == 'develop'
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey=$NUGET_API_KEY --VsMarketplaceToken=$VS_MARKETPLACE_TOKEN --IsDevelop='true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --VsMarketplaceToken="$env:VS_MARKETPLACE_TOKEN" --IsDevelop='true'
       working-directory: ${{ github.workspace }}/Build
 
     # Publish release packages (Main)
@@ -357,5 +357,5 @@ jobs:
         VS_MARKETPLACE_TOKEN: ${{ secrets.VSIX_MARKETPLACE_TOKEN }}
       if: github.event.pull_request.base.ref == 'main'
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey=$NUGET_API_KEY --VsMarketplaceToken=$VS_MARKETPLACE_TOKEN --IsDevelop='false'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.CppCli.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --VsMarketplaceToken="$env:VS_MARKETPLACE_TOKEN" --IsDevelop='false'
       working-directory: ${{ github.workspace }}/Build
