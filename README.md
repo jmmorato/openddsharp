@@ -42,7 +42,7 @@ Some parameters can be provided to configure the compilation process:
 
 **BuildConfiguration**: Defines the configuration to build OpenDDSharp. The accepted values are `Release` and `Debug`. If this parameter is not provided, the default value is `Release` 
 
-**OpenDdsVersion**: Defines the OpenDDS version that will be downloaded and compiled. If this parameter is not provided, the default value is `3.16`. Changing the version of OpenDDS could require code adaptations on the OpenDDSharp layer.
+**OpenDdsVersion**: Defines the OpenDDS version that will be downloaded and compiled. If this parameter is not provided, the default value is `3.18.1`. Changing the version of OpenDDS could require code adaptations on the OpenDDSharp layer.
 
 **PerlPath**: Defines the Perl path to be used during the OpenDDS compilation. Perl is used for the OpenDDS configure script to generate the Visual Studio project files. It is recommended to use [Straweberry Perl](https://strawberryperl.com/). By default the `C:/Strawberry/perl/bin` will be used to find the perl executable, but you can use this parameter to point the installation path where your Perl software is installed.
 
@@ -51,5 +51,5 @@ Some parameters can be provided to configure the compilation process:
 Example:
 
 ```ps
-OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=3.16 --IgnoreThirdPartySetup=False --VisualStudioVersion=VS2019
+OpenDDSharp.Build.CppCli.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=3.18.1 --IgnoreThirdPartySetup=False --VisualStudioVersion=VS2019
 ```
