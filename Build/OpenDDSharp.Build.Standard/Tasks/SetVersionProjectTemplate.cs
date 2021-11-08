@@ -17,11 +17,9 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System;
 using Cake.Common.IO;
 using Cake.Common.Xml;
 using Cake.Core.IO;
-using Cake.FileHelpers;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
@@ -44,6 +42,11 @@ namespace OpenDDSharp.Build.Standard.Tasks
             DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
             foreach (var file in context.GetFiles($"{path}/**/OpenDDSharp.IdlProject.csproj"))
+            {
+                context.XmlPoke(file, "/Project/ItemGroup/PackageReference/@Version", version);
+            }
+
+            foreach (var file in context.GetFiles($"{path}/**/OpenDDSharp.ConsoleApp.csproj"))
             {
                 context.XmlPoke(file, "/Project/ItemGroup/PackageReference/@Version", version);
             }

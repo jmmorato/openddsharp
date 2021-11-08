@@ -10,7 +10,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="TestTypeSupport.cs" />
+    <Compile Include="OpenDDSharp.IdlProjectTypeSupport.cs" />
     <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>
 
