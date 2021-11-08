@@ -32,7 +32,7 @@ namespace OpenDDSharp.Build.CppCli.Tasks
         {
             var path = $"../../Tests/OpenDDSharp.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/";
             var file = "OpenDDSharp.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/MSTest.TestAdapter.2.1.2/build/_common");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/MSTest.TestAdapter.2.2.7/build/_common");
             var settingsFile = Path.Combine(Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER), "CodeCoverage.runsettings");
             var platform = context.BuildPlatform == PlatformTarget.x64 ? VSTestPlatform.x64 : VSTestPlatform.x86;
 

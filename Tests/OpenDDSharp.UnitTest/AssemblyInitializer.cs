@@ -49,7 +49,14 @@ namespace OpenDDSharp.UnitTest
         {
             Ace.Init();
 
-            _disc = new RtpsDiscovery(RTPS_DISCOVERY);
+            _disc = new RtpsDiscovery(RTPS_DISCOVERY)
+            {
+                ResendPeriod = new TimeValue
+                {
+                    Seconds = 5,
+                }
+            };
+
             ParticipantService.Instance.AddDiscovery(_disc);            
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
             Assert.AreEqual(RTPS_DISCOVERY, ParticipantService.Instance.DefaultDiscovery);

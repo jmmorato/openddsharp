@@ -1,0 +1,23 @@
+﻿<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <Platforms>x64;x86</Platforms>
+    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="OpenDDSharp.IdlProjectTypeSupport.cs" />
+    <Compile Include="Helpers\MarshalHelper.cs" />
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  
+  <ItemGroup>
+    <PackageReference Include="OpenDDSharp.Standard.IdlGenerator" Version="1.0.0" />
+    <PackageReference Include="OpenDDSharp.Standard" Version="1.0.0" />
+  </ItemGroup>
+</Project>

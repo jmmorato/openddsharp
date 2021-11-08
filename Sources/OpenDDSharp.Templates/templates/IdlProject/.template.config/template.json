@@ -1,0 +1,12 @@
+{
+  "author": "Jose Morato",
+  "description": "Project template to create OpenDDSharp IDL projects",
+  "identity": "OpenDDSharp.IdlProject",
+  "name": "OpenDDSharp - IDL Project Template",
+  "shortName": "openddsharp-idl-project",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "OpenDDSharp.IdlProject"
+}

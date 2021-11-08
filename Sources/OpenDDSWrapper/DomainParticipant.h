@@ -138,3 +138,9 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_GetDiscoveredTopicData(::DDS::DomainParticipant_ptr dp, TopicBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle);
+
+EXTERN_METHOD_EXPORT
+::DDS::ContentFilteredTopic_ptr DomainParticipant_CreateContentFilteredTopic(::DDS::DomainParticipant_ptr dp, char* name, ::DDS::Topic_ptr relatedTopic, char* filterExpression, void* seq);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_DeleteContentFilteredTopic(::DDS::DomainParticipant_ptr dp, ::DDS::ContentFilteredTopic_ptr cft);

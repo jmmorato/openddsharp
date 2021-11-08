@@ -50,3 +50,7 @@ PoC/
 Deprecated/
 GeneratorCommands/
 ext/
+ext_*/
+**/PublishProfiles/
+#Ignore launchSettings
+**/launchSettings.json

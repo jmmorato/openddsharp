@@ -126,6 +126,9 @@
     <ClInclude Include="..\OpenDDSWrapper\Ace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\OpenDDSWrapper\ContentFilteredTopic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\OpenDDSWrapper\Condition.cpp">
@@ -231,6 +234,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\OpenDDSWrapper\marshal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OpenDDSWrapper\ContentFilteredTopic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

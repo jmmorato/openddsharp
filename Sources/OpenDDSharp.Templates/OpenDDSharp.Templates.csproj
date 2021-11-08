@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageId>OpenDDSharp.Templates</PackageId>
+    <TargetFramework>net5.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <Title>OpenDDSharp Templates</Title>
+    <Authors>Jose Morato</Authors>
+    <Description>Project templates for OpenDDSharp</Description>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>IDL, OpenDDS, OpenDDSharp, DDS,</PackageTags>
+    <Company>OpenDDSharp</Company>
+    <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
+    <PackageProjectUrl>http://www.openddsharp.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
+    <PackageIcon>icon_128.png</PackageIcon>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Version>1.0.0</Version>
+
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon_128.png" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+</Project>

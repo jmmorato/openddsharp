@@ -67,6 +67,7 @@
     <ClInclude Include="..\OpenDDSWrapper\Ace.h" />
     <ClInclude Include="..\OpenDDSWrapper\BuiltinTopicData.h" />
     <ClInclude Include="..\OpenDDSWrapper\Condition.h" />
+    <ClInclude Include="..\OpenDDSWrapper\ContentFilteredTopic.h" />
     <ClInclude Include="..\OpenDDSWrapper\DataReader.h" />
     <ClInclude Include="..\OpenDDSWrapper\DataReaderListener.h" />
     <ClInclude Include="..\OpenDDSWrapper\DataReaderListenerImpl.h" />
@@ -107,6 +108,7 @@
   <ItemGroup>
     <ClCompile Include="..\OpenDDSWrapper\Ace.cpp" />
     <ClCompile Include="..\OpenDDSWrapper\Condition.cpp" />
+    <ClCompile Include="..\OpenDDSWrapper\ContentFilteredTopic.cpp" />
     <ClCompile Include="..\OpenDDSWrapper\DataReader.cpp" />
     <ClCompile Include="..\OpenDDSWrapper\DataReaderListener.cpp" />
     <ClCompile Include="..\OpenDDSWrapper\DataReaderListenerImpl.cpp" />

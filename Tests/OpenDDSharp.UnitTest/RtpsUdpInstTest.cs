@@ -52,15 +52,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(rui.HeartbeatResponseDelay);
             Assert.AreEqual(0, rui.HeartbeatResponseDelay.Seconds);
             Assert.AreEqual(500000, rui.HeartbeatResponseDelay.MicroSeconds);
-            Assert.IsNotNull(rui.HandshakeTimeout);
-            Assert.AreEqual(30, rui.HandshakeTimeout.Seconds);
-            Assert.AreEqual(0, rui.HandshakeTimeout.MicroSeconds);
             Assert.AreEqual(1, rui.Ttl);
             Assert.AreEqual(32U, rui.DatalinkControlChunks);
             Assert.AreEqual(10000, rui.DatalinkReleaseDelay);
-            Assert.IsNotNull(rui.DurableDataTimeout);
-            Assert.AreEqual(60, rui.DurableDataTimeout.Seconds);
-            Assert.AreEqual(0, rui.DurableDataTimeout.MicroSeconds);
             Assert.IsTrue(rui.IsReliable);
             Assert.AreEqual(2147481599u, rui.MaxPacketSize);
             Assert.AreEqual(10U, rui.MaxSamplesPerPacket);
@@ -104,19 +98,9 @@ namespace OpenDDSharp.UnitTest
                     Seconds = 2,
                     MicroSeconds = 100000
                 },
-                HandshakeTimeout = new TimeValue
-                {
-                    Seconds = 60,
-                    MicroSeconds = 100000
-                },
                 Ttl = 2,
                 DatalinkControlChunks = 64U,
                 DatalinkReleaseDelay = 20000,
-                DurableDataTimeout = new TimeValue
-                {
-                    Seconds = 20,
-                    MicroSeconds = 100000
-                },
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
@@ -141,15 +125,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(rui.HeartbeatResponseDelay);
             Assert.AreEqual(2, rui.HeartbeatResponseDelay.Seconds);
             Assert.AreEqual(100000, rui.HeartbeatResponseDelay.MicroSeconds);
-            Assert.IsNotNull(rui.HandshakeTimeout);
-            Assert.AreEqual(60, rui.HandshakeTimeout.Seconds);
-            Assert.AreEqual(100000, rui.HandshakeTimeout.MicroSeconds);
             Assert.AreEqual(2, rui.Ttl);
             Assert.AreEqual(64U, rui.DatalinkControlChunks);
             Assert.AreEqual(20000, rui.DatalinkReleaseDelay);
-            Assert.IsNotNull(rui.DurableDataTimeout);
-            Assert.AreEqual(20, rui.DurableDataTimeout.Seconds);
-            Assert.AreEqual(100000, rui.DurableDataTimeout.MicroSeconds);
             Assert.IsTrue(rui.IsReliable);
             Assert.AreEqual(2147481500u, rui.MaxPacketSize);
             Assert.AreEqual(20U, rui.MaxSamplesPerPacket);

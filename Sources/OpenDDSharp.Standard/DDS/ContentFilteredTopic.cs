@@ -17,6 +17,14 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
+using OpenDDSharp.Helpers;
+
 namespace OpenDDSharp.DDS
 {
     /// <summary>
@@ -32,7 +40,220 @@ namespace OpenDDSharp.DDS
     ///     <item><description>The expression parameters are a collection of strings that give values to the 'parameters' ("%n" tokens) in the filter expression. The number of supplied parameters must fit with the requested values in the filter expression</description></item>
     /// </list>
     /// </remarks>
-    public class ContentFilteredTopic
+    public class ContentFilteredTopic : ITopicDescription
     {
+        #region Fields
+        private readonly IntPtr _native;
+        private readonly IntPtr _nativeTopicDescription;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the filter expression associated with the <see cref="ContentFilteredTopic" />. That is, the expression specified when the
+        /// <see cref="ContentFilteredTopic" /> was created.
+        /// </summary>
+        public string FilterExpression => GetFilterExpression();
+
+        /// <summary>
+        /// Gets the <see cref="Topic" /> associated with the <see cref="ContentFilteredTopic" />. That is, the <see cref="Topic" /> specified when the
+        /// <see cref="ContentFilteredTopic" /> was created.
+        /// </summary>
+        public Topic RelatedTopic => GetRelatedTopic();
+
+        /// <summary>
+        /// Gets type name used to create the <see cref="ITopicDescription" />.
+        /// </summary>
+        public string TypeName => GetTypeName();
+
+        /// <summary>
+        /// Gets the name used to create the <see cref="ITopicDescription" />.
+        /// </summary>
+        public string Name => GetName();
+
+        /// <summary>
+        /// Gets the <see cref="DomainParticipant" /> to which the <see cref="ITopicDescription" /> belongs.
+        /// </summary>
+        public DomainParticipant Participant => GetParticipant();
+        #endregion
+
+        #region Constructors
+        internal ContentFilteredTopic(IntPtr native)
+        {
+            _native = native;
+            _nativeTopicDescription = NarrowTopicDescription(native);
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Gets the expression parameters associated with the <see cref="ContentFilteredTopic" />. That is, the parameters specified
+        /// on the last successful call to <see cref="SetExpressionParameters" />, or if it was never called, the parameters
+        /// specified when the <see cref="ContentFilteredTopic" /> was created.
+        /// </summary>
+        /// <param name="parameters">The expression parameters list to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetExpressionParameters(IList<string> parameters)
+        {
+            if (parameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+            parameters.Clear();
+
+            IntPtr seq = IntPtr.Zero;
+
+            ReturnCode ret = UnsafeNativeMethods.GetExpressionParameters(_native, ref seq);
+
+            if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
+            {
+                MarshalHelper.PtrToStringSequence(seq, ref parameters, false);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Changes the expression parameters associated with the <see cref="ContentFilteredTopic" />.
+        /// </summary>
+        /// <param name="parameters">The expression parameters values to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetExpressionParameters(params string[] parameters)
+        {
+            if (parameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            IntPtr seq = IntPtr.Zero;
+            IList<string> paramList = parameters.ToList();
+            paramList.StringSequenceToPtr(ref seq, false);
+
+            return UnsafeNativeMethods.SetExpressionParameters(_native, seq);
+        }
+
+        internal static IntPtr NarrowTopicDescription(IntPtr ptr)
+        {
+            return UnsafeNativeMethods.NativeNarrowTopicDescription(ptr);
+        }
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public IntPtr ToNative()
+        {
+            return _native;
+        }
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public IntPtr ToNativeTopicDescription()
+        {
+            return _nativeTopicDescription;
+        }
+
+        private string GetTypeName()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName(_native));
+        }
+
+        private string GetName()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName(_native));
+        }
+
+        private DomainParticipant GetParticipant()
+        {
+            IntPtr ptrParticipant = UnsafeNativeMethods.GetParticipant(_native);
+
+            DomainParticipant participant = null;
+
+            if (!ptrParticipant.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = DomainParticipant.NarrowBase(ptrParticipant);
+
+                Entity entity = EntityManager.Instance.Find(ptr);
+                if (entity != null)
+                {
+                    participant = (DomainParticipant)entity;
+                }
+                else
+                {
+                    participant = new DomainParticipant(ptrParticipant);
+                    EntityManager.Instance.Add(ptrParticipant, participant);
+                }
+            }
+
+            return participant;
+        }
+
+        private string GetFilterExpression()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetFilterExpression(_native));
+        }
+
+        private Topic GetRelatedTopic()
+        {
+            var nativeTopic = UnsafeNativeMethods.GetRelatedTopic(_native);
+            var entity = EntityManager.Instance.Find(Topic.NarrowTopicDescription(nativeTopic));
+
+            Topic topic = null;
+            if (entity != null)
+            {
+                topic = entity as Topic;
+            }
+
+            return topic;
+        }
+        #endregion
+
+        #region Unsafe Native Methods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_NarrowTopicDescription", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NativeNarrowTopicDescription(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_GetExpressionParameters", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetExpressionParameters(IntPtr ptr, ref IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_SetExpressionParameters", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode SetExpressionParameters(IntPtr ptr, IntPtr parameters);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_GetFilterExpression", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetFilterExpression(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_GetRelatedTopic", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetRelatedTopic(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetTypeName(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetName(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "ContentFilteredTopic_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetParticipant(IntPtr ptr);
+        }
+        #endregion
     }
 }
