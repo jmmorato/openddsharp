@@ -23,12 +23,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Analyzer API for our custom checks. -->
-    <!-- Downgraded to < 3.0 because VS2017 doesn't support targeting .NET Standard on analyzers -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.11.0">
+    <!-- Analyzer API for our custom checks. -->    
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -37,12 +36,11 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.30.0.37606">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.31.0.39249">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-
-    <!-- Downgraded because VS2017 doesn't support targeting .NET Standard on analyzers -->
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.0.63">
+    
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.0.64">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>

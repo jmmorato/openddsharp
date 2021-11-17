@@ -24,7 +24,7 @@ using OpenDDSharp.Standard.UnitTest;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Test;
 
-namespace OpenDDSharp.UnitTest
+namespace OpenDDSharp.Standard.UnitTest
 {
     /// <summary>
     /// <see cref="ContentFilteredTopic"/> unit test class.

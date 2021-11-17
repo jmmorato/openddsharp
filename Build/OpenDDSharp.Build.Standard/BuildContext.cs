@@ -245,7 +245,7 @@ namespace OpenDDSharp.Build.Standard
             }
             else
             {
-                VisualStudioVersion = MSBuildToolVersion.VS2019;
+                VisualStudioVersion = MSBuildToolVersion.VS2022;
             }
 
             if (context.Arguments.HasArgument(nameof(NugetApiKey)))

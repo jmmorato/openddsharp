@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>WSL_1_0</PlatformToolset>
+    <PlatformToolset>WSL2_1_0</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfStl>libstdc++_static</UseOfStl>
   </PropertyGroup>

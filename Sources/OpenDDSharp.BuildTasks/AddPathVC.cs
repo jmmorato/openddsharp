@@ -58,6 +58,10 @@ namespace OpenDDSharp.BuildTasks
             {
                 strVersion = "\"[16.0,17.0)\"";
             }
+            if (msbuildVersion == 17)
+            {
+                strVersion = "\"[17.0,18.0)\"";
+            }
             string installPath = ExecuteVSWhereCommand("-version " + strVersion  + " -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath");
             installPath = installPath.Replace(Environment.NewLine, string.Empty);
 #if DEBUG
