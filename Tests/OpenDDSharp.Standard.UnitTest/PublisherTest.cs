@@ -757,7 +757,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2_000);
 
             // Check that not samples arrived
             List<TestStruct> data = new List<TestStruct>();
@@ -769,7 +769,7 @@ namespace OpenDDSharp.Standard.UnitTest
             result = publisher.ResumePublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(2_000);
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();
