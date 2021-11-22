@@ -93,10 +93,6 @@
     <None Include="NativeIdlProjectTemplate.vstemplate">
       <SubType>Designer</SubType>
     </None>
-    <None Include="OpenDDSharp.IdlGenerator.targets" />
-    <None Include="OpenDDSharp.IdlGenerator.nuspec">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="OpenDDSharp.Standard.IdlGenerator.nuspec" />
     <None Include="OpenDDSharp.Standard.IdlGenerator.targets" />
     <None Include="StandardWrapperIdlProject.Linux.vcxproj" />

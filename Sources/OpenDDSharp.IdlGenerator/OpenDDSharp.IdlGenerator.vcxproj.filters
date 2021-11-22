@@ -122,8 +122,6 @@
     <None Include="NativeIdlProjectTemplate.vstemplate">
       <Filter>Project Template</Filter>
     </None>
-    <None Include="OpenDDSharp.IdlGenerator.nuspec" />
-    <None Include="OpenDDSharp.IdlGenerator.targets" />
     <None Include="StandardWrapperIdlProject.vcxproj">
       <Filter>Project Template</Filter>
     </None>
