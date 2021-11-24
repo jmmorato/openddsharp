@@ -65,6 +65,7 @@ trademarks or registered trademarks of Sun Microsystems, Inc.
 #ifndef OPENDDS_IDL_BE_EXTERN_H
 #define OPENDDS_IDL_BE_EXTERN_H
 
+#include "all.h"
 #include "be_global.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)

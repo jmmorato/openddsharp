@@ -17,43 +17,40 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.IO;
+using Cake.Common.Tools.MSBuild;
 using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Build;
-using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Restore;
 using Cake.Core;
 using Cake.Frosting;
+using System.IO;
+using Cake.Common.Tools.DotNetCore.Build;
+using Cake.CMake;
+using Cake.Core.Diagnostics;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
     /// <summary>
-    /// Build OpenDDSharp task.
+    /// Build OpenDDSharp Native task.
     /// </summary>
-    [TaskName("BuildOpenDDSharpTask")]
-    [IsDependentOn(typeof(BuildOpenDDSharpNativeTask))]
-    public class BuildOpenDDSharpTask : FrostingTask<BuildContext>
+    [TaskName("BuildOpenDDSharpNativeTask")]
+    [IsDependentOn(typeof(BuildThirdPartyTask))]
+    public class BuildOpenDDSharpNativeTask : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            var acePath = Path.GetFullPath(context.AceRoot).TrimEnd(Path.DirectorySeparatorChar);
-            var taoPath = Path.GetFullPath(context.TaoRoot).TrimEnd(Path.DirectorySeparatorChar);
-            System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
-            System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+            context.Log.Information(Path.GetFullPath(BuildContext.NATIVE_FOLDER));
+            var nativeFolder = Path.GetFullPath(BuildContext.NATIVE_FOLDER).Replace("\\", "/");
+            var buildFoder = nativeFolder + "build";
+            var platform = context.BuildPlatform == PlatformTarget.x86 ? "Win32" : "x64";
 
-            context.NuGetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new NuGetRestoreSettings
+            context.CMake(new CMakeSettings
             {
-                NoCache = true,
-            });
-
-            var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-
-            context.DotNetCoreClean("OpenDDSharp.Standard.sln", new DotNetCoreCleanSettings
-            {
-                Configuration = context.BuildConfiguration,
-                WorkingDirectory = solutionFolder,
+                SourcePath = Path.GetFullPath(BuildContext.NATIVE_FOLDER),
+                OutputPath = buildFoder,
+                ArgumentCustomization = args => $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}",
+                WorkingDirectory = nativeFolder,
                 EnvironmentVariables =
                 {
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
@@ -61,13 +58,14 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
             });
 
-            context.DotNetCoreBuild("OpenDDSharp.Standard.sln", new DotNetCoreBuildSettings
+            context.CMakeBuild(new CMakeBuildSettings
             {
+                BinaryPath = buildFoder,
+                WorkingDirectory = nativeFolder,
                 Configuration = context.BuildConfiguration,
-                WorkingDirectory = solutionFolder,
+                CleanFirst = true,
                 EnvironmentVariables =
                 {
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
@@ -75,9 +73,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
             });
-            
         }
     }
 }

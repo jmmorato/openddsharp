@@ -1,6 +1,8 @@
 #ifndef TOPIC_KEYS_HEADER
 #define TOPIC_KEYS_HEADER
 
+#include "all.h"
+
 #include <string>
 #include <iterator>
 #include <exception>

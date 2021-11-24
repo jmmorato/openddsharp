@@ -8,6 +8,8 @@
 #ifndef dds_visitor_H
 #define dds_visitor_H
 
+#include "all.h"
+
 #include "be_extern.h"
 #include "dds_generator.h"
 

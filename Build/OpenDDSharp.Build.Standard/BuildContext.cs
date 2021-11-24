@@ -17,11 +17,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Frosting;
-using System;
-using System.IO;
 
 namespace OpenDDSharp.Build.Standard
 {
@@ -42,6 +43,8 @@ namespace OpenDDSharp.Build.Standard
         internal const string THIRD_PARTY_FOLDER = "../../ext/";
 
         internal const string PATCHES_FOLDER = "../../Patches/";
+
+        internal const string NATIVE_FOLDER = "./../../Native/";
 
         internal const string OPENDDSHARP_SOLUTION_FOLDER = "../../";
 
@@ -114,6 +117,12 @@ namespace OpenDDSharp.Build.Standard
         /// </summary>
         public string NugetApiKey { get; internal set; }
 
+        internal static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+        internal static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
+        internal static bool IsOSX => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
         internal string DdsRoot { get; private set; }
 
         internal string AceRoot { get; private set; }
@@ -123,14 +132,6 @@ namespace OpenDDSharp.Build.Standard
         internal string MpcRoot { get; private set; }
 
         internal string OpenDdsSolutionFile { get; private set; }
-
-        internal bool IsLinuxBuild
-        {
-            get
-            {
-                return BuildConfiguration.StartsWith("Linux");
-            }
-        }
         #endregion
 
         #region Constructors
@@ -257,14 +258,7 @@ namespace OpenDDSharp.Build.Standard
                 NugetApiKey = string.Empty;
             }
 
-            if (!BuildConfiguration.StartsWith("Linux"))
-            {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS/";
-            }
-            else
-            {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";
-            }
+            DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS/";
 
             AceRoot = DdsRoot + "ACE_TAO/ACE/";
             TaoRoot = DdsRoot + "ACE_TAO/TAO/";

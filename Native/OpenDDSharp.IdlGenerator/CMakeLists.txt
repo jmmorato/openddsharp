@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.8.2)
 find_package(OpenDDS REQUIRED)
 
 add_executable(openddsharp_idl
+all.h
 annotations.h annotations.cpp
 be_extern.h
 be_global.h be_global.cpp

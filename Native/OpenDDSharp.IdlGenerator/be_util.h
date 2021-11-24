@@ -16,6 +16,7 @@
 #ifndef OPENDDS_IDL_BE_UTIL_H
 #define OPENDDS_IDL_BE_UTIL_H
 
+#include "all.h"
 #include <string>
 
 class AST_Generator;

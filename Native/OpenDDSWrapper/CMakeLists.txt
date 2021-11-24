@@ -1,9 +1,10 @@
 project(OpenDDSWrapper)
 cmake_minimum_required(VERSION 3.8.2)
 
-find_package(OpenDDS REQUIRED)
+find_package(OpenDDS REQUIRED) 
 
 add_library(OpenDDSWrapper SHARED
+all.h
 Ace.h Ace.cpp 
 BuiltinTopicData.h
 Condition.h Condition.cpp

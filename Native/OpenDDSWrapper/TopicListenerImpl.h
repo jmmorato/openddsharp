@@ -20,6 +20,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 
+#include "all.h"
+
 #include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/Service_Participant.h>
 

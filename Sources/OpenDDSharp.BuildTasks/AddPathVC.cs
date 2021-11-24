@@ -25,6 +25,9 @@ using Microsoft.Build.Utilities;
 
 namespace OpenDDSharp.BuildTasks
 {
+    /// <summary>
+    /// Add Visual C++ to the path.
+    /// </summary>
     public class AddPathVC : Task
     {
         private const string VSWHERE_PATH = @"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe";
@@ -50,25 +53,17 @@ namespace OpenDDSharp.BuildTasks
                 return false;
             }
 
-            // Get the current MSBuild version
-            var msbuildProcess = Process.GetCurrentProcess();
-            int msbuildVersion = msbuildProcess.MainModule.FileVersionInfo.FileMajorPart;
-            string strVersion = "\"[15.0,16.0)\"";
-            if (msbuildVersion == 16)
+            string installPath = ExecuteVSWhereCommand("-latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath");
+            var split = installPath.Replace(Environment.NewLine, ";").Split(';');
+            if (split.Length > 0)
             {
-                strVersion = "\"[16.0,17.0)\"";
+                installPath = split[0];
             }
-            if (msbuildVersion == 17)
-            {
-                strVersion = "\"[17.0,18.0)\"";
-            }
-            string installPath = ExecuteVSWhereCommand("-version " + strVersion  + " -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath");
-            installPath = installPath.Replace(Environment.NewLine, string.Empty);
 #if DEBUG
             Log.LogMessage(MessageImportance.High, "VC Install Path: {0}", installPath);
 #endif
 
-            string versionPath = string.Format("{0}\\VC\\Auxiliary\\Build\\Microsoft.VCToolsVersion.default.txt", installPath);            
+            string versionPath = string.Format("{0}\\VC\\Auxiliary\\Build\\Microsoft.VCToolsVersion.default.txt", installPath);
             if (!File.Exists(versionPath))
             {
 #if DEBUG
@@ -100,7 +95,7 @@ namespace OpenDDSharp.BuildTasks
         }
 
         private string ExecuteVSWhereCommand(string parameters)
-        {            
+        {
             string output = string.Empty;
 
             using (Process process = new Process())
@@ -112,7 +107,10 @@ namespace OpenDDSharp.BuildTasks
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
+
                 output = process.StandardOutput.ReadToEnd();
+                Log.LogMessage("VSWhere Command Output: {0}", output);
+
                 string err = process.StandardError.ReadToEnd();
                 if (!string.IsNullOrWhiteSpace(err))
                 {

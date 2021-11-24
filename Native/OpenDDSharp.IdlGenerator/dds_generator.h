@@ -8,6 +8,8 @@
 #ifndef dds_generator_H
 #define dds_generator_H
 
+#include "all.h"
+
 #include "be_extern.h"
 
 #include "utl_scoped_name.h"

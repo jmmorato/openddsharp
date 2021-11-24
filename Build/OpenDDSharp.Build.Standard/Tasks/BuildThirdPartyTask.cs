@@ -58,7 +58,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 platform = PlatformTarget.Win32;
             }
 
-            if (!context.IsLinuxBuild)
+            if (BuildContext.IsWindows)
             {
                 context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
                 {
@@ -79,9 +79,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
             else
             {
-                var exit = context.StartProcess("wsl", new Cake.Core.IO.ProcessSettings
+                var exit = context.StartProcess("make", new Cake.Core.IO.ProcessSettings
                 {
-                    Arguments = "make",
                     WorkingDirectory = ddsPath,
                 });
 

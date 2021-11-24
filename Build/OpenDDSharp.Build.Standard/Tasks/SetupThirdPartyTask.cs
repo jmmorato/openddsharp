@@ -80,11 +80,11 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
 
             context.Log.Information("Cloning OpenDDS repository...");
-            if (context.IsLinuxBuild)
+            if (BuildContext.IsLinux)
             {
-                var exit = context.StartProcess("wsl", new ProcessSettings
+                var exit = context.StartProcess("git", new ProcessSettings
                 {
-                    Arguments = $"git clone -q {OPENDDS_GIT_REPOSITORY} {BuildContext.ToWslPath(_clonePath.FullPath)}",
+                    Arguments = $"clone -q {OPENDDS_GIT_REPOSITORY} { _clonePath.FullPath }",
                 });
                 if (exit != 0)
                 {
@@ -102,13 +102,14 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
 
             context.Log.Information("Checkout OpenDDS version v{0}", context.OpenDdsVersion);
-            if (context.IsLinuxBuild)
+            if (BuildContext.IsLinux)
             {
-                var exit = context.StartProcess("wsl", new ProcessSettings
+                var exit = context.StartProcess("git", new ProcessSettings
                 {
-                    Arguments = $"git fetch && git fetch --tags && git checkout tags/{_versionTag}",
+                    Arguments = $"fetch && git fetch --tags && git checkout tags/{_versionTag}",
                     WorkingDirectory = _clonePath.FullPath,
                 });
+
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
@@ -123,17 +124,18 @@ namespace OpenDDSharp.Build.Standard.Tasks
             foreach (string patchPath in Directory.GetFiles(BuildContext.PATCHES_FOLDER, "*.patch"))
             {
                 DirectoryPath patchDirectory = new DirectoryPath(patchPath);
-                if (context.IsLinuxBuild)
+                if (BuildContext.IsLinux)
                 {
-                    var linuxPath = BuildContext.ToWslPath(System.IO.Path.GetFullPath(patchDirectory.FullPath));
+                    var linuxPath = System.IO.Path.GetFullPath(patchDirectory.FullPath);
 
                     context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
 
-                    int exitCode = context.StartProcess("wsl", new ProcessSettings
+                    int exitCode = context.StartProcess("git", new ProcessSettings
                     {
-                        Arguments = "git apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath,
+                        Arguments = "apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath,
                         WorkingDirectory = context.DdsRoot,
                     });
+
                     if (exitCode != 0)
                     {
                         throw new BuildException($"Patch {patchPath} couldn't be applied. Exit code: {exitCode}");
@@ -155,17 +157,18 @@ namespace OpenDDSharp.Build.Standard.Tasks
 
             context.Log.Information("Call OpenDDS configure script");
 
-            if (context.IsLinuxBuild)
+            if (BuildContext.IsLinux)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = BuildContext.ToWslPath(configurePath) + " -v --ace-github-latest --no-test --no-debug --optimize";
+                var arguments = " -v --ace-github-latest --no-test --no-debug --optimize";
                 context.Log.Information(arguments);
 
-                var exit = context.StartProcess("wsl", new ProcessSettings
+                var exit = context.StartProcess(configurePath, new ProcessSettings
                 {
                     Arguments = arguments,
                     WorkingDirectory = context.DdsRoot,
                 });
+
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");

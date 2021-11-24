@@ -25,9 +25,15 @@ namespace OpenDDSharp.BuildTasks
 {
     public class SetEnvVar : Task
     {
+        /// <summary>
+        /// Environment variable name to be changed.
+        /// </summary>
         [Required]
         public string Variable { get; set; }
 
+        /// <summary>
+        /// Enviroment variable value to be set.
+        /// </summary>
         [Required]
         public string Value { get; set; }
 

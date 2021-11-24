@@ -1,7 +1,5 @@
 #pragma once
 
-#include "all.h"
-
 #include "ace/Basic_Types.h"
 #include "tao/Unbounded_Value_Sequence_T.h"
 
