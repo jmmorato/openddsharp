@@ -259,6 +259,10 @@ namespace OpenDDSharp.Build.Standard
             }
 
             DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS/";
+            if (IsLinux)
+            {
+                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";
+            }
 
             AceRoot = DdsRoot + "ACE_TAO/ACE/";
             TaoRoot = DdsRoot + "ACE_TAO/TAO/";

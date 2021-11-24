@@ -1,4 +1,4 @@
-name: Continuous Integration (Standard)
+name: Continuous Integration
 
 on:
   push:
@@ -30,6 +30,7 @@ jobs:
       with:
         path: |
           ${{ github.workspace }}/ext/OpenDDS/cmake/**
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/MPC/*.pl
           ${{ github.workspace }}/ext/OpenDDS/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS/**/*.lib
           ${{ github.workspace }}/ext/OpenDDS/**/*.exe
@@ -52,6 +53,64 @@ jobs:
       shell: pwsh
       if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
+      working-directory: ${{ github.workspace }}/Build
+
+  build_linux:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:        
+        BuildPlatform: [x64]
+        BuildConfiguration: [Release]
+    env:
+      OpenDdsVersion: "3.18.1"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install .NET 5
+      shell: pwsh
+      run: |
+        sudo apt-get install -y wget
+        wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
+        rm packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install -y dotnet-sdk-3.1
+        sudo apt-get install -y dotnet-sdk-5.0
+        sudo apt-get install -y dotnet-sdk-6.0
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-linux
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**
+          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/MPC/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux
+
+    - name: Build & Test with Cake (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
   #build_linux:

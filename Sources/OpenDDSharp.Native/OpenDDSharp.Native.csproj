@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>OpenDDSharp.Native</AssemblyName>
     <RootNamespace>OpenDDSharp.Native</RootNamespace>
-    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <Authors>Jose Morato</Authors>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
@@ -208,15 +208,9 @@
       <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <None Include="..\..\Native\build\OpenDDSWrapper\Release\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
-    </None>
+    <None Include="..\..\Native\build\OpenDDSWrapper\Release\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false" />
 
-    <None Include="..\..\Native\build\OpenDDSWrapper\Debug\libOpenDDSWrapper.so" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">PreserveNewest</CopyToPublishDirectory>
-    </None>
+    <None Include="..\..\Native\build\OpenDDSWrapper\Debug\libOpenDDSWrapper.so" Pack="false" Visible="false" />
   </ItemGroup>
 
 </Project>
