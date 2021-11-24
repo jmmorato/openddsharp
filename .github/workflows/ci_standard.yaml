@@ -28,7 +28,8 @@ jobs:
       id: opendds-libraries-windows
       uses: actions/cache@v2
       with:
-        path: |          
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS/cmake/**
           ${{ github.workspace }}/ext/OpenDDS/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS/**/*.lib
           ${{ github.workspace }}/ext/OpenDDS/**/*.exe
@@ -39,7 +40,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cmake
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
