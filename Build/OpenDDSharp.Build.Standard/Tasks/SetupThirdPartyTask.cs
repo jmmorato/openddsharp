@@ -179,7 +179,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure.cmd");
                 var vsPath = context.VSWhereLatest(new Cake.Common.Tools.VSWhere.Latest.VSWhereLatestSettings
                 {
-                    Version = "[\"15.0\", \"17.0\"]",
+                    Version = "[\"15.0\", \"18.0\"]",
                 });
                 var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
                 context.Log.Information(configurePath + arguments);
