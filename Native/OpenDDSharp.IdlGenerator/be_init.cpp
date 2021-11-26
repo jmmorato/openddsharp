@@ -7,7 +7,7 @@
 
 #include "be_extern.h"
 #include "be_util.h"
-#include "../../ext/OpenDDS/dds/Version.h"
+#include "dds/Version.h"
 
 #include <global_extern.h>
 #include <drv_extern.h>

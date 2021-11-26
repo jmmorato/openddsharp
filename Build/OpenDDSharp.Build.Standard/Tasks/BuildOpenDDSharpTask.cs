@@ -21,8 +21,7 @@ using System.IO;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Clean;
-using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Restore;
+using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Core;
 using Cake.Frosting;
 
@@ -43,7 +42,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
-            context.NuGetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new NuGetRestoreSettings
+            context.DotNetCoreRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetCoreRestoreSettings
             {
                 NoCache = true,
             });
@@ -62,6 +61,12 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
                 ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
+            });
+
+            context.DotNetCoreBuild($"{solutionFolder}Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj", new DotNetCoreBuildSettings
+            {
+                Configuration = context.BuildConfiguration,
+                WorkingDirectory = solutionFolder,
             });
 
             context.DotNetCoreBuild("OpenDDSharp.Standard.sln", new DotNetCoreBuildSettings

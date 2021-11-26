@@ -45,35 +45,45 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var buildFoder = nativeFolder + "build";
             var platform = context.BuildPlatform == PlatformTarget.x86 ? "Win32" : "x64";
 
+            var arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}";
+            if (BuildContext.IsLinux)
+            {
+                arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
+            }
+
             context.CMake(new CMakeSettings
             {
-                SourcePath = Path.GetFullPath(BuildContext.NATIVE_FOLDER),
+                SourcePath = nativeFolder,
                 OutputPath = buildFoder,
-                ArgumentCustomization = args => $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}",
+                ArgumentCustomization = args => arguments,
                 WorkingDirectory = nativeFolder,
                 EnvironmentVariables =
                 {
-                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
-                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
-                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd(Path.DirectorySeparatorChar) },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd(Path.DirectorySeparatorChar) },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd(Path.DirectorySeparatorChar) },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd(Path.DirectorySeparatorChar) },
                 },
             });
 
-            context.CMakeBuild(new CMakeBuildSettings
+            var buildSettings = new CMakeBuildSettings
             {
                 BinaryPath = buildFoder,
                 WorkingDirectory = nativeFolder,
-                Configuration = context.BuildConfiguration,
                 CleanFirst = true,
                 EnvironmentVariables =
                 {
-                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
-                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
-                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd(Path.DirectorySeparatorChar) },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd(Path.DirectorySeparatorChar) },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd(Path.DirectorySeparatorChar) },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd(Path.DirectorySeparatorChar) },
                 },
-            });
+            };
+            if (BuildContext.IsWindows)
+            {
+                buildSettings.Configuration = context.BuildConfiguration;
+            }
+            context.CMakeBuild(buildSettings);
         }
     }
 }

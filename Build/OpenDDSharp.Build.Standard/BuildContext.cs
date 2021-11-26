@@ -258,7 +258,7 @@ namespace OpenDDSharp.Build.Standard
                 NugetApiKey = string.Empty;
             }
 
-            DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS/";
+            DdsRoot = $"{THIRD_PARTY_FOLDER}OpenDDS_{BuildPlatform}/";
             if (IsLinux)
             {
                 DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";

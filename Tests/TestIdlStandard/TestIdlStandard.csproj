@@ -9,15 +9,8 @@
           The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <IsWindows Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">true</IsWindows>     
-    <IsLinux Condition="'$(Configuration)'=='LinuxDebug' Or '$(Configuration)'=='LinuxRelease'">true</IsLinux>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstants);Linux</DefineConstants>
-  </PropertyGroup>
+	
   <ItemGroup>
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
@@ -27,16 +20,24 @@
   </ItemGroup>
 
   <PropertyGroup Label="OpenDDS Home">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS</DDS_ROOT>
+    <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(Platform)</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="ACE Home">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_TAO\ACE</ACE_ROOT>
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(Platform)\ACE_TAO\ACE</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="TAO Home">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS\ACE_TAO\TAO</TAO_ROOT>
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(Platform)\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
   
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <ItemGroup>
+	<!--<ProjectReference Include="..\..\Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj"
+				      ReferenceOutputAssembly="false"
+				      LinkLibraryDependencies="false"
+				      CopyLocal="false" />-->
+	<ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
+  </ItemGroup>
 
   <!-- Clean up generated code before rebuild -->
   <PropertyGroup>
@@ -47,25 +48,16 @@
     <Delete Files="%(RootDir)%(Directory)..\%(IdlFiles.FileName)TypeSupport.cs;" ContinueOnError="true" />
     <RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))NativeProject" />
   </Target>
-  
-  <!--Copy BuildTask to intermediate folder-->
-  <ItemGroup>
-    <MySourceFiles Include="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
-  </ItemGroup>
-  <Target Name="OpenDDSharpCopyBuldTask" BeforeTargets="PreBuildEvent">
-    <Message Text="Copy OpenDDSharp.BuildTasks.dll file..." Importance="High" />
-	<Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))" />
-  </Target>
-	
+
   <!-- Add VC++ to the PATH -->
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.AddPathVC" AssemblyFile="$(IntermediateOutputPath)OpenDDSharp.BuildTasks.dll" />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.AddPathVC" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
   <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="$(Platform)" />
   </Target>
         
   <!-- Set Windos environment variables -->
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(IntermediateOutputPath)OpenDDSharp.BuildTasks.dll" />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Set Windows environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
@@ -77,7 +69,7 @@
   </Target>
 	
   <!--Generate native library task-->
-  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeLibraryTask" AssemblyFile="$(IntermediateOutputPath)\OpenDDSharp.BuildTasks.dll" />
+  <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeLibraryTask" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
     <Target Name="GenerateNativeLibraryTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename).idl')">
     <Message Text="Generate Windows Native OpenDDS project" Importance="High" />
     <GenerateNativeLibraryTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\..\Native\" Configuration="$(Configuration)" Platform="$(Platform)" />
@@ -119,15 +111,5 @@
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>TestIdlStandardWrapper.dll</TargetPath>
 	</ContentWithTargetPath>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj"
-					  ReferenceOutputAssembly="false"
-                      LinkLibraryDependencies="false"
-                      CopyLocal="false"
-                      SkipGetTargetFrameworkProperties="true"
-                      GlobalPropertiesToRemove="TargetFramework"/>
-    <ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
-  </ItemGroup>
+  </ItemGroup> 
 </Project>

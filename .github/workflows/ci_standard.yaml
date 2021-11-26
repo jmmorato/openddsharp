@@ -29,19 +29,19 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          ${{ github.workspace }}/ext/OpenDDS/cmake/**
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/MPC/*.pl
-          ${{ github.workspace }}/ext/OpenDDS/**/*.dll
-          ${{ github.workspace }}/ext/OpenDDS/**/*.lib
-          ${{ github.workspace }}/ext/OpenDDS/**/*.exe
-          ${{ github.workspace }}/ext/OpenDDS/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS/**/*.pidl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cmake
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
@@ -68,7 +68,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install .NET 5
+    - name: Install .NET
       shell: pwsh
       run: |
         sudo apt-get install -y wget
@@ -76,6 +76,8 @@ jobs:
         sudo dpkg -i packages-microsoft-prod.deb
         rm packages-microsoft-prod.deb
         sudo apt-get update
+        sudo apt-get install -y build-essential
+        sudo apt-get install -y git
         sudo apt-get install -y apt-transport-https
         sudo apt-get update
         sudo apt-get install -y dotnet-sdk-3.1
@@ -88,7 +90,7 @@ jobs:
       with:
         path: |
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**
-          ${{ github.workspace }}/ext/OpenDDS/ACE_TAO/ACE/MPC/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/DCPSInfoRepo
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/opendds_idl

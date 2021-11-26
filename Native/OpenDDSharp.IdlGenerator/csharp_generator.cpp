@@ -151,7 +151,7 @@ bool csharp_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AS
 		csharp_type = "System.UInt64";
 		break;
 	case AST_Expression::EV_fixed:
-		str_value = std::to_string(constant->constant_value()->ev()->u.fixedval);
+		str_value = std::to_string(static_cast<long double>(constant->constant_value()->ev()->u.fixedval));
 		csharp_type = "System.Decimal";
 		break;
 	case AST_Expression::EV_enum:

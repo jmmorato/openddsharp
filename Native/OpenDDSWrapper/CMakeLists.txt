@@ -1,5 +1,6 @@
-project(OpenDDSWrapper)
 cmake_minimum_required(VERSION 3.8.2)
+
+project(OpenDDSWrapper C)
 
 find_package(OpenDDS REQUIRED) 
 

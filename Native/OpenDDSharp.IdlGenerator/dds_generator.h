@@ -29,7 +29,7 @@
 #include <vector>
 #include <cstring>
 
-#include "..\..\ext\OpenDDS\dds\DCPS/RestoreOutputStreamState.h"
+#include "dds/DCPS/RestoreOutputStreamState.h"
 
 class dds_generator {
 public:

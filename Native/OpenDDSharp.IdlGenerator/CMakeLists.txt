@@ -1,4 +1,4 @@
-project(openddsharp_idl)
+project(openddsharp_idl C)
 cmake_minimum_required(VERSION 3.8.2)
 
 find_package(OpenDDS REQUIRED)
@@ -22,9 +22,11 @@ marshal.h
 openddsharp_idl.cpp
 topic_keys.h topic_keys.cpp)
 
-string(REPLACE "\\" "/" TAO_ROOT_INCLUDE $ENV{TAO_ROOT}/TAO_IDL/include)
+string(REPLACE "\\" "/" TAO_ROOT_INCLUDE ${TAO_ROOT}/TAO_IDL/include)
+string(REPLACE "\\" "/" TAO_ROOT_BE_INCLUDE ${TAO_ROOT}/TAO_IDL/be_include)
 message("ACE_ROOT=${ACE_ROOT}" )
-message("TAO_ROOT_INCLUDE=${TAO_ROOT_INCLUDE}" )
+message("TAO_ROOT=${TAO_ROOT}" )
+message("DDS_ROOT=${DDS_ROOT}" )
 
-target_include_directories(openddsharp_idl PRIVATE ${TAO_ROOT_INCLUDE})
-target_link_libraries(openddsharp_idl OpenDDS::Dcps TAO::IDL_FE)
+target_include_directories(openddsharp_idl PRIVATE ${TAO_ROOT_BE_INCLUDE} PRIVATE ${TAO_ROOT_INCLUDE} PRIVATE ${TAO_ROOT})
+target_link_libraries(openddsharp_idl OpenDDS::Dcps TAO::TAO TAO::IDL_FE)
