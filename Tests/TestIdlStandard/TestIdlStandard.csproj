@@ -43,6 +43,16 @@
   <ItemGroup>
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
+  
+	<ItemGroup>
+        <IdlTemplates Include="..\..\Native\CSharpImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" />
+    </ItemGroup>
+
+  <!-- Ensure templates are copied for code generation-->
+  <Target Name="CopyCodeGeneratorTemplates" BeforeTargets="PreBuildEvent">
+    <Message Text="Copying code generation templates to OpenDDS" Importance="High" />
+	<Copy SourceFiles="@(IdlTemplates)" DestinationFolder="$(DDS_ROOT)\dds\idl" />
+  </Target>
 
   <!-- Clean up generated code before rebuild -->
   <PropertyGroup>
