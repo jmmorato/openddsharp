@@ -23,6 +23,7 @@ using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
@@ -42,6 +43,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
+            context.Log.Information("Resotring NuGet packages...");
             context.DotNetCoreRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetCoreRestoreSettings
             {
                 NoCache = true,
@@ -49,6 +51,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
 
             var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
 
+            context.Log.Information("Clean solution...");
             context.DotNetCoreClean("OpenDDSharp.Standard.sln", new DotNetCoreCleanSettings
             {
                 Configuration = context.BuildConfiguration,
@@ -63,12 +66,14 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
             });
 
+            context.Log.Information("Build OpenDDSharp.BuildTasks project...");
             context.DotNetCoreBuild($"{solutionFolder}Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj", new DotNetCoreBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
             });
 
+            context.Log.Information("Build OpenDDSharp solution...");
             context.DotNetCoreBuild("OpenDDSharp.Standard.sln", new DotNetCoreBuildSettings
             {
                 Configuration = context.BuildConfiguration,
@@ -82,7 +87,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 },
                 ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
             });
-            
         }
     }
 }

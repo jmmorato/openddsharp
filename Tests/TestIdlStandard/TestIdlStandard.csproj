@@ -9,6 +9,15 @@
           The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+	<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	<DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+	<DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstants);Linux</DefineConstants>
   </PropertyGroup>
 	
   <ItemGroup>
@@ -32,10 +41,6 @@
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
   <ItemGroup>
-	<!--<ProjectReference Include="..\..\Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj"
-				      ReferenceOutputAssembly="false"
-				      LinkLibraryDependencies="false"
-				      CopyLocal="false" />-->
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
 

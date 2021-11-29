@@ -275,12 +275,8 @@ namespace OpenDDSharp.Build.Standard
             var ddsLib = Path.Combine(ddsPath, $"lib");
             var aceBin = Path.Combine(acePath, $"bin");
             var aceLib = Path.Combine(acePath, $"lib");
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{BuildPlatform}");
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{BuildPlatform}");
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{BuildPlatform}");
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{BuildPlatform}");
             var perlPath = Path.GetFullPath(PerlPath);
-            string path = $"{perlPath};{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            string path = $"{perlPath};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             System.Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
         }

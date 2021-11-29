@@ -49,7 +49,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
         {
             var ddsPath = Path.GetFullPath(context.DdsRoot).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(context.AceRoot).TrimEnd(Path.DirectorySeparatorChar);
-            
 
             var platform = context.BuildPlatform;
             if (platform == PlatformTarget.x86)
@@ -89,14 +88,11 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 }
             }
 
-            
-
             if (context.CleanupTemporalFiles)
             {
                 CleanupTemporalFiles(context, ddsPath);
             }
         }
-        
 
         private static void CleanupTemporalFiles(BuildContext context, string ddsPath)
         {
