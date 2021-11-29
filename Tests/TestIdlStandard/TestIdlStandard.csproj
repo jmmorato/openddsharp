@@ -96,14 +96,14 @@
   <!--Generate native library task-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeLibraryTask" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
     <Target Name="GenerateNativeLibraryTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename).idl')">
-    <Message Text="Generate Windows Native OpenDDS project" Importance="High" />
-    <GenerateNativeLibraryTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)..\..\Native\" Configuration="$(Configuration)" Platform="$(Platform)" />
+    <Message Text="Generate native OpenDDS project" Importance="High" />
+    <GenerateNativeLibraryTask IntDir="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" OriginalProjectName="$(ProjectName)" IdlFiles="@(IdlFiles)" TemplatePath="$(MSBuildThisFileDirectory)../../Native/" Configuration="$(Configuration)" Platform="$(Platform)" />
   </Target>
 
   <!--Generate OpenDDSharp Wrapper files-->
   <Target Name="OpenDDSharpIdlWrapper" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-	  <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\Native\build\OpenDDSharp.IdlGenerator\$(Configuration)\openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
+	<Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Create cmake-->
@@ -129,7 +129,7 @@
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharp" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\Native\build\OpenDDSharp.IdlGenerator\$(Configuration)\openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <ItemGroup>
