@@ -28,14 +28,24 @@
     <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>
 
-  <PropertyGroup Label="OpenDDS Home">
+  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(Platform)</DDS_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="ACE Home">
+  <PropertyGroup Label="ACE Home" Condition="'$(IsWindows)'=='true'">
     <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(Platform)\ACE_TAO\ACE</ACE_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="TAO Home">
+  <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(Platform)\ACE_TAO\TAO</TAO_ROOT>
+  </PropertyGroup>
+	
+  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_Linux</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="ACE Home" Condition="'$(IsLinux)'=='true'">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_Linux\ACE_TAO\ACE</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true'">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_Linux\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
   
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
@@ -51,7 +61,7 @@
   <!-- Ensure templates are copied for code generation-->
   <Target Name="CopyCodeGeneratorTemplates" BeforeTargets="PreBuildEvent">
     <Message Text="Copying code generation templates to OpenDDS" Importance="High" />
-	<Copy SourceFiles="@(IdlTemplates)" DestinationFolder="$(DDS_ROOT)\dds\idl" />
+	<Copy SourceFiles="@(IdlTemplates)" DestinationFolder="$(DDS_ROOT)\dds\idl" OverwriteReadOnlyFiles="true" />
   </Target>
 
   <!-- Clean up generated code before rebuild -->
@@ -71,7 +81,7 @@
     <AddPathVC Platform="$(Platform)" />
   </Target>
         
-  <!-- Set Windos environment variables -->
+  <!-- Set environment variables -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Set Windows environment variables:" Importance="High" />
