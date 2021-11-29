@@ -45,8 +45,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_Linux";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/ACE";
         private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/TAO";
-        private const string DEBUG_TARGET_FOLDER = @"LinuxDebug/";
-        private const string RELEASE_TARGET_FOLDER = @"LinuxRelease/";
+        private const string DEBUG_TARGET_FOLDER = @"Debug/";
+        private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
@@ -114,7 +114,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         {
             string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
 #if Windows
-            string infoRepoPath = Path.Combine(ddsPath, $"bin_{_platformFolder}", DCPSINFOREPO_PROCESS_EXE_NAME);
+            string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
             string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #endif

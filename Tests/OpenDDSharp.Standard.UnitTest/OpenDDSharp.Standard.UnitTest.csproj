@@ -8,8 +8,8 @@
     <Platforms>x64;x86</Platforms>
     <LangVersion>8.0</LangVersion>
     <Configurations>Debug;Release</Configurations>
-    <IsWindows Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">true</IsWindows>
-    <IsLinux Condition="'$(Configuration)'=='LinuxDebug' Or '$(Configuration)'=='LinuxRelease'">true</IsLinux>
+	<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
