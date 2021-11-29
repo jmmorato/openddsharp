@@ -140,7 +140,7 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -165,7 +165,7 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -189,7 +189,7 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -214,7 +214,7 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -244,7 +244,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -269,7 +269,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -293,7 +293,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -318,7 +318,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -342,7 +342,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -366,7 +366,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -390,7 +390,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
@@ -414,7 +414,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     {
         TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
         seq.length(received_data.length());
-        for (int i = 0; i < received_data.length(); i++) {
+        for (unsigned int i = 0; i < received_data.length(); i++) {
             <%SCOPED_METHOD%>Wrapper aux;
             aux.from_native(received_data[i]);
             seq[i] = aux;
