@@ -29,7 +29,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
@@ -41,7 +41,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-1
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
@@ -89,7 +89,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**
+          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/DCPSInfoRepo
@@ -101,7 +101,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-1
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
