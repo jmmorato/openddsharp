@@ -143,9 +143,8 @@ namespace OpenDDSharp.BuildTasks
                     using (StreamReader reader = new (inputPath))
                     using (StreamWriter writer = new (outputPath))
                     {
-#if Windows
                         writer.WriteLine("#include <tao/orb.idl>");
-#endif
+
                         while (!reader.EndOfStream)
                         {
                             writer.WriteLine(reader.ReadLine());
