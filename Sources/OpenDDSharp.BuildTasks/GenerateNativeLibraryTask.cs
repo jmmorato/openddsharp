@@ -29,17 +29,8 @@ namespace OpenDDSharp.BuildTasks
     public class GenerateNativeLibraryTask : Task
     {
         #region Fields
-        private string _solutionName;
         private string _projectName;
-        private int _msbuildVersion;
-        private readonly Dictionary<int, string> _platformToolsets = new Dictionary<int, string>
-        {
-            { 15, "v141" },
-            { 16, "v142" }
-        };
-        private string _solutionFullPath;
         private bool returnValue;
-        System.Diagnostics.Process _proc;
         #endregion
 
         #region Properties
@@ -152,7 +143,9 @@ namespace OpenDDSharp.BuildTasks
                     using (StreamReader reader = new (inputPath))
                     using (StreamWriter writer = new (outputPath))
                     {
-                        writer.WriteLine("#include <tao/orb.idl> // Workaround for the error C2961: inconsistent explicit instantiations, a previous explicit instantiation did not specify '__declspec(dllimport)'");
+#if Windows
+                        writer.WriteLine("#include <tao/orb.idl>");
+#endif
                         while (!reader.EndOfStream)
                         {
                             writer.WriteLine(reader.ReadLine());

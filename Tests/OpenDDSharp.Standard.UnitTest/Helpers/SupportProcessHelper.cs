@@ -78,17 +78,16 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             var ddsLib = Path.Combine(ddsPath, $"lib");
             var aceBin = Path.Combine(acePath, $"bin");
             var aceLib = Path.Combine(acePath, $"lib");
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{_platformFolder}");
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{_platformFolder}");
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{_platformFolder}");
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{_platformFolder}");
-            string path = $"{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            string path = $"{ddsBin};{ddsLib};{aceBin};{aceLib};";
             Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
             Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+#if Linux
+            Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+#endif
         }
-#endregion
+        #endregion
 
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)

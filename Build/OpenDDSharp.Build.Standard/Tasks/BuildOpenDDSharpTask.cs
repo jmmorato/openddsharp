@@ -46,6 +46,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.Log.Information("Resotring NuGet packages...");
             context.DotNetCoreRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetCoreRestoreSettings
             {
+                ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
                 NoCache = true,
             });
 
