@@ -43,7 +43,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
-            context.Log.Information("Resotring NuGet packages...");
+            context.Log.Information("Restoring NuGet packages...");
             context.DotNetCoreRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetCoreRestoreSettings
             {
                 ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
