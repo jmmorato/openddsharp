@@ -30,7 +30,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     /// <summary>
     /// Run OpenDDSharp unit test task.
     /// </summary>
-    [TaskName("Test")]
+    [TaskName("TestTask")]
     public class TestTask : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>

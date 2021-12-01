@@ -105,14 +105,25 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-1
 
-    - name: Build & Test with Cake (No cached)
+    - name: Build Native (No cached)
       shell: pwsh
       if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
       
-    - name: Build & Test with Cake (Cached)
+    - name: Build Native (Cached)
       shell: pwsh
       if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+    
+    - name: Build OpenDDSharp
+      shell: bash
+      run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform:${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+
+    - name: Test
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=TestTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}/Build
