@@ -119,7 +119,7 @@ jobs:
     
     - name: Build OpenDDSharp
       shell: bash
-      run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform:${{ matrix.BuildPlatform }}
+      run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}
 
     - name: Test
