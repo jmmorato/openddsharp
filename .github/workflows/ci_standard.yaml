@@ -116,8 +116,18 @@ jobs:
       if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
+
+    - name: Dotnet restore
+      shell: bash
+      run: dotnet restore --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
     
-    - name: Build OpenDDSharp
+    - name: Build OpenDDSharp solution
       shell: bash
       run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}
