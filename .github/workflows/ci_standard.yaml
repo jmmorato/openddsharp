@@ -124,7 +124,7 @@ jobs:
 
     - name: Build OpenDDSharp.BuildTasks project
       shell: bash
-      run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      run: dotnet msbuild -target:Rebuild ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}
     
     - name: Build OpenDDSharp solution
