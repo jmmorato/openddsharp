@@ -208,7 +208,7 @@
       <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <None Include="..\..\Native\build\OpenDDSWrapper\Release\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
+    <None Include="..\..\Native\build\OpenDDSWrapper\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
 	  <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>	
 	</None>	
