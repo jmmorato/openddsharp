@@ -140,9 +140,8 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
 
-    - name: Test
-      shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+    - name: Test OpenDDSharp
+      shell: pwsh      
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=TestTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}/Build
       env:
