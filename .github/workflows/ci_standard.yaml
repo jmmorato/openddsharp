@@ -93,7 +93,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/DCPSInfoRepo
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/**/*
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin/**/*
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
@@ -142,10 +141,11 @@ jobs:
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
 
     - name: Test OpenDDSharp
-      shell: pwsh      
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=TestTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }}
-      working-directory: ${{ github.workspace }}/Build
+      shell: bash      
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n
+      working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
