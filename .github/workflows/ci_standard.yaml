@@ -142,7 +142,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash      
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
