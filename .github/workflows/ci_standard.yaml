@@ -94,7 +94,8 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/**/*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin/**/*
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
@@ -103,7 +104,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-1
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-2
 
     - name: Build Native (No cached)
       shell: pwsh
