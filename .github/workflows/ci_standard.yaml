@@ -111,11 +111,11 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-4
 
-    - name: List cached files
-      shell: bash
-      run: |
-        ls -lR ${{ github.workspace }}/ext/OpenDDS_Linux/bin
-        ls -lR ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+    #- name: List cached files
+    #  shell: bash
+    #  run: |
+    #    ls -lR ${{ github.workspace }}/ext/OpenDDS_Linux/bin
+    #    ls -lR ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
 
     - name: Build Native (No cached)
       shell: pwsh
