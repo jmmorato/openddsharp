@@ -103,7 +103,13 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-3
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-4
 
     - name: List cached files
       shell: bash
