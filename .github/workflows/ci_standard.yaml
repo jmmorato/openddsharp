@@ -107,7 +107,7 @@ jobs:
 
     - name: List cached files
       shell: bash
-      run: ls -lR ${{ github.workspace }}/ext/OpenDDS_Linux
+      run: ls -lR ${{ github.workspace }}/ext/OpenDDS_Linux/bin
 
     - name: Build Native (No cached)
       shell: pwsh
