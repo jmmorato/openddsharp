@@ -164,7 +164,7 @@
 	</ContentWithTargetPath>
 	  
 	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.so" />
-	<ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
+	<ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>libTestIdlStandardWrapper.so</TargetPath>
