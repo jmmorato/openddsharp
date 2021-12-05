@@ -146,6 +146,10 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
 
+    - name: List TestSupportProcess
+      shell: bash
+      run: ls -l ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/bin/x64/Release/netcoreapp3.1
+
     - name: Test OpenDDSharp
       shell: bash      
       run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
