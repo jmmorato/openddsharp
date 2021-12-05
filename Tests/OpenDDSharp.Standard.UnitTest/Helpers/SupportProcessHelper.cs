@@ -128,6 +128,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         private Process SpawnProcess(string path, string arguments)
         {
+            var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+
             ProcessStartInfo processInfo = new ProcessStartInfo(path)
             {
                 Arguments = arguments,
@@ -136,6 +140,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 CreateNoWindow = true,
                 UseShellExecute = false,
             };
+
+            processInfo.EnvironmentVariables["DDS_ROOT"] = ddsPath;
+            processInfo.EnvironmentVariables["ACE_ROOT"] = acePath;
+            processInfo.EnvironmentVariables["TAO_ROOT"] = taoPath;
+#if Linux
+            processInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"$LD_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
+#endif
 
             Process process = new Process
             {
