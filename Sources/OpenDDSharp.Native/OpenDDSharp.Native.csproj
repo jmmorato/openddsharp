@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>OpenDDSharp.Native</AssemblyName>
     <RootNamespace>OpenDDSharp.Native</RootNamespace>
-    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <Authors>Jose Morato</Authors>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
@@ -34,189 +34,184 @@
     <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
 
     <!-- OpenDDS Win32/Release native Libraries -->
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACE.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactory.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCode.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOP.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PI.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServer.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcps.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscovery.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udp.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmem.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcp.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicast.dll" />
-    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udp.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACE.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_CodecFactory.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_AnyTypeCode.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOP.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PI.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PortableServer.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Dcps.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Rtps.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoDiscovery.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Rtps_Udp.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Shmem.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Tcp.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Multicast.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Udp.dll" />
     <None Include="@(OpenDDSReleaseWin32)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false">
       <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS Win32/Debug native Libraries -->
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\ACEd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAOd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_CodecFactoryd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_AnyTypeCoded.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_BiDirGIOPd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PId.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x86\TAO_PortableServerd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Dcpsd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtpsd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_InfoRepoDiscoveryd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Rtps_Udpd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Shmemd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Tcpd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Multicastd.dll" />
-    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS\lib_x86\OpenDDS_Udpd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACEd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAOd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_CodecFactoryd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_AnyTypeCoded.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOPd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PId.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PortableServerd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Dcpsd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Rtpsd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoDiscoveryd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Rtps_Udpd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Shmemd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Tcpd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Multicastd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Udpd.dll" />
     <None Include="@(OpenDDSDebugWin32)" Pack="false" Visible="false">
       <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS x64/Release native Libraries -->
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACE.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactory.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCode.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOP.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PI.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServer.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcps.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscovery.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps_Udp.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Shmem.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcp.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicast.dll" />
-    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udp.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\ACE.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_CodecFactory.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_AnyTypeCode.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_BiDirGIOP.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PI.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PortableServer.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Rtps.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoDiscovery.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Rtps_Udp.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Shmem.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Tcp.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Multicast.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Udp.dll" />
     <None Include="@(OpenDDSReleasex64)" Pack="true" Visible="false" PackagePath="runtimes\win-x64\native">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS x64/Debug native Libraries -->
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\ACEd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAOd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_CodecFactoryd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_AnyTypeCoded.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_BiDirGIOPd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PId.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\ACE_TAO\ACE\lib_x64\TAO_PortableServerd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Dcpsd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtpsd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_InfoRepoDiscoveryd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Rtps_Udpd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Shmemd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Tcpd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Multicastd.dll" />
-    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS\lib_x64\OpenDDS_Udpd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\ACEd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAOd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_CodecFactoryd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_AnyTypeCoded.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_BiDirGIOPd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PId.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PortableServerd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Dcpsd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Rtpsd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoDiscoveryd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Rtps_Udpd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Shmemd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Tcpd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Multicastd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Udpd.dll" />
     <None Include="@(OpenDDSDebugx64)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS Linux/Release native Libraries -->
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64' Or '$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
 
     <!-- Native dependency from this project. -->
-    <ProjectNativeDepsReleasex64 Include="..\OpenDDSWrapper\bin\x64\Release\OpenDDSWrapper.dll" />   
+    <ProjectNativeDepsReleasex64 Include="..\..\Native\build\OpenDDSWrapper\Release\OpenDDSWrapper.dll" />   
     <None Include="@(ProjectNativeDepsReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <ProjectNativeDepsDebugx64 Include="..\OpenDDSWrapper\bin\x64\Debug\OpenDDSWrapper.dll" />
+    <ProjectNativeDepsDebugx64 Include="..\..\Native\build\OpenDDSWrapper\Debug\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsDebugx64)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <ProjectNativeDepsReleasex86 Include="..\OpenDDSWrapper\bin\Win32\Release\OpenDDSWrapper.dll" />
+    <ProjectNativeDepsReleasex86 Include="..\..\Native\build\OpenDDSWrapper\Release\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsReleasex86)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false">
       <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86'">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <ProjectNativeDepsDebugx86 Include="..\OpenDDSWrapper\bin\Win32\Debug\OpenDDSWrapper.dll" />
+    <ProjectNativeDepsDebugx86 Include="..\..\Native\build\OpenDDSWrapper\Debug\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsDebugx86)" Pack="false" Visible="false">
       <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxRelease\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">PreserveNewest</CopyToPublishDirectory>
-    </None>
-
-    <None Include="..\OpenDDSWrapper.Linux\bin\x64\LinuxDebug\libOpenDDSWrapper.so" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">PreserveNewest</CopyToPublishDirectory>
-    </None>
+    <None Include="..\..\Native\build\OpenDDSWrapper\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
+	  <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>	
+	</None>	
   </ItemGroup>
 
 </Project>

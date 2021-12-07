@@ -18,13 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
+using System.Linq;
 using Cake.Common;
-using Cake.Common.IO;
 using Cake.Common.Tools.VSWhere;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Frosting;
-using Cake.Git;
 using OpenDDSharp.Build.Standard.Exceptions;
 
 namespace OpenDDSharp.Build.Standard.Tasks
@@ -55,7 +54,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 return true;
             }
 
-            string currentHead = context.GitDescribe(_clonePath);
+            string currentHead = GitDescribe(context);
             if (_versionTag != currentHead)
             {
                 return true;
@@ -69,7 +68,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
         {
             if (!Directory.Exists(BuildContext.THIRD_PARTY_FOLDER))
             {
-                context.Log.Information("Creating third folder folder...");
+                context.Log.Information("Creating third-party folder...");
                 Directory.CreateDirectory(BuildContext.THIRD_PARTY_FOLDER);
             }
 
@@ -78,94 +77,47 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 context.Log.Information("Cleaning OpenDDS folder...");
                 DeleteDirectory(context.DdsRoot);
             }
+            Directory.CreateDirectory(context.DdsRoot);
 
-            context.Log.Information("Cloning OpenDDS repository...");
-            if (context.IsLinuxBuild)
-            {
-                var exit = context.StartProcess("wsl", new ProcessSettings
-                {
-                    Arguments = $"git clone -q {OPENDDS_GIT_REPOSITORY} {BuildContext.ToWslPath(_clonePath.FullPath)}",
-                });
-                if (exit != 0)
-                {
-                    throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
-                }
-            }
-            else
-            {
-                context.GitClone(OPENDDS_GIT_REPOSITORY, _clonePath);
-            }
-
-            if (!ExistsVersionTag(context, _clonePath, _versionTag))
-            {
-                throw new BuildException($"Couldn't find the OpenDDS version tag: {_versionTag}.");
-            }
+            context.Log.Information($"Cloning OpenDDS repository on {_clonePath.FullPath}...");
+            Git(context, $"clone -q {OPENDDS_GIT_REPOSITORY} {_clonePath.FullPath}");
 
             context.Log.Information("Checkout OpenDDS version v{0}", context.OpenDdsVersion);
-            if (context.IsLinuxBuild)
-            {
-                var exit = context.StartProcess("wsl", new ProcessSettings
-                {
-                    Arguments = $"git fetch && git fetch --tags && git checkout tags/{_versionTag}",
-                    WorkingDirectory = _clonePath.FullPath,
-                });
-                if (exit != 0)
-                {
-                    throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
-                }
-            }
-            else
-            {
-                context.GitCheckout(_clonePath, "tags/" + _versionTag);
-            }
+            Git(context, "fetch");
+            Git(context, "fetch --tags");
+            Git(context, $"checkout tags/{_versionTag}");
 
             context.Log.Information("Apply required OpenDDSharp patches to OpenDDS...");
             foreach (string patchPath in Directory.GetFiles(BuildContext.PATCHES_FOLDER, "*.patch"))
             {
                 DirectoryPath patchDirectory = new DirectoryPath(patchPath);
-                if (context.IsLinuxBuild)
+                if (BuildContext.IsLinux)
                 {
-                    var linuxPath = BuildContext.ToWslPath(System.IO.Path.GetFullPath(patchDirectory.FullPath));
+                    var linuxPath = System.IO.Path.GetFullPath(patchDirectory.FullPath);
 
                     context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
-
-                    int exitCode = context.StartProcess("wsl", new ProcessSettings
-                    {
-                        Arguments = "git apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath,
-                        WorkingDirectory = context.DdsRoot,
-                    });
-                    if (exitCode != 0)
-                    {
-                        throw new BuildException($"Patch {patchPath} couldn't be applied. Exit code: {exitCode}");
-                    }
+                    Git(context, "apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath);
                 }
                 else
                 {
-                    int exitCode = context.StartProcess("git", new ProcessSettings
-                    {
-                        Arguments = "apply " + patchDirectory.FullPath,
-                        WorkingDirectory = context.DdsRoot,
-                    });
-                    if (exitCode != 0)
-                    {
-                        throw new BuildException($"Patch {patchPath} couldn't be applied. Exit code: {exitCode}");
-                    }
+                    Git(context, "apply " + patchDirectory.FullPath);
                 }
             }
 
             context.Log.Information("Call OpenDDS configure script");
 
-            if (context.IsLinuxBuild)
+            if (BuildContext.IsLinux)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = BuildContext.ToWslPath(configurePath) + " -v --ace-github-latest --no-test --no-debug --optimize";
+                var arguments = " -v --ace-github-latest --no-test --no-debug --optimize";
                 context.Log.Information(arguments);
 
-                var exit = context.StartProcess("wsl", new ProcessSettings
+                var exit = context.StartProcess(configurePath, new ProcessSettings
                 {
                     Arguments = arguments,
                     WorkingDirectory = context.DdsRoot,
                 });
+
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
@@ -174,9 +126,14 @@ namespace OpenDDSharp.Build.Standard.Tasks
             else
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure.cmd");
+                var version = "[\"15.0\", \"17.0\"]";
+                if (context.VisualStudioVersion == Cake.Common.Tools.MSBuild.MSBuildToolVersion.VS2022)
+                {
+                    version = "[\"15.0\", \"18.0\"]";
+                }
                 var vsPath = context.VSWhereLatest(new Cake.Common.Tools.VSWhere.Latest.VSWhereLatestSettings
                 {
-                    Version = "[\"15.0\", \"17.0\"]",
+                    Version = version,
                 });
                 var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
                 context.Log.Information(configurePath + arguments);
@@ -190,31 +147,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
                 }
-            }
-
-            context.Log.Information("Create a copy of the original bin/lib folders");
-            context.CreateDirectory(System.IO.Path.Combine(_clonePath.FullPath, "original_bin"));
-            context.CreateDirectory(System.IO.Path.Combine(_clonePath.FullPath, "original_lib"));
-            context.CreateDirectory(System.IO.Path.Combine(_clonePath.FullPath, @"ACE_TAO\ACE\original_bin"));
-            context.CreateDirectory(System.IO.Path.Combine(_clonePath.FullPath, @"ACE_TAO\ACE\original_lib"));
-            context.CopyFiles(System.IO.Path.Combine(_clonePath.FullPath, @"bin\*"), System.IO.Path.Combine(_clonePath.FullPath, "original_bin"));
-            context.CopyFiles(System.IO.Path.Combine(_clonePath.FullPath, @"lib\*"), System.IO.Path.Combine(_clonePath.FullPath, "original_lib"));
-            context.CopyFiles(System.IO.Path.Combine(_clonePath.FullPath, @"ACE_TAO\ACE\bin\*"), System.IO.Path.Combine(_clonePath.FullPath, @"ACE_TAO\ACE\original_bin"));
-            context.CopyFiles(System.IO.Path.Combine(_clonePath.FullPath, @"ACE_TAO\ACE\lib\*"), System.IO.Path.Combine(_clonePath.FullPath, @"ACE_TAO\ACE\original_lib"));
-        }
-
-        private static bool ExistsVersionTag(BuildContext context, DirectoryPath clonePath, string versionTag)
-        {
-            var tags = context.GitTags(clonePath);
-            foreach (var tag in tags)
-            {
-                if (tag.FriendlyName == versionTag)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            }            
         }
 
         private static void DeleteDirectory(string directoryPath)
@@ -241,6 +174,55 @@ namespace OpenDDSharp.Build.Standard.Tasks
             File.SetAttributes(directoryPath, FileAttributes.Normal);
 
             Directory.Delete(directoryPath, false);
+        }
+
+        private void Git(BuildContext context, string arguments)
+        {
+            var exit = context.StartProcess("git", new ProcessSettings
+            {
+                Arguments = arguments,
+                WorkingDirectory = _clonePath.FullPath,
+            });
+
+            if (exit != 0)
+            {
+                throw new BuildException($"Error calling 'git {arguments}'. Exit code: {exit}");
+            }
+        }
+
+        private string GitDescribe(BuildContext context)
+        {
+            var process = context.StartAndReturnProcess("git", new ProcessSettings
+            {
+                Arguments = "describe",
+                WorkingDirectory = _clonePath.FullPath,
+                RedirectStandardOutput = true,
+            });
+
+            process.WaitForExit();
+
+            var exit = process.GetExitCode();
+            if (exit == 0)
+            {
+                try
+                {
+                    var output = process.GetStandardOutput();
+                    if (output.Any())
+                    {
+                        return output.First();
+                    }
+                }
+                catch
+                {
+                    // Expected exception when not output received
+                }
+            }
+            else
+            {
+                throw new BuildException($"Error calling 'git describe'. Exit code: {exit}");
+            }
+
+            return string.Empty;
         }
     }
 }

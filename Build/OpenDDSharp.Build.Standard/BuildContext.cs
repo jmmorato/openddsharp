@@ -17,11 +17,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Frosting;
-using System;
-using System.IO;
 
 namespace OpenDDSharp.Build.Standard
 {
@@ -42,6 +43,8 @@ namespace OpenDDSharp.Build.Standard
         internal const string THIRD_PARTY_FOLDER = "../../ext/";
 
         internal const string PATCHES_FOLDER = "../../Patches/";
+
+        internal const string NATIVE_FOLDER = "./../../Native/";
 
         internal const string OPENDDSHARP_SOLUTION_FOLDER = "../../";
 
@@ -114,6 +117,12 @@ namespace OpenDDSharp.Build.Standard
         /// </summary>
         public string NugetApiKey { get; internal set; }
 
+        internal static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+        internal static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
+        internal static bool IsOSX => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
         internal string DdsRoot { get; private set; }
 
         internal string AceRoot { get; private set; }
@@ -123,14 +132,6 @@ namespace OpenDDSharp.Build.Standard
         internal string MpcRoot { get; private set; }
 
         internal string OpenDdsSolutionFile { get; private set; }
-
-        internal bool IsLinuxBuild
-        {
-            get
-            {
-                return BuildConfiguration.StartsWith("Linux");
-            }
-        }
         #endregion
 
         #region Constructors
@@ -257,11 +258,8 @@ namespace OpenDDSharp.Build.Standard
                 NugetApiKey = string.Empty;
             }
 
-            if (!BuildConfiguration.StartsWith("Linux"))
-            {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS/";
-            }
-            else
+            DdsRoot = $"{THIRD_PARTY_FOLDER}OpenDDS_{BuildPlatform}/";
+            if (IsLinux)
             {
                 DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";
             }
@@ -277,12 +275,8 @@ namespace OpenDDSharp.Build.Standard
             var ddsLib = Path.Combine(ddsPath, $"lib");
             var aceBin = Path.Combine(acePath, $"bin");
             var aceLib = Path.Combine(acePath, $"lib");
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{BuildPlatform}");
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{BuildPlatform}");
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{BuildPlatform}");
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{BuildPlatform}");
             var perlPath = Path.GetFullPath(PerlPath);
-            string path = $"{perlPath};{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            string path = $"{perlPath};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             System.Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
         }

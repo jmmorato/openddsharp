@@ -50,15 +50,13 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var ddsPath = Path.GetFullPath(context.DdsRoot).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(context.AceRoot).TrimEnd(Path.DirectorySeparatorChar);
 
-            RestoreOriginalBinLibFolders(context, ddsPath, acePath);
-
             var platform = context.BuildPlatform;
             if (platform == PlatformTarget.x86)
             {
                 platform = PlatformTarget.Win32;
             }
 
-            if (!context.IsLinuxBuild)
+            if (BuildContext.IsWindows)
             {
                 context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
                 {
@@ -79,125 +77,20 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
             else
             {
-                var exit = context.StartProcess("wsl", new Cake.Core.IO.ProcessSettings
+                var exit = context.StartProcess("make", new Cake.Core.IO.ProcessSettings
                 {
-                    Arguments = "make",
                     WorkingDirectory = ddsPath,
                 });
 
                 if (exit != 0)
                 {
-                    throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
+                    throw new BuildException($"Error calling 'make'. Exit code: {exit}");
                 }
             }
-
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{context.BuildPlatform}");
-            if (context.DirectoryExists(ddsBinPlatform))
-            {
-                context.DeleteDirectory(ddsBinPlatform, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-            }
-            context.CreateDirectory(ddsBinPlatform);
-            context.CopyFiles(Path.Combine(ddsPath, "bin/*"), ddsBinPlatform);
-
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{context.BuildPlatform}");
-            if (context.DirectoryExists(ddsLibPlatform))
-            {
-                context.DeleteDirectory(ddsLibPlatform, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-            }
-            context.CreateDirectory(ddsLibPlatform);
-            context.CopyFiles(Path.Combine(ddsPath, "lib/*"), ddsLibPlatform);
-
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{context.BuildPlatform}");
-            if (context.DirectoryExists(aceBinPlatform))
-            {
-                context.DeleteDirectory(aceBinPlatform, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-            }
-            context.CreateDirectory(aceBinPlatform);
-            context.CopyFiles(Path.Combine(acePath, "bin/*"), aceBinPlatform);
-
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{context.BuildPlatform}");
-            if (context.DirectoryExists(aceLibPlatform))
-            {
-                context.DeleteDirectory(aceLibPlatform, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-            }
-
-            context.CreateDirectory(aceLibPlatform);
-            context.CopyFiles(Path.Combine(acePath, "lib/*"), aceLibPlatform);
 
             if (context.CleanupTemporalFiles)
             {
                 CleanupTemporalFiles(context, ddsPath);
-            }
-        }
-
-        private static void RestoreOriginalBinLibFolders(BuildContext context, string ddsPath, string acePath)
-        {
-            string ddsBin = Path.Combine(ddsPath, "bin");
-            string ddsLib = Path.Combine(ddsPath, "lib");
-            string ddsBinOriginal = Path.Combine(ddsPath, "original_bin");
-            string ddsLibOriginal = Path.Combine(ddsPath, "original_lib");
-
-            if (Directory.Exists(ddsBinOriginal) && Directory.Exists(ddsLibOriginal))
-            {
-                context.DeleteDirectory(ddsBin, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-
-                context.CreateDirectory(ddsBin);
-                context.CopyFiles(ddsBinOriginal, ddsBin);
-
-                context.DeleteDirectory(ddsLib, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-
-                context.CreateDirectory(ddsLib);
-                context.CopyFiles(ddsLibOriginal, ddsLib);
-            }
-
-            string aceBin = Path.Combine(acePath, "bin");
-            string aceLib = Path.Combine(acePath, "lib");
-            string aceBinOriginal = Path.Combine(acePath, "original_bin");
-            string aceLibOriginal = Path.Combine(acePath, "original_lib");
-
-            if (Directory.Exists(aceBinOriginal) && Directory.Exists(aceLibOriginal))
-            {
-                context.DeleteDirectory(aceBin, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-
-                context.CreateDirectory(aceBin);
-                context.CopyFiles(aceBinOriginal, aceBin);
-
-                context.DeleteDirectory(aceLib, new DeleteDirectorySettings
-                {
-                    Force = true,
-                    Recursive = true,
-                });
-
-                context.CreateDirectory(aceLib);
-                context.CopyFiles(aceLibOriginal, aceLib);
             }
         }
 

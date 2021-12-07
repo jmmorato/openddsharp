@@ -30,7 +30,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     /// <summary>
     /// Run OpenDDSharp unit test task.
     /// </summary>
-    [TaskName("Test")]
+    [TaskName("TestTask")]
     public class TestTask : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
@@ -42,11 +42,11 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/");
             context.Log.Information($"Unit test path: {path}");
             var file = "OpenDDSharp.Standard.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.7/build/_common");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.8/build/_common");
             var settingsFile = Path.Combine(solutionFullPath, "CodeCoverage.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
-            if (!context.IsLinuxBuild)
+            if (BuildContext.IsWindows)
             {
                 context.DotNetCoreTest(path + file, new Cake.Common.Tools.DotNetCore.Test.DotNetCoreTestSettings
                 {
@@ -67,18 +67,16 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 try
                 {
-                    var dllPath = BuildContext.ToWslPath(Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/", "OpenDDSharp.Standard.UnitTest.dll"));
-                    context.Log.Information($"DLL WSL path: {dllPath}");
+                    var dllPath = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/", "OpenDDSharp.Standard.UnitTest.dll");
 
-                    var linuxPath = BuildContext.ToWslPath(path);
-                    context.Log.Information($"WSL path: {linuxPath}");
+                    var linuxPath = path;
 
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.Append($"export DDS_ROOT={BuildContext.ToWslPath(Path.GetFullPath(context.DdsRoot).TrimEnd('\\'))} && ");
+                    stringBuilder.Append($"export DDS_ROOT={Path.GetFullPath(context.DdsRoot)} && ");
                     stringBuilder.Append($"export LD_LIBRARY_PATH=$DDS_ROOT/lib:$DDS_ROOT/ACE_TAO/ACE/lib:{linuxPath} && ");
                     stringBuilder.Append($"dotnet test {dllPath} -v n");
 
-                    var exit = context.StartProcess("wsl", new Cake.Core.IO.ProcessSettings
+                    var exit = context.StartProcess("bash", new Cake.Core.IO.ProcessSettings
                     {
                         Arguments = stringBuilder.ToString(),
                         WorkingDirectory = path,

@@ -17,12 +17,14 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using Cake.Common.Tools.MSBuild;
-using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Restore;
-using Cake.Core;
-using Cake.Frosting;
 using System.IO;
+using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNetCore.Build;
+using Cake.Common.Tools.DotNetCore.Clean;
+using Cake.Common.Tools.DotNetCore.Restore;
+using Cake.Core;
+using Cake.Core.Diagnostics;
+using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -30,7 +32,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     /// Build OpenDDSharp task.
     /// </summary>
     [TaskName("BuildOpenDDSharpTask")]
-    [IsDependentOn(typeof(BuildThirdPartyTask))]
+    [IsDependentOn(typeof(BuildOpenDDSharpNativeTask))]
     public class BuildOpenDDSharpTask : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
@@ -41,18 +43,20 @@ namespace OpenDDSharp.Build.Standard.Tasks
             System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
-            context.NuGetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new NuGetRestoreSettings
+            context.Log.Information("Restoring NuGet packages...");
+            context.DotNetCoreRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetCoreRestoreSettings
             {
+                ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
                 NoCache = true,
             });
 
-            var settings = new MSBuildSettings
+            var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+
+            context.Log.Information("Clean solution...");
+            context.DotNetCoreClean("OpenDDSharp.Standard.sln", new DotNetCoreCleanSettings
             {
                 Configuration = context.BuildConfiguration,
-                PlatformTarget = context.BuildPlatform,
-                Targets = { "Clean", "Build" },
-                MaxCpuCount = 0,
-                WorkingDirectory = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER),
+                WorkingDirectory = solutionFolder,
                 EnvironmentVariables =
                 {
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
@@ -60,15 +64,30 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                ToolVersion = context.VisualStudioVersion,
-            };
+                ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
+            });
 
-            if (!context.IsLinuxBuild)
+            context.Log.Information("Build OpenDDSharp.BuildTasks project...");
+            context.DotNetCoreBuild($"{solutionFolder}Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj", new DotNetCoreBuildSettings
             {
-                settings.ArgumentCustomization = args => context.VisualStudioVersion == MSBuildToolVersion.VS2019 ? args.Append("/p:PlatformToolset=v142") : args.Append(string.Empty);
-            }
+                Configuration = context.BuildConfiguration,
+                WorkingDirectory = solutionFolder,
+            });
 
-            context.MSBuild(BuildContext.OPENDDSHARP_SOLUTION_FILE, settings);
+            context.Log.Information("Build OpenDDSharp solution...");
+            context.DotNetCoreBuild("OpenDDSharp.Standard.sln", new DotNetCoreBuildSettings
+            {
+                Configuration = context.BuildConfiguration,
+                WorkingDirectory = solutionFolder,
+                EnvironmentVariables =
+                {
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                },
+                ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
+            });
         }
     }
 }

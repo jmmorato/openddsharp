@@ -45,8 +45,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_Linux";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/ACE";
         private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/TAO";
-        private const string DEBUG_TARGET_FOLDER = @"LinuxDebug/";
-        private const string RELEASE_TARGET_FOLDER = @"LinuxRelease/";
+        private const string DEBUG_TARGET_FOLDER = @"Debug/";
+        private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
@@ -78,17 +78,16 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             var ddsLib = Path.Combine(ddsPath, $"lib");
             var aceBin = Path.Combine(acePath, $"bin");
             var aceLib = Path.Combine(acePath, $"lib");
-            var ddsBinPlatform = Path.Combine(ddsPath, $"bin_{_platformFolder}");
-            var ddsLibPlatform = Path.Combine(ddsPath, $"lib_{_platformFolder}");
-            var aceBinPlatform = Path.Combine(acePath, $"bin_{_platformFolder}");
-            var aceLibPlatform = Path.Combine(acePath, $"lib_{_platformFolder}");
-            string path = $"{ddsBinPlatform};{ddsLibPlatform};{aceBinPlatform};{aceLibPlatform};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            string path = $"{ddsBin};{ddsLib};{aceBin};{aceLib};";
             Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
             Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+#if Linux
+            Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+#endif
         }
-#endregion
+        #endregion
 
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)
@@ -114,7 +113,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         {
             string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
 #if Windows
-            string infoRepoPath = Path.Combine(ddsPath, $"bin_{_platformFolder}", DCPSINFOREPO_PROCESS_EXE_NAME);
+            string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
             string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #endif
@@ -129,6 +128,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
         private Process SpawnProcess(string path, string arguments)
         {
+            var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+            var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
+
             ProcessStartInfo processInfo = new ProcessStartInfo(path)
             {
                 Arguments = arguments,
@@ -137,6 +140,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 CreateNoWindow = true,
                 UseShellExecute = false,
             };
+
+            processInfo.EnvironmentVariables["DDS_ROOT"] = ddsPath;
+            processInfo.EnvironmentVariables["ACE_ROOT"] = acePath;
+            processInfo.EnvironmentVariables["TAO_ROOT"] = taoPath;
+#if Linux
+            processInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"$LD_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
+#endif
 
             Process process = new Process
             {

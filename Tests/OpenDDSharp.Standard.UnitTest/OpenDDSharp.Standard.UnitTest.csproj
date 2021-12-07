@@ -7,18 +7,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Platforms>x64;x86</Platforms>
     <LangVersion>8.0</LangVersion>
-    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
-    <IsWindows Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">true</IsWindows>
-    <IsLinux Condition="'$(Configuration)'=='LinuxDebug' Or '$(Configuration)'=='LinuxRelease'">true</IsLinux>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxDebug|x64'">
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LinuxRelease|x64'">
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
+    <Configurations>Debug;Release</Configurations>
+	<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
@@ -47,11 +38,10 @@
     <DefineConstants Condition="'$(Platform)'=='x86'">$(DefineConstants);X86</DefineConstants>
   </PropertyGroup>
   
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
   </ItemGroup>
   
   <ItemGroup>
@@ -68,7 +58,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.31.0.39249">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
