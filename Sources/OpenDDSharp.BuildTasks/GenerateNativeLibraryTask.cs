@@ -53,6 +53,8 @@ namespace OpenDDSharp.BuildTasks
         public string Platform { get; set; }
 
         public bool IsLinux { get; set; }
+
+        public bool IsOSX { get; set; }
         #endregion
 
         #region Methods
