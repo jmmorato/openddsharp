@@ -64,79 +64,79 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_on_readers(::DDS::Subscriber_ptr subscriber) {
-	if (_onDataOnReaders != NULL) {
+	if (_onDataOnReaders) {
 		_onDataOnReaders(static_cast< ::DDS::Entity_ptr>(subscriber));
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_available(::DDS::DataReader_ptr reader) {
-	if (_onDataAvalaible != NULL) {
+	if (_onDataAvalaible) {
 		_onDataAvalaible(static_cast< ::DDS::Entity_ptr>(reader));
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
-	if (_onRequestedDeadlineMissed != NULL) {
+	if (_onRequestedDeadlineMissed) {
 		_onRequestedDeadlineMissed(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status) {
-	if (_onRequestedIncompatibleQos != NULL) {
+	if (_onRequestedIncompatibleQos) {
 		_onRequestedIncompatibleQos(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status) {
-	if (_onSampleRejected != NULL) {
+	if (_onSampleRejected) {
 		_onSampleRejected(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status) {
-	if (_onLivelinessChanged != NULL) {
+	if (_onLivelinessChanged) {
 		_onLivelinessChanged(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status) {
-	if (_onSubscriptionMatched != NULL) {
+	if (_onSubscriptionMatched) {
 		_onSubscriptionMatched(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
-	if (_onSampleLost != NULL) {
+	if (_onSampleLost) {
 		_onSampleLost(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status) {
-	if (_onOfferedDeadlineMissed != NULL) {
+	if (_onOfferedDeadlineMissed) {
 		_onOfferedDeadlineMissed(static_cast< ::DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status) {
-	if (_onOfferedIncompatibleQos != NULL) {
+	if (_onOfferedIncompatibleQos) {
 		_onOfferedIncompatibleQos(static_cast< ::DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status) {
-	if (_onLivelinessLost != NULL) {
+	if (_onLivelinessLost) {
 		_onLivelinessLost(static_cast< ::DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status) {
-	if (_onPublicationMatched != NULL) {
+	if (_onPublicationMatched) {
 		_onPublicationMatched(static_cast< ::DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
-	if (_onInconsistentTopic != NULL) {
+	if (_onInconsistentTopic) {
 		_onInconsistentTopic(static_cast< ::DDS::TopicDescription_ptr>(topic), status);
 	}
 };

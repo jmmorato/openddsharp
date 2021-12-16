@@ -46,43 +46,43 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_data_available(::DDS::DataReader_ptr reader) {
-	if (_onDataAvalaible != NULL) {
+	if (_onDataAvalaible) {
 		_onDataAvalaible(static_cast< ::DDS::Entity_ptr>(reader));
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
-	if (_onRequestedDeadlineMissed != NULL) {
+	if (_onRequestedDeadlineMissed) {
 		_onRequestedDeadlineMissed(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status) {
-	if (_onRequestedIncompatibleQos != NULL) {
+	if (_onRequestedIncompatibleQos) {
 		_onRequestedIncompatibleQos(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status) {
-	if (_onSampleRejected != NULL) {
+	if (_onSampleRejected) {
 		_onSampleRejected(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status) {
-	if (_onLivelinessChanged != NULL) {
+	if (_onLivelinessChanged) {
 		_onLivelinessChanged(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status) {
-	if (_onSubscriptionMatched != NULL) {
+	if (_onSubscriptionMatched) {
 		_onSubscriptionMatched(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
-	if (_onSampleLost != NULL) {
+	if (_onSampleLost) {
 		_onSampleLost(static_cast< ::DDS::Entity_ptr>(reader), status);
 	}
 }
