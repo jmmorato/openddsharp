@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Subscriber.h"
 
 ::DDS::Entity_ptr Subscriber_NarrowBase(::DDS::Subscriber_ptr sub) {
-	return static_cast<::DDS::Entity_ptr>(sub);
+	return static_cast<DDS::Entity_ptr>(sub);
 }
 
 ::DDS::DataReader_ptr Subscriber_CreateDataReader(::DDS::Subscriber_ptr sub,
@@ -82,7 +82,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::DDS::Entity_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName) {
-	return static_cast<::DDS::Entity_ptr>(sub->lookup_datareader(topicName));
+	return static_cast<DDS::Entity_ptr>(sub->lookup_datareader(topicName));
 }
 
 ::DDS::ReturnCode_t Subscriber_DeleteContainedEntities(::DDS::Subscriber_ptr sub) {
@@ -98,7 +98,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	::DDS::ReturnCode_t ret = sub->get_datareaders(seq, sampleState, viewState, instanceState);
 	if (ret == ::DDS::RETCODE_OK) {
 		CORBA::ULong length = seq.length();
-		TAO::unbounded_value_sequence<::DDS::DataReader_ptr> readers(length);
+		TAO::unbounded_value_sequence<DDS::DataReader_ptr> readers(length);
 		readers.length(length);
 		for (CORBA::ULong i = 0; i < length; i++) {
 			readers[i] = seq[i].in();

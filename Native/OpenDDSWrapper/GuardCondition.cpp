@@ -24,7 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::DDS::Condition_ptr GuardCondition_NarrowBase(::DDS::GuardCondition_ptr gc) {
-	return static_cast<::DDS::Condition_ptr>(gc);
+	return static_cast<DDS::Condition_ptr>(gc);
 }
 
 ::CORBA::Boolean GuardCondition_GetTriggerValue(::DDS::GuardCondition_ptr gc) {

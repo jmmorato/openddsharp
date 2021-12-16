@@ -30,7 +30,7 @@ namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DDS {
 
-			class DomainParticipantListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<::DDS::DomainParticipantListener> {
+			class DomainParticipantListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<DDS::DomainParticipantListener> {
 			private:
 				std::function<void(::DDS::Entity_ptr)> _onDataOnReaders;
 				std::function<void(::DDS::Entity_ptr)> _onDataAvalaible;

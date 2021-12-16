@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DomainParticipant.h"
 
 ::DDS::Entity_ptr DomainParticipant_NarrowBase(::DDS::DomainParticipant_ptr dp) {
-	return static_cast<::DDS::Entity_ptr>(dp);
+	return static_cast<DDS::Entity_ptr>(dp);
 }
 
 CORBA::Long DomainParticipant_GetDomainId(::DDS::DomainParticipant_ptr dp) {

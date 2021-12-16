@@ -38,24 +38,24 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 void ::OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status) {
 	if (_onOfferedDeadlineMissed != NULL) {
-		_onOfferedDeadlineMissed(static_cast<::DDS::Entity_ptr>(writer), status);
+		_onOfferedDeadlineMissed(static_cast<DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status) {
 	if (_onOfferedIncompatibleQos != NULL) {
-		_onOfferedIncompatibleQos(static_cast<::DDS::Entity_ptr>(writer), status);
+		_onOfferedIncompatibleQos(static_cast<DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl::on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status) {
 	if (_onLivelinessLost != NULL) {
-		_onLivelinessLost(static_cast<::DDS::Entity_ptr>(writer), status);
+		_onLivelinessLost(static_cast<DDS::Entity_ptr>(writer), status);
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status) {
 	if (_onPublicationMatched != NULL) {
-		_onPublicationMatched(static_cast<::DDS::Entity_ptr>(writer), status);
+		_onPublicationMatched(static_cast<DDS::Entity_ptr>(writer), status);
 	}
 };

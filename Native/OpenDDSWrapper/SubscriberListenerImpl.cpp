@@ -50,48 +50,48 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_data_on_readers(::DDS::Subscriber_ptr subscriber) {
 	if (_onDataOnReaders != NULL) {
-		_onDataOnReaders(static_cast<::DDS::Entity_ptr>(subscriber));
+		_onDataOnReaders(static_cast<DDS::Entity_ptr>(subscriber));
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_data_available(::DDS::DataReader_ptr reader) {
 	if (_onDataAvalaible != NULL) {
-		_onDataAvalaible(static_cast<::DDS::Entity_ptr>(reader));
+		_onDataAvalaible(static_cast<DDS::Entity_ptr>(reader));
 	}
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
 	if (_onRequestedDeadlineMissed != NULL) {
-		_onRequestedDeadlineMissed(static_cast<::DDS::Entity_ptr>(reader), status);
+		_onRequestedDeadlineMissed(static_cast<DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status) {
 	if (_onRequestedIncompatibleQos != NULL) {
-		_onRequestedIncompatibleQos(static_cast<::DDS::Entity_ptr>(reader), status);
+		_onRequestedIncompatibleQos(static_cast<DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status) {
 	if (_onSampleRejected != NULL) {
-		_onSampleRejected(static_cast<::DDS::Entity_ptr>(reader), status);
+		_onSampleRejected(static_cast<DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status) {
 	if (_onLivelinessChanged != NULL) {
-		_onLivelinessChanged(static_cast<::DDS::Entity_ptr>(reader), status);
+		_onLivelinessChanged(static_cast<DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status) {
 	if (_onSubscriptionMatched != NULL) {
-		_onSubscriptionMatched(static_cast<::DDS::Entity_ptr>(reader), status);
+		_onSubscriptionMatched(static_cast<DDS::Entity_ptr>(reader), status);
 	}
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
 	if (_onSampleLost != NULL) {
-		_onSampleLost(static_cast<::DDS::Entity_ptr>(reader), status);
+		_onSampleLost(static_cast<DDS::Entity_ptr>(reader), status);
 	}
 }

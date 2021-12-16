@@ -30,7 +30,7 @@ namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DDS {
 
-			class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<::DDS::DataReaderListener> {
+			class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<DDS::DataReaderListener> {
 			private:				
 				std::function<void(::DDS::Entity_ptr)> _onDataAvalaible;
 				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> _onRequestedDeadlineMissed;

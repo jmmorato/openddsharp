@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DataWriter.h"
 
 ::DDS::Entity_ptr DataWriter_NarrowBase(::DDS::DataWriter_ptr dw) {
-	return static_cast<::DDS::Entity_ptr>(dw);
+	return static_cast<DDS::Entity_ptr>(dw);
 }
 
 ::DDS::ReturnCode_t DataWriter_WaitForAcknowledgments(::DDS::DataWriter_ptr dw, ::DDS::Duration_t max_wait) {

@@ -29,7 +29,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 	if (ret == ::DDS::RETCODE_OK) {
 		CORBA::ULong length = seq.length();
-		TAO::unbounded_value_sequence<::DDS::Condition_ptr> conditions(length);
+		TAO::unbounded_value_sequence<DDS::Condition_ptr> conditions(length);
 		conditions.length(length);
 		for (CORBA::ULong i = 0; i < length; i++) {
 			conditions[i] = seq[i].in();
@@ -54,7 +54,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 	if (ret == ::DDS::RETCODE_OK) {
 		CORBA::ULong length = seq.length();
-		TAO::unbounded_value_sequence<::DDS::Condition_ptr> conditions(length);
+		TAO::unbounded_value_sequence<DDS::Condition_ptr> conditions(length);
 		conditions.length(length);
 		for (CORBA::ULong i = 0; i < length; i++) {
 			conditions[i] = seq[i].in();
@@ -66,7 +66,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::DDS::ReturnCode_t WaitSet_DetachConditions(::DDS::WaitSet_ptr ws, void* sequence) {
-	::TAO::unbounded_value_sequence<::DDS::Condition_ptr> seq;
+	::TAO::unbounded_value_sequence<DDS::Condition_ptr> seq;
 	ptr_to_unbounded_sequence(sequence, seq);
 		
 	::CORBA::ULong length = seq.length();
