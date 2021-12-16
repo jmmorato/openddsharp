@@ -20,11 +20,11 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Topic.h"
 
 ::DDS::Entity_ptr Topic_NarrowBase(::DDS::Topic_ptr t) {
-	return static_cast<DDS::Entity_ptr>(t);
+	return static_cast<::DDS::Entity_ptr>(t);
 }
 
 ::DDS::TopicDescription_ptr Topic_NarrowTopicDescription(::DDS::Topic_ptr t) {
-	return static_cast<DDS::TopicDescription_ptr>(t);;
+	return static_cast<::DDS::TopicDescription_ptr>(t);;
 }
 
 ::DDS::ReturnCode_t Topic_GetQos(::DDS::Topic_ptr t, TopicQosWrapper& qos_wrapper) {

@@ -30,7 +30,7 @@ namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DDS {
 
-			class DataWriterListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<DDS::DataWriterListener> {
+			class DataWriterListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<::DDS::DataWriterListener> {
 			private:
 				std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> _onOfferedDeadlineMissed;
 				std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> _onOfferedIncompatibleQos;

@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "QueryCondition.h"
 
 ::DDS::ReadCondition_ptr QueryCondition_NarrowBase(::DDS::QueryCondition_ptr ptr) {
-	return static_cast<DDS::ReadCondition_ptr>(ptr);
+	return static_cast<::DDS::ReadCondition_ptr>(ptr);
 }
 
 char* QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr) {

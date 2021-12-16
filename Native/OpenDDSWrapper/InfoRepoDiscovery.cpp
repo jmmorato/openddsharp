@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "InfoRepoDiscovery.h"
 
 ::OpenDDS::DCPS::Discovery* InfoRepoDiscovery_NarrowBase(::OpenDDS::DCPS::InfoRepoDiscovery* d) {
-	return  dynamic_cast<OpenDDS::DCPS::InfoRepoDiscovery*>(d);
+	return  dynamic_cast<::OpenDDS::DCPS::InfoRepoDiscovery*>(d);
 }
 
 ::OpenDDS::DCPS::InfoRepoDiscovery* InfoRepoDiscovery_new(const char* key, const char* ior) {

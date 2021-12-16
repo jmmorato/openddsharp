@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ContentFilteredTopic.h"
 
 ::DDS::TopicDescription_ptr ContentFilteredTopic_NarrowTopicDescription(::DDS::ContentFilteredTopic_ptr t) {
-    return static_cast<DDS::TopicDescription_ptr>(t);
+    return static_cast<::DDS::TopicDescription_ptr>(t);;
 }
 
 char* ContentFilteredTopic_GetTypeName(::DDS::ContentFilteredTopic_ptr t) {
