@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "RtpsDiscovery.h"
 
 ::OpenDDS::DCPS::Discovery* RtpsDiscovery_NarrowBase(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return  dynamic_cast<::OpenDDS::RTPS::RtpsDiscovery*>(d);
+	return  dynamic_cast< ::OpenDDS::RTPS::RtpsDiscovery*>(d);
 }
 
 ::OpenDDS::RTPS::RtpsDiscovery* RtpsDiscovery_new(const char* key) {

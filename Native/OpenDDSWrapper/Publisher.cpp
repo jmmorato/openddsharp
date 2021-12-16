@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Publisher.h"
 
 ::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr pub) {
-	return static_cast<::DDS::Entity_ptr>(pub);
+	return static_cast< ::DDS::Entity_ptr>(pub);
 }
 
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
@@ -74,7 +74,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::DDS::Entity_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName) {
-	return static_cast<::DDS::Entity_ptr>(pub->lookup_datawriter(topicName));
+	return static_cast< ::DDS::Entity_ptr>(pub->lookup_datawriter(topicName));
 }
 
 ::DDS::ReturnCode_t Publisher_DeleteContainedEntities(::DDS::Publisher_ptr pub) {

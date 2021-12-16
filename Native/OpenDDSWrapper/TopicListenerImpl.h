@@ -29,7 +29,7 @@ namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DDS {
 
-			class TopicListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<::DDS::TopicListener> {
+			class TopicListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::TopicListener> {
 			private:
 				std::function<void(::DDS::TopicDescription_ptr topic, ::DDS::InconsistentTopicStatus status)> _onInconsistentTopic;
 

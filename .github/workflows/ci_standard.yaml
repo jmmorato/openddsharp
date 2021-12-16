@@ -176,7 +176,7 @@ jobs:
         path: |
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.so*
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
           ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt

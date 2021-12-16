@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ReadCondition.h"
 
 ::DDS::Condition_ptr ReadCondition_NarrowBase(::DDS::ReadCondition_ptr ptr) {
-	return static_cast<::DDS::Condition_ptr>(ptr);
+	return static_cast< ::DDS::Condition_ptr>(ptr);
 }
 
 void ReadCondition_Release(::DDS::ReadCondition_ptr ptr) {
