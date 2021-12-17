@@ -621,9 +621,9 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		AST_Expression** dims = arr_type->dims();
 		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
 
-		ret.append("        if (");
+		ret.append("        if (!");
 		ret.append(name);
-		ret.append(" != NULL)\n");
+		ret.append("\n");
 
 		ret.append("        {\n");
 
