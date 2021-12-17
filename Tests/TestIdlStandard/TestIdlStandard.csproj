@@ -169,7 +169,7 @@
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlCSharpLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
+  <Target Name="OpenDDSharpIdlCSharpMacOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
 	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
 	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
@@ -189,6 +189,7 @@
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>libTestIdlStandardWrapper.so</TargetPath>
 	</ContentWithTargetPath>
+	  
 	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.dylib" />
 	<ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
