@@ -342,7 +342,7 @@ public:
 
         delete[] pointers;
 
-        delete ptr;
+        free(ptr);
     }
 
     static void release_wide_string_multi_array_ptr(void* & ptr, int length)
@@ -365,7 +365,7 @@ public:
 
         delete[] pointers;
 
-        delete ptr;
+        free(ptr);
     }
 
     template <typename T, CORBA::ULong MAX>
