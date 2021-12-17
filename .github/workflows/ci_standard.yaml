@@ -207,35 +207,35 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
-    #- name: Dotnet restore
-    #  shell: bash
-    #  run: |
-    #    dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #    dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #    dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #    dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #  working-directory: ${{ github.workspace }}
+    - name: Dotnet restore
+      shell: bash
+      run: |
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
 
-    #- name: Build OpenDDSharp.BuildTasks project
-    #  shell: bash
-    #  run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }}
-    #  working-directory: ${{ github.workspace }}
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }}
+      working-directory: ${{ github.workspace }}
     
-    #- name: Build OpenDDSharp solution
-    #  shell: bash
-    #  run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
-    #  working-directory: ${{ github.workspace }}
-    #  env:
-    #    DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-    #    ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-    #    TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+    - name: Build OpenDDSharp solution
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
 
-    #- name: Test OpenDDSharp
-    #  shell: bash      
-    #  run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
-    #  working-directory: ${{ github.workspace }}
-    #  env:
-    #    DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-    #    ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-    #    TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-    #    LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
+    - name: Test OpenDDSharp
+      shell: bash      
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
