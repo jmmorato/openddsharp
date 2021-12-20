@@ -41,10 +41,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
-#else
+#elif Linux
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_Linux";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/ACE";
         private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/TAO";
+        private const string DEBUG_TARGET_FOLDER = @"Debug/";
+        private const string RELEASE_TARGET_FOLDER = @"Release/";
+        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
+#elif OSX
+        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_MacOS";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_TAO/ACE";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_TAO/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
@@ -85,6 +95,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 #if Linux
             Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+#elif OSX
+            Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
 #endif
         }
         #endregion
@@ -100,7 +112,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
                 throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
             }
-#if Linux
+#if Linux || OSX
             var arguments = supportProcessPath + " " + teskKind.ToString();
 
             return SpawnProcess("dotnet", arguments);
@@ -146,6 +158,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             processInfo.EnvironmentVariables["TAO_ROOT"] = taoPath;
 #if Linux
             processInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"$LD_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
+#elif OSX
+            processInfo.EnvironmentVariables["DYLD_FALLBACK_LIBRARY_PATH"] = $"DYLD_FALLBACK_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
 #endif
 
             Process process = new Process

@@ -10,6 +10,7 @@
     <Configurations>Debug;Release</Configurations>
 	<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
 	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+	<IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
@@ -33,6 +34,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="'$(IsLinux)'=='true'">$(DefineConstants);Linux</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+	<DefineConstants Condition="'$(IsOSX)'=='true'">$(DefineConstants);OSX</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="'$(Platform)'=='x86'">$(DefineConstants);X86</DefineConstants>
