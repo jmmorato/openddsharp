@@ -231,21 +231,21 @@ jobs:
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
       continue-on-error: true
 
-    - name: Read TestTypeSupport.cs
-      id: package
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ${{ github.workspace }}/Tests/TestIdlStandard/TestTypeSupport.cs
+    #- name: Read TestTypeSupport.cs
+    #  id: package
+    #  uses: juliangruber/read-file-action@v1
+    #  with:
+    #    path: ${{ github.workspace }}/Tests/TestIdlStandard/TestTypeSupport.cs
 
-    - name: Echo TestTypeSupport.cs
-      run: echo "${{ steps.package.outputs.content }}"
+    #- name: Echo TestTypeSupport.cs
+    #  run: echo "${{ steps.package.outputs.content }}"
 
-    #- name: Test OpenDDSharp
-    #  shell: bash      
-    #  run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
-    #  working-directory: ${{ github.workspace }}
-    #  env:
-    #    DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-    #    ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-    #    TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-    #    LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
+    - name: Test OpenDDSharp
+      shell: bash      
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
