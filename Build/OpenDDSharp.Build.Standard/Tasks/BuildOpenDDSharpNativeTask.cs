@@ -50,6 +50,10 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
             }
+            else if (BuildContext.IsOSX)
+            {
+                arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
+            }
 
             context.CMake(new CMakeSettings
             {

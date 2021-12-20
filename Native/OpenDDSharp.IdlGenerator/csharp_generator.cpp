@@ -324,7 +324,7 @@ std::string csharp_generator::declare_marshal_fields(const std::vector<AST_Field
 			ret.append(" ");
 			ret.append(name);
 			ret.append(";\n");
-			ret.append("#elif Linux\n");
+			ret.append("#else\n");
 			ret.append(indent);
 			ret.append("public ");
 			ret.append(linux_type_name.c_str());
@@ -760,7 +760,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
 			break;
 		case AST_PredefinedType::PT_wchar:			
-			ret = "#if Windows\n[MarshalAs(UnmanagedType.I2)]\n#elif Linux\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
+			ret = "#if Windows\n[MarshalAs(UnmanagedType.I2)]\n#else\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
@@ -793,7 +793,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 					ret.append(", SizeConst = ");
 					ret.append(std::to_string(dims[0]->ev()->u.ulval));
 					ret.append(")]\n");
-					ret.append("#elif Linux\n");
+					ret.append("#else\n");
 					ret.append("[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.");
 					ret.append(linuxUmanagedType);
 					ret.append(", SizeConst = ");
@@ -1671,7 +1671,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					ret.append(name);
 					ret.append(";\n");
 
-					ret.append("#elif Linux\n");
+					ret.append("#else\n");
 
 					ret.append(indent);
 					ret.append("    wrapper.");
@@ -2397,7 +2397,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append(name);
 					ret.append(";\n");
 
-					ret.append("#elif Linux\n");
+					ret.append("#else\n");
 
 					ret.append("    ");
 					ret.append(name);

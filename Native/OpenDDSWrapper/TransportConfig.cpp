@@ -20,6 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "TransportConfig.h"
 
 void TransportConfig_Insert(::OpenDDS::DCPS::TransportConfig* cfg, ::OpenDDS::DCPS::TransportInst* inst) {
-	::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
+	::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
 	cfg->instances_.push_back(rch);
 }

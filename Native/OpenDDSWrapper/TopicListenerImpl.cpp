@@ -28,7 +28,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
-	if (_onInconsistentTopic != NULL) {
-		_onInconsistentTopic(static_cast<::DDS::TopicDescription_ptr>(topic), status);
+	if (_onInconsistentTopic) {
+		_onInconsistentTopic(static_cast< ::DDS::TopicDescription_ptr>(topic), status);
 	}
 };

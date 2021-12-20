@@ -155,3 +155,97 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
         LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
+
+  build_macos:
+    runs-on: macos-10.15
+    strategy:
+      fail-fast: false
+      matrix:        
+        BuildPlatform: [x64]
+        BuildConfiguration: [Release]
+    env:
+      OpenDdsVersion: "3.18.1"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-macos
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-macos
+
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Dotnet restore
+      shell: bash
+      run: |
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }}
+      working-directory: ${{ github.workspace }}
+    
+    - name: Build OpenDDSharp solution
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+      continue-on-error: true
+
+    #- name: Read TestTypeSupport.cs
+    #  id: package
+    #  uses: juliangruber/read-file-action@v1
+    #  with:
+    #    path: ${{ github.workspace }}/Tests/TestIdlStandard/TestTypeSupport.cs
+
+    #- name: Echo TestTypeSupport.cs
+    #  run: echo "${{ steps.package.outputs.content }}"
+
+    - name: Test OpenDDSharp
+      shell: bash      
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
