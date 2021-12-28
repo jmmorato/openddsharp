@@ -374,3 +374,8 @@ jobs:
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
       working-directory: ${{ github.workspace }}
+    
+    - name: Create release packages
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}/Build
