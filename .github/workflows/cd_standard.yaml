@@ -1,0 +1,190 @@
+name: Continuous Delivery
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    types:
+     - closed
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_windows_native:
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:        
+        BuildPlatform: [x64, x86]
+        BuildConfiguration: [Release]
+    env:
+      OpenDdsVersion: "3.18.1"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-windows
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows
+        
+    - name: Cache OpenDDSharp native
+      id: openddsharp-libraries-windows
+      uses: actions/cache@v2
+      with:
+        path: |
+            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
+            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
+        key: openddsharp-native-cache-windows-${{ github.run_number }}
+
+    - name: Build & Test with Cake (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build & Test with Cake (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
+      working-directory: ${{ github.workspace }}/Build
+
+  build_linux_native:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:        
+        BuildPlatform: [x64]
+        BuildConfiguration: [Release]
+    env:
+      OpenDdsVersion: "3.18.1"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-linux
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux
+
+    - name: Cache OpenDDSharp native
+      id: openddsharp-libraries-linux
+      uses: actions/cache@v2
+      with:
+        path: |
+            ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so            
+            ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
+        key: openddsharp-native-cache-linux-${{ github.run_number }}
+
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+    
+
+  build_macos_native:
+    runs-on: macos-10.15
+    strategy:
+      fail-fast: false
+      matrix:        
+        BuildPlatform: [x64]
+        BuildConfiguration: [Release]
+    env:
+      OpenDdsVersion: "3.18.1"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-macos
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-macos
+
+    - name: Cache OpenDDSharp native
+      id: openddsharp-libraries-macos
+      uses: actions/cache@v2
+      with:
+        path: |
+            ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib            
+            ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
+        key: openddsharp-native-cache-macos-${{ github.run_number }}
+
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
