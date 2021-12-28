@@ -347,7 +347,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: Dotnet restore
-      shell: bash
+      shell: cmd
       run: |
         dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
@@ -356,12 +356,12 @@ jobs:
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp.BuildTasks project
-      shell: bash
-      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }}
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=Release
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp solution x86
-      shell: bash
+      shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=Release -property:Platform=x86
       working-directory: ${{ github.workspace }}
       env:
@@ -370,11 +370,10 @@ jobs:
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86/ACE_TAO/TAO"
 
     - name: Build OpenDDSharp solution x64
-      shell: bash
+      shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
-

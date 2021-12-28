@@ -54,3 +54,5 @@ ext_*/
 **/PublishProfiles/
 #Ignore launchSettings
 **/launchSettings.json
+#Ignore Native build folders
+Native/build*/
