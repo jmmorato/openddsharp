@@ -40,11 +40,11 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var buildFoder = nativeFolder + "build";
             var platform = context.BuildPlatform == PlatformTarget.x86 ? "Win32" : "x64";
 
-            var arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}";
             if (BuildContext.IsWindows)
             {
                 buildFoder += $"_{context.BuildPlatform}";
             }
+            var arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}";           
 
             if (BuildContext.IsLinux)
             {
