@@ -71,8 +71,8 @@
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Multicastd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Udpd.dll" />
     <None Include="@(OpenDDSDebugWin32)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS x64/Release native Libraries -->
