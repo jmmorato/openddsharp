@@ -362,18 +362,15 @@ jobs:
 
     - name: Build OpenDDSharp solution x86
       shell: cmd
-      run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=Release -property:Platform=x86
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86/ACE_TAO/TAO"
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x86
+      working-directory: ${{ github.workspace }}        
 
     - name: Build OpenDDSharp solution x64
       shell: cmd
-      run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=Release -property:Platform=x64
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
+
+    - name: Build OpenDDSharp solution AnyCPU
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
+      working-directory: ${{ github.workspace }}
