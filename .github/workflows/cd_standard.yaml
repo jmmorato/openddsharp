@@ -55,7 +55,7 @@ jobs:
         path: |
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-native-cache-windows-${{ github.run_number }}
+        key: openddsharp-native-cache-windows-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
@@ -189,3 +189,122 @@ jobs:
       if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
+      
+  build_openddsharp_windows:
+    runs-on: windows-2019
+    needs: [build_windows_native]
+    env:
+      OpenDdsVersion: "3.18.1"
+      MajorVersion: "0"
+      MinorVersion: "8"
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache OpenDDS libraries Windows x86
+      id: opendds-libraries-windows-x86
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_x86/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS_x86/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_x86/VERSION.txt
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x86-windows-cd
+        
+    - name: Cache OpenDDSharp native Windows x86
+      id: openddsharp-libraries-windows-x86
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/Native/build_x86/OpenDDSWrapper/Release/OpenDDSWrapper.dll
+          ${{ github.workspace }}/Native/build_x86/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
+        key: openddsharp-native-cache-windows-Release-x86-${{ github.run_number }}
+    
+    - name: Cache OpenDDS libraries Windows x64
+      id: opendds-libraries-windows-x64
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_x64/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS_x64/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_x64/VERSION.txt
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-windows-cd
+        
+    - name: Cache OpenDDSharp native Windows x64
+      id: openddsharp-libraries-windows-x64
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/Native/build_x64/OpenDDSWrapper/Release/OpenDDSWrapper.dll
+          ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
+        key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}    
+    
+    #- name: Set release version (Main)
+    #  shell: pwsh
+    #  if: github.event.pull_request.base.ref == 'main'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='false'
+    #  working-directory: ${{ github.workspace }}/Build
+    
+    #- name: Set release version (Develop)
+    #  shell: pwsh
+    #  if: github.event.pull_request.base.ref == 'develop'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+    #  working-directory: ${{ github.workspace }}/Build
+
+    - name: Set release version (Test)
+      shell: pwsh      
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Dotnet restore
+      shell: bash
+      run: |
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }}
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp solution x86
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=Release -property:Platform=x86
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x86/ACE_TAO/TAO"
+
+    - name: Build OpenDDSharp solution x64
+      shell: bash
+      run: dotnet msbuild -target:build ${{ github.workspace }}/OpenDDSharp.Standard.sln -property:Configuration=Release -property:Platform=x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
+

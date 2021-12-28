@@ -228,17 +228,7 @@ jobs:
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-      continue-on-error: true
-
-    #- name: Read TestTypeSupport.cs
-    #  id: package
-    #  uses: juliangruber/read-file-action@v1
-    #  with:
-    #    path: ${{ github.workspace }}/Tests/TestIdlStandard/TestTypeSupport.cs
-
-    #- name: Echo TestTypeSupport.cs
-    #  run: echo "${{ steps.package.outputs.content }}"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"      
 
     - name: Test OpenDDSharp
       shell: bash      
