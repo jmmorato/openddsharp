@@ -192,7 +192,7 @@ jobs:
       
   build_openddsharp_windows:
     runs-on: windows-2019
-    needs: [build_windows_native]
+    needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
       OpenDdsVersion: "3.18.1"
       MajorVersion: "0"
@@ -257,7 +257,77 @@ jobs:
         path: |
           ${{ github.workspace }}/Native/build_x64/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}    
+        key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}
+
+    - name: Cache OpenDDS libraries Linux
+      id: opendds-libraries-linux
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-linux-cd
+
+    - name: Cache OpenDDSharp native Linux
+      id: openddsharp-libraries-linux
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so            
+          ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
+        key: openddsharp-native-cache-linux-${{ github.run_number }}
+
+    - name: Cache OpenDDS libraries MacOS
+      id: opendds-libraries-macos
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-macos-cd
+
+    - name: Cache OpenDDSharp native MacOS
+      id: openddsharp-libraries-macos
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib            
+          ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
+        key: openddsharp-native-cache-macos-${{ github.run_number }}
     
     #- name: Set release version (Main)
     #  shell: pwsh

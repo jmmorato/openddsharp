@@ -25,7 +25,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-windows
+      id: opendds-libraries-windows-ci
       uses: actions/cache@v2
       with:
         path: |
@@ -42,17 +42,17 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-2
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-ci
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-windows.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-windows-ci.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-windows-ci.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
 
@@ -86,7 +86,7 @@ jobs:
         sudo apt-get install -y dotnet-sdk-6.0
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-linux
+      id: opendds-libraries-linux-ci
       uses: actions/cache@v2
       with:
         path: |
@@ -109,17 +109,17 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-4
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-ci
 
     - name: Build Native (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-linux-ci.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build Native (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-linux-ci.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
@@ -170,7 +170,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-macos
+      id: opendds-libraries-macos-ci
       uses: actions/cache@v2
       with:
         path: |
@@ -193,17 +193,17 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-macos
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-macos-ci
 
     - name: Build Native (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-macos-ci.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build Native (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-macos-ci.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
