@@ -260,7 +260,7 @@ jobs:
         key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}
 
     - name: Cache OpenDDS libraries Linux
-      id: opendds-libraries-linux
+      id: opendds-libraries-linux-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -283,7 +283,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-linux-cd
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-linux-cd1
 
     - name: Cache OpenDDSharp native Linux
       id: openddsharp-libraries-linux
@@ -295,7 +295,7 @@ jobs:
         key: openddsharp-native-cache-linux-${{ github.run_number }}
 
     - name: Cache OpenDDS libraries MacOS
-      id: opendds-libraries-macos
+      id: opendds-libraries-macos-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -318,10 +318,10 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-macos-cd
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-macos-cd1
 
     - name: Cache OpenDDSharp native MacOS
-      id: openddsharp-libraries-macos
+      id: openddsharp-libraries-macos-cd
       uses: actions/cache@v2
       with:
         path: |
