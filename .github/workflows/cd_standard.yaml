@@ -27,7 +27,7 @@ jobs:
     - uses: actions/checkout@v2    
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-windows-cd
+      id: opendds-libraries-windows-${{ matrix.BuildPlatform }}-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -44,26 +44,26 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-cd
+        key: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
         
     - name: Cache OpenDDSharp native
-      id: openddsharp-libraries-windows-cd
+      id: openddsharp-libraries-windows-${{ matrix.BuildPlatform }}-cd
       uses: actions/cache@v2
       with:
         path: |
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-native-cache-windows-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
+        key: openddsharp-windows-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-windows-${{ matrix.BuildPlatform }}-cd.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-windows-${{ matrix.BuildPlatform }}-cd.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
 
@@ -104,7 +104,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-cd1
+        key: opendds-linux-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
 
     - name: Cache OpenDDSharp native
       id: openddsharp-libraries-linux-cd
@@ -113,7 +113,7 @@ jobs:
         path: |
             ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so            
             ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
-        key: openddsharp-native-cache-linux-${{ github.run_number }}
+        key: openddsharp-linux-${{ github.run_number }}
 
     - name: Build Native (No cached)
       shell: pwsh
@@ -138,9 +138,6 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    #- name: Use GNU tar
-    #  shell: cmd
-    #  run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - uses: actions/checkout@v2
    
@@ -168,7 +165,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-macos-cd1
+        key: opendds-macos-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
 
     - name: Cache OpenDDSharp native
       id: openddsharp-libraries-macos-cd
@@ -177,7 +174,7 @@ jobs:
         path: |
             ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib            
             ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
-        key: openddsharp-native-cache-macos-${{ github.run_number }}
+        key: openddsharp-macos-${{ github.run_number }}
 
     - name: Build Native (No cached)
       shell: pwsh
@@ -202,7 +199,7 @@ jobs:
     steps:
     - name: Use GNU tar
       shell: cmd
-      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+      run: echo "C:\Program Files\Git\usr\bin">>"%GITHUB_PATH%"
 
     - uses: actions/checkout@v2    
       
@@ -224,7 +221,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_x86/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_x86/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x86-windows-cd
+        key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x86-cd
         
     - name: Restore OpenDDSharp native Windows x86
       id: restore-openddsharp-libraries-windows-x86
@@ -233,7 +230,7 @@ jobs:
         path: |
           ${{ github.workspace }}/Native/build_x86/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x86/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-native-cache-windows-Release-x86-${{ github.run_number }}
+        key: openddsharp-windows-Release-x86-${{ github.run_number }}
     
     - name: Restore OpenDDS libraries Windows x64
       id: restore-opendds-libraries-windows-x64
@@ -253,7 +250,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_x64/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_x64/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-windows-cd
+        key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x64-cd
         
     - name: Restore OpenDDSharp native Windows x64
       id: restore-openddsharp-libraries-windows-x64
@@ -262,7 +259,7 @@ jobs:
         path: |
           ${{ github.workspace }}/Native/build_x64/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}
+        key: openddsharp-windows-Release-x64-${{ github.run_number }}
 
     - name: Restore OpenDDS libraries Linux
       id: restore-opendds-libraries-linux-cd
@@ -288,7 +285,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-linux-cd1
+        key: opendds-linux-${{ env.OpenDdsVersion }}-Release-x64-cd
 
     - name: Restore OpenDDSharp native Linux
       id: restore-openddsharp-libraries-linux
@@ -297,7 +294,7 @@ jobs:
         path: |
           ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so            
           ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
-        key: openddsharp-native-cache-linux-${{ github.run_number }}
+        key: openddsharp-linux-${{ github.run_number }}
 
     - name: Restore OpenDDS libraries MacOS
       id: restore-opendds-libraries-macos-cd
@@ -323,7 +320,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-macos-cd1
+        key: opendds-macos-${{ env.OpenDdsVersion }}-Release-x64-cd
 
     - name: Cache OpenDDSharp native MacOS
       id: restore-openddsharp-libraries-macos-cd
@@ -332,7 +329,7 @@ jobs:
         path: |
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib            
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
-        key: openddsharp-native-cache-macos-${{ github.run_number }}
+        key: openddsharp-macos-${{ github.run_number }}
     
     #- name: Set release version (Main)
     #  shell: pwsh
