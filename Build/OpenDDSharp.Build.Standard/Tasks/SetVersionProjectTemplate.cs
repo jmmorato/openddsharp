@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Common.IO;
 using Cake.Common.Xml;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Frosting;
 
@@ -33,6 +34,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
+            context.Log.Information("Set version in ProjectTemplate...");
+
             string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
             if (context.IsDevelop)
             {

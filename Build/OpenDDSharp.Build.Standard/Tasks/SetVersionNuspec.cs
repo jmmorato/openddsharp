@@ -21,6 +21,7 @@ using Cake.Frosting;
 using Cake.Common.Xml;
 using Cake.Core.IO;
 using Cake.Common.IO;
+using Cake.Core.Diagnostics;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -33,6 +34,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
+            context.Log.Information("Set version in NuSpec...");
+
             string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
             if (context.IsDevelop)
             {
