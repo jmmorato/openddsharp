@@ -81,7 +81,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Use GNU tar instead BSD tar
-      shell: cmd
+      shell: bash
       run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - name: Cache OpenDDS libraries
@@ -145,7 +145,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Use GNU tar instead BSD tar
-      shell: cmd
+      shell: bash
       run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - name: Cache OpenDDS libraries
