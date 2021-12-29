@@ -78,10 +78,6 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - name: Use GNU tar
-      shell: bash
-      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
-
     - uses: actions/checkout@v2    
 
     - name: Cache OpenDDS libraries
@@ -143,7 +139,7 @@ jobs:
         
     steps:
     - name: Use GNU tar
-      shell: bash
+      shell: cmd
       run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - uses: actions/checkout@v2
@@ -196,7 +192,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
       
   build_openddsharp_windows:
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
       OpenDdsVersion: "3.18.1"
@@ -204,13 +200,13 @@ jobs:
       MinorVersion: "8"
         
     steps:
-    #- name: Use GNU tar
-    #  shell: cmd
-    #  run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+    - name: Use GNU tar
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - uses: actions/checkout@v2    
       
-    - name: Cache OpenDDS libraries Windows x86
+    - name: Restore OpenDDS libraries Windows x86
       id: restore-opendds-libraries-windows-x86
       uses: actions/cache@v2
       with:
@@ -230,7 +226,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_x86/VERSION.txt
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x86-windows-cd
         
-    - name: Cache OpenDDSharp native Windows x86
+    - name: Restore OpenDDSharp native Windows x86
       id: restore-openddsharp-libraries-windows-x86
       uses: actions/cache@v2
       with:
@@ -239,7 +235,7 @@ jobs:
           ${{ github.workspace }}/Native/build_x86/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
         key: openddsharp-native-cache-windows-Release-x86-${{ github.run_number }}
     
-    - name: Cache OpenDDS libraries Windows x64
+    - name: Restore OpenDDS libraries Windows x64
       id: restore-opendds-libraries-windows-x64
       uses: actions/cache@v2
       with:
@@ -259,7 +255,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_x64/VERSION.txt
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-windows-cd
         
-    - name: Cache OpenDDSharp native Windows x64
+    - name: Restore OpenDDSharp native Windows x64
       id: restore-openddsharp-libraries-windows-x64
       uses: actions/cache@v2
       with:
@@ -268,7 +264,7 @@ jobs:
           ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
         key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}
 
-    - name: Cache OpenDDS libraries Linux
+    - name: Restore OpenDDS libraries Linux
       id: restore-opendds-libraries-linux-cd
       uses: actions/cache@v2
       with:
@@ -294,7 +290,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-linux-cd1
 
-    - name: Cache OpenDDSharp native Linux
+    - name: Restore OpenDDSharp native Linux
       id: restore-openddsharp-libraries-linux
       uses: actions/cache@v2
       with:
@@ -303,7 +299,7 @@ jobs:
           ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
         key: openddsharp-native-cache-linux-${{ github.run_number }}
 
-    - name: Cache OpenDDS libraries MacOS
+    - name: Restore OpenDDS libraries MacOS
       id: restore-opendds-libraries-macos-cd
       uses: actions/cache@v2
       with:
