@@ -27,7 +27,7 @@ jobs:
     - uses: actions/checkout@v2    
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-windows-${{ matrix.BuildPlatform }}-cd
+      id: opendds-libraries-windows-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -47,7 +47,7 @@ jobs:
         key: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
         
     - name: Cache OpenDDSharp native
-      id: openddsharp-libraries-windows-${{ matrix.BuildPlatform }}-cd
+      id: openddsharp-libraries-windows-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -57,13 +57,13 @@ jobs:
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-windows-${{ matrix.BuildPlatform }}-cd.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
       
     - name: Build & Test with Cake (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-windows-${{ matrix.BuildPlatform }}-cd.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
 
