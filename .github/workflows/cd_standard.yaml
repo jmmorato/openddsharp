@@ -71,7 +71,7 @@ jobs:
     - name: Artifacts OpenDDS libraries      
       uses: actions/upload-artifact@v2
       with:
-        name: opendds-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
+        name: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: |
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
