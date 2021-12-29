@@ -445,7 +445,7 @@ jobs:
 
     - uses: actions/download-artifact@v2
       with:
-        name: opendds-windows-x86-${{ github.run_number }}
+        name: opendds-windows-${{ env.OpenDdsVersion }}-x86-${{ github.run_number }}
 
     - uses: actions/download-artifact@v2
       with:
@@ -453,7 +453,7 @@ jobs:
         
     - uses: actions/download-artifact@v2
       with:
-        name: opendds-windows-x64-${{ github.run_number }}
+        name: opendds-windows-${{ env.OpenDdsVersion }}-x64-${{ github.run_number }}
 
     - uses: actions/download-artifact@v2
       with:
@@ -461,7 +461,7 @@ jobs:
 
     - uses: actions/download-artifact@v2
       with:
-        name: opendds-linux-${{ github.run_number }}
+        name: opendds-linux-${{ env.OpenDdsVersion }}-${{ github.run_number }}
 
     - uses: actions/download-artifact@v2
       with:
@@ -469,7 +469,7 @@ jobs:
 
     - uses: actions/download-artifact@v2
       with:
-        name: opendds-macos-${{ github.run_number }}
+        name: opendds-macos-${{ env.OpenDdsVersion }}-${{ github.run_number }}
 
     - uses: actions/download-artifact@v2
       with:
