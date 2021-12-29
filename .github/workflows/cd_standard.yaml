@@ -204,9 +204,9 @@ jobs:
       MinorVersion: "8"
         
     steps:
-    - name: Use GNU tar
-      shell: cmd
-      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+    #- name: Use GNU tar
+    #  shell: cmd
+    #  run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - uses: actions/checkout@v2    
       
