@@ -2,12 +2,6 @@ name: Continuous Delivery
 
 on:
   push:
-  pull_request:
-    branches:
-      - develop
-      - main
-    types:
-     - closed
   workflow_dispatch:
 
 concurrency:
@@ -128,7 +122,6 @@ jobs:
       if: steps.opendds-libraries-linux-cd.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
-    
 
   build_macos_native:
     runs-on: macos-10.15
@@ -201,8 +194,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Use GNU tar instead BSD tar
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+      
     - name: Cache OpenDDS libraries Windows x86
-      id: opendds-libraries-windows-x86
+      id: restore-opendds-libraries-windows-x86
       uses: actions/cache@v2
       with:
         path: |
@@ -222,7 +219,7 @@ jobs:
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x86-windows-cd
         
     - name: Cache OpenDDSharp native Windows x86
-      id: openddsharp-libraries-windows-x86
+      id: restore-openddsharp-libraries-windows-x86
       uses: actions/cache@v2
       with:
         path: |
@@ -231,7 +228,7 @@ jobs:
         key: openddsharp-native-cache-windows-Release-x86-${{ github.run_number }}
     
     - name: Cache OpenDDS libraries Windows x64
-      id: opendds-libraries-windows-x64
+      id: restore-opendds-libraries-windows-x64
       uses: actions/cache@v2
       with:
         path: |
@@ -251,7 +248,7 @@ jobs:
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-windows-cd
         
     - name: Cache OpenDDSharp native Windows x64
-      id: openddsharp-libraries-windows-x64
+      id: restore-openddsharp-libraries-windows-x64
       uses: actions/cache@v2
       with:
         path: |
@@ -260,7 +257,7 @@ jobs:
         key: openddsharp-native-cache-windows-Release-x64-${{ github.run_number }}
 
     - name: Cache OpenDDS libraries Linux
-      id: opendds-libraries-linux-cd
+      id: restore-opendds-libraries-linux-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -286,7 +283,7 @@ jobs:
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-linux-cd1
 
     - name: Cache OpenDDSharp native Linux
-      id: openddsharp-libraries-linux
+      id: restore-openddsharp-libraries-linux
       uses: actions/cache@v2
       with:
         path: |
@@ -295,7 +292,7 @@ jobs:
         key: openddsharp-native-cache-linux-${{ github.run_number }}
 
     - name: Cache OpenDDS libraries MacOS
-      id: opendds-libraries-macos-cd
+      id: restore-opendds-libraries-macos-cd
       uses: actions/cache@v2
       with:
         path: |
@@ -321,7 +318,7 @@ jobs:
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-Release-x64-macos-cd1
 
     - name: Cache OpenDDSharp native MacOS
-      id: openddsharp-libraries-macos-cd
+      id: restore-openddsharp-libraries-macos-cd
       uses: actions/cache@v2
       with:
         path: |
