@@ -22,6 +22,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Use GNU tar instead BSD tar
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
       uses: actions/cache@v2
@@ -75,6 +79,10 @@ jobs:
         
     steps:
     - uses: actions/checkout@v2
+
+    - name: Use GNU tar instead BSD tar
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -136,6 +144,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Use GNU tar instead BSD tar
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos-cd
       uses: actions/cache@v2
@@ -184,7 +196,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
       
   build_openddsharp_windows:
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
       OpenDdsVersion: "3.18.1"
@@ -194,9 +206,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    #- name: Use GNU tar instead BSD tar
-    #  shell: cmd
-    #  run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+    - name: Use GNU tar instead BSD tar
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
       
     - name: Cache OpenDDS libraries Windows x86
       id: restore-opendds-libraries-windows-x86
@@ -338,41 +350,41 @@ jobs:
     #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
     #  working-directory: ${{ github.workspace }}/Build
 
-    #- name: Set release version (Test)
-    #  shell: pwsh      
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
-    #  working-directory: ${{ github.workspace }}/Build
+    - name: Set release version (Test)
+      shell: pwsh      
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}/Build
 
-    #- name: Dotnet restore
-    #  shell: cmd
-    #  run: |
-    #    dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #    dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #    dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #    dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
-    #  working-directory: ${{ github.workspace }}
+    - name: Dotnet restore
+      shell: cmd
+      run: |
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
 
-    #- name: Build OpenDDSharp.BuildTasks project
-    #  shell: cmd
-    #  run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=Release
-    #  working-directory: ${{ github.workspace }}
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=Release
+      working-directory: ${{ github.workspace }}
 
-    #- name: Build OpenDDSharp solution x86
-    #  shell: cmd
-    #  run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x86
-    #  working-directory: ${{ github.workspace }}        
+    - name: Build OpenDDSharp solution x86
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x86
+      working-directory: ${{ github.workspace }}        
 
-    #- name: Build OpenDDSharp solution x64
-    #  shell: cmd
-    #  run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
-    #  working-directory: ${{ github.workspace }}
+    - name: Build OpenDDSharp solution x64
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
+      working-directory: ${{ github.workspace }}
 
-    #- name: Build OpenDDSharp solution AnyCPU
-    #  shell: cmd
-    #  run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
-    #  working-directory: ${{ github.workspace }}
+    - name: Build OpenDDSharp solution AnyCPU
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
+      working-directory: ${{ github.workspace }}
     
-    #- name: Create release packages
-    #  shell: pwsh
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
-    #  working-directory: ${{ github.workspace }}/Build
+    - name: Create release packages
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}/Build
