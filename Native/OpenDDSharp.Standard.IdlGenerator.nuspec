@@ -189,22 +189,22 @@
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.lib" target="tools\DDS_x64\lib" />
 
     <!--Required OpenDDS libraries Linux-->
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so.*" target="tools\ACE_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so.*" target="tools\DDS_Linux\lib" />
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so.*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so*" target="tools\ACE_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so*" target="tools\DDS_Linux\lib" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so*" target="tools\DDS_Linux\lib" />
 
     <!--Required OpenDDS libraries MacOS-->
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\ace\libACE.dylib" target="tools\ACE_MacOS\lib" />

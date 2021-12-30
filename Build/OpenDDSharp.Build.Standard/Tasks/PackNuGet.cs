@@ -31,6 +31,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     /// Pack NuGet packages taks.
     /// </summary>
     [TaskName("PackNuGet")]
+    [IsDependentOn(typeof(PrepareLinuxLibraries))]
     public class PackNuGet : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>

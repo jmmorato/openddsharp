@@ -27,7 +27,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     [TaskName("SetVersion")]
     [IsDependentOn(typeof(SetVersionAssemblyInfo))]
     [IsDependentOn(typeof(SetVersionNuspec))]
-    //[IsDependentOn(typeof(SetVersionProjectTemplate))]
+    [IsDependentOn(typeof(SetVersionProjectTemplate))]
     public class SetVersion : FrostingTask
     {
     }
