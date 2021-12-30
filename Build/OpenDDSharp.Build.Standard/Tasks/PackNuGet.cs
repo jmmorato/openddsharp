@@ -70,7 +70,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 OutputDirectory = ".",
             });
 
-            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.IdlGenerator", "OpenDDSharp.Standard.IdlGenerator.nuspec");
+            path = Path.Combine(solutionPath, "Native", "OpenDDSharp.Standard.IdlGenerator.nuspec");
             var filePath = new Cake.Core.IO.FilePath(path);
             context.NuGetPack(filePath, new NuGetPackSettings());
 

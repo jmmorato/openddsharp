@@ -504,7 +504,7 @@ jobs:
     #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
     #  working-directory: ${{ github.workspace }}/Build
 
-    - name: Set release version (Test)
+    - name: Set release version
       shell: pwsh      
       run: ${{ github.workspace }}\Build\OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
       working-directory: ${{ github.workspace }}\Build
