@@ -313,7 +313,7 @@ jobs:
     #  shell: cmd
     #  run: echo "C:\Program Files\Git\usr\bin">>"%GITHUB_PATH%"
 
-    #- uses: actions/checkout@v2    
+    - uses: actions/checkout@v2    
       
     #- name: Restore OpenDDS libraries Windows x86
     #  id: restore-opendds-libraries-windows-x86
@@ -487,10 +487,10 @@ jobs:
     #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
     #  working-directory: ${{ github.workspace }}/Build
 
-    #- name: Set release version (Test)
-    #  shell: pwsh      
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
-    #  working-directory: ${{ github.workspace }}/Build
+    - name: Set release version (Test)
+      shell: pwsh      
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
       shell: cmd
