@@ -68,11 +68,16 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
 
+    - name: Create dummy file
+      run: echo hi > dummy.txt
+      working-directory: ${{ github.workspace }}/ext
+
     - name: Artifacts OpenDDS libraries      
       uses: actions/upload-artifact@v2
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
@@ -93,9 +98,9 @@ jobs:
       with:
         name: openddsharp-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: |
+            ${{ github.workspace }}/README.md
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
-            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
+            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe        
         retention-days: 1
 
   build_linux_native:
@@ -168,6 +173,7 @@ jobs:
       with:
         name: opendds-linux-${{ env.OpenDdsVersion }}-${{ github.run_number }}
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
@@ -194,6 +200,7 @@ jobs:
       with:
         name: openddsharp-linux-${{ github.run_number }}
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so            
           ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
         retention-days: 1
@@ -269,6 +276,7 @@ jobs:
       with:
         name: opendds-macos-${{ env.OpenDdsVersion }}-${{ github.run_number }}
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
@@ -296,6 +304,7 @@ jobs:
       with:
         name: openddsharp-macos-${{ github.run_number }}
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib            
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
         retention-days: 1
@@ -443,35 +452,43 @@ jobs:
     #      ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
     #    key: openddsharp-macos-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDS x86
+      uses: actions/download-artifact@v2
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-x86-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDSharp x86
+      uses: actions/download-artifact@v2
       with:
         name: openddsharp-windows-x86-${{ github.run_number }}
         
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDS x64
+      uses: actions/download-artifact@v2
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-x64-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDSharp x64
+      uses: actions/download-artifact@v2
       with:
         name: openddsharp-windows-x64-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDS Linux
+      uses: actions/download-artifact@v2
       with:
         name: opendds-linux-${{ env.OpenDdsVersion }}-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDSharp Linux
+      uses: actions/download-artifact@v2
       with:
         name: openddsharp-linux-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDS MacOS
+      uses: actions/download-artifact@v2
       with:
         name: opendds-macos-${{ env.OpenDdsVersion }}-${{ github.run_number }}
 
-    - uses: actions/download-artifact@v2
+    - name: Download artifacts OpenDDSharp MacOS
+      uses: actions/download-artifact@v2
       with:
         name: openddsharp-macos-${{ github.run_number }}
     
