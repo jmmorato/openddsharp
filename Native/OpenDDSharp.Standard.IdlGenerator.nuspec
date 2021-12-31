@@ -18,7 +18,7 @@
   </metadata>
   <files>    
     <!--Build task dll-->
-    <file src="..\Sources\OpenDDSharp.BuildTasks\bin\Release\OpenDDSharp.BuildTasks.dll" target="tools" />
+    <file src="..\Sources\OpenDDSharp.BuildTasks\bin\Release\netstandard2.0\OpenDDSharp.BuildTasks.dll" target="tools" />
     
     <!-- Required tools x86 -->
     <file src=".\build_x86\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" target="tools\DDS_x86\bin" />
