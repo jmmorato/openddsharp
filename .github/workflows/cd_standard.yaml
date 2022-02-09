@@ -452,7 +452,7 @@ jobs:
     #      ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
     #    key: openddsharp-macos-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDS x86
+    - name: Download artifacts OpenDDSx86
       uses: actions/download-artifact@v2
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-x86-${{ github.run_number }}
