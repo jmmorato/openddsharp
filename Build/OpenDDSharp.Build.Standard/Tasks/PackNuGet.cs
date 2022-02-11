@@ -73,7 +73,10 @@ namespace OpenDDSharp.Build.Standard.Tasks
 
             path = Path.Combine(solutionPath, "Native", "OpenDDSharp.Standard.IdlGenerator.nuspec");
             var filePath = new Cake.Core.IO.FilePath(path);
-            context.NuGetPack(filePath, new NuGetPackSettings());
+            context.NuGetPack(filePath, new NuGetPackSettings
+            {
+                Verbosity = NuGetVerbosity.Detailed,
+            });
 
             string releaseFolder = Path.Combine(solutionPath, "Release");
             if (!Directory.Exists(releaseFolder))
