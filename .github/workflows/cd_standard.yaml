@@ -542,3 +542,28 @@ jobs:
       shell: pwsh
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
       working-directory: ${{ github.workspace }}/Build
+
+    - name: NuGet Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+        path: |
+          ${{ github.workspace }}/Release/*.nupkg
+
+    ## Publish release packages (Develop)
+    #- name: Publish release packages
+    #  env: 
+    #    NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    #  if: github.event.pull_request.base.ref == 'develop'
+    #  shell: pwsh
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --IsDevelop='true'
+    #  working-directory: ${{ github.workspace }}/Build
+
+    ## Publish release packages (Main)
+    #- name: Publish release packages
+    #  env: 
+    #    NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    #  if: github.event.pull_request.base.ref == 'main'
+    #  shell: pwsh
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --IsDevelop='false'
+    #  working-directory: ${{ github.workspace }}/Build
