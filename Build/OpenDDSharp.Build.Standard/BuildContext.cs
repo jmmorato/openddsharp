@@ -288,19 +288,10 @@ namespace OpenDDSharp.Build.Standard
         #endregion
 
         #region Methods
-        internal static string ToWslPath(string windowPath)
-        {
-            var drive = "/mnt/" + windowPath[0].ToString().ToLowerInvariant();
-            var ret = drive + windowPath[2..];
-            ret = ret.Replace("\\", "/");
-
-            return ret;
-        }
-
         internal string GetBuildRevisionVersion()
         {
             string year = DateTime.Now.ToString("yy");
-            string dayOfYear = DateTime.Now.DayOfYear.ToString();
+            string dayOfYear = DateTime.Now.DayOfYear.ToString("000");
             int runNumber = int.Parse(RunNumber) % 65534;
             return $"{year}{dayOfYear}.{runNumber}";
         }
