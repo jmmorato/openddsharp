@@ -47,27 +47,27 @@
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_BE.dll" target="tools\ACE_x64\bin" />
 
     <!-- Required tools Linux -->
-    <file src=".\build_Linux\OpenDDSharp.IdlGenerator\openddsharp_idl" target="tools\DDS_Linux\bin" />
+    <file src=".\build_Linux\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\dds\DCPS\libOpenDDS_Util.so*" target="tools\DDS_Linux" />            
-    <file src="..\ext\OpenDDS_Linux\dds\idl\opendds_idl" target="tools\DDS_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\dds\idl\opendds_idl*" target="tools\DDS_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so*" target="tools\DDS_Linux\bin" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_FE.so*" target="tools\DDS_Linux\bin" />  
-    <file src="..\ext\OpenDDS_Linux\dds\DCPS\libOpenDDS_Util.so*" target="tools\DDS_Linux\bin" />    
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\tao_idl" target="tools\ACE_Linux\bin" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\apps\gperf\src\ace_gperf" target="tools\ACE_Linux\bin" />    
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_FE.so*" target="tools\DDS_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\dds\DCPS\libOpenDDS_Util.so*" target="tools\DDS_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\tao_idl*" target="tools\ACE_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\apps\gperf\src\ace_gperf*" target="tools\ACE_Linux\bin" />    
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so*" target="tools\ACE_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_FE.so*" target="tools\ACE_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_BE.so*" target="tools\ACE_Linux\bin" />
 
     <!-- Required tools MacOS -->
-    <file src=".\build_MacOS\OpenDDSharp.IdlGenerator\openddsharp_idl" target="tools\DDS_MacOS\bin" />
+    <file src=".\build_MacOS\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\dds\DCPS\libOpenDDS_Util.dylib" target="tools\DDS_MacOS" />            
-    <file src="..\ext\OpenDDS_MacOS\dds\idl\opendds_idl" target="tools\DDS_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\dds\idl\opendds_idl*" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\ace\libACE.dylib" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_FE.dylib" target="tools\DDS_MacOS\bin" />  
     <file src="..\ext\OpenDDS_MacOS\dds\DCPS\libOpenDDS_Util.dylib" target="tools\DDS_MacOS\bin" />    
-    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\tao_idl" target="tools\ACE_MacOS\bin" />
-    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\apps\gperf\src\ace_gperf" target="tools\ACE_MacOS\bin" />    
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\tao_idl*" target="tools\ACE_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\apps\gperf\src\ace_gperf*" target="tools\ACE_MacOS\bin" />    
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\ace\libACE.dylib" target="tools\ACE_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_FE.dylib" target="tools\ACE_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\libTAO_IDL_BE.dylib" target="tools\ACE_MacOS\bin" />
