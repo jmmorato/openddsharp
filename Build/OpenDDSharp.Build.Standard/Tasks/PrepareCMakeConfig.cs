@@ -18,31 +18,49 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
+using System.Linq;
+using System.Text;
+using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Push;
+using Cake.Common.Tools.NuGet.Pack;
+using Cake.Core;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
     /// <summary>
-    /// Publish NuGet packages task.
+    /// Prepare cmake config files taks.
     /// </summary>
-    [TaskName("PublishNuGet")]
-    public class PublishNuGet : FrostingTask<BuildContext>
+    [TaskName("PrepareCMakeConfig")]
+    public class PrepareCMakeConfig : FrostingTask<BuildContext>
     {
+        private readonly string[] _variablesToRemove = new string[]
+        {
+            "OPENDDS_MPC",
+            "OPENDDS_ACE",
+            "OPENDDS_TAO",
+        };
+
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
             string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            string releaseFolder = Path.Combine(solutionPath, "Release");
+            string path = Path.Combine(solutionPath, "ext");
 
-            foreach (var file in Directory.GetFiles(releaseFolder, "*.nupkg"))
+            foreach (string file in Directory.GetFiles(path, "config.cmake", SearchOption.AllDirectories))
             {
-                context.NuGetPush(file, new NuGetPushSettings
+                var lines = File.ReadAllLines(file);
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (string line in lines)
                 {
-                    ApiKey = context.NugetApiKey,
-                    Source = "https://api.nuget.org/v3/index.json",
-                });
+                    if (line.StartsWith("#") || _variablesToRemove.Any(line.Contains))
+                    {
+                        continue;
+                    }
+                    stringBuilder.AppendLine(line);
+                }
+                File.WriteAllText(file, stringBuilder.ToString());
             }
         }
     }

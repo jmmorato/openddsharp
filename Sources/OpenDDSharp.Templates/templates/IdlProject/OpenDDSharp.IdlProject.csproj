@@ -20,4 +20,27 @@
     <PackageReference Include="OpenDDSharp.Standard.IdlGenerator" Version="1.0.0" />
     <PackageReference Include="OpenDDSharp.Standard" Version="1.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\OpenDDSharp.IdlProjectWrapper.dll" />
+    <ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>OpenDDSharp.IdlProjectWrapper.dll</TargetPath>
+    </ContentWithTargetPath>
+	  
+    <NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libOpenDDSharp.IdlProjectWrapper.so" />
+    <ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>libOpenDDSharp.IdlProjectWrapper.so</TargetPath>
+    </ContentWithTargetPath>
+      
+    <NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libOpenDDSharp.IdlProjectWrapper.dylib" />
+    <ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>libOpenDDSharp.IdlProjectWrapper.dylib</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
 </Project>
