@@ -34,6 +34,7 @@
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACE.dll" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_IDL_BE.dll" target="tools\ACE_x86\bin" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_x86\bin" />
 
     <!-- Required tools x64 -->
     <file src=".\build_x64\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" target="tools\DDS_x64\bin" />
@@ -49,6 +50,7 @@
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\ACE.dll" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_BE.dll" target="tools\ACE_x64\bin" />
+    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_x64\bin" />
 
     <!-- Required tools Linux -->
     <file src=".\build_Linux\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_Linux\bin" />
@@ -56,7 +58,8 @@
     <file src="..\ext\OpenDDS_Linux\cmake\*" target="tools\DDS_Linux\cmake" />
     <file src="..\ext\OpenDDS_Linux\dds\idl\opendds_idl*" target="tools\DDS_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\TAO\TAO_IDL\tao_idl*" target="tools\ACE_Linux\bin" />
-    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\apps\gperf\src\ace_gperf*" target="tools\ACE_Linux\bin" />        
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\apps\gperf\src\ace_gperf*" target="tools\ACE_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_Linux\bin" />
 
     <!-- Required tools MacOS -->
     <file src=".\build_MacOS\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_MacOS\bin" />
@@ -65,6 +68,7 @@
     <file src="..\ext\OpenDDS_MacOS\dds\idl\opendds_idl*" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\tao_idl*" target="tools\ACE_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\apps\gperf\src\ace_gperf*" target="tools\ACE_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_MacOS\bin" />
 
     <!--Code generation templates x86-->
     <file src=".\CSharpImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
