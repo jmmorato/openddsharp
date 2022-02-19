@@ -186,7 +186,16 @@
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_CodecFactory.lib" target="tools\ACE_x86\lib" />    
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PI.lib" target="tools\ACE_x86\lib" />    
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOP.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Dcps.lib" target="tools\DDS_x86\lib" />    
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Dcps.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\RTPS\OpenDDS_Rtps.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\InfoRepo\OpenDDS_InfoRepoLib.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\InfoRepoDiscovery\OpenDDS_InfoRepoDiscovery.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\transport\rtps_udp\OpenDDS_Rtps_Udp.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\transport\shmem\OpenDDS_Shmem.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\transport\tcp\OpenDDS_Tcp.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\transport\multicast\OpenDDS_Multicast.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\transport\udp\OpenDDS_Udp.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\dds\DCPS\OpenDDS_Util.lib" target="tools\DDS_x86\lib" />
 
     <!--Required OpenDDS libraries x64-->
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\ACE.lib" target="tools\ACE_x64\lib" />
@@ -196,7 +205,16 @@
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_CodecFactory.lib" target="tools\ACE_x64\lib" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PI.lib" target="tools\ACE_x64\lib" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_BiDirGIOP.lib" target="tools\ACE_x64\lib" />
-    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.lib" target="tools\DDS_x64\lib" />    
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\RTPS\OpenDDS_Rtps.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\InfoRepo\OpenDDS_InfoRepoLib.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\InfoRepoDiscovery\OpenDDS_InfoRepoDiscovery.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\transport\rtps_udp\OpenDDS_Rtps_Udp.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\transport\shmem\OpenDDS_Shmem.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\transport\tcp\OpenDDS_Tcp.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\transport\multicast\OpenDDS_Multicast.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\transport\udp\OpenDDS_Udp.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\dds\DCPS\OpenDDS_Util.lib" target="tools\DDS_x64\lib" />
 
     <!--Required OpenDDS libraries Linux-->
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so*" target="tools\ACE_Linux\lib" />

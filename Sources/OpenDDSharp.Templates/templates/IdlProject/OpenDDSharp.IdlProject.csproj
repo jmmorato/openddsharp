@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\OpenDDSharp.IdlProjectWrapper.dll" />
+    <NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\Release\OpenDDSharp.IdlProjectWrapper.dll" />
     <ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
