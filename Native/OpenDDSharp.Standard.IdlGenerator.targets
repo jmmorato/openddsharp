@@ -81,11 +81,11 @@
 
   <!-- Add VC++ to the PATH -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.AddPathVC" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+  <Target Name="AddPathVCTargetX64" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="x64" />
   </Target>
-  <Target Name="AddPathVCTarget" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
+  <Target Name="AddPathVCTargetX86" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="x86" />
   </Target>
@@ -178,7 +178,7 @@
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x64/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlCSharpWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+  <Target Name="OpenDDSharpIdlCSharpWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
