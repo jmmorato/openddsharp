@@ -22,7 +22,7 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-ci
@@ -67,7 +67,7 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Install .NET
       shell: pwsh
@@ -167,7 +167,7 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos-ci
