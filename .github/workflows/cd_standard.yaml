@@ -20,7 +20,7 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - uses: actions/checkout@v2    
+    - uses: actions/checkout@v3   
 
     #- name: Cache OpenDDS libraries
     #  id: opendds-libraries-windows-cd
@@ -114,7 +114,7 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - uses: actions/checkout@v2    
+    - uses: actions/checkout@v3
 
     #- name: Cache OpenDDS libraries
     #  id: opendds-libraries-linux-cd
@@ -217,7 +217,7 @@ jobs:
         
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
    
     #- name: Cache OpenDDS libraries
     #  id: opendds-libraries-macos-cd
@@ -318,7 +318,7 @@ jobs:
       MinorVersion: "8"
         
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Get branch names
       id: branch-name
