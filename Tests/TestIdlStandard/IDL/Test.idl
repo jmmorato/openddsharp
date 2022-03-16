@@ -67,6 +67,7 @@ module Test {
 	typedef unsigned long UnsignedLongArrayType[5];
 	typedef long long LongLongArrayType[5];
 	typedef unsigned long long UnsignedLongLongArrayType[5];
+
 	typedef char CharArrayType[5];
 	typedef wchar WCharArrayType[5];
 	typedef boolean BooleanArrayType[5];
@@ -249,7 +250,7 @@ module Test {
 	};
 
 	@topic
-		struct Result
+	struct Result
 	{
 		@key long AthleteId;
 		long Rank;
@@ -257,7 +258,7 @@ module Test {
 	};
 
 	@topic
-		struct AthleteResult
+	struct AthleteResult
 	{
 		@key long AthleteId;
 		string FirstName;

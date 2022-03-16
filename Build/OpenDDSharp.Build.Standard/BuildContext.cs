@@ -68,11 +68,6 @@ namespace OpenDDSharp.Build.Standard
         public string RunNumber { get; internal set; }
 
         /// <summary>
-        /// Gets a value indicating whether is a build in develop branch.
-        /// </summary>
-        public bool IsDevelop { get; internal set; }
-
-        /// <summary>
         /// Gets the OpenDDS version to use during the build.
         /// </summary>
         public string OpenDdsVersion { get; internal set; }
@@ -117,6 +112,11 @@ namespace OpenDDSharp.Build.Standard
         /// </summary>
         public string NugetApiKey { get; internal set; }
 
+        /// <summary>
+        /// The current branch name.
+        /// </summary>
+        public string BranchName { get; internal set; }
+
         internal static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
         internal static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -132,6 +132,11 @@ namespace OpenDDSharp.Build.Standard
         internal string MpcRoot { get; private set; }
 
         internal string OpenDdsSolutionFile { get; private set; }
+
+        internal bool IsDevelop
+        {
+            get { return BranchName == "develop"; }
+        }
         #endregion
 
         #region Constructors
@@ -170,11 +175,11 @@ namespace OpenDDSharp.Build.Standard
 
             if (context.Arguments.HasArgument(nameof(IsDevelop)))
             {
-                IsDevelop = bool.Parse(context.Arguments.GetArgument(nameof(IsDevelop)));
+                BranchName = context.Arguments.GetArgument(nameof(BranchName));
             }
             else
             {
-                IsDevelop = true;
+                BranchName = string.Empty;
             }
 
             if (context.Arguments.HasArgument(nameof(MajorVersion)))

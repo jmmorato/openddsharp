@@ -1,8 +1,8 @@
 name: Continuous Delivery
 
 on:
-  push:
   workflow_dispatch:
+    branches: [ develop, main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -318,11 +318,11 @@ jobs:
       MinorVersion: "8"
         
     steps:
-    #- name: Use GNU tar
-    #  shell: cmd
-    #  run: echo "C:\Program Files\Git\usr\bin">>"%GITHUB_PATH%"
+    - uses: actions/checkout@v2
 
-    - uses: actions/checkout@v2    
+    - name: Get branch names
+      id: branch-name
+      uses: tj-actions/branch-names@v5.1
       
     #- name: Restore OpenDDS libraries Windows x86
     #  id: restore-opendds-libraries-windows-x86
@@ -495,18 +495,18 @@ jobs:
     #- name: Set release version (Main)
     #  shell: pwsh
     #  if: github.event.pull_request.base.ref == 'main'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='false'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
     #  working-directory: ${{ github.workspace }}/Build
     
     #- name: Set release version (Develop)
     #  shell: pwsh
     #  if: github.event.pull_request.base.ref == 'develop'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
     #  working-directory: ${{ github.workspace }}/Build
 
     - name: Set release version
       shell: pwsh      
-      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.Standard.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
@@ -540,7 +540,7 @@ jobs:
     
     - name: Create release packages
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --IsDevelop='true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
@@ -549,21 +549,10 @@ jobs:
         name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
         path: |
           ${{ github.workspace }}/Release/*.nupkg
-
-    ## Publish release packages (Develop)
-    #- name: Publish release packages
-    #  env: 
-    #    NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-    #  if: github.event.pull_request.base.ref == 'develop'
-    #  shell: pwsh
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --IsDevelop='true'
-    #  working-directory: ${{ github.workspace }}/Build
-
-    ## Publish release packages (Main)
-    #- name: Publish release packages
-    #  env: 
-    #    NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-    #  if: github.event.pull_request.base.ref == 'main'
-    #  shell: pwsh
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --IsDevelop='false'
-    #  working-directory: ${{ github.workspace }}/Build
+    
+    - name: Publish release packages
+      env: 
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      working-directory: ${{ github.workspace }}/Build
