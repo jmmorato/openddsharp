@@ -4,26 +4,39 @@ The full code of this example can be found in this [GitHub repository](https://g
 
 ## Requirements
 
-In order to follow this tutorial, you will need to install in your computer:
-- Microsoft Visual Studio 2019 (v16.7 or greater)
-- Microsoft [dotnet 3.1 SDK](https://dotnet.microsoft.com/download/dotnet/3.1) or greater
+In order to follow this tutorial, you need to install in your computer:
+- Microsoft [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or greater 
+- CMake [Version 3.8.2](https://cmake.org/download/) or greater
+- Perl, on Windows system is recommended to use [Strawberry Perl](https://strawberryperl.com/)
 
 ## Install the OpenDDSharp Templates
 
-OpenDDSharp provides .NET Core project templates in order to ease the process of creating OpenDDSharp applications.
+OpenDDSharp provides .NET project templates in order to ease the process of creating OpenDDSharp applications.
+
 Run the following command to install OpenDDSharp templates in your computer from the [NuGet.org feed](https://www.nuget.org/packages/OpenDDSharp.Templates/0.8.21289.1-beta):
 
 `dotnet new --install OpenDDSharp.Templates::0.8.21289.1-beta`
 
-For more information on how manage .NET Core project and item templates visit the [microsoft documentation](https://docs.microsoft.com/en-us/dotnet/core/install/templates).
+Two new templates will be added to the dotnet templates system, `openddsharp-idl-project` and `openddsharp-console-app`, 
+that can be used to create the projects for your OpenDDSharp solution.
+
+For more information on how manage .NET project and item templates visit the [microsoft documentation](https://docs.microsoft.com/en-us/dotnet/core/install/templates).
 
 ## Create the IDL project
 
-From your solution folder, execute the following command:
+Applications that use the Data Distribution Service (DDS) define the data types in a way that is independent of
+the programming language or operating system/processor platform by using the Interface Definition Language (IDL).
+
+OpenDDSharp generates the C# code based on the [IDL4 to C# Language Mapping specification](https://www.omg.org/spec/IDL4-CSHARP/)
+using his owns code generation tool. Check this [link](idl.md) to get more information about the IDL language and the current implementation of the specification.
+
+Execute the following command in order to create your OpenDDSharp IDL project:
 
 `dotnet new openddsharp-idl-project --name TestMessage --output TestMessage`
 
-A new C# IDL project will be created in the `TestMessage` folder; add it to your solution and modify the `IDL/Test.idl` file content:
+A new C# IDL project will be created in the `TestMessage` folder, where you can define your own data types using the Interface Definition Language.
+
+For the current example, modify the `IDL/TestMessage.idl` file content as follow:
 
 ```idl
 module HelloWorld{
@@ -34,22 +47,40 @@ module HelloWorld{
 };
 ```
 
-Build the project and the C# code will be auto-generated and compiled in the `TestTypeSupport.cs` file.
+Build the project to auto-generate and compile the C# code for the defined structure:
+
+`dotnet build TestMessage.csproj`
+
+> [!NOTE]
+> For Windows system you must specify the runtime to use (i.e. win-x64 or win-x86):
+> `dotnet build TestMessage.csproj -r win-64`
 
 ## HelloWorld Publisher
 
 ### Create the publisher project
 
-// TODO
+Once you have defined your data transport types in the IDL project, it's time to create your first publisher application.
+
+Using the following command, you will create a console application that includes the OpenDDSharp reference, some boilerplate code
+and the configuration required to initialize your domain participant:
+
+`dotnet new openddsharp-console-app --name Publisher --output Publisher`
+
+You should add a reference to the previously created data transport types project to be able to use them in your publisher application.
+You can do it with the following command:
+
+`dotnet add Publisher/Publisher.csproj reference TestMessage/TestMessage.csproj`
 
 ### Create the DDS DomainParticipant
 
-The first entity to be created in a DDS application is the domain participant. 
+The first entity to be created in a DDS application is the domain participant.
+
 The domain participant is created with the domain participant factory and it is the factory for the DDS topics, 
 publishers and subscribers. The following code shows how to create a domain participant in the domain 42:
 
 ```csharp
 Ace.Init();
+
 DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
 DomainParticipant participant = dpf.CreateParticipant(42);
 if (participant == null)
@@ -58,11 +89,19 @@ if (participant == null)
 }
 ```
 
+> [!NOTE]
+> This code snippet is already included in the boilerplate if you created the application with the template.
+> Feel free to change the domain id or the configuration file in order to fit the requirements of your application.
+
 ### Create the DDS Topic
 
-Before create the topic, it is mandatory to register the type that is going to be used to share the data in that topic. 
-We are going to use the `Message` structure defined in the IDL project. 
-The following code shows how to register the `Message` type in the previously created domain participant:
+To allow data to flow around the system first you need to define your topics. You can define multiple topics in the same domain,
+each topic consists in a topic name and the topic type that will be used to share information.
+
+Before creating a topic, you must to register the type that is going to be used to share the data in that topic.
+
+We are going to use the `Message` structure defined in the IDL project. The following code shows how to register the `Message` type
+in the previously created domain participant:
 
 ```csharp
 MessageTypeSupport support = new MessageTypeSupport();
@@ -73,7 +112,7 @@ if (result != ReturnCode.Ok)
 }
 ```
 
-Now, we can create the DDS topic entity where the messages will be shared with the subscribers:
+After the type is registered, we can create the DDS topic entity where the messages will be shared with the subscribers:
 
 ```csharp
 Topic topic = participant.CreateTopic("MessageTopic", support.GetTypeName());
@@ -86,7 +125,7 @@ if (topic == null)
 ### Create the DDS Publisher and the DDS DataWriter
 
 The publisher entity is the factory for the datawriter entities. 
-The datawriter entity is in charge of writting the data in the related topic. 
+The datawriter entity is in charge of writing the data in the related topic. 
 You can group several datawriter entities in the same publisher entity. 
 In this example we only need one publisher and one datawriter related with the `MessageTopic` created previously. 
 The following code shows how to create the publisher entity:
@@ -115,7 +154,7 @@ MessageDataWriter messageWriter = new MessageDataWriter(writer);
 
 The default QoS configuration for the datawriter use a volatile durability. 
 Only the datareaders matched with the datawriters when the data is written will receive the message. 
-The following code shows how to ensure that at least one datareader is present before we write the data:
+The following code shows how to ensure that at least one datareader is present before writing the data:
 
 ```csharp
 Console.WriteLine("Waiting for a subscriber...");
@@ -131,7 +170,7 @@ while (status.CurrentCount < 1);
 Now that we are sure that at least one datareader is present in the system we can write the message to the topic:
 
 ```csharp
-Console.WriteLine("Subscriber found, writting data....");
+Console.WriteLine("Subscriber found, writing data....");
 messageWriter.Write(new Message
 {
     Content = "Hello, I love you, won't you tell me your name?"
@@ -143,7 +182,7 @@ Console.ReadKey();
 
 ### Shutdown the application
 
-Before exit the application you should release all the resources used by DDS. The following code shows how to release all the entities previously created:
+Before exiting the application you should release all the resources used by DDS. The following code shows how to release all the entities previously created:
 
 ```csharp
 participant.DeleteContainedEntities();
@@ -152,23 +191,27 @@ ParticipantService.Instance.Shutdown();
 Ace.Fini();
 ```
 
+> [!NOTE]
+> This code snippet is already included in the boilerplate if you created the application with the template.
+
 ## HelloWorld Subscriber
 
 ### Create the subscriber project
 
-// TODO
+Same than with the publisher applicattion, you can create the susbcriber application using the OpenDDSharp console template by using the following commnad:
+
+`dotnet new openddsharp-console-app --name Subscriber --output Subscriber`
 
 ### Create the domain participant, register the type and create the topic
 
-You need to create the same enities as in the publisher project. Pay attention to use the same domain id (42) and the same topic name (`MessageTopic`) used in the publisher application.
+You need to create the same enities as in the publisher project. Pay attention to use the same domain id (42) and
+the same topic name(`MessageTopic`) used in the publisher application.
 
 ### Create the DDS Subscriber and the DDS DataReader
 
-The subscriber entity is the factory for the datareader entities. 
-The datareader entity is in charge of reading the data in the related topic. 
-You can group several datareader entities in the same subscriber entity. 
-In this example we only need one subscriber and one datareader related with the `MessageTopic` created previously. 
-The following code shows how to create the subscriber entity:
+The subscriber entity is the factory for the datareader entities. The datareader entity is in charge of reading the data in the related topic. 
+You can group several datareader entities in the same subscriber entity. In this example we only need one subscriber and one datareader 
+related with the `MessageTopic` created previously. The following code shows how to create the subscriber entity:
 
 ```csharp
 Subscriber subscriber = participant.CreateSubscriber();
@@ -228,7 +271,7 @@ while (true)
 
 ### Shutdown the application
 
-Same as with the publisher application, you should release all the resources used by DDS. You can use the same code as before:
+Same as with the publisher application, you should release all the resources used by DDS.
 
 ```csharp
 participant.DeleteContainedEntities();
