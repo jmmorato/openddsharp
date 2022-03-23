@@ -21,7 +21,11 @@ jobs:
       OpenDdsVersion: "3.18.1"
         
     steps:
-    - uses: actions/checkout@v3   
+    - uses: actions/checkout@v3
+
+    - name: "Use GNU tar instead BSD tar"
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
@@ -42,7 +46,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-        key: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
+        key: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd1
         
     - name: Cache OpenDDSharp native
       id: openddsharp-libraries-windows-cd
@@ -52,7 +56,7 @@ jobs:
             ${{ github.workspace }}/README.md
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-windows-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
+        key: openddsharp-windows-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}-1
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
@@ -323,6 +327,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: "Use GNU tar instead BSD tar"
+      shell: cmd
+      run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+
     - name: Get branch names
       id: branch-name
       uses: tj-actions/branch-names@v5.1
@@ -346,7 +354,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_x86/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_x86/VERSION.txt
-        key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x86-cd
+        key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x86-cd1
         
     - name: Restore OpenDDSharp native Windows x86
       id: restore-openddsharp-libraries-windows-x86
@@ -356,7 +364,7 @@ jobs:
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_x86/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x86/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-windows-Release-x86-${{ github.run_number }}
+        key: openddsharp-windows-Release-x86-${{ github.run_number }}-1
     
     - name: Restore OpenDDS libraries Windows x64
       id: restore-opendds-libraries-windows-x64
@@ -377,7 +385,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_x64/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_x64/VERSION.txt
-        key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x64-cd
+        key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x64-cd1
         
     - name: Restore OpenDDSharp native Windows x64
       id: restore-openddsharp-libraries-windows-x64
@@ -387,7 +395,7 @@ jobs:
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_x64/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        key: openddsharp-windows-Release-x64-${{ github.run_number }}
+        key: openddsharp-windows-Release-x64-${{ github.run_number }}-1
 
     - name: Restore OpenDDS libraries Linux
       id: restore-opendds-libraries-linux-cd
@@ -453,7 +461,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
         key: opendds-macos-${{ env.OpenDdsVersion }}-Release-x64-cd
 
-    - name: Cache OpenDDSharp native MacOS
+    - name: Restore OpenDDSharp native MacOS
       id: restore-openddsharp-libraries-macos-cd
       uses: actions/cache@v3
       with:
