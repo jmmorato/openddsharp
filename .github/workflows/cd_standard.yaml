@@ -332,6 +332,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_x86/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_x86/**/*.dll
@@ -352,6 +353,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_x86/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x86/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
         key: openddsharp-windows-Release-x86-${{ github.run_number }}
@@ -361,6 +363,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_x64/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_x64/**/*.dll
@@ -381,6 +384,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_x64/OpenDDSWrapper/Release/OpenDDSWrapper.dll
           ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
         key: openddsharp-windows-Release-x64-${{ github.run_number }}
@@ -390,6 +394,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
@@ -416,6 +421,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so            
           ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
         key: openddsharp-linux-${{ github.run_number }}
@@ -425,6 +431,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
+          ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
@@ -451,7 +458,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
-          ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib            
+          ${{ github.workspace }}/README.md
+          ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
         key: openddsharp-macos-${{ github.run_number }}
 
