@@ -27,3 +27,15 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::OpenDDS::DCPS::InfoRepoDiscovery* InfoRepoDiscovery_new(const char* key, const char* ior);
+
+EXTERN_METHOD_EXPORT
+CORBA::Long InfoRepoDiscovery_GetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery* idr);
+
+EXTERN_METHOD_EXPORT
+void InfoRepoDiscovery_SetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery* idr, CORBA::Long port_number);
+
+EXTERN_METHOD_EXPORT
+char* InfoRepoDiscovery_GetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery* idr);
+
+EXTERN_METHOD_EXPORT
+void InfoRepoDiscovery_SetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery* idr, char* ip);
