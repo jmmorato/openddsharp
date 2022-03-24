@@ -64,5 +64,5 @@ DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::Dom
 }
 
 ::DDS::Entity_ptr DomainParticipantFactory_LookupParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainId_t domainId) {
-	return static_cast<::DDS::Entity_ptr>(dpf->lookup_participant(domainId));
+	return static_cast< ::DDS::Entity_ptr>(dpf->lookup_participant(domainId));
 }
