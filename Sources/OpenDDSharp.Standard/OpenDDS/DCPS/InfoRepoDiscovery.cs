@@ -71,12 +71,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <param name="ior">Repository IOR or host:port.</param>
         public InfoRepoDiscovery(string key, string ior)
         {
-            if (string.IsNullOrEmpty(key))
+            if (string.IsNullOrWhiteSpace(key))
             {
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (string.IsNullOrEmpty(ior))
+            if (string.IsNullOrWhiteSpace(ior))
             {
                 throw new ArgumentNullException(nameof(ior));
             }
