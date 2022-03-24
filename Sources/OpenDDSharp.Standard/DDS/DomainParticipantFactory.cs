@@ -201,7 +201,7 @@ namespace OpenDDSharp.DDS
         {
             if (dp == null)
             {
-                throw new ArgumentNullException(nameof(dp));
+                return ReturnCode.Ok;
             }
 
             return UnsafeNativeMethods.DeleteParticipant(_native, dp.ToNative());
