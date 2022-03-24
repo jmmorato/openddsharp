@@ -63,6 +63,6 @@ DDS::DomainParticipant_ptr DomainParticipantFactory_CreateParticipant(::DDS::Dom
     return dpf->set_qos(qos_wrapper);
 }
 
-::DDS::Entity_ptr DomainParticipantFactory_LookupDataParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainId_t domainId) {
+::DDS::Entity_ptr DomainParticipantFactory_LookupParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainId_t domainId) {
 	return static_cast<::DDS::Entity_ptr>(dpf->lookup_participant(domainId));
 }
