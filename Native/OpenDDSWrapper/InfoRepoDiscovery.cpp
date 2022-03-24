@@ -26,3 +26,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 ::OpenDDS::DCPS::InfoRepoDiscovery* InfoRepoDiscovery_new(const char* key, const char* ior) {
 	return new ::OpenDDS::DCPS::InfoRepoDiscovery(key, ior);
 }
+
+CORBA::Long InfoRepoDiscovery_GetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery* idr) {
+	return idr->bit_transport_port();
+}
+
+void InfoRepoDiscovery_SetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery* idr, CORBA::Long port_number) {
+	idr->bit_transport_port(port_number);
+}
+
+char* InfoRepoDiscovery_GetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery* idr) {
+	return CORBA::string_dup(idr->bit_transport_ip().c_str());
+}
+
+void InfoRepoDiscovery_SetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery* idr, char* ip) {
+	idr->bit_transport_ip(ip);
+}
