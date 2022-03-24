@@ -31,6 +31,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
     /// Pack NuGet packages taks.
     /// </summary>
     [TaskName("PackNuGet")]
+    [IsDependentOn(typeof(PrepareLinuxLibraries))]
+    [IsDependentOn(typeof(PrepareCMakeConfig))]
     public class PackNuGet : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
@@ -70,9 +72,12 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 OutputDirectory = ".",
             });
 
-            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.IdlGenerator", "OpenDDSharp.Standard.IdlGenerator.nuspec");
+            path = Path.Combine(solutionPath, "Native", "OpenDDSharp.Standard.IdlGenerator.nuspec");
             var filePath = new Cake.Core.IO.FilePath(path);
-            context.NuGetPack(filePath, new NuGetPackSettings());
+            context.NuGetPack(filePath, new NuGetPackSettings
+            {
+                Verbosity = NuGetVerbosity.Detailed,
+            });
 
             string releaseFolder = Path.Combine(solutionPath, "Release");
             if (!Directory.Exists(releaseFolder))

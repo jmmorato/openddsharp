@@ -22,6 +22,7 @@ using Cake.FileHelpers;
 using Cake.Common.IO;
 using Cake.Core.IO;
 using System;
+using Cake.Core.Diagnostics;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -34,6 +35,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
+            context.Log.Information("Set version in AssemblyInfo...");
+
             string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
             DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 

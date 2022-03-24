@@ -68,11 +68,6 @@ namespace OpenDDSharp.Build.Standard
         public string RunNumber { get; internal set; }
 
         /// <summary>
-        /// Gets a value indicating whether is a build in develop branch.
-        /// </summary>
-        public bool IsDevelop { get; internal set; }
-
-        /// <summary>
         /// Gets the OpenDDS version to use during the build.
         /// </summary>
         public string OpenDdsVersion { get; internal set; }
@@ -117,6 +112,11 @@ namespace OpenDDSharp.Build.Standard
         /// </summary>
         public string NugetApiKey { get; internal set; }
 
+        /// <summary>
+        /// The current branch name.
+        /// </summary>
+        public string BranchName { get; internal set; }
+
         internal static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
         internal static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -132,6 +132,11 @@ namespace OpenDDSharp.Build.Standard
         internal string MpcRoot { get; private set; }
 
         internal string OpenDdsSolutionFile { get; private set; }
+
+        internal bool IsDevelop
+        {
+            get { return BranchName == "develop"; }
+        }
         #endregion
 
         #region Constructors
@@ -170,11 +175,11 @@ namespace OpenDDSharp.Build.Standard
 
             if (context.Arguments.HasArgument(nameof(IsDevelop)))
             {
-                IsDevelop = bool.Parse(context.Arguments.GetArgument(nameof(IsDevelop)));
+                BranchName = context.Arguments.GetArgument(nameof(BranchName));
             }
             else
             {
-                IsDevelop = true;
+                BranchName = string.Empty;
             }
 
             if (context.Arguments.HasArgument(nameof(MajorVersion)))
@@ -288,19 +293,10 @@ namespace OpenDDSharp.Build.Standard
         #endregion
 
         #region Methods
-        internal static string ToWslPath(string windowPath)
-        {
-            var drive = "/mnt/" + windowPath[0].ToString().ToLowerInvariant();
-            var ret = drive + windowPath[2..];
-            ret = ret.Replace("\\", "/");
-
-            return ret;
-        }
-
         internal string GetBuildRevisionVersion()
         {
             string year = DateTime.Now.ToString("yy");
-            string dayOfYear = DateTime.Now.DayOfYear.ToString();
+            string dayOfYear = DateTime.Now.DayOfYear.ToString("000");
             int runNumber = int.Parse(RunNumber) % 65534;
             return $"{year}{dayOfYear}.{runNumber}";
         }

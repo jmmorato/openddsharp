@@ -17,16 +17,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using Cake.Common.Tools.MSBuild;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Restore;
-using Cake.Core;
-using Cake.Frosting;
 using System.IO;
-using Cake.Common.Tools.DotNetCore.Build;
 using Cake.CMake;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core.Diagnostics;
+using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -45,13 +40,20 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var buildFoder = nativeFolder + "build";
             var platform = context.BuildPlatform == PlatformTarget.x86 ? "Win32" : "x64";
 
-            var arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}";
+            if (BuildContext.IsWindows)
+            {
+                buildFoder += $"_{context.BuildPlatform}";
+            }
+            var arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}";           
+
             if (BuildContext.IsLinux)
             {
+                buildFoder += "_Linux";
                 arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
             }
             else if (BuildContext.IsOSX)
             {
+                buildFoder += "_MacOS";
                 arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
             }
 

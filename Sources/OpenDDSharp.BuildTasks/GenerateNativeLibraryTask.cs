@@ -46,12 +46,6 @@ namespace OpenDDSharp.BuildTasks
         [Required]
         public ITaskItem[] IdlFiles { get; set; }
 
-        [Required]
-        public string Configuration { get; set; }
-
-        [Required]
-        public string Platform { get; set; }
-
         public bool IsLinux { get; set; }
 
         public bool IsOSX { get; set; }

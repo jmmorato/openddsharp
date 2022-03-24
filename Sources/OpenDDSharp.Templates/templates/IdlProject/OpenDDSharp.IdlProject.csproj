@@ -5,8 +5,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <Platforms>x64;x86</Platforms>
-    <Configurations>Debug;Release;LinuxDebug;LinuxRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
   
   <ItemGroup>
@@ -19,5 +20,28 @@
   <ItemGroup>
     <PackageReference Include="OpenDDSharp.Standard.IdlGenerator" Version="1.0.0" />
     <PackageReference Include="OpenDDSharp.Standard" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\Release\OpenDDSharp.IdlProjectWrapper.dll" />
+    <ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>OpenDDSharp.IdlProjectWrapper.dll</TargetPath>
+    </ContentWithTargetPath>
+	  
+    <NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libOpenDDSharp.IdlProjectWrapper.so" />
+    <ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>libOpenDDSharp.IdlProjectWrapper.so</TargetPath>
+    </ContentWithTargetPath>
+      
+    <NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libOpenDDSharp.IdlProjectWrapper.dylib" />
+    <ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>libOpenDDSharp.IdlProjectWrapper.dylib</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 </Project>

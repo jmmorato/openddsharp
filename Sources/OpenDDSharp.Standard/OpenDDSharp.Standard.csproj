@@ -72,7 +72,8 @@
          directories. We keep the one in the `lib` for applications using .NET Framework. -->    
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />    
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />    
-    <None Include="$(MSBuildProjectDirectory)/bin/x64/LinuxRelease/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
+	<None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-x64\lib\$(TargetFramework)" Visible="false" />
     <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/ref/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
     <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
   </ItemGroup>  

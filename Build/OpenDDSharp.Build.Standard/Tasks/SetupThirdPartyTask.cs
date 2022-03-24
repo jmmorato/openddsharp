@@ -34,7 +34,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     [TaskName("SetupThirdParty")]
     public sealed class SetupThirdPartyTask : FrostingTask<BuildContext>
     {
-        private const string OPENDDS_GIT_REPOSITORY = "git://github.com/objectcomputing/OpenDDS.git";
+        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/objectcomputing/OpenDDS.git";
         private DirectoryPath _clonePath;
         private string _versionTag;
 
@@ -49,7 +49,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 return false;
             }
 
-            if (!Directory.Exists(context.DdsRoot))
+            if (!Directory.Exists(_clonePath.FullPath) || !Directory.EnumerateFileSystemEntries(_clonePath.FullPath).Any())
             {
                 return true;
             }
@@ -147,7 +147,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
                 }
-            }            
+            }
         }
 
         private static void DeleteDirectory(string directoryPath)
@@ -219,7 +219,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
             else
             {
-                throw new BuildException($"Error calling 'git describe'. Exit code: {exit}");
+                throw new BuildException($"Error calling 'git describe'. Working directory: {_clonePath.FullPath} Exit code: {exit}");
             }
 
             return string.Empty;

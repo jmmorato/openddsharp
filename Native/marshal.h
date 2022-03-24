@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _MARSHAL_H_
+#define _MARSHAL_H_
 
 #include "ace/Basic_Types.h"
 #include "tao/Unbounded_Value_Sequence_T.h"
@@ -519,3 +520,5 @@ public:
         delete[] bytes;
     }
 };
+
+#endif
