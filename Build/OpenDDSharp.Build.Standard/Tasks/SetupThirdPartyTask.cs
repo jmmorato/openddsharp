@@ -49,7 +49,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 return false;
             }
 
-            if (!Directory.Exists(context.DdsRoot))
+            if (!Directory.Exists(context.DdsRoot) || !Directory.EnumerateFileSystemEntries(context.DdsRoot).Any())
             {
                 return true;
             }
@@ -147,7 +147,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
                 }
-            }            
+            }
         }
 
         private static void DeleteDirectory(string directoryPath)
