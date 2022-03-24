@@ -71,6 +71,16 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <param name="ior">Repository IOR or host:port.</param>
         public InfoRepoDiscovery(string key, string ior)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (string.IsNullOrEmpty(ior))
+            {
+                throw new ArgumentNullException(nameof(ior));
+            }
+
             _native = UnsafeNativeMethods.InfoRepoDiscoveryNew(key, ior);
             FromNative(UnsafeNativeMethods.NarrowBase(_native));
         }
