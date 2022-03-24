@@ -98,7 +98,7 @@ namespace OpenDDSharp.DDS
             if (qos is null)
             {
                 qos = new DomainParticipantQos();
-                var ret = GetDefaultParticipantQos(qos);
+                var ret = GetDefaultDomainParticipantQos(qos);
                 if (ret == ReturnCode.Ok)
                 {
                     qosWrapper = qos.ToNative();
@@ -139,12 +139,12 @@ namespace OpenDDSharp.DDS
         /// newly created <see cref="DomainParticipant" /> entities in the case where the QoS policies are defaulted in the CreateParticipant operation.
         /// </summary>
         /// <remarks>
-        /// The values retrieved <see cref="GetDefaultParticipantQos" /> will match the set of values specified on the last successful call to
-        /// <see cref="SetDefaultParticipantQos" />, or else, if the call was never made, the default values defined by the DDS standard.
+        /// The values retrieved <see cref="GetDefaultDomainParticipantQos(DomainParticipantQos)" /> will match the set of values specified on the last successful call to
+        /// <see cref="SetDefaultDomainParticipantQos(DomainParticipantQos)" />, or else, if the call was never made, the default values defined by the DDS standard.
         /// </remarks>
         /// <param name="qos">The <see cref="DomainParticipantQos" /> to be filled up.</param>
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-        public ReturnCode GetDefaultParticipantQos(DomainParticipantQos qos)
+        public ReturnCode GetDefaultDomainParticipantQos(DomainParticipantQos qos)
         {
             if (qos is null)
             {
@@ -152,7 +152,7 @@ namespace OpenDDSharp.DDS
             }
 
             DomainParticipantQosWrapper qosWrapper = default;
-            var ret = UnsafeNativeMethods.GetDefaultParticipantQos(_native, ref qosWrapper);
+            var ret = UnsafeNativeMethods.GetDefaultDomainParticipantQos(_native, ref qosWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -174,7 +174,7 @@ namespace OpenDDSharp.DDS
         /// </remarks>
         /// <param name="qos">The default <see cref="DomainParticipantQos" /> to be set.</param>
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-        public ReturnCode SetDefaultParticipantQos(DomainParticipantQos qos)
+        public ReturnCode SetDefaultDomainParticipantQos(DomainParticipantQos qos)
         {
             if (qos is null)
             {
@@ -182,7 +182,7 @@ namespace OpenDDSharp.DDS
             }
 
             var qosNative = qos.ToNative();
-            var ret = UnsafeNativeMethods.SetDefaultParticipantQos(_native, qosNative);
+            var ret = UnsafeNativeMethods.SetDefaultDomainParticipantQos(_native, qosNative);
             qos.Release();
 
             return ret;
@@ -201,10 +201,72 @@ namespace OpenDDSharp.DDS
         {
             if (dp == null)
             {
-                throw new ArgumentNullException(nameof(dp));
+                return ReturnCode.Ok;
             }
 
             return UnsafeNativeMethods.DeleteParticipant(_native, dp.ToNative());
+        }
+
+        /// <summary>
+        /// Gets the <see cref="DomainParticipantFactory" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="DomainParticipantFactoryQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetQos(DomainParticipantFactoryQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            DomainParticipantFactoryQosWrapper qosWrapper = default;
+            var ret = UnsafeNativeMethods.GetQos(_native, ref qosWrapper);
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="DomainParticipantFactory" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="DomainParticipantFactoryQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetQos(DomainParticipantFactoryQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+            var ret = UnsafeNativeMethods.SetQos(_native, qosNative);
+
+            return ret;
+        }
+
+        /// <summary>
+        /// This operation retrieves a previously created <see cref="DomainParticipant" /> belonging to specified <paramref name="domainId"/>.
+        /// </summary>
+        /// <remarks>
+        /// If multiple <see cref="DomainParticipant" /> entities belonging to that <paramref name="domainId"/> exist, then the operation will return one of them.
+        /// It is not specified which one.
+        /// </remarks>
+        /// <param name="domainId">Domain ID of the participant to lookup.</param>
+        /// <returns>The <see cref="DomainParticipant" />, if it exists, otherwise <see langword="null"/>.</returns>
+        public DomainParticipant LookupParticipant(int domainId)
+        {
+            IntPtr native = UnsafeNativeMethods.LookupParticipant(_native, domainId);
+
+            if (native.Equals(IntPtr.Zero))
+            {
+                return null;
+            }
+
+            return (DomainParticipant)EntityManager.Instance.Find(native);
         }
         #endregion
 
@@ -222,16 +284,28 @@ namespace OpenDDSharp.DDS
             public static extern IntPtr CreateParticipant(IntPtr dpf, int domainId, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos, IntPtr a_listener, uint mask);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_GetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetDefaultParticipantQos(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_GetDefaultDomainParticipantQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultDomainParticipantQos(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_SetDefaultParticipantQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode SetDefaultParticipantQos(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_SetDefaultDomainParticipantQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultDomainParticipantQos(IntPtr pub, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_DeleteParticipant", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode DeleteParticipant(IntPtr dpf, IntPtr dp);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos(IntPtr dpf, [MarshalAs(UnmanagedType.Struct), In, Out] ref DomainParticipantFactoryQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos(IntPtr dpf, [MarshalAs(UnmanagedType.Struct), In] DomainParticipantFactoryQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantFactory_LookupParticipant", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr LookupParticipant(IntPtr pub, int domain);
         }
         #endregion
     }

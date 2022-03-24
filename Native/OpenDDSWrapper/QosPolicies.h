@@ -539,6 +539,24 @@ public:
     }
 };
 
+EXTERN_STRUCT_EXPORT DomainParticipantFactoryQosWrapper
+{
+    EntityFactoryQosPolicyWrapper entity_factory;
+
+public:
+    DomainParticipantFactoryQosWrapper();
+
+    DomainParticipantFactoryQosWrapper(const ::DDS::DomainParticipantFactoryQos native) {
+        entity_factory = native.entity_factory;
+    }
+
+    operator ::DDS::DomainParticipantFactoryQos() const {
+        ::DDS::DomainParticipantFactoryQos native;
+        native.entity_factory = entity_factory;
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT DomainParticipantQosWrapper
 {
     UserDataQosPolicyWrapper user_data;

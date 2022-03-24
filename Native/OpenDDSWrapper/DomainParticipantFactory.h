@@ -36,7 +36,16 @@ EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipantFactory_DeleteParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainParticipant_ptr dp);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipantFactory_GetDefaultParticipantQos(::DDS::DomainParticipantFactory_ptr pub, DomainParticipantQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t DomainParticipantFactory_GetDefaultDomainParticipantQos(::DDS::DomainParticipantFactory_ptr pub, DomainParticipantQosWrapper& qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipantFactory_SetDefaultParticipantQos(::DDS::DomainParticipantFactory_ptr pub, DomainParticipantQosWrapper qos_wrapper);
+::DDS::ReturnCode_t DomainParticipantFactory_SetDefaultDomainParticipantQos(::DDS::DomainParticipantFactory_ptr pub, DomainParticipantQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipantFactory_GetQos(::DDS::DomainParticipantFactory_ptr dpf, DomainParticipantFactoryQosWrapper& qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipantFactory_SetQos(::DDS::DomainParticipantFactory_ptr dpf, DomainParticipantFactoryQosWrapper qos_wrapper);
+
+EXTERN_METHOD_EXPORT
+::DDS::Entity_ptr DomainParticipantFactory_LookupParticipant(::DDS::DomainParticipantFactory_ptr dpf, ::DDS::DomainId_t domainId);
