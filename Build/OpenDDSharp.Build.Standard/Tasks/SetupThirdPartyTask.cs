@@ -49,7 +49,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 return false;
             }
 
-            if (!Directory.Exists(context.DdsRoot) || !Directory.EnumerateFileSystemEntries(context.DdsRoot).Any())
+            if (!Directory.Exists(_clonePath.FullPath) || !Directory.EnumerateFileSystemEntries(_clonePath.FullPath).Any())
             {
                 return true;
             }
@@ -219,7 +219,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
             else
             {
-                throw new BuildException($"Error calling 'git describe'. Exit code: {exit}");
+                throw new BuildException($"Error calling 'git describe'. Working directory: {_clonePath.FullPath} Exit code: {exit}");
             }
 
             return string.Empty;
