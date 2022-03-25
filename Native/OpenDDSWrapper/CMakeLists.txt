@@ -45,6 +45,9 @@ TopicListenerImpl.h TopicListenerImpl.cpp
 TransportConfig.h TransportConfig.cpp
 TransportRegistry.h TransportRegistry.cpp
 Utils.h Utils.cpp
-WaitSet.h WaitSet.cpp)
+WaitSet.h WaitSet.cpp
+MulticastInst.h MulticastInst.cpp
+TransportInst.h TransportInst.cpp
+TcpInst.h TcpInst.cpp)
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)

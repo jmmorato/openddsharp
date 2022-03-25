@@ -17,7 +17,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using OpenDDSharp.Helpers;
 using System;
+using System.Runtime.InteropServices;
+using System.Security;
 
 namespace OpenDDSharp.OpenDDS.DCPS
 {
@@ -170,97 +173,181 @@ namespace OpenDDSharp.OpenDDS.DCPS
         #region Methods
         private string GetTransportType()
         {
-            throw new NotImplementedException();
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTransportType(_native));
         }
 
         private string GetName()
         {
-            throw new NotImplementedException();
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName(_native));
         }
 
         private ulong GetQueueMessagesPerPool()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetQueueMessagesPerPool(_native).ToUInt64();
         }
 
         private void SetQueueMessagesPerPool(ulong value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetQueueMessagesPerPool(_native, new UIntPtr(value));
         }
 
         private ulong GetQueueInitialPools()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetQueueInitialPools(_native).ToUInt64();
         }
 
         private void SetQueueInitialPools(ulong value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetQueueInitialPools(_native, new UIntPtr(value));
         }
 
         private uint GetMaxPacketSize()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetMaxPacketSize(_native);
         }
 
         private void SetMaxPacketSize(uint value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetMaxPacketSize(_native, value);
         }
 
         private ulong GetMaxSamplesPerPacket()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetMaxSamplesPerPacket(_native).ToUInt64();
         }
 
         private void SetMaxSamplesPerPacket(ulong value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetMaxSamplesPerPacket(_native, new UIntPtr(value));
         }
 
         private uint GetOptimumPacketSize()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetOptimumPacketSize(_native);
         }
 
         private void SetOptimumPacketSize(uint value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetOptimumPacketSize(_native, value);
         }
 
         private bool GetThreadPerConnection()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetThreadPerConnection(_native);
         }
 
         private void SetThreadPerConnection(bool value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetThreadPerConnection(_native, value);
         }
 
         private long GetDatalinkReleaseDelay()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetDatalinkReleaseDelay(_native);
         }
 
         private void SetDatalinkReleaseDelay(long value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetDatalinkReleaseDelay(_native, value);
         }
 
         private ulong GetDatalinkControlChunks()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetDatalinkControlChunks(_native).ToUInt64();
         }
 
         private void SetDatalinkControlChunks(ulong value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetDatalinkControlChunks(_native, new UIntPtr(value));
         }
 
         internal IntPtr ToNative()
         {
             return _native;
+        }
+        #endregion
+
+        #region UnsafeNativeMethods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetTransportType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetTransportType(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetName(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetQueueMessagesPerPool", CallingConvention = CallingConvention.Cdecl)]
+            public static extern UIntPtr GetQueueMessagesPerPool(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetQueueMessagesPerPool", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetQueueMessagesPerPool(IntPtr ti, UIntPtr value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetQueueInitialPools", CallingConvention = CallingConvention.Cdecl)]
+            public static extern UIntPtr GetQueueInitialPools(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetQueueInitialPools", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetQueueInitialPools(IntPtr ti, UIntPtr value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetMaxPacketSize", CallingConvention = CallingConvention.Cdecl)]
+            public static extern uint GetMaxPacketSize(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetMaxPacketSize", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetMaxPacketSize(IntPtr ti, uint value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetMaxSamplesPerPacket", CallingConvention = CallingConvention.Cdecl)]
+            public static extern UIntPtr GetMaxSamplesPerPacket(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetMaxSamplesPerPacket", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetMaxSamplesPerPacket(IntPtr ti, UIntPtr value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetOptimumPacketSize", CallingConvention = CallingConvention.Cdecl)]
+            public static extern uint GetOptimumPacketSize(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetOptimumPacketSize", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetOptimumPacketSize(IntPtr ti, uint value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetThreadPerConnection", CallingConvention = CallingConvention.Cdecl)]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static extern bool GetThreadPerConnection(IntPtr mi);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetThreadPerConnection", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetThreadPerConnection(IntPtr mi, [MarshalAs(UnmanagedType.I1)] bool value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetDatalinkReleaseDelay", CallingConvention = CallingConvention.Cdecl)]
+            public static extern long GetDatalinkReleaseDelay(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetDatalinkReleaseDelay", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetDatalinkReleaseDelay(IntPtr ti, long value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetDatalinkControlChunks", CallingConvention = CallingConvention.Cdecl)]
+            public static extern UIntPtr GetDatalinkControlChunks(IntPtr ti);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetDatalinkControlChunks", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetDatalinkControlChunks(IntPtr ti, UIntPtr value);
         }
         #endregion
     }
