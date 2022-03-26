@@ -20,8 +20,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "MulticastInst.h"
 
 ::OpenDDS::DCPS::MulticastInst* MulticastInst_new(::OpenDDS::DCPS::TransportInst* inst) {
-    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
-    ::OpenDDS::DCPS::MulticastInst_rch udp = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::MulticastInst>(rch);
+    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
+    ::OpenDDS::DCPS::MulticastInst_rch udp = ::OpenDDS::DCPS::static_rchandle_cast< ::OpenDDS::DCPS::MulticastInst>(rch);
     ::OpenDDS::DCPS::MulticastInst* pointer = udp.in();
     pointer->_add_ref();
 

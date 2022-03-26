@@ -20,8 +20,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "TcpInst.h"
 
 ::OpenDDS::DCPS::TcpInst* TcpInst_new(::OpenDDS::DCPS::TransportInst* inst) {
-    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
-    ::OpenDDS::DCPS::TcpInst_rch tcp = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::TcpInst>(rch);
+    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
+    ::OpenDDS::DCPS::TcpInst_rch tcp = ::OpenDDS::DCPS::static_rchandle_cast< ::OpenDDS::DCPS::TcpInst>(rch);
     ::OpenDDS::DCPS::TcpInst* pointer = tcp.in();
     pointer->_add_ref();
 
