@@ -75,7 +75,7 @@ void TransportInst_SetThreadPerConnection(::OpenDDS::DCPS::TransportInst* ti, CO
     ti->thread_per_connection_ = value;
 }
 
-CORBA::ULongLong TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti) {
+long TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti) {
     return ti->datalink_release_delay_;
 }
 
