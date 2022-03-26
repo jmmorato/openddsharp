@@ -67,7 +67,7 @@ void TransportRegistry_RemoveInst(::OpenDDS::DCPS::TransportInst* inst) {
         return;
     }
 
-    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
+    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
 	::OpenDDS::DCPS::TransportRegistry::instance()->remove_inst(rch);
     //TransportInstManager::instance()->remove(inst->impl_entity);
 }
