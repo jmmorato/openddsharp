@@ -79,7 +79,7 @@ CORBA::ULongLong TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::Transpor
     return ti->datalink_release_delay_;
 }
 
-void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, CORBA::ULongLong value) {
+void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, long value) {
     ti->datalink_release_delay_ = value;
 }
 

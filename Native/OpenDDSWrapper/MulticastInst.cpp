@@ -57,7 +57,10 @@ void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst* mi, CORBA::USho
 }
 
 char* MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst* mi) {
-    return CORBA::string_dup(mi->group_address_.get_host_addr());
+    char * buffer = new char[512];
+    mi->group_address_.addr_to_string(buffer, 512);
+        
+    return CORBA::string_dup(buffer);
 }
 
 void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst* mi, char* value) {
@@ -80,19 +83,19 @@ void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Doub
     mi->syn_backoff_ = value;
 }
 
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst* mi) {
+TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst* mi) {
     return mi->syn_interval_;
 }
 
-void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value) {
+void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value) {
     mi->syn_interval_ = value;
 }
 
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi) {
+TimeValueWrapper MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi) {
     return mi->syn_timeout_;
 }
 
-void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value) {
+void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value) {
     mi->syn_timeout_ = value;
 }
 
@@ -104,11 +107,11 @@ void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst* mi, size_t value)
     mi->nak_depth_ = value;
 }
 
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst* mi) {
+TimeValueWrapper MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst* mi) {
     return mi->nak_interval_;
 }
 
-void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value) {
+void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value) {
     mi->nak_interval_ = value;
 }
 
@@ -128,11 +131,11 @@ void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst* mi, size_t value) {
     mi->nak_max_ = value;
 }
 
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi) {
+TimeValueWrapper MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi) {
     return mi->nak_timeout_;
 }
 
-void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value) {
+void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value) {
     mi->nak_timeout_ = value;
 }
 

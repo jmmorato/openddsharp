@@ -61,3 +61,13 @@ void TransportRegistry_BindConfigName(const char * name, ::DDS::Entity_ptr entit
 	const std::string str(name);
 	TheTransportRegistry->bind_config(str, entity);
 }
+
+void TransportRegistry_RemoveInst(::OpenDDS::DCPS::TransportInst* inst) {
+	if (inst == NULL) {
+        return;
+    }
+
+    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
+	::OpenDDS::DCPS::TransportRegistry::instance()->remove_inst(rch);
+    //TransportInstManager::instance()->remove(inst->impl_entity);
+}

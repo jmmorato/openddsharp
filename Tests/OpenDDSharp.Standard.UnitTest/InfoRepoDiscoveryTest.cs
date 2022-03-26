@@ -21,7 +21,7 @@ using System;
 using OpenDDSharp.OpenDDS.DCPS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenDDSharpStandard.UnitTest
+namespace OpenDDSharp.Standard.UnitTest
 {
     /// <summary>
     /// <see cref="InfoRepoDiscovery"/> unit test class.

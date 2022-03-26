@@ -67,7 +67,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsFalse(mi.AsyncSend);
             Assert.AreEqual(1, mi.Ttl);
             Assert.AreEqual(32U, mi.DatalinkControlChunks);
-            Assert.AreEqual(10000, mi.DatalinkReleaseDelay); ;
+            Assert.AreEqual(10000, mi.DatalinkReleaseDelay);
             Assert.IsTrue(mi.IsReliable);
             Assert.AreEqual(2147481599u, mi.MaxPacketSize);
             Assert.AreEqual(10U, mi.MaxSamplesPerPacket);

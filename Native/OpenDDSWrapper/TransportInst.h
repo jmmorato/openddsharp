@@ -69,7 +69,7 @@ EXTERN_METHOD_EXPORT
 CORBA::ULongLong TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, CORBA::ULongLong value);
+void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, long value);
 
 EXTERN_METHOD_EXPORT
 CORBA::ULongLong TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst* ti);

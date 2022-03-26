@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Utils.h"
+#include "TimeValueWrapper.h"
 #include <dds/DCPS/transport/multicast/Multicast.h>
 #include <dds/DCPS/transport/multicast/MulticastInst.h>
 #include <dds/DCPS/transport/multicast/MulticastInst_rch.h>
@@ -69,16 +70,16 @@ EXTERN_METHOD_EXPORT
 void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Double value);
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst* mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value);
+void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value);
+void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
 size_t MulticastInst_GetNakDepth(::OpenDDS::DCPS::MulticastInst* mi);
@@ -87,10 +88,10 @@ EXTERN_METHOD_EXPORT
 void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst* mi, size_t value);
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst* mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value);
+void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
 size_t MulticastInst_GetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst* mi);
@@ -105,10 +106,10 @@ EXTERN_METHOD_EXPORT
 void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst* mi, size_t value);
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::TimeDuration MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi, ::OpenDDS::DCPS::TimeDuration value);
+void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
 CORBA::Octet MulticastInst_GetTtl(::OpenDDS::DCPS::MulticastInst* mi);

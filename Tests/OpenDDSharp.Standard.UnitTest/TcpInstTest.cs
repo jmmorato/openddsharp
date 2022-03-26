@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using OpenDDSharp.OpenDDS.DCPS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenDDSharp.UnitTest
+namespace OpenDDSharp.Standard.UnitTest
 {
     /// <summary>
     /// <see cref="TcpInst"/> unit test.

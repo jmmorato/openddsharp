@@ -89,7 +89,7 @@ void TcpInst_SetPublicAddress(::OpenDDS::DCPS::TcpInst* ti, char* value) {
 }
 
 char* TcpInst_GetLocalAddress(::OpenDDS::DCPS::TcpInst* ti) {
-    CORBA::string_dup(ti->local_address_string().c_str());
+    return CORBA::string_dup(ti->local_address_string().c_str());
 }
 
 void TcpInst_SetLocalAddress(::OpenDDS::DCPS::TcpInst* ti, char* value) {

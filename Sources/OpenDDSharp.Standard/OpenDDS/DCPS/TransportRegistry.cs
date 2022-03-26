@@ -326,7 +326,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_RemoveInst", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr RemoveInst(IntPtr inst);
+            public static extern void RemoveInst(IntPtr inst);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_CreateConfig", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
