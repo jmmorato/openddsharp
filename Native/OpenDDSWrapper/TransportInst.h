@@ -66,10 +66,10 @@ EXTERN_METHOD_EXPORT
 void TransportInst_SetThreadPerConnection(::OpenDDS::DCPS::TransportInst* ti, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-long TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti);
+CORBA::UInt64 TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, long value);
+void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, CORBA::UInt64 value);
 
 EXTERN_METHOD_EXPORT
 size_t TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst* ti);
