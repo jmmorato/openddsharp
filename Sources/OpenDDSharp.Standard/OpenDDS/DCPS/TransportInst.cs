@@ -17,10 +17,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using OpenDDSharp.Helpers;
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using OpenDDSharp.Helpers;
 
 namespace OpenDDSharp.OpenDDS.DCPS
 {

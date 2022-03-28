@@ -49,6 +49,9 @@ WaitSet.h WaitSet.cpp
 TimeValueWrapper.h
 MulticastInst.h MulticastInst.cpp
 TransportInst.h TransportInst.cpp
-TcpInst.h TcpInst.cpp)
+TcpInst.h TcpInst.cpp
+RtpsUdpInst.h RtpsUdpInst.cpp
+ShmemInst.h ShmemInst.cpp
+UdpInst.h UdpInst.cpp)
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
