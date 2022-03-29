@@ -17,6 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.OpenDDS.DCPS;
 
@@ -68,8 +69,16 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(4096u, rui.OptimumPacketSize);
             Assert.AreEqual(5U, rui.QueueInitialPools);
             Assert.AreEqual(10U, rui.QueueMessagesPerPool);
-            Assert.AreEqual(65535, rui.RcvBufferSize);
-            Assert.AreEqual(65535, rui.SendBufferSize);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Assert.AreEqual(65536, rui.RcvBufferSize);
+                Assert.AreEqual(65536, rui.SendBufferSize);
+            }
+            else
+            {
+                Assert.AreEqual(65535, rui.RcvBufferSize);
+                Assert.AreEqual(65535, rui.SendBufferSize);
+            }
             Assert.AreEqual(TRANSPORT_TYPE, rui.TransportType);
             Assert.IsTrue(rui.RequiresCdr);
             Assert.IsFalse(rui.ThreadPerConnection);
