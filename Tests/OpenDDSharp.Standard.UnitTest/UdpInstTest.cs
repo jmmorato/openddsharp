@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.OpenDDS.DCPS;
+using System.Runtime.InteropServices;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -54,8 +55,16 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(4096u, udpi.OptimumPacketSize);
             Assert.AreEqual(5U, udpi.QueueInitialPools);
             Assert.AreEqual(10U, udpi.QueueMessagesPerPool);
-            Assert.AreEqual(65535, udpi.RcvBufferSize);
-            Assert.AreEqual(65535, udpi.SendBufferSize);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Assert.AreEqual(65536, udpi.RcvBufferSize);
+                Assert.AreEqual(65536, udpi.SendBufferSize);
+            }
+            else
+            {
+                Assert.AreEqual(65535, udpi.RcvBufferSize);
+                Assert.AreEqual(65535, udpi.SendBufferSize);
+            }
             Assert.AreEqual(TRANSPORT_TYPE, udpi.TransportType);
             Assert.IsFalse(udpi.ThreadPerConnection);
 
