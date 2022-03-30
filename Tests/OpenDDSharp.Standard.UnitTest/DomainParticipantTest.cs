@@ -1051,7 +1051,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(topic);
 
             InstanceHandle handle = topic.InstanceHandle;
-            Thread.Sleep(100);
+            Thread.Sleep(500);
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
