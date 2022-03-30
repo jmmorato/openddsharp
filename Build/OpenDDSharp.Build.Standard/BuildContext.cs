@@ -135,7 +135,7 @@ namespace OpenDDSharp.Build.Standard
 
         internal bool IsDevelop
         {
-            get { return BranchName != "main"; }
+            get { return BranchName == "develop"; }
         }
         #endregion
 

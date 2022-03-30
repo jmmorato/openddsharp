@@ -12,14 +12,14 @@ concurrency:
 
 jobs:
   build_windows:
-    runs-on: windows-2022
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:        
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
     env:
-      OpenDdsVersion: "3.20"
+      OpenDdsVersion: "3.18.1"
         
     steps:
     - uses: actions/checkout@v3
@@ -64,7 +64,7 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.20"
+      OpenDdsVersion: "3.18.1"
         
     steps:
     - uses: actions/checkout@v3
@@ -164,7 +164,7 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.20"
+      OpenDdsVersion: "3.18.1"
         
     steps:
     - uses: actions/checkout@v3
