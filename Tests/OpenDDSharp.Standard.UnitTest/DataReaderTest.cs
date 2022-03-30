@@ -487,6 +487,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(writer);
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+
             // Call sample rejected status
             SampleRejectedStatus status = default;
             ReturnCode result = reader.GetSampleRejectedStatus(ref status);
@@ -510,7 +513,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(500);
 
             // Call sample rejected status
             result = reader.GetSampleRejectedStatus(ref status);
@@ -769,6 +772,9 @@ namespace OpenDDSharp.Standard.UnitTest
             DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
 
             // Call sample lost status
             SampleLostStatus status = default;

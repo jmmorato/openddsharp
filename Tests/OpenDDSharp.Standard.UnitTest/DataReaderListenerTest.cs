@@ -284,7 +284,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(found);
 
             // Check the number of incompatible DataWriter
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             Assert.AreEqual(1, count);
             Assert.AreEqual(_reader, dr);
             Assert.AreEqual(1, totalCount);

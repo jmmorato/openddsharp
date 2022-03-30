@@ -78,13 +78,13 @@ void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst* ri, CORBA::Octet value) {
 
 char* RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst* ri) {
     char * buffer = new char[512];
-    ri->multicast_group_address().addr_to_string(buffer, 512);
+    ri->multicast_group_address().to_addr().addr_to_string(buffer, 512);
     
     return CORBA::string_dup(buffer);
 }
 
 void RtpsUdpInst_SetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst* ri, char* value) {
-    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+    const OpenDDS::DCPS::NetworkAddress addr = static_cast<const OpenDDS::DCPS::NetworkAddress>(value);
     ri->multicast_group_address(addr);
 }
 
@@ -98,13 +98,13 @@ void RtpsUdpInst_SetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst* ri, char* v
 
 char* RtpsUdpInst_GetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst* ri) {
     char * buffer = new char[512];
-    ri->local_address().addr_to_string(buffer, 512);
+    ri->local_address().to_addr().addr_to_string(buffer, 512);
     
     return CORBA::string_dup(buffer);
 }
 
 void RtpsUdpInst_SetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst* ri, char* value) {
-    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+     const OpenDDS::DCPS::NetworkAddress addr = static_cast<const OpenDDS::DCPS::NetworkAddress>(value);
     ri->local_address(addr);
 }
 
@@ -122,14 +122,6 @@ TimeValueWrapper RtpsUdpInst_GetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst* ri
 
 void RtpsUdpInst_SetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst* ri, TimeValueWrapper value) {
     ri->heartbeat_period_ = value;
-}
-
-TimeValueWrapper RtpsUdpInst_GetHeartbeatResponseDelay(::OpenDDS::DCPS::RtpsUdpInst* ri) {
-    return ri->heartbeat_response_delay_;
-}
-
-void RtpsUdpInst_SetHeartbeatResponseDelay(::OpenDDS::DCPS::RtpsUdpInst* ri, TimeValueWrapper value) {
-    ri->heartbeat_response_delay_ = value;
 }
 
 TimeValueWrapper RtpsUdpInst_GetReceiveAddressDuration(::OpenDDS::DCPS::RtpsUdpInst* ri) {

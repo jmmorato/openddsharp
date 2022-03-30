@@ -50,7 +50,8 @@ char* TransportConfig_GetName(::OpenDDS::DCPS::TransportConfig* cfg) {
 }
 
 void* TransportConfig_GetTransports(::OpenDDS::DCPS::TransportConfig* cfg) {
-	TAO::unbounded_value_sequence< ::OpenDDS::DCPS::TransportInst*> seq(cfg->instances_.size());
+	CORBA::ULongLong size = cfg->instances_.size();
+	TAO::unbounded_value_sequence< ::OpenDDS::DCPS::TransportInst*> seq(static_cast<CORBA::ULong>(size));
 
 	int i = 0;
 	for (auto inst = cfg->instances_.begin(); inst != cfg->instances_.end(); ++inst) {		
