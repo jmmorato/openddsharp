@@ -105,12 +105,7 @@ public:
 
     operator ::DDS::EntityFactoryQosPolicy() const {
         ::DDS::EntityFactoryQosPolicy native;
-        /*char buf[2048];
-        sprintf(buf, "EntityFactoryQosPolicy autoenable_created_entities: %s \n", autoenable_created_entities ? "true" : "false");
-        OutputDebugString(buf);*/
         native.autoenable_created_entities = autoenable_created_entities;
-        /*sprintf(buf, "EntityFactoryQosPolicy native.autoenable_created_entities: %s \n", native.autoenable_created_entities ? "true" : "false");
-        OutputDebugString(buf);*/
         return native;
     }
 };

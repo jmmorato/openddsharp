@@ -37,7 +37,7 @@ namespace OpenDDSharp
         /// <summary>
         /// Gets or sets the microseconds.
         /// </summary>
-        public long MicroSeconds { get; set; }
+        public int MicroSeconds { get; set; }
         #endregion
 
         #region IEquatable<TimeValue> Members

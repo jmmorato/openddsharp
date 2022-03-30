@@ -2,7 +2,7 @@
 This file is part of OpenDDSharp.
 
 OpenDDSharp is a .NET wrapper for OpenDDS
-Copyright (C) 2018 Jose Morato
+Copyright (C) 2018 - 2022 Jose Morato
 
 OpenDDSharp is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -20,31 +20,32 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Utils.h"
-#include "marshal.h"
-#include <dds/DCPS/transport/framework/TransportConfig_rch.h>
-#include <dds/DCPS/transport/framework/TransportConfig.h>
+#include <dds/DCPS/transport/udp/Udp.h>
+#include <dds/DCPS/transport/udp/UdpInst.h>
+#include <dds/DCPS/transport/udp/UdpInst_rch.h>
 #include <dds/DCPS/transport/framework/TransportInst.h>
+#include <dds/DCPS/transport/framework/TransportInst_rch.h>
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_Insert(::OpenDDS::DCPS::TransportConfig* cfg, ::OpenDDS::DCPS::TransportInst* inst);
+::OpenDDS::DCPS::UdpInst* UdpInst_new(::OpenDDS::DCPS::TransportInst* inst);
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_SortedInsert(::OpenDDS::DCPS::TransportConfig* cfg, ::OpenDDS::DCPS::TransportInst* inst);
+CORBA::Boolean UdpInst_GetIsReliable(::OpenDDS::DCPS::UdpInst* ui);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean TransportConfig_GetSwapBytes(::OpenDDS::DCPS::TransportConfig* cfg);
+CORBA::Int32 UdpInst_GetSendBufferSize(::OpenDDS::DCPS::UdpInst* ui);
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_SetSwapBytes(::OpenDDS::DCPS::TransportConfig* cfg, CORBA::Boolean value);
+void UdpInst_SetSendBufferSize(::OpenDDS::DCPS::UdpInst* ui, CORBA::Int32 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt32 TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig* cfg);
+CORBA::Int32 UdpInst_GetRcvBufferSize(::OpenDDS::DCPS::UdpInst* ui);
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_SetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig* cfg, CORBA::UInt32 value);
+void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst* ui, CORBA::Int32 value);
 
 EXTERN_METHOD_EXPORT
-char* TransportConfig_GetName(::OpenDDS::DCPS::TransportConfig* cfg);
+char* UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst* ui);
 
 EXTERN_METHOD_EXPORT
-void* TransportConfig_GetTransports(::OpenDDS::DCPS::TransportConfig* cfg);
+void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst* ui, char* value);

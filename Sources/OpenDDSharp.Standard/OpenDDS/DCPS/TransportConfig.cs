@@ -45,13 +45,19 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <summary>
         /// Gets the configuration unique name.
         /// </summary>
-        public string Name => GetName();
+        public string Name
+        {
+            get => GetName();
+        }
 
         /// <summary>
         /// Gets the ordered list of transport instances that
         /// this configuration will utilize.
         /// </summary>
-        public IReadOnlyCollection<TransportInst> Transports => GetTransports();
+        public IReadOnlyCollection<TransportInst> Transports
+        {
+            get => GetTransports();
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether a value of false causes DDS to serialize data in the
@@ -113,37 +119,60 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <param name="inst">The <see cref="TransportInst" /> to be inserted.</param>
         public void SortedInsert(TransportInst inst)
         {
-            throw new NotImplementedException();
+            if (inst == null)
+            {
+                throw new ArgumentNullException(nameof(inst));
+            }
+
+            UnsafeNativeMethods.SortedInsert(_native, inst.ToNative());
         }
 
         private string GetName()
         {
-            throw new NotImplementedException();
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName(_native));
         }
 
         private IReadOnlyCollection<TransportInst> GetTransports()
         {
-            throw new NotImplementedException();
+            var ret = new List<TransportInst>();
+
+            IntPtr seqPtr = UnsafeNativeMethods.GetTransports(_native);
+
+            IList<IntPtr> pointers = new List<IntPtr>();
+            seqPtr.PtrToSequence(ref pointers);
+
+            foreach (var ptr in pointers)
+            {
+                TransportInst managed = TransportInstManager.Instance.Find(ptr);
+                if (managed == null)
+                {
+                    managed = new TransportInst(ptr);
+                    TransportInstManager.Instance.Add(ptr, managed);
+                }
+
+                ret.Add(managed);
+            }
+            return ret.AsReadOnly();
         }
 
         private bool GetSwapBytes()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetSwapBytes(_native);
         }
 
         private void SetSwapBytes(bool value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetSwapBytes(_native, value);
         }
 
         private uint GetPassiveConnectDuration()
         {
-            throw new NotImplementedException();
+            return UnsafeNativeMethods.GetPassiveConnectDuration(_native);
         }
 
         private void SetPassiveConnectDuration(uint value)
         {
-            throw new NotImplementedException();
+            UnsafeNativeMethods.SetPassiveConnectDuration(_native, value);
         }
 
         internal IntPtr ToNative()
@@ -164,6 +193,35 @@ namespace OpenDDSharp.OpenDDS.DCPS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_Insert", CallingConvention = CallingConvention.Cdecl)]
             public static extern void Insert(IntPtr cfg, IntPtr inst);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_SortedInsert", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SortedInsert(IntPtr cfg, IntPtr inst);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_GetSwapBytes", CallingConvention = CallingConvention.Cdecl)]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static extern bool GetSwapBytes(IntPtr cfg);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_SetSwapBytes", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetSwapBytes(IntPtr cfg, [MarshalAs(UnmanagedType.I1)] bool value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_GetPassiveConnectDuration", CallingConvention = CallingConvention.Cdecl)]
+            public static extern uint GetPassiveConnectDuration(IntPtr cfg);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_SetPassiveConnectDuration", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetPassiveConnectDuration(IntPtr cfg, uint value);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetName(IntPtr cfg);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportConfig_GetTransports", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetTransports(IntPtr cfg);
         }
         #endregion
     }

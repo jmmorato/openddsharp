@@ -33,10 +33,37 @@ EXTERN_METHOD_EXPORT
 bool TransportRegistry_GetReleased();
 
 EXTERN_METHOD_EXPORT
-OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name);
-
-EXTERN_METHOD_EXPORT
 ::OpenDDS::DCPS::TransportInst* TransportRegistry_CreateInst(const char * name, const char * transportType);
 
 EXTERN_METHOD_EXPORT
+OpenDDS::DCPS::TransportInst* TransportRegistry_GetInst(const char * name);
+
+EXTERN_METHOD_EXPORT 
+void TransportRegistry_RemoveInst(::OpenDDS::DCPS::TransportInst* inst);
+
+EXTERN_METHOD_EXPORT
+OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name);
+
+EXTERN_METHOD_EXPORT
+OpenDDS::DCPS::TransportConfig* TransportRegistry_GetConfig(const char * name);
+
+EXTERN_METHOD_EXPORT
+void TransportRegistry_RemoveConfig(OpenDDS::DCPS::TransportConfig* cfg);
+
+EXTERN_METHOD_EXPORT
+OpenDDS::DCPS::TransportConfig* TransportRegistry_GetDomainDefaultConfig(CORBA::Int32 domainId);
+
+EXTERN_METHOD_EXPORT
+void TransportRegistry_SetDomainDefaultConfig(CORBA::Int32 domainId, OpenDDS::DCPS::TransportConfig* cfg);
+
+EXTERN_METHOD_EXPORT
 void TransportRegistry_BindConfigName(const char * name, ::DDS::Entity_ptr entity);
+
+EXTERN_METHOD_EXPORT
+void TransportRegistry_BindConfigTransport(OpenDDS::DCPS::TransportConfig* cfg, ::DDS::Entity_ptr entity);
+
+EXTERN_METHOD_EXPORT
+OpenDDS::DCPS::TransportConfig* TransportRegistry_GetGlobalConfig();
+
+EXTERN_METHOD_EXPORT
+void TransportRegistry_SetGlobalConfig(OpenDDS::DCPS::TransportConfig* cfg);
