@@ -143,7 +143,7 @@
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsOSX" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
 	<Message Text="Create native project with cmake..." Importance="High" />
-	<Exec ToolExe="sh" Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	<Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Build cmake-->
