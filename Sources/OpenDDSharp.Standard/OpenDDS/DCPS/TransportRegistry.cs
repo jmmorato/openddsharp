@@ -77,7 +77,9 @@ namespace OpenDDSharp.OpenDDS.DCPS
         #endregion
 
         #region Constructors
-        private TransportRegistry() { }
+        private TransportRegistry()
+        {
+        }
         #endregion
 
         #region Methods
@@ -87,6 +89,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
         public static void Close()
         {
             UnsafeNativeMethods.NativeClose();
+            TransportInstManager.Instance.Clear();
+            TransportConfigManager.Instance.Clear();
         }
 
         /// <summary>
@@ -97,6 +101,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
         public void Release()
         {
             UnsafeNativeMethods.Release();
+            TransportInstManager.Instance.Clear();
+            TransportConfigManager.Instance.Clear();
         }
 
         /// <summary>
@@ -108,14 +114,27 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportInst CreateInst(string name, string transportType)
         {
-            IntPtr ptr = UnsafeNativeMethods.CreateInst(name, transportType);
-
-            if (ptr != IntPtr.Zero)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return new TransportInst(ptr);
+                throw new ArgumentNullException(nameof(name), "The transport instance's name cannot be null or an empty string.");
             }
 
-            return null;
+            if (string.IsNullOrWhiteSpace(transportType))
+            {
+                throw new ArgumentNullException(nameof(transportType), "The transport type cannot be null or an empty string.");
+            }
+
+            IntPtr ptr = UnsafeNativeMethods.CreateInst(name, transportType);
+
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var inst = new TransportInst(ptr);
+            TransportInstManager.Instance.Add(ptr, inst);
+
+            return inst;
         }
 
         /// <summary>
@@ -126,14 +145,26 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportInst GetInst(string name)
         {
-            IntPtr ptr = UnsafeNativeMethods.GetInst(name);
-
-            if (ptr != IntPtr.Zero)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return new TransportInst(ptr);
+                return null;
             }
 
-            return null;
+            IntPtr ptr = UnsafeNativeMethods.GetInst(name);
+
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            TransportInst inst = TransportInstManager.Instance.Find(ptr);
+            if (inst == null)
+            {
+                inst = new TransportInst(ptr);
+                TransportInstManager.Instance.Add(ptr, inst);
+            }
+
+            return inst;
         }
 
         /// <summary>
@@ -145,10 +176,11 @@ namespace OpenDDSharp.OpenDDS.DCPS
         {
             if (inst == null)
             {
-                throw new ArgumentNullException(nameof(inst));
+                return;
             }
 
             UnsafeNativeMethods.RemoveInst(inst.ToNative());
+            TransportInstManager.Instance.Remove(inst.ToNative());
         }
 
         /// <summary>
@@ -159,14 +191,22 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportConfig CreateConfig(string name)
         {
-            IntPtr ptr = UnsafeNativeMethods.CreateConfig(name);
-
-            if (ptr != IntPtr.Zero)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return new TransportConfig(ptr);
+                throw new ArgumentNullException(nameof(name), "The configuration name cannot be null or an empty string.");
             }
 
-            return null;
+            IntPtr ptr = UnsafeNativeMethods.CreateConfig(name);
+
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var config = new TransportConfig(ptr);
+            TransportConfigManager.Instance.Add(ptr, config);
+
+            return config;
         }
 
         /// <summary>
@@ -177,13 +217,25 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportConfig GetConfig(string name)
         {
-            IntPtr ptr = UnsafeNativeMethods.GetConfig(name);
-            if (ptr != IntPtr.Zero)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return new TransportConfig(ptr);
+                return null;
             }
 
-            return null;
+            IntPtr ptr = UnsafeNativeMethods.GetConfig(name);
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var config = TransportConfigManager.Instance.Find(ptr);
+            if (config == null)
+            {
+                config = new TransportConfig(ptr);
+                TransportConfigManager.Instance.Add(ptr, config);
+            }
+
+            return config;
         }
 
         /// <summary>
@@ -195,10 +247,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
         {
             if (cfg == null)
             {
-                throw new ArgumentNullException(nameof(cfg));
+                return;
             }
 
-            UnsafeNativeMethods.RemoveConfig(cfg.ToNative());
+            IntPtr native = cfg.ToNative();
+            UnsafeNativeMethods.RemoveConfig(native);
+            TransportConfigManager.Instance.Remove(native);
         }
 
         /// <summary>
@@ -209,14 +263,26 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public TransportConfig GetDomainDefaultConfig(int domain)
         {
-            IntPtr ptr = UnsafeNativeMethods.GetDomainDefaultConfig(domain);
-
-            if (ptr != IntPtr.Zero)
+            if (domain < 0)
             {
-                return new TransportConfig(ptr);
+                return null;
             }
 
-            return null;
+            IntPtr ptr = UnsafeNativeMethods.GetDomainDefaultConfig(domain);
+
+            if (ptr == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var cfg = TransportConfigManager.Instance.Find(ptr);
+            if (cfg == null)
+            {
+                cfg = new TransportConfig(ptr);
+                TransportConfigManager.Instance.Add(ptr, cfg);
+            }
+
+            return cfg;
         }
 
         /// <summary>
@@ -227,6 +293,11 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public void SetDomainDefaultConfig(int domain, TransportConfig cfg)
         {
+            if (domain < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(domain), "The domain must be greater or equal to zero.");
+            }
+
             if (cfg == null)
             {
                 throw new ArgumentNullException(nameof(cfg));
@@ -243,6 +314,11 @@ namespace OpenDDSharp.OpenDDS.DCPS
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
         public void BindConfig(string name, Entity entity)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name), "The transport config's name cannot be null or an empty string.");
+            }
+
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
@@ -280,12 +356,19 @@ namespace OpenDDSharp.OpenDDS.DCPS
         {
             IntPtr ptr = UnsafeNativeMethods.NativeGetGlobalConfig();
 
-            if (ptr != IntPtr.Zero)
+            if (ptr == IntPtr.Zero)
             {
-                return new TransportConfig(ptr);
+                return null;
             }
 
-            return null;
+            var cfg = TransportConfigManager.Instance.Find(ptr);
+            if (cfg == null)
+            {
+                cfg = new TransportConfig(ptr);
+                TransportConfigManager.Instance.Add(ptr, cfg);
+            }
+
+            return cfg;
         }
 
         private static void SetGlobalConfig(TransportConfig cfg)
@@ -338,7 +421,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_RemoveConfig", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr RemoveConfig(IntPtr inst);
+            public static extern void RemoveConfig(IntPtr inst);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportRegistry_GetDomainDefaultConfig", CallingConvention = CallingConvention.Cdecl)]
