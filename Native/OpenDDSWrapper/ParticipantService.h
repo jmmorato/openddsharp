@@ -42,7 +42,7 @@ EXTERN_METHOD_EXPORT
 void ParticipantService_SetRepoDomain(int domain, char * repo, bool attach_participant);
 
 EXTERN_METHOD_EXPORT
-void ParticipantService_Shutdown();
+::DDS::ReturnCode_t ParticipantService_Shutdown();
 
 EXTERN_METHOD_EXPORT
 bool ParticipantService_GetIsShutdown();

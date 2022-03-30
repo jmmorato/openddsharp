@@ -94,7 +94,8 @@ namespace OpenDDSharp.Standard.UnitTest
             TransportRegistry.Instance.Release();
             Assert.IsTrue(TransportRegistry.Instance.Released);
             TransportRegistry.Close();
-            ParticipantService.Instance.Shutdown();
+            var ret = ParticipantService.Instance.Shutdown();
+            Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsTrue(ParticipantService.Instance.IsShutdown);
 
             Ace.Fini();

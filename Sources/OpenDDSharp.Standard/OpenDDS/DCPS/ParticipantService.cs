@@ -169,10 +169,11 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// <remarks>
         /// Required Precondition: All DomainParticipants have been deleted.
         /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "We keep the singleton access to match OpenDDS API.")]
-        public void Shutdown()
+        public ReturnCode Shutdown()
         {
-            UnsafeNativeMethods.Shutdown();
+            return UnsafeNativeMethods.Shutdown();
         }
 
         private static string GetDefaultDiscovery()
@@ -230,7 +231,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_Shutdown", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void Shutdown();
+
+            public static extern ReturnCode Shutdown();
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetIsShutdown", CallingConvention = CallingConvention.Cdecl)]
