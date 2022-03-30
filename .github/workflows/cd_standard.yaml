@@ -1,6 +1,7 @@
 name: Continuous Delivery
 
 on:
+  push:
   workflow_dispatch:
     branches: [ develop, main ]
 
@@ -10,14 +11,14 @@ concurrency:
 
 jobs:
   build_windows_native:
-    runs-on: windows-2019
+    runs-on: windows-2022
     strategy:
       fail-fast: false
       matrix:        
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
         
     steps:
     - uses: actions/checkout@v3   
@@ -109,7 +110,7 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
         
     steps:
     - uses: actions/checkout@v3
@@ -213,7 +214,7 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
         
     steps:
 
@@ -312,10 +313,10 @@ jobs:
         retention-days: 1
       
   build_openddsharp_windows:
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
       MajorVersion: "0"
       MinorVersion: "8"
         
@@ -548,9 +549,9 @@ jobs:
         path: |
           ${{ github.workspace }}/Release/*.nupkg
     
-    - name: Publish release packages
-      env: 
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
-      working-directory: ${{ github.workspace }}/Build
+    #- name: Publish release packages
+    #  env: 
+    #    NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    #  shell: pwsh
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
+    #  working-directory: ${{ github.workspace }}/Build
