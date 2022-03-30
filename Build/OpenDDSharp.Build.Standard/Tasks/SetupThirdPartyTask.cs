@@ -109,7 +109,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = " -v --ace-github-latest --no-test --no-debug --optimize";
+                var arguments = " -v --ace-github-latest --no-test --no-debug --optimize --std=c++11";
                 context.Log.Information(arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings

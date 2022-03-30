@@ -20,11 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System.IO;
 using System.Linq;
 using System.Text;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Pack;
-using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Pack;
-using Cake.Core;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
