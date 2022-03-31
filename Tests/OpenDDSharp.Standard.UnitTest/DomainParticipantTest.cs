@@ -1031,7 +1031,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore]
         public void TestGetDiscoveredTopicData()
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
@@ -1063,8 +1062,8 @@ namespace OpenDDSharp.Standard.UnitTest
             DataReader reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
 
-            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
-            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(reader.WaitForPublications(1, 50_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 50_000));
 
             InstanceHandle handle = topic.InstanceHandle;
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
