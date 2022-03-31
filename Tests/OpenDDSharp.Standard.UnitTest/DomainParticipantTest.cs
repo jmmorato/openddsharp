@@ -1050,6 +1050,21 @@ namespace OpenDDSharp.Standard.UnitTest
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
+            Publisher publisher = participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+
+            Subscriber subscriber = participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReader reader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(reader);
+
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+
             InstanceHandle handle = topic.InstanceHandle;
             Thread.Sleep(500);
 
