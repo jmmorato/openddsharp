@@ -963,7 +963,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 5_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 5_000));
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = _participant.GetDiscoveredParticipants(handles);
@@ -995,6 +996,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1034,6 +1036,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1046,8 +1049,7 @@ namespace OpenDDSharp.Standard.UnitTest
             result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
-            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName);
             Assert.IsNotNull(topic);
 
             Publisher publisher = participant.CreatePublisher();
@@ -1066,7 +1068,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
 
             InstanceHandle handle = topic.InstanceHandle;
-            Thread.Sleep(500);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1079,7 +1081,6 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
 
             // Remove the participant
             participant.DeleteContainedEntities();
