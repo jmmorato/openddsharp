@@ -1160,7 +1160,7 @@ namespace OpenDDSharp.DDS
         /// will return <see cref="ReturnCode.Unsupported" />.</para>
         /// </remarks>
         /// <param name="topicData">The <see cref="TopicBuiltinTopicData" /> to fill up.</param>
-        /// <param name="topicHandle">The <see cref="InstanceHandle" />  of the <see cref="Topic" /> to get the data.</param>
+        /// <param name="topicHandle">The <see cref="InstanceHandle" /> of the <see cref="Topic" /> to get the data.</param>
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode GetDiscoveredTopicData(ref TopicBuiltinTopicData topicData, InstanceHandle topicHandle)
         {
