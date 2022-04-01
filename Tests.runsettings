@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <!-- Put results in root folder rather inside each project-->
+    <ResultsDirectory>.\TestResults</ResultsDirectory>
+  </RunConfiguration>
+
+  <MSTest>
+    <!-- Do not run the test assemblies in parallel since they could interfere each other. -->
+    <DisableParallelization>true</DisableParallelization>
+  </MSTest>
+
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <!-- .NET command-line coverage tool -->
+      <!-- https://github.com/tonerdo/coverlet/blob/master/Documentation/VSTestIntegration.md -->
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Exclude>[.*UnitTest]*,[.*IntegrationTest]*</Exclude>
+          <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
+          <UseSourceLink>true</UseSourceLink>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

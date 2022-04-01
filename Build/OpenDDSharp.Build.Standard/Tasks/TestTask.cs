@@ -43,7 +43,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.Log.Information($"Unit test path: {path}");
             var file = "OpenDDSharp.Standard.UnitTest.dll";
             var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.8/build/_common");
-            var settingsFile = Path.Combine(solutionFullPath, "CodeCoverage.runsettings");
+            var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
             if (BuildContext.IsWindows)
