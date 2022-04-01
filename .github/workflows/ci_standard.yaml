@@ -230,12 +230,12 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"      
 
-    #- name: Test OpenDDSharp
-    #  shell: bash      
-    #  run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
-    #  working-directory: ${{ github.workspace }}
-    #  env:
-    #    DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-    #    ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-    #    TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-    #    DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
+    - name: Test OpenDDSharp
+      shell: bash      
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n -property:Configuration=${{ matrix.BuildConfiguration }} -property:Platform=${{ matrix.BuildPlatform }}
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+        DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
