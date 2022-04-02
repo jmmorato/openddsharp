@@ -111,17 +111,17 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-linux-ci
 
-    - name: Build Native (No cached)
-      shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-      working-directory: ${{ github.workspace }}/Build
+    #- name: Build Native (No cached)
+    #  shell: pwsh
+    #  if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+    #  working-directory: ${{ github.workspace }}/Build
       
-    - name: Build Native (Cached)
-      shell: pwsh
-      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
-      working-directory: ${{ github.workspace }}/Build
+    #- name: Build Native (Cached)
+    #  shell: pwsh
+    #  if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+    #  working-directory: ${{ github.workspace }}/Build
 
     - name: Dotnet restore
       shell: bash
@@ -207,17 +207,17 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
         key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-macos-ci
 
-    - name: Build Native (No cached)
-      shell: pwsh
-      if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-      working-directory: ${{ github.workspace }}/Build
+    #- name: Build Native (No cached)
+    #  shell: pwsh
+    #  if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+    #  working-directory: ${{ github.workspace }}/Build
       
-    - name: Build Native (Cached)
-      shell: pwsh
-      if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
-      working-directory: ${{ github.workspace }}/Build
+    #- name: Build Native (Cached)
+    #  shell: pwsh
+    #  if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+    #  working-directory: ${{ github.workspace }}/Build
 
     - name: Dotnet restore
       shell: bash
