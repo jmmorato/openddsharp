@@ -15,10 +15,10 @@
 	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
-  <PropertyGroup Label="PlatformFolderx64" Condition="'$(RuntimeIdentifier)'=='win-64' Or '$(Platform)'=='x64'">
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
 	<PlatformFolder>x64</PlatformFolder>
   </PropertyGroup> 
-  <PropertyGroup Label="PlatformFolderx86" Condition="'$(RuntimeIdentifier)'=='win-86' Or '$(Platform)'=='x86'">
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x86' Or '$(Platform)'=='x86'">
 	<PlatformFolder>x86</PlatformFolder>
   </PropertyGroup>
 

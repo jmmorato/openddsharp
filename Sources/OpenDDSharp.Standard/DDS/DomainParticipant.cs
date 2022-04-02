@@ -978,10 +978,9 @@ namespace OpenDDSharp.DDS
             }
 
             IntPtr seq = IntPtr.Zero;
-            IList<string> parameters = new List<string>();
+            IList<string> parameters;
             if (expressionParameters != null)
             {
-                
                 parameters = expressionParameters.ToList();
                 parameters.StringSequenceToPtr(ref seq, false);
             }
