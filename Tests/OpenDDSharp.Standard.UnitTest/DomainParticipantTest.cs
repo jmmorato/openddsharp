@@ -57,9 +57,12 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
-            Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            if (TestContext.TestName != nameof(TestGetDiscoveredTopicData) && TestContext.TestName != nameof(TestGetDiscoveredTopics))
+            {
+                _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+                Assert.IsNotNull(_participant);
+                _participant.BindRtpsUdpTransportConfig();
+            }
         }
 
         /// <summary>
@@ -72,12 +75,13 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 ReturnCode result = _participant.DeleteContainedEntities();
                 Assert.AreEqual(ReturnCode.Ok, result);
-            }
 
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
+                if (AssemblyInitializer.Factory != null)
+                {
+                    result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    _participant = null;
+                }
             }
         }
         #endregion
@@ -996,6 +1000,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1035,6 +1040,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
