@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.8.2)
 
 project(OpenDDSWrapper C)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 find_package(OpenDDS REQUIRED) 
 
 add_library(OpenDDSWrapper SHARED
