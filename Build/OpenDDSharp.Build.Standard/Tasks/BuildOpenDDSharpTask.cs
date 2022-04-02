@@ -77,7 +77,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             });
 
             context.Log.Information("Build OpenDDSharp solution...");
-            context.DotNetBuild("OpenDDSharp.Standard.sln", new DotNetBuildSettings
+            context.DotNetBuild("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
