@@ -918,6 +918,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
 
+        public static void BindUdpTransportConfig(this Entity entity)
+        {
+            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            string configName = "openddsharp_udp_interop_" + guid;
+            string instName = "internal_openddsharp_udp_transport_" + guid;
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
+            UdpInst rui = new UdpInst(inst);
+            config.Insert(rui);
+
+            TransportRegistry.Instance.BindConfig(configName, entity);
+        }
+
         public static void BindTcpTransportConfig(this Entity entity)
         {
             string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
@@ -927,7 +941,6 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
             TcpInst tcpi = new TcpInst(inst);
-            tcpi.LocalAddress = "localhost:12345";
             config.Insert(tcpi);
 
             TransportRegistry.Instance.BindConfig(configName, entity);

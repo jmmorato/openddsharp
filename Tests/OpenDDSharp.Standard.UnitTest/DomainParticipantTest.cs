@@ -1000,7 +1000,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
+            participant.BindUdpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1040,7 +1040,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
+            participant.BindUdpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1053,7 +1053,9 @@ namespace OpenDDSharp.Standard.UnitTest
             result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName);
+            TopicQos qos = new TopicQos();
+            qos.TopicData.Value = new byte[] { 0x42 };
+            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
             Publisher publisher = participant.CreatePublisher();
@@ -1083,12 +1085,26 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, handles.Count);
             Assert.AreEqual(handle, handles.First());
 
+            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter
             TopicBuiltinTopicData data = default;
-            result = participant.GetDiscoveredTopicData(ref data, handles.First());
+            var count = 200;
+            result = ReturnCode.NoData;
+            while (result != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(500);
+                result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                count--;
+            }
+
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.TopicData);
+            Assert.IsNotNull(data.TopicData.Value);
+            Assert.AreEqual(1, data.TopicData.Value.Count());
+            Assert.AreEqual(0x42, data.TopicData.Value.First());
 
             // Remove the participant
             participant.DeleteContainedEntities();
