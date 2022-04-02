@@ -130,7 +130,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             return SpawnProcess("dotnet", arguments);
 #else
-            return SpawnProcess(supportProcessPath, teskKind.ToString());
+            return SpawnProcess(supportProcessPath, teskKind.ToString(), string.Empty);
 #endif
         }
 
@@ -138,8 +138,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         {
             string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
 #if Windows
+            string workingDirectory = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin");
             string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
+            string workingDirectory = Path.Combine(ddsPath, "bin");
             string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #endif
             if (!File.Exists(infoRepoPath))
@@ -148,10 +150,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
 
-            return SpawnProcess(infoRepoPath, string.Empty);
+            return SpawnProcess(infoRepoPath, string.Empty, workingDirectory);
         }
 
-        private Process SpawnProcess(string path, string arguments)
+        private Process SpawnProcess(string path, string arguments, string workingDirectory)
         {
             var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
@@ -164,6 +166,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 RedirectStandardError = true,
                 CreateNoWindow = true,
                 UseShellExecute = false,
+                WorkingDirectory = workingDirectory,
             };
 
             processInfo.EnvironmentVariables["DDS_ROOT"] = ddsPath;

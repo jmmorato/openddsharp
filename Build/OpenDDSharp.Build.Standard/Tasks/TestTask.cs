@@ -46,7 +46,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetTestSettings
             {
                 TestAdapterPath = Path.GetFullPath(testAdapterPath),
-                WorkingDirectory = path,
+                WorkingDirectory = solutionFullPath,
                 EnvironmentVariables =
                 {
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
@@ -62,6 +62,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 NoBuild = true,
                 NoRestore = true,
                 Configuration = context.BuildConfiguration,
+                Loggers = { "trx" },
             });
         }
     }
