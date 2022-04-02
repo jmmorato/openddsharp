@@ -73,20 +73,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    #- name: Install .NET
-    #  shell: pwsh
-    #  run: |
-    #    sudo apt-get install -y wget
-    #    wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-    #    sudo dpkg -i packages-microsoft-prod.deb
-    #    rm packages-microsoft-prod.deb
-    #    sudo apt-get update
-    #    sudo apt-get install -y build-essential
-    #    sudo apt-get install -y git
-    #    sudo apt-get install -y apt-transport-https
-    #    sudo apt-get update
-    #    sudo apt-get install -y dotnet-sdk-6.0
-
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
@@ -164,7 +150,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash      
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n --configuration ${{ matrix.BuildConfiguration }} --runtime linux-x64  --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ matrix.BuildConfiguration }} --runtime linux-x64  --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -262,8 +248,8 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash      
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n --configuration ${{ matrix.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
-      working-directory: ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/bin/Release/net6.0/osx-x64
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ matrix.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
+      working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
