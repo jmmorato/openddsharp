@@ -39,7 +39,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildConfiguration}/netcoreapp3.1/{context.RunTime}");
             context.Log.Information($"Unit test path: {path}");
-            var file = "OpenDDSharp.Standard.UnitTest.dll";
             var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/3.1.2/build/netstandard1.0");
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
@@ -57,7 +56,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
                     { "DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
                 },
-                Verbosity = DotNetVerbosity.Normal,
+                Verbosity = DotNetVerbosity.Detailed,
                 Settings = settingsFile,
                 Runtime = context.RunTime,
                 NoBuild = true,
