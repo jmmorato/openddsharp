@@ -18,13 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using System.Text;
-using Cake.Common;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
-using OpenDDSharp.Build.Standard.Exceptions;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -56,7 +53,9 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
                     { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },                    
+                    { "LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
+                    { "DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
                 },
                 Verbosity = DotNetVerbosity.Normal,
                 Settings = settingsFile,
