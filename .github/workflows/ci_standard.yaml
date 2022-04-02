@@ -24,6 +24,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
+
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
       uses: actions/cache@v3
@@ -69,21 +73,23 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install .NET
-      shell: pwsh
-      run: |
-        sudo apt-get install -y wget
-        wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        rm packages-microsoft-prod.deb
-        sudo apt-get update
-        sudo apt-get install -y build-essential
-        sudo apt-get install -y git
-        sudo apt-get install -y apt-transport-https
-        sudo apt-get update
-        sudo apt-get install -y dotnet-sdk-3.1
-        sudo apt-get install -y dotnet-sdk-5.0
-        sudo apt-get install -y dotnet-sdk-6.0
+    #- name: Install .NET
+    #  shell: pwsh
+    #  run: |
+    #    sudo apt-get install -y wget
+    #    wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    #    sudo dpkg -i packages-microsoft-prod.deb
+    #    rm packages-microsoft-prod.deb
+    #    sudo apt-get update
+    #    sudo apt-get install -y build-essential
+    #    sudo apt-get install -y git
+    #    sudo apt-get install -y apt-transport-https
+    #    sudo apt-get update
+    #    sudo apt-get install -y dotnet-sdk-6.0
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -190,6 +196,10 @@ jobs:
         
     steps:
     - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos
