@@ -43,7 +43,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/");
             context.Log.Information($"Unit test path: {path}");
             var file = "OpenDDSharp.Standard.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "coverlet.collector/3.1.2/build/netstandard1.0");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/3.1.2/build/netstandard1.0");
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
@@ -59,40 +59,12 @@ namespace OpenDDSharp.Build.Standard.Tasks
                         { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
                         { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                         { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                        { "LD_LIBRARY_PATH", $"$DDS_ROOT/lib:$DDS_ROOT/ACE_TAO/ACE/lib" },
+                        { "DYLD_FALLBACK_LIBRARY_PATH", $"$DDS_ROOT/lib:$DDS_ROOT/ACE_TAO/ACE/lib" },
                     },
                     Verbosity = DotNetVerbosity.Normal,
                     Settings = settingsFile,
                 });
-            }
-            else
-            {
-                try
-                {
-                    var dllPath = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/", "OpenDDSharp.Standard.UnitTest.dll");
-
-                    var linuxPath = path;
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.Append($"export DDS_ROOT={Path.GetFullPath(context.DdsRoot)} && ");
-                    stringBuilder.Append($"export LD_LIBRARY_PATH=$DDS_ROOT/lib:$DDS_ROOT/ACE_TAO/ACE/lib:{linuxPath} && ");
-                    stringBuilder.Append($"dotnet test {dllPath} -v n");
-
-                    var exit = context.StartProcess("bash", new Cake.Core.IO.ProcessSettings
-                    {
-                        Arguments = stringBuilder.ToString(),
-                        WorkingDirectory = path,
-                    });
-
-                    if (exit != 0)
-                    {
-                        throw new BuildException($"Error calling the WSL dotnet test. Exit code: {exit}");
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    context.Log.Error(ex.StackTrace.ToString());
-                    throw;
-                }
             }
         }
     }
