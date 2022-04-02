@@ -44,18 +44,20 @@ namespace OpenDDSharp.Build.Standard.Tasks
             System.Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
+            var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+
             context.Log.Information("Restoring NuGet packages...");
-            context.DotNetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetRestoreSettings
+            context.DotNetRestore("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetRestoreSettings
             {
                 ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
                 NoCache = true,
                 PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
+                WorkingDirectory = solutionFolder,
+                Runtime = context.RunTime,
             });
 
-            var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-
             context.Log.Information("Clean solution...");
-            context.DotNetClean("OpenDDSharp.Standard.sln", new DotNetCleanSettings
+            context.DotNetClean("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetCleanSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,

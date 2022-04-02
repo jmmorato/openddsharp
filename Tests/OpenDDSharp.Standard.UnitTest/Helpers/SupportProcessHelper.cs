@@ -65,6 +65,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         #endregion
 
         #region Fields
+        private readonly string _runtime;
         private readonly TestContext _testContext;
         private string _platformFolder;
         private string _targetFolder;
@@ -93,10 +94,17 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
             Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+            _runtime = "win-x64";
+            if (_platformFolder == "x86")
+            {
+                _runtime = "win-x86";
+            }
 #if Linux
             Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+            _runtime = "linux-x64";
 #elif OSX
             Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+            _runtime = "osx-x64";
 #endif
         }
         #endregion
@@ -109,8 +117,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Console.WriteLine(supportProcessPath);
             if (!File.Exists(supportProcessPath))
             {
-                _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
-                throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "netcoreapp3.1", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+
+                if (!File.Exists(supportProcessPath))
+                {
+                    _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
+                    throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
+                }
             }
 #if Linux || OSX
             var arguments = supportProcessPath + " " + teskKind.ToString();
