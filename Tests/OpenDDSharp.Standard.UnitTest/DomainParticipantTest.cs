@@ -1000,7 +1000,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindShmemTransportConfig();
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1040,7 +1040,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindShmemTransportConfig();
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1093,7 +1093,6 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 Thread.Sleep(500);
                 result = participant.GetDiscoveredTopicData(ref data, handles.First());
-                TestContext.WriteLine($"Handles.First(): {handles.First()} {result}");
                 count--;
             }
 
