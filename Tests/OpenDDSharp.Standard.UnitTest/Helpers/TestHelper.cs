@@ -946,6 +946,20 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
 
+        public static void BindShmemTransportConfig(this Entity entity)
+        {
+            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            string configName = "openddsharp_shmem_" + guid;
+            string instName = "internal_openddsharp_shmem_transport_" + guid;
+
+            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
+            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "shmem");
+            ShmemInst tcpi = new ShmemInst(inst);
+            config.Insert(tcpi);
+
+            TransportRegistry.Instance.BindConfig(configName, entity);
+        }
+
         public static Timestamp ToTimestamp(this DateTime dateTime)
         {
             DateTime epoc = new DateTime(1970, 1, 1);
