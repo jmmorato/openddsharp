@@ -926,8 +926,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "udp");
-            UdpInst rui = new UdpInst(inst);
-            config.Insert(rui);
+            UdpInst ui = new UdpInst(inst);
+            config.Insert(ui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
@@ -954,8 +954,8 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "shmem");
-            ShmemInst tcpi = new ShmemInst(inst);
-            config.Insert(tcpi);
+            ShmemInst shmemi = new ShmemInst(inst);
+            config.Insert(shmemi);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }

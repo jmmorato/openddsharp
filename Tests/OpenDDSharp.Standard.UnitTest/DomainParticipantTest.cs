@@ -1093,6 +1093,7 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 Thread.Sleep(500);
                 result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                TestContext.WriteLine($"Handles.First(): {handles.First()} {result}");
                 count--;
             }
 
