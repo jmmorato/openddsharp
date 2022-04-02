@@ -139,18 +139,6 @@ jobs:
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
       working-directory: ${{ github.workspace }}
 
-    #- name: Build & Test with Cake (No cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
-    #  working-directory: ${{ github.workspace }}/Build
-      
-    #- name: Build & Test with Cake (Cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
-    #  working-directory: ${{ github.workspace }}/Build
-
     - name: Build OpenDDSharp.BuildTasks project
       shell: bash
       run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ matrix.BuildConfiguration }}
@@ -247,19 +235,7 @@ jobs:
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-      working-directory: ${{ github.workspace }}    
-
-    #- name: Build & Test with Cake (No cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
-    #  working-directory: ${{ github.workspace }}/Build
-      
-    #- name: Build & Test with Cake (Cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
-    #  working-directory: ${{ github.workspace }}/Build
+      working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp.BuildTasks project
       shell: bash
@@ -287,7 +263,7 @@ jobs:
     - name: Test OpenDDSharp
       shell: bash      
       run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore -v n --configuration ${{ matrix.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
-      working-directory: ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/bin/Release/netcoreapp3.1/osx-x64
+      working-directory: ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/bin/Release/net6.0/osx-x64
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
