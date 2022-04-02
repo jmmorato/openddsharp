@@ -47,23 +47,21 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
-            if (BuildContext.IsWindows)
+            context.DotNetTest(path + file, new DotNetTestSettings
             {
-                context.DotNetTest(path + file, new DotNetTestSettings
+                TestAdapterPath = Path.GetFullPath(testAdapterPath),
+                WorkingDirectory = path,
+                EnvironmentVariables =
                 {
-                    TestAdapterPath = Path.GetFullPath(testAdapterPath),
-                    WorkingDirectory = path,
-                    EnvironmentVariables =
-                    {
-                        { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
-                        { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
-                        { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                        { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
-                    },
-                    Verbosity = DotNetVerbosity.Normal,
-                    Settings = settingsFile,
-                });
-            }
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                },
+                Verbosity = DotNetVerbosity.Normal,
+                Settings = settingsFile,
+                Runtime = context.RunTime,
+            });
         }
     }
 }

@@ -137,6 +137,35 @@ namespace OpenDDSharp.Build.Standard
         {
             get { return BranchName != "main"; }
         }
+
+        internal string RunTime
+        {
+            get
+            {
+                var runtime = string.Empty;
+                if (IsWindows)
+                {
+                    if (BuildPlatform == PlatformTarget.x64)
+                    {
+                        runtime = "win-x64";
+                    }
+                    else
+                    {
+                        runtime = "win-x86";
+                    }
+                }
+                else if (IsLinux)
+                {
+                    runtime = "linux-x64";
+                }
+                else if (IsOSX)
+                {
+                    runtime = "macos-x64";
+                }
+
+                return runtime;
+            }
+        }
         #endregion
 
         #region Constructors

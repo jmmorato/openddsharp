@@ -18,10 +18,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Build;
-using Cake.Common.Tools.DotNetCore.Clean;
-using Cake.Common.Tools.DotNetCore.Restore;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.Clean;
+using Cake.Common.Tools.DotNet.Restore;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
@@ -44,16 +45,17 @@ namespace OpenDDSharp.Build.Standard.Tasks
             System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
             context.Log.Information("Restoring NuGet packages...");
-            context.DotNetCoreRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetCoreRestoreSettings
+            context.DotNetRestore(BuildContext.OPENDDSHARP_SOLUTION_FILE, new DotNetRestoreSettings
             {
                 ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
                 NoCache = true,
+                PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
             });
 
             var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
 
             context.Log.Information("Clean solution...");
-            context.DotNetCoreClean("OpenDDSharp.Standard.sln", new DotNetCoreCleanSettings
+            context.DotNetClean("OpenDDSharp.Standard.sln", new DotNetCleanSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
@@ -64,18 +66,19 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
+                Runtime = context.RunTime,
             });
 
             context.Log.Information("Build OpenDDSharp.BuildTasks project...");
-            context.DotNetCoreBuild($"{solutionFolder}Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj", new DotNetCoreBuildSettings
+            context.DotNetBuild($"{solutionFolder}Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj", new DotNetBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
+                Runtime = context.RunTime,
             });
 
             context.Log.Information("Build OpenDDSharp solution...");
-            context.DotNetCoreBuild("OpenDDSharp.Standard.sln", new DotNetCoreBuildSettings
+            context.DotNetBuild("OpenDDSharp.Standard.sln", new DotNetBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
@@ -86,7 +89,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                ArgumentCustomization = args => args.Append("/p:Platform=" + context.BuildPlatform),
+                Runtime = context.RunTime,
             });
         }
     }
