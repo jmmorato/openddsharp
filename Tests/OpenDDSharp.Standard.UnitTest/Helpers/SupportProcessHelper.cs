@@ -94,17 +94,17 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
             Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
-            _runtime = "win-x64";
+            _runtime = "win-x64/";
             if (_platformFolder == "x86")
             {
-                _runtime = "win-x86";
+                _runtime = "win-x86/";
             }
 #if Linux
             Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
-            _runtime = "linux-x64";
+            _runtime = "linux-x64/";
 #elif OSX
             Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
-            _runtime = "osx-x64";
+            _runtime = "osx-x64/";
 #endif
         }
         #endregion

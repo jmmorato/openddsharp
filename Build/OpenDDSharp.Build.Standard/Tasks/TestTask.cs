@@ -44,7 +44,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
-            context.DotNetTest(path + file, new DotNetTestSettings
+            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetTestSettings
             {
                 TestAdapterPath = Path.GetFullPath(testAdapterPath),
                 WorkingDirectory = path,
@@ -53,13 +53,16 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
                     { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },                    
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                     { "LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
                     { "DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
                 },
                 Verbosity = DotNetVerbosity.Normal,
                 Settings = settingsFile,
                 Runtime = context.RunTime,
+                NoBuild = true,
+                NoRestore = true,
+                Configuration = context.BuildConfiguration,
             });
         }
     }
