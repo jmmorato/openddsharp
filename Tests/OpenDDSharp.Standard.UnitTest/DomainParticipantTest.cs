@@ -1063,16 +1063,12 @@ namespace OpenDDSharp.Standard.UnitTest
 
             DataWriter writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
-            Assert.IsNotNull(dataWriter);
 
             Subscriber subscriber = participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
             DataReader reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
-            TestStructDataReader dataReader = new TestStructDataReader(reader);
-            Assert.IsNotNull(dataReader);
 
             Assert.IsTrue(reader.WaitForPublications(1, 50_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 50_000));
