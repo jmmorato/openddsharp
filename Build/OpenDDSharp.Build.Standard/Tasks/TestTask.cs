@@ -46,7 +46,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetTestSettings
             {
                 TestAdapterPath = Path.GetFullPath(testAdapterPath),
-                WorkingDirectory = solutionFullPath,
+                WorkingDirectory = path,
                 EnvironmentVariables =
                 {
                     { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
