@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System.IO;
 using System.Text;
 using Cake.Common;
+using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
@@ -48,7 +49,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
 
             if (BuildContext.IsWindows)
             {
-                context.DotNetCoreTest(path + file, new Cake.Common.Tools.DotNetCore.Test.DotNetCoreTestSettings
+                context.DotNetTest(path + file, new Cake.Common.Tools.DotNet.Test.DotNetTestSettings
                 {
                     TestAdapterPath = Path.GetFullPath(testAdapterPath),
                     WorkingDirectory = path,

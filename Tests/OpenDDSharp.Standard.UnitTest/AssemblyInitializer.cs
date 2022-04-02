@@ -73,7 +73,7 @@ namespace OpenDDSharp.Standard.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory();
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSDebugLevel", "5", "-DCPSInfoRepo", "localhost:12345");
 
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
