@@ -1,7 +1,6 @@
 name: Continuous Delivery
 
 on:
-  push:
   workflow_dispatch:
     branches: [ develop, main ]
 
