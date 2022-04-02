@@ -130,6 +130,7 @@ jobs:
         dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
       working-directory: ${{ github.workspace }}
 
     #- name: Build & Test with Cake (No cached)
@@ -148,8 +149,17 @@ jobs:
       shell: bash
       run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ matrix.BuildConfiguration }}
       working-directory: ${{ github.workspace }}
-    
-    - name: Build OpenDDSharp solution
+   
+    - name: Build OpenDDSharp TestSupportProcessCore project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ matrix.BuildConfiguration }} --runtime linux-x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
+
+    - name: Build OpenDDSharp UnitTest project
       shell: bash
       run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration ${{ matrix.BuildConfiguration }} --runtime linux-x64
       working-directory: ${{ github.workspace }}
@@ -226,12 +236,8 @@ jobs:
         dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-      working-directory: ${{ github.workspace }}
-
-    - name: Build OpenDDSharp.BuildTasks project
-      shell: bash
-      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=${{ matrix.BuildConfiguration }}
-      working-directory: ${{ github.workspace }}
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}    
 
     #- name: Build & Test with Cake (No cached)
     #  shell: pwsh
@@ -244,8 +250,22 @@ jobs:
     #  if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
     #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
     #  working-directory: ${{ github.workspace }}/Build
+
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ matrix.BuildConfiguration }}
+      working-directory: ${{ github.workspace }}
     
-    - name: Build OpenDDSharp solution
+    - name: Build OpenDDSharp TestSupportProcessCore Project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ matrix.BuildConfiguration }} --runtime osx-x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO" 
+    
+    - name: Build OpenDDSharp UnitTest Project
       shell: bash
       run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration ${{ matrix.BuildConfiguration }} --runtime osx-x64
       working-directory: ${{ github.workspace }}

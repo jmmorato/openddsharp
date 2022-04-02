@@ -56,6 +56,15 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Runtime = context.RunTime,
             });
 
+            context.DotNetRestore("./Tests/TestSupportProcessCore/TestSupportProcessCore.csproj", new DotNetRestoreSettings
+            {
+                ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
+                NoCache = true,
+                PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
+                WorkingDirectory = solutionFolder,
+                Runtime = context.RunTime,
+            });
+
             context.Log.Information("Clean solution...");
             context.DotNetClean("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetCleanSettings
             {
@@ -79,6 +88,19 @@ namespace OpenDDSharp.Build.Standard.Tasks
             });
 
             context.Log.Information("Build OpenDDSharp solution...");
+            context.DotNetBuild("./Tests/TestSupportProcessCore/TestSupportProcessCore.csproj", new DotNetBuildSettings
+            {
+                Configuration = context.BuildConfiguration,
+                WorkingDirectory = solutionFolder,
+                EnvironmentVariables =
+                {
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                },
+                Runtime = context.RunTime,
+            });
             context.DotNetBuild("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetBuildSettings
             {
                 Configuration = context.BuildConfiguration,
