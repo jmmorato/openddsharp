@@ -289,7 +289,7 @@
         private static extern int DisposeTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue", CallingConvention = CallingConvention.Cdec, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int GetKeyValue(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
         #endregion
     }
