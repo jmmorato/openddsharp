@@ -13,7 +13,7 @@
 	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
 	<IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
 	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>	
-	<PlatformFolder Condition ="'$(RuntimeIdentifier)'!='win-86' Or '$(Platform)'=='x64'">x64</PlatformFolder>
+	<PlatformFolder Condition="'$(RuntimeIdentifier)'=='win-64' Or '$(Platform)'=='x64'">x64</PlatformFolder>
 	<PlatformFolder Condition="'$(RuntimeIdentifier)'=='win-86' Or '$(Platform)'=='x86'">x86</PlatformFolder>
   </PropertyGroup>
 
