@@ -954,7 +954,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             return new Timestamp
             {
                 Seconds = span.Seconds,
-                NanoSeconds = (uint)span.Milliseconds / 1000000
+                NanoSeconds = (uint)span.Milliseconds / 1000000,
             };
         }
         #endregion
