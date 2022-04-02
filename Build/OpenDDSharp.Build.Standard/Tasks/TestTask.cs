@@ -21,7 +21,7 @@ using System.IO;
 using System.Text;
 using Cake.Common;
 using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using OpenDDSharp.Build.Standard.Exceptions;
@@ -43,13 +43,13 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/");
             context.Log.Information($"Unit test path: {path}");
             var file = "OpenDDSharp.Standard.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.8/build/_common");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "coverlet.collector/3.1.2/build/netstandard1.0");
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
             if (BuildContext.IsWindows)
             {
-                context.DotNetTest(path + file, new Cake.Common.Tools.DotNet.Test.DotNetTestSettings
+                context.DotNetTest(path + file, new DotNetTestSettings
                 {
                     TestAdapterPath = Path.GetFullPath(testAdapterPath),
                     WorkingDirectory = path,
@@ -60,7 +60,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                         { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                         { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                     },
-                    Verbosity = DotNetCoreVerbosity.Normal,
+                    Verbosity = DotNetVerbosity.Normal,
                     Settings = settingsFile,
                 });
             }
