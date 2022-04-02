@@ -160,7 +160,7 @@ namespace OpenDDSharp.Build.Standard
                 }
                 else if (IsOSX)
                 {
-                    runtime = "macos-x64";
+                    runtime = "osx-x64";
                 }
 
                 return runtime;

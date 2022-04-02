@@ -74,7 +74,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
-                Runtime = context.RunTime,
             });
 
             context.Log.Information("Build OpenDDSharp solution...");
