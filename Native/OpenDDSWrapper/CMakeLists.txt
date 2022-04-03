@@ -59,9 +59,9 @@ ShmemInst.h ShmemInst.cpp
 UdpInst.h UdpInst.cpp)
 
 if(MSVC)
-  target_compile_options(OpenDDSWrapper PRIVATE /IGNORE:C4190)
+  target_compile_options(OpenDDSWrapper PUBLIC /IGNORE:C4190)
 else()
-  target_compile_options(OpenDDSWrapper PRIVATE -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
+  target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
 endif()
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
