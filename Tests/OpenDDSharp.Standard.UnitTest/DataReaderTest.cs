@@ -1877,6 +1877,8 @@ namespace OpenDDSharp.Standard.UnitTest
             result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            System.Threading.Thread.Sleep(1_000);
+
             // Get the for an existing instance
             List<TestStruct> structs = new List<TestStruct>();
             List<SampleInfo> sampleInfos = new List<SampleInfo>();
