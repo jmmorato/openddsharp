@@ -54,7 +54,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                Verbosity = DotNetVerbosity.Detailed,
                 Settings = settingsFile,
                 Runtime = context.RunTime,
                 NoBuild = true,
