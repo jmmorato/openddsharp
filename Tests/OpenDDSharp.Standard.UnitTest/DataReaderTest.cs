@@ -1867,16 +1867,11 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
 
-            // Call GetKeyValue with HandleNil
-            TestStruct data = new TestStruct();
-            ReturnCode result = dataReader.GetKeyValue(data, InstanceHandle.HandleNil);
-            Assert.AreEqual(ReturnCode.BadParameter, result);
-
             // Register an instance and write it
             InstanceHandle handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
-            result = dataWriter.Write(new TestStruct { Id = 1 }, handle1);
+            ReturnCode result = dataWriter.Write(new TestStruct { Id = 1 }, handle1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
@@ -1890,10 +1885,15 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().InstanceHandle);
 
-            data = new TestStruct();
+            TestStruct data = new TestStruct();
             result = dataReader.GetKeyValue(data, sampleInfos.First().InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.Id);
+
+            // Call GetKeyValue with HandleNil
+            data = new TestStruct();
+            result = dataReader.GetKeyValue(data, InstanceHandle.HandleNil);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         /// <summary>
