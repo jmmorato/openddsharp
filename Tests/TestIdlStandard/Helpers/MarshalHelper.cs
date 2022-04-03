@@ -150,7 +150,7 @@ internal static class MarshalHelper
             sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
 #else
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));            
-            sequence.Add(char.ConvertFromUtf32(utf32)[0]);
+            sequence.Add(char.ConvertFromUtf32(utf32).FirstOrDefault());
 #endif
         }
     }
@@ -618,7 +618,7 @@ internal static class MarshalHelper
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = char.ConvertFromUtf32(aux)[0];
+            char value = char.ConvertFromUtf32(aux).FirstOrDefault();
 #endif
             array.SetValue(value, dimensions);
         }
