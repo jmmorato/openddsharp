@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -151,7 +150,7 @@ internal static class MarshalHelper
             sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
 #else
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));            
-            sequence.Add(char.ConvertFromUtf32(utf32).FirstOrDefault());
+            sequence.Add(char.ConvertFromUtf32(utf32)[0]);
 #endif
         }
     }
@@ -619,7 +618,7 @@ internal static class MarshalHelper
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = char.ConvertFromUtf32(aux).FirstOrDefault();
+            char value = char.ConvertFromUtf32(aux)[0];
 #endif
             array.SetValue(value, dimensions);
         }
