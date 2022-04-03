@@ -87,7 +87,7 @@ int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp(<%SCOPED%>DataWriter_ptr dw, <%
 
 int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper* data, int handle)
 {
-    <%SCOPED%> nativeData;
+    <%SCOPED%> nativeData={};
 
     ::DDS::ReturnCode_t ret = dw->get_key_value(nativeData, handle);
 
@@ -431,7 +431,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
 
 int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, int handle)
 {
-    <%SCOPED%> nativeData;
+    <%SCOPED%> nativeData={};
 
     ::DDS::ReturnCode_t ret = dr->get_key_value(nativeData, handle);
 
