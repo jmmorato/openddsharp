@@ -940,7 +940,10 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
-            TcpInst tcpi = new TcpInst(inst);
+            TcpInst tcpi = new TcpInst(inst)
+            {
+                LocalAddress = "localhost:0",
+            };
             config.Insert(tcpi);
 
             TransportRegistry.Instance.BindConfig(configName, entity);

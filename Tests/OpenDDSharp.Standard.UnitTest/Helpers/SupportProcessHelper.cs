@@ -149,7 +149,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
 
-            return SpawnProcess(infoRepoPath, @"-ORBListenEndpoints iiop://localhost:12345");
+            return SpawnProcess(infoRepoPath, @"-o repo.ior -ORBListenEndpoints iiop://localhost:12345");
         }
 
         private Process SpawnProcess(string path, string arguments)

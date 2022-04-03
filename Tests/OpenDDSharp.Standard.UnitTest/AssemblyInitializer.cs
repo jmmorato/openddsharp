@@ -67,6 +67,8 @@ namespace OpenDDSharp.Standard.UnitTest
 
             InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::localhost:12345/DCPSInfoRepo"); // "file://" + INFOREPO_IOR
             ParticipantService.Instance.AddDiscovery(infoRepo);
+            infoRepo.BitTransportIp = "localhost";
+            infoRepo.BitTransportPort = 0;
             ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
 
             _supportProcess = new SupportProcessHelper(context);

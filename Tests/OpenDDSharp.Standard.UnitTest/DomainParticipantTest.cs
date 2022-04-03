@@ -1001,15 +1001,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindUdpTransportConfig();
-            //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            //{
-            //    participant.BindTcpTransportConfig();
-            //}
-            //else
-            //{
-            //    participant.BindShmemTransportConfig();
-            //}
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1049,27 +1041,11 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindUdpTransportConfig();
-            //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            //{
-            //    participant.BindTcpTransportConfig();
-            //}
-            //else
-            //{
-            //    participant.BindShmemTransportConfig();
-            //}
+            participant.BindTcpTransportConfig();
 
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindUdpTransportConfig();
-            //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            //{
-            //    otherParticipant.BindTcpTransportConfig();
-            //}
-            //else
-            //{
-            //    otherParticipant.BindShmemTransportConfig();
-            //}
+            otherParticipant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
