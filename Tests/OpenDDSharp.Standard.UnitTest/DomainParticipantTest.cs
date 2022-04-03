@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -1000,7 +1001,14 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                participant.BindTcpTransportConfig();
+            }
+            else
+            {
+                participant.BindShmemTransportConfig();
+            }
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1040,7 +1048,14 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                participant.BindTcpTransportConfig();
+            }
+            else
+            {
+                participant.BindShmemTransportConfig();
+            }
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
