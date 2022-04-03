@@ -59,7 +59,7 @@ ShmemInst.h ShmemInst.cpp
 UdpInst.h UdpInst.cpp)
 
 if(MSVC)
-  target_compile_options(OpenDDSWrapper PUBLIC /nowarn:4190)
+  target_compile_options(OpenDDSWrapper PUBLIC /wd4190)
 else()
   target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
 endif()
