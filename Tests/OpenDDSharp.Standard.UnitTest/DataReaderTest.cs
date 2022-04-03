@@ -1890,6 +1890,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().InstanceHandle);
 
+            data = new TestStruct();
             result = dataReader.GetKeyValue(data, sampleInfos.First().InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.Id);
