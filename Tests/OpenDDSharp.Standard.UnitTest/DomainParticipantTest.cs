@@ -1001,13 +1001,13 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                participant.BindTcpTransportConfig();
+                participant.BindShmemTransportConfig();
             }
             else
             {
-                participant.BindShmemTransportConfig();
+                participant.BindTcpTransportConfig();
             }
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
@@ -1048,11 +1048,26 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                participant.BindShmemTransportConfig();
+            }
+            else
+            {
+                participant.BindTcpTransportConfig();
+            }
 
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindTcpTransportConfig();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                otherParticipant.BindShmemTransportConfig();
+            }
+            else
+            {
+                otherParticipant.BindTcpTransportConfig();
+            }
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
