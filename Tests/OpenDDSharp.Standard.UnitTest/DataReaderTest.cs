@@ -1857,7 +1857,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataReader dataReader = new TestStructDataReader(reader);
 
             Publisher publisher = _participant.CreatePublisher();
-            DataWriter writer = publisher.CreateDataWriter(_topic);
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
@@ -1879,8 +1881,6 @@ namespace OpenDDSharp.Standard.UnitTest
 
             result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            System.Threading.Thread.Sleep(100);
 
             // Get the for an existing instance
             List<TestStruct> structs = new List<TestStruct>();
