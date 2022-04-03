@@ -53,8 +53,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
                     { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
-                    { "LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
-                    { "DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib" },
                 },
                 Verbosity = DotNetVerbosity.Detailed,
                 Settings = settingsFile,

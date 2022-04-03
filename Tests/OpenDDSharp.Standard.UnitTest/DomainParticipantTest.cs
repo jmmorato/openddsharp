@@ -1057,6 +1057,18 @@ namespace OpenDDSharp.Standard.UnitTest
                 participant.BindShmemTransportConfig();
             }
 
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(otherParticipant);
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                otherParticipant.BindTcpTransportConfig();
+            }
+            else
+            {
+                otherParticipant.BindShmemTransportConfig();
+            }
+
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1066,6 +1078,9 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructTypeSupport support = new TestStructTypeSupport();
             string typeName = support.GetTypeName();
             result = support.RegisterType(participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             TopicQos qos = new TopicQos();
@@ -1079,7 +1094,7 @@ namespace OpenDDSharp.Standard.UnitTest
             DataWriter writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
 
-            Subscriber subscriber = participant.CreateSubscriber();
+            Subscriber subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
             DataReader reader = subscriber.CreateDataReader(topic);
@@ -1117,9 +1132,12 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, data.TopicData.Value.Count());
             Assert.AreEqual(0x42, data.TopicData.Value.First());
 
-            // Remove the participant
+            // Remove the participants
             participant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(participant);
+
+            otherParticipant.DeleteContainedEntities();
+            AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
         }
 
         /// <summary>
