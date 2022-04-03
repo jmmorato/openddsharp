@@ -1048,26 +1048,11 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                participant.BindTcpTransportConfig();
-            }
-            else
-            {
-                participant.BindShmemTransportConfig();
-            }
+            participant.BindTcpTransportConfig();
 
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                otherParticipant.BindTcpTransportConfig();
-            }
-            else
-            {
-                otherParticipant.BindShmemTransportConfig();
-            }
+            otherParticipant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1112,7 +1097,7 @@ namespace OpenDDSharp.Standard.UnitTest
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(2, handles.Count);
-            Assert.AreEqual(handle, handles.First());
+            Assert.IsTrue(handles.Contains(handle));
 
             // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter
             TopicBuiltinTopicData data = default;

@@ -60,7 +60,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 NoBuild = true,
                 NoRestore = true,
                 Configuration = context.BuildConfiguration,
-                Loggers = { "trx" },
+                Loggers = { "trx", ":\"console; verbosity = normal\"" },
             });
         }
     }
