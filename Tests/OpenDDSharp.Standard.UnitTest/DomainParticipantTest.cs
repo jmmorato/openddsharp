@@ -1001,14 +1001,15 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                participant.BindTcpTransportConfig();
-            }
-            else
-            {
-                participant.BindRtpsUdpTransportConfig();
-            }
+            participant.BindUdpTransportConfig();
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            //{
+            //    participant.BindTcpTransportConfig();
+            //}
+            //else
+            //{
+            //    participant.BindShmemTransportConfig();
+            //}
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1048,25 +1049,27 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                participant.BindTcpTransportConfig();
-            }
-            else
-            {
-                participant.BindRtpsUdpTransportConfig();
-            }
+            participant.BindUdpTransportConfig();
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            //{
+            //    participant.BindTcpTransportConfig();
+            //}
+            //else
+            //{
+            //    participant.BindShmemTransportConfig();
+            //}
 
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                otherParticipant.BindTcpTransportConfig();
-            }
-            else
-            {
-                otherParticipant.BindRtpsUdpTransportConfig();
-            }
+            otherParticipant.BindUdpTransportConfig();
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            //{
+            //    otherParticipant.BindTcpTransportConfig();
+            //}
+            //else
+            //{
+            //    otherParticipant.BindShmemTransportConfig();
+            //}
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
