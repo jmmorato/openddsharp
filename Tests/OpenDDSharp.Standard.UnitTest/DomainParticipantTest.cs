@@ -1001,13 +1001,13 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                participant.BindShmemTransportConfig();
+                participant.BindTcpTransportConfig();
             }
             else
             {
-                participant.BindTcpTransportConfig();
+                participant.BindRtpsUdpTransportConfig();
             }
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
@@ -1048,25 +1048,24 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                participant.BindShmemTransportConfig();
+                participant.BindTcpTransportConfig();
             }
             else
             {
-                participant.BindTcpTransportConfig();
+                participant.BindRtpsUdpTransportConfig();
             }
 
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindTcpTransportConfig();
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                otherParticipant.BindShmemTransportConfig();
+                otherParticipant.BindTcpTransportConfig();
             }
             else
             {
-                otherParticipant.BindTcpTransportConfig();
+                otherParticipant.BindRtpsUdpTransportConfig();
             }
 
             List<InstanceHandle> handles = new List<InstanceHandle>();

@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.8.2)
 
-project(OpenDDSWrapper C)
+project(OpenDDSWrapper CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -57,5 +57,11 @@ TcpInst.h TcpInst.cpp
 RtpsUdpInst.h RtpsUdpInst.cpp
 ShmemInst.h ShmemInst.cpp
 UdpInst.h UdpInst.cpp)
+
+if(MSVC)
+  target_compile_options(OpenDDSWrapper PRIVATE /IGNORE:C4190)
+else()
+  target_compile_options(OpenDDSWrapper PRIVATE -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
+endif()
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
