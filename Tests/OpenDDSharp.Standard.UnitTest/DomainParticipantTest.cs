@@ -1088,6 +1088,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
+            Topic otherTopic = otherParticipant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+            Assert.IsNotNull(otherTopic);
+
             Publisher publisher = participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
@@ -1097,7 +1100,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Subscriber subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(topic);
+            DataReader reader = subscriber.CreateDataReader(otherTopic);
             Assert.IsNotNull(reader);
 
             Assert.IsTrue(reader.WaitForPublications(1, 50_000));
@@ -1108,7 +1111,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
+            Assert.AreEqual(2, handles.Count);
             Assert.AreEqual(handle, handles.First());
 
             // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter
@@ -1118,7 +1121,7 @@ namespace OpenDDSharp.Standard.UnitTest
             while (result != ReturnCode.Ok && count > 0)
             {
                 Thread.Sleep(500);
-                result = participant.GetDiscoveredTopicData(ref data, handles.First());
+                result = participant.GetDiscoveredTopicData(ref data, handle);
                 count--;
             }
 
