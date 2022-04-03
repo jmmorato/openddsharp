@@ -1862,8 +1862,8 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
 
             // Call GetKeyValue with HandleNil
             TestStruct data = new TestStruct();
