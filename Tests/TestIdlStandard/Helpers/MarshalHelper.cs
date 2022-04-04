@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-#if Linux
+#if Windows
+#else
 using System.Diagnostics;
 #endif
 using System.Runtime.InteropServices;
