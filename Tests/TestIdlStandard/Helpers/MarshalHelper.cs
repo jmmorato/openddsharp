@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if Linux
+using System.Diagnostics;
+#endif
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -336,7 +339,7 @@ internal static class MarshalHelper
 
     public static IntPtr WideStringToPtr(this string str)
     {
-#if Windows        
+#if Windows
         var utfBytes = Encoding.Unicode.GetBytes(str);
 
         byte[] bytes = new byte[utfBytes.Length + 2];
@@ -618,14 +621,14 @@ internal static class MarshalHelper
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = '\x000';
+            char value = '\0';
             try
             {
                 value = char.ConvertFromUtf32(aux)[0];
             }
             catch
             {
-                Console.WriteLine($"Character {aux} is not a valid UTF32 character.");
+                Trace.Write($"Character {aux} is not a valid UTF32 character.");
             }
 #endif
             array.SetValue(value, dimensions);
