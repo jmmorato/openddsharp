@@ -618,7 +618,15 @@ internal static class MarshalHelper
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = char.ConvertFromUtf32(aux)[0];
+            char value = '\x000';
+            try
+            {
+                value = char.ConvertFromUtf32(aux)[0];
+            }
+            catch
+            {
+                Console.WriteLine($"Character {aux} is not a valid UTF32 character.");
+            }
 #endif
             array.SetValue(value, dimensions);
         }
