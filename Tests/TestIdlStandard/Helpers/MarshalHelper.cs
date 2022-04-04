@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-#if Windows
-#else
-using System.Diagnostics;
-#endif
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -629,7 +625,7 @@ internal static class MarshalHelper
             }
             catch
             {
-                Trace.Write($"Character {aux} is not a valid UTF32 character.");
+                Console.Error.WriteLine($"Character {aux} is not a valid UTF32 character.");
             }
 #endif
             array.SetValue(value, dimensions);
