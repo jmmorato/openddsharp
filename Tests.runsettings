@@ -2,7 +2,7 @@
 <RunSettings>
   <RunConfiguration>
     <!-- Put results in root folder rather inside each project-->
-    <ResultsDirectory>.\TestResults</ResultsDirectory>
+    <ResultsDirectory>TestResults</ResultsDirectory>
   </RunConfiguration>
 
   <MSTest>
