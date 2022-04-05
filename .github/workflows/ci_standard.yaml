@@ -59,20 +59,12 @@ jobs:
       if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
-
-    - name : Coverlet
-      uses: b3b00/coverlet-action@1.1.9
-      with:
-        testProject: '${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj'
-        output: 'lcov.info'
-        outputFormat: 'lcov'
-        excludes: '[.*UnitTest]*,[.*IntegrationTest]*'
-
+    
     - name: Coveralls      
       uses: coverallsapp/github-action@v1.1.1
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{steps.coverlet.outputs.coverageFile}}
+        path-to-lcov: ${{ github.workspace }}/TestResults/lcov.info
 
   build_linux:
     runs-on: ubuntu-18.04
@@ -171,20 +163,12 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
         LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
-
-    - name : Coverlet
-      uses: b3b00/coverlet-action@1.1.9
-      with:
-        testProject: '${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj'
-        output: 'lcov.info'
-        outputFormat: 'lcov'
-        excludes: '[.*UnitTest]*,[.*IntegrationTest]*'
-
+    
     - name: Coveralls      
       uses: coverallsapp/github-action@v1.1.1
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{steps.coverlet.outputs.coverageFile}} 
+        path-to-lcov: ${{ github.workspace }}/TestResults/lcov.info
 
   build_macos:
     runs-on: macos-10.15
@@ -283,17 +267,9 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
         DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
-
-    - name : Coverlet
-      uses: b3b00/coverlet-action@1.1.9
-      with:
-        testProject: '${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj'
-        output: 'lcov.info'
-        outputFormat: 'lcov'
-        excludes: '[.*UnitTest]*,[.*IntegrationTest]*'
-
+   
     - name: Coveralls      
       uses: coverallsapp/github-action@v1.1.1
       with:
         github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{steps.coverlet.outputs.coverageFile}} 
+        path-to-lcov: ${{ github.workspace }}/TestResults/lcov.info
