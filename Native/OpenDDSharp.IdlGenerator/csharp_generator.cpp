@@ -1662,7 +1662,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if Windows\n");
+					ret.append("#if !OSX\n");
 
 					ret.append(indent);
 					ret.append("    wrapper.");

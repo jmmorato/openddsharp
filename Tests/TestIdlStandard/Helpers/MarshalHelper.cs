@@ -149,7 +149,7 @@ internal static class MarshalHelper
         for (int i = 0; i < length; i++)
         {
 #if !OSX
-            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
+            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));            
 #else
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
             try
@@ -509,8 +509,7 @@ internal static class MarshalHelper
             length *= array.GetLength(i);
         }
 
-        int[] dimensions = new int[array.Rank];
-        int[] dIndex = new int[array.Rank];
+        int[] dimensions = new int[array.Rank];        
         for (int i = 0; i < length; i++)
         {
             if (i > 0)
