@@ -62,7 +62,7 @@ jobs:
 
     - name: Prepare coverage result
       shell: pwsh
-      run: Copy-Item -path "TestResults" -Recurse -Include "coverage.info" -Destination "TestResults"
+      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
       working-directory: ${{ github.workspace }}
     
     - name: Coveralls      
@@ -171,7 +171,7 @@ jobs:
 
     - name: Prepare coverage result
       shell: pwsh
-      run: Copy-Item -path "TestResults" -Recurse -Include "coverage.info" -Destination "TestResults"
+      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
       working-directory: ${{ github.workspace }}
     
     - name: Coveralls      
@@ -280,7 +280,7 @@ jobs:
 
     - name: Prepare coverage result
       shell: pwsh
-      run: Copy-Item -path "TestResults" -Recurse -Include "coverage.info" -Destination "TestResults"
+      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
       working-directory: ${{ github.workspace }}
    
     - name: Coveralls      
