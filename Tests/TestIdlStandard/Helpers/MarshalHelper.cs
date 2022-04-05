@@ -146,19 +146,19 @@ internal static class MarshalHelper
         // Populate the list
         for (int i = 0; i < length; i++)
         {
-#if Windows
+//#if Windows
             sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
-#else
-            int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
-            try
-            {
-                sequence.Add(char.ConvertFromUtf32(utf32)[0]);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Character {utf32} is not a valid UTF32 character: {ex}");
-            }
-#endif
+//#else
+//            int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
+//            try
+//            {
+//                sequence.Add(char.ConvertFromUtf32(utf32)[0]);
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new Exception($"Character {utf32} is not a valid UTF32 character: {ex}");
+//            }
+//#endif
         }
     }
 
@@ -190,11 +190,11 @@ internal static class MarshalHelper
         for (int i = 0; i < sequence.Count; i++)
         {
             // Newly-allocated space has no existing object, so the last param is false 
-#if Windows
+//#if Windows
             Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
-#else
-            Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
-#endif
+//#else
+//            Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
+//#endif
         }
     }
 
@@ -582,7 +582,6 @@ internal static class MarshalHelper
 
         // Get the total size of unmanaged memory that is needed
         int size = array.Length;
-
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
 
@@ -622,20 +621,20 @@ internal static class MarshalHelper
                 UpdateDimensionsArray(array, dimensions);
             }
 
-#if (Windows || Linux)
+//#if Windows
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
-#else
-            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = '\0';
-            try
-            {
-                value = char.ConvertFromUtf32(aux)[0];
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Character {aux} in the position {i} is not a valid UTF32 character: {ex}");
-            }
-#endif
+//#else
+//            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
+//            char value = '\0';
+//            try
+//            {
+//                value = char.ConvertFromUtf32(aux)[0];
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new Exception($"Character {aux} in the position {i} is not a valid UTF32 character: {ex}");
+//            }
+//#endif
             array.SetValue(value, dimensions);
         }
     }
