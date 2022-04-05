@@ -760,7 +760,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
 			break;
 		case AST_PredefinedType::PT_wchar:			
-			ret = "#if (Windows || Linux) \n[MarshalAs(UnmanagedType.I2)]\n#else\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
+			ret = "#if Windows \n[MarshalAs(UnmanagedType.I2)]\n#else\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
