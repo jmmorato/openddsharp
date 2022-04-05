@@ -760,7 +760,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type) {
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
 			break;
 		case AST_PredefinedType::PT_wchar:			
-			ret = "#if Windows\n[MarshalAs(UnmanagedType.I2)]\n#else\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
+			ret = "#if (Windows || Linux) \n[MarshalAs(UnmanagedType.I2)]\n#else\n[MarshalAs(UnmanagedType.I4)]\n#endif\n";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
@@ -1662,7 +1662,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if Windows\n");
+					ret.append("#if Windows || Linux\n");
 
 					ret.append(indent);
 					ret.append("    wrapper.");
@@ -1835,7 +1835,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if Windows\n");
+					ret.append("#if Windows || Linux\n");
 					
 					ret.append(indent);
 					ret.append("        MarshalHelper.MultiArrayToPtr<");
@@ -2389,7 +2389,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if Windows\n");
+					ret.append("#if Windows || Linux\n");
 
 					ret.append("    ");
 					ret.append(name);

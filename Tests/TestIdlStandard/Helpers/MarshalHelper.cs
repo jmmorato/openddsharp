@@ -582,6 +582,7 @@ internal static class MarshalHelper
 
         // Get the total size of unmanaged memory that is needed
         int size = array.Length;
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
 
