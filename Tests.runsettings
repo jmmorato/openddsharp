@@ -16,7 +16,7 @@
       <!-- https://github.com/tonerdo/coverlet/blob/master/Documentation/VSTestIntegration.md -->
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>cobertura</Format>
+          <Format>cobertura,lcov</Format>
           <Exclude>[.*UnitTest]*,[.*IntegrationTest]*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
