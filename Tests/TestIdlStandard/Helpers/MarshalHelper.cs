@@ -621,7 +621,7 @@ internal static class MarshalHelper
                 UpdateDimensionsArray(array, dimensions);
             }
 
-#if Windows
+#if (Windows || Linux)
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
