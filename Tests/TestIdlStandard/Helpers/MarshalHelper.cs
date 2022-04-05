@@ -149,8 +149,15 @@ internal static class MarshalHelper
 #if Windows
             sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
 #else
-            int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));            
-            sequence.Add(char.ConvertFromUtf32(utf32)[0]);
+            int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
+            try
+            {
+                sequence.Add(char.ConvertFromUtf32(utf32)[0]);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Character {aux} is not a valid UTF32 character: {ex}");
+            }
 #endif
         }
     }
@@ -623,9 +630,9 @@ internal static class MarshalHelper
             {
                 value = char.ConvertFromUtf32(aux)[0];
             }
-            catch
+            catch (Exception ex)
             {
-                Console.Error.WriteLine($"Character {aux} is not a valid UTF32 character.");
+                throw new Exception($"Character {aux} is not a valid UTF32 character: {ex}");
             }
 #endif
             array.SetValue(value, dimensions);
