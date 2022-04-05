@@ -666,8 +666,8 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 // Wait for discovery.
-                bool found = _writer.WaitForSubscriptions(1, 1000);
-                Assert.IsTrue(found);
+                Assert.IsTrue(_reader.WaitForPublications(1, 5_000));
+                Assert.IsTrue(_writer.WaitForSubscriptions(1, 5_000));
 
                 // Write two samples of the same instances.
                 InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
