@@ -632,7 +632,7 @@ internal static class MarshalHelper
             }
             catch (Exception ex)
             {
-                throw new Exception($"Character {aux} is not a valid UTF32 character: {ex}");
+                throw new Exception($"Character {aux} in the position {i} is not a valid UTF32 character: {ex}");
             }
 #endif
             array.SetValue(value, dimensions);
