@@ -61,7 +61,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: Parse Trx files
-      uses: NasAmin/trx-parser@v0.1
+      uses: NasAmin/trx-parser@v0.2.0
       id: trx-parser
       with:
         TRX_PATH: ${{ github.workspace }}/TestResults
@@ -166,7 +166,7 @@ jobs:
         LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
 
     - name: Parse Trx files
-      uses: NasAmin/trx-parser@v0.1
+      uses: NasAmin/trx-parser@v0.2.0
       id: trx-parser
       with:
         TRX_PATH: ${{ github.workspace }}/TestResults
@@ -271,7 +271,7 @@ jobs:
         DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
 
     - name: Parse Trx files
-      uses: NasAmin/trx-parser@v0.1
+      uses: NasAmin/trx-parser@v0.2.0
       id: trx-parser
       with:
         TRX_PATH: ${{ github.workspace }}/TestResults
