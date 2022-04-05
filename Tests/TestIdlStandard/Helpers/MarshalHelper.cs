@@ -156,7 +156,7 @@ internal static class MarshalHelper
             }
             catch (Exception ex)
             {
-                throw new Exception($"Character {aux} is not a valid UTF32 character: {ex}");
+                throw new Exception($"Character {utf32} is not a valid UTF32 character: {ex}");
             }
 #endif
         }
