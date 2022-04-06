@@ -2389,7 +2389,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if !OSX\n");
+					ret.append("#if Windows\n");
 
 					ret.append("    ");
 					ret.append(name);
