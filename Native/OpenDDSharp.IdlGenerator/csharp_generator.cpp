@@ -2390,7 +2390,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
 					ret.clear();
-					ret.append("#if !OSX\n");
+					ret.append("#if Windows\n");
 
 					ret.append(indent);
 					ret.append("    ");
@@ -2398,6 +2398,15 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append(" = wrapper.");
 					ret.append(name);
 					ret.append(";\n");
+
+					ret.append("#elif Linux\n");
+
+					ret.append(indent);
+					ret.append("    ");
+					ret.append(name);
+					ret.append(" = Array.ConvertAll(wrapper.");
+					ret.append(name);
+					ret.append(", c => Convert.ToChar(c));\n");
 
 					ret.append("#else\n");
 
