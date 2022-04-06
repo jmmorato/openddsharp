@@ -5,8 +5,6 @@
  * See: http://www.opendds.org/license.html
  */
 
-#include "all.h"
-
 #include <ast_argument.h>
 #include <ast_attribute.h>
 #include <ast_component_fwd.h>

@@ -64,8 +64,6 @@ trademarks or registered trademarks of Sun Microsystems, Inc.
 
 // be_produce.cpp - Produce the work of the BE
 
-#include "all.h"
-
 #include "global_extern.h"
 
 #include "be_extern.h"

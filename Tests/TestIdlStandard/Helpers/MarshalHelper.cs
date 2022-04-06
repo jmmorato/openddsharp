@@ -148,7 +148,7 @@ internal static class MarshalHelper
         // Populate the list
         for (int i = 0; i < length; i++)
         {
-#if Windows
+#if !OSX
             sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));            
 #else
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
@@ -192,7 +192,7 @@ internal static class MarshalHelper
         for (int i = 0; i < sequence.Count; i++)
         {
             // Newly-allocated space has no existing object, so the last param is false 
-#if Windows
+#if !OSX
             Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
 #else
             Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
@@ -622,7 +622,7 @@ internal static class MarshalHelper
                 UpdateDimensionsArray(array, dimensions);
             }
 
-#if Windows
+#if !OSX
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));

@@ -14,6 +14,4 @@
 
 // NOTE: this was copied from the $TAO_ROOT/orbsvcs/IFR_Service
 
-#include "all.h"
-
 #include "TAO_IDL/driver/drv_args.cpp"

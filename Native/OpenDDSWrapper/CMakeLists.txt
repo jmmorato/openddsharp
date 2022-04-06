@@ -9,7 +9,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(OpenDDS REQUIRED) 
 
 add_library(OpenDDSWrapper SHARED
-all.h
 Ace.h Ace.cpp 
 BuiltinTopicData.h
 Condition.h Condition.cpp
@@ -59,6 +58,8 @@ ShmemInst.h ShmemInst.cpp
 UdpInst.h UdpInst.cpp)
 
 if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
   target_compile_options(OpenDDSWrapper PUBLIC /wd4190)
 else()
   target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
