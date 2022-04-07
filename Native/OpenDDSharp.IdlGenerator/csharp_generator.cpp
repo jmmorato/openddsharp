@@ -738,8 +738,9 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type, std::stri
 	}
 	case AST_Decl::NT_typedef:
 	{
+		ret.clear();
 		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-		ret = get_marshal_as_attribute(typedef_type->base_type());
+		ret = get_marshal_as_attribute(typedef_type->base_type(), indent);
 		break;
 	}
 	case AST_Decl::NT_fixed:
