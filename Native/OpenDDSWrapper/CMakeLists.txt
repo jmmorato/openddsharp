@@ -6,7 +6,7 @@ if(APPLE)
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
-endif
+endif()
 
 find_package(OpenDDS REQUIRED) 
 
