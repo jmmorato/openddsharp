@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.2)
-project(${PROJECT_NAME} CXX)
+project(${PROJECT_NAME} C)
 
 find_package(OpenDDS REQUIRED)
 
