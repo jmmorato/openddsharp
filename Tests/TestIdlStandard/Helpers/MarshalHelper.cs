@@ -154,7 +154,7 @@ internal static class MarshalHelper
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
             try
             {
-                sequence.Add(char.ConvertFromUtf32(utf32)[0]);
+                sequence.Add(ConvertFromUtf32(utf32));
             }
             catch (Exception ex)
             {
@@ -625,16 +625,8 @@ internal static class MarshalHelper
 #if Windows
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
-            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = '\0';
-            try
-            {
-                value = char.ConvertFromUtf32(aux)[0];
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Character {aux} in the position {i} is not a valid UTF32 character: {ex}");
-            }
+            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));            
+            char value = ConvertFromUtf32(aux);
 #endif
             array.SetValue(value, dimensions);
         }
@@ -729,6 +721,19 @@ internal static class MarshalHelper
         {
             return (decimal)d;
         }
+    }
+
+    public static char ConvertFromUtf32(int codepoint)
+    {
+        bool isValidUnicodeCharacter = codepoint <= 0x10FFFF &&
+                    (codepoint < 0xD800 || codepoint > 0xDFFF);
+
+        if (!isValidUnicodeCharacter)
+        {
+            return '\0';
+        }
+
+        return char.ConvertFromUtf32(codepoint)[0];
     }
 
     internal static void UpdateDimensionsArray(this Array array, int[] dimensions)

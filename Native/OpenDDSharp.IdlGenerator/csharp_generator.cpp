@@ -2434,7 +2434,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append(name);
 					ret.append(" = Array.ConvertAll(wrapper.");
 					ret.append(name);
-					ret.append(", c => Char.ConvertFromUtf32(c).FirstOrDefault());\n");
+					ret.append(", c => MarshalHelper.ConvertFromUtf32(c).FirstOrDefault());\n");
 
 					ret.append("#endif\n");
 					break;
