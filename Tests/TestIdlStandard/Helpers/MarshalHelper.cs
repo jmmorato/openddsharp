@@ -733,7 +733,7 @@ internal static class MarshalHelper
             return '\0';
         }
 
-        return char.ConvertFromUtf32(codepoint)[0];
+        return char.ConvertFromUtf32(codepoint).FirstOrDefault();
     }
 
     internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
