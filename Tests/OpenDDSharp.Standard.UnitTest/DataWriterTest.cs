@@ -872,6 +872,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             // Wait for discovery
             writer.WaitForSubscriptions(1, 1000);
+            dataReader.WaitForPublications(1, 1000);
 
             // Dispose an instance that does not exist
             ReturnCode result = dataWriter.Dispose(new TestStruct { Id = 1 }, InstanceHandle.HandleNil);
