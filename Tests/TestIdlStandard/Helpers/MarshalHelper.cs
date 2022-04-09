@@ -734,7 +734,14 @@ internal static class MarshalHelper
             return '\0';
         }
 
-        return char.ConvertFromUtf32(codepoint).FirstOrDefault();
+        try
+        {
+            return char.ConvertFromUtf32(codepoint).FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Exception for codepoint {codepoint}: {ex}");
+        }
     }
 
     internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
