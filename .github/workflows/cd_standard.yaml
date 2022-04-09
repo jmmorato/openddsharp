@@ -3,6 +3,11 @@ name: Continuous Delivery
 on:
   workflow_dispatch:
     branches: [ develop, main ]
+    inputs:
+      publish-nuget:
+        type: boolean
+        required: true
+        description: Publish the NuGet packages to nuget.org
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -564,9 +569,11 @@ jobs:
         path: |
           ${{ github.workspace }}/Release/*.nupkg
     
-    #- name: Publish release packages
-    #  env: 
-    #    NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-    #  shell: pwsh
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
-    #  working-directory: ${{ github.workspace }}/Build
+    - name: Publish NuGet packages
+      if:  ${{ github.event.inputs.publish-nuget == 'true' }} 
+      env: 
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      shell: pwsh
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      working-directory: ${{ github.workspace }}/Build
+
