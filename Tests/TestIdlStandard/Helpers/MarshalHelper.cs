@@ -726,7 +726,7 @@ internal static class MarshalHelper
 
     public static char ConvertFromUtf32(int codepoint)
     {
-        bool isValidUnicodeCharacter = codepoint <= 0x10FFFF &&
+        bool isValidUnicodeCharacter = (codepoint >= 0x00000 && codepoint <= 0x10FFFF) &&
                     (codepoint < 0xD800 || codepoint > 0xDFFF);
 
         if (!isValidUnicodeCharacter)
@@ -734,14 +734,7 @@ internal static class MarshalHelper
             return '\0';
         }
 
-        try
-        {
-            return char.ConvertFromUtf32(codepoint).FirstOrDefault();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Exception for codepoint {codepoint}: {ex}");
-        }
+        return char.ConvertFromUtf32(codepoint).FirstOrDefault();
     }
 
     internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
