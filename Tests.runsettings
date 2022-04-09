@@ -19,8 +19,12 @@
           <Format>cobertura,lcov</Format>
           <Include>
            <ModulePath>.*OpenDDSharp.Standard.dll</ModulePath>
+           <ModulePath>.*TestIdlStandard.dll</ModulePath>
           </Include>
-          <Exclude>[.*UnitTest]*,[.*IntegrationTest]*</Exclude>
+          <Exclude>
+            <ModulePath>.*OpenDDSharp.BuildTasks.*</ModulePath>
+            <ModulePath>.*OpenDDSharp.Standard.UnitTest.*</ModulePath>
+          </Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
         </Configuration>
