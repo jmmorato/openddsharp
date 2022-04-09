@@ -1,3 +1,6 @@
+[![Continuous Integration](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml/badge.svg?branch=develop)](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml)
+[![Coverage Status](https://coveralls.io/repos/github/jmmorato/openddsharp/badge.svg?branch=develop)](https://coveralls.io/github/jmmorato/openddsharp)
+
 # OpenDDSharp
 OpenDDS wrapper for .NET languages.
 

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     branches: [ develop, main ]
     inputs:
-      publish-nuget:
+      publish:
         type: boolean
         required: true
         description: Publish the NuGet packages to nuget.org
@@ -552,6 +552,27 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
+    - name: Test OpenDDSharp
+      shell: bash      
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration Release --runtime win-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+        DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
+
+    - name: Prepare coverage result
+      shell: pwsh
+      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
+      working-directory: ${{ github.workspace }}
+
+    - name: Coveralls      
+      uses: coverallsapp/github-action@v1.1.2
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN }} 
+        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
+
     - name: Build OpenDDSharp solution AnyCPU
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
@@ -570,7 +591,7 @@ jobs:
           ${{ github.workspace }}/Release/*.nupkg
     
     - name: Publish NuGet packages
-      if:  ${{ github.event.inputs.publish-nuget == 'true' }} 
+      if:  ${{ github.event.inputs.publish == 'true' }} 
       env: 
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       shell: pwsh

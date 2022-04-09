@@ -60,17 +60,6 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
 
-    - name: Prepare coverage result
-      shell: pwsh
-      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
-      working-directory: ${{ github.workspace }}
-    
-    - name: Coveralls      
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
-
   build_linux:
     runs-on: ubuntu-18.04
     strategy:
@@ -169,17 +158,6 @@ jobs:
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
         LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
 
-    - name: Prepare coverage result
-      shell: pwsh
-      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
-      working-directory: ${{ github.workspace }}
-    
-    - name: Coveralls      
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
-
   build_macos:
     runs-on: macos-10.15
     strategy:
@@ -277,14 +255,4 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
         DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
-
-    - name: Prepare coverage result
-      shell: pwsh
-      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
-      working-directory: ${{ github.workspace }}
    
-    - name: Coveralls      
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN }} 
-        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
