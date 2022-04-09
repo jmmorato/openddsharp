@@ -150,17 +150,10 @@ internal static class MarshalHelper
         for (int i = 0; i < length; i++)
         {
 #if Windows
-            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));            
+            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
 #else
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
-            try
-            {
-                sequence.Add(ConvertFromUtf32(utf32));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Character {utf32} is not a valid UTF32 character: {ex}");
-            }
+            sequence.Add(ConvertFromUtf32(utf32));
 #endif
         }
     }
@@ -330,7 +323,7 @@ internal static class MarshalHelper
         byte[] buffer = new byte[length];
         Marshal.Copy(ptr, buffer, 0, buffer.Length);
 
-        return Encoding.Unicode.GetString(buffer);        
+        return Encoding.Unicode.GetString(buffer);
 #else
         int length = 0;
         while (Marshal.ReadInt32(ptr, length) != 0)
@@ -338,7 +331,7 @@ internal static class MarshalHelper
             length += 4;
         }
         byte[] buffer = new byte[length];
-        Marshal.Copy(ptr, buffer, 0, buffer.Length);   
+        Marshal.Copy(ptr, buffer, 0, buffer.Length);
 
         return Encoding.UTF32.GetString(buffer);
 #endif
@@ -350,7 +343,7 @@ internal static class MarshalHelper
         var utfBytes = Encoding.Unicode.GetBytes(str);
 
         byte[] bytes = new byte[utfBytes.Length + 2];
-        Array.Copy(utfBytes, bytes, utfBytes.Length);  
+        Array.Copy(utfBytes, bytes, utfBytes.Length);
 #else
         var utfBytes = Encoding.UTF32.GetBytes(str);
 
@@ -358,7 +351,7 @@ internal static class MarshalHelper
         Array.Copy(utfBytes, bytes, utfBytes.Length);
 #endif
 
-        IntPtr unmanagedPointer = Marshal.AllocHGlobal(bytes.Length);        
+        IntPtr unmanagedPointer = Marshal.AllocHGlobal(bytes.Length);
         Marshal.Copy(bytes, 0, unmanagedPointer, bytes.Length);
 
         return unmanagedPointer;
@@ -510,7 +503,7 @@ internal static class MarshalHelper
             length *= array.GetLength(i);
         }
 
-        int[] dimensions = new int[array.Rank];        
+        int[] dimensions = new int[array.Rank];
         for (int i = 0; i < length; i++)
         {
             if (i > 0)
@@ -626,7 +619,7 @@ internal static class MarshalHelper
 #if Windows
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
-            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));            
+            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
             char value = ConvertFromUtf32(aux);
 #endif
             array.SetValue(value, dimensions);
