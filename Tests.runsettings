@@ -17,6 +17,9 @@
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>cobertura,lcov</Format>
+          <Include>
+           <ModulePath>.*OpenDDSharp.Standard.dll</ModulePath>
+          </Include>
           <Exclude>[.*UnitTest]*,[.*IntegrationTest]*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
