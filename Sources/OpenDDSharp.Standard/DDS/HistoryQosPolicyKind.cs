@@ -27,7 +27,7 @@ namespace OpenDDSharp.DDS
     {
         /// <summary>
         /// Specifies that only the last depth values should be kept. When a data writer contains depth samples of a given instance, a write of
-        /// new samples for that instance are queued for delivery and the oldest unsent samples are discarded. When a data reader contains depth samples of a given instance, 
+        /// new samples for that instance are queued for delivery and the oldest unsent samples are discarded. When a data reader contains depth samples of a given instance,
         /// any incoming samples for that instance are kept and the oldest samples are discarded.
         /// </summary>
         KeepLastHistoryQos = 0,

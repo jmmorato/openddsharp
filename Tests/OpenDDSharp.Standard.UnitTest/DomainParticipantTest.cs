@@ -720,7 +720,6 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreNotSame(otherParticipant, _participant);
             Assert.AreNotSame(otherParticipant.InstanceHandle, _participant.InstanceHandle);
             Assert.AreNotEqual(otherParticipant.InstanceHandle, _participant.InstanceHandle);
-            otherParticipant.BindRtpsUdpTransportConfig();
 
             result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);

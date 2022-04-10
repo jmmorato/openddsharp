@@ -30,7 +30,7 @@ EXTERN_STRUCT_EXPORT ParticipantBuiltinTopicDataWrapper
     UserDataQosPolicyWrapper user_data;
 
 public:
-    ParticipantBuiltinTopicDataWrapper();
+    ParticipantBuiltinTopicDataWrapper() = default;
 
     ParticipantBuiltinTopicDataWrapper(const ::DDS::ParticipantBuiltinTopicData native) {
         key = native.key;
@@ -67,7 +67,7 @@ EXTERN_STRUCT_EXPORT TopicBuiltinTopicDataWrapper
     TopicDataQosPolicyWrapper topic_data;
 
 public:
-    TopicBuiltinTopicDataWrapper();
+    TopicBuiltinTopicDataWrapper() = default;
 
     TopicBuiltinTopicDataWrapper(const ::DDS::TopicBuiltinTopicData native) {
         key = native.key;
@@ -147,7 +147,7 @@ EXTERN_STRUCT_EXPORT SubscriptionBuiltinTopicDataWrapper
     GroupDataQosPolicyWrapper group_data;
 
 public:
-    SubscriptionBuiltinTopicDataWrapper();
+    SubscriptionBuiltinTopicDataWrapper() = default;
 
     SubscriptionBuiltinTopicDataWrapper(const ::DDS::SubscriptionBuiltinTopicData native) {
         key = native.key;
@@ -231,7 +231,7 @@ EXTERN_STRUCT_EXPORT PublicationBuiltinTopicDataWrapper
     GroupDataQosPolicyWrapper group_data;
 
 public:
-    PublicationBuiltinTopicDataWrapper();
+    PublicationBuiltinTopicDataWrapper() = default;
 
     PublicationBuiltinTopicDataWrapper(const ::DDS::PublicationBuiltinTopicData native) {
         key = native.key;

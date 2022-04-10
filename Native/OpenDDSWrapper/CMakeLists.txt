@@ -57,7 +57,11 @@ TransportInst.h TransportInst.cpp
 TcpInst.h TcpInst.cpp
 RtpsUdpInst.h RtpsUdpInst.cpp
 ShmemInst.h ShmemInst.cpp
-UdpInst.h UdpInst.cpp)
+UdpInst.h UdpInst.cpp
+ParticipantBuiltinTopicDataDataReader.h ParticipantBuiltinTopicDataDataReader.cpp
+PublicationBuiltinTopicDataDataReader.h PublicationBuiltinTopicDataDataReader.cpp
+SubscriptionBuiltinTopicDataDataReader.h SubscriptionBuiltinTopicDataDataReader.cpp
+TopicBuiltinTopicDataDataReader.h TopicBuiltinTopicDataDataReader.cpp)
 
 if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)

@@ -407,7 +407,6 @@ namespace OpenDDSharp.DDS
         /// <see cref="DataReader" />, and <see cref="DataWriter" /> objects.</para>
         /// </remarks>
         /// <returns>The built-in <see cref="Subscriber" />.</returns>
-        [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
         public Subscriber GetBuiltinSubscriber()
         {
             IntPtr s = UnsafeNativeMethods.GetBuiltinSubscriber(_native);
