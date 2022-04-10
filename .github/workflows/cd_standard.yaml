@@ -552,32 +552,10 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
-    - name: Build OpenDDSharp TestSupportProcessCore Project
-      shell: cmd
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration Release --runtime win-x64
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
-    
-    - name: Build OpenDDSharp UnitTest Project
-      shell: cmd
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration Release --runtime win-x64
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
-
-    - name: Test OpenDDSharp
-      shell: cmd      
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity normal --configuration Release --runtime win-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
+    - name: Build & Test with Cake
+      shell: pwsh      
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=x64 --BuildPlatform=Release --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+      working-directory: ${{ github.workspace }}/Build
 
     - name: Prepare coverage result
       shell: pwsh
