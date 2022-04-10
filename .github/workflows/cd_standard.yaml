@@ -553,7 +553,7 @@ jobs:
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp TestSupportProcessCore Project x64
-      shell: bash
+      shell: cmd
       run: dotnet msbuild ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
       env:
@@ -562,7 +562,7 @@ jobs:
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
     
     - name: Build OpenDDSharp UnitTest Project x64
-      shell: bash
+      shell: cmd
       run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
       env:
