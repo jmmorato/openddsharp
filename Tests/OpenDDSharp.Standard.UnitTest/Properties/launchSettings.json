@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "OpenDDSharp.Standard.UnitTest": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}

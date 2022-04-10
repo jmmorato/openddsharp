@@ -13,6 +13,7 @@
       OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Platforms>x64;x86</Platforms>
+	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <!-- NuGet properties -->
@@ -50,8 +51,8 @@
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Multicast.dll" />
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Udp.dll" />
     <None Include="@(OpenDDSReleaseWin32)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS Win32/Debug native Libraries -->
@@ -71,8 +72,8 @@
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Multicastd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Udpd.dll" />
     <None Include="@(OpenDDSDebugWin32)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(Platform)'=='Debug|AnyCPU'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x86'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS x64/Release native Libraries -->
@@ -92,8 +93,8 @@
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Multicast.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Udp.dll" />
     <None Include="@(OpenDDSReleasex64)" Pack="true" Visible="false" PackagePath="runtimes\win-x64\native">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS x64/Debug native Libraries -->
@@ -113,8 +114,8 @@
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Multicastd.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Udpd.dll" />
     <None Include="@(OpenDDSDebugx64)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x64'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x64'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <!-- OpenDDS Linux/Release native Libraries -->
@@ -252,26 +253,26 @@
     <!-- Native dependency from this project. -->
     <ProjectNativeDepsReleasex64 Include="..\..\Native\build_x64\OpenDDSWrapper\Release\OpenDDSWrapper.dll" />   
     <None Include="@(ProjectNativeDepsReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <ProjectNativeDepsDebugx64 Include="..\..\Native\build_x64\OpenDDSWrapper\Debug\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsDebugx64)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x64'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x64'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <ProjectNativeDepsReleasex86 Include="..\..\Native\build_x86\OpenDDSWrapper\Release\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsReleasex86)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <ProjectNativeDepsDebugx86 Include="..\..\Native\build_x86\OpenDDSWrapper\Debug\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsDebugx86)" Pack="false" Visible="false">
-      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x86'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x86'">PreserveNewest</CopyToPublishDirectory>
     </None>
 
     <None Include="..\..\Native\build_Linux\OpenDDSWrapper\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">

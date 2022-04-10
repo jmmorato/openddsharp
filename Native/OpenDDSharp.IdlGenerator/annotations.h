@@ -1,7 +1,6 @@
 #ifndef OPENDDS_IDL_ANNOTATIONS_HEADER
 #define OPENDDS_IDL_ANNOTATIONS_HEADER
 
-#include "all.h"
 #include <string>
 #include <map>
 

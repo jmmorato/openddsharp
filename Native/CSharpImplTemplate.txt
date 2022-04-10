@@ -217,6 +217,11 @@
                 return ReturnCode.BadParameter;
             }
 
+            if (handle == InstanceHandle.HandleNil)
+            {
+                return ReturnCode.BadParameter;
+            }
+
             ReturnCode ret = ReturnCode.Error;
             <%TYPE%>Wrapper aux = new <%TYPE%>Wrapper();
 
@@ -1026,6 +1031,11 @@
         public ReturnCode GetKeyValue(<%TYPE%> data, InstanceHandle handle)
         {
             if (data == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            if (handle == InstanceHandle.HandleNil)
             {
                 return ReturnCode.BadParameter;
             }

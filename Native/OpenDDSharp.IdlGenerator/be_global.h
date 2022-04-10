@@ -8,7 +8,6 @@
 #ifndef OPENDDS_IDL_BE_GLOBAL_H
 #define OPENDDS_IDL_BE_GLOBAL_H
 
-#include "all.h"
 #include "annotations.h"
 
 #include <utl_scoped_name.h>

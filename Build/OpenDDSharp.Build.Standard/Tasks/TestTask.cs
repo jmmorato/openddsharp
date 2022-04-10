@@ -18,12 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using System.Text;
-using Cake.Common;
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
-using OpenDDSharp.Build.Standard.Exceptions;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -39,60 +37,30 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.Log.Information("Starting test task...");
 
             var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/");
+            var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildConfiguration}/net6.0/{context.RunTime}");
             context.Log.Information($"Unit test path: {path}");
-            var file = "OpenDDSharp.Standard.UnitTest.dll";
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/mstest.testadapter/2.2.8/build/_common");
-            var settingsFile = Path.Combine(solutionFullPath, "CodeCoverage.runsettings");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/3.1.2/build/netstandard1.0");
+            var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
-            if (BuildContext.IsWindows)
+            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetTestSettings
             {
-                context.DotNetCoreTest(path + file, new Cake.Common.Tools.DotNetCore.Test.DotNetCoreTestSettings
+                TestAdapterPath = Path.GetFullPath(testAdapterPath),
+                WorkingDirectory = path,
+                EnvironmentVariables =
                 {
-                    TestAdapterPath = Path.GetFullPath(testAdapterPath),
-                    WorkingDirectory = path,
-                    EnvironmentVariables =
-                    {
-                        { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
-                        { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
-                        { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                        { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
-                    },
-                    Verbosity = DotNetCoreVerbosity.Normal,
-                    Settings = settingsFile,
-                });
-            }
-            else
-            {
-                try
-                {
-                    var dllPath = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildPlatform}/{context.BuildConfiguration}/netcoreapp3.1/", "OpenDDSharp.Standard.UnitTest.dll");
-
-                    var linuxPath = path;
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.Append($"export DDS_ROOT={Path.GetFullPath(context.DdsRoot)} && ");
-                    stringBuilder.Append($"export LD_LIBRARY_PATH=$DDS_ROOT/lib:$DDS_ROOT/ACE_TAO/ACE/lib:{linuxPath} && ");
-                    stringBuilder.Append($"dotnet test {dllPath} -v n");
-
-                    var exit = context.StartProcess("bash", new Cake.Core.IO.ProcessSettings
-                    {
-                        Arguments = stringBuilder.ToString(),
-                        WorkingDirectory = path,
-                    });
-
-                    if (exit != 0)
-                    {
-                        throw new BuildException($"Error calling the WSL dotnet test. Exit code: {exit}");
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    context.Log.Error(ex.StackTrace.ToString());
-                    throw;
-                }
-            }
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                },
+                Settings = settingsFile,
+                Runtime = context.RunTime,
+                NoBuild = true,
+                NoRestore = true,
+                Configuration = context.BuildConfiguration,
+                Loggers = { "trx", "console;verbosity=normal" },
+            });
         }
     }
 }

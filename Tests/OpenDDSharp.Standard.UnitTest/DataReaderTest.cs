@@ -487,6 +487,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(writer);
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+
             // Call sample rejected status
             SampleRejectedStatus status = default;
             ReturnCode result = reader.GetSampleRejectedStatus(ref status);
@@ -510,7 +513,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(500);
 
             // Call sample rejected status
             result = reader.GetSampleRejectedStatus(ref status);
@@ -769,6 +772,9 @@ namespace OpenDDSharp.Standard.UnitTest
             DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
 
             // Call sample lost status
             SampleLostStatus status = default;
@@ -1851,30 +1857,27 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStructDataReader dataReader = new TestStructDataReader(reader);
 
             Publisher publisher = _participant.CreatePublisher();
-            DataWriter writer = publisher.CreateDataWriter(_topic);
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataWriter writer = publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
 
             // Wait for discovery
-            bool found = writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-
-            // Call GetKeyValue with HandleNil
-            TestStruct data = new TestStruct();
-            ReturnCode result = dataReader.GetKeyValue(data, InstanceHandle.HandleNil);
-            Assert.AreEqual(ReturnCode.BadParameter, result);
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
 
             // Register an instance and write it
             InstanceHandle handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
-            result = dataWriter.Write(new TestStruct { Id = 1 }, handle1);
+            ReturnCode result = dataWriter.Write(new TestStruct { Id = 1 }, handle1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(1_000);
 
             // Get the for an existing instance
             List<TestStruct> structs = new List<TestStruct>();
@@ -1884,9 +1887,15 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().InstanceHandle);
 
+            TestStruct data = new TestStruct();
             result = dataReader.GetKeyValue(data, sampleInfos.First().InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.Id);
+
+            // Call GetKeyValue with HandleNil
+            data = new TestStruct();
+            result = dataReader.GetKeyValue(data, InstanceHandle.HandleNil);
+            Assert.AreEqual(ReturnCode.BadParameter, result);
         }
 
         /// <summary>

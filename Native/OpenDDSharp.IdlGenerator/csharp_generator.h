@@ -8,8 +8,6 @@
 #ifndef csharp_generator_H
 #define csharp_generator_H
 
-#include "all.h"
-
 #include "dds_generator.h"
 #include "ast_field.h"
 #include "ast_decl.h"
@@ -48,7 +46,7 @@ private:
 	std::string get_csharp_type(AST_Type* type);
 	std::string get_marshal_type(AST_Type* type);
 	std::string get_linux_marshal_type(AST_Type* type);
-	std::string get_marshal_as_attribute(AST_Type* type);
+	std::string get_marshal_as_attribute(AST_Type* type, std::string indent);
 	std::string get_marshal_attribute_unmanaged_type(AST_Type* type);
 	std::string get_linux_marshal_attribute_unmanaged_type(AST_Type* type);
 	std::string get_csharp_default_value(AST_Type* type);

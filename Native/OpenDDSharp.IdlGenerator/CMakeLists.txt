@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.8.2)
 find_package(OpenDDS REQUIRED)
 
 add_executable(openddsharp_idl
-all.h
 annotations.h annotations.cpp
 be_extern.h
 be_global.h be_global.cpp
@@ -27,6 +26,11 @@ string(REPLACE "\\" "/" TAO_ROOT_BE_INCLUDE ${TAO_ROOT}/TAO_IDL/be_include)
 message("ACE_ROOT=${ACE_ROOT}" )
 message("TAO_ROOT=${TAO_ROOT}" )
 message("DDS_ROOT=${DDS_ROOT}" )
+
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
+endif()
 
 target_include_directories(openddsharp_idl PRIVATE ${TAO_ROOT_BE_INCLUDE} PRIVATE ${TAO_ROOT_INCLUDE} PRIVATE ${TAO_ROOT})
 target_link_libraries(openddsharp_idl OpenDDS::Dcps TAO::TAO TAO::IDL_FE)

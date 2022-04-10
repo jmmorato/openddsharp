@@ -484,7 +484,7 @@ namespace OpenDDSharp.Standard.UnitTest
             exception = false;
             try
             {
-                TransportRegistry.Instance.BindConfig("", participant);
+                TransportRegistry.Instance.BindConfig(string.Empty, participant);
             }
             catch (Exception ex)
             {
@@ -540,6 +540,9 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.IsTrue(ex.GetType() == typeof(ArgumentNullException));
             }
             Assert.IsTrue(exception);
+
+            ReturnCode ret = AssemblyInitializer.Factory.DeleteParticipant(participant);
+            Assert.AreEqual(ReturnCode.Ok, ret);
         }
         #endregion
     }

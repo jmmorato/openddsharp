@@ -243,12 +243,12 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
         private long GetDatalinkReleaseDelay()
         {
-            return UnsafeNativeMethods.GetDatalinkReleaseDelay(_native);
+            return UnsafeNativeMethods.GetDatalinkReleaseDelay(_native).ToInt64();
         }
 
         private void SetDatalinkReleaseDelay(long value)
         {
-            UnsafeNativeMethods.SetDatalinkReleaseDelay(_native, value);
+            UnsafeNativeMethods.SetDatalinkReleaseDelay(_native, new IntPtr(value));
         }
 
         private ulong GetDatalinkControlChunks()
@@ -335,11 +335,11 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetDatalinkReleaseDelay", CallingConvention = CallingConvention.Cdecl)]
-            public static extern long GetDatalinkReleaseDelay(IntPtr ti);
+            public static extern IntPtr GetDatalinkReleaseDelay(IntPtr ti);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetDatalinkReleaseDelay", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetDatalinkReleaseDelay(IntPtr ti, long value);
+            public static extern void SetDatalinkReleaseDelay(IntPtr ti, IntPtr value);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetDatalinkControlChunks", CallingConvention = CallingConvention.Cdecl)]

@@ -3,6 +3,11 @@ name: Continuous Delivery
 on:
   workflow_dispatch:
     branches: [ develop, main ]
+    inputs:
+      publish:
+        type: boolean
+        required: true
+        description: Publish the NuGet packages to nuget.org
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,17 +15,21 @@ concurrency:
 
 jobs:
   build_windows_native:
-    runs-on: windows-2019
+    runs-on: windows-2022
     strategy:
       fail-fast: false
       matrix:        
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
         
     steps:
-    - uses: actions/checkout@v3   
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
 
     #- name: Cache OpenDDS libraries
     #  id: opendds-libraries-windows-cd
@@ -56,18 +65,18 @@ jobs:
     #- name: Build & Test with Cake (No cached)
     #  shell: pwsh
     #  if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
     #  working-directory: ${{ github.workspace }}/Build
       
     #- name: Build & Test with Cake (Cached)
     #  shell: pwsh
     #  if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
+    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
     #  working-directory: ${{ github.workspace }}/Build
 
     - name: Build native with Cake
       shell: pwsh      
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
 
     - name: Artifacts OpenDDS libraries      
@@ -109,10 +118,14 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
         
     steps:
     - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
 
     #- name: Cache OpenDDS libraries
     #  id: opendds-libraries-linux-cd
@@ -213,11 +226,15 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
         
     steps:
 
     - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
    
     #- name: Cache OpenDDS libraries
     #  id: opendds-libraries-macos-cd
@@ -312,15 +329,19 @@ jobs:
         retention-days: 1
       
   build_openddsharp_windows:
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
-      OpenDdsVersion: "3.18.1"
+      OpenDdsVersion: "3.20"
       MajorVersion: "0"
       MinorVersion: "8"
         
     steps:
     - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
 
     - name: Get branch names
       id: branch-name
@@ -524,12 +545,33 @@ jobs:
     - name: Build OpenDDSharp solution x86
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x86
-      working-directory: ${{ github.workspace }}        
+      working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp solution x64
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
+
+    #- name: Test OpenDDSharp
+    #  shell: cmd      
+    #  run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --verbosity normal --configuration Release --property:Platform=x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
+    #  working-directory: ${{ github.workspace }}
+    #  env:
+    #    DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
+    #    ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
+    #    TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
+    #    DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_x64/lib:${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE/lib"
+
+    #- name: Prepare coverage result
+    #  shell: pwsh
+    #  run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
+    #  working-directory: ${{ github.workspace }}
+
+    #- name: Coveralls      
+    #  uses: coverallsapp/github-action@v1.1.2
+    #  with:
+    #    github-token: ${{secrets.GITHUB_TOKEN }} 
+    #    path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
 
     - name: Build OpenDDSharp solution AnyCPU
       shell: cmd
@@ -548,9 +590,11 @@ jobs:
         path: |
           ${{ github.workspace }}/Release/*.nupkg
     
-    - name: Publish release packages
+    - name: Publish NuGet packages
+      if:  ${{ github.event.inputs.publish == 'true' }} 
       env: 
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}/Build
+

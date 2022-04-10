@@ -97,12 +97,6 @@ EXTERN_METHOD_EXPORT
 void RtpsUdpInst_SetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst* ri, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper RtpsUdpInst_GetHeartbeatResponseDelay(::OpenDDS::DCPS::RtpsUdpInst* ri);
-
-EXTERN_METHOD_EXPORT
-void RtpsUdpInst_SetHeartbeatResponseDelay(::OpenDDS::DCPS::RtpsUdpInst* ri, TimeValueWrapper value);
-
-EXTERN_METHOD_EXPORT
 TimeValueWrapper RtpsUdpInst_GetReceiveAddressDuration(::OpenDDS::DCPS::RtpsUdpInst* ri);
 
 EXTERN_METHOD_EXPORT

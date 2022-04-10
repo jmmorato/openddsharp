@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -57,9 +58,12 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
-            Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            if (TestContext.TestName != nameof(TestGetDiscoveredTopicData) && TestContext.TestName != nameof(TestGetDiscoveredTopics))
+            {
+                _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+                Assert.IsNotNull(_participant);
+                _participant.BindRtpsUdpTransportConfig();
+            }
         }
 
         /// <summary>
@@ -72,12 +76,13 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 ReturnCode result = _participant.DeleteContainedEntities();
                 Assert.AreEqual(ReturnCode.Ok, result);
-            }
 
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
+                if (AssemblyInitializer.Factory != null)
+                {
+                    result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                    _participant = null;
+                }
             }
         }
         #endregion
@@ -963,7 +968,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            Thread.Sleep(500);
+            Assert.IsTrue(_participant.WaitForParticipants(1, 5_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 5_000));
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = _participant.GetDiscoveredParticipants(handles);
@@ -995,6 +1001,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1034,6 +1041,11 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
+
+            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(otherParticipant);
+            otherParticipant.BindTcpTransportConfig();
 
             List<InstanceHandle> handles = new List<InstanceHandle>();
             ReturnCode result = participant.GetDiscoveredTopics(handles);
@@ -1046,29 +1058,67 @@ namespace OpenDDSharp.Standard.UnitTest
             result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            result = support.RegisterType(otherParticipant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            TopicQos qos = new TopicQos();
+            qos.TopicData.Value = new byte[] { 0x42 };
             Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
+            Topic otherTopic = otherParticipant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+            Assert.IsNotNull(otherTopic);
+
+            Publisher publisher = participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            DataWriter writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+
+            Subscriber subscriber = otherParticipant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReader reader = subscriber.CreateDataReader(otherTopic);
+            Assert.IsNotNull(reader);
+
+            Assert.IsTrue(reader.WaitForPublications(1, 50_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 50_000));
+
             InstanceHandle handle = topic.InstanceHandle;
-            Thread.Sleep(100);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, handles.Count);
-            Assert.AreEqual(handle, handles.First());
+            Assert.IsTrue(handles.Count > 0);
+            Assert.IsTrue(handles.Contains(handle));
 
+            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter
             TopicBuiltinTopicData data = default;
-            result = participant.GetDiscoveredTopicData(ref data, handles.First());
+            var count = 200;
+            result = ReturnCode.NoData;
+            while (result != ReturnCode.Ok && count > 0)
+            {
+                Thread.Sleep(500);
+                result = participant.GetDiscoveredTopicData(ref data, handle);
+                count--;
+            }
+
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
             Assert.AreEqual(typeName, data.TypeName);
             Assert.IsNotNull(data.Key);
-            TestHelper.TestNonDefaultTopicData(data);
+            Assert.IsNotNull(data.Key);
+            Assert.IsNotNull(data.TopicData);
+            Assert.IsNotNull(data.TopicData.Value);
+            Assert.AreEqual(1, data.TopicData.Value.Count());
+            Assert.AreEqual(0x42, data.TopicData.Value.First());
 
-            // Remove the participant
+            // Remove the participants
             participant.DeleteContainedEntities();
             AssemblyInitializer.Factory.DeleteParticipant(participant);
+
+            otherParticipant.DeleteContainedEntities();
+            AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
         }
 
         /// <summary>

@@ -729,8 +729,10 @@ namespace OpenDDSharp.Standard.UnitTest
             drQos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
             DataReader reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
-
             TestStructDataReader dataReader = new TestStructDataReader(reader);
+
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
 
             // Call ResumePublications without calling first SuspendPublications
             result = publisher.ResumePublications();
@@ -831,8 +833,10 @@ namespace OpenDDSharp.Standard.UnitTest
             drQos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
             DataReader reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
-
             TestStructDataReader dataReader = new TestStructDataReader(reader);
+
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
 
             // Call EndCoherentChanges without calling first SuspendPublications
             result = publisher.EndCoherentChanges();

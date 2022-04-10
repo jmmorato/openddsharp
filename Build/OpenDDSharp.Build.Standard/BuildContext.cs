@@ -32,7 +32,7 @@ namespace OpenDDSharp.Build.Standard
     public class BuildContext : FrostingContext
     {
         #region Constants
-        internal const string DEFAULT_OPENDDS_VERSION = "3.18.1";
+        internal const string DEFAULT_OPENDDS_VERSION = "3.20";
 
         private const string DEFAULT_PERL_FOLDER = "C:/Strawberry/perl/bin";
 
@@ -135,7 +135,36 @@ namespace OpenDDSharp.Build.Standard
 
         internal bool IsDevelop
         {
-            get { return BranchName == "develop"; }
+            get { return BranchName != "main"; }
+        }
+
+        internal string RunTime
+        {
+            get
+            {
+                var runtime = string.Empty;
+                if (IsWindows)
+                {
+                    if (BuildPlatform == PlatformTarget.x64)
+                    {
+                        runtime = "win-x64";
+                    }
+                    else
+                    {
+                        runtime = "win-x86";
+                    }
+                }
+                else if (IsLinux)
+                {
+                    runtime = "linux-x64";
+                }
+                else if (IsOSX)
+                {
+                    runtime = "osx-x64";
+                }
+
+                return runtime;
+            }
         }
         #endregion
 

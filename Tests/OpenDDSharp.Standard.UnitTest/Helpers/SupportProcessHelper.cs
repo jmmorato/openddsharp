@@ -30,6 +30,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
     internal class SupportProcessHelper
     {
         #region Constants
+        private const string SOLUTION_PATH = @"../../../../../../";
 #if Windows
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/ACE";
@@ -65,6 +66,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         #endregion
 
         #region Fields
+        private readonly string _runtime;
         private readonly TestContext _testContext;
         private string _platformFolder;
         private string _targetFolder;
@@ -93,10 +95,17 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
             Environment.SetEnvironmentVariable("ACE_ROOT", acePath);
             Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
+            _runtime = "win-x64/";
+            if (_platformFolder == "x86")
+            {
+                _runtime = "win-x86/";
+            }
 #if Linux
             Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+            _runtime = "linux-x64/";
 #elif OSX
             Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+            _runtime = "osx-x64/";
 #endif
         }
         #endregion
@@ -104,13 +113,18 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)
         {
-            string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "netcoreapp3.1", TEST_SUPPORT_PROCESS_EXE_NAME);
+            string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net6.0", TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
             if (!File.Exists(supportProcessPath))
             {
-                _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
-                throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net6.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+
+                if (!File.Exists(supportProcessPath))
+                {
+                    _testContext.WriteLine($"The support process executable could not be located at {supportProcessPath}.");
+                    throw new FileNotFoundException($"The support process executable could not be located at {supportProcessPath}.");
+                }
             }
 #if Linux || OSX
             var arguments = supportProcessPath + " " + teskKind.ToString();
@@ -131,11 +145,11 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 #endif
             if (!File.Exists(infoRepoPath))
             {
-                _testContext.WriteLine($"The support process executable could not be located at {infoRepoPath}.");
+                _testContext.WriteLine($"The DCPSInfoRepo executable could not be located at {infoRepoPath}.");
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
 
-            return SpawnProcess(infoRepoPath, string.Empty);
+            return SpawnProcess(infoRepoPath, @"-o repo.ior -ORBListenEndpoints iiop://localhost:12345");
         }
 
         private Process SpawnProcess(string path, string arguments)

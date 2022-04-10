@@ -65,8 +65,10 @@ namespace OpenDDSharp.Standard.UnitTest
             ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
             ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
-            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://" + INFOREPO_IOR);
+            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::localhost:12345/DCPSInfoRepo");
             ParticipantService.Instance.AddDiscovery(infoRepo);
+            infoRepo.BitTransportIp = "localhost";
+            infoRepo.BitTransportPort = 0;
             ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
 
             _supportProcess = new SupportProcessHelper(context);
@@ -94,7 +96,8 @@ namespace OpenDDSharp.Standard.UnitTest
             TransportRegistry.Instance.Release();
             Assert.IsTrue(TransportRegistry.Instance.Released);
             TransportRegistry.Close();
-            ParticipantService.Instance.Shutdown();
+            var ret = ParticipantService.Instance.Shutdown();
+            Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsTrue(ParticipantService.Instance.IsShutdown);
 
             Ace.Fini();

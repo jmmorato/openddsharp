@@ -56,9 +56,6 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(rui.HeartbeatPeriod);
             Assert.AreEqual(1, rui.HeartbeatPeriod.Seconds);
             Assert.AreEqual(0, rui.HeartbeatPeriod.MicroSeconds);
-            Assert.IsNotNull(rui.HeartbeatResponseDelay);
-            Assert.AreEqual(0, rui.HeartbeatResponseDelay.Seconds);
-            Assert.AreEqual(500000, rui.HeartbeatResponseDelay.MicroSeconds);
             Assert.AreEqual(1, rui.Ttl);
             Assert.AreEqual(32U, rui.DatalinkControlChunks);
             Assert.AreEqual(10000, rui.DatalinkReleaseDelay);
@@ -113,11 +110,6 @@ namespace OpenDDSharp.Standard.UnitTest
                     Seconds = 2,
                     MicroSeconds = 100000,
                 },
-                HeartbeatResponseDelay = new TimeValue
-                {
-                    Seconds = 2,
-                    MicroSeconds = 100000,
-                },
                 Ttl = 2,
                 DatalinkControlChunks = 64U,
                 DatalinkReleaseDelay = 20000,
@@ -147,9 +139,6 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(rui.HeartbeatPeriod);
             Assert.AreEqual(2, rui.HeartbeatPeriod.Seconds);
             Assert.AreEqual(100000, rui.HeartbeatPeriod.MicroSeconds);
-            Assert.IsNotNull(rui.HeartbeatResponseDelay);
-            Assert.AreEqual(2, rui.HeartbeatResponseDelay.Seconds);
-            Assert.AreEqual(100000, rui.HeartbeatResponseDelay.MicroSeconds);
             Assert.AreEqual(2, rui.Ttl);
             Assert.AreEqual(64U, rui.DatalinkControlChunks);
             Assert.AreEqual(20000, rui.DatalinkReleaseDelay);

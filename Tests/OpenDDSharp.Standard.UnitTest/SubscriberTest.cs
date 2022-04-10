@@ -764,6 +764,11 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(otherReader);
             TestStructDataReader otherDataReader = new TestStructDataReader(otherReader);
 
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(otherReader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(otherWriter.WaitForSubscriptions(1, 5_000));
+
             // Check that the GetDataReaders without sending any sample
             List<DataReader> list = new List<DataReader>();
             result = subscriber.GetDataReaders(list);

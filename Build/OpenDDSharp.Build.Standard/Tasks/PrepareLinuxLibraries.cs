@@ -18,11 +18,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Pack;
-using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Pack;
-using Cake.Core;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
@@ -33,7 +28,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     [TaskName("PrepareLinuxLibraries")]
     public class PrepareLinuxLibraries : FrostingTask<BuildContext>
     {
-        private const string OPENDDS_VERSION = "3.18.1";
+        private const string OPENDDS_VERSION = "3.20.0";
         private const string ACE_VERSION = "6.5.16";
         private const string TAO_VERSION = "2.5.16";
 

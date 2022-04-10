@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Pack;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.NuGet;
 using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
@@ -46,7 +46,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
 
             string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
             string path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Standard", "OpenDDSharp.Standard.csproj");
-            context.DotNetCorePack(path, new DotNetCorePackSettings
+            context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
                 NoBuild = true,
@@ -55,7 +55,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             });
 
             path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Templates", "OpenDDSharp.Templates.csproj");
-            context.DotNetCorePack(path, new DotNetCorePackSettings
+            context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
                 NoBuild = true,
@@ -64,7 +64,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             });
 
             path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Native", "OpenDDSharp.Native.csproj");
-            context.DotNetCorePack(path, new DotNetCorePackSettings
+            context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
                 NoBuild = true,

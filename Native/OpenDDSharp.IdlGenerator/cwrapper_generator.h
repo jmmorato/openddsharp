@@ -8,8 +8,6 @@
 #ifndef cwrapper_generator_H
 #define cwrapper_generator_H
 
-#include "all.h"
-
 #include "dds_generator.h"
 #include "ast_field.h"
 #include "ast_decl.h"

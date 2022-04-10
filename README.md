@@ -1,3 +1,6 @@
+[![Continuous Integration](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml/badge.svg?branch=develop)](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml)
+[![Coverage Status](https://coveralls.io/repos/github/jmmorato/openddsharp/badge.svg?branch=develop)](https://coveralls.io/github/jmmorato/openddsharp)
+
 # OpenDDSharp
 OpenDDS wrapper for .NET languages.
 
@@ -11,7 +14,7 @@ publish and subscribe model.
 OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)  
 OpenDDS Repository: [https://github.com/objectcomputing/OpenDDS](https://github.com/objectcomputing/OpenDDS)
 
-OpenDDSharp has been compiled with OpenDDS v3.18.1
+OpenDDSharp has been compiled with OpenDDS v3.20
 
 | Package | NuGet |
 |---------|-------|

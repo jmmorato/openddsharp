@@ -44,8 +44,8 @@ void ParticipantService_SetRepoDomain(int domain, char * repo, bool attach_parti
 	TheServiceParticipant->set_repo_domain(domain, std::string(repo), attach_participant);
 }
 
-void ParticipantService_Shutdown() {
-	TheServiceParticipant->shutdown();
+::DDS::ReturnCode_t ParticipantService_Shutdown() {
+	return TheServiceParticipant->shutdown();
 }
 
 bool ParticipantService_GetIsShutdown() {

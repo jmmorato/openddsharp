@@ -165,19 +165,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
         }
 
         /// <summary>
-        /// Gets or sets the protocol tuning parameter in milliseconds that
-        /// allows the RTPS Reader to delay the sending of a
-        /// positive or negative acknowledgment. This
-        /// parameter is used to reduce the occurrences of
-        /// network storms.
-        /// </summary>
-        public TimeValue HeartbeatResponseDelay
-        {
-            get => GetHeartbeatResponseDelay();
-            set => SetHeartbeatResponseDelay(value);
-        }
-
-        /// <summary>
         /// Gets or sets the receive address timeout.
         /// The default value is 5 seconds.
         /// </summary>
@@ -321,16 +308,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
             UnsafeNativeMethods.SetHeartbeatPeriod(_native, value);
         }
 
-        private TimeValue GetHeartbeatResponseDelay()
-        {
-            return UnsafeNativeMethods.GetHeartbeatResponseDelay(_native);
-        }
-
-        private void SetHeartbeatResponseDelay(TimeValue value)
-        {
-            UnsafeNativeMethods.SetHeartbeatResponseDelay(_native, value);
-        }
-
         private TimeValue GetReceiveAddressDuration()
         {
             return UnsafeNativeMethods.GetReceiveAddressDuration(_native);
@@ -447,15 +424,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_SetHeartbeatPeriod", CallingConvention = CallingConvention.Cdecl)]
             public static extern void SetHeartbeatPeriod(IntPtr mi, [MarshalAs(UnmanagedType.Struct)] TimeValue value);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_GetHeartbeatResponseDelay", CallingConvention = CallingConvention.Cdecl)]
-            [return: MarshalAs(UnmanagedType.Struct)]
-            public static extern TimeValue GetHeartbeatResponseDelay(IntPtr mi);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_SetHeartbeatResponseDelay", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetHeartbeatResponseDelay(IntPtr mi, [MarshalAs(UnmanagedType.Struct)] TimeValue value);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_GetReceiveAddressDuration", CallingConvention = CallingConvention.Cdecl)]

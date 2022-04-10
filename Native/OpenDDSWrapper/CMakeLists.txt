@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 3.8.2)
 
-project(OpenDDSWrapper C)
+project(OpenDDSWrapper CXX)
+
+if(APPLE)
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
 
 find_package(OpenDDS REQUIRED) 
 
 add_library(OpenDDSWrapper SHARED
-all.h
 Ace.h Ace.cpp 
 BuiltinTopicData.h
 Condition.h Condition.cpp
@@ -53,5 +58,13 @@ TcpInst.h TcpInst.cpp
 RtpsUdpInst.h RtpsUdpInst.cpp
 ShmemInst.h ShmemInst.cpp
 UdpInst.h UdpInst.cpp)
+
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
+  target_compile_options(OpenDDSWrapper PUBLIC /wd4190)
+else()
+  target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
+endif()
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
