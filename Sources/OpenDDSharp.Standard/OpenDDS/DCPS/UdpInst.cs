@@ -68,8 +68,8 @@ namespace OpenDDSharp.OpenDDS.DCPS
         /// Defaults to a value picked by the underlying OS.
         /// </summary>
         /// <remarks>
-        /// If only the host is specifed and the port number is omitted, 
-        /// the ':' is still required on the host specifer. 
+        /// If only the host is specifed and the port number is omitted,
+        /// the ':' is still required on the host specifer.
         /// </remarks>
         public string LocalAddress
         {

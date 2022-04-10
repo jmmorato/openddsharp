@@ -264,7 +264,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
             {
                 full += ":0";
             }
-            
+
             UnsafeNativeMethods.SetMulticastGroupAddress(_native, full);
         }
 
