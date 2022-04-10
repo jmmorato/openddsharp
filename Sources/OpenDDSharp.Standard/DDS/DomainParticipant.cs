@@ -1035,7 +1035,38 @@ namespace OpenDDSharp.DDS
         /// <returns>The newly created <see cref="MultiTopic" /> on success, otherwise <see langword="null"/>.</returns>
         public MultiTopic CreateMultiTopic(string name, string typeName, string subscriptionExpression, params string[] expressionParameters)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(typeName))
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(subscriptionExpression))
+            {
+                return null;
+            }
+
+            IntPtr seq = IntPtr.Zero;
+            IList<string> parameters;
+            if (expressionParameters != null)
+            {
+                parameters = expressionParameters.ToList();
+                parameters.StringSequenceToPtr(ref seq, false);
+            }
+
+            IntPtr native = UnsafeNativeMethods.CreateMultiTopic(_native, name, typeName, subscriptionExpression, seq);
+
+            MultiTopic mt = null;
+            if (native != IntPtr.Zero)
+            {
+                mt = new MultiTopic(native);
+            }
+
+            return mt;
         }
 
         /// <summary>
@@ -1047,13 +1078,18 @@ namespace OpenDDSharp.DDS
         /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
         /// <para>The <see cref="DeleteMultiTopic" /> operation must be called on the same <see cref="DomainParticipant" /> object used to create the <see cref="MultiTopic" />. If
         /// <see cref="DeleteMultiTopic" /> is called on a different <see cref="DomainParticipant" />, the operation will have no effect and it will return
-        /// <see cref="ReturnCode.PreconditionNotMet" /></para>.
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>.
         /// </remarks>
         /// <param name="multitopic">The <see cref="MultiTopic" /> to be deleted.</param>
         /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
         public ReturnCode DeleteMultiTopic(MultiTopic multitopic)
         {
-            throw new NotImplementedException();
+            if (multitopic == null)
+            {
+                return ReturnCode.Ok;
+            }
+
+            return UnsafeNativeMethods.DeleteMultiTopic(_native, multitopic.ToNative());
         }
 
         /// <summary>
@@ -1341,6 +1377,14 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipant_DeleteContentFilteredTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
             public static extern ReturnCode DeleteContentFilteredTopic(IntPtr dp, IntPtr cft);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipant_CreateMultiTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr CreateMultiTopic(IntPtr dp, string name, string typeName, string expression, IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipant_DeleteMultiTopic", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteMultiTopic(IntPtr dp, IntPtr mt);
         }
         #endregion
     }

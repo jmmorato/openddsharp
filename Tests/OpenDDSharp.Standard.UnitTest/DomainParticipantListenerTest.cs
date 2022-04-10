@@ -683,7 +683,7 @@ namespace OpenDDSharp.Standard.UnitTest
             result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(20000));
+            Assert.IsTrue(evt.Wait(20_000));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_reader, reader);
             Assert.AreEqual(1, totalCount);

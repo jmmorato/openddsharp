@@ -17,6 +17,14 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
+using OpenDDSharp.Helpers;
+
 namespace OpenDDSharp.DDS
 {
     /// <summary>
@@ -48,7 +56,196 @@ namespace OpenDDSharp.DDS
     /// instances is <see cref="InstanceStateKind.NotAliveDisposedInstanceState" />. Otherwise it is <see cref="InstanceStateKind.NotAliveNoWritersInstanceState" />.</description></item>
     /// </list></para>
     /// </remarks>
-    public class MultiTopic
+    public class MultiTopic : ITopicDescription
     {
+        #region Fields
+        private readonly IntPtr _native;
+        private readonly IntPtr _nativeTopicDescription;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets the subscription expression associated with the <see cref="MultiTopic" />. 
+        /// That is, the expression specified when the <see cref="MultiTopic" /> was created.
+        /// </summary>
+        public string SubscriptionExpression => GetSubscriptionExpression ();
+
+        /// <summary>
+        /// Gets type name used to create the <see cref="ITopicDescription" />.
+        /// </summary>
+        public string TypeName => GetTypeName();
+
+        /// <summary>
+        /// Gets the name used to create the <see cref="ITopicDescription" />.
+        /// </summary>
+        public string Name => GetName();
+
+        /// <summary>
+        /// Gets the <see cref="DomainParticipant" /> to which the <see cref="ITopicDescription" /> belongs.
+        /// </summary>
+        public DomainParticipant Participant => GetParticipant();
+        #endregion
+
+        #region Constructors
+        internal MultiTopic(IntPtr native)
+        {
+            _native = native;
+            _nativeTopicDescription = NarrowTopicDescription(native);
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Gets the expression parameters associated with the <see cref="MultiTopic" />. That is, the parameters specified on the last
+        /// successful call to <see cref="MultiTopic.SetExpressionParameters" />, or if it was never called, the parameters specified
+        /// when the <see cref="MultiTopic" /> was created.
+        /// </summary>
+        /// <param name="parameters">The expression parameters list to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetExpressionParameters(IList<string> parameters)
+        {
+            if (parameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+            parameters.Clear();
+
+            IntPtr seq = IntPtr.Zero;
+
+            ReturnCode ret = UnsafeNativeMethods.GetExpressionParameters(_native, ref seq);
+
+            if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
+            {
+                MarshalHelper.PtrToStringSequence(seq, ref parameters, false);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Changes the expression parameters associated with the <see cref="MultiTopic" />.
+        /// </summary>
+        /// <param name="parameters">The expression parameters values to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetExpressionParameters(params string[] parameters)
+        {
+            if (parameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            IntPtr seq = IntPtr.Zero;
+            IList<string> paramList = parameters.ToList();
+            paramList.StringSequenceToPtr(ref seq, false);
+
+            return UnsafeNativeMethods.SetExpressionParameters(_native, seq);
+        }
+
+        internal static IntPtr NarrowTopicDescription(IntPtr ptr)
+        {
+            return UnsafeNativeMethods.NativeNarrowTopicDescription(ptr);
+        }
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public IntPtr ToNative()
+        {
+            return _native;
+        }
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        /// <returns>The native pointer.</returns>
+        /// <exclude />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public IntPtr ToNativeTopicDescription()
+        {
+            return _nativeTopicDescription;
+        }
+
+        private string GetTypeName()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetTypeName(_native));
+        }
+
+        private string GetName()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName(_native));
+        }
+
+        private DomainParticipant GetParticipant()
+        {
+            IntPtr ptrParticipant = UnsafeNativeMethods.GetParticipant(_native);
+
+            DomainParticipant participant = null;
+
+            if (!ptrParticipant.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = DomainParticipant.NarrowBase(ptrParticipant);
+
+                Entity entity = EntityManager.Instance.Find(ptr);
+                if (entity != null)
+                {
+                    participant = (DomainParticipant)entity;
+                }
+                else
+                {
+                    participant = new DomainParticipant(ptrParticipant);
+                    EntityManager.Instance.Add(ptrParticipant, participant);
+                }
+            }
+
+            return participant;
+        }
+
+        private string GetSubscriptionExpression()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetSubscriptionExpression (_native));
+        }
+        #endregion
+
+        #region Unsafe Native Methods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_NarrowTopicDescription", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NativeNarrowTopicDescription(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_GetExpressionParameters", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetExpressionParameters(IntPtr ptr, ref IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_SetExpressionParameters", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode SetExpressionParameters(IntPtr ptr, IntPtr parameters);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_GetSubscriptionExpression", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetSubscriptionExpression(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetTypeName(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetName(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "MultiTopic_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetParticipant(IntPtr ptr);
+        }
+        #endregion
     }
 }

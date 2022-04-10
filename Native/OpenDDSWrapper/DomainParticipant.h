@@ -144,3 +144,9 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_DeleteContentFilteredTopic(::DDS::DomainParticipant_ptr dp, ::DDS::ContentFilteredTopic_ptr cft);
+
+EXTERN_METHOD_EXPORT
+::DDS::MultiTopic_ptr DomainParticipant_CreateMultiTopic(::DDS::DomainParticipant_ptr dp, char* name, char* type_name, char* expression, void* seq);
+
+EXTERN_METHOD_EXPORT
+::DDS::ReturnCode_t DomainParticipant_DeleteMultiTopic(::DDS::DomainParticipant_ptr dp, ::DDS::MultiTopic_ptr cft);

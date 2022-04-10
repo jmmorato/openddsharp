@@ -1409,6 +1409,206 @@ namespace OpenDDSharp.Standard.UnitTest
             result = _participant.DeleteContentFilteredTopic(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipant.CreateMultiTopic(string, string, string, string[])" /> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestCreateMultiTopic()
+        {
+            AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
+            string athleteTypeName = athleteSupport.GetTypeName();
+            ReturnCode result = athleteSupport.RegisterType(_participant, athleteTypeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic athleteTopic = _participant.CreateTopic("AthleteTopic", athleteTypeName);
+            Assert.IsNotNull(athleteTopic);
+
+            ResultTypeSupport resultSupport = new ResultTypeSupport();
+            string resultTypeName = resultSupport.GetTypeName();
+            result = resultSupport.RegisterType(_participant, resultTypeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic resultTopic = _participant.CreateTopic("ResultTopic", resultTypeName);
+            Assert.IsNotNull(resultTopic);
+
+            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
+            string athleteResultTypeName = athleteResultSupport.GetTypeName();
+            result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            MultiTopic multiTopic = _participant.CreateMultiTopic("AthleteResultTopic", athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNotNull(multiTopic);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataReader dr = subscriber.CreateDataReader(multiTopic, drQos);
+            Assert.IsNotNull(dr);
+            AthleteResultDataReader dataReader = new AthleteResultDataReader(dr);
+
+            Publisher publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            DataWriterQos dwQos = new DataWriterQos();
+            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            DataWriter dwAthlete = publisher.CreateDataWriter(athleteTopic, dwQos);
+            Assert.IsNotNull(dwAthlete);
+            AthleteDataWriter athleteDataWriter = new AthleteDataWriter(dwAthlete);
+
+            DataWriter dwResult = publisher.CreateDataWriter(resultTopic, dwQos);
+            Assert.IsNotNull(dwResult);
+            ResultDataWriter resultDataWriter = new ResultDataWriter(dwResult);
+
+            // Wait for subscriptions
+            var statusAthlete = default(PublicationMatchedStatus);
+            var statusResult = default(PublicationMatchedStatus);
+            do
+            {
+                result = athleteDataWriter.GetPublicationMatchedStatus(ref statusAthlete);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = resultDataWriter.GetPublicationMatchedStatus(ref statusResult);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Thread.Sleep(100);
+            }
+            while (statusAthlete.CurrentCount < 1 && statusResult.CurrentCount < 1);
+
+            for (int i = 1; i <= 5; i++)
+            {
+                athleteDataWriter.Write(new Athlete
+                {
+                    AthleteId = i,
+                    FirstName = "FirstName" + i.ToString(),
+                    SecondName = "SecondName" + i.ToString(),
+                    Country = "Country" + i.ToString(),
+                });
+
+                result = athleteDataWriter.WaitForAcknowledgments(new Duration
+                {
+                    Seconds = 5
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
+
+            for (int i = 1; i <= 3; i++)
+            {
+                resultDataWriter.Write(new Result
+                {
+                    AthleteId = i,
+                    Rank = i,
+                    Score = 10f - i
+                });
+
+                result = resultDataWriter.WaitForAcknowledgments(new Duration
+                {
+                    Seconds = 5
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
+
+            Thread.Sleep(500);
+            List<AthleteResult> receivedData = new List<AthleteResult>();
+            List<SampleInfo> sampleInfos = new List<SampleInfo>();
+            result = dataReader.Read(receivedData, sampleInfos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(3, receivedData.Count);
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(i + 1, receivedData[i].AthleteId);
+                Assert.AreEqual(i + 1, receivedData[i].Rank);
+                Assert.AreEqual(10f - (i + 1), receivedData[i].Score);
+                Assert.AreEqual("FirstName" + (i + 1).ToString(), receivedData[i].FirstName);
+                Assert.AreEqual("SecondName" + (i + 1).ToString(), receivedData[i].SecondName);
+                Assert.AreEqual("Country" + (i + 1).ToString(), receivedData[i].Country);
+            }
+
+            // Test with null name
+            MultiTopic nullMultiTopic = _participant.CreateMultiTopic(null, athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNull(nullMultiTopic);
+
+            // Test with null type name
+            nullMultiTopic = _participant.CreateMultiTopic("AthleteResultTopic", null, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNull(nullMultiTopic);
+
+            // Test with null expression
+            nullMultiTopic = _participant.CreateMultiTopic("AthleteResultTopic", athleteResultTypeName, null);
+            Assert.IsNull(nullMultiTopic);
+
+            // Test wrong creation (same name than other topic is not allowed)
+            nullMultiTopic = _participant.CreateMultiTopic("AthleteTopic", athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNull(nullMultiTopic);
+
+            // Test with null expression parameters
+            MultiTopic multiTopic1 = _participant.CreateMultiTopic("AthleteResultTopic1",
+                athleteResultTypeName,
+                "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic", null);
+            Assert.IsNotNull(multiTopic1);
+
+            // Test with expression parameters
+            MultiTopic multiTopic2 = _participant.CreateMultiTopic("AthleteResultTopic2",
+                athleteResultTypeName,
+                "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic WHERE Id >= %0 AND Id <= %1", "0", "10");
+            Assert.IsNotNull(multiTopic2);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipant.DeleteMultiTopic(MultiTopic)" /> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestDeleteMultiTopic()
+        {
+            AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
+            string athleteTypeName = athleteSupport.GetTypeName();
+            ReturnCode result = athleteSupport.RegisterType(_participant, athleteTypeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic athleteTopic = _participant.CreateTopic("AthleteTopic", athleteTypeName);
+            Assert.IsNotNull(athleteTopic);
+
+            ResultTypeSupport resultSupport = new ResultTypeSupport();
+            string resultTypeName = resultSupport.GetTypeName();
+            result = resultSupport.RegisterType(_participant, resultTypeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Topic resultTopic = _participant.CreateTopic("ResultTopic", resultTypeName);
+            Assert.IsNotNull(resultTopic);
+
+            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
+            string athleteResultTypeName = athleteResultSupport.GetTypeName();
+            result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            MultiTopic multiTopic = _participant.CreateMultiTopic(nameof(TestDeleteMultiTopic),
+                athleteResultTypeName,
+                "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            Assert.IsNotNull(multiTopic);
+
+            Subscriber subscriber = _participant.CreateSubscriber();
+            Assert.IsNotNull(subscriber);
+
+            DataReader reader = subscriber.CreateDataReader(multiTopic);
+            Assert.IsNotNull(reader);
+
+            result = _participant.DeleteMultiTopic(multiTopic);
+            Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
+
+            result = subscriber.DeleteDataReader(reader);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteMultiTopic(multiTopic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Test with null parameter
+            result = _participant.DeleteMultiTopic(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+        }
         #endregion
     }
 }
