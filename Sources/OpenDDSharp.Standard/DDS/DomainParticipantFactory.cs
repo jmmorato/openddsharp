@@ -266,7 +266,14 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return (DomainParticipant)EntityManager.Instance.Find(native);
+            Entity entity = EntityManager.Instance.Find(native);
+            if (entity == null)
+            {
+                entity = new DomainParticipant(native);
+                EntityManager.Instance.Add(native, entity);
+            }
+
+            return (DomainParticipant)entity;
         }
         #endregion
 

@@ -254,7 +254,14 @@ namespace OpenDDSharp.DDS
                 return null;
             }
 
-            return (DataReader)EntityManager.Instance.Find(native);
+            Entity entity = EntityManager.Instance.Find(native);
+            if (entity == null)
+            {
+                entity = new DataReader(native);
+                EntityManager.Instance.Add(native, entity);
+            }
+
+            return (DataReader)entity;
         }
 
         /// <summary>

@@ -27,9 +27,9 @@ namespace OpenDDSharp.DDS
     /// Class that contains information about available <see cref="DomainParticipant" />s within the system.
     /// </summary>
     /// <remarks>
-    /// The DCPSParticipant topic communicates the existence of <see cref="DomainParticipant" />s by means of the ParticipantBuiltinTopicData datatype. 
-    /// Each ParticipantBuiltinTopicData sample in a Domain represents a <see cref="DomainParticipant" /> that participates in that Domain: a new ParticipantBuiltinTopicData instance 
-    /// is created when a newly-added <see cref="DomainParticipant" /> is enabled, and it is disposed when that <see cref="DomainParticipant" /> is deleted. 
+    /// The DCPSParticipant topic communicates the existence of <see cref="DomainParticipant" />s by means of the ParticipantBuiltinTopicData datatype.
+    /// Each ParticipantBuiltinTopicData sample in a Domain represents a <see cref="DomainParticipant" /> that participates in that Domain: a new ParticipantBuiltinTopicData instance
+    /// is created when a newly-added <see cref="DomainParticipant" /> is enabled, and it is disposed when that <see cref="DomainParticipant" /> is deleted.
     /// An updated ParticipantBuiltinTopicData sample is written each time the <see cref="DomainParticipant" /> modifies its <see cref="UserDataQosPolicy" />.
     /// </remarks>
     public struct ParticipantBuiltinTopicData : IEquatable<ParticipantBuiltinTopicData>

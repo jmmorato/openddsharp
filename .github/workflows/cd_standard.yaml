@@ -552,26 +552,21 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
-    #- name: Test OpenDDSharp
-    #  shell: cmd      
-    #  run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --verbosity normal --configuration Release --property:Platform=x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
-    #  working-directory: ${{ github.workspace }}
-    #  env:
-    #    DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64"
-    #    ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE"
-    #    TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/TAO"
-    #    DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_x64/lib:${{ github.workspace }}/ext/OpenDDS_x64/ACE_TAO/ACE/lib"
+    - name: Build & Test with Cake
+      shell: pwsh      
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+      working-directory: ${{ github.workspace }}/Build
 
-    #- name: Prepare coverage result
-    #  shell: pwsh
-    #  run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
-    #  working-directory: ${{ github.workspace }}
+    - name: Prepare coverage result
+      shell: pwsh
+      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
+      working-directory: ${{ github.workspace }}
 
-    #- name: Coveralls      
-    #  uses: coverallsapp/github-action@v1.1.2
-    #  with:
-    #    github-token: ${{secrets.GITHUB_TOKEN }} 
-    #    path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
+    - name: Coveralls      
+      uses: coverallsapp/github-action@v1.1.2
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN }} 
+        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
 
     - name: Build OpenDDSharp solution AnyCPU
       shell: cmd

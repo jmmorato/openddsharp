@@ -630,69 +630,68 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnSampleLost()
         {
-            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
+            using ManualResetEventSlim evt = new ManualResetEventSlim(false);
+
+            DataReader reader = null;
+            int count = 0;
+            int totalCount = 0;
+            int totalCountChange = 0;
+
+            // Attach to the event.
+            _listener.SampleLost += (r, s) =>
             {
-                DataReader reader = null;
-                int count = 0;
-                int totalCount = 0;
-                int totalCountChange = 0;
+                reader = r;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
 
-                // Attach to the event.
-                _listener.SampleLost += (r, s) =>
-                {
-                    reader = r;
-                    totalCount = s.TotalCount;
-                    totalCountChange = s.TotalCountChange;
+                count++;
 
-                    count++;
+                evt.Set();
+            };
 
-                    evt.Set();
-                };
+            // Prepare QoS for the test.
+            DataReaderQos drQos = new DataReaderQos();
+            drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
+            drQos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
+            drQos.History.Kind = HistoryQosPolicyKind.KeepLastHistoryQos;
+            drQos.History.Depth = 1;
+            ReturnCode result = _reader.SetQos(drQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                // Prepare QoS for the test.
-                DataReaderQos drQos = new DataReaderQos();
-                drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-                drQos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-                drQos.History.Kind = HistoryQosPolicyKind.KeepLastHistoryQos;
-                drQos.History.Depth = 1;
-                ReturnCode result = _reader.SetQos(drQos);
-                Assert.AreEqual(ReturnCode.Ok, result);
+            // Enable entities.
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                // Enable entities.
-                result = _writer.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = _reader.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
+            // Wait for discovery.
+            Assert.IsTrue(_reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(_writer.WaitForSubscriptions(1, 5_000));
 
-                // Wait for discovery.
-                Assert.IsTrue(_reader.WaitForPublications(1, 5_000));
-                Assert.IsTrue(_writer.WaitForSubscriptions(1, 5_000));
+            // Write two samples of the same instances.
+            InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-                // Write two samples of the same instances.
-                InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
-                Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+            Timestamp time = DateTime.Now.ToTimestamp();
+            result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                Timestamp time = DateTime.Now.ToTimestamp();
-                result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
-                Assert.AreEqual(ReturnCode.Ok, result);
+            Thread.Sleep(100);
 
-                Thread.Sleep(100);
+            time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
+            result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
-                result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
-                Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsTrue(evt.Wait(20_000));
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(_reader, reader);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
 
-                Assert.IsTrue(evt.Wait(20000));
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(_reader, reader);
-                Assert.AreEqual(1, totalCount);
-                Assert.AreEqual(1, totalCountChange);
-
-                // Remove the listener to avoid extra messages.
-                result = _participant.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            // Remove the listener to avoid extra messages.
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
@@ -922,47 +921,46 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnInconsistentTopic()
         {
-            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
+            using ManualResetEventSlim evt = new ManualResetEventSlim(false);
+
+            Topic topic = null;
+            int totalCount = 0;
+            int totalCountChange = 0;
+
+            // Attach to the event
+            int count = 0;
+            _listener.InconsistentTopic += (t, s) =>
             {
-                Topic topic = null;
-                int totalCount = 0;
-                int totalCountChange = 0;
+                topic = t;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
 
-                // Attach to the event
-                int count = 0;
-                _listener.InconsistentTopic += (t, s) =>
-                {
-                    topic = t;
-                    totalCount = s.TotalCount;
-                    totalCountChange = s.TotalCountChange;
+                count++;
+                evt.Set();
+            };
 
-                    count++;
-                    evt.Set();
-                };
+            // Enable entities
+            ReturnCode result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                // Enable entities
-                ReturnCode result = _writer.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
+            SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
+            Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
-                SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-                Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
+            // Wait the signal
+            bool wait = evt.Wait(20000);
+            Assert.IsTrue(wait);
+            Assert.AreSame(_topic, topic);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
 
-                // Wait the signal
-                bool wait = evt.Wait(20000);
-                Assert.IsTrue(wait);
-                Assert.AreSame(_topic, topic);
-                Assert.AreEqual(1, totalCount);
-                Assert.AreEqual(1, totalCountChange);
+            // Kill the process
+            supportProcess.KillProcess(process);
 
-                // Kill the process
-                supportProcess.KillProcess(process);
+            Assert.AreEqual(1, count);
 
-                Assert.AreEqual(1, count);
-
-                // Remove listener to avoid extra messages
-                result = _participant.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            // Remove listener to avoid extra messages
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }

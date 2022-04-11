@@ -225,3 +225,13 @@ CORBA::Boolean DomainParticipant_ContainsEntity(::DDS::DomainParticipant_ptr dp,
 ::DDS::ReturnCode_t DomainParticipant_DeleteContentFilteredTopic(::DDS::DomainParticipant_ptr dp, ::DDS::ContentFilteredTopic_ptr cft) {
     return dp->delete_contentfilteredtopic(cft);
 }
+
+::DDS::MultiTopic_ptr DomainParticipant_CreateMultiTopic(::DDS::DomainParticipant_ptr dp, char* name,  char* type_name, char* expression, void* seq) {
+    ::DDS::StringSeq parameters;
+    ptr_to_unbounded_basic_string_sequence(seq, parameters);
+    return dp->create_multitopic(name, type_name, expression, parameters);
+}
+
+::DDS::ReturnCode_t DomainParticipant_DeleteMultiTopic(::DDS::DomainParticipant_ptr dp, ::DDS::MultiTopic_ptr mt) {
+    return dp->delete_multitopic(mt);
+}

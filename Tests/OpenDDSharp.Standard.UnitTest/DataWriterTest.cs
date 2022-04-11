@@ -19,7 +19,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -921,7 +920,7 @@ namespace OpenDDSharp.Standard.UnitTest
             System.Threading.Thread.Sleep(100);
             Assert.AreEqual(2, count);
 
-            // Call dispose with the handle parameter and specific timestamp 
+            // Call dispose with the handle parameter and specific timestamp
             Timestamp now = DateTime.Now.ToTimestamp();
             TestStruct instance3 = new TestStruct { Id = 3 };
             InstanceHandle handle3 = dataWriter.RegisterInstance(instance3);
