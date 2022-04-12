@@ -26,7 +26,7 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '6.0.3'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
@@ -75,7 +75,7 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '6.0.3'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -173,7 +173,7 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '6.0.3'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos
