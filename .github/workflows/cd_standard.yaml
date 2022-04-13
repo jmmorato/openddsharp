@@ -80,7 +80,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: Artifacts OpenDDS libraries      
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: |
@@ -101,7 +101,7 @@ jobs:
         retention-days: 1
         
     - name: Artifacts OpenDDSharp native      
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: openddsharp-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: |
@@ -182,7 +182,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: Cache OpenDDS libraries      
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: opendds-linux-${{ env.OpenDdsVersion }}-${{ github.run_number }}
         path: |
@@ -209,7 +209,7 @@ jobs:
         retention-days: 1
 
     - name: Cache OpenDDSharp native      
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: openddsharp-linux-${{ github.run_number }}
         path: |
@@ -291,7 +291,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: Artifacts OpenDDS libraries      
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: opendds-macos-${{ env.OpenDdsVersion }}-${{ github.run_number }}
         path: |
@@ -319,7 +319,7 @@ jobs:
 
     - name: Artifact OpenDDSharp native
       id: openddsharp-libraries-macos-cd
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: openddsharp-macos-${{ github.run_number }}
         path: |
@@ -579,7 +579,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
         path: |
