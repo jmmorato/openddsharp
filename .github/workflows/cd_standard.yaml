@@ -590,6 +590,6 @@ jobs:
       env: 
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}/Build
 
