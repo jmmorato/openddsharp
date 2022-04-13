@@ -103,6 +103,11 @@ namespace OpenDDSharp.DDS
         /// Gets the <see cref="WriterDataLifecycleQosPolicy"/>.
         /// </summary>
         public WriterDataLifecycleQosPolicy WriterDataLifecycle { get; internal set; }
+
+        /// <summary>
+        /// Gets the <see cref="DataRepresentationQosPolicy"/>.
+        /// </summary>
+        public DataRepresentationQosPolicy Representation { get; internal set; }
         #endregion
 
         #region Constructors
@@ -134,6 +139,7 @@ namespace OpenDDSharp.DDS
             UserData = new UserDataQosPolicy();
             OwnershipStrength = new OwnershipStrengthQosPolicy();
             WriterDataLifecycle = new WriterDataLifecycleQosPolicy();
+            Representation = new DataRepresentationQosPolicy();
         }
         #endregion
 
@@ -163,6 +169,11 @@ namespace OpenDDSharp.DDS
                 data.UserData = UserData.ToNative();
             }
 
+            if (Representation != null)
+            {
+                data.Representation = Representation.ToNative();
+            }
+
             return data;
         }
 
@@ -188,6 +199,12 @@ namespace OpenDDSharp.DDS
                 UserData = new UserDataQosPolicy();
             }
             UserData.FromNative(wrapper.UserData);
+
+            if (Representation == null)
+            {
+                Representation = new DataRepresentationQosPolicy();
+            }
+            Representation.FromNative(wrapper.Representation);
         }
 
         internal void Release()
@@ -223,7 +240,8 @@ namespace OpenDDSharp.DDS
                    Ownership == other.Ownership &&
                    UserData == other.UserData &&
                    OwnershipStrength == other.OwnershipStrength &&
-                   WriterDataLifecycle == other.WriterDataLifecycle;
+                   WriterDataLifecycle == other.WriterDataLifecycle &&
+                   Representation == other.Representation;
         }
 
         /// <summary>
@@ -258,6 +276,7 @@ namespace OpenDDSharp.DDS
             hashCode = (hashCode * -1521134295) + EqualityComparer<UserDataQosPolicy>.Default.GetHashCode(UserData);
             hashCode = (hashCode * -1521134295) + EqualityComparer<OwnershipStrengthQosPolicy>.Default.GetHashCode(OwnershipStrength);
             hashCode = (hashCode * -1521134295) + EqualityComparer<WriterDataLifecycleQosPolicy>.Default.GetHashCode(WriterDataLifecycle);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<DataRepresentationQosPolicy>.Default.GetHashCode(Representation);
             return hashCode;
         }
         #endregion
@@ -341,6 +360,8 @@ namespace OpenDDSharp.DDS
         public OwnershipStrengthQosPolicyWrapper OwnershipStrength;
         [MarshalAs(UnmanagedType.Struct)]
         public WriterDataLifecycleQosPolicyWrapper WriterDataLifecycle;
+        [MarshalAs(UnmanagedType.Struct)]
+        public DataRepresentationQosPolicyWrapper Representation;
         #endregion
     }
 }

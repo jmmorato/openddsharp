@@ -392,6 +392,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             qos.TransportPriority.Value = 5;
             qos.WriterDataLifecycle.AutodisposeUnregisteredInstances = true;
 
+            qos.Representation.Value = new List<short>
+            {
+                DataRepresentationQosPolicy.XCDR_DATA_REPRESENTATION,
+                DataRepresentationQosPolicy.XCDR2_DATA_REPRESENTATION,
+                DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
+            };
+
             return qos;
         }
 
@@ -419,6 +426,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.IsNotNull(qos.UserData);
             Assert.IsNotNull(qos.WriterDataLifecycle);
             Assert.IsNotNull(qos.Deadline.Period);
+            Assert.IsNotNull(qos.Representation.Value);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
             Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
             Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
@@ -453,6 +461,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.IsNotNull(qos.UserData.Value);
             Assert.AreEqual(0, qos.UserData.Value.Count);
             Assert.IsTrue(qos.WriterDataLifecycle.AutodisposeUnregisteredInstances);
+            Assert.AreEqual(0, qos.Representation.Value.Count);
         }
 
         public static void TestNonDefaultDataWriterQos(DataWriterQos qos)
@@ -478,6 +487,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.IsNotNull(qos.TransportPriority);
             Assert.IsNotNull(qos.UserData);
             Assert.IsNotNull(qos.WriterDataLifecycle);
+            Assert.IsNotNull(qos.Representation.Value);
 
             Assert.IsNotNull(qos.Deadline.Period);
             Assert.AreEqual(5, qos.Deadline.Period.Seconds);
@@ -514,6 +524,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(0x5, qos.UserData.Value.First());
             Assert.AreEqual(5, qos.TransportPriority.Value);
             Assert.IsTrue(qos.WriterDataLifecycle.AutodisposeUnregisteredInstances);
+            Assert.AreEqual(3, qos.Representation.Value.Count);
         }
         #endregion
 
@@ -569,6 +580,13 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             };
             qos.UserData.Value = new List<byte> { 0x5 };
 
+            qos.Representation.Value = new List<short>
+            {
+                DataRepresentationQosPolicy.XCDR_DATA_REPRESENTATION,
+                DataRepresentationQosPolicy.XCDR2_DATA_REPRESENTATION,
+                DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
+            };
+
             return qos;
         }
 
@@ -593,6 +611,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.IsNotNull(qos.TimeBasedFilter);
             Assert.IsNotNull(qos.UserData);
             Assert.IsNotNull(qos.Deadline.Period);
+            Assert.IsNotNull(qos.Representation.Value);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
             Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
             Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
@@ -625,6 +644,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(0U, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.IsNotNull(qos.UserData.Value);
             Assert.AreEqual(0, qos.UserData.Value.Count);
+            Assert.AreEqual(0, qos.Representation.Value.Count);
         }
 
         public static void TestNonDefaultDataReaderQos(DataReaderQos qos)
@@ -647,6 +667,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.IsNotNull(qos.ResourceLimits);
             Assert.IsNotNull(qos.TimeBasedFilter);
             Assert.IsNotNull(qos.UserData);
+            Assert.IsNotNull(qos.Representation.Value);
 
             Assert.IsNotNull(qos.Deadline.Period);
             Assert.AreEqual(5, qos.Deadline.Period.Seconds);
@@ -681,6 +702,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             Assert.AreEqual(3, qos.TimeBasedFilter.MinimumSeparation.Seconds);
             Assert.AreEqual(3U, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.AreEqual(0x5, qos.UserData.Value.First());
+            Assert.AreEqual(3, qos.Representation.Value.Count);
         }
         #endregion
 

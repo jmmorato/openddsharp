@@ -24,6 +24,28 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include "dds/DdsDcpsDomainC.h"
 
+EXTERN_STRUCT_EXPORT DataRepresentationQosPolicyWrapper
+{
+    void* value;
+
+public:
+    DataRepresentationQosPolicyWrapper() {
+        value = NULL;
+    }
+
+    DataRepresentationQosPolicyWrapper(const ::DDS::DataRepresentationQosPolicy native) {
+        unbounded_sequence_to_ptr(native.value, value);
+    }
+
+    operator ::DDS::DataRepresentationQosPolicy() const {
+        ::DDS::DataRepresentationQosPolicy native;
+        if (value != NULL) {
+            ptr_to_unbounded_sequence(value, native.value);
+        }
+        return native;
+    }
+};
+
 EXTERN_STRUCT_EXPORT UserDataQosPolicyWrapper
 {
     void* value;
@@ -698,6 +720,7 @@ EXTERN_STRUCT_EXPORT DataWriterQosWrapper
     UserDataQosPolicyWrapper user_data;
     OwnershipStrengthQosPolicyWrapper ownership_strength;
     WriterDataLifecycleQosPolicyWrapper writer_data_lifecycle;
+    DataRepresentationQosPolicyWrapper representation;
 
 public:
     DataWriterQosWrapper();
@@ -718,6 +741,7 @@ public:
         user_data = native.user_data;
         ownership_strength = native.ownership_strength;
         writer_data_lifecycle = native.writer_data_lifecycle;
+        representation = native.representation;
     }
 
     operator ::DDS::DataWriterQos() const {
@@ -737,6 +761,7 @@ public:
         native.user_data = user_data;
         native.ownership_strength = ownership_strength;
         native.writer_data_lifecycle = writer_data_lifecycle;
+        native.representation = representation;
         return native;
     }
 };
@@ -755,6 +780,7 @@ EXTERN_STRUCT_EXPORT DataReaderQosWrapper
      OwnershipQosPolicyWrapper ownership;
      TimeBasedFilterQosPolicyWrapper time_based_filter;
      ReaderDataLifecycleQosPolicyWrapper reader_data_lifecycle;
+     DataRepresentationQosPolicyWrapper representation;
 
 public:
     DataReaderQosWrapper();
@@ -772,6 +798,7 @@ public:
         ownership = native.ownership;
         time_based_filter = native.time_based_filter;
         reader_data_lifecycle = native.reader_data_lifecycle;
+        representation = native.representation;
     }
 
     operator ::DDS::DataReaderQos() const {
@@ -788,6 +815,7 @@ public:
         native.ownership = ownership;
         native.time_based_filter = time_based_filter;
         native.reader_data_lifecycle = reader_data_lifecycle;
+        native.representation = representation;
         return native;
     }
 };

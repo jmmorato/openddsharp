@@ -88,6 +88,11 @@ namespace OpenDDSharp.DDS
         /// Gets the <see cref="ReaderDataLifecycleQosPolicy"/>.
         /// </summary>
         public ReaderDataLifecycleQosPolicy ReaderDataLifecycle { get; internal set; }
+
+        /// <summary>
+        /// Gets the <see cref="DataRepresentationQosPolicy"/>.
+        /// </summary>
+        public DataRepresentationQosPolicy Representation { get; internal set; }
         #endregion
 
         #region Constructors
@@ -108,6 +113,7 @@ namespace OpenDDSharp.DDS
             Ownership = new OwnershipQosPolicy();
             TimeBasedFilter = new TimeBasedFilterQosPolicy();
             ReaderDataLifecycle = new ReaderDataLifecycleQosPolicy();
+            Representation = new DataRepresentationQosPolicy();
         }
         #endregion
 
@@ -134,6 +140,11 @@ namespace OpenDDSharp.DDS
                 data.UserData = UserData.ToNative();
             }
 
+            if (Representation != null)
+            {
+                data.Representation = Representation.ToNative();
+            }
+
             return data;
         }
 
@@ -156,6 +167,12 @@ namespace OpenDDSharp.DDS
                 UserData = new UserDataQosPolicy();
             }
             UserData.FromNative(wrapper.UserData);
+
+            if (Representation == null)
+            {
+                Representation = new DataRepresentationQosPolicy();
+            }
+            Representation.FromNative(wrapper.Representation);
         }
 
         internal void Release()
@@ -188,7 +205,8 @@ namespace OpenDDSharp.DDS
                    UserData == other.UserData &&
                    Ownership == other.Ownership &&
                    TimeBasedFilter == other.TimeBasedFilter &&
-                   ReaderDataLifecycle == other.ReaderDataLifecycle;
+                   ReaderDataLifecycle == other.ReaderDataLifecycle &&
+                   Representation == other.Representation;
         }
 
         /// <summary>
@@ -220,6 +238,7 @@ namespace OpenDDSharp.DDS
             hashCode = (hashCode * -1521134295) + EqualityComparer<OwnershipQosPolicy>.Default.GetHashCode(Ownership);
             hashCode = (hashCode * -1521134295) + EqualityComparer<TimeBasedFilterQosPolicy>.Default.GetHashCode(TimeBasedFilter);
             hashCode = (hashCode * -1521134295) + EqualityComparer<ReaderDataLifecycleQosPolicy>.Default.GetHashCode(ReaderDataLifecycle);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<DataRepresentationQosPolicy>.Default.GetHashCode(Representation);
             return hashCode;
         }
         #endregion
@@ -297,6 +316,8 @@ namespace OpenDDSharp.DDS
         public TimeBasedFilterQosPolicyWrapper TimeBasedFilter;
         [MarshalAs(UnmanagedType.Struct)]
         public ReaderDataLifecycleQosPolicyWrapper ReaderDataLifecycle;
+        [MarshalAs(UnmanagedType.Struct)]
+        public DataRepresentationQosPolicyWrapper Representation;
         #endregion
     }
 }
