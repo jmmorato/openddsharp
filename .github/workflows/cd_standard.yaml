@@ -484,42 +484,42 @@ jobs:
     #    key: openddsharp-macos-${{ github.run_number }}
 
     - name: Download artifacts OpenDDSx86
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-x86-${{ github.run_number }}
 
     - name: Download artifacts OpenDDSharp x86
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: openddsharp-windows-x86-${{ github.run_number }}
         
     - name: Download artifacts OpenDDS x64
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: opendds-windows-${{ env.OpenDdsVersion }}-x64-${{ github.run_number }}
 
     - name: Download artifacts OpenDDSharp x64
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: openddsharp-windows-x64-${{ github.run_number }}
 
     - name: Download artifacts OpenDDS Linux
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: opendds-linux-${{ env.OpenDdsVersion }}-${{ github.run_number }}
 
     - name: Download artifacts OpenDDSharp Linux
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: openddsharp-linux-${{ github.run_number }}
 
     - name: Download artifacts OpenDDS MacOS
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: opendds-macos-${{ env.OpenDdsVersion }}-${{ github.run_number }}
 
     - name: Download artifacts OpenDDSharp MacOS
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: openddsharp-macos-${{ github.run_number }}
 
