@@ -63,12 +63,12 @@
   <PropertyGroup Label="Library Path" Condition="'$(IsOSX)'=='true'">
 	  <DYLD_FALLBACK_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</DYLD_FALLBACK_LIBRARY_PATH>
   </PropertyGroup>
-  
+
   <!--IDL files group-->
   <ItemGroup>
     <IdlFiles Include="IDL/*.idl" />
-  </ItemGroup>  
-  
+  </ItemGroup>
+
   <!--Clean up generated code before rebuild-->
   <PropertyGroup>
     <CleanDependsOn>CustomBeforeClean;$(CleanDependsOn);</CleanDependsOn>
@@ -89,7 +89,7 @@
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="x86" />
   </Target>
-  
+
   <!--Set Windows environment variables-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
