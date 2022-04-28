@@ -5,13 +5,13 @@
     <version>1.0.0.0</version>
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
-    <owners>Jose Morato</owners>    
+    <owners>Jose Morato</owners>
     <projectUrl>http://www.openddsharp.com</projectUrl>
     <icon>icon_128.png</icon>
     <license type="file">LICENSE.txt</license>
     <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>OpenDDSharp IDL Generator</description>    
+    <description>OpenDDSharp IDL Generator</description>
     <copyright>Jose Morato</copyright>
     <tags>OpenDDSharp OpenDDS DDS IDL CodeGenerator</tags>
     <references />
@@ -19,7 +19,7 @@
   <files>
     <!--Build task dll-->
     <file src="..\Sources\OpenDDSharp.BuildTasks\bin\Release\netstandard2.0\OpenDDSharp.BuildTasks.dll" target="tools" />
-    
+
     <!-- Required tools x86 -->
     <file src=".\build_x86\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\VERSION.txt" target="tools\DDS_x86" />
@@ -27,10 +27,10 @@
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.dll" target="tools\DDS_x86" />
     <file src="..\ext\OpenDDS_x86\bin\opendds_idl.exe" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACE.dll" target="tools\DDS_x86\bin" />
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\DDS_x86\bin" />  
-    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.dll" target="tools\DDS_x86\bin" />    
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\DDS_x86\bin" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.dll" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\bin\tao_idl.exe" target="tools\ACE_x86\bin" />
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\bin\ace_gperf.exe" target="tools\ACE_x86\bin" />    
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\bin\ace_gperf.exe" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACE.dll" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_IDL_BE.dll" target="tools\ACE_x86\bin" />
@@ -40,13 +40,13 @@
     <file src=".\build_x64\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" target="tools\DDS_x64\bin" />
     <file src="..\ext\OpenDDS_x64\VERSION.txt" target="tools\DDS_x64" />
     <file src="..\ext\OpenDDS_x64\cmake\*" target="tools\DDS_x64\cmake" />
-    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Util.dll" target="tools\DDS_x64" />            
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Util.dll" target="tools\DDS_x64" />
     <file src="..\ext\OpenDDS_x64\bin\opendds_idl.exe" target="tools\DDS_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\ACE.dll" target="tools\DDS_x64\bin" />
-    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\DDS_x64\bin" />  
-    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Util.dll" target="tools\DDS_x64\bin" />    
+    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\DDS_x64\bin" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Util.dll" target="tools\DDS_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\bin\tao_idl.exe" target="tools\ACE_x64\bin" />
-    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\bin\ace_gperf.exe" target="tools\ACE_x64\bin" />    
+    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\bin\ace_gperf.exe" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\ACE.dll" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_FE.dll" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_IDL_BE.dll" target="tools\ACE_x64\bin" />
@@ -93,11 +93,11 @@
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src="..\ext\OpenDDS_MacOS\dds\idl\IDLTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
-    
+
     <!--Project templates-->
     <file src=".\CMakeListsTemplate.txt" target="tools\native_project_template" />
     <file src=".\marshal.h" target="tools\native_project_template" />
-    
+
     <!--Header files x86-->
     <file src="..\ext\OpenDDS_x86\dds\**\*.h" target="tools\DDS_x86\dds" />
     <file src="..\ext\OpenDDS_x86\dds\**\*.cpp" target="tools\DDS_x86\dds" />
@@ -108,7 +108,7 @@
     <file src="..\ext\OpenDDS_x86\FACE\**\*.hpp" target="tools\DDS_x86\FACE" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.h" target="tools\ACE_x86\ace" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.inl" target="tools\ACE_x86\ace" />
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_x86\ace" />    
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_x86\ace" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\TAO\tao\**\*.h" target="tools\ACE_x86\TAO\tao" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\TAO\tao\**\*.inl" target="tools\ACE_x86\TAO\tao" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\TAO\tao\**\*.cpp" target="tools\ACE_x86\TAO\tao" />
@@ -128,7 +128,7 @@
     <file src="..\ext\OpenDDS_x64\FACE\**\*.hpp" target="tools\DDS_x64\FACE" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.h" target="tools\ACE_x64\ace" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.inl" target="tools\ACE_x64\ace" />
-    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_x64\ace" />    
+    <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_x64\ace" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\TAO\tao\**\*.h" target="tools\ACE_x64\TAO\tao" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\TAO\tao\**\*.inl" target="tools\ACE_x64\TAO\tao" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\TAO\tao\**\*.cpp" target="tools\ACE_x64\TAO\tao" />
@@ -179,13 +179,13 @@
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\orbsvcs\**\*.cpp" target="tools\ACE_MacOS\TAO\orbsvcs" />
 
     <!--Required OpenDDS libraries x86-->
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACE.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_AnyTypeCode.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PortableServer.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_CodecFactory.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PI.lib" target="tools\ACE_x86\lib" />    
-    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOP.lib" target="tools\ACE_x86\lib" />    
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\ACE.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_AnyTypeCode.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PortableServer.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_CodecFactory.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PI.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOP.lib" target="tools\ACE_x86\lib" />
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Dcps.lib" target="tools\DDS_x86\lib" />
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Rtps.lib" target="tools\DDS_x86\lib" />
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoLib.lib" target="tools\DDS_x86\lib" />
@@ -205,7 +205,7 @@
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_CodecFactory.lib" target="tools\ACE_x64\lib" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PI.lib" target="tools\ACE_x64\lib" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_BiDirGIOP.lib" target="tools\ACE_x64\lib" />
-    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.lib" target="tools\DDS_x64\lib" />    
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.lib" target="tools\DDS_x64\lib" />
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Rtps.lib" target="tools\DDS_x64\lib" />
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoLib.lib" target="tools\DDS_x64\lib" />
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoDiscovery.lib" target="tools\DDS_x64\lib" />
@@ -260,9 +260,9 @@
 
     <!--Target file-->
     <file src=".\OpenDDSharp.Standard.IdlGenerator.targets" target="build\" />
-    
+
     <!--Resource files-->
     <file src="..\LICENSE.txt" target="" />
-    <file src="..\icon_128.png" target="/" />    
-  </files> 
+    <file src="..\icon_128.png" target="/" />
+  </files>
 </package>
