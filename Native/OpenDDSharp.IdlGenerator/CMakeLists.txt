@@ -1,4 +1,4 @@
-project(openddsharp_idl C)
+project(openddsharp_idl CXX)
 cmake_minimum_required(VERSION 3.8.2)
 
 find_package(OpenDDS REQUIRED)
