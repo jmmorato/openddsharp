@@ -8,15 +8,15 @@ if(APPLE)
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
-find_package(OpenDDS REQUIRED) 
+find_package(OpenDDS REQUIRED)
 
 add_library(OpenDDSWrapper SHARED
-Ace.h Ace.cpp 
+Ace.h Ace.cpp
 BuiltinTopicData.h
 Condition.h Condition.cpp
 ContentFilteredTopic.h ContentFilteredTopic.cpp
 DataReader.h DataReader.cpp
-DataReaderListener.h DataReaderListener.cpp 
+DataReaderListener.h DataReaderListener.cpp
 DataReaderListenerImpl.h DataReaderListenerImpl.cpp
 DataWriter.h DataWriter.cpp
 DataWriterListener.h DataWriterListener.cpp

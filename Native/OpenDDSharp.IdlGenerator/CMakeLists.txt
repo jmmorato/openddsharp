@@ -34,6 +34,7 @@ endif()
 
 if(APPLE)
   set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-rpath,../tools/ACE_MacOS/lib,-rpath,../tools/DDS_MacOS/lib")
+  target_compile_options(openddsharp_idl PUBLIC -Wno-switch)
 endif()
 
 target_include_directories(openddsharp_idl PRIVATE ${TAO_ROOT_BE_INCLUDE} PRIVATE ${TAO_ROOT_INCLUDE} PRIVATE ${TAO_ROOT})
