@@ -27,10 +27,10 @@ void Utils_CreateOctetSeq(unsigned char bytes[], ::DDS::OctetSeq* seq)
         return;
     }
 
-    int size = sizeof(bytes) / sizeof(bytes[0]);   
+    int size = static_cast<int>(*(&bytes + 1) - bytes);
     seq->length(size);
     for (int i = 0; i < size; i++)
     {
         seq[i] = bytes[i];
-    }    
+    }
 }
