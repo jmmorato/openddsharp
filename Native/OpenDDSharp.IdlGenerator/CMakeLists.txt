@@ -33,7 +33,7 @@ if(MSVC)
 endif()
 
 if(APPLE)
-  set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-rpath,../tools/ACE_MacOS/lib,-rpath,../tools/DDS_MacOS/lib")
+  set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-rpath,../../ACE_MacOS/lib,-rpath,../lib")
   target_compile_options(openddsharp_idl PUBLIC -Wno-switch)
 endif()
 
