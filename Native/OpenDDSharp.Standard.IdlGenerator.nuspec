@@ -66,8 +66,14 @@
     <file src="..\ext\OpenDDS_MacOS\VERSION.txt" target="tools\DDS_MacOS" />
     <file src="..\ext\OpenDDS_MacOS\cmake\*" target="tools\DDS_MacOS\cmake" />
     <file src="..\ext\OpenDDS_MacOS\dds\idl\opendds_idl*" target="tools\DDS_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\lib\libACE.dylib" target="tools\DDS_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\lib\libTAO_IDL_FE.dylib" target="tools\DDS_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\lib\libOpenDDS_Util.dylib" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\TAO\TAO_IDL\tao_idl*" target="tools\ACE_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\apps\gperf\src\ace_gperf*" target="tools\ACE_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\lib\libACE.dylib" target="tools\ACE_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\lib\libTAO_IDL_FE.dylib" target="tools\ACE_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\lib\libTAO_IDL_BE.dylib" target="tools\ACE_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_MacOS\bin" />
 
     <!--Code generation templates x86-->
