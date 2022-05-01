@@ -156,7 +156,7 @@
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsOSX" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DOPENDDS_ACE=$(ACE_ROOT) -DOPENDDS_TAO=$(TAO_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec ToolExe="sh" Command="arch -x86_64 cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DOPENDDS_ACE=$(ACE_ROOT) -DOPENDDS_TAO=$(TAO_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Build cmake-->
@@ -170,7 +170,7 @@
   </Target>
   <Target Name="OpenDDSharpConfigureBuildCmakeOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
 	  <Message Text="Configuring cmake project..." Importance="High" />
-	  <Exec ToolExe="sh" Command="cmake --build . --config Release" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec ToolExe="sh" Command="arch -x86_64 cmake --build . --config Release" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Generate OpenDDSharp IDL files-->
