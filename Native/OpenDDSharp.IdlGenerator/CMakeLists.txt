@@ -1,4 +1,4 @@
-project(openddsharp_idl C)
+project(openddsharp_idl CXX)
 cmake_minimum_required(VERSION 3.8.2)
 
 find_package(OpenDDS REQUIRED)
@@ -30,6 +30,11 @@ message("DDS_ROOT=${DDS_ROOT}" )
 if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
+endif()
+
+if(APPLE)
+  set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path/../../ACE_MacOS/lib -Wl,-rpath,@executable_path/../lib")
+  target_compile_options(openddsharp_idl PUBLIC -Wno-switch)
 endif()
 
 target_include_directories(openddsharp_idl PRIVATE ${TAO_ROOT_BE_INCLUDE} PRIVATE ${TAO_ROOT_INCLUDE} PRIVATE ${TAO_ROOT})

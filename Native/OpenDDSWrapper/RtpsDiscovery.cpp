@@ -93,38 +93,36 @@ void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::Octet value)
 
 char* RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d) {
     char* buffer = new char[1024];
-	
+
     if (d->sedp_local_address().addr_to_string(buffer, 1024) < 0) {
         return CORBA::string_dup("");
     }
 
 	std::string ret = CORBA::string_dup(buffer);
-	delete buffer;
+	delete[] buffer;
 
 	return CORBA::string_dup(ret.c_str());
 }
 
 void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	
 	const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
 	d->sedp_local_address(addr);
 }
 
 char* RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d) {
     char* buffer = new char[1024];
-	
+
     if (d->spdp_local_address().addr_to_string(buffer, 1024) < 0) {
         return CORBA::string_dup("");
     }
 
 	std::string ret = CORBA::string_dup(buffer);
-	delete buffer;
+	delete[] buffer;
 
 	return CORBA::string_dup(ret.c_str());
 }
 
 void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	
 	const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
 	d->spdp_local_address(addr);
 }
@@ -147,13 +145,13 @@ void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery* d, char
 
 char* RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery* d) {
 	char* buffer = new char[1024];
-	
+
     if (d->default_multicast_group().addr_to_string(buffer, 1024) < 0) {
         return CORBA::string_dup("");
     }
 
 	std::string ret = CORBA::string_dup(buffer);
-	delete buffer;
+	delete[] buffer;
 
 	return CORBA::string_dup(ret.c_str());
 }
@@ -170,11 +168,11 @@ void* RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery* d) {
 	TAO::unbounded_basic_string_sequence<char> seq(static_cast<CORBA::ULong>(size));
 
 	int i = 0;
-	for (auto inst = addrs.begin(); inst != addrs.end(); ++inst) {		
+	for (auto inst = addrs.begin(); inst != addrs.end(); ++inst) {
 		seq[i] = inst->c_str();
 		i++;
 	}
-	
+
 	void* ptr;
 	unbounded_basic_string_sequence_to_ptr(seq, ptr);
 
