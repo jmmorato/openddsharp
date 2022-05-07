@@ -113,7 +113,7 @@ namespace OpenDDSharp.Build.Standard
         public string NugetApiKey { get; internal set; }
 
         /// <summary>
-        /// The current branch name.
+        /// Gets the current branch name.
         /// </summary>
         public string BranchName { get; internal set; }
 
@@ -202,7 +202,7 @@ namespace OpenDDSharp.Build.Standard
                 IgnoreThirdPartyBuild = false;
             }
 
-            if (context.Arguments.HasArgument(nameof(IsDevelop)))
+            if (context.Arguments.HasArgument(nameof(BranchName)))
             {
                 BranchName = context.Arguments.GetArgument(nameof(BranchName));
             }
