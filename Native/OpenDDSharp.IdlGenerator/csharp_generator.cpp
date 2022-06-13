@@ -753,25 +753,25 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type, std::stri
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
 		switch (predefined_type->pt())
-		{		
+		{
 		case AST_PredefinedType::PT_octet:
 			ret = "[MarshalAs(UnmanagedType.U1)]\n";
 			break;
 		case AST_PredefinedType::PT_char:
-			ret = "[MarshalAs(UnmanagedType.I1)]\n";
+			ret = "[MarshalAs(UnmanagedType.U1)]\n";
 			break;
 		case AST_PredefinedType::PT_wchar:
 			ret.clear();
 			ret = "#if Windows\n";
-			
+
 			ret.append(indent);
-			ret.append("[MarshalAs(UnmanagedType.I2)]\n");
+			ret.append("[MarshalAs(UnmanagedType.U2)]\n");
 
 			ret.append("#else\n");
 
 			ret.append(indent);
-			ret.append("[MarshalAs(UnmanagedType.I4)]\n");
-			
+			ret.append("[MarshalAs(UnmanagedType.U4)]\n");
+
 			ret.append("#endif\n");
 			break;
 		case AST_PredefinedType::PT_boolean:
@@ -782,7 +782,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type, std::stri
 	}
 	case AST_Decl::NT_array:
 	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(type);		
+		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
 
 		if (arr_type != NULL && arr_type->n_dims() == 1) {
 			AST_Expression** dims = arr_type->dims();
@@ -904,10 +904,10 @@ std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* typ
 				ret = "U1";
 				break;
 			case AST_PredefinedType::PT_char:
-				ret = "I1";
+				ret = "U1";
 				break;
 			case AST_PredefinedType::PT_wchar:
-				ret = "I2";
+				ret = "U2";
 				break;
 			case AST_PredefinedType::PT_boolean:
 				ret = "I1";
@@ -994,10 +994,10 @@ std::string csharp_generator::get_linux_marshal_attribute_unmanaged_type(AST_Typ
 				ret = "U1";
 				break;
 			case AST_PredefinedType::PT_char:
-				ret = "I1";
+				ret = "U1";
 				break;
 			case AST_PredefinedType::PT_wchar:
-				ret = "I4";
+				ret = "U4";
 				break;
 			case AST_PredefinedType::PT_boolean:
 				ret = "I1";
@@ -1012,7 +1012,7 @@ std::string csharp_generator::get_linux_marshal_attribute_unmanaged_type(AST_Typ
 }
 
 std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();	
+	AST_Decl::NodeType node_type = type->node_type();
 	std::string ret(type->flat_name());
 
 	switch (node_type)
@@ -1286,7 +1286,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 	}
 	case AST_Decl::NT_string:
 	case AST_Decl::NT_wstring:
-	{		
+	{
 		ret.append(indent);
 		ret.append("    if (");
 		ret.append(name);
@@ -1350,7 +1350,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(name);
 			ret.append(" = Convert.ToDouble(_");
 			ret.append(name);
-			ret.append(");\n");			
+			ret.append(");\n");
 		}
 		break;
 	}
@@ -1570,7 +1570,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
 				ret.append("Wrapper[");
 				ret.append(std::to_string(dims[0]->ev()->u.ulval));
-				ret.append("];\n");				
+				ret.append("];\n");
 
 				ret.append(indent);
 				ret.append("        for (int i = 0; i < ");
