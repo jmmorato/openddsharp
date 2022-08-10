@@ -113,10 +113,6 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
                 _runtime = "osx-arm64";
             }
 #endif
-            if (!string.IsNullOrWhiteSpace(RuntimeInformation.RuntimeIdentifier))
-            {
-                _runtime = RuntimeInformation.RuntimeIdentifier;
-            }
         }
         #endregion
 
