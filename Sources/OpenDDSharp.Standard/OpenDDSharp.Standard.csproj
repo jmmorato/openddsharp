@@ -10,14 +10,14 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
 
-    <Authors>Jose Morato</Authors>    
+    <Authors>Jose Morato</Authors>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
     <Description>OpenDDS wrapper for .NET languages.
       OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Configurations>Debug;Release</Configurations>
-    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <!-- NuGet properties -->

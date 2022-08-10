@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test;
 
@@ -105,8 +106,17 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             _runtime = "linux-x64/";
 #elif OSX
             Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+
             _runtime = "osx-x64/";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                _runtime = "osx-arm64";
+            }
 #endif
+            if (!string.IsNullOrWhiteSpace(RuntimeInformation.RuntimeIdentifier))
+            {
+                _runtime = RuntimeInformation.RuntimeIdentifier;
+            }
         }
         #endregion
 

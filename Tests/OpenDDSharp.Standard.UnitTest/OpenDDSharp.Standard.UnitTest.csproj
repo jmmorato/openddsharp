@@ -8,10 +8,10 @@
     <Platforms>x64;x86</Platforms>
     <LangVersion>8.0</LangVersion>
     <Configurations>Debug;Release</Configurations>
-	<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
-	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
-	<IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
-	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+    <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+    <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+    <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
@@ -29,7 +29,7 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
   </PropertyGroup>
@@ -42,7 +42,7 @@
   <PropertyGroup>
     <DefineConstants Condition="'$(Platform)'=='x86' Or '$(RuntimeIdentifier)'=='win-x86'">$(DefineConstants);X86</DefineConstants>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
@@ -52,7 +52,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\Tests\TestIdlStandard\TestIdlStandard.csproj" />
   </ItemGroup>
