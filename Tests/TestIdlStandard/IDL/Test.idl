@@ -28,7 +28,7 @@ module Test {
 
 	typedef string<32> BoundedStringType;
 	typedef wstring<32> BoundedWStringType;
-	
+
 	typedef sequence<boolean> UnboundedBooleanSequenceType;
 	typedef sequence<boolean, 5> BoundedBooleanSequenceType;
 	typedef sequence<char> UnboundedCharSequenceType;
@@ -60,7 +60,7 @@ module Test {
 	typedef sequence<string, 5> BoundedStringSequenceType;
 	typedef sequence<wstring> UnboundedWStringSequenceType;
 	typedef sequence<wstring, 5> BoundedWStringSequenceType;
-	
+
 	typedef short ShortArrayType[5];
 	typedef unsigned short UnsignedShortArrayType[5];
 	typedef long LongArrayType[5];
@@ -95,7 +95,7 @@ module Test {
 
 	typedef string StringMultiArrayType[3][4][2];
 	typedef wstring WStringMultiArrayType[3][4][2];
-	
+
 	@topic
 	struct NestedStruct {
 		long Id;
@@ -133,7 +133,7 @@ module Test {
 
 	typedef TestEnum EnumMultiArrayType[3][4][2];
 
-	@topic	
+	@topic
     struct TestStruct {
 		@key long Id;
         short ShortField;

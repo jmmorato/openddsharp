@@ -9,15 +9,15 @@
           The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-	<IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
-	<IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
-	<IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
-	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+    <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+    <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+    <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
 	<PlatformFolder>x64</PlatformFolder>
-  </PropertyGroup> 
+  </PropertyGroup>
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x86' Or '$(Platform)'=='x86'">
 	<PlatformFolder>x86</PlatformFolder>
   </PropertyGroup>
@@ -31,7 +31,7 @@
   <PropertyGroup>
 	<DefineConstants Condition="'$(IsOSX)'=='true'">$(DefineConstants);OSX</DefineConstants>
   </PropertyGroup>
-	
+
   <ItemGroup>
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
@@ -49,7 +49,7 @@
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)\ACE_TAO\TAO</TAO_ROOT>
   </PropertyGroup>
-	
+
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_Linux</DDS_ROOT>
   </PropertyGroup>
@@ -62,14 +62,14 @@
   <PropertyGroup Label="Library Path" Condition="'$(IsLinux)'=='true'">
 	<LD_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</LD_LIBRARY_PATH>
   </PropertyGroup>
-  
+
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
   <ItemGroup>
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj" />
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <IdlTemplates Include="..\..\Native\CSharpImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" />
   </ItemGroup>
@@ -96,14 +96,14 @@
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
     <AddPathVC Platform="$(PlatformFolder)" />
   </Target>
-        
+
   <!-- Set OpenDDS environment variables -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Set OpenDDS environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
-    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />    
+    <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
@@ -112,10 +112,10 @@
   <!-- Set Linux environment variables -->
   <Target Name="SetEnvVarTargetLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'">
     <Message Text="Set Linux environment variables:" Importance="High" />
-	<Message Text="LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)" Importance="High" />
-	<SetEnvVar Variable="LD_LIBRARY_PATH" Value="$(LD_LIBRARY_PATH)" />
+    <Message Text="LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)" Importance="High" />
+    <SetEnvVar Variable="LD_LIBRARY_PATH" Value="$(LD_LIBRARY_PATH)" />
   </Target>
-	
+
   <!--Generate native library task-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.GenerateNativeLibraryTask" AssemblyFile="$(MSBuildThisFileDirectory)..\..\Sources\OpenDDSharp.BuildTasks\bin\$(Configuration)\netstandard2.0\OpenDDSharp.BuildTasks.dll" />
     <Target Name="GenerateNativeLibraryTarget" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename).idl')">
@@ -125,50 +125,50 @@
 
   <!--Generate OpenDDSharp Wrapper files-->
   <Target Name="OpenDDSharpIdlWrapperWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
-	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-	<Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlWrapperLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
-	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlWrapperMacOS" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
-	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Create cmake-->
   <Target Name="OpenDDSharpCmakeOpenddsx64" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x64' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-	<Message Text="Create native project with cmake..." Importance="High" />
-	<Exec Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Create native project with cmake..." Importance="High" />
+    <Exec Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsx86" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x86' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-	<Message Text="Create native project with cmake..." Importance="High" />
-	<Exec Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Create native project with cmake..." Importance="High" />
+    <Exec Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-	<Message Text="Create native project with cmake..." Importance="High" />
-	<Exec ToolExe="sh" Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Create native project with cmake..." Importance="High" />
+    <Exec ToolExe="sh" Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsOSX" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')">
-	<Message Text="Create native project with cmake..." Importance="High" />
-	<Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Create native project with cmake..." Importance="High" />
+    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Build cmake-->
   <Target Name="OpenDDSharpConfigureBuildCmakeWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
-	<Message Text="Configure cmake project..." Importance="High" />
-	<Exec Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Configure cmake project..." Importance="High" />
+    <Exec Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpConfigureBuildCmakeLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
-	<Message Text="Configure cmake project..." Importance="High" />
-	<Exec ToolExe="sh" Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Configure cmake project..." Importance="High" />
+    <Exec ToolExe="sh" Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpConfigureBuildCmakeOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
-	<Message Text="Configure cmake project..." Importance="High" />
-	<Exec ToolExe="sh" Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Message Text="Configure cmake project..." Importance="High" />
+    <Exec ToolExe="sh" Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-	
+
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharpWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
@@ -191,19 +191,19 @@
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>TestIdlStandardWrapper.dll</TargetPath>
 	</ContentWithTargetPath>
-	  
+
 	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.so" />
 	<ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>libTestIdlStandardWrapper.so</TargetPath>
 	</ContentWithTargetPath>
-	  
+
 	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.dylib" />
 	<ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>libTestIdlStandardWrapper.dylib</TargetPath>
 	</ContentWithTargetPath>
-  </ItemGroup> 
+  </ItemGroup>
 </Project>

@@ -4,12 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64;x86</Platforms>
-    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <Configurations>Debug;Release</Configurations>
 	<CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>  
-  
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Tests\TestIdlStandard\TestIdlStandard.csproj" />
 
@@ -39,5 +39,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  
+
 </Project>

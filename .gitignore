@@ -56,3 +56,7 @@ ext_*/
 **/launchSettings.json
 #Ignore Native build folders
 Native/build*/
+#Ignore Finder hidden files
+**/.DS_Store
+#Ignore vscode hidden folder
+.vscode

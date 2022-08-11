@@ -13,7 +13,7 @@
       OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Platforms>x64;x86</Platforms>
-	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+	  <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <!-- NuGet properties -->
@@ -251,7 +251,7 @@
 	</Content>
 
     <!-- Native dependency from this project. -->
-    <ProjectNativeDepsReleasex64 Include="..\..\Native\build_x64\OpenDDSWrapper\Release\OpenDDSWrapper.dll" />   
+    <ProjectNativeDepsReleasex64 Include="..\..\Native\build_x64\OpenDDSWrapper\Release\OpenDDSWrapper.dll" />
     <None Include="@(ProjectNativeDepsReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false">
       <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToPublishDirectory>
@@ -277,7 +277,7 @@
 
     <None Include="..\..\Native\build_Linux\OpenDDSWrapper\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
 	  <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>	
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
 	</None>
 
 	<None Include="..\..\Native\build_MacOS\OpenDDSWrapper\libOpenDDSWrapper.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
