@@ -29,10 +29,10 @@ jobs:
           git checkout tags/DDS-${{ env.OpenDdsVersion }}
 
       - name: Configure OpenDDS
-        run: ./configure --doc-group3 --target=android --macros=android_abi=${{ matrix.AndroidAbi }} --macros=android_api=28 --macros=android_ndk=/usr/local/lib/android/sdk/ndk/25.0.8775105
+        run: ./configure --doc-group3 --target=android --macros=android_abi=${{ matrix.AndroidAbi }} --macros=android_api=28 --macros=android_ndk=/usr/local/lib/android/sdk/ndk/25.0.8775105 --optimize --no-debug
 
       - name: Build OpenDDS
-        run: make -j 2
+        run: make -j4
 
   build_windows:
     runs-on: windows-2022
