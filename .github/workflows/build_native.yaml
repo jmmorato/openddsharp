@@ -26,7 +26,7 @@ jobs:
           git clone -q https://github.com/objectcomputing/OpenDDS.git .
           git fetch
           git fetch --tags
-          git checkout tags/${{ env.OpenDdsVersion }}
+          git checkout tags/DDS-${{ env.OpenDdsVersion }}
 
       - name: Configure OpenDDS
         run: ./configure --doc-group3 --target=android --macros=android_abi=${{ matrix.AndroiAbi }} macros=android_api=28 --macros=android_ndk=${{ env.ANDROID_NDK }}
