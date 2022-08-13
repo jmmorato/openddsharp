@@ -34,6 +34,12 @@ jobs:
       - name: Build OpenDDS
         run: make -j4
 
+      - name: Artifacts OpenDDS native
+        uses: actions/upload-artifact@v3
+        with:
+          name: openddss-${{env.OpenDdsVersion}}-android-${{ matrix.AndroidAbi }}-${{ github.run_number }}
+          path: ${{ github.workspace }}
+
   build_windows:
     runs-on: windows-2022
     strategy:
@@ -138,8 +144,6 @@ jobs:
 
   build_macos:
     runs-on: macos-latest
-    strategy:
-      fail-fast: false
     env:
       OpenDdsVersion: "3.21"
       BuildPlatform: "x64"
