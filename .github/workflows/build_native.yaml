@@ -1,0 +1,277 @@
+name: Continuous Integration
+
+on:
+  push:
+  schedule:
+    - cron: '0 1 * * SUN'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        AndroidAbi: [arm64-v8a, x86_64, x86]
+    env:
+      OpenDdsVersion: "3.21"
+
+    steps:
+      - name: Clone OpenDDS
+        run: |
+          git clone -q https://github.com/objectcomputing/OpenDDS.git .
+          git fetch
+          git fetch --tags
+          git checkout tags/{{env.OpenDdsVersion}}
+
+      - name: Configure OpenDDS
+        run: ./configure --doc-group3 --target=android --macros=android_abi=${{ matrix.AndroiAbi }} macros=android_api=28 --macros=android_ndk=${{ env.ANDROID_NDK }}
+
+      - name: Build OpenDDS
+        run: make
+
+  build_windows:
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        BuildPlatform: [x64, x86]
+        BuildConfiguration: [Release, Debug]
+    env:
+      OpenDdsVersion: "3.21"
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.103'
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-windows
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-ci
+
+    - name: Build & Test with Cake (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build & Test with Cake (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+      working-directory: ${{ github.workspace }}/Build
+
+  build_linux:
+    runs-on: ubuntu-latest
+
+    env:
+      OpenDdsVersion: "3.21"
+      BuildPlatform: "x64"
+      BuildConfiguration: "Release"
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.103'
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-linux
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ env.BuildConfiguration }}-${{ env.BuildPlatform }}-linux-ci1
+
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Dotnet restore
+      shell: bash
+      run: |
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp TestSupportProcessCore project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
+
+    - name: Build OpenDDSharp UnitTest project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
+
+    - name: Test OpenDDSharp
+      shell: bash
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ env.BuildConfiguration }} --runtime linux-x64  --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
+
+  build_macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+    env:
+      OpenDdsVersion: "3.21"
+      BuildPlatform: "x64"
+      BuildConfiguration: "Release"
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.103'
+
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-macos
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ env.BuildConfiguration }}-${{ env.BuildPlatform }}-macos-ci
+
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Dotnet restore
+      shell: bash
+      run: |
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.BuildTasks project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp TestSupportProcessCore Project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+
+    - name: Build OpenDDSharp UnitTest Project
+      shell: bash
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+
+    - name: Test OpenDDSharp
+      shell: bash
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
+        DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
