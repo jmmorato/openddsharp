@@ -26,7 +26,7 @@ jobs:
           git clone -q https://github.com/objectcomputing/OpenDDS.git .
           git fetch
           git fetch --tags
-          git checkout tags/{{env.OpenDdsVersion}}
+          git checkout tags/${{ env.OpenDdsVersion }}
 
       - name: Configure OpenDDS
         run: ./configure --doc-group3 --target=android --macros=android_abi=${{ matrix.AndroiAbi }} macros=android_api=28 --macros=android_ndk=${{ env.ANDROID_NDK }}
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         BuildPlatform: [x64, x86]
-        BuildConfiguration: [Release, Debug]
+        BuildConfiguration: [Release]
     env:
       OpenDdsVersion: "3.21"
 
@@ -136,49 +136,6 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
-    - name: Dotnet restore
-      shell: bash
-      run: |
-        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-      working-directory: ${{ github.workspace }}
-
-    - name: Build OpenDDSharp.BuildTasks project
-      shell: bash
-      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
-      working-directory: ${{ github.workspace }}
-
-    - name: Build OpenDDSharp TestSupportProcessCore project
-      shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
-
-    - name: Build OpenDDSharp UnitTest project
-      shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
-
-    - name: Test OpenDDSharp
-      shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ env.BuildConfiguration }} --runtime linux-x64  --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
-        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib"
-
   build_macos:
     runs-on: macos-latest
     strategy:
@@ -233,45 +190,3 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
-    - name: Dotnet restore
-      shell: bash
-      run: |
-        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-      working-directory: ${{ github.workspace }}
-
-    - name: Build OpenDDSharp.BuildTasks project
-      shell: bash
-      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
-      working-directory: ${{ github.workspace }}
-
-    - name: Build OpenDDSharp TestSupportProcessCore Project
-      shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-
-    - name: Build OpenDDSharp UnitTest Project
-      shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-
-    - name: Test OpenDDSharp
-      shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger trx --logger "console;verbosity=normal" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.1.2/build/netstandard1.0/"
-      working-directory: ${{ github.workspace }}
-      env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO"
-        DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/lib"
