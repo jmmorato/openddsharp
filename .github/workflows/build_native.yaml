@@ -24,7 +24,8 @@ jobs:
       - name: Clone OpenDDS
         run: |
           mkdir -p ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
-          git clone -q https://github.com/objectcomputing/OpenDDS.git ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
+          cd ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
+          git clone -q https://github.com/objectcomputing/OpenDDS.git .
           git fetch
           git fetch --tags
           git checkout tags/DDS-${{ env.OpenDdsVersion }}
@@ -39,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: openddss-${{env.OpenDdsVersion}}-android-${{ matrix.AndroidAbi }}-${{ github.run_number }}
-          path: ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
+          path: ${{ github.workspace }}/ext/OpenDDS_Android${{ matrix.AndroidAbi }}
 
   build_windows:
     runs-on: windows-2022
