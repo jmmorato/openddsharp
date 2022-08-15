@@ -32,7 +32,7 @@ jobs:
 
       - name: Configure OpenDDS
         run: ./configure --doc-group3 --target=android --macros=android_abi=${{ matrix.AndroidAbi }} --macros=android_api=28 --macros=android_ndk=/usr/local/lib/android/sdk/ndk/25.0.8775105 --optimize --no-debug
-        working-directory: ${{ github.workspace }}/ext/OpenDDS_OpenDDS_Android${{ matrix.AndroidAbi }}
+        working-directory: ${{ github.workspace }}/ext/OpenDDS_Android${{ matrix.AndroidAbi }}
 
       - name: Build OpenDDS
         run: make -j4
