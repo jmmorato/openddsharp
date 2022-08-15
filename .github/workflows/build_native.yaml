@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Clone OpenDDS
         run: |
-          mkdir ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
+          mkdir -p ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
           git clone -q https://github.com/objectcomputing/OpenDDS.git ${{ github.workspace }}/ext/OpenDDS_${{ matrix.AndroidAbi }}
           git fetch
           git fetch --tags
