@@ -36,6 +36,7 @@ jobs:
 
       - name: Build OpenDDS
         run: make -j4
+        working-directory: ${{ github.workspace }}/ext/OpenDDS_Android${{ matrix.AndroidAbi }}
 
       - name: Artifacts OpenDDS native
         uses: actions/upload-artifact@v3
