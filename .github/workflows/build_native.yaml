@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: openddss-${{env.OpenDdsVersion}}-android-${{ matrix.AndroidAbi }}-${{ github.run_number }}
-          path: ${{ github.workspace }}/ext/OpenDDS_Android${{ matrix.AndroidAbi }}
+          path: ${{ github.workspace }}/ext/OpenDDS_Android${{ matrix.AndroidAbi }}/build/target
 
   build_windows:
     runs-on: windows-2022
