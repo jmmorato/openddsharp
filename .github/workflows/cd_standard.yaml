@@ -345,7 +345,7 @@ jobs:
 
     - name: Get branch names
       id: branch-name
-      uses: tj-actions/branch-names@v5.4
+      uses: tj-actions/branch-names@v5.5
 
     #- name: Restore OpenDDS libraries Windows x86
     #  id: restore-opendds-libraries-windows-x86
