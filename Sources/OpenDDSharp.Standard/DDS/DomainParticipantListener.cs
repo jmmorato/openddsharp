@@ -595,7 +595,7 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantListener_New", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantListener_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewDomainParticipantListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataOnReadersDelegate onDataOnReaders,
                                                                      [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
                                                                      [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,

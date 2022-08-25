@@ -79,6 +79,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 var exit = context.StartProcess("make", new Cake.Core.IO.ProcessSettings
                 {
+                    Arguments = "-j4",
                     WorkingDirectory = ddsPath,
                 });
 

@@ -249,27 +249,27 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_New", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewWaitset();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_Wait", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_Wait", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode Wait(IntPtr ws, ref IntPtr seq, [MarshalAs(UnmanagedType.Struct), In] Duration duration);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_AttachCondition", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_AttachCondition", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode AttachCondition(IntPtr ws, IntPtr condition);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachCondition", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachCondition", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode DetachCondition(IntPtr ws, IntPtr condition);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_GetConditions", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_GetConditions", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode GetConditions(IntPtr ws, ref IntPtr seq);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachConditions", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachConditions", CallingConvention = CallingConvention.Cdecl)]
             public static extern ReturnCode DetachConditions(IntPtr ws, IntPtr seq);
         }
         #endregion
