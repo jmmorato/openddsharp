@@ -236,7 +236,7 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewDataWriterListener([MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,

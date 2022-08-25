@@ -70,7 +70,7 @@ namespace OpenDDSharp.DDS
         private readonly OnSubscriptionMatchedDelegate _onSubscriptionMatched;
         [MarshalAs(UnmanagedType.FunctionPtr)]
         private readonly OnSampleLostDelegate _onSampleLost;
-        
+
         private GCHandle _gchDataAvailable;
         private GCHandle _gchRequestedDeadlineMissed;
         private GCHandle _gchRequestedIncompatibleQos;
@@ -350,7 +350,7 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReaderListener_New", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReaderListener_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewDataReaderListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,

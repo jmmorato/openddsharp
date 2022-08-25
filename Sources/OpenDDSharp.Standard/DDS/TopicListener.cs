@@ -114,7 +114,7 @@ namespace OpenDDSharp.DDS
         private static class UnsafeNativeMethods
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.StdCall)]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewTopicListener([MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
         }
         #endregion
