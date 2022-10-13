@@ -660,7 +660,7 @@ namespace OpenDDSharp.DDS
 
             if (ptrTopicDescription != IntPtr.Zero)
             {
-                return new Topic(ptrTopicDescription);
+                return new Topic(native);
             }
 
             return null;
