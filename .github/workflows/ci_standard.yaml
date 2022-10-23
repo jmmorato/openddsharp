@@ -19,7 +19,7 @@ jobs:
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
     env:
-      OpenDdsVersion: "3.21"
+      OpenDdsVersion: "3.22"
 
     steps:
     - uses: actions/checkout@v3
@@ -66,7 +66,7 @@ jobs:
       fail-fast: false
 
     env:
-      OpenDdsVersion: "3.21"
+      OpenDdsVersion: "3.22"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
 
@@ -163,7 +163,7 @@ jobs:
     strategy:
       fail-fast: false
     env:
-      OpenDdsVersion: "3.21"
+      OpenDdsVersion: "3.22"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
 
