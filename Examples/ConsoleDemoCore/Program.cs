@@ -38,7 +38,7 @@ namespace ConsoleDemoCore
                 isPublisher = !args[0].ToLowerInvariant().Equals("--sub") && !args[0].ToLowerInvariant().Equals("--subscriber");
             }
             Ace.Init();
-            
+
             DomainParticipantFactory dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini", "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
             if (dpf == null)
             {
@@ -182,9 +182,9 @@ namespace ConsoleDemoCore
                     StringArrayField = new string[] { "This", "is", "the", "end", "my only friend, the end."},
                     WStringArrayField = new string[] { "This", "is", "the", "end", "my only friend, the end." },
                     EnumArrayField = new TestEnum[] { TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5},
-                    StructArrayField = new NestedStruct[] 
-                    { 
-                        new NestedStruct { Id = 1, Message = "This is the end." }, 
+                    StructArrayField = new NestedStruct[]
+                    {
+                        new NestedStruct { Id = 1, Message = "This is the end." },
                         new NestedStruct { Id = 2, Message = "This is the end." },
                         new NestedStruct { Id = 3, Message = "This is the end." },
                         new NestedStruct { Id = 4, Message = "This is the end." },
@@ -606,11 +606,10 @@ namespace ConsoleDemoCore
                     PrintReceivedSample(received[0]);
                 }
             }
-            else 
+            else
             {
                 PrintReceivedSample(received[1]);
             }
-            
         }
 
         private static void PrintReceivedSample(TestStruct received)
@@ -673,7 +672,7 @@ namespace ConsoleDemoCore
             PrintStructField(nameof(received.LongArrayField), string.Join(", ", received.LongArrayField));
             PrintStructField(nameof(received.UnsignedLongArrayField), string.Join(", ", received.UnsignedLongArrayField));
             PrintStructField(nameof(received.LongLongArrayField), string.Join(", ", received.LongLongArrayField));
-            PrintStructField(nameof(received.UnsignedLongLongArrayField), string.Join(", ", received.UnsignedLongLongArrayField));            
+            PrintStructField(nameof(received.UnsignedLongLongArrayField), string.Join(", ", received.UnsignedLongLongArrayField));
             PrintStructField(nameof(received.CharArrayField), string.Join(", ", received.CharArrayField));
             PrintStructField(nameof(received.WCharArrayField), string.Join(", ", received.WCharArrayField));
             PrintStructField(nameof(received.BooleanArrayField), string.Join(", ", received.BooleanArrayField));
