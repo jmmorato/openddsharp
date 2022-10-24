@@ -31,7 +31,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 namespace {
-	std::string read_template(const char* prefix) {		
+	std::string read_template(const char* prefix) {
 		const char* dds_root = ACE_OS::getenv("DDS_ROOT");
 		if (!dds_root) {
 			ACE_ERROR((LM_ERROR, "The environment variable DDS_ROOT must be set.\n"));
@@ -40,7 +40,7 @@ namespace {
 		std::string path = dds_root;
 		path.append("/dds/idl/");
 		path.append(prefix);
-		path.append("Template.txt");		
+		path.append("Template.txt");
 		std::ifstream ifs(path.c_str());
 		std::ostringstream oss;
 		oss << ifs.rdbuf();
@@ -116,7 +116,7 @@ bool cwrapper_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* na
 					   << implement_struct_from_native(fields, short_name, scoped_name).c_str()
 					   << implement_struct_release(fields, short_name, scoped_name)
 					   << "};\n\n";
-	
+
 	if (be_global->is_topic_type(structure)) {
 		std::string header = header_template_;
 		replaceAll(header, replacements);
@@ -126,7 +126,7 @@ bool cwrapper_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* na
 		replaceAll(impl, replacements);
 		be_global->impl_ << impl;
 	}
-	
+
 	return true;
 }
 
@@ -150,8 +150,8 @@ std::string cwrapper_generator::declare_struct_fields(const std::vector<AST_Fiel
 
 	for (unsigned int i = 0; i < fields.size(); i++) {
 		AST_Field* field = fields[i];
-		AST_Type* type = field->field_type();		
-		const char* name = field->local_name()->get_string();		
+		AST_Type* type = field->field_type();
+		const char* name = field->local_name()->get_string();
 		std::string type_name = get_cwrapper_type(type);
 		std::string array_dec = get_array_definition(type);
 
@@ -210,7 +210,7 @@ std::string cwrapper_generator::implement_struct_from_native(const std::vector<A
 }
 
 std::string cwrapper_generator::implement_struct_release(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name) {
-	std::string ret("    void release()\n");	
+	std::string ret("    void release()\n");
 	ret.append("    {\n");
 
 	for (unsigned int i = 0; i < fields.size(); i++) {
@@ -227,19 +227,19 @@ std::string cwrapper_generator::implement_struct_release(const std::vector<AST_F
 }
 
 std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();	
+	AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
 	switch (node_type)
-	{	
-	case AST_Decl::NT_union:			
-	case AST_Decl::NT_struct:		
-	{		
-		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("_"));		
+	{
+	case AST_Decl::NT_union:
+	case AST_Decl::NT_struct:
+	{
+		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("_"));
 		ret.append("Wrapper");
 		break;
 	}
-	case AST_Decl::NT_enum:	
+	case AST_Decl::NT_enum:
 	{
 		ret = type->full_name();
 		break;
@@ -299,7 +299,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			ret = "CORBA::Double";
 			break;
 		case AST_PredefinedType::PT_octet:
-			ret = "CORBA::Octet";			
+			ret = "CORBA::Octet";
 			break;
 		case AST_PredefinedType::PT_char:
 			ret = "CORBA::Char";
@@ -325,12 +325,12 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			ret = "void*";
 		}
 		break;
-	}		
+	}
 	case AST_Decl::NT_sequence:
 	{
 		ret = "void*";
 		break;
-	}		
+	}
 	default:
 		break;
 	}
@@ -375,7 +375,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 	{
 	case AST_Decl::NT_union:
 	case AST_Decl::NT_struct:
-	{		
+	{
 		ret.append("        ret.");
 		ret.append(name);
 		ret.append(" = ");
@@ -407,7 +407,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		break;
 	}
 	case AST_Decl::NT_enum:
-	{				
+	{
 		ret.append("        ret.");
 		ret.append(name);
 		ret.append(" = ");
@@ -425,7 +425,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {		
+		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
 			ret.append("        ret.");
 			ret.append(name);
 			ret.append(" = ");
@@ -439,7 +439,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append(name);
 			ret.append(");\n");
 
-			ret.append("        long double const_");			
+			ret.append("        long double const_");
 			ret.append(name);
 			ret.append(" = (long double)");
 			ret.append(name);
@@ -451,7 +451,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 
 			ret.append("        ret.");
 			ret.append(name);
-			ret.append(" = const_"); 
+			ret.append(" = const_");
 			ret.append(name);
 			ret.append(";\n");
 
@@ -481,14 +481,14 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 		}
 		break;
 	}
-	case AST_Decl::NT_sequence: 
+	case AST_Decl::NT_sequence:
 	{
 		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
 		std::string base_type = get_cwrapper_type(seq_type->base_type());
 		AST_Decl::NodeType base_node_type = seq_type->base_type()->node_type();
 		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
 		std::string sequence_kind = bound > 0 ? "bounded" : "unbounded";
-		
+
 		ret.append("        if (");
 		ret.append(name);
 		ret.append(" != NULL)\n");
@@ -503,7 +503,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append("            TAO::");
 			ret.append(sequence_kind);
 			ret.append("_value_sequence<");
-			ret.append(base_type);			
+			ret.append(base_type);
 			if (bound > 0) {
 				ret.append(", ");
 				ret.append(std::to_string(bound));
@@ -560,7 +560,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 				ret.append("_value_sequence<CORBA::Double");
 				if (bound > 0) {
 					ret.append(", ");
-					ret.append(std::to_string(bound));					
+					ret.append(std::to_string(bound));
 				}
 				ret.append("> aux;\n");
 
@@ -593,12 +593,12 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 				ret.append("[i].assign(aux[i]);\n");
 
 				ret.append("#endif\n");
-				
-				ret.append("            }\n");				
+
+				ret.append("            }\n");
 				break;
 			}
 		}
-		default: 
+		default:
 		{
 			ret.append("            marshal::ptr_to_");
 			ret.append(sequence_kind);
@@ -676,7 +676,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 				ret.append("[i]);\n");
 
 				ret.append("                }\n");
-				
+
 				ret.append("            }\n");
 				break;
 			}
@@ -819,7 +819,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			{
 				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
 
-				if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {					
+				if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
 					std::string indent = "            ";
 					ret.append(indent);
 					ret.append(base_type);
@@ -842,7 +842,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 					for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
 						ret.append(indent);
 						ret.append("for (ACE_UINT32 i");
-						ret.append(std::to_string(i));						
+						ret.append(std::to_string(i));
 						ret.append(" = 0; i");
 						ret.append(std::to_string(i));
 						ret.append(" < ");
@@ -1044,7 +1044,7 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			ret.append(name);
 			ret.append(");\n");
 
-			ret.append("        }\n");			
+			ret.append("        }\n");
 			break;
 		}
 		case AST_Decl::NT_string:
@@ -1102,7 +1102,7 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 				ret.append(name);
 				ret.append(");\n");
 
-				ret.append("        }\n");				
+				ret.append("        }\n");
 				break;
 			}
 		}
@@ -1433,7 +1433,7 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 	{
 		ret.append("        ");
 		ret.append(name);
-		ret.append(".release();\n");		
+		ret.append(".release();\n");
 		break;
 	}
 	case AST_Decl::NT_string:
@@ -1584,7 +1584,7 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 				break;
 			}
 			default:
-				reset = true;				
+				reset = true;
 				break;
 			}
 		}
@@ -1633,7 +1633,7 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 			case AST_Decl::NT_wstring:
 			{
 				if (base_node_type == AST_Decl::NT_string) {
-					ret.append("            marshal::release_basic_string_multi_array_ptr(");					
+					ret.append("            marshal::release_basic_string_multi_array_ptr(");
 				}
 				else {
 					ret.append("            marshal::release_wide_string_multi_array_ptr(");
