@@ -140,21 +140,25 @@ internal static class MarshalHelper
         int length = Marshal.ReadInt32(ptr);
 
         // For efficiency, only compute the element size once
+//-:cnd:noEmit
 #if Windows
         int elSiz = 2;
 #else
         int elSiz = 4;
 #endif
+//+:cnd:noEmit
 
         // Populate the list
         for (int i = 0; i < length; i++)
         {
+//-:cnd:noEmit
 #if Windows
-            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));            
+            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
 #else
             int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
             sequence.Add(ConvertFromUtf32(utf32));
 #endif
+//+:cnd:noEmit
         }
     }
 
@@ -167,12 +171,13 @@ internal static class MarshalHelper
             Marshal.WriteInt32(ptr, 0);
             return;
         }
-
+//-:cnd:noEmit
 #if Windows
         int elSiz = 2;
 #else
         int elSiz = 4;
 #endif
+//+:cnd:noEmit
         // Get the total size of unmanaged memory that is needed (length + elements)
         int size = sizeof(int) + (elSiz * sequence.Count);
 
@@ -185,12 +190,14 @@ internal static class MarshalHelper
         // Write the list data
         for (int i = 0; i < sequence.Count; i++)
         {
-            // Newly-allocated space has no existing object, so the last param is false 
+            // Newly-allocated space has no existing object, so the last param is false
+//-:cnd:noEmit
 #if Windows
             Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
 #else
             Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
 #endif
+//+:cnd:noEmit
         }
     }
 
@@ -314,6 +321,7 @@ internal static class MarshalHelper
 
     public static string PtrToWideString(this IntPtr ptr)
     {
+//-:cnd:noEmit
 #if Windows
         int length = 0;
         while (Marshal.ReadInt16(ptr, length) != 0)
@@ -323,7 +331,7 @@ internal static class MarshalHelper
         byte[] buffer = new byte[length];
         Marshal.Copy(ptr, buffer, 0, buffer.Length);
 
-        return Encoding.Unicode.GetString(buffer);        
+        return Encoding.Unicode.GetString(buffer);
 #else
         int length = 0;
         while (Marshal.ReadInt32(ptr, length) != 0)
@@ -335,22 +343,24 @@ internal static class MarshalHelper
 
         return Encoding.UTF32.GetString(buffer);
 #endif
+//+:cnd:noEmit
     }
 
     public static IntPtr WideStringToPtr(this string str)
     {
+//-:cnd:noEmit
 #if Windows
         var utfBytes = Encoding.Unicode.GetBytes(str);
 
         byte[] bytes = new byte[utfBytes.Length + 2];
-        Array.Copy(utfBytes, bytes, utfBytes.Length);  
+        Array.Copy(utfBytes, bytes, utfBytes.Length);
 #else
         var utfBytes = Encoding.UTF32.GetBytes(str);
 
         byte[] bytes = new byte[utfBytes.Length + 4];
         Array.Copy(utfBytes, bytes, utfBytes.Length);
 #endif
-
+//+:cnd:noEmit
         IntPtr unmanagedPointer = Marshal.AllocHGlobal(bytes.Length);
         Marshal.Copy(bytes, 0, unmanagedPointer, bytes.Length);
 
@@ -444,7 +454,6 @@ internal static class MarshalHelper
         }
 
         int[] dimensions = new int[array.Rank];
-        //int[] dIndex = new int[array.Rank];
         for (int i = 0; i < length; i++)
         {
             if (i > 0)
@@ -601,13 +610,13 @@ internal static class MarshalHelper
         {
             length *= array.GetLength(i);
         }
-
+//-:cnd:noEmit
 #if Windows
         int elSiz = Marshal.SizeOf<char>();
 #else
         int elSiz = Marshal.SizeOf<int>();
 #endif
-
+//+:cnd:noEmit
         int[] dimensions = new int[array.Rank];
         for (int i = 0; i < length; i++)
         {
@@ -615,13 +624,14 @@ internal static class MarshalHelper
             {
                 UpdateDimensionsArray(array, dimensions);
             }
-
+//-:cnd:noEmit
 #if Windows
             char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
 #else
             int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
             char value = ConvertFromUtf32(aux);
 #endif
+//+:cnd:noEmit
             array.SetValue(value, dimensions);
         }
     }
@@ -666,7 +676,7 @@ internal static class MarshalHelper
 
     public static void PtrToStringMultiArray(this IntPtr ptr, Array array, bool isUnicode)
     {
-        // We need to ensure that the array is not null before the call 
+        // We need to ensure that the array is not null before the call
         if (array == null)
             return;
 

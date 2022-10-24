@@ -374,6 +374,8 @@ namespace OpenDDSharp.Standard.UnitTest
             });
 
             Assert.IsNotNull(foundTopic);
+            Assert.AreEqual(nameof(TestFindTopic), foundTopic.Name);
+            Assert.AreEqual(typeName, foundTopic.TypeName);
         }
 
         /// <summary>
