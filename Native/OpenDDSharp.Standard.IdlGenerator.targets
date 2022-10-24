@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build">
-  
+
   <!--Define OS constants-->
   <PropertyGroup>
     <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
@@ -37,7 +37,7 @@
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x64\TAO</TAO_ROOT>
   </PropertyGroup>
-	
+
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux</DDS_ROOT>
   </PropertyGroup>
