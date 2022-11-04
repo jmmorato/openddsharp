@@ -42,6 +42,7 @@
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOP.dll" />
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PI.dll" />
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PortableServer.dll" />
+    <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_Value.dll" />
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Dcps.dll" />
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Rtps.dll" />
     <OpenDDSReleaseWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoDiscovery.dll" />
@@ -63,6 +64,7 @@
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_BiDirGIOPd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PId.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_PortableServerd.dll" />
+    <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\ACE_TAO\ACE\lib\TAO_Valued.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Dcpsd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_Rtpsd.dll" />
     <OpenDDSDebugWin32 Include="..\..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoDiscoveryd.dll" />
@@ -84,6 +86,7 @@
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_BiDirGIOP.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PI.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PortableServer.dll" />
+    <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_Value.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Dcps.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Rtps.dll" />
     <OpenDDSReleasex64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoDiscovery.dll" />
@@ -105,6 +108,7 @@
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_BiDirGIOPd.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PId.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_PortableServerd.dll" />
+    <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\ACE_TAO\ACE\lib\TAO_Valued.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Dcpsd.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_Rtpsd.dll" />
     <OpenDDSDebugx64 Include="..\..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoDiscoveryd.dll" />
@@ -144,6 +148,10 @@
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_Value.so*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
       <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -210,6 +218,10 @@
 		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
 	</Content>
 	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	</Content>
+  <Content Include="..\..\ext\OpenDDS_MacOS\ACE_TAO\TAO\tao\PI\libTAO_Value.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
 		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
 	</Content>
