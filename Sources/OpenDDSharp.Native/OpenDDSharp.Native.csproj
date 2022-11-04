@@ -221,7 +221,7 @@
 		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-  <Content Include="..\..\ext\OpenDDS_MacOS\ACE_TAO\TAO\tao\PI\libTAO_Valuetype.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+  <Content Include="..\..\ext\OpenDDS_MacOS\ACE_TAO\TAO\tao\Valuetype\libTAO_Valuetype.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
 		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
 	</Content>
