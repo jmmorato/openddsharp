@@ -81,8 +81,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	return sub->get_participant();
 }
 
-::DDS::Entity_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName) {
-	return static_cast< ::DDS::Entity_ptr>(sub->lookup_datareader(topicName));
+::DDS::DataReader_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName) {
+	return sub->lookup_datareader(topicName);
 }
 
 ::DDS::ReturnCode_t Subscriber_DeleteContainedEntities(::DDS::Subscriber_ptr sub) {

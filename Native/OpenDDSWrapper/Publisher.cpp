@@ -73,8 +73,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	return pub->get_participant();
 }
 
-::DDS::Entity_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName) {
-	return static_cast< ::DDS::Entity_ptr>(pub->lookup_datawriter(topicName));
+::DDS::DataWriter_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName) {
+	return pub->lookup_datawriter(topicName);
 }
 
 ::DDS::ReturnCode_t Publisher_DeleteContainedEntities(::DDS::Publisher_ptr pub) {

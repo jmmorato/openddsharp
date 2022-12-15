@@ -222,12 +222,28 @@ namespace OpenDDSharp.DDS
         {
             IntPtr native = UnsafeNativeMethods.LookupDataWriter(_native, topicName);
 
-            if (native.Equals(IntPtr.Zero))
+            DataWriter writer = null;
+
+            if (!native.Equals(IntPtr.Zero))
             {
-                return null;
+                IntPtr ptr = DataReader.NarrowBase(native);
+
+                if (!ptr.Equals(IntPtr.Zero))
+                {
+                    Entity entity = EntityManager.Instance.Find(ptr);
+                    if (entity != null)
+                    {
+                        writer = (DataWriter)entity;
+                    }
+                    else
+                    {
+                        writer = new DataWriter(native);
+                        EntityManager.Instance.Add((writer as Entity).ToNative(), writer);
+                    }
+                }
             }
 
-            return (DataWriter)EntityManager.Instance.Find(native);
+            return writer;
         }
 
         /// <summary>
