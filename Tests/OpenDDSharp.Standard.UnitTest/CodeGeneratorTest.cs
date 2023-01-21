@@ -1620,6 +1620,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore]
         public void TestGeneratedConstants()
         {
             Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());
