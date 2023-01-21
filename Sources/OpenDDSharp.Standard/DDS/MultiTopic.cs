@@ -68,7 +68,7 @@ namespace OpenDDSharp.DDS
         /// Gets the subscription expression associated with the <see cref="MultiTopic" />. 
         /// That is, the expression specified when the <see cref="MultiTopic" /> was created.
         /// </summary>
-        public string SubscriptionExpression => GetSubscriptionExpression ();
+        public string SubscriptionExpression => GetSubscriptionExpression();
 
         /// <summary>
         /// Gets type name used to create the <see cref="ITopicDescription" />.
@@ -110,13 +110,13 @@ namespace OpenDDSharp.DDS
             }
             parameters.Clear();
 
-            IntPtr seq = IntPtr.Zero;
+            var seq = IntPtr.Zero;
 
-            ReturnCode ret = UnsafeNativeMethods.GetExpressionParameters(_native, ref seq);
+            var ret = UnsafeNativeMethods.GetExpressionParameters(_native, ref seq);
 
             if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
             {
-                MarshalHelper.PtrToStringSequence(seq, ref parameters, false);
+                seq.PtrToStringSequence(ref parameters, false);
             }
 
             return ret;
@@ -205,7 +205,7 @@ namespace OpenDDSharp.DDS
 
         private string GetSubscriptionExpression()
         {
-            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetSubscriptionExpression (_native));
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetSubscriptionExpression(_native));
         }
         #endregion
 

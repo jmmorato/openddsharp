@@ -19,7 +19,6 @@
           <Format>cobertura,lcov</Format>
           <Include>
            <ModulePath>.*OpenDDSharp.Standard.dll</ModulePath>
-           <ModulePath>.*TestIdlStandard.dll</ModulePath>
           </Include>
           <Exclude>
             <ModulePath>.*OpenDDSharp.BuildTasks.*</ModulePath>
