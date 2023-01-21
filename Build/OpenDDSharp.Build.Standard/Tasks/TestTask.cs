@@ -39,7 +39,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
             var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildConfiguration}/net6.0/{context.RunTime}");
             context.Log.Information($"Unit test path: {path}");
-            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/3.1.2/build/netstandard1.0");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/3.2.0/build/netstandard1.0");
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
