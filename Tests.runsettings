@@ -21,8 +21,10 @@
            <ModulePath>.*OpenDDSharp.Standard.dll</ModulePath>
           </Include>
           <Exclude>
-            <ModulePath>.*OpenDDSharp.BuildTasks.*</ModulePath>
-            <ModulePath>.*OpenDDSharp.Standard.UnitTest.*</ModulePath>
+            <ModulePath>.*OpenDDSharp.BuildTasks.dll</ModulePath>
+            <ModulePath>.*OpenDDSharp.Standard.UnitTest.dll</ModulePath>
+            <ModulePath>.*TestIdlStandard.dll</ModulePath>
+            <ModulePath>.*TestSupportProcessCore.dll</ModulePath>
           </Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
