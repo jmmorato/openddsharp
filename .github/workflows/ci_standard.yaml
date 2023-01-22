@@ -158,7 +158,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --blame-crash --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --blame-crash --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --settings ${{ github.workspace }}/Tests.runsettings --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.2.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -171,7 +171,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: Tests/OpenDDSharp.Standard.UnitTest/TestResults/test-results.trx
+        path: TestResults/test-results.trx
         reporter: dotnet-trx
 
   build_macos:
