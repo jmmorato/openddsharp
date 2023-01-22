@@ -35,6 +35,7 @@ namespace OpenDDSharp.Standard.UnitTest
         private const string INSTANCE_NAME = "MulticastInst";
         #endregion
 
+        #region Test Methods
         /// <summary>
         /// Test the properties default values after calling the constructor.
         /// </summary>
@@ -182,5 +183,6 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TransportRegistry.Instance.RemoveInst(mi);
         }
+        #endregion
     }
 }
