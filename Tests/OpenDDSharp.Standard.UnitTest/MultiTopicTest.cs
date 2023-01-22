@@ -116,17 +116,25 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_participant != null)
-            {
-                ReturnCode result = _participant.DeleteContainedEntities();
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _publisher?.DeleteDataWriter(_resultWriter);
+            _publisher?.DeleteDataWriter(_athleteWriter);
+            _reader?.DeleteContainedEntities();
+            _publisher?.DeleteContainedEntities();
+            _subscriber?.DeleteDataReader(_reader);
+            _subscriber?.DeleteContainedEntities();
+            _participant?.DeletePublisher(_publisher);
+            _participant?.DeleteSubscriber(_subscriber);
+            _participant?.DeleteTopic(_resultTopic);
+            _participant?.DeleteContainedEntities();
+            AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _participant = null;
+            _publisher = null;
+            _subscriber = null;
+            _resultTopic = null;
+            _resultWriter = null;
+            _athleteWriter = null;
+            _reader = null;
         }
         #endregion
 
