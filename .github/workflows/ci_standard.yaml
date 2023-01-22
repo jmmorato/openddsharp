@@ -64,7 +64,7 @@ jobs:
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: "Test Report: ${{ matrix.BuildConfiguration }} win-${{ matrix.BuildPlatform }}"
+        name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
         path: TestResults/test-results.trx
         reporter: dotnet-trx
 
