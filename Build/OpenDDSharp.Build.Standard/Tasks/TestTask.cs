@@ -58,8 +58,9 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Runtime = context.RunTime,
                 NoBuild = true,
                 NoRestore = true,
+                Verbosity = DotNetVerbosity.Diagnostic,
                 Configuration = context.BuildConfiguration,
-                Loggers = { "trx", "console;verbosity=detailed" },
+                Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
             });
         }
     }

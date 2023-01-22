@@ -60,6 +60,14 @@ jobs:
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
 
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: "Test Report: ${{ matrix.BuildConfiguration }} win-${{ matrix.BuildPlatform }}"
+        path: TestResults/test-results.trx
+        reporter: dotnet-trx
+
   build_linux:
     runs-on: ubuntu-latest
     strategy:
