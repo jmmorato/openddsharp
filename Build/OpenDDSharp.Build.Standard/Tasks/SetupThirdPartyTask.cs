@@ -34,7 +34,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     [TaskName("SetupThirdParty")]
     public sealed class SetupThirdPartyTask : FrostingTask<BuildContext>
     {
-        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/objectcomputing/OpenDDS.git";
+        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/OpenDDS/OpenDDS.git";
         private DirectoryPath _clonePath;
         private string _versionTag;
 

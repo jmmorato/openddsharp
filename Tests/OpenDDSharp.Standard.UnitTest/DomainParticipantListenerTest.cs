@@ -241,7 +241,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// <summary>
         /// Test the <see cref="DomainParticipantListener.OnRequestedDeadlineMissed(DataReader, RequestedDeadlineMissedStatus)" /> event.
         /// </summary>
-        [Ignore("Ignored until https://github.com/objectcomputing/OpenDDS/issues/2684 is fixed.")]
+        // [Ignore("Ignored until https://github.com/objectcomputing/OpenDDS/issues/2684 is fixed.")]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnRequestedDeadlineMissed()
