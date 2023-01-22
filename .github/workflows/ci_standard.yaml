@@ -163,7 +163,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/test-results.trx
+        path: Tests/OpenDDSharp.Standard.UnitTest/TestResults/test-results.trx
         reporter: dotnet-trx
 
   build_macos:
