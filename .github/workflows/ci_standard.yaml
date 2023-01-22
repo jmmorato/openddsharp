@@ -156,23 +156,23 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
 
-    # - name: Test OpenDDSharp
-    #   shell: bash
-    #   run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --blame-crash --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed"
-    #   working-directory: ${{ github.workspace }}
-    #   env:
-    #     DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-    #     ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
-    #     TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
-    #     LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib:."
+    - name: Test OpenDDSharp
+      shell: bash
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --blame-crash --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed"
+      working-directory: ${{ github.workspace }}
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib:."
 
-    # - name: Test Report
-    #   uses: dorny/test-reporter@v1
-    #   if: success() || failure()
-    #   with:
-    #     name: "Test Report: linux-x64"
-    #     path: Tests/OpenDDSharp.Standard.UnitTest/TestResults/test-results.trx
-    #     reporter: dotnet-trx
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: "Test Report: linux-x64"
+        path: Tests/OpenDDSharp.Standard.UnitTest/TestResults/test-results.trx
+        reporter: dotnet-trx
 
   build_macos:
     runs-on: macos-latest
