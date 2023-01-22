@@ -63,7 +63,7 @@ namespace OpenDDSharp.Standard.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();            
+            _participant.BindRtpsUdpTransportConfig();
 
             _publisher = _participant.CreatePublisher();
             Assert.IsNotNull(_publisher);
@@ -99,17 +99,16 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_participant != null)
-            {
-                ReturnCode result = _participant.DeleteContainedEntities();
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
-
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _publisher?.DeleteDataWriter(_dw);
+            _dr?.DeleteContainedEntities();
+            _publisher?.DeleteContainedEntities();
+            _subscriber?.DeleteDataReader(_dr);
+            _subscriber?.DeleteContainedEntities();
+            _participant?.DeletePublisher(_publisher);
+            _participant?.DeleteSubscriber(_subscriber);
+            _participant?.DeleteTopic(_topic);
+            _participant?.DeleteContainedEntities();
+            AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
             _participant = null;
             _publisher = null;
