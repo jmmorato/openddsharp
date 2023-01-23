@@ -11,7 +11,7 @@ to be suitable for systems whose requirements include real-time, high
 volume, robustness, failure tolerant data distribution utilizing a
 publish and subscribe model.
 
-OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)
+OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)  
 OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)
 
 OpenDDSharp has been compiled with OpenDDS v3.23
