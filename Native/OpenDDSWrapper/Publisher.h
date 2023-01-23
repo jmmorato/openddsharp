@@ -58,7 +58,7 @@ EXTERN_METHOD_EXPORT
 ::DDS::DomainParticipant_ptr Publisher_GetParticipant(::DDS::Publisher_ptr pub);
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName);
+::DDS::DataWriter_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_DeleteContainedEntities(::DDS::Publisher_ptr pub);

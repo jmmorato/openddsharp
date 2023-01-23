@@ -358,7 +358,7 @@ namespace ConsoleDemoCore
                             { 23.23, 24.24 },
                         }
                     },
-                    BooleanMultiArrayField = new[, ,]
+                    BooleanMultiArrayField = new[,,]
                     {
                         {
                             { true, false },
@@ -442,7 +442,7 @@ namespace ConsoleDemoCore
                             { new NestedStruct{ Id = 23, Message = "23" }, new NestedStruct{ Id = 24, Message = "24" } },
                         },
                     },
-                    StringMultiArrayField = new[, ,]
+                    StringMultiArrayField = new[,,]
                     {
                         {
                             { "01", "02" },
@@ -463,7 +463,7 @@ namespace ConsoleDemoCore
                             { "23", "24" },
                         },
                     },
-                    WStringMultiArrayField = new[, ,]
+                    WStringMultiArrayField = new[,,]
                     {
                         {
                             { "01", "02" },
@@ -484,7 +484,7 @@ namespace ConsoleDemoCore
                             { "23", "24" },
                         },
                     },
-                    CharMultiArrayField = new[, ,]
+                    CharMultiArrayField = new[,,]
                     {
                         {
                             { '1', '2' },
@@ -505,7 +505,7 @@ namespace ConsoleDemoCore
                             { '3', '4' },
                         }
                     },
-                    WCharMultiArrayField = new[, ,]
+                    WCharMultiArrayField = new[,,]
                     {
                         {
                             { '1', '2' },

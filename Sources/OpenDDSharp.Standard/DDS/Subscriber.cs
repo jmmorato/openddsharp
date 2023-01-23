@@ -249,19 +249,28 @@ namespace OpenDDSharp.DDS
         {
             IntPtr native = UnsafeNativeMethods.LookupDataReader(_native, topicName);
 
-            if (native.Equals(IntPtr.Zero))
+            DataReader reader = null;
+
+            if (!native.Equals(IntPtr.Zero))
             {
-                return null;
+                IntPtr ptr = DataReader.NarrowBase(native);
+
+                if (!ptr.Equals(IntPtr.Zero))
+                {
+                    Entity entity = EntityManager.Instance.Find(ptr);
+                    if (entity != null)
+                    {
+                        reader = (DataReader)entity;
+                    }
+                    else
+                    {
+                        reader = new DataReader(native);
+                        EntityManager.Instance.Add((reader as Entity).ToNative(), reader);
+                    }
+                }
             }
 
-            Entity entity = EntityManager.Instance.Find(native);
-            if (entity == null)
-            {
-                entity = new DataReader(native);
-                EntityManager.Instance.Add(native, entity);
-            }
-
-            return (DataReader)entity;
+            return reader;
         }
 
         /// <summary>

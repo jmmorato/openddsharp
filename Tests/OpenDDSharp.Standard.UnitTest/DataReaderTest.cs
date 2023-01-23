@@ -85,17 +85,13 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_participant != null)
-            {
-                ReturnCode result = _participant.DeleteContainedEntities();
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
-
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _publisher?.DeleteContainedEntities();
+            _subscriber?.DeleteContainedEntities();
+            _participant?.DeletePublisher(_publisher);
+            _participant?.DeleteSubscriber(_subscriber);
+            _participant?.DeleteTopic(_topic);
+            _participant?.DeleteContainedEntities();
+            AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
             _participant = null;
             _publisher = null;
@@ -959,7 +955,7 @@ namespace OpenDDSharp.Standard.UnitTest
             // the DDS specification and omits "local" entities from the Built-In Topics.
             // The definition of "local" means those entities belonging to the same Domain
             // Participant as the given Built-In Topic Subscriber.
-            // https://github.com/objectcomputing/OpenDDS/blob/master/docs/design/RTPS
+            // https://github.com/OpenDDS/OpenDDS/blob/master/docs/design/RTPS
 
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
             // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?

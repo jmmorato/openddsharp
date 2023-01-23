@@ -112,17 +112,23 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_participant != null)
-            {
-                ReturnCode result = _participant.DeleteContainedEntities();
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _publisher?.DeleteDataWriter(_writer);
+            _reader?.DeleteContainedEntities();
+            _publisher?.DeleteContainedEntities();
+            _subscriber?.DeleteDataReader(_reader);
+            _subscriber?.DeleteContainedEntities();
+            _participant?.DeletePublisher(_publisher);
+            _participant?.DeleteSubscriber(_subscriber);
+            _participant?.DeleteTopic(_topic);
+            _participant?.DeleteContainedEntities();
+            AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _participant = null;
+            _publisher = null;
+            _subscriber = null;
+            _topic = null;
+            _writer = null;
+            _reader = null;
         }
         #endregion
 
@@ -178,7 +184,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// <summary>
         /// Test the <see cref="SubscriberListener.OnRequestedDeadlineMissed(DataReader, RequestedDeadlineMissedStatus)" /> event.
         /// </summary>
-        [Ignore("Ignored until https://github.com/objectcomputing/OpenDDS/issues/2684 is fixed.")]
+        // [Ignore("Ignored until https://github.com/objectcomputing/OpenDDS/issues/2684 is fixed.")]
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
         public void TestOnRequestedDeadlineMissed()

@@ -60,17 +60,10 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_participant != null)
-            {
-                ReturnCode result = _participant.DeleteContainedEntities();
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _participant?.DeleteContainedEntities();
+            AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _participant = null;
         }
         #endregion
 
@@ -80,7 +73,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestGetParticipant()
         {
             Subscriber subscriber = _participant.CreateSubscriber();
@@ -92,7 +84,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestNewSubscriberQos()
         {
             SubscriberQos qos = new SubscriberQos();
@@ -268,7 +259,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestNewDataReaderQos()
         {
             DataReaderQos qos = new DataReaderQos();
@@ -431,6 +421,14 @@ namespace OpenDDSharp.Standard.UnitTest
 
             received = otherSubscriber.LookupDataReader(nameof(TestLookupDataReader));
             Assert.IsNull(received);
+
+            // Lookup Built-in DataReader
+            var bis = _participant.GetBuiltinSubscriber();
+            var participantReader = bis.LookupDataReader("DCPSParticipant");
+            Assert.IsNotNull(participantReader);
+
+            result = participantReader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>

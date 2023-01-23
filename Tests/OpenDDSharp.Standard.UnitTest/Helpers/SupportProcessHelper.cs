@@ -60,6 +60,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
+        private const string ARM_SIXTY_FOUR_PLATFORM_FOLDER = @"ARM64/";
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
@@ -83,6 +84,11 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
 
 #if Windows
             SetEightySixPlatform();
+#elif OSX
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                _platformFolder = ARM_SIXTY_FOUR_PLATFORM_FOLDER;
+            }
 #endif
             var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);

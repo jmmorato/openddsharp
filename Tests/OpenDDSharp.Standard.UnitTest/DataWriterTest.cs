@@ -83,17 +83,15 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            if (_participant != null)
-            {
-                ReturnCode result = _participant.DeleteContainedEntities();
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _publisher?.DeleteContainedEntities();
+            _participant?.DeletePublisher(_publisher);
+            _participant?.DeleteTopic(_topic);
+            _participant?.DeleteContainedEntities();
+            AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
-            if (AssemblyInitializer.Factory != null)
-            {
-                ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(_participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            _participant = null;
+            _publisher = null;
+            _topic = null;
         }
         #endregion
 
@@ -133,7 +131,7 @@ namespace OpenDDSharp.Standard.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
-            // Create a non-default QoS and create a datawriter with it
+            // Create a non-default QoS and create a DataWriter with it
             DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
 
             DataWriter dataWriter = _publisher.CreateDataWriter(_topic, qos);
@@ -184,7 +182,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(100, qos.OwnershipStrength.Value);
 
-            // Try to set immutable QoS properties before enable the datawriter
+            // Try to set immutable QoS properties before enable the DataWriter
             PublisherQos pubQos = new PublisherQos();
             pubQos.EntityFactory.AutoenableCreatedEntities = false;
             result = _publisher.SetQos(pubQos);
@@ -250,7 +248,7 @@ namespace OpenDDSharp.Standard.UnitTest
             MyDataWriterListener listener = (MyDataWriterListener)dataWriter.Listener;
             Assert.IsNull(listener);
 
-            // Create a listener, set it and check that is correctly setted
+            // Create a listener, set it and check that is correctly set
             listener = new MyDataWriterListener();
             ReturnCode result = dataWriter.SetListener(listener, StatusMask.AllStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -403,7 +401,7 @@ namespace OpenDDSharp.Standard.UnitTest
             DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
 
-            // If not matched readers should retur the default status
+            // If not matched readers should return the default status
             OfferedIncompatibleQosStatus status = default;
             ReturnCode result = writer.GetOfferedIncompatibleQosStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -450,7 +448,7 @@ namespace OpenDDSharp.Standard.UnitTest
             DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
 
-            // If not datareaders are created should return the default status
+            // If not DataReaders are created should return the default status
             PublicationMatchedStatus status = default;
             ReturnCode result = writer.GetPublicationMatchedStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -599,15 +597,15 @@ namespace OpenDDSharp.Standard.UnitTest
 
             // DCPSInfoRepo-based discovery generates Built-In Topic data once (inside the
             // info repo process) and therefore all known entities in the domain are
-            // reflected in the Built-In Topics.  RTPS discovery, on the other hand, follows
+            // reflected in the Built-In Topics. RTPS discovery, on the other hand, follows
             // the DDS specification and omits "local" entities from the Built-In Topics.
             // The definition of "local" means those entities belonging to the same Domain
             // Participant as the given Built-In Topic Subscriber.
-            // https://github.com/objectcomputing/OpenDDS/blob/master/docs/design/RTPS
+            // https://github.com/OpenDDS/OpenDDS/blob/master/docs/design/RTPS
 
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
             // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
-            // WORKAROUND: Create another particpant for the DataReader.
+            // WORKAROUND: Create another participant for the DataReader.
             DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
@@ -755,7 +753,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
                     lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
                     retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
-                    if (retReadInstance == ReturnCode.Ok && infos != null && infos.Count == 1)
+                    if (retReadInstance == ReturnCode.Ok && infos.Count == 1)
                     {
                         timestamp = infos.First().SourceTimestamp;
                     }

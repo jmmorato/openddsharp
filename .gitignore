@@ -60,3 +60,5 @@ Native/build*/
 **/.DS_Store
 #Ignore vscode hidden folder
 .vscode
+#Ignore Rider hidden folder
+.idea

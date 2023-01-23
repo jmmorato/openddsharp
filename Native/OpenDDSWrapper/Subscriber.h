@@ -67,7 +67,7 @@ EXTERN_METHOD_EXPORT
 ::DDS::DomainParticipant_ptr Subscriber_GetParticipant(::DDS::Subscriber_ptr sub);
 
 EXTERN_METHOD_EXPORT
-::DDS::Entity_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName);
+::DDS::DataReader_ptr Subscriber_LookupDataReader(::DDS::Subscriber_ptr sub, char* topicName);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Subscriber_DeleteContainedEntities(::DDS::Subscriber_ptr sub);

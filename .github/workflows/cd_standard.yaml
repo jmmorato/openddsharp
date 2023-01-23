@@ -22,7 +22,7 @@ jobs:
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.22"
+      OpenDdsVersion: "3.23"
 
     steps:
     - uses: actions/checkout@v3
@@ -118,7 +118,7 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.22"
+      OpenDdsVersion: "3.23"
 
     steps:
     - uses: actions/checkout@v3
@@ -226,7 +226,7 @@ jobs:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
     env:
-      OpenDdsVersion: "3.22"
+      OpenDdsVersion: "3.23"
 
     steps:
 
@@ -332,7 +332,7 @@ jobs:
     runs-on: windows-2022
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
-      OpenDdsVersion: "3.22"
+      OpenDdsVersion: "3.23"
       MajorVersion: "0"
       MinorVersion: "8"
 
