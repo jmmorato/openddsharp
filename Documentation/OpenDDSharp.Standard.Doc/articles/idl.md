@@ -60,12 +60,12 @@ The following legend is used to define the current version status:
 | uint16             | ushort  | :heavy_check_mark: |
 | long               | int     | :heavy_check_mark: |
 | int32              | int     | :heavy_check_mark: |
-| unsigned long      | ushort  | :heavy_check_mark: |
-| uint32             | ushort  | :heavy_check_mark: |
-| long long          | int     | :heavy_check_mark: |
-| int64              | int     | :heavy_check_mark: |
-| unsigned long long | ushort  | :heavy_check_mark: |
-| uint64             | ushort  | :heavy_check_mark: |
+| unsigned long      | uint    | :heavy_check_mark: |
+| uint32             | uint    | :heavy_check_mark: |
+| long long          | long    | :heavy_check_mark: |
+| int64              | long    | :heavy_check_mark: |
+| unsigned long long | ulong   | :heavy_check_mark: |
+| uint64             | ulong   | :heavy_check_mark: |
 
 #### Floating-Point Types
 
