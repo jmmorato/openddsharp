@@ -33,10 +33,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-  </ItemGroup>
-
-  <ItemGroup>
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
   <ItemGroup>

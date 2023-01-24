@@ -17,10 +17,17 @@
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>cobertura,lcov</Format>
-          <Include>^OpenDDSharp\.Standard\.dll$</Include>
+          <Include>
+            <ModulePath>^OpenDDSharp\.Standard\.dll$</ModulePath>
+          </Include>
+          <Exclude>
+            <ModulePath>^TestIdlStandard\.dll$</ModulePath>
+            <ModulePath>^OpenDDSharp\.BuildTasks\.dll$</ModulePath>
+            <ModulePath>^OpenDDSharp\.Standard\.UnitTest\.dll$</ModulePath>            
+            <ModulePath>^TestSupportProcessCore\.dll$</ModulePath>
+          </Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
-          <SkipAutoProps>true</SkipAutoProps>
         </Configuration>
       </DataCollector>
     </DataCollectors>

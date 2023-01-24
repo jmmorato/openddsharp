@@ -12,10 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Tests\TestIdlStandard\TestIdlStandard.csproj" />
 
 	<!-- Analyzer API for our custom checks. -->

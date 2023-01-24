@@ -15,10 +15,6 @@
     <Platforms>x64;x86;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
   </PropertyGroup>
-    
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-  </ItemGroup>
 
   <!-- NuGet properties -->
   <PropertyGroup>
