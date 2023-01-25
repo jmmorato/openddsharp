@@ -20,7 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
-using OpenDDSharp.Standard.UnitTest;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using Test;
 

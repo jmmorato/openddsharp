@@ -2,8 +2,12 @@ name: Continuous Integration
 
 on:
   push:
+    branches:
+      - main
+      - develop
   schedule:
     - cron: '0 1 * * SUN'
+  pull_request:
   workflow_dispatch:
 
 concurrency:
@@ -67,6 +71,17 @@ jobs:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
         path: TestResults/test-results.trx
         reporter: dotnet-trx
+
+    - name: Get path to lcov file
+      id: get_lcov_path
+      shell: bash
+      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linux:
     runs-on: ubuntu-latest
@@ -158,7 +173,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --blame-crash --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --settings ${{ github.workspace }}/Tests.runsettings --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.2.0/build/netstandard1.0/"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj --blame-crash --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --collect "XPlat code coverage" --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --settings ${{ github.workspace }}/Tests.runsettings --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/3.2.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -173,6 +188,17 @@ jobs:
         name: "Test Report: linux-x64"
         path: TestResults/test-results.trx
         reporter: dotnet-trx
+
+    - name: Get path to lcov file
+      id: get_lcov_path
+      shell: bash
+      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+
+    - name: Upload coverage to Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
 
   build_macos:
     runs-on: macos-latest
@@ -278,3 +304,14 @@ jobs:
         name: "Test Report: osx-x64"
         path: TestResults/test-results.trx
         reporter: dotnet-trx
+
+    - name: Get path to lcov file
+      id: get_lcov_path
+      shell: bash
+      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+
+    - name: Upload coverage to Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
