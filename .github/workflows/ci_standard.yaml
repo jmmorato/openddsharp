@@ -72,10 +72,14 @@ jobs:
         path: TestResults/test-results.trx
         reporter: dotnet-trx
 
+    - name: Get path to lcov file
+      id: get_lcov_path
+      run: echo '::set-output name=lcov_path::%s\n' TestResults/*/coverage.info
+
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
-        path-to-lcov: ${{ github.workspace }}/TestResults/coverage/lcov
+        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linux:
