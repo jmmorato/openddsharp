@@ -51,7 +51,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             {
                 CollectCoverage = true,
                 CoverletOutputFormat = CoverletOutputFormat.lcov,
-                CoverletOutputDirectory = new DirectoryPath(@"./coverage/"),
+                CoverletOutputDirectory = new DirectoryPath($@"{solutionFullPath}/TestResults/coverage/"),
                 CoverletOutputName = $"lcov",
             };
 
