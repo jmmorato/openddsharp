@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
+using System.Linq;
 using Cake.Common;
 using Cake.Common.IO;
 using Cake.Common.Tools.MSBuild;
@@ -141,16 +142,13 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Path.Combine(ddsPath, @"ACE_TAO\TAO\tao", context.BuildConfiguration),
             };
 
-            foreach (var folder in cleanupFolders)
+            foreach (var folder in cleanupFolders.Where(Directory.Exists))
             {
-                if (Directory.Exists(folder))
+                context.DeleteDirectory(folder, new DeleteDirectorySettings
                 {
-                    context.DeleteDirectory(folder, new DeleteDirectorySettings
-                    {
-                        Force = true,
-                        Recursive = true,
-                    });
-                }
+                    Force = true,
+                    Recursive = true,
+                });
             }
         }
     }

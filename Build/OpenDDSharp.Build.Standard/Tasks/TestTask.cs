@@ -22,8 +22,6 @@ using System;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Coverlet;
 using Cake.Frosting;
 using Path = System.IO.Path;
 
@@ -47,14 +45,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
-            var coverletSettings = new CoverletSettings
-            {
-                CollectCoverage = true,
-                CoverletOutputFormat = CoverletOutputFormat.lcov,
-                CoverletOutputDirectory = new DirectoryPath($@"{solutionFullPath}/TestResults/**/coverage/"),
-                CoverletOutputName = $"coverage.info",
-            };
-
             var dotnetTestSettings = new DotNetTestSettings
             {
                 TestAdapterPath = Path.GetFullPath(testAdapterPath),
@@ -75,7 +65,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
             };
 
-            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", dotnetTestSettings, coverletSettings);
+            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", dotnetTestSettings);
         }
     }
 }

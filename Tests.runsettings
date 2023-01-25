@@ -17,8 +17,8 @@
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>cobertura,lcov</Format>
-          <Include>[*]OpenDDSharp.Standard.*</Include>
-          <Exclude>[*]TestIdlStandard.*,[*]OpenDDSharp.BuildTasks.*,[*]OpenDDSharp.Standard.UnitTest.*</Exclude>
+          <Include>[*]OpenDDSharp.*</Include>
+          <Exclude>[*]Test.*,[*]OpenDDSharp.BuildTasks.*,[*]OpenDDSharp.Standard.UnitTest.*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
           <SkipAutoProps>true</SkipAutoProps>
