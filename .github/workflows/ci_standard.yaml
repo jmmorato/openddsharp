@@ -74,7 +74,7 @@ jobs:
 
     - name: Get path to lcov file
       id: get_lcov_path
-      run: "::set-output name=lcov_path::{0}\n" -f Get-ChildItem TestResults/*/coverage.info
+      run: echo "::set-output name=lcov_path::{0}\n" -f Get-ChildItem TestResults/*/coverage.info
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
