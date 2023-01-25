@@ -17,11 +17,15 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.IO;
+
+using System;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
+using Cake.Coverlet;
 using Cake.Frosting;
+using Path = System.IO.Path;
 
 namespace OpenDDSharp.Build.Standard.Tasks
 {
@@ -43,7 +47,15 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
             context.Log.Information($"Settings file: {settingsFile}");
 
-            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetTestSettings
+            var coverletSettings = new CoverletSettings
+            {
+                CollectCoverage = true,
+                CoverletOutputFormat = CoverletOutputFormat.lcov,
+                CoverletOutputDirectory = new DirectoryPath(@"./coverage/"),
+                CoverletOutputName = $"lcov",
+            };
+
+            var dotnetTestSettings = new DotNetTestSettings
             {
                 TestAdapterPath = Path.GetFullPath(testAdapterPath),
                 WorkingDirectory = path,
@@ -61,7 +73,9 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Verbosity = DotNetVerbosity.Diagnostic,
                 Configuration = context.BuildConfiguration,
                 Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
-            });
+            };
+
+            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", dotnetTestSettings, coverletSettings);
         }
     }
 }
