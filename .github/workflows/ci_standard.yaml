@@ -4,6 +4,7 @@ on:
   push:
   schedule:
     - cron: '0 1 * * SUN'
+  pull_request:
   workflow_dispatch:
 
 concurrency:
@@ -67,6 +68,11 @@ jobs:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
         path: TestResults/test-results.trx
         reporter: dotnet-trx
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linux:
     runs-on: ubuntu-latest
