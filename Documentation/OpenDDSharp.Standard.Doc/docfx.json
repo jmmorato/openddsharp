@@ -4,9 +4,9 @@
       "src": [
         {
           "files": [
-            "**.csproj"
+            "OpenDDSharp.Standard.csproj"
           ],
-          "src": "../Sources/OpenDDSharp.Standard"
+          "src": "../../Sources/OpenDDSharp.Standard"
         }
       ],
       "dest": "api",

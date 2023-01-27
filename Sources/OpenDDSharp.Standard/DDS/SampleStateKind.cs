@@ -64,9 +64,9 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Creates a new <see cref="SampleStateKind"/> from an <see cref="uint"/> value.
+        /// Creates a new <see cref="SampleStateKind"/> from an <c>uint</c> value.
         /// </summary>
-        /// <param name="value">The <see cref="uint"/> value.</param>
+        /// <param name="value">The <c>uint</c> value.</param>
         /// <returns>A newly created <see cref="SampleStateKind"/> object.</returns>
         public static SampleStateKind FromUInt32(uint value)
         {
@@ -74,9 +74,9 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Gets the <see cref="uint"/> value of the <see cref="SampleStateKind"/>.
+        /// Gets the <c>uint</c> value of the <see cref="SampleStateKind"/>.
         /// </summary>
-        /// <returns>The <see cref="uint"/> value.</returns>
+        /// <returns>The <c>uint</c> value.</returns>
         public uint ToUInt32()
         {
             return _value;
@@ -145,17 +145,17 @@ namespace OpenDDSharp.DDS
 
         #region Operators
         /// <summary>
-        /// Implicit conversion operator from <see cref="SampleStateKind" /> to <see cref="uint" />.
+        /// Implicit conversion operator from <see cref="SampleStateKind" /> to <c>uint</c>.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="uint" /> value.</returns>
+        /// <returns>The <c>uint</c> value.</returns>
         public static implicit operator uint(SampleStateKind value)
         {
             return value.ToUInt32();
         }
 
         /// <summary>
-        /// Implicit conversion operator from <see cref="uint" /> to <see cref="SampleStateKind" />.
+        /// Implicit conversion operator from <c>uint</c> to <see cref="SampleStateKind" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="SampleStateKind" /> value.</returns>
