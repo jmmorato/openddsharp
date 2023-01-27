@@ -58,9 +58,9 @@ namespace OpenDDSharp.DDS
 
         #region Methods
         /// <summary>
-        /// Creates a new <see cref="StatusMask"/> from an <see cref="uint"/> value.
+        /// Creates a new <see cref="StatusMask"/> from an <c>uint</c> value.
         /// </summary>
-        /// <param name="value">The <see cref="uint"/> value.</param>
+        /// <param name="value">The <c>uint</c> value.</param>
         /// <returns>A newly created <see cref="StatusMask"/> object.</returns>
         public static StatusMask FromUInt32(uint value)
         {
@@ -68,9 +68,9 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Gets the <see cref="uint"/> value of the <see cref="StatusMask"/>.
+        /// Gets the <c>uint</c> value of the <see cref="StatusMask"/>.
         /// </summary>
-        /// <returns>The <see cref="uint"/> value.</returns>
+        /// <returns>The <c>uint</c> value.</returns>
         public uint ToUInt32()
         {
             return _value;
@@ -130,17 +130,17 @@ namespace OpenDDSharp.DDS
 
         #region Operators
         /// <summary>
-        /// Implicit conversion operator from <see cref="StatusMask" /> to <see cref="uint" />.
+        /// Implicit conversion operator from <see cref="StatusMask" /> to <c>uint</c>.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="uint" /> value.</returns>
+        /// <returns>The <c>uint</c> value.</returns>
         public static implicit operator uint(StatusMask value)
         {
             return value.ToUInt32();
         }
 
         /// <summary>
-        /// Implicit conversion operator from <see cref="uint" /> to <see cref="StatusMask" />.
+        /// Implicit conversion operator from <c>uint</c> to <see cref="StatusMask" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="StatusMask" /> value.</returns>

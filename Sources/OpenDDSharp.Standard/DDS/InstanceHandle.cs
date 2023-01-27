@@ -47,9 +47,9 @@ namespace OpenDDSharp.DDS
 
         #region Methods
         /// <summary>
-        /// Creates a new <see cref="InstanceHandle"/> from an <see cref="int"/> value.
+        /// Creates a new <see cref="InstanceHandle"/> from an <c>int</c> value.
         /// </summary>
-        /// <param name="value">The <see cref="int"/> value.</param>
+        /// <param name="value">The <c>int</c> value.</param>
         /// <returns>A newly created <see cref="InstanceHandle"/> object.</returns>
         public static InstanceHandle FromInt32(int value)
         {
@@ -58,9 +58,9 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Gets the <see cref="int"/> value of the <see cref="InstanceHandle"/>.
+        /// Gets the <c>int</c> value of the <see cref="InstanceHandle"/>.
         /// </summary>
-        /// <returns>The <see cref="int"/> value.</returns>
+        /// <returns>The <c>int</c> value.</returns>
         public int ToInt32()
         {
             return _value;
@@ -124,17 +124,17 @@ namespace OpenDDSharp.DDS
 
         #region Operators
         /// <summary>
-        /// Implicit conversion operator from <see cref="InstanceHandle" /> to <see cref="int" />.
+        /// Implicit conversion operator from <see cref="InstanceHandle" /> to <c>int</c>.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="int" /> value.</returns>
+        /// <returns>The <c>int</c> value.</returns>
         public static implicit operator int(InstanceHandle value)
         {
             return value.ToInt32();
         }
 
         /// <summary>
-        /// Implicit conversion operator from <see cref="int" /> to <see cref="InstanceHandle" />.
+        /// Implicit conversion operator from <c>int</c> to <see cref="InstanceHandle" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="InstanceHandle" /> value.</returns>

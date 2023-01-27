@@ -75,9 +75,9 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Creates a new <see cref="InstanceStateKind"/> from an <see cref="uint"/> value.
+        /// Creates a new <see cref="InstanceStateKind"/> from an <c>uint</c> value.
         /// </summary>
-        /// <param name="value">The <see cref="uint"/> value.</param>
+        /// <param name="value">The <c>uint</c> value.</param>
         /// <returns>A newly created <see cref="InstanceStateKind"/> object.</returns>
         public static InstanceStateKind FromUInt32(uint value)
         {
@@ -85,9 +85,9 @@ namespace OpenDDSharp.DDS
         }
 
         /// <summary>
-        /// Gets the <see cref="uint"/> value of the <see cref="InstanceStateKind"/>.
+        /// Gets the <c>uint</c> value of the <see cref="InstanceStateKind"/>.
         /// </summary>
-        /// <returns>The <see cref="uint"/> value.</returns>
+        /// <returns>The <c>uint</c> value.</returns>
         public uint ToUInt32()
         {
             return _value;
@@ -156,17 +156,17 @@ namespace OpenDDSharp.DDS
 
         #region Operators
         /// <summary>
-        /// Implicit conversion operator from <see cref="InstanceStateKind" /> to <see cref="uint" />.
+        /// Implicit conversion operator from <see cref="InstanceStateKind" /> to <c>uint</c>.
         /// </summary>
         /// <param name="value">The value to transform.</param>
-        /// <returns>The <see cref="uint" /> value.</returns>
+        /// <returns>The <c>uint</c> value.</returns>
         public static implicit operator uint(InstanceStateKind value)
         {
             return value.ToUInt32();
         }
 
         /// <summary>
-        /// Implicit conversion operator from <see cref="uint" /> to <see cref="InstanceStateKind" />.
+        /// Implicit conversion operator from <c>uint</c> to <see cref="InstanceStateKind" />.
         /// </summary>
         /// <param name="value">The value to transform.</param>
         /// <returns>The <see cref="InstanceStateKind" /> value.</returns>
