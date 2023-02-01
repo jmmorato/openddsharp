@@ -49,7 +49,7 @@ From the basic publish and subscribe actions to the most advanced content-filter
 
 ## API Documentation
 
-A .NET friendly API fully documented for your DDS developments on Windows platforms.
+A .NET friendly API fully documented for your DDS developments on Windows, Linux and OSX platforms.
 
 [API Documentation](/api/index.html)
 
