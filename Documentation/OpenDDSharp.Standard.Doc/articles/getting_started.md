@@ -15,7 +15,7 @@ OpenDDSharp provides .NET project templates in order to ease the process of crea
 
 Run the following command to install OpenDDSharp templates in your computer from the [NuGet.org feed](https://www.nuget.org/packages/OpenDDSharp.Templates/0.8.21289.1-beta):
 
-`dotnet new --install OpenDDSharp.Templates::0.8.21289.1-beta`
+`dotnet new --install OpenDDSharp.Templates::0.8.23023.106`
 
 Two new templates will be added to the dotnet templates system, `openddsharp-idl-project` and `openddsharp-console-app`, 
 that can be used to create the projects for your OpenDDSharp solution.
@@ -53,7 +53,7 @@ Build the project to auto-generate and compile the C# code for the defined struc
 
 > [!NOTE]
 > For Windows system you must specify the runtime to use (i.e. win-x64 or win-x86):
-> `dotnet build TestMessage.csproj -r win-64`
+> `dotnet build TestMessage.csproj -r win-x64`
 
 ## HelloWorld Publisher
 
@@ -131,7 +131,7 @@ In this example we only need one publisher and one datawriter related with the `
 The following code shows how to create the publisher entity:
 
 ```csharp
-Publisher publisher = participant.CreatePublisher();
+OpenDDSharp.DDS.Publisher publisher = participant.CreatePublisher();
 if (publisher == null)
 {
     throw new Exception("Could not create the publisher");
@@ -198,13 +198,15 @@ Ace.Fini();
 
 ### Create the subscriber project
 
-Same than with the publisher applicattion, you can create the susbcriber application using the OpenDDSharp console template by using the following commnad:
+Same than with the publisher application, you can create the subscriber application and reference the data transport types project using the OpenDDSharp console template by using the following commands:
 
 `dotnet new openddsharp-console-app --name Subscriber --output Subscriber`
 
+`dotnet add Subscriber/Subscriber.csproj reference TestMessage/TestMessage.csproj`
+
 ### Create the domain participant, register the type and create the topic
 
-You need to create the same enities as in the publisher project. Pay attention to use the same domain id (42) and
+You need to create the same entities as in the publisher project. Pay attention to use the same domain id (42) and
 the same topic name(`MessageTopic`) used in the publisher application.
 
 ### Create the DDS Subscriber and the DDS DataReader
@@ -244,8 +246,8 @@ while (true)
     StatusMask mask = messageReader.StatusChanges;
     if ((mask & StatusKind.DataAvailableStatus) != 0)
     {
-        List<Message> receivedData = new List();
-        List<SampleInfo> receivedInfo = new List();
+        List<Message> receivedData = new List&lt;Message&gt;();
+        List<SampleInfo> receivedInfo = new List&lt;SampleInfo&gt;();
         result = messageReader.Take(receivedData, receivedInfo);
 
         if (result == ReturnCode.Ok)
