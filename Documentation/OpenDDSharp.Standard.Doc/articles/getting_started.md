@@ -5,19 +5,20 @@ The full code of this example can be found in this [GitHub repository](https://g
 ## Requirements
 
 In order to follow this tutorial, you need to install in your computer:
-- Microsoft [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or greater 
+- Microsoft [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or greater
 - CMake [Version 3.8.2](https://cmake.org/download/) or greater
 - Perl, on Windows system is recommended to use [Strawberry Perl](https://strawberryperl.com/)
+- For Apple ARM64 systems, you must install Rosetta 2 (`softwareupdate --install-rosetta`)
 
 ## Install the OpenDDSharp Templates
 
 OpenDDSharp provides .NET project templates in order to ease the process of creating OpenDDSharp applications.
 
-Run the following command to install OpenDDSharp templates in your computer from the [NuGet.org feed](https://www.nuget.org/packages/OpenDDSharp.Templates/0.8.21289.1-beta):
+Run the following command to install OpenDDSharp templates in your computer from the [NuGet.org feed](https://www.nuget.org/packages/OpenDDSharp.Templates/0.8.23023.106):
 
 `dotnet new --install OpenDDSharp.Templates::0.8.23023.106`
 
-Two new templates will be added to the dotnet templates system, `openddsharp-idl-project` and `openddsharp-console-app`, 
+Two new templates will be added to the dotnet templates system, `openddsharp-idl-project` and `openddsharp-console-app`,
 that can be used to create the projects for your OpenDDSharp solution.
 
 For more information on how manage .NET project and item templates visit the [microsoft documentation](https://docs.microsoft.com/en-us/dotnet/core/install/templates).
@@ -49,11 +50,14 @@ module HelloWorld{
 
 Build the project to auto-generate and compile the C# code for the defined structure:
 
-`dotnet build TestMessage.csproj`
+`dotnet build TestMessage.csproj --runtime <runtime_identifier>`
 
 > [!NOTE]
-> For Windows system you must specify the runtime to use (i.e. win-x64 or win-x86):
-> `dotnet build TestMessage.csproj -r win-x64`
+> The implemented runtime identifiers are:
+> - win-64
+> - win-x86
+> - linux-x64
+> - osx-x64
 
 ## HelloWorld Publisher
 
@@ -246,8 +250,8 @@ while (true)
     StatusMask mask = messageReader.StatusChanges;
     if ((mask & StatusKind.DataAvailableStatus) != 0)
     {
-        List<Message> receivedData = new List&lt;Message&gt;();
-        List<SampleInfo> receivedInfo = new List&lt;SampleInfo&gt;();
+        List<Message> receivedData = new List<Message>();
+        List<SampleInfo> receivedInfo = new Lis<SampleInfo>();
         result = messageReader.Take(receivedData, receivedInfo);
 
         if (result == ReturnCode.Ok)
@@ -281,3 +285,23 @@ dpf.DeleteParticipant(participant);
 ParticipantService.Instance.Shutdown();
 Ace.Fini();
 ```
+
+## Build and run the projects
+
+Build the publisher and subscriber project with the following commands:
+
+`dotnet build HelloPublisher.csproj --configuration Release|Debug --runtime <runtime_identifier> --no-self-contained`
+
+`dotnet build HelloSubscriber.csproj --configuration Release|Debug --runtime <runtime_identifier> --no-self-contained`
+
+> [!NOTE]
+> The implemented runtime identifiers are:
+> - win-64
+> - win-x86
+> - linux-x64
+> - osx-x64
+
+> [!NOTE]
+> To run the program on Linux systems, you should set the `LD_LIBRARY_PATH` pointing to the directory where the executable is created.
+> Similar, to run the program on MacOS systems, you should set the `DYLD_FALLBACK_LIBRARY_PATH` pointing to the directory where the executable is created. 
+

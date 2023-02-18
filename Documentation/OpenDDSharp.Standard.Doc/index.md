@@ -11,7 +11,7 @@ publish and subscribe model.
 OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)
 OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)
 
-OpenDDSharp has been compiled with OpenDDS v3.23.0
+OpenDDSharp has been compiled with OpenDDS v3.23.1
 
 | Package | NuGet |
 |---------|-------|
@@ -49,7 +49,7 @@ From the basic publish and subscribe actions to the most advanced content-filter
 
 ## API Documentation
 
-A .NET friendly API fully documented for your DDS developments on Windows platforms.
+A .NET friendly API fully documented for your DDS developments on Windows, Linux and OSX platforms.
 
 [API Documentation](/api/index.html)
 
