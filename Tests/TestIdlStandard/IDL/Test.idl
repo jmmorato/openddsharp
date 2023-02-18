@@ -205,7 +205,13 @@ module Test {
 		UnsignedLongLongArrayType UnsignedLongLongArrayField;
 		CharArrayType CharArrayField;
 		WCharArrayType WCharArrayField;
+
+		// Not working in mono
+		// https://github.com/mono/mono/issues/15592
+		// Workaround using a byte[] and Array.ConvertAll calls works but
+		// it would affects performance
 		BooleanArrayType BooleanArrayField;
+
 		OctetArrayType OctetArrayField;
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
@@ -214,8 +220,10 @@ module Test {
 		StringArrayType StringArrayField;
 		WStringArrayType WStringArrayField;
 
+		// No working in mono
 		StructArrayType StructArrayField;
 
+		// No working in mono
 		EnumArrayType EnumArrayField;
 
 		ShortMultiArrayType ShortMultiArrayField;
@@ -232,11 +240,14 @@ module Test {
 		DoubleMultiArrayType DoubleMultiArrayField;
 		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
 
+		// No working in mono
 		EnumMultiArrayType EnumMultiArrayField;
 
+		// No working in mono
 		StringMultiArrayType StringMultiArrayField;
 		WStringMultiArrayType WStringMultiArrayField;
 
+		// No working in mono
 		StructMultiArrayType StructMultiArrayField;
     };
 
