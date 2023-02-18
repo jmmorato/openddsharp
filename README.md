@@ -93,7 +93,7 @@ the development will be focus to provide other advanced DDS features
 OpenDDSharp is developed and maintained as a hobby during my free time but as (almost) all human beens I have kids, wife, family,
 friends or other hobbies that I like to enjoy with.
 
-You should understand that I'm not 100% dedicated to the project and the only way to make grow the project is collaborating together.
+You should understand that I'm not 100% dedicated to the project and the only way to make it grow is collaborating together.
 
 ## Use it, test it and report it
 Just using OpenDDSharp you are already collaborating with the project.
