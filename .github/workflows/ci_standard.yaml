@@ -78,7 +78,7 @@ jobs:
       run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.2.2
       with:
         path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -195,7 +195,7 @@ jobs:
       run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.2.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
@@ -311,7 +311,7 @@ jobs:
       run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.2.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
