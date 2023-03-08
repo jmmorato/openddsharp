@@ -119,7 +119,7 @@ jobs:
         BuildConfiguration: [Release]
     env:
       OpenDdsVersion: "3.23.1"
-      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path/. -Wl,-rpath,$ORIGIN -Wl,-rpath,."
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path/. -Wl,-rpath='$ORIGIN'"
 
     steps:
     - uses: actions/checkout@v3
@@ -228,7 +228,7 @@ jobs:
         BuildConfiguration: [Release]
     env:
       OpenDdsVersion: "3.23.1"
-      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path/. -Wl,-rpath,$ORIGIN -Wl,-rpath,."
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path/. -Wl,-rpath='$ORIGIN'"
 
     steps:
 

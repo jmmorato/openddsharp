@@ -70,7 +70,7 @@ if(MSVC)
   target_compile_options(OpenDDSWrapper PUBLIC /wd4190)
 else()
   target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
-  set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path/. -Wl,-rpath,.")
+  set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path/. -Wl,-rpath='$ORIGIN'")
 endif()
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
