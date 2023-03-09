@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build_windows_native:
-    runs-on: windows-2022
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
@@ -331,7 +331,7 @@ jobs:
         retention-days: 1
 
   build_openddsharp_windows:
-    runs-on: windows-2022
+    runs-on: windows-latest
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
       OpenDdsVersion: "3.23.1"
