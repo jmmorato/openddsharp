@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build_windows_native:
-    runs-on: windows-2022
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
@@ -111,7 +111,7 @@ jobs:
         retention-days: 1
 
   build_linux_native:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -119,6 +119,7 @@ jobs:
         BuildConfiguration: [Release]
     env:
       OpenDdsVersion: "3.23.1"
+      LD_RPATH_FLAGS: "-Wl,-z,origin -Wl,-rpath,$ORIGIN"
 
     steps:
     - uses: actions/checkout@v3
@@ -219,7 +220,7 @@ jobs:
         retention-days: 1
 
   build_macos_native:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -227,6 +228,7 @@ jobs:
         BuildConfiguration: [Release]
     env:
       OpenDdsVersion: "3.23.1"
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
 
@@ -329,7 +331,7 @@ jobs:
         retention-days: 1
 
   build_openddsharp_windows:
-    runs-on: windows-2022
+    runs-on: windows-latest
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
       OpenDdsVersion: "3.23.1"
