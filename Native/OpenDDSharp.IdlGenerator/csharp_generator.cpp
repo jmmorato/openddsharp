@@ -636,8 +636,10 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 				ret = "Byte";
 				break;
 			case AST_PredefinedType::PT_char:
+                ret = "Char";
+				break;
 			case AST_PredefinedType::PT_wchar:
-				ret = "Char";
+				ret = "IntPtr";
 				break;
 			case AST_PredefinedType::PT_boolean:
 				ret = "Boolean";
@@ -696,7 +698,7 @@ std::string csharp_generator::get_linux_marshal_type(AST_Type* type) {
 			switch (predefined_type->pt())
 			{
 			case AST_PredefinedType::PT_wchar:
-				ret = "int";
+				ret = "IntPtr";
 				break;
 			}
 		}
@@ -705,7 +707,7 @@ std::string csharp_generator::get_linux_marshal_type(AST_Type* type) {
 	case AST_Decl::NT_array:
 	{
 		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		if (arr_type != NULL) {						
+		if (arr_type != NULL) {
 			if (arr_type->n_dims() > 1) {
 				ret = "IntPtr";
 			}
@@ -761,18 +763,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type, std::stri
 			ret = "[MarshalAs(UnmanagedType.U1)]\n";
 			break;
 		case AST_PredefinedType::PT_wchar:
-			ret.clear();
-			ret = "#if Windows\n";
-
-			ret.append(indent);
-			ret.append("[MarshalAs(UnmanagedType.U2)]\n");
-
-			ret.append("#else\n");
-
-			ret.append(indent);
-			ret.append("[MarshalAs(UnmanagedType.U4)]\n");
-
-			ret.append("#endif\n");
+            ret = "[MarshalAs(UnmanagedType.SysInt)]\n";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			ret = "[MarshalAs(UnmanagedType.I1)]\n";
@@ -907,7 +898,7 @@ std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* typ
 				ret = "U1";
 				break;
 			case AST_PredefinedType::PT_wchar:
-				ret = "U2";
+				ret = "SysInt";
 				break;
 			case AST_PredefinedType::PT_boolean:
 				ret = "I1";
@@ -997,7 +988,7 @@ std::string csharp_generator::get_linux_marshal_attribute_unmanaged_type(AST_Typ
 				ret = "U1";
 				break;
 			case AST_PredefinedType::PT_wchar:
-				ret = "U4";
+				ret = "SysInt";
 				break;
 			case AST_PredefinedType::PT_boolean:
 				ret = "I1";
@@ -1336,21 +1327,29 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
+		if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+            ret.append(indent);
+			ret.append("    wrapper.");
+			ret.append(name);
+			ret.append(" = Convert.ToDouble(_");
+			ret.append(name);
+			ret.append(");\n");
+		}
+        else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+            ret.append(indent);
+			ret.append("    wrapper.");
+			ret.append(name);
+			ret.append(" = _");
+			ret.append(name);
+			ret.append(".WCharToPtr();\n");
+        }
+		else {
 			ret.append(indent);
 			ret.append("    wrapper.");
 			ret.append(name);
 			ret.append(" = _");
 			ret.append(name);
 			ret.append(";\n");
-		}
-		else {
-			ret.append(indent);
-			ret.append("    wrapper.");
-			ret.append(name);
-			ret.append(" = Convert.ToDouble(_");
-			ret.append(name);
-			ret.append(");\n");
 		}
 		break;
 	}
@@ -1681,25 +1680,12 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if Windows\n");
-
-					ret.append(indent);
-					ret.append("    wrapper.");
-					ret.append(name);
-					ret.append(" = ");
-					ret.append(name);
-					ret.append(";\n");
-
-					ret.append("#else\n");
-
 					ret.append(indent);
 					ret.append("    wrapper.");
 					ret.append(name);
 					ret.append(" = Array.ConvertAll(");
 					ret.append(name);
-					ret.append(", c => Char.ConvertToUtf32(c.ToString(), 0));\n");
-
-					ret.append("#endif\n");
+					ret.append(", c => c.WCharToPtr());\n");
 					break;
 				}
 			}
@@ -1824,7 +1810,6 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
 
 				if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {
-					
 					ret.append(indent);
 					ret.append("        MarshalHelper.BooleanMultiArrayToPtr(");
 					ret.append(name);
@@ -1854,10 +1839,14 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.append("#if Windows\n");
-					
-					ret.append(indent);
-					ret.append("        MarshalHelper.MultiArrayToPtr<");
+                    ret.append(indent);
+					ret.append("        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))\n");
+
+                    ret.append(indent);
+                    ret.append("        {\n");
+
+                    ret.append(indent);
+					ret.append("            MarshalHelper.MultiArrayToPtr<");
 					ret.append(base_type);
 					ret.append(">(");
 					ret.append(name);
@@ -1865,16 +1854,24 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					ret.append(name);
 					ret.append(");\n");
 
-					ret.append("#else\n");
+                    ret.append(indent);
+                    ret.append("        }\n");
+
+                    ret.append(indent);
+					ret.append("        else\n");
+
+                    ret.append(indent);
+                    ret.append("        {\n");
 
 					ret.append(indent);
-					ret.append("        MarshalHelper.MultiArrayToPtr<int>(");
+					ret.append("            MarshalHelper.MultiArrayToPtr<int>(");
 					ret.append(name);
 					ret.append(", ref wrapper.");
 					ret.append(name);
 					ret.append(");\n");
 
-					ret.append("#endif\n");
+                    ret.append(indent);
+					ret.append("        }\n");
 
 					ret.append(indent);
 					ret.append("        toRelease.Add(wrapper.");
@@ -2068,9 +2065,9 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 		else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
 			ret.append("    _");
 			ret.append(name);
-			ret.append(" = (char)wrapper.");
+			ret.append(" = wrapper.");
 			ret.append(name);
-			ret.append(";\n");
+			ret.append(".PtrToWChar();\n");
 		}
 		else {
 			ret.append("    _");
@@ -2395,7 +2392,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 
 					ret.append(indent);
 					ret.append("        }\n");
-					
+
 					ret.append(indent);
 					ret.append("        ");
 					ret.append(name);
@@ -2408,35 +2405,12 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					break;
 				}
 				else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-					ret.clear();
-					ret.append("#if Windows\n");
-
-					ret.append(indent);
-					ret.append("    ");
-					ret.append(name);
-					ret.append(" = wrapper.");
-					ret.append(name);
-					ret.append(";\n");
-
-					// ret.append("#elif Linux\n");
-
-					// ret.append(indent);
-					// ret.append("    ");
-					// ret.append(name);
-					// ret.append(" = Array.ConvertAll(wrapper.");
-					// ret.append(name);
-					// ret.append(", c => Convert.ToChar(c));\n");
-
-					ret.append("#else\n");
-
 					ret.append(indent);
 					ret.append("    ");
 					ret.append(name);
 					ret.append(" = Array.ConvertAll(wrapper.");
 					ret.append(name);
-					ret.append(", c => MarshalHelper.ConvertFromUtf32(c));\n");
-
-					ret.append("#endif\n");
+					ret.append(", c => c.PtrToWChar());\n");
 					break;
 				}
 			}
@@ -2460,7 +2434,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 				ACE_UINT32 total_dim = 1;
 				for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
 					total_dim *= dims[i]->ev()->u.ulval;
-				}								
+				}
 
 				ret.append(indent);
 				ret.append("    if (");
@@ -2555,7 +2529,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			}
 			case AST_Decl::NT_string:
 			case AST_Decl::NT_wstring:
-			{				
+			{
 				ret.append("    if (");
 				ret.append(name);
 				ret.append(" == null)\n");
@@ -2640,8 +2614,8 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 			case AST_Decl::NT_pre_defined:
 			{
 				AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
-				
-				if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {					
+
+				if (predefined_type->pt() == AST_PredefinedType::PT_boolean) {
 					ret.append("    if (");
 					ret.append(name);
 					ret.append(" == null)\n");
@@ -2705,7 +2679,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("    {\n");
 
 					ret.append(indent);
-					ret.append("        MarshalHelper.PtrToMultiArray<byte>(wrapper.");					
+					ret.append("        MarshalHelper.PtrToMultiArray<byte>(wrapper.");
 					ret.append(name);
 					ret.append(", ");
 					ret.append(name);
@@ -2742,7 +2716,7 @@ std::string csharp_generator::get_field_from_native(AST_Type* type, const char *
 					ret.append("    {\n");
 
 					ret.append(indent);
-					ret.append("        MarshalHelper.PtrToWCharMultiArray");					
+					ret.append("        MarshalHelper.PtrToWCharMultiArray");
 					ret.append("(wrapper.");
 					ret.append(name);
 					ret.append(", ");

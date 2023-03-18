@@ -94,7 +94,7 @@ bool cwrapper_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AS
 }
 
 bool cwrapper_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
-{			
+{
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
 	const std::string scoped_method = replaceString(std::string(scoped_name), std::string("::"), std::string("_"));
@@ -305,7 +305,7 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 			ret = "CORBA::Char";
 			break;
 		case AST_PredefinedType::PT_wchar:
-			ret = "CORBA::WChar";
+			ret = "void*";
 			break;
 		case AST_PredefinedType::PT_boolean:
 			ret = "CORBA::Boolean";
@@ -425,14 +425,7 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 	{
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
-			ret.append("        ret.");
-			ret.append(name);
-			ret.append(" = ");
-			ret.append(name);
-			ret.append(";\n");
-		}
-		else {
+		if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
 			ret.append("#if ACE_SIZEOF_LONG_DOUBLE == 16\n");
 
 			ret.append("printf(\"LINUX TO NATIVE: Value of double before cast = %f\\n\", ");
@@ -478,6 +471,21 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 			ret.append(");\n");
 
 			ret.append("#endif\n");
+		}
+        else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+            ret.append("        ret.");
+			ret.append(name);
+			ret.append(" = marshal::ptr_to_wchar(");
+			ret.append(name);
+			ret.append(");\n");
+        }
+		else {
+            ret.append("        ret.");
+			ret.append(name);
+			ret.append(" = ");
+			ret.append(name);
+			ret.append(";\n");
+
 		}
 		break;
 	}
@@ -680,6 +688,36 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 				ret.append("            }\n");
 				break;
 			}
+            case AST_Decl::NT_pre_defined:
+            {
+                AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+		        if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+                    ret.append("            for (unsigned int i = 0; i < ");
+                    ret.append(std::to_string(dims[0]->ev()->u.ulval));
+                    ret.append("; i++)\n");
+
+                    ret.append("            {\n");
+
+                    ret.append("                if (");
+                    ret.append(name);
+                    ret.append("[i] != NULL)\n");
+
+                    ret.append("                {\n");
+
+                    ret.append("                    ret.");
+                    ret.append(name);
+                    ret.append("[i] = marshal::ptr_to_wchar(");
+
+                    ret.append(name);
+                    ret.append("[i]);\n");
+
+                    ret.append("                }\n");
+
+                    ret.append("            }\n");
+                    break;
+                }
+            }
 			default:
 			{
 				ret.append("            ACE_OS::memcpy(ret.");
@@ -973,15 +1011,8 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 	{
 		AST_PredefinedType* predefined_type = AST_PredefinedType::narrow_from_decl(type);
 
-		if (predefined_type->pt() != AST_PredefinedType::PT_longdouble) {
-			ret.append("        ");
-			ret.append(name);
-			ret.append(" = native.");
-			ret.append(name);
-			ret.append(";\n");
-		}
-		else {
-			ret.append("printf(\"FROM NATIVE: Value of long double before cast = %Lf\\n\", native.");
+		if (predefined_type->pt() == AST_PredefinedType::PT_longdouble) {
+            ret.append("printf(\"FROM NATIVE: Value of long double before cast = %Lf\\n\", native.");
 			ret.append(name);
 			ret.append(");\n");
 
@@ -994,6 +1025,20 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 			ret.append("printf(\"FROM NATIVE: Value of double after cast = %f\\n\", ");
 			ret.append(name);
 			ret.append(");\n");
+		}
+        else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+            ret.append("        ");
+			ret.append(name);
+			ret.append(" = marshal::wchar_to_ptr(native.");
+			ret.append(name);
+			ret.append(");\n");
+        }
+		else {
+			ret.append("        ");
+			ret.append(name);
+			ret.append(" = native.");
+			ret.append(name);
+			ret.append(";\n");
 		}
 		break;
 	}
@@ -1186,6 +1231,36 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 				ret.append("            }\n");
 				break;
 			}
+            case AST_Decl::NT_pre_defined:
+            {
+                AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+		        if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+                    ret.append("            for (unsigned int i = 0; i < ");
+                    ret.append(std::to_string(dims[0]->ev()->u.ulval));
+                    ret.append("; i++)\n");
+
+                    ret.append("            {\n");
+
+                    ret.append("                if (native.");
+                    ret.append(name);
+                    ret.append("[i] != NULL)\n");
+
+                    ret.append("                {\n");
+
+                    ret.append("                    ");
+                    ret.append(name);
+                    ret.append("[i] = marshal::wchar_to_ptr(native.");
+
+                    ret.append(name);
+                    ret.append("[i]);\n");
+
+                    ret.append("                }\n");
+
+                    ret.append("            }\n");
+                    break;
+                }
+            }
 			default:
 			{
 				ret.append("            ACE_OS::memcpy(");

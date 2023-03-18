@@ -124,6 +124,42 @@ internal static class MarshalHelper
         }
     }
 
+    public static char PtrToWChar(this IntPtr ptr)
+    {
+        if (ptr == IntPtr.Zero)
+        {
+            return '\0';
+        }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return Convert.ToChar(Marshal.ReadInt16(ptr));
+        }
+
+        var utf32 = Marshal.ReadInt32(ptr);
+
+        return ConvertFromUtf32(utf32);
+    }
+    
+    public static IntPtr WCharToPtr(this char c)
+    {
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
+        
+        // Allocate unmanaged space.
+        var ptr = Marshal.AllocHGlobal(elSiz);
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Marshal.WriteInt16(ptr, c);
+        }
+        else
+        {
+            Marshal.WriteInt32(ptr, char.ConvertToUtf32(c.ToString(), 0));
+        }
+
+        return ptr;
+    }
+    
     public static void PtrToWCharSequence(this IntPtr ptr, ref IList<char> sequence, int capacity = 0)
     {
         // Ensure a not null empty list to populate

@@ -81,7 +81,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <IdlTemplates Include="..\..\Native\CSharpImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" />
+    <IdlTemplates Include="..\..\Native\CSharpImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
   </ItemGroup>
 
   <!-- Ensure templates are copied for code generation-->
@@ -195,21 +195,21 @@
 
   <ItemGroup>
 	<!-- OpenDDS native Libraries -->
-	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlStandardWrapper.dll" />
+	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlStandardWrapper.dll" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>TestIdlStandardWrapper.dll</TargetPath>
 	</ContentWithTargetPath>
 
-	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.so" />
+	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.so" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>libTestIdlStandardWrapper.so</TargetPath>
 	</ContentWithTargetPath>
 
-	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.dylib" />
+	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.dylib" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
