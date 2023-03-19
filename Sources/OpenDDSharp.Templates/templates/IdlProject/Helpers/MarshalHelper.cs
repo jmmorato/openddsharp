@@ -6,6 +6,9 @@ using System.Text;
 
 internal static class MarshalHelper
 {
+    private static readonly UTF32Encoding _utf32Encoding = new UTF32Encoding(!BitConverter.IsLittleEndian, false);
+    private static readonly Encoding _utf16Encoding = Encoding.Unicode;
+
     public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
     {
         // Ensure a not null empty list to populate
@@ -131,15 +134,14 @@ internal static class MarshalHelper
             return '\0';
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var utf16 = Marshal.ReadInt16(ptr);
-            return utf16 < char.MinValue ? '\0' : Convert.ToChar(utf16);
-        }
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
 
-        var utf32 = Marshal.ReadInt32(ptr);
+        var bytes = new byte[elSiz];
+        Marshal.Copy(ptr, bytes, 0, elSiz);
 
-        return ConvertFromUtf32(utf32);
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? _utf16Encoding.GetString(bytes).FirstOrDefault()
+            : _utf32Encoding.GetString(bytes).FirstOrDefault();
     }
     
     public static IntPtr WCharToPtr(this char c)
@@ -154,14 +156,16 @@ internal static class MarshalHelper
         // Allocate unmanaged space.
         var ptr = Marshal.AllocHGlobal(elSiz);
 
+        byte[] bytes;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Marshal.WriteInt16(ptr, c);
+            bytes = _utf16Encoding.GetBytes(new[] { c });
         }
         else
         {
-            Marshal.WriteInt32(ptr, char.ConvertToUtf32(c.ToString(), 0));
+            bytes = _utf32Encoding.GetBytes(new[] { c });
         }
+        Marshal.Copy(bytes, 0, ptr, bytes.Length);
 
         return ptr;
     }
@@ -190,16 +194,28 @@ internal static class MarshalHelper
         var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
 
         // Populate the list
-        for (var i = 0; i < length; i++)
+        var bytes = new byte[elSiz * length];
+        Marshal.Copy(ptr + sizeof(int) , bytes, 0, elSiz * length);
+
+        string str;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            str = _utf16Encoding.GetString(bytes);
+        }
+        else
+        {
+            str = _utf32Encoding.GetString(bytes);
+        }
+        
+        if (sequence is List<char> asList)
+        {
+            asList.AddRange(str.ToCharArray());
+        }
+        else
+        {
+            foreach (var item in str.ToCharArray())
             {
-                sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
-            }
-            else
-            {
-                var utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
-                sequence.Add(ConvertFromUtf32(utf32));
+                sequence.Add(item);
             }
         }
     }
@@ -225,19 +241,17 @@ internal static class MarshalHelper
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
 
-        // Write the list data
-        for (var i = 0; i < sequence.Count; i++)
+        byte[] bytes;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // Newly-allocated space has no existing object, so the last param is false
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
-            }
-            else
-            {
-                Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
-            }
+            bytes = _utf16Encoding.GetBytes(sequence.ToArray());
         }
+        else
+        {
+            bytes = _utf32Encoding.GetBytes(sequence.ToArray());
+        }
+
+        Marshal.Copy(bytes, 0, ptr + sizeof(int), bytes.Length);
     }
 
     public static void PtrToEnumSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0) where T : Enum
@@ -697,8 +711,9 @@ internal static class MarshalHelper
             }
             else
             {
-                var aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-                value = ConvertFromUtf32(aux);
+                var bytes = new byte[4];
+                Marshal.Copy(ptr + (elSiz * i), bytes, 0, 4);
+                value = _utf32Encoding.GetString(bytes).FirstOrDefault();
             }
 
             array.SetValue(value, dimensions);
@@ -802,20 +817,7 @@ internal static class MarshalHelper
         }
     }
 
-    public static char ConvertFromUtf32(int codepoint)
-    {
-        var isValidUnicodeCharacter = (codepoint >= 0x00000 && codepoint <= 0x10FFFF)
-                                      && (codepoint < 0xD800 || codepoint > 0xDFFF);
-
-        if (!isValidUnicodeCharacter)
-        {
-            return '\0';
-        }
-
-        return char.ConvertFromUtf32(codepoint).FirstOrDefault();
-    }
-
-    internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
+    private static void UpdateDimensionsArray(this Array array, int[] dimensions)
     {
         dimensions[array.Rank - 1]++;
         if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
