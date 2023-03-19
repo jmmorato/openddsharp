@@ -6,28 +6,34 @@ using System.Text;
 
 internal static class MarshalHelper
 {
+    private static readonly UTF32Encoding _utf32Encoding = new UTF32Encoding(!BitConverter.IsLittleEndian, false);
+    private static readonly Encoding _utf16Encoding = Encoding.Unicode;
+
     public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
     {
         // Ensure a not null empty list to populate
         if (sequence == null)
         {
-            if (capacity > 0)
-                sequence = new List<T>(capacity);
-            else
-                sequence = new List<T>();
+            sequence = capacity > 0 ? new List<T>(capacity) : new List<T>();
         }
         else
+        {
             sequence.Clear();
+        }
 
         if (ptr == IntPtr.Zero)
+        {
             return;
+        }
 
         // Start by reading the size of the array
-        int length = Marshal.ReadInt32(ptr);
+        var length = Marshal.ReadInt32(ptr);
+
         // For efficiency, only compute the element size once
-        int elSiz = Marshal.SizeOf<T>();
+        var elSiz = Marshal.SizeOf<T>();
+
         // Populate the list
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
             sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
         }
@@ -43,15 +49,19 @@ internal static class MarshalHelper
             return;
         }
 
-        int elSiz = Marshal.SizeOf<T>();
+        var elSiz = Marshal.SizeOf<T>();
+
         // Get the total size of unmanaged memory that is needed (length + elements)
-        int size = sizeof(int) + (elSiz * sequence.Count);
+        var size = sizeof(int) + (elSiz * sequence.Count);
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
+
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
+
         // Write the list data
-        for (int i = 0; i < sequence.Count; i++)
+        for (var i = 0; i < sequence.Count; i++)
         {
             // Newly-allocated space has no existing object, so the last param is false 
             Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
@@ -63,10 +73,7 @@ internal static class MarshalHelper
         // Ensure a not null empty list to populate
         if (sequence == null)
         {
-            if (capacity > 0)
-                sequence = new List<decimal>(capacity);
-            else
-                sequence = new List<decimal>();
+            sequence = capacity > 0 ? new List<decimal>(capacity) : new List<decimal>();
         }
         else
         {
@@ -74,16 +81,20 @@ internal static class MarshalHelper
         }
 
         if (ptr == IntPtr.Zero)
+        {
             return;
+        }
 
         // Start by reading the size of the array
-        int length = Marshal.ReadInt32(ptr);
+        var length = Marshal.ReadInt32(ptr);
+
         // For efficiency, only compute the element size once
-        int elSiz = Marshal.SizeOf<double>();
+        var elSiz = Marshal.SizeOf<decimal>();
+
         // Populate the list
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
-            sequence.Add(Convert.ToDecimal(Marshal.PtrToStructure<double>(ptr + sizeof(int) + (elSiz * i))));
+            sequence.Add(Convert.ToDecimal(Marshal.PtrToStructure<decimal>(ptr + sizeof(int) + (elSiz * i))));
         }
     }
 
@@ -97,34 +108,74 @@ internal static class MarshalHelper
             return;
         }
 
-        int elSiz = Marshal.SizeOf<double>();
+        var elSiz = Marshal.SizeOf<decimal>();
+
         // Get the total size of unmanaged memory that is needed (length + elements)
-        int size = sizeof(int) + (elSiz * sequence.Count);
+        var size = sizeof(int) + (elSiz * sequence.Count);
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
+
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
+
         // Write the list data
-        for (int i = 0; i < sequence.Count; i++)
+        for (var i = 0; i < sequence.Count; i++)
         {
             // Newly-allocated space has no existing object, so the last param is false 
             Marshal.StructureToPtr(Convert.ToDouble(sequence[i]), ptr + sizeof(int) + (elSiz * i), false);
         }
     }
 
+    public static char PtrToWChar(this IntPtr ptr)
+    {
+        if (ptr == IntPtr.Zero)
+        {
+            return '\0';
+        }
+
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
+
+        var bytes = new byte[elSiz];
+        Marshal.Copy(ptr, bytes, 0, elSiz);
+
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? _utf16Encoding.GetString(bytes).FirstOrDefault()
+            : _utf32Encoding.GetString(bytes).FirstOrDefault();
+    }
+    
+    public static IntPtr WCharToPtr(this char c)
+    {
+        if (c == default(char))
+        {
+            return IntPtr.Zero;
+        }
+
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
+        
+        // Allocate unmanaged space.
+        var ptr = Marshal.AllocHGlobal(elSiz);
+
+        byte[] bytes;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            bytes = _utf16Encoding.GetBytes(new[] { c });
+        }
+        else
+        {
+            bytes = _utf32Encoding.GetBytes(new[] { c });
+        }
+        Marshal.Copy(bytes, 0, ptr, bytes.Length);
+
+        return ptr;
+    }
+    
     public static void PtrToWCharSequence(this IntPtr ptr, ref IList<char> sequence, int capacity = 0)
     {
         // Ensure a not null empty list to populate
         if (sequence == null)
         {
-            if (capacity > 0)
-            {
-                sequence = new List<char>(capacity);
-            }
-            else
-            {
-                sequence = new List<char>();
-            }
+            sequence = capacity > 0 ? new List<char>(capacity) : new List<char>();
         }
         else
         {
@@ -137,24 +188,35 @@ internal static class MarshalHelper
         }
 
         // Start by reading the size of the array
-        int length = Marshal.ReadInt32(ptr);
+        var length = Marshal.ReadInt32(ptr);
 
         // For efficiency, only compute the element size once
-#if Windows
-        int elSiz = 2;
-#else
-        int elSiz = 4;
-#endif
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
 
         // Populate the list
-        for (int i = 0; i < length; i++)
+        var bytes = new byte[elSiz * length];
+        Marshal.Copy(ptr + sizeof(int) , bytes, 0, elSiz * length);
+
+        string str;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-#if Windows
-            sequence.Add(Marshal.PtrToStructure<char>(ptr + sizeof(int) + (elSiz * i)));
-#else
-            int utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
-            sequence.Add(ConvertFromUtf32(utf32));
-#endif
+            str = _utf16Encoding.GetString(bytes);
+        }
+        else
+        {
+            str = _utf32Encoding.GetString(bytes);
+        }
+        
+        if (sequence is List<char> asList)
+        {
+            asList.AddRange(str.ToCharArray());
+        }
+        else
+        {
+            foreach (var item in str.ToCharArray())
+            {
+                sequence.Add(item);
+            }
         }
     }
 
@@ -168,13 +230,10 @@ internal static class MarshalHelper
             return;
         }
 
-#if Windows
-        int elSiz = 2;
-#else
-        int elSiz = 4;
-#endif
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
+        
         // Get the total size of unmanaged memory that is needed (length + elements)
-        int size = sizeof(int) + (elSiz * sequence.Count);
+        var size = sizeof(int) + (elSiz * sequence.Count);
 
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
@@ -182,16 +241,17 @@ internal static class MarshalHelper
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
 
-        // Write the list data
-        for (int i = 0; i < sequence.Count; i++)
+        byte[] bytes;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // Newly-allocated space has no existing object, so the last param is false 
-#if Windows
-            Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
-#else
-            Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
-#endif
+            bytes = _utf16Encoding.GetBytes(sequence.ToArray());
         }
+        else
+        {
+            bytes = _utf32Encoding.GetBytes(sequence.ToArray());
+        }
+
+        Marshal.Copy(bytes, 0, ptr + sizeof(int), bytes.Length);
     }
 
     public static void PtrToEnumSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0) where T : Enum
@@ -199,26 +259,28 @@ internal static class MarshalHelper
         // Ensure a not null empty list to populate
         if (sequence == null)
         {
-            if (capacity > 0)
-                sequence = new List<T>(capacity);
-            else
-                sequence = new List<T>();
+            sequence = capacity > 0 ? new List<T>(capacity) : new List<T>();
         }
         else
         {
             sequence.Clear();
         }
 
-        if (ptr == IntPtr.Zero) return;
+        if (ptr == IntPtr.Zero)
+        {
+            return;
+        }
 
         // Start by reading the size of the array
-        int length = Marshal.ReadInt32(ptr);
+        var length = Marshal.ReadInt32(ptr);
+
         // For efficiency, only compute the element size once
-        int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+        var elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+
         // Populate the list
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
-            int aux = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
+            var aux = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
             sequence.Add((T)Enum.ToObject(typeof(T), aux));
         }
     }
@@ -233,22 +295,25 @@ internal static class MarshalHelper
             return;
         }
 
-        int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+        var elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+
         // Get the total size of unmanaged memory that is needed (length + elements)
-        int size = sizeof(int) + (elSiz * sequence.Count);
+        var size = sizeof(int) + (elSiz * sequence.Count);
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
+
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
+
         // Write the list data
-        //Marshal.Copy(sequence.ToArray(), 0, ptr + sizeof(int), sequence.Count);
-        for (int i = 0; i < sequence.Count; i++)
+        for (var i = 0; i < sequence.Count; i++)
         {
             // IDL only accept integer enumerations
-            int value = Convert.ToInt32(sequence[i]);
+            var value = Convert.ToInt32(sequence[i]);
+
             // Newly-allocated space has no existing object, so the last param is false 
             Marshal.StructureToPtr(value, ptr + sizeof(int) + (elSiz * i), false);
-
         }
     }
 
@@ -257,10 +322,7 @@ internal static class MarshalHelper
         // Ensure a not null empty list to populate
         if (sequence == null)
         {
-            if (capacity > 0)
-                sequence = new List<bool>(capacity);
-            else
-                sequence = new List<bool>();
+            sequence = capacity > 0 ? new List<bool>(capacity) : new List<bool>();
         }
         else
         {
@@ -268,19 +330,21 @@ internal static class MarshalHelper
         }
 
         if (ptr == IntPtr.Zero)
+        {
             return;
+        }
 
         // Start by reading the size of the array
-        int length = Marshal.ReadInt32(ptr);
+        var length = Marshal.ReadInt32(ptr);
 
         // Structure size is one byte for C++ bool type
-        int elSiz = 1;
+        const int elSiz = 1;
 
         // Populate the list
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
-            byte aux = Marshal.PtrToStructure<byte>(ptr + sizeof(int) + (elSiz * i));
-            sequence.Add(aux == 1 ? true : false);
+            var aux = Marshal.PtrToStructure<byte>(ptr + sizeof(int) + (elSiz * i));
+            sequence.Add(aux == 1);
         }
     }
 
@@ -294,64 +358,74 @@ internal static class MarshalHelper
             return;
         }
 
-        // Structure size is one byte for C++ bool type
-        int elSiz = 1;
         // Get the total size of unmanaged memory that is needed (length + elements)
-        int size = sizeof(int) + (elSiz * sequence.Count);
+        var size = sizeof(int) + sequence.Count;
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
+
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
+
         // Write the list data
-        for (int i = 0; i < sequence.Count; i++)
+        for (var i = 0; i < sequence.Count; i++)
         {
-            byte aux = Convert.ToBoolean(sequence[i]) ? (byte)0x01 : (byte)0x00;
+            var aux = Convert.ToBoolean(sequence[i]) ? (byte)0x01 : (byte)0x00;
 
             // Newly-allocated space has no existing object, so the last param is false 
-            Marshal.StructureToPtr(aux, ptr + sizeof(int) + (elSiz * i), false);
+            Marshal.StructureToPtr(aux, ptr + sizeof(int) +  i, false);
         }
     }
 
     public static string PtrToWideString(this IntPtr ptr)
     {
-#if Windows
-        int length = 0;
-        while (Marshal.ReadInt16(ptr, length) != 0)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            length += 2;
-        }
-        byte[] buffer = new byte[length];
-        Marshal.Copy(ptr, buffer, 0, buffer.Length);
+            int length = 0;
+            while (Marshal.ReadInt16(ptr, length) != 0)
+            {
+                length += 2;
+            }
 
-        return Encoding.Unicode.GetString(buffer);
-#else
-        int length = 0;
-        while (Marshal.ReadInt32(ptr, length) != 0)
+            var buffer = new byte[length];
+            Marshal.Copy(ptr, buffer, 0, buffer.Length);
+
+            return Encoding.Unicode.GetString(buffer);
+        }
+        else
         {
-            length += 4;
-        }
-        byte[] buffer = new byte[length];
-        Marshal.Copy(ptr, buffer, 0, buffer.Length);
+            var length = 0;
+            while (Marshal.ReadInt32(ptr, length) != 0)
+            {
+                length += 4;
+            }
 
-        return Encoding.UTF32.GetString(buffer);
-#endif
+            var buffer = new byte[length];
+            Marshal.Copy(ptr, buffer, 0, buffer.Length);
+
+            return Encoding.UTF32.GetString(buffer);
+        }
     }
 
     public static IntPtr WideStringToPtr(this string str)
     {
-#if Windows
-        var utfBytes = Encoding.Unicode.GetBytes(str);
+        byte[] bytes;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var utfBytes = Encoding.Unicode.GetBytes(str);
 
-        byte[] bytes = new byte[utfBytes.Length + 2];
-        Array.Copy(utfBytes, bytes, utfBytes.Length);
-#else
-        var utfBytes = Encoding.UTF32.GetBytes(str);
+            bytes = new byte[utfBytes.Length + 2];
+            Array.Copy(utfBytes, bytes, utfBytes.Length);
+        }
+        else
+        {
+            var utfBytes = Encoding.UTF32.GetBytes(str);
 
-        byte[] bytes = new byte[utfBytes.Length + 4];
-        Array.Copy(utfBytes, bytes, utfBytes.Length);
-#endif
+            bytes = new byte[utfBytes.Length + 4];
+            Array.Copy(utfBytes, bytes, utfBytes.Length);
+        }
 
-        IntPtr unmanagedPointer = Marshal.AllocHGlobal(bytes.Length);
+        var unmanagedPointer = Marshal.AllocHGlobal(bytes.Length);
         Marshal.Copy(bytes, 0, unmanagedPointer, bytes.Length);
 
         return unmanagedPointer;
@@ -362,10 +436,7 @@ internal static class MarshalHelper
         // Ensure a not null empty list to populate
         if (sequence == null)
         {
-            if (capacity > 0)
-                sequence = new List<string>(capacity);
-            else
-                sequence = new List<string>();
+            sequence = capacity > 0 ? new List<string>(capacity) : new List<string>();
         }
         else
         {
@@ -373,28 +444,34 @@ internal static class MarshalHelper
         }
 
         if (ptr == IntPtr.Zero)
+        {
             return;
+        }
 
         // Start by reading the size of the array
-        int length = Marshal.ReadInt32(ptr);
+        var length = Marshal.ReadInt32(ptr);
 
         // Populate the array
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
             // Get the unmanaged pointer
-            IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + sizeof(int) + (IntPtr.Size * i));
+            var pointer = Marshal.PtrToStructure<IntPtr>(ptr + sizeof(int) + (IntPtr.Size * i));
 
             // Convert the pointer in a string
             if (isUnicode)
+            {
                 sequence.Add(PtrToWideString(pointer));
+            }
             else
+            {
                 sequence.Add(Marshal.PtrToStringAnsi(pointer));
+            }
         }
     }
 
     public static List<IntPtr> StringSequenceToPtr(this IList<string> sequence, ref IntPtr ptr, bool isUnicode)
     {
-        List<IntPtr> toRelease = new List<IntPtr>();
+        var toRelease = new List<IntPtr>();
 
         if (sequence == null || sequence.Count == 0)
         {
@@ -405,20 +482,19 @@ internal static class MarshalHelper
         }
 
         // Get the total size of unmanaged memory that is needed (length + elements)
-        int size = sizeof(int) + (IntPtr.Size * sequence.Count);
+        var size = sizeof(int) + (IntPtr.Size * sequence.Count);
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
+
         // Write the "Length" field first
         Marshal.WriteInt32(ptr, sequence.Count);
+
         // Write the pointers to the string data
-        for (int i = 0; i < sequence.Count; i++)
+        for (var i = 0; i < sequence.Count; i++)
         {
             // Create a pointer to the string in unmanaged memory
-            IntPtr sPtr;
-            if (isUnicode)
-                sPtr = WideStringToPtr(sequence[i]);
-            else
-                sPtr = Marshal.StringToHGlobalAnsi(sequence[i]);
+            var sPtr = isUnicode ? WideStringToPtr(sequence[i]) : Marshal.StringToHGlobalAnsi(sequence[i]);
 
             // Add to pointer to the list of pointers to release
             toRelease.Add(sPtr);
@@ -434,18 +510,20 @@ internal static class MarshalHelper
     {
         // We need to ensure that the array is not null before the call 
         if (array == null)
+        {
             return;
+        }
 
-        int elSiz = Marshal.SizeOf<T>();
-        int length = 1;
-        for (int i = 0; i < array.Rank; i++)
+        var elSiz = Marshal.SizeOf<T>();
+
+        var length = 1;
+        for (var i = 0; i < array.Rank; i++)
         {
             length *= array.GetLength(i);
         }
 
-        int[] dimensions = new int[array.Rank];
-        //int[] dIndex = new int[array.Rank];
-        for (int i = 0; i < length; i++)
+        var dimensions = new int[array.Rank];
+        for (var i = 0; i < length; i++)
         {
             if (i > 0)
             {
@@ -462,24 +540,26 @@ internal static class MarshalHelper
             return;
         }
 
-        int elSiz = Marshal.SizeOf<T>();
+        var elSiz = Marshal.SizeOf<T>();
+        
         // Get the total size of unmanaged memory that is needed
-        int size = elSiz * array.Length;
+        var size = elSiz * array.Length;
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
 
-        System.Collections.IEnumerator enumerator = array.GetEnumerator();
-        int i = 0;
+        var enumerator = array.GetEnumerator();
+        var i = 0;
         while (enumerator.MoveNext())
         {
             if (enumerator.Current is char && elSiz == 1)
             {
-                byte aux = Convert.ToByte(enumerator.Current);
+                var aux = Convert.ToByte(enumerator.Current);
                 Marshal.StructureToPtr(aux, ptr + (elSiz * i), false);
             }
             else if (enumerator.Current is char && elSiz == 4)
             {
-                int aux = char.ConvertToUtf32(enumerator.Current.ToString(), 0);
+                var aux = char.ConvertToUtf32(enumerator.Current.ToString(), 0);
                 Marshal.StructureToPtr(aux, ptr + (elSiz * i), false);
             }
             else
@@ -494,24 +574,26 @@ internal static class MarshalHelper
     {
         // We need to ensure that the array is not null before the call 
         if (array == null)
+        {
             return;
+        }
 
-        int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
-        int length = 1;
-        for (int i = 0; i < array.Rank; i++)
+        var elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+        var length = 1;
+        for (var i = 0; i < array.Rank; i++)
         {
             length *= array.GetLength(i);
         }
 
-        int[] dimensions = new int[array.Rank];
-        for (int i = 0; i < length; i++)
+        var dimensions = new int[array.Rank];
+        for (var i = 0; i < length; i++)
         {
             if (i > 0)
             {
                 UpdateDimensionsArray(array, dimensions);
             }
 
-            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
+            var aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
             array.SetValue((T)Enum.ToObject(typeof(T), aux), dimensions);
         }
     }
@@ -523,18 +605,21 @@ internal static class MarshalHelper
             return;
         }
 
-        int elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+        var elSiz = Marshal.SizeOf(Enum.GetUnderlyingType(typeof(T)));
+
         // Get the total size of unmanaged memory that is needed
-        int size = elSiz * array.Length;
+        var size = elSiz * array.Length;
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
 
-        System.Collections.IEnumerator enumerator = array.GetEnumerator();
-        int i = 0;
+        var enumerator = array.GetEnumerator();
+        var i = 0;
         while (enumerator.MoveNext())
         {
             // IDL only accept integer enumerations
-            int value = Convert.ToInt32(enumerator.Current);
+            var value = Convert.ToInt32(enumerator.Current);
+
             // Newly-allocated space has no existing object, so the last param is false 
             Marshal.StructureToPtr(value, ptr + (elSiz * i), false);
 
@@ -546,24 +631,25 @@ internal static class MarshalHelper
     {
         // We need to ensure that the array is not null before the call 
         if (array == null)
+        {
             return;
+        }
 
-        int length = 1;
-        for (int i = 0; i < array.Rank; i++)
+        var length = 1;
+        for (var i = 0; i < array.Rank; i++)
         {
             length *= array.GetLength(i);
         }
 
-        int[] dimensions = new int[array.Rank];
-        int[] dIndex = new int[array.Rank];
-        for (int i = 0; i < length; i++)
+        var dimensions = new int[array.Rank];
+        for (var i = 0; i < length; i++)
         {
             if (i > 0)
             {
                 UpdateDimensionsArray(array, dimensions);
             }
 
-            byte aux = Marshal.PtrToStructure<byte>(ptr + i);
+            var aux = Marshal.PtrToStructure<byte>(ptr + i);
             array.SetValue(aux == 1, dimensions);
         }
     }
@@ -576,15 +662,17 @@ internal static class MarshalHelper
         }
 
         // Get the total size of unmanaged memory that is needed
-        int size = array.Length;
+        var size = array.Length;
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
 
-        System.Collections.IEnumerator enumerator = array.GetEnumerator();
-        int i = 0;
+        var enumerator = array.GetEnumerator();
+        
+        var i = 0;
         while (enumerator.MoveNext())
         {
-            byte aux = (bool)enumerator.Current ? (byte)1 : (byte)0;
+            var aux = (bool)enumerator.Current ? (byte)1 : (byte)0;
             Marshal.StructureToPtr(aux, ptr + i, false);
             i++;
         }
@@ -594,34 +682,40 @@ internal static class MarshalHelper
     {
         // We need to ensure that the array is not null before the call 
         if (array == null)
+        {
             return;
+        }
 
-        int length = 1;
-        for (int i = 0; i < array.Rank; i++)
+        var length = 1;
+        for (var i = 0; i < array.Rank; i++)
         {
             length *= array.GetLength(i);
         }
 
-#if Windows
-        int elSiz = Marshal.SizeOf<char>();
-#else
-        int elSiz = Marshal.SizeOf<int>();
-#endif
+        var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? Marshal.SizeOf<char>()
+            : Marshal.SizeOf<int>();
 
-        int[] dimensions = new int[array.Rank];
-        for (int i = 0; i < length; i++)
+        var dimensions = new int[array.Rank];
+        for (var i = 0; i < length; i++)
         {
             if (i > 0)
             {
                 UpdateDimensionsArray(array, dimensions);
             }
 
-#if Windows
-            char value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
-#else
-            int aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-            char value = ConvertFromUtf32(aux);
-#endif
+            char value;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                value = Marshal.PtrToStructure<char>(ptr + (elSiz * i));
+            }
+            else
+            {
+                var bytes = new byte[4];
+                Marshal.Copy(ptr + (elSiz * i), bytes, 0, 4);
+                value = _utf32Encoding.GetString(bytes).FirstOrDefault();
+            }
+
             array.SetValue(value, dimensions);
         }
     }
@@ -635,22 +729,22 @@ internal static class MarshalHelper
             return toRelease;
         }
 
-        int elSiz = IntPtr.Size;
+        var elSiz = IntPtr.Size;
+        
         // Get the total size of unmanaged memory that is needed
-        int size = elSiz * array.Length;
+        var size = elSiz * array.Length;
+
         // Allocate unmanaged space.
         ptr = Marshal.AllocHGlobal(size);
 
-        System.Collections.IEnumerator enumerator = array.GetEnumerator();
-        int i = 0;
+        var enumerator = array.GetEnumerator();
+        var i = 0;
         while (enumerator.MoveNext())
         {
             // Create a pointer to the string in unmanaged memory
-            IntPtr sPtr;
-            if (isUnicode)
-                sPtr = WideStringToPtr((string)enumerator.Current);
-            else
-                sPtr = Marshal.StringToHGlobalAnsi((string)enumerator.Current);
+            var sPtr = isUnicode
+                ? WideStringToPtr((string)enumerator.Current)
+                : Marshal.StringToHGlobalAnsi((string)enumerator.Current);
 
             // Add to pointer to the list of pointers to release
             toRelease.Add(sPtr);
@@ -666,19 +760,20 @@ internal static class MarshalHelper
 
     public static void PtrToStringMultiArray(this IntPtr ptr, Array array, bool isUnicode)
     {
-        // We need to ensure that the array is not null before the call 
+        // We need to ensure that the array is not null before the call
         if (array == null)
+        {
             return;
-
-        int elSiz = IntPtr.Size;
-        int length = 1;
-        for (int i = 0; i < array.Rank; i++)
+        }
+        
+        var length = 1;
+        for (var i = 0; i < array.Rank; i++)
         {
             length *= array.GetLength(i);
         }
 
-        int[] dimensions = new int[array.Rank];
-        for (int i = 0; i < length; i++)
+        var dimensions = new int[array.Rank];
+        for (var i = 0; i < length; i++)
         {
             if (i > 0)
             {
@@ -686,12 +781,17 @@ internal static class MarshalHelper
             }
 
             // Get the unmanaged pointer
-            IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + (IntPtr.Size * i));
+            var pointer = Marshal.PtrToStructure<IntPtr>(ptr + (IntPtr.Size * i));
+
             // Convert the pointer in a string
             if (isUnicode)
+            {
                 array.SetValue(PtrToWideString(pointer), dimensions);
+            }
             else
+            {
                 array.SetValue(Marshal.PtrToStringAnsi(pointer), dimensions);
+            }
         }
     }
 
@@ -717,25 +817,12 @@ internal static class MarshalHelper
         }
     }
 
-    public static char ConvertFromUtf32(int codepoint)
-    {
-        bool isValidUnicodeCharacter = (codepoint >= 0x00000 && codepoint <= 0x10FFFF) &&
-                    (codepoint < 0xD800 || codepoint > 0xDFFF);
-
-        if (!isValidUnicodeCharacter)
-        {
-            return '\0';
-        }
-
-        return char.ConvertFromUtf32(codepoint).FirstOrDefault();
-    }
-
     internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
     {
         dimensions[array.Rank - 1]++;
         if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
         {
-            for (int j = array.Rank - 1; j > 0; j--)
+            for (var j = array.Rank - 1; j > 0; j--)
             {
                 dimensions[j - 1]++;
                 dimensions[j] = 0;

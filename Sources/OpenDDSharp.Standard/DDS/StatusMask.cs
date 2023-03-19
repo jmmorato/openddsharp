@@ -26,7 +26,7 @@ namespace OpenDDSharp.DDS
     /// Represent a bit-mask of <see cref="StatusKind" />.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct StatusMask : IEquatable<StatusMask>
+    public readonly struct StatusMask : IEquatable<StatusMask>
     {
         #region Constants
         /// <summary>
@@ -62,7 +62,7 @@ namespace OpenDDSharp.DDS
         /// </summary>
         /// <param name="value">The <c>uint</c> value.</param>
         /// <returns>A newly created <see cref="StatusMask"/> object.</returns>
-        public static StatusMask FromUInt32(uint value)
+        public static StatusMask FromUInt(uint value)
         {
             return new StatusMask(value);
         }
@@ -71,7 +71,7 @@ namespace OpenDDSharp.DDS
         /// Gets the <c>uint</c> value of the <see cref="StatusMask"/>.
         /// </summary>
         /// <returns>The <c>uint</c> value.</returns>
-        public uint ToUInt32()
+        public uint ToUInt()
         {
             return _value;
         }
@@ -136,7 +136,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <c>uint</c> value.</returns>
         public static implicit operator uint(StatusMask value)
         {
-            return value.ToUInt32();
+            return value.ToUInt();
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace OpenDDSharp.DDS
         /// <returns>The <see cref="StatusMask" /> value.</returns>
         public static implicit operator StatusMask(uint value)
         {
-            return FromUInt32(value);
+            return FromUInt(value);
         }
 
         /// <summary>
