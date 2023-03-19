@@ -133,7 +133,9 @@ internal static class MarshalHelper
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            return Convert.ToChar(Marshal.ReadInt16(ptr));
+            var utf16 = Marshal.ReadInt16(ptr);
+
+            return utf16 < char.MinValue ? '\0' : Convert.ToChar(utf16);
         }
 
         var utf32 = Marshal.ReadInt32(ptr);
@@ -143,6 +145,11 @@ internal static class MarshalHelper
     
     public static IntPtr WCharToPtr(this char c)
     {
+        if (c == default(char))
+        {
+            return IntPtr.Zero;
+        }
+
         var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
         
         // Allocate unmanaged space.
