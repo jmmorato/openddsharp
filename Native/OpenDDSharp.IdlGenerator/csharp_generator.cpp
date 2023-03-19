@@ -1347,6 +1347,11 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(" = _");
 			ret.append(name);
 			ret.append(".WCharToPtr();\n");
+
+            ret.append(indent);
+            ret.append("    toRelease.Add(wrapper.");
+            ret.append(name);
+            ret.append(");\n");
         }
 		else {
 			ret.append(indent);
@@ -1691,6 +1696,11 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 					ret.append(" = Array.ConvertAll(");
 					ret.append(name);
 					ret.append(", c => c.WCharToPtr());\n");
+
+                    ret.append(indent);
+                    ret.append("    Array.ForEach(wrapper.");
+                    ret.append(name);
+                    ret.append(", p => toRelease.Add(p));\n");
 					break;
 				}
 			}

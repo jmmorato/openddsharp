@@ -1521,6 +1521,25 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 		ret = get_field_release(typedef_type->base_type(), name);
 		break;
 	}
+    case AST_Decl::NT_pre_defined:
+	{
+		AST_PredefinedType* predefined_type = AST_PredefinedType::narrow_from_decl(type);
+
+		if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+            ret.append("        if (");
+            ret.append(name);
+            ret.append(" != NULL)\n");
+
+            ret.append("        {\n");
+
+            ret.append("            ACE_OS::free(");
+			ret.append(name);
+			ret.append(");\n");
+
+            ret.append("        }\n");
+        }
+        break;
+    }
 	case AST_Decl::NT_sequence:
 	{
 		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
@@ -1641,6 +1660,36 @@ std::string cwrapper_generator::get_field_release(AST_Type* type, const char * n
 				ret.append("            }\n");
 				break;
 			}
+            case AST_Decl::NT_pre_defined:
+            {
+                AST_PredefinedType* predefined_type = AST_PredefinedType::narrow_from_decl(arr_type->base_type());
+
+                if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+                    ret.append("            for (int i = 0; i < ");
+                    ret.append(std::to_string(dims[0]->ev()->u.ulval));
+                    ret.append("; i++)\n");
+
+                    ret.append("            {\n");
+
+                    ret.append("                if (");
+                    ret.append(name);
+                    ret.append("[i] != NULL)\n");
+
+                    ret.append("                {\n");
+
+                    ret.append("                    ACE_OS::free(");
+                    ret.append(name);
+                    ret.append("[i]);\n");
+
+                    ret.append("                }\n");
+
+				    ret.append("            }\n");
+                }
+                else {
+                    reset = true;
+                }
+                break;
+            }
 			default:
 				reset = true;
 				break;
