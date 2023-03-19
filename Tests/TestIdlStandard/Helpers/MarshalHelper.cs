@@ -133,9 +133,9 @@ internal static class MarshalHelper
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var utf16 = Marshal.ReadInt16(ptr);
+            return Marshal.PtrToStructure<char>(ptr);
 
-            return utf16 < char.MinValue ? '\0' : Convert.ToChar(utf16);
+            // return utf16 < char.MinValue ? '\0' : Convert.ToChar(utf16);
         }
 
         var utf32 = Marshal.ReadInt32(ptr);
@@ -157,7 +157,8 @@ internal static class MarshalHelper
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Marshal.WriteInt16(ptr, c);
+            Marshal.StructureToPtr(c, ptr, true);
+            // Marshal.WriteInt16(ptr, c);
         }
         else
         {
