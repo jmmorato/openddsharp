@@ -6,6 +6,8 @@ using System.Text;
 
 internal static class MarshalHelper
 {
+    private static readonly UTF32Encoding _encoding = new UTF32Encoding(!BitConverter.IsLittleEndian, false);
+
     public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
     {
         // Ensure a not null empty list to populate
@@ -133,15 +135,13 @@ internal static class MarshalHelper
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // var utf16 = Marshal.ReadInt16(ptr);
-            // return utf16 < char.MinValue ? '\0' : Convert.ToChar(utf16);
             return Marshal.PtrToStructure<char>(ptr);
 
         }
 
-        var utf32 = Marshal.ReadInt32(ptr);
-
-        return ConvertFromUtf32(utf32);
+        var bytes = new byte[4];
+        Marshal.Copy(ptr, bytes, 0, 4);
+        return _encoding.GetString(bytes).FirstOrDefault();
     }
     
     public static IntPtr WCharToPtr(this char c)
@@ -159,11 +159,11 @@ internal static class MarshalHelper
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             Marshal.StructureToPtr(c, ptr, false);
-            // Marshal.WriteInt16(ptr, c);
         }
         else
         {
-            Marshal.WriteInt32(ptr, char.ConvertToUtf32(c.ToString(), 0));
+            var bytes = _encoding.GetBytes(new[] { c });
+            Marshal.Copy(bytes, 0, ptr, bytes.Length);
         }
 
         return ptr;
@@ -201,8 +201,13 @@ internal static class MarshalHelper
             }
             else
             {
-                var utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
-                sequence.Add(ConvertFromUtf32(utf32));
+                var bytes = new byte[4];
+                Marshal.Copy(ptr + sizeof(int) + (elSiz * i), bytes, 0, 4);
+                var character =  _encoding.GetString(bytes).FirstOrDefault();
+                sequence.Add(character);
+                
+                // var utf32 = Marshal.PtrToStructure<int>(ptr + sizeof(int) + (elSiz * i));
+                // sequence.Add(ConvertFromUtf32(utf32));
             }
         }
     }
@@ -238,7 +243,9 @@ internal static class MarshalHelper
             }
             else
             {
-                Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
+                var bytes = _encoding.GetBytes(new[] { sequence[i] });
+                Marshal.Copy(bytes, 0, ptr + sizeof(int) + (elSiz * i), bytes.Length);
+                // Marshal.StructureToPtr(char.ConvertToUtf32(sequence[i].ToString(), 0), ptr + sizeof(int) + (elSiz * i), false);
             }
         }
     }
@@ -700,8 +707,12 @@ internal static class MarshalHelper
             }
             else
             {
-                var aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
-                value = ConvertFromUtf32(aux);
+                var bytes = new byte[4];
+                Marshal.Copy(ptr + (elSiz * i), bytes, 0, 4);
+                value = _encoding.GetString(bytes).FirstOrDefault();
+                
+                // var aux = Marshal.PtrToStructure<int>(ptr + (elSiz * i));
+                // value = ConvertFromUtf32(aux);
             }
 
             array.SetValue(value, dimensions);
@@ -805,18 +816,13 @@ internal static class MarshalHelper
         }
     }
 
-    public static char ConvertFromUtf32(int codepoint)
-    {
-        var isValidUnicodeCharacter = (codepoint >= 0x00000 && codepoint <= 0x10FFFF)
-                                      && (codepoint < 0xD800 || codepoint > 0xDFFF);
-
-        if (!isValidUnicodeCharacter)
-        {
-            return '\0';
-        }
-
-        return char.ConvertFromUtf32(codepoint).FirstOrDefault();
-    }
+    // public static char ConvertFromUtf32(int codepoint)
+    // {
+    //     var isValidUnicodeCharacter = (codepoint >= 0x00000 && codepoint <= 0x10FFFF)
+    //                                   && (codepoint < 0xD800 || codepoint > 0xDFFF);
+    //
+    //     return !isValidUnicodeCharacter ? '\0' : char.ConvertFromUtf32(codepoint).FirstOrDefault();
+    // }
 
     internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
     {
