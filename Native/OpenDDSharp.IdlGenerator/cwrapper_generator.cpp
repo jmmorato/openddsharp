@@ -699,20 +699,11 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 
                     ret.append("            {\n");
 
-                    ret.append("                if (");
-                    ret.append(name);
-                    ret.append("[i] != NULL)\n");
-
-                    ret.append("                {\n");
-
-                    ret.append("                    ret.");
+                    ret.append("                ret.");
                     ret.append(name);
                     ret.append("[i] = marshal::ptr_to_wchar(");
-
                     ret.append(name);
                     ret.append("[i]);\n");
-
-                    ret.append("                }\n");
 
                     ret.append("            }\n");
                     break;
@@ -1242,20 +1233,12 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 
                     ret.append("            {\n");
 
-                    ret.append("                if (native.");
-                    ret.append(name);
-                    ret.append("[i] != NULL)\n");
-
-                    ret.append("                {\n");
-
-                    ret.append("                    ");
+                    ret.append("                ");
                     ret.append(name);
                     ret.append("[i] = marshal::wchar_to_ptr(native.");
 
                     ret.append(name);
                     ret.append("[i]);\n");
-
-                    ret.append("                }\n");
 
                     ret.append("            }\n");
                     break;

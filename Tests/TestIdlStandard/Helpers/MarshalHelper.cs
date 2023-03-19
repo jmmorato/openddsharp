@@ -143,6 +143,11 @@ internal static class MarshalHelper
     
     public static IntPtr WCharToPtr(this char c)
     {
+        if (c == default(char))
+        {
+            return IntPtr.Zero;
+        }
+
         var elSiz = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 2 : 4;
         
         // Allocate unmanaged space.
