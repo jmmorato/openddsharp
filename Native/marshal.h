@@ -527,6 +527,33 @@ public:
         // Free temporally allocated memory
         delete[] bytes;
     }
+
+    static wchar_t ptr_to_wchar(void* ptr) {
+        wchar_t wchar = '\0';
+
+        if (ptr == NULL)
+        {
+            return wchar;
+        }
+
+        const size_t size = sizeof(wchar_t);
+
+        ACE_OS::memcpy(&wchar, ptr, sizeof(wchar_t));
+
+        return wchar;
+    }
+
+    static void* wchar_to_ptr(wchar_t wchar) {
+        const size_t size = sizeof(wchar_t);
+
+        // Alloc memory for the poninter
+        void* ptr = ACE_OS::malloc(size);
+
+        // Copy the bytes in the pointer
+        ACE_OS::memcpy(ptr, &wchar, size);
+
+        return ptr;
+    }
 };
 
 #endif
