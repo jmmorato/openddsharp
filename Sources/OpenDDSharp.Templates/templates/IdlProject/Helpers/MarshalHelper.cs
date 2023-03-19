@@ -817,7 +817,7 @@ internal static class MarshalHelper
         }
     }
 
-    private static void UpdateDimensionsArray(this Array array, int[] dimensions)
+    internal static void UpdateDimensionsArray(this Array array, int[] dimensions)
     {
         dimensions[array.Rank - 1]++;
         if (dimensions[array.Rank - 1] >= array.GetLength(array.Rank - 1))
