@@ -37,8 +37,6 @@ jobs:
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
-      env:
-        PROCESSOR_ARCHITECTURE: ${{ matrix.BuildPlatform }}
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
