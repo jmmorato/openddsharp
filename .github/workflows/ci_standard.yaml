@@ -31,8 +31,6 @@ jobs:
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '3.1.x'
-      env:
-        PROCESSOR_ARCHITECTURE: ${{ matrix.BuildPlatform }}
 
     - uses: actions/setup-dotnet@v3
       with:

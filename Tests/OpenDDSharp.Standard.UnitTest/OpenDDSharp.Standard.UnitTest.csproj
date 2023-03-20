@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0;netcoreapp3.1;net461;net48;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT' And ('$(RuntimeIdentifier)'=='win-x86' Or '$(Platform)'=='x86')">net6.0;net461;net48;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT' And ('$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">net6.0;netcoreapp3.1;net461;net48;</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">net6.0;netcoreapp3.1;</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
