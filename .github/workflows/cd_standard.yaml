@@ -98,7 +98,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-        retention-days: 1
 
     - name: Artifacts OpenDDSharp native
       uses: actions/upload-artifact@v3
@@ -108,7 +107,6 @@ jobs:
             ${{ github.workspace }}/README.md
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
             ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-        retention-days: 1
 
   build_linux_native:
     runs-on: ubuntu-latest
@@ -207,7 +205,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        retention-days: 1
 
     - name: Cache OpenDDSharp native
       uses: actions/upload-artifact@v3
@@ -217,7 +214,6 @@ jobs:
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so
           ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
-        retention-days: 1
 
   build_macos_native:
     runs-on: macos-latest
@@ -317,7 +313,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        retention-days: 1
 
     - name: Artifact OpenDDSharp native
       id: openddsharp-libraries-macos-cd
@@ -328,7 +323,6 @@ jobs:
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib
           ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
-        retention-days: 1
 
   build_openddsharp_windows:
     runs-on: windows-latest
