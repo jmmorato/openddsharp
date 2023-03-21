@@ -99,14 +99,13 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: bash
-      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+      run: printf 'lcov_path=%s\n' TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
       uses: coverallsapp/github-action@v2
       with:
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        format: lcov
 
   build_linux:
     runs-on: ubuntu-latest
@@ -233,13 +232,12 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: bash
-      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+      run: printf 'lcov_path=%s\n' TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        format: lcov
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
 
   build_macos:
@@ -366,11 +364,10 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: bash
-      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+      run: printf 'lcov_path=%s\n' TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        format: lcov
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
