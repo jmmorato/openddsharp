@@ -28,10 +28,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '3.1.x'
-
+    - name: Download and Install dotnet 3.1
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Version '3.1.32';
+        
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
