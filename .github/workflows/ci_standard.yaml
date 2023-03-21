@@ -34,6 +34,12 @@ jobs:
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Version '3.1.426';
         
+    - name: Download and Install dotnet 6.1
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Version '6.1.407';
+        
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
