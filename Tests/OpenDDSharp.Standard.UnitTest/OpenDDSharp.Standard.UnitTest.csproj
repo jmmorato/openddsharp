@@ -45,7 +45,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)/../TestResults/$(TargetFramework)</VSTestResultsDirectory>
+    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)../TestResults/$(TargetFramework)</VSTestResultsDirectory>
   </PropertyGroup>
 
   <ItemGroup>
