@@ -44,6 +44,10 @@
     <DefineConstants Condition="'$(Platform)'=='x86' Or '$(RuntimeIdentifier)'=='win-x86'">$(DefineConstants);X86</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)/../TestResults/$(TargetFramework)</VSTestResultsDirectory>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.2.0">
       <PrivateAssets>all</PrivateAssets>

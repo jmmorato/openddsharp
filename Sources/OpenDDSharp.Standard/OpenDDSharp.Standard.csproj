@@ -26,7 +26,8 @@
     <PackageIcon>icon_128.png</PackageIcon>
     <PackageTags>OpenDDSharp DDS OpenDDS</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <!-- Create a ref assembly to include in the ref NuGet dir. It makes a warning: https://github.com/NuGet/Home/issues/4184 -->
+    <!-- Create a ref assembly to include in the ref NuGet dir.
+     It makes a warning: https://github.com/NuGet/Home/issues/4184 -->
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <NoWarn>NU5131</NoWarn>
     <Version>1.0.0</Version>
@@ -66,8 +67,8 @@
     <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
     
     <!-- As we put libraries in the `runtimes\{rid}\lib` folder, .NET Core will ignore
-         the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
-         directories. We keep the one in the `lib` for applications using .NET Framework. -->    
+     the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
+     directories. We keep the one in the `lib` for applications using .NET Framework. -->    
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />    
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />    
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />

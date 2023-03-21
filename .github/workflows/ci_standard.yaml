@@ -93,18 +93,18 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
-        path: TestResults/test-results.trx
+        path: TestResults/**/test-results.trx
         reporter: dotnet-trx
 
-    - name: Get path to lcov file
-      id: get_lcov_path
-      shell: bash
-      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+#    - name: Get path to lcov file
+#      id: get_lcov_path
+#      shell: bash
+#      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v2.0.0
       with:
-        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
+        #path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linux:
@@ -226,19 +226,19 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/test-results.trx
+        path: TestResults/**/test-results.trx
         reporter: dotnet-trx
 
-    - name: Get path to lcov file
-      id: get_lcov_path
-      shell: bash
-      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+#    - name: Get path to lcov file
+#      id: get_lcov_path
+#      shell: bash
+#      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v2.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
+#        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
 
   build_macos:
     runs-on: macos-latest
@@ -358,16 +358,16 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
-        path: TestResults/test-results.trx
+        path: TestResults/**/test-results.trx
         reporter: dotnet-trx
 
-    - name: Get path to lcov file
-      id: get_lcov_path
-      shell: bash
-      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
+#    - name: Get path to lcov file
+#      id: get_lcov_path
+#      shell: bash
+#      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
+#        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
