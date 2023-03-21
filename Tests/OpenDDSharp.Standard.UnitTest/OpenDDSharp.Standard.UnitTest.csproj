@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net6.0;net461;net48;</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">net6.0;netcoreapp3.1;</TargetFrameworks>
+    <TargetFramework Condition="('$(OS)'=='Windows_NT') And ('$(Platform)'=='AnyCPU')">net6.0</TargetFramework>
+    <TargetFrameworks Condition="('$(OS)'=='Windows_NT') And ('$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64')">net6.0;netcoreapp3.1;net461;net462;net47;net471;net472;net48;</TargetFrameworks>
+    <TargetFrameworks Condition="('$(OS)'=='Windows_NT') And ('$(RuntimeIdentifier)'=='win-x86' Or '$(Platform)'=='x86')">net6.0;net461;net462;net47;net471;net472;net48;</TargetFrameworks>
+    <TargetFramework Condition="('$(OS)'!='Windows_NT') And ('$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64')">net6.0</TargetFramework>
+    <TargetFrameworks Condition="('$(OS)'!='Windows_NT') And ('$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64')">net6.0;netcoreapp3.1;</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
