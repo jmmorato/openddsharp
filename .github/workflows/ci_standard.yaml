@@ -32,7 +32,7 @@ jobs:
       shell: pwsh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Version '3.1.x';
+        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Version '3.1.426';
         
     - uses: actions/setup-dotnet@v3
       with:
