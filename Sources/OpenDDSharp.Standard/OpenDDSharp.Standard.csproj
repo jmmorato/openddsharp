@@ -20,7 +20,7 @@
 
   <!-- NuGet properties -->
   <PropertyGroup>
-    <PackageProjectUrl>http://www.openddsharp.com</PackageProjectUrl>
+    <PackageProjectUrl>https://www.openddsharp.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
     <PackageIcon>icon_128.png</PackageIcon>
