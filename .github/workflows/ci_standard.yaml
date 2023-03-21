@@ -102,10 +102,11 @@ jobs:
 #      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
-      uses: coverallsapp/github-action@v2.0.0
+      uses: coverallsapp/github-action@v2
       with:
         #path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        format: lcov
 
   build_linux:
     runs-on: ubuntu-latest
@@ -235,9 +236,10 @@ jobs:
 #      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2.0.0
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        format: lcov
 #        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
 
   build_macos:
@@ -367,7 +369,8 @@ jobs:
 #      run: printf 'lcov_path=%s\n' TestResults/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        format: lcov
 #        path-to-lcov: ${{ steps.get_lcov_path.outputs.lcov_path }}
