@@ -100,8 +100,8 @@ jobs:
       id: get_lcov_path
       shell: bash
       run: |
-        lcovFile="${{ github.workspace }}/TestResults/net6.0/*/coverage.info"
-        printf 'lcov_path=%s\n' "${lcovFile/\\/\/}" >> $GITHUB_OUTPUT
+        lcovFile="${${{ github.workspace }}/\\//}"
+        printf 'lcov_path=%s\n' "/TestResults/net6.0/*/coverage.info" >> $GITHUB_OUTPUT
 
     - name: Coveralls
       uses: coverallsapp/github-action@v2
