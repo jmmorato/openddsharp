@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks Condition="('$(OS)'=='Windows_NT')">net461;net462;net47;net471;net472;net48;netcoreapp3.1;net5.0;net6.0;net7.0;</TargetFrameworks>
+    <TargetFrameworks Condition="('$(OS)'!='Windows_NT') And ('$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64')">net6.0;net7.0;</TargetFrameworks>
+    <TargetFrameworks Condition="('$(OS)'!='Windows_NT') And ('$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64')">netcoreapp3.1;net5.0;net6.0;net7.0;</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -40,6 +42,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="'$(Platform)'=='x86' Or '$(RuntimeIdentifier)'=='win-x86'">$(DefineConstants);X86</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)../../TestResults/$(TargetFramework)</VSTestResultsDirectory>
   </PropertyGroup>
 
   <ItemGroup>
