@@ -104,8 +104,8 @@ jobs:
     - name: Coveralls
       uses: coverallsapp/github-action@v2
       with:
-        file: ${{ steps.get_lcov_path.outputs.lcov_path }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        file: "${{ steps.get_lcov_path.outputs.lcov_path }}"
         format: lcov
 
   build_linux:
