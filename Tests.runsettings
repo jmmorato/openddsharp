@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
-  <RunConfiguration>
-    <!-- Put results in root folder rather inside each project-->
-    <ResultsDirectory>TestResults</ResultsDirectory>
-  </RunConfiguration>
 
   <MSTest>
     <!-- Do not run the test assemblies in parallel since they could interfere each other. -->
