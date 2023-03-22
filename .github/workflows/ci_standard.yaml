@@ -103,7 +103,7 @@ jobs:
         printf 'lcov_path=%s\n' "./TestResults/net6.0/*/coverage.info" >> $GITHUB_OUTPUT
 
     - name: Coveralls
-      uses: coverallsapp/github-action@v2
+      uses: coverallsapp/github-action@v2.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: "${{ steps.get_lcov_path.outputs.lcov_path }}"
@@ -239,7 +239,7 @@ jobs:
       run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2
+      uses: coverallsapp/github-action@v2.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
@@ -374,7 +374,7 @@ jobs:
       run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2
+      uses: coverallsapp/github-action@v2.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
@@ -387,7 +387,7 @@ jobs:
     needs: [build_windows, build_linux, build_macos]
     steps:
       - name: Publish coverage on Coveralls
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@v2.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}          
           parallel-finished: true
