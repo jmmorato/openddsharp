@@ -109,7 +109,7 @@ jobs:
         file: "${{ steps.get_lcov_path.outputs.lcov_path }}"
         format: lcov
         parallel: true
-        tag-name: coverage-windows-${{ join(matrix.*, '-') }}
+        flag-name: coverage-windows-${{ join(matrix.*, '-') }}
 
   build_linux:
     runs-on: ubuntu-latest
@@ -245,7 +245,7 @@ jobs:
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
         format: lcov
         parallel: true
-        tag-name: coverage-linux-x64-Release
+        flag-name: coverage-linux-x64-Release
 
   build_macos:
     runs-on: macos-latest
@@ -380,7 +380,7 @@ jobs:
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
         format: lcov
         parallel: true
-        tag-name: coverage-macos-x64-Release
+        flag-name: coverage-macos-x64-Release
 
   publish_coveralls:
     runs-on: ubuntu-latest
