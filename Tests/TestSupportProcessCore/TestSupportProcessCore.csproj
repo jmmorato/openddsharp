@@ -7,8 +7,8 @@
     <Platforms>x64;x86;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
-    <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
+<!--	<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>-->
+<!--    <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
