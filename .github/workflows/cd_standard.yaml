@@ -69,25 +69,51 @@ jobs:
 #      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
 #      working-directory: ${{ github.workspace }}/Build
 
+    - name: Stage Native
+      shell: pwsh
+      run: |
+        $items = @ (
+          "${{ github.workspace }}/README.md",
+          "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt",
+          "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt"
+        )
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cmake -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pl -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.dll -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.lib -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.exe -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.h -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.hpp -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cpp -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.inl -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.idl -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pidl -Recurse | Select-Object FullName)
+        $compress = @{
+          Path = $items
+          CompressionLevel = "Fastest"
+          DestinationPath = "${{ github.workspace }}/opendds-native-windows-${{ matrix.BuildPlatform }}.zip"
+        }
+        Compress-Archive @compress        
+
     - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v3
       with:
         name: opendds-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
-        path: |
-          ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
+        path: ${{ github.workspace }}/opendds-native-windows-${{ matrix.BuildPlatform }}.zip
+#          ${{ github.workspace }}/README.md
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
+#          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
 
     - name: Artifacts OpenDDSharp native
       uses: actions/upload-artifact@v3
