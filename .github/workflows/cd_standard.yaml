@@ -72,7 +72,7 @@ jobs:
     - name: Stage Native
       shell: pwsh
       run: |
-        $items = @ (
+        $items = @(
           "${{ github.workspace }}/README.md",
           "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt",
           "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt"
