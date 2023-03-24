@@ -217,7 +217,8 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.pidl -Recurse | % { $_.FullName })
         $items = $items | select -Unique
         $a = $items -join ","
-        zip --symlinks "${{ github.workspace }}/opendds-native-linux-x64.zip" $a
+        cp $a "${{ github.workspace }}/opendds-native-linux-x64"
+        zip --symlinks -r "${{ github.workspace }}/opendds-native-linux-x64.zip" "${{ github.workspace }}/opendds-native-linux-x64"
 #        $compress = @{
 #          LiteralPath = $items
 #          CompressionLevel = "Fastest"
