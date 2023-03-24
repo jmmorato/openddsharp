@@ -215,6 +215,7 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.inl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.idl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.pidl -Recurse | % { $_.FullName })
+        $items = $items | select -Unique
         $compress = @{
           Path = $items
           CompressionLevel = "Fastest"
@@ -348,8 +349,9 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.inl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.idl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.pidl -Recurse | % { $_.FullName })
+        $items = $items | select -Unique
         $compress = @{
-          Path = $items
+          Path = $items 
           CompressionLevel = "Fastest"
           DestinationPath = "${{ github.workspace }}/opendds-native-osx-x64.zip"
         }
