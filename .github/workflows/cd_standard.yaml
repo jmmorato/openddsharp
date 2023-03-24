@@ -217,7 +217,7 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.pidl -Recurse | % { $_.FullName })
         $items = $items | select -Unique
         $compress = @{
-          Path = $items
+          LiteralPath = $items
           CompressionLevel = "Fastest"
           DestinationPath = "${{ github.workspace }}/opendds-native-linux-x64.zip"
         }
@@ -341,8 +341,8 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.cmake -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.pl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *lib*.dylib -Recurse | % { $_.FullName })
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/ -Recurse | % { $_.FullName })
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin/ -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS/bin -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.h -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.hpp -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_MacOS -Filter *.cpp -Recurse | % { $_.FullName })
