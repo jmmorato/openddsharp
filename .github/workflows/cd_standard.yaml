@@ -87,7 +87,7 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cpp -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.inl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.idl -Recurse | % { $_.FullName })
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pidl -Recurse | % { $_.FullName }e)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pidl -Recurse | % { $_.FullName })
         $compress = @{
           Path = $items
           CompressionLevel = "Fastest"
