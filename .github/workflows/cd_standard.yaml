@@ -77,17 +77,17 @@ jobs:
           "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt",
           "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt"
         )
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cmake -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pl -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.dll -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.lib -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.exe -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.h -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.hpp -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cpp -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.inl -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.idl -Recurse | Select-Object FullName)
-        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pidl -Recurse | Select-Object FullName)
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cmake -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pl -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.dll -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.lib -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.exe -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.h -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.hpp -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.cpp -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.inl -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.idl -Recurse | % { $_.FullName })
+        $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }} -Filter *.pidl -Recurse | % { $_.FullName }e)
         $compress = @{
           Path = $items
           CompressionLevel = "Fastest"
