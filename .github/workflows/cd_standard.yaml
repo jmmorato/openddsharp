@@ -216,12 +216,14 @@ jobs:
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.idl -Recurse | % { $_.FullName })
         $items += @(Get-ChildItem -Path ${{ github.workspace }}/ext/OpenDDS_Linux -Filter *.pidl -Recurse | % { $_.FullName })
         $items = $items | select -Unique
-        $compress = @{
-          LiteralPath = $items
-          CompressionLevel = "Fastest"
-          DestinationPath = "${{ github.workspace }}/opendds-native-linux-x64.zip"
-        }
-        Compress-Archive @compress
+        $a = $items -join ","
+        zip --symlinks "${{ github.workspace }}/opendds-native-linux-x64.zip" $a
+#        $compress = @{
+#          LiteralPath = $items
+#          CompressionLevel = "Fastest"
+#          DestinationPath = "${{ github.workspace }}/opendds-native-linux-x64.zip"
+#        }
+#        Compress-Archive @compress
 
     - name: Artifact OpenDDS libraries
       uses: actions/upload-artifact@v3
