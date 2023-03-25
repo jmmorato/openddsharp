@@ -458,7 +458,7 @@ jobs:
           dotnet new openddsharp-idl-project
           Remove-Item ./IDL/Test.idl
           Copy-Item "${{ github.workspace }}/Tests/TestIdlStandard/IDL/Test.idl" -Destination "./IDL" -Force
-          dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache --verbosity detailed
+          dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build Test.csproj --configuration Release
           cd ..
           New-Item -Path "." -Name "TestConsole" -ItemType "directory"
@@ -467,8 +467,9 @@ jobs:
           Remove-Item Program.cs
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
-          dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache --verbosity detailed
-          dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
+          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} -self-contained --no-restore
+          dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-build
 
   publish_artifacts:
     runs-on: windows-latest

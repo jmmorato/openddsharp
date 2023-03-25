@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
+using Cake.Core.Diagnostics;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Standard.Tasks
@@ -32,7 +33,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
         private const string ACE_VERSION = "6.5.19";
         private const string TAO_VERSION = "2.5.19";
 
-        private readonly string[] _acelibraries = new string[]
+        private readonly string[] _aceLibraries = new string[]
         {
             @"ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so",
         };
@@ -63,26 +64,35 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+            var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
 
-            foreach (string s in _acelibraries)
+            foreach (var s in _aceLibraries)
             {
-                string sourceFile = Path.Combine(solutionPath, $"{s}.{ACE_VERSION}");
-                string destinationFile = Path.Combine(solutionPath, s);
+                var sourceFile = Path.Combine(solutionPath, $"{s}.{ACE_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
+
                 File.Copy(sourceFile, destinationFile, true);
             }
 
-            foreach (string s in _taoLibraries)
+            foreach (var s in _taoLibraries)
             {
-                string sourceFile = Path.Combine(solutionPath, $"{s}.{TAO_VERSION}");
-                string destinationFile = Path.Combine(solutionPath, s);
+                var sourceFile = Path.Combine(solutionPath, $"{s}.{TAO_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
+
                 File.Copy(sourceFile, destinationFile, true);
             }
 
-            foreach (string s in _openddsLibraries)
+            foreach (var s in _openddsLibraries)
             {
-                string sourceFile = Path.Combine(solutionPath, $"{s}.{OPENDDS_VERSION}");
-                string destinationFile = Path.Combine(solutionPath, s);
+                var sourceFile = Path.Combine(solutionPath, $"{s}.{OPENDDS_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
+
                 File.Copy(sourceFile, destinationFile, true);
             }
         }
