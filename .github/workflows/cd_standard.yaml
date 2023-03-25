@@ -422,7 +422,9 @@ jobs:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
         include:
           - os: windows-latest
-            runtime: [win-x86, win-x64]
+            runtime: win-x86
+          - os: windows-latest
+            runtime: win-x64
           - os: ubuntu-latest
             runtime: linux-x64
           - os: macos-latest
@@ -441,7 +443,7 @@ jobs:
         shell: pwsh
         run: |
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
-          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}.nupkg"
+          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.*.${{ github.run_number }}.nupkg"
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project
