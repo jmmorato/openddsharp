@@ -419,7 +419,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
         include:
           - os: windows-latest
             runtime: win-x86
@@ -433,6 +432,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
         with:
