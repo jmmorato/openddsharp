@@ -233,7 +233,7 @@ jobs:
         rsync -am --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        zip --symlinks -r "${{ github.workspace }}/opendds-native-linux-x64.zip" "${{ github.workspace }}/opendds-native-linux-x64"
+        zip --symlinks -r "opendds-native-linux-x64.zip" "./opendds-native-linux-x64"
 
     - name: Artifact OpenDDS libraries
       uses: actions/upload-artifact@v3
