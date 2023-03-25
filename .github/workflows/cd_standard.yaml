@@ -75,35 +75,23 @@ jobs:
         $targetDir = "./opendds-native-windows-${{ matrix.BuildPlatform }}"
         New-Item -Path "." -Name "opendds-native-windows-${{ matrix.BuildPlatform }}" -ItemType "directory"
         
-        New-Item -ItemType File -Path "./README.md" -Force | Copy-Item -Destination $targetDir -Recurse -Container -Path "./README.md" -Verbose -Force
-        New-Item -ItemType File -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt" -Force | Copy-Item -Destination $targetDir -Recurse -Container -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt" -Verbose -Force
-        New-Item -ItemType File -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt" -Force | Copy-Item -Destination $targetDir -Recurse -Container -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt" -Verbose -Force
-        New-Item -ItemType File -Path "./Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll" -Force | Copy-Item -Destination $targetDir -Recurse -Container -Path "./Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll" -Verbose -Force
-        New-Item -ItemType File -Path "./Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe" -Force | Copy-Item -Destination $targetDir -Recurse -Container -Path "./Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe" -Verbose -Force
+        XCOPY ".\README.md" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" $targetDir /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" $targetDir /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" $targetDir /D /S /Y /M
         
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.cmake" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.pl" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.dll" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.lib" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.exe" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.h" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.hpp" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.cpp" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.inl" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.idl" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.pidl" -Recurse | New-Item -ItemType File -Path $_.FullName -Force
-        
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.cmake" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.pl" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.dll" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.lib" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.exe" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.h" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.hpp" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.cpp" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.inl" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.idl" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
-        Get-ChildItem -Path "./ext/OpenDDS_${{ matrix.BuildPlatform }}" -Filter "*.pidl" -Recurse | Copy-Item -Destination $targetDir -Recurse -Container -Verbose -Force
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.lib" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.exe" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.h" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.hpp" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cpp" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.inl" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.idl" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pidl" $targetDir /D /S /Y /M
         
         $compress = @{
           Path = $targetDir
