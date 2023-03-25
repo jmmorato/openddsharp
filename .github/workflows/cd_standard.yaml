@@ -95,7 +95,7 @@ jobs:
         $compress = @{
           Path = $targetDir
           CompressionLevel = "Fastest"
-          DestinationPath = "$(targetDir).zip"
+          DestinationPath = "./opendds-native-windows-${{ matrix.BuildPlatform }}.zip"
         }
         Compress-Archive @compress        
 
