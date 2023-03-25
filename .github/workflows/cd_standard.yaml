@@ -76,22 +76,22 @@ jobs:
         New-Item -Path "." -Name "opendds-native-windows-${{ matrix.BuildPlatform }}" -ItemType "directory"
         
         XCOPY ".\README.md" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" $targetDir /D /S /Y /M
-        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" $targetDir /D /S /Y /M
-        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDirNative\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDirNative\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release" /D /S /Y /M
         
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.lib" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.exe" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.h" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.hpp" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cpp" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.inl" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.idl" $targetDir /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pidl" $targetDir /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.lib" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.exe" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.h" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.hpp" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cpp" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.inl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.idl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pidl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}" /D /S /Y /M
         
         $compress = @{
           Path = $targetDir
@@ -120,14 +120,14 @@ jobs:
 #          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
 #          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
 
-    - name: Artifacts OpenDDSharp native
-      uses: actions/upload-artifact@v3
-      with:
-        name: openddsharp-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
-        path: |
-            ${{ github.workspace }}/README.md
-            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
-            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
+#    - name: Artifacts OpenDDSharp native
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: openddsharp-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
+#        path: |
+#            ${{ github.workspace }}/README.md
+#            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
+#            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
 
   build_linux_native:
     runs-on: ubuntu-latest
