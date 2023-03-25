@@ -219,7 +219,7 @@ jobs:
         mkdir "${{ github.workspace }}/opendds-native-linux-x64"
         foreach ($item in $items)
         {
-          cp --parents $item "${{ github.workspace }}/opendds-native-linux-x64"
+          cp --parents --preserve=links $item "${{ github.workspace }}/opendds-native-linux-x64"
         }
         
         zip --symlinks -r "${{ github.workspace }}/opendds-native-linux-x64.zip" "${{ github.workspace }}/opendds-native-linux-x64"
