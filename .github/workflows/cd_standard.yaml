@@ -96,15 +96,15 @@ jobs:
         $compress = @{
           Path = $targetDir
           CompressionLevel = "Fastest"
-          DestinationPath = "./opendds-native-win-${{ matrix.BuildPlatform }}.zip"
+          DestinationPath = ".\opendds-native-win-${{ matrix.BuildPlatform }}.zip"
         }
         Compress-Archive @compress        
 
     - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v3
       with:
-        name: opendds-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
-        path: ${{ github.workspace }}/opendds-native-windows-${{ matrix.BuildPlatform }}.zip
+        name: opendds-win-${{ matrix.BuildPlatform }}
+        path: ${{ github.workspace }}/opendds-native-win-${{ matrix.BuildPlatform }}.zip
 #          ${{ github.workspace }}/README.md
 #          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
 #          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
@@ -357,8 +357,8 @@ jobs:
     - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v3
       with:
-        name: opendds-macos-x64-${{ github.run_number }}
-        path: ${{ github.workspace }}/opendds-native-macos-x64.zip
+        name: opendds-osx-x64-${{ github.run_number }}
+        path: ${{ github.workspace }}/opendds-native-osx-x64.zip
 #        path: |
 #          ${{ github.workspace }}/README.md
 #          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
@@ -420,45 +420,25 @@ jobs:
       id: branch-name
       uses: tj-actions/branch-names@v6
 
-    - name: Download artifacts OpenDDSx86
+    - name: Download OpenDDS Native win-x86
       uses: actions/download-artifact@v3
       with:
-        name: opendds-windows-x86-${{ github.run_number }}
+        name: opendds-win-x86-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDSharp x86
+    - name: Download OpenDDS Native win-x64
       uses: actions/download-artifact@v3
       with:
-        name: openddsharp-windows-x86-${{ github.run_number }}
+        name: opendds-win-x64-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDS x64
-      uses: actions/download-artifact@v3
-      with:
-        name: opendds-windows-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDSharp x64
-      uses: actions/download-artifact@v3
-      with:
-        name: openddsharp-windows-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDS Linux
+    - name: Download OpenDDS Native linux-x64
       uses: actions/download-artifact@v3
       with:
         name: opendds-linux-x64-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDSharp Linux
-      uses: actions/download-artifact@v3
-      with:
-        name: openddsharp-linux-x64-${{ github.run_number }}
-
     - name: Download artifacts OpenDDS MacOS
       uses: actions/download-artifact@v3
       with:
-        name: opendds-macos-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDSharp MacOS
-      uses: actions/download-artifact@v3
-      with:
-        name: openddsharp-macos-x64-${{ github.run_number }}
+        name: opendds-osx-x64-${{ github.run_number }}
 
     - name: Set release version
       shell: pwsh
