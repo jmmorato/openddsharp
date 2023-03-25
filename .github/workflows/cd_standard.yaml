@@ -338,7 +338,7 @@ jobs:
       with:
         name: opendds-linux-x64-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDS MacOS
+    - name: Download OpenDDS Native osx-x64
       uses: actions/download-artifact@v3
       with:
         name: opendds-osx-x64-${{ github.run_number }}
@@ -409,9 +409,13 @@ jobs:
         path: |
           ${{ github.workspace }}/Release/*.nupkg
   
+  
   test_artifacts:
     needs: build_openddsharp
-
+    env:
+      OpenDdsVersion: "3.23.1"
+      MajorVersion: "0"
+      MinorVersion: "8"
     strategy:
       fail-fast: false
       matrix:
@@ -454,6 +458,7 @@ jobs:
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://as-pl-prod-northeurope-docdevlib.azurewebsites.net/nuget/STNuget/v3/index.json --source $(Build.StagingDirectory)/nupkg/ --no-cache --verbosity detailed
           dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.os }} --no-self-contained --no-restore
+
 
 #  publish_artifacts:
 #    steps:
