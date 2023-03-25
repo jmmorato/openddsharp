@@ -445,7 +445,7 @@ jobs:
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project
-          Remove-Item Test.idl
+          Remove-Item ./IDL/Test.idl
           Copy-Item "${{ github.workspace }}/Tests/TestIdlStandard/IDL/Test.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg --no-cache --verbosity detailed
           dotnet build Test.csproj --configuration Release
