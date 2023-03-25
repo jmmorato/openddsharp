@@ -33,8 +33,8 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            string releaseFolder = Path.Combine(solutionPath, "Release");
+            var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+            var releaseFolder = Path.Combine(solutionPath, "Release");
 
             foreach (var file in Directory.GetFiles(releaseFolder, "*.nupkg"))
             {

@@ -294,7 +294,7 @@ jobs:
         name: opendds-osx-x64-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-osx-x64.zip
 
-  build_openddsharp:
+  build_artifacts:
     runs-on: windows-latest
     needs: [build_windows_native, build_linux_native, build_macos_native]
     env:
@@ -409,13 +409,14 @@ jobs:
         path: |
           ${{ github.workspace }}/Release/*.nupkg
   
-  
   test_artifacts:
-    needs: build_openddsharp
+    needs: build_artifacts
+
     env:
       OpenDdsVersion: "3.23.1"
       MajorVersion: "0"
       MinorVersion: "8"
+
     strategy:
       fail-fast: false
       matrix:
@@ -443,8 +444,8 @@ jobs:
       - name: Test .NET development
         shell: pwsh
         run: |
-          $year = "23"
-          $dayOfYear = "084"
+          $year = (Get-Date).ToString("yy")
+          $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
           dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.$year$dayOfYear.${{ github.run_number }}-beta.nupkg"
           New-Item -Path "." -Name "Test" -ItemType "directory"
@@ -462,20 +463,21 @@ jobs:
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache --verbosity detailed
-          dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.os }} --no-self-contained --no-restore
+          dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
 
-#  publish_artifacts:
-#    steps:
-#      - name: Download OpenDDSharp NuGets
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
-#          
-#      - name: Publish NuGet packages
-#        if: ${{ github.event.inputs.publish == 'true' }}
-#        env:
-#          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-#        shell: pwsh
-#        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
-#        working-directory: ${{ github.workspace }}/Build
-#
+  publish_artifacts:
+    needs: test_artifacts
+    steps:
+      - name: Download OpenDDSharp NuGets
+        uses: actions/download-artifact@v3
+        with:
+          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+          path: ${{ github.workspace }}/Release
+
+      - name: Publish NuGet packages
+        if: ${{ github.event.inputs.publish == 'true' }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: pwsh
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
+        working-directory: ${{ github.workspace }}/Build
