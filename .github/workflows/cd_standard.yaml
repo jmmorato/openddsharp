@@ -190,7 +190,7 @@ jobs:
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -am --include='/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -am --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='tools/dcpsinfo_dump/dcpsinfo_dump' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -290,8 +290,8 @@ jobs:
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -am --include='/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -am --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -am --include='Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='tools/dcpsinfo_dump/dcpsinfo_dump' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
