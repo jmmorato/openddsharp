@@ -103,11 +103,13 @@ jobs:
 
   build_linux_native:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
+
     env:
       OpenDdsVersion: "3.23.1"
       LD_RPATH_FLAGS: "-Wl,-z,origin -Wl,-rpath,$ORIGIN"
@@ -199,17 +201,18 @@ jobs:
 
   build_macos_native:
     runs-on: macos-latest
+
     strategy:
       fail-fast: false
       matrix:
         BuildPlatform: [x64]
         BuildConfiguration: [Release]
+
     env:
       OpenDdsVersion: "3.23.1"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
-
     - uses: actions/checkout@v3
 
     - uses: actions/setup-dotnet@v3
@@ -296,7 +299,9 @@ jobs:
 
   build_artifacts:
     runs-on: windows-latest
+
     needs: [build_windows_native, build_linux_native, build_macos_native]
+
     env:
       OpenDdsVersion: "3.23.1"
       MajorVersion: "0"
@@ -466,7 +471,10 @@ jobs:
           dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
 
   publish_artifacts:
+    runs-on: windows-latest
+
     needs: test_artifacts
+
     steps:
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
