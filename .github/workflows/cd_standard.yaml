@@ -359,22 +359,22 @@ jobs:
     - name: Prepare OpenDDS Native
       shell: pwsh
       run: |
-        Expand-Archive -Path "${{ github.workspace }}\opendds-win-x64.zip" -DestinationPath "."
-        Expand-Archive -Path "${{ github.workspace }}\opendds-win-x86.zip" -DestinationPath "."
-        Expand-Archive -Path "${{ github.workspace }}\opendds-linux-x64.zip" -DestinationPath "."
-        Expand-Archive -Path "${{ github.workspace }}\opendds-osx-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x86.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-linux-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-osx-x64.zip" -DestinationPath "."
         
-        XCOPY ".\opendds-win-x64\OpenDDS_x64\*" "${{ github.workspace }}\ext\OpenDDS_x64\" /D /S /Y /M
-        XCOPY ".\opendds-win-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        XCOPY ".\opendds-native-win-x64\OpenDDS_x64\*" "${{ github.workspace }}\ext\OpenDDS_x64\" /D /S /Y /M
+        XCOPY ".\opendds-native-win-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-win-x86\OpenDDS_x86\*" "${{ github.workspace }}\ext\OpenDDS_x86\" /D /S /Y /M
-        XCOPY ".\opendds-win-x86\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        XCOPY ".\opendds-native-win-x86\OpenDDS_x86\*" "${{ github.workspace }}\ext\OpenDDS_x86\" /D /S /Y /M
+        XCOPY ".\opendds-native-win-x86\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-linux-x64\OpenDDS_Linux\*" "${{ github.workspace }}\ext\OpenDDS_Linux\" /D /S /Y /M
-        XCOPY ".\opendds-linux-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        XCOPY ".\opendds-native-linux-x64\OpenDDS_Linux\*" "${{ github.workspace }}\ext\OpenDDS_Linux\" /D /S /Y /M
+        XCOPY ".\opendds-native-linux-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-osx-x64\OpenDDS_MacOS\*" "${{ github.workspace }}\ext\OpenDDS_MacOS\" /D /S /Y /M
-        XCOPY ".\opendds-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-x64\OpenDDS_MacOS\*" "${{ github.workspace }}\ext\OpenDDS_MacOS\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
 
     - name: Set release version
       shell: pwsh
