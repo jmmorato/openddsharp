@@ -72,7 +72,7 @@ jobs:
     - name: Stage Native
       shell: pwsh
       run: |
-        $targetDir = "./opendds-native-windows-${{ matrix.BuildPlatform }}"
+        $targetDir = ".\opendds-native-windows-${{ matrix.BuildPlatform }}"
         New-Item -Path "." -Name "opendds-native-windows-${{ matrix.BuildPlatform }}" -ItemType "directory"
         
         XCOPY ".\README.md" $targetDir /D /S /Y /M
