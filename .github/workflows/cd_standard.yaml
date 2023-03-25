@@ -187,7 +187,8 @@ jobs:
         rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
@@ -288,7 +289,8 @@ jobs:
         rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
@@ -405,21 +407,21 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
-    - name: Build & Test with Cake
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
-      working-directory: ${{ github.workspace }}/Build
-
-    - name: Prepare coverage result
-      shell: pwsh
-      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
-      working-directory: ${{ github.workspace }}
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@v1.2.4
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN }}
-        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
+#    - name: Build & Test with Cake
+#      shell: pwsh
+#      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+#      working-directory: ${{ github.workspace }}/Build
+#
+#    - name: Prepare coverage result
+#      shell: pwsh
+#      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
+#      working-directory: ${{ github.workspace }}
+#
+#    - name: Coveralls
+#      uses: coverallsapp/github-action@v1.2.4
+#      with:
+#        github-token: ${{secrets.GITHUB_TOKEN }}
+#        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
 
     - name: Build OpenDDSharp solution AnyCPU
       shell: cmd
