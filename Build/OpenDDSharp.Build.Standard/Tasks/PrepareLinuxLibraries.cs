@@ -33,12 +33,12 @@ namespace OpenDDSharp.Build.Standard.Tasks
         private const string ACE_VERSION = "6.5.19";
         private const string TAO_VERSION = "2.5.19";
 
-        private readonly string[] _aceLibraries = new string[]
+        private readonly string[] _aceLibraries =
         {
             @"ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so",
         };
 
-        private readonly string[] _taoLibraries = new string[]
+        private readonly string[] _taoLibraries =
         {
             @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so",
             @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
@@ -48,7 +48,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so",
         };
 
-        private readonly string[] _openddsLibraries = new string[]
+        private readonly string[] _openddsLibraries =
         {
             @"ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so",
             @"ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so",
