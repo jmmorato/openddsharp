@@ -75,11 +75,11 @@ jobs:
         $targetDir = ".\opendds-native-windows-${{ matrix.BuildPlatform }}"
         New-Item -Path "." -Name "opendds-native-windows-${{ matrix.BuildPlatform }}" -ItemType "directory"
         
-        XCOPY ".\README.md" $targetDir /D /S /Y /M
+        XCOPY ".\README.md" "$targetDir\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDirNative\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
-        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDirNative\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
