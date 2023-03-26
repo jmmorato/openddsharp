@@ -167,17 +167,29 @@ jobs:
         $targetDir = "${{ github.workspace }}/opendds-native-linux-x64"
         mkdir "$targetDir"
              
-        rsync -am --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+       cp -L -r --parents $sourceDir/**/*.cmake $targetDir
+       cp -L -r --parents $sourceDir/**/*.pl $targetDir
+       cp -L -r --parents $sourceDir/**/lib*.so* $targetDir
+       cp -L -r --parents $sourceDir/bin/* $targetDir
+       cp -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
+       cp -L -r --parents $sourceDir/**/*.h $targetDir
+       cp -L -r --parents $sourceDir/**/*.hpp $targetDir
+       cp -L -r --parents $sourceDir/**/*.cpp $targetDir
+       cp -L -r --parents $sourceDir/**/*.inl $targetDir
+       cp -L -r --parents $sourceDir/**/*.idl $targetDir
+       cp -L -r --parents $sourceDir/**/*.pidl $targetDir
+             
+#        rsync -am --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -261,21 +273,33 @@ jobs:
     - name: Stage Native
       shell: pwsh
       run: |
-        $sourceDir = "./ext/OpenDDS_MacOS"
-        $targetDir = "${{ github.workspace }}/opendds-native-osx-x64"
+        $sourceDir = "./ext/OpenDDS_MacOS/"
+        $targetDir = "${{ github.workspace }}/opendds-native-osx-x64/"
         mkdir "$targetDir"
         
-        rsync -am --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        cp -L -r --parents $sourceDir/**/*.cmake $targetDir
+        cp -L -r --parents $sourceDir/**/*.pl $targetDir
+        cp -L -r --parents $sourceDir/**/lib*.dylib $targetDir
+        cp -L -r --parents $sourceDir/bin/* $targetDir
+        cp -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
+        cp -L -r --parents $sourceDir/**/*.h $targetDir
+        cp -L -r --parents $sourceDir/**/*.hpp $targetDir
+        cp -L -r --parents $sourceDir/**/*.cpp $targetDir
+        cp -L -r --parents $sourceDir/**/*.inl $targetDir
+        cp -L -r --parents $sourceDir/**/*.idl $targetDir
+        cp -L -r --parents $sourceDir/**/*.pidl $targetDir
+        
+#        rsync -am --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+#        rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
