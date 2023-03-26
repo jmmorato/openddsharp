@@ -286,7 +286,7 @@ jobs:
         rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
         rsync -r -m -v --include='Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
                 
         ls -la ./opendds-native-osx-x64
