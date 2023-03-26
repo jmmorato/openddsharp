@@ -104,12 +104,6 @@ jobs:
   build_linux_native:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        BuildPlatform: [x64]
-        BuildConfiguration: [Release]
-
     env:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
@@ -202,9 +196,6 @@ jobs:
 
   build_macos_native:
     runs-on: macos-latest
-
-    strategy:
-      fail-fast: false
 
     env:
       OpenDdsVersion: "3.23.1"
@@ -410,8 +401,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
-        path: |
-          ${{ github.workspace }}/Release/*.nupkg
+        path:  ${{ github.workspace }}/Release/*.nupkg
   
   test_artifacts:
     needs: build_artifacts
