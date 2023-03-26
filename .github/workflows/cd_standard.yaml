@@ -452,7 +452,7 @@ jobs:
       - name: Test .NET development
         shell: pwsh
         env:
-          LD_DEBUG: "detail libs"
+          LD_DEBUG: "libs"
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
@@ -474,7 +474,7 @@ jobs:
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained true --no-restore
+          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained false --no-restore
           dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --no-build
 
   publish_artifacts:
