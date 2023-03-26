@@ -258,8 +258,8 @@ jobs:
     - name: Stage Native
       shell: pwsh
       run: |
-        $sourceDir = "./ext/OpenDDS_MacOS/"
-        $targetDir = "./opendds-native-osx-x64/"
+        $sourceDir = "./ext/OpenDDS_MacOS"
+        $targetDir = "./opendds-native-osx-x64"
         mkdir "$targetDir"
         
         rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
