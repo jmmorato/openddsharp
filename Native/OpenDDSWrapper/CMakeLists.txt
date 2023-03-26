@@ -73,7 +73,7 @@ elseif(APPLE)
    set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path")
 elseif(UNIX)
    target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
-   set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-z,origin -Wl,-rpath,'$ORIGIN' -Wl,-rpath-link")
+   set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-rpath='$ORIGIN'")
 endif()
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
