@@ -72,7 +72,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.54.0.64047">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 

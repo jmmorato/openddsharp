@@ -167,17 +167,17 @@ jobs:
         $targetDir = "${{ github.workspace }}/opendds-native-linux-x64"
         mkdir "$targetDir"
              
-         cp -H -L -r --parents $sourceDir/**/*.cmake $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.pl $targetDir
-         cp -H -L -r --parents $sourceDir/**/lib*.so* $targetDir
-         cp -H -L -r --parents $sourceDir/bin/* $targetDir
-         cp -H -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.h $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.hpp $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.cpp $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.inl $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.idl $targetDir
-         cp -H -L -r --parents $sourceDir/**/*.pidl $targetDir
+        cp -L -R --parents $sourceDir/**/*.cmake $targetDir
+        cp -L -R --parents $sourceDir/**/*.pl $targetDir
+        cp -L -R --parents $sourceDir/**/lib*.so* $targetDir
+        cp -L -R --parents $sourceDir/bin/* $targetDir
+        cp -L -R --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
+        cp -L -R --parents $sourceDir/**/*.h $targetDir
+        cp -L -R --parents $sourceDir/**/*.hpp $targetDir
+        cp -L -R --parents $sourceDir/**/*.cpp $targetDir
+        cp -L -R --parents $sourceDir/**/*.inl $targetDir
+        cp -L -R --parents $sourceDir/**/*.idl $targetDir
+        cp -L -R --parents $sourceDir/**/*.pidl $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -191,7 +191,7 @@ jobs:
         rsync -am --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        zip --symlinks -r "opendds-native-linux-x64.zip" "./opendds-native-linux-x64"
+        zip -r "opendds-native-linux-x64.zip" "./opendds-native-linux-x64"
 
     - name: Artifact OpenDDS libraries
       uses: actions/upload-artifact@v3
@@ -265,17 +265,17 @@ jobs:
         $targetDir = "${{ github.workspace }}/opendds-native-osx-x64/"
         mkdir "$targetDir"
         
-        cp -H -L -r --parents $sourceDir/**/*.cmake $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.pl $targetDir
-        cp -H -L -r --parents $sourceDir/**/lib*.dylib $targetDir
-        cp -H -L -r --parents $sourceDir/bin/* $targetDir
-        cp -H -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.h $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.hpp $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.cpp $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.inl $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.idl $targetDir
-        cp -H -L -r --parents $sourceDir/**/*.pidl $targetDir
+        cp -L -R --parents $sourceDir/**/*.cmake $targetDir
+        cp -L -R --parents $sourceDir/**/*.pl $targetDir
+        cp -L -R --parents $sourceDir/**/lib*.dylib $targetDir
+        cp -L -R --parents $sourceDir/bin/ $targetDir
+        cp -L -R --parents $sourceDir/ACE_TAO/ACE/bin/ $targetDir
+        cp -L -R --parents $sourceDir/**/*.h $targetDir
+        cp -L -R --parents $sourceDir/**/*.hpp $targetDir
+        cp -L -R --parents $sourceDir/**/*.cpp $targetDir
+        cp -L -R --parents $sourceDir/**/*.inl $targetDir
+        cp -L -R --parents $sourceDir/**/*.idl $targetDir
+        cp -L -R --parents $sourceDir/**/*.pidl $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -289,7 +289,7 @@ jobs:
         rsync -am --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -am --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        zip --symlinks -r "opendds-native-osx-x64.zip" "./opendds-native-osx-x64"
+        zip -r "opendds-native-osx-x64.zip" "./opendds-native-osx-x64"
 
     - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v3
