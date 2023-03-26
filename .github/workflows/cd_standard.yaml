@@ -162,30 +162,30 @@ jobs:
         $targetDir = "./opendds-native-linux-x64"
         mkdir "$targetDir"
         
-        rsync -LKH -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -LKH -m --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -LKH -m --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -LKH -m --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        rsync -m --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -m --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -m --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -m --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='tools/dcpsinfo_dump/dcpsinfo_dump' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -m --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync --include='README.md' --exclude='*' $sourceDir/../../ $targetDir
+        rsync --include='VERSION.txt' --exclude='*' $sourceDir $targetDir
+        rsync --include='dds/idl/IDLTemplate.txt' --exclude='*' $sourceDir $targetDir
+        rsync --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --exclude='*' $sourceDir/../../ $targetDir
+        rsync --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --exclude='*' $sourceDir/../../ $targetDir
+        rsync --include='dds/InfoRepo/DCPSInfoRepo' --exclude='*' $sourceDir $targetDir
+        rsync --include='tools/dcpsinfo_dump/dcpsinfo_dump' --exclude='*' $sourceDir $targetDir
+        rsync --include='dds/idl/opendds_idl' --exclude='*' $sourceDir $targetDir
+        rsync --include='tools/repoctl/repoctl' --exclude='*' $sourceDir $targetDir
+        rsync --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --exclude='*' $sourceDir $targetDir
+        rsync --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --exclude='*' $sourceDir $targetDir
         
         ls -la ./opendds-native-linux-x64
         
@@ -258,21 +258,21 @@ jobs:
         $targetDir = "./opendds-native-osx-x64/"
         mkdir "$targetDir"
         
-        rsync -LKH -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -LKH -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LKHR -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        rsync -m --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -m --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -m --include='README.md' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -m --include='VERSION.txt' --exclude='*' $sourceDir $targetDir
         rsync -m --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -m --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -m --include='Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
