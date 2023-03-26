@@ -443,6 +443,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
         with:
@@ -474,7 +478,7 @@ jobs:
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained false --no-restore
+          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained true --no-restore
           dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --no-build
 
   publish_artifacts:
