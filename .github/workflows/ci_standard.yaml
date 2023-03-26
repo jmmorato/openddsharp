@@ -60,7 +60,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-ci
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-ci
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
@@ -128,8 +128,8 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-          ${{ github.workspace }}/ext/OpenDDS_Linux/bin
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
@@ -138,13 +138,12 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ env.BuildConfiguration }}-${{ env.BuildPlatform }}-linux-ci1
+        key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
       shell: pwsh
@@ -253,7 +252,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
@@ -263,13 +262,12 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ env.BuildConfiguration }}-${{ env.BuildPlatform }}-macos-ci
+        key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
       shell: pwsh
