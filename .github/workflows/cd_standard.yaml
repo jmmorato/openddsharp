@@ -178,18 +178,6 @@ jobs:
        cp -L -r --parents $sourceDir/**/*.inl $targetDir
        cp -L -r --parents $sourceDir/**/*.idl $targetDir
        cp -L -r --parents $sourceDir/**/*.pidl $targetDir
-             
-#        rsync -am --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -288,18 +276,6 @@ jobs:
         cp -L -r --parents $sourceDir/**/*.inl $targetDir
         cp -L -r --parents $sourceDir/**/*.idl $targetDir
         cp -L -r --parents $sourceDir/**/*.pidl $targetDir
-        
-#        rsync -am --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-#        rsync -am --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
