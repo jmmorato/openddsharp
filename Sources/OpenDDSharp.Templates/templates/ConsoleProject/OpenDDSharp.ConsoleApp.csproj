@@ -5,6 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64;x86</Platforms>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+    <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
@@ -13,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+
     <None Update="rtps.ini">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
