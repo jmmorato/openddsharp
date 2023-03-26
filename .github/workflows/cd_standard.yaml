@@ -451,6 +451,8 @@ jobs:
           
       - name: Test .NET development
         shell: pwsh
+        env:
+          LD_DEBUG: "detail libs"
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
