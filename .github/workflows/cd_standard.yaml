@@ -173,22 +173,21 @@ jobs:
         
         rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -LKH --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v -LKH --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
                 
-        rsync -r -m -v --include='VERSION.txt' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='dds/idl/IDLTemplate.txt' --exclude='*' $sourceDir $targetDir       
-        rsync -r -m -v -L --include='dds/InfoRepo/DCPSInfoRepo' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='dds/idl/opendds_idl' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='tools/repoctl/repoctl' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir       
+        rsync -r -m -v -L --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
-        rsync -r -m -v --include='README.md' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
         
         ls -la ./opendds-native-linux-x64
         ls -la ./opendds-native-linux-x64/OpenDDS_Linux
