@@ -34,7 +34,7 @@ elseif(APPLE)
   set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path -Wl,-rpath,@executable_path/../../ACE_MacOS/lib -Wl,-rpath,@executable_path/../lib")
   target_compile_options(openddsharp_idl PUBLIC -Wno-switch)
 elseif(UNIX)
-  set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-z,origin -Wl,-rpath,$ORIGIN -Wl,-rpath,$ORIGIN/../../ACE_Linux/lib -Wl,-rpath,$ORIGIN/../lib")
+  set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-z,origin -Wl,-rpath,'$ORIGIN' -Wl,-rpath,'$ORIGIN/../../ACE_Linux/lib' -Wl,-rpath,'$ORIGIN/../lib' -Wl,-rpath-link")
 endif()
 
 target_include_directories(openddsharp_idl PRIVATE ${TAO_ROOT_BE_INCLUDE} PRIVATE ${TAO_ROOT_INCLUDE} PRIVATE ${TAO_ROOT})

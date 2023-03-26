@@ -119,7 +119,7 @@ jobs:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"        
-      LD_RPATH_FLAGS: "-Wl,-z,origin -Wl,-rpath,$ORIGIN"
+      LD_RPATH_FLAGS: "-Wl,-z,origin -Wl,-rpath,'$ORIGIN' -Wl,-rpath-link"
 
     steps:
     - uses: actions/checkout@v3
