@@ -162,17 +162,17 @@ jobs:
         $targetDir = "${{ github.workspace }}/opendds-native-linux-x64"
         mkdir "$targetDir"
         
-        rsync -L -a -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -L -a -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -LK -a -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -L -a -m --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -L -a -m --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
