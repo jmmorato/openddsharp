@@ -167,17 +167,17 @@ jobs:
         $targetDir = "${{ github.workspace }}/opendds-native-linux-x64"
         mkdir "$targetDir"
              
-         cp -L -r --parents $sourceDir/**/*.cmake $targetDir
-         cp -L -r --parents $sourceDir/**/*.pl $targetDir
-         cp -L -r --parents $sourceDir/**/lib*.so* $targetDir
-         cp -L -r --parents $sourceDir/bin/* $targetDir
-         cp -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
-         cp -L -r --parents $sourceDir/**/*.h $targetDir
-         cp -L -r --parents $sourceDir/**/*.hpp $targetDir
-         cp -L -r --parents $sourceDir/**/*.cpp $targetDir
-         cp -L -r --parents $sourceDir/**/*.inl $targetDir
-         cp -L -r --parents $sourceDir/**/*.idl $targetDir
-         cp -L -r --parents $sourceDir/**/*.pidl $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.cmake $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.pl $targetDir
+         cp -H -L -r --parents $sourceDir/**/lib*.so* $targetDir
+         cp -H -L -r --parents $sourceDir/bin/* $targetDir
+         cp -H -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.h $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.hpp $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.cpp $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.inl $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.idl $targetDir
+         cp -H -L -r --parents $sourceDir/**/*.pidl $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -265,17 +265,17 @@ jobs:
         $targetDir = "${{ github.workspace }}/opendds-native-osx-x64/"
         mkdir "$targetDir"
         
-        cp -L -r --parents $sourceDir/**/*.cmake $targetDir
-        cp -L -r --parents $sourceDir/**/*.pl $targetDir
-        cp -L -r --parents $sourceDir/**/lib*.dylib $targetDir
-        cp -L -r --parents $sourceDir/bin/* $targetDir
-        cp -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
-        cp -L -r --parents $sourceDir/**/*.h $targetDir
-        cp -L -r --parents $sourceDir/**/*.hpp $targetDir
-        cp -L -r --parents $sourceDir/**/*.cpp $targetDir
-        cp -L -r --parents $sourceDir/**/*.inl $targetDir
-        cp -L -r --parents $sourceDir/**/*.idl $targetDir
-        cp -L -r --parents $sourceDir/**/*.pidl $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.cmake $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.pl $targetDir
+        cp -H -L -r --parents $sourceDir/**/lib*.dylib $targetDir
+        cp -H -L -r --parents $sourceDir/bin/* $targetDir
+        cp -H -L -r --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.h $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.hpp $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.cpp $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.inl $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.idl $targetDir
+        cp -H -L -r --parents $sourceDir/**/*.pidl $targetDir
         
         rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
         rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
