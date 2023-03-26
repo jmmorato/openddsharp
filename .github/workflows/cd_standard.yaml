@@ -166,30 +166,30 @@ jobs:
         $sourceDir = "./ext/OpenDDS_Linux"
         $targetDir = "${{ github.workspace }}/opendds-native-linux-x64"
         mkdir "$targetDir"
-             
-        cp -L -R --parents $sourceDir/**/*.cmake $targetDir
-        cp -L -R --parents $sourceDir/**/*.pl $targetDir
-        cp -L -R --parents $sourceDir/**/lib*.so* $targetDir
-        cp -L -R --parents $sourceDir/bin/* $targetDir
-        cp -L -R --parents $sourceDir/ACE_TAO/ACE/bin/* $targetDir
-        cp -L -R --parents $sourceDir/**/*.h $targetDir
-        cp -L -R --parents $sourceDir/**/*.hpp $targetDir
-        cp -L -R --parents $sourceDir/**/*.cpp $targetDir
-        cp -L -R --parents $sourceDir/**/*.inl $targetDir
-        cp -L -R --parents $sourceDir/**/*.idl $targetDir
-        cp -L -R --parents $sourceDir/**/*.pidl $targetDir
         
-        rsync -am --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -am --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -am --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
-        rsync -am --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='tools/dcpsinfo_dump/dcpsinfo_dump' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -am --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='ACE_TAO/ACE/bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -L -a -m --include='README.md' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -L -a -m --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -L -a -m --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' $sourceDir/../../ $targetDir
+        rsync -L -a -m --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='tools/dcpsinfo_dump/dcpsinfo_dump' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -L -a -m --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         zip -r "opendds-native-linux-x64.zip" "./opendds-native-linux-x64"
 
