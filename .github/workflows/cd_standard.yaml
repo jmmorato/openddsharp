@@ -108,6 +108,7 @@ jobs:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
+      LD_RPATH_FLAGS: "-Wl,-rpath,$$ORIGIN"
 
     steps:
     - uses: actions/checkout@v3
@@ -463,8 +464,7 @@ jobs:
           DOTNET_GENERATE_ASPNET_CERTIFICATE: false
           DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
           DOTNET_MULTILEVEL_LOOKUP: 0
-          DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
-          LD_RPATH_FLAGS: "-Wl,-rpath,$$ORIGIN"
+          DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1          
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
