@@ -446,12 +446,6 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
-          
-      - name: Install ICU packages
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install libicu-dev
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
@@ -461,16 +455,6 @@ jobs:
           
       - name: Test .NET development
         shell: pwsh
-        env:
-          LD_DEBUG: "libs"
-          LD_LIBRARY_PATH: "."
-          DOTNET_CLI_TELEMETRY_OPTOUT: 1
-          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-          DOTNET_NOLOGO: true
-          DOTNET_GENERATE_ASPNET_CERTIFICATE: false
-          DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
-          DOTNET_MULTILEVEL_LOOKUP: 0
-          DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
@@ -503,9 +487,9 @@ jobs:
           Start-Process -FilePath $executable
 
   publish_artifacts:
-    runs-on: windows-latest
-
     needs: test_artifacts
+    if: ${{ github.event.inputs.publish == 'true' }}
+    runs-on: windows-latest
 
     steps:
       - name: Download OpenDDSharp NuGets
@@ -514,8 +498,7 @@ jobs:
           name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Release
 
-      - name: Publish NuGet packages
-        if: ${{ github.event.inputs.publish == 'true' }}
+      - name: Publish NuGet packages        
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         shell: pwsh
