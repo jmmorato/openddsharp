@@ -464,6 +464,7 @@ jobs:
           DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
           DOTNET_MULTILEVEL_LOOKUP: 0
           DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
+          LD_RPATH_FLAGS: "-Wl,-rpath,$$ORIGIN"
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
