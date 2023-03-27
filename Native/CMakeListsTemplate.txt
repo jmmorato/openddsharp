@@ -9,6 +9,10 @@ if(MSVC)
     add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
 endif()
 
+if(UNIX)
+    set(CMAKE_INSTALL_RPATH $ORIGIN)
+endif()
+
 add_library(${PROJECT_NAME} SHARED ${WRAPPER_FILES})
 
 if(MSVC)
