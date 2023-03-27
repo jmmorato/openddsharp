@@ -108,7 +108,6 @@ jobs:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
-      LDFLAGS: "-Wl,-rpath,$$ORIGIN"
 
     steps:
     - uses: actions/checkout@v3

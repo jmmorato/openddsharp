@@ -10,6 +10,10 @@ endif()
 
 find_package(OpenDDS REQUIRED)
 
+if(UNIX)
+    set(CMAKE_INSTALL_RPATH $ORIGIN)
+endif()
+
 add_library(OpenDDSWrapper SHARED
 Ace.h Ace.cpp
 BuiltinTopicData.h
@@ -72,8 +76,7 @@ elseif(APPLE)
    target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)
    set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path")
 elseif(UNIX)
-   target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)      
-   set_target_properties(OpenDDSWrapper PROPERTIES LINK_FLAGS "-Wl,-rpath,$ORIGIN")
+   target_compile_options(OpenDDSWrapper PUBLIC -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare)   
 endif()
 
 target_link_libraries(OpenDDSWrapper OpenDDS::OpenDDS)
