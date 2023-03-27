@@ -464,6 +464,13 @@ jobs:
         env:
           LD_DEBUG: "libs"
           LD_LIBRARY_PATH: "."
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          DOTNET_NOLOGO: true
+          DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+          DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+          DOTNET_MULTILEVEL_LOOKUP: 0
+          DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
@@ -486,7 +493,14 @@ jobs:
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained true --no-restore
-          dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --no-build
+          dotnet publish TestConsole.csproj --output ./Publish --configuration Release --runtime ${{ matrix.runtime }} --self-contained true
+          $executable = "./TestConsole"
+          if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows))
+          {
+              $executable += ".exe"
+          }
+          cd ./Publish
+          Start-Process -FilePath $executable
 
   publish_artifacts:
     runs-on: windows-latest
