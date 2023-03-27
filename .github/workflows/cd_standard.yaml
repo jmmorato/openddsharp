@@ -448,10 +448,10 @@ jobs:
           dotnet-version: '6.0.x'
           
       - name: Install ICU packages
-        if: matrix.runtime == 'ubuntu-latest'
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt-get update
-          sudo apt-get -y install libicu-dev  
+          sudo apt-get -y install libicu-dev
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
