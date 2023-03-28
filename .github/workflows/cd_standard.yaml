@@ -488,15 +488,15 @@ jobs:
           dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
           
           $publishFolder = "${{ github.workspace }}/Publish/"
-          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration Release --runtime ${{ matrix.runtime }} --self-contained
-          cd ${{ github.workspace }}
-          
           $executable = "TestConsole"
           if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows))
           {
+              $publishFolder = "${{ github.workspace }}\Publish\"
               $executable += ".exe"
           }
-         
+          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration Release --runtime ${{ matrix.runtime }} --self-contained
+          cd ${{ github.workspace }}
+
           $pinfo = New-Object System.Diagnostics.ProcessStartInfo
           $pinfo.FileName = $publishFolder + $executable
           $pinfo.RedirectStandardError = $true
@@ -511,9 +511,14 @@ jobs:
           $p.WaitForExit()
           
           $stdout = $p.StandardOutput.ReadToEnd()
-          $stderr = $p.StandardError.ReadToEnd()
           Write-Host "stdout: $stdout"
-          Write-Error "stderr: $stderr"
+          
+          $stderr = $p.StandardError.ReadToEnd()
+          if ($stderr)
+          {
+              Write-Error "stderr: $stderr"
+          }
+
           Write-Host "exit code: " + $p.ExitCode
 
   publish_artifacts:
