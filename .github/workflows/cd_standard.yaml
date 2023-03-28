@@ -489,7 +489,7 @@ jobs:
           dotnet publish TestConsole.csproj --output ./Publish --configuration Release --runtime ${{ matrix.runtime }} --self-contained true
           cd ./Publish
           
-          $executable = "./TestConsole"
+          $executable = "TestConsole"
           if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows))
           {
             $executable += ".exe"
