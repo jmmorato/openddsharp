@@ -485,22 +485,24 @@ jobs:
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained true --no-restore --self-contained true
-          dotnet publish TestConsole.csproj --output ${{ github.workspace }}/Publish --configuration Release --runtime ${{ matrix.runtime }} --self-contained true
+          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          
+          $publishFolder = "${{ github.workspace }}/Publish/"
+          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration Release --runtime ${{ matrix.runtime }} --self-contained
           cd ${{ github.workspace }}
           
           $executable = "TestConsole"
           if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows))
           {
-            $executable += ".exe"
+              $executable += ".exe"
           }
          
           $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-          $pinfo.FileName = $executable
+          $pinfo.FileName = $publishFolder + $executable
           $pinfo.RedirectStandardError = $true
           $pinfo.RedirectStandardOutput = $true
           $pinfo.UseShellExecute = $false
-          $pinfo.WorkingDirectory = "${{ github.workspace }}/Publish"
+          $pinfo.WorkingDirectory = "$publishFolder"
           $pinfo.CreateNoWindow = $true
           
           $p = New-Object System.Diagnostics.Process
