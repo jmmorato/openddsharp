@@ -457,7 +457,6 @@ jobs:
         shell: pwsh
         env:
           LD_DEBUG: "libs"
-          LD_LIBRARY_PATH: "."
           DOTNET_CLI_TELEMETRY_OPTOUT: 1
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
           DOTNET_NOLOGO: true
@@ -486,9 +485,34 @@ jobs:
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained true --no-restore
+          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained true --no-restore --self-contained true
           dotnet publish TestConsole.csproj --output ./Publish --configuration Release --runtime ${{ matrix.runtime }} --self-contained true
-          dotnet run TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }}          
+          cd ./Publish
+          
+          $executable = "./TestConsole"
+          if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows))
+          {
+            $executable += ".exe"
+          }
+         
+          $pinfo = New-Object System.Diagnostics.ProcessStartInfo
+          $pinfo.FileName = $executable
+          $pinfo.RedirectStandardError = $true
+          $pinfo.RedirectStandardOutput = $true
+          $pinfo.UseShellExecute = $false
+          $pinfo.WorkingDirectory = "${{ github.workspace }}/Publish"
+          $pinfo.CreateNoWindow = $true
+          
+          $p = New-Object System.Diagnostics.Process
+          $p.StartInfo = $pinfo
+          $p.Start() | Out-Null
+          $p.WaitForExit()
+          
+          $stdout = $p.StandardOutput.ReadToEnd()
+          $stderr = $p.StandardError.ReadToEnd()
+          Write-Host "stdout: $stdout"
+          Write-Error "stderr: $stderr"
+          Write-Host "exit code: " + $p.ExitCode
 
   publish_artifacts:
     needs: test_artifacts
