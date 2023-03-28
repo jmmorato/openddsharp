@@ -108,7 +108,7 @@ jobs:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-rpath,$$ORIGIN"
+      LD_RPATH_FLAGS: "'-Wl,-rpath,$$ORIGIN'"
 
     steps:
     - uses: actions/checkout@v3
@@ -493,7 +493,7 @@ jobs:
           $pinfo.RedirectStandardError = $true
           $pinfo.RedirectStandardOutput = $false
           $pinfo.UseShellExecute = $false
-          $pinfo.WorkingDirectory = "$publishFolder"
+          $pinfo.WorkingDirectory = "${{ github.workspace }}"
           $pinfo.CreateNoWindow = $true
           
           $p = New-Object System.Diagnostics.Process
