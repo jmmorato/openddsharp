@@ -493,7 +493,7 @@ jobs:
           $pinfo.RedirectStandardError = $true
           $pinfo.RedirectStandardOutput = $false
           $pinfo.UseShellExecute = $false
-          $pinfo.WorkingDirectory = "$publishFolder"
+          $pinfo.WorkingDirectory = "${{ github.workspace }}"
           $pinfo.CreateNoWindow = $true
           
           $p = New-Object System.Diagnostics.Process
