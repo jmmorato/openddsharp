@@ -108,7 +108,7 @@ jobs:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "'-Wl,-rpath,$$ORIGIN'"
+      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
 
     steps:
     - uses: actions/checkout@v3
@@ -208,7 +208,7 @@ jobs:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
-      LDFLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
     - uses: actions/checkout@v3
