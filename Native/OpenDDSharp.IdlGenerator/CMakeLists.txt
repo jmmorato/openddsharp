@@ -3,12 +3,6 @@ cmake_minimum_required(VERSION 3.8.2)
 
 find_package(OpenDDS REQUIRED)
 
-if(UNIX)
-    SET(CMAKE_SKIP_BUILD_RPATH FALSE)
-    SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-    set(CMAKE_INSTALL_RPATH $ORIGIN)
-endif()
-
 add_executable(openddsharp_idl
 annotations.h annotations.cpp
 be_extern.h
