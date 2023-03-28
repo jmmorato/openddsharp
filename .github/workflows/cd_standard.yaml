@@ -499,12 +499,24 @@ jobs:
           $p = New-Object System.Diagnostics.Process
           $p.StartInfo = $pinfo
           $p.Start() | Out-Null
+          
+          Start-Sleep -Seconds 5.0
+
+          $stdout = ""
+          while ($p.StandardOutput.Peek() > -1)
+          {
+              $stdout += $p.StandardOutput.ReadLine()
+          }
+          
+          $stderr = ""
+          while ($p.StandardError.Peek() > -1)
+          {
+              $stderr += $p.StandardError.ReadLine()
+          }
           $p.WaitForExit()
           
-          $stdout = $p.StandardOutput.ReadToEnd()
           Write-Host "stdout: $stdout"
-          
-          $stderr = $p.StandardError.ReadToEnd()
+
           if ($stderr)
           {
               Write-Error "stderr: $stderr"
