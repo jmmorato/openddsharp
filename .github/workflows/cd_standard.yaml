@@ -514,6 +514,10 @@ jobs:
         with:
           name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Release
+          
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v6
 
       - name: Publish NuGet packages        
         env:
