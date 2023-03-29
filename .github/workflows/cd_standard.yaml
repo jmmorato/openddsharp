@@ -13,6 +13,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  OpenDdsVersion: "3.23.1"
+  MajorVersion: "0"
+  MinorVersion: "8"
+
 jobs:
   build_windows_native:
     runs-on: windows-latest
@@ -21,8 +26,6 @@ jobs:
       matrix:
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release]
-    env:
-      OpenDdsVersion: "3.23.1"
 
     steps:
     - uses: actions/checkout@v3
@@ -105,7 +108,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
@@ -205,7 +207,6 @@ jobs:
     runs-on: macos-latest
 
     env:
-      OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
@@ -305,11 +306,6 @@ jobs:
     runs-on: windows-latest
 
     needs: [build_windows_native, build_linux_native, build_macos_native]
-
-    env:
-      OpenDdsVersion: "3.23.1"
-      MajorVersion: "0"
-      MinorVersion: "8"
 
     steps:
     - uses: actions/checkout@v3
@@ -419,11 +415,6 @@ jobs:
   
   test_artifacts:
     needs: build_artifacts
-
-    env:
-      OpenDdsVersion: "3.23.1"
-      MajorVersion: "0"
-      MinorVersion: "8"
 
     strategy:
       fail-fast: false
