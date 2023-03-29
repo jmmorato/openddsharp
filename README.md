@@ -64,9 +64,7 @@ The following table shows the Target Frameworks that are already implemented and
 
 | Target Framework  | Status             |
 |-------------------|--------------------|
-| net461 (or above) | :white_check_mark: |
-| netcoreapp3.1     | :white_check_mark: |
-| net5.0            | :white_check_mark: |
+| net462 (or above) | :white_check_mark: |
 | net6.0            | :white_check_mark: |
 | net6.0-android    | :x:                |
 | net6.0-ios        | :x:                |

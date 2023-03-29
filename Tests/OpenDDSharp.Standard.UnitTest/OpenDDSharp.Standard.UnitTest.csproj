@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="('$(OS)'=='Windows_NT')">net461;net462;net47;net471;net472;net48;netcoreapp3.1;net5.0;net6.0;net7.0;</TargetFrameworks>
-    <TargetFrameworks Condition="('$(OS)'!='Windows_NT') And ('$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64')">net6.0;net7.0;</TargetFrameworks>
-    <TargetFrameworks Condition="('$(OS)'!='Windows_NT') And ('$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64')">netcoreapp3.1;net5.0;net6.0;net7.0;</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
+<!--    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net462;net47;net471;net472;net48;net481;net6.0;net7.0;</TargetFrameworks>-->
+<!--    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">net6.0;net7.0;</TargetFrameworks>-->
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -72,7 +72,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.54.0.64047">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 

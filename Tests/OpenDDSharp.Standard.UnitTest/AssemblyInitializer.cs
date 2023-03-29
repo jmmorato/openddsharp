@@ -87,7 +87,10 @@ namespace OpenDDSharp.Standard.UnitTest
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
-            _supportProcess.KillProcess(_infoProcess);
+            if (_infoProcess != null)
+            {
+                _supportProcess.KillProcess(_infoProcess);
+            }
             if (File.Exists(INFOREPO_IOR))
             {
                 File.Delete(INFOREPO_IOR);
