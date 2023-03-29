@@ -6,7 +6,7 @@
     <Platforms>x64;x86;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
     <!--  VS doesn't call MSBuild to check if projects are up-to-date and it doesn't check the inputs of custom target.
-          The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
+     The following tag disable its custom logic and use MSBuild logic. https://stackoverflow.com/a/13414681/3021815 -->
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>

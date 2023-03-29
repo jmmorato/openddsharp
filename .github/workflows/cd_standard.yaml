@@ -31,58 +31,10 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    #- name: Cache OpenDDS libraries
-    #  id: opendds-libraries-windows-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-    #    key: opendds-windows-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd1
-
-    #- name: Cache OpenDDSharp native
-    #  id: openddsharp-libraries-windows-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #        ${{ github.workspace }}/README.md
-    #        ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
-    #        ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-    #    key: openddsharp-windows-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-${{ github.run_number }}-1
-
-    #- name: Build & Test with Cake (No cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
-    #  working-directory: ${{ github.workspace }}/Build
-
-    #- name: Build & Test with Cake (Cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
-    #  working-directory: ${{ github.workspace }}/Build
-
-    - name: Build native with Cake
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
-      working-directory: ${{ github.workspace }}/Build
-
-    - name: Artifacts OpenDDS libraries
-      uses: actions/upload-artifact@v3
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-windows-cd
+      uses: actions/cache@v3
       with:
-        name: opendds-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
@@ -98,26 +50,65 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-cd
 
-    - name: Artifacts OpenDDSharp native
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Stage Native
+      shell: pwsh
+      run: |
+        $targetDir = ".\opendds-native-win-${{ matrix.BuildPlatform }}"
+        New-Item -Path "." -Name "opendds-native-win-${{ matrix.BuildPlatform }}" -ItemType "directory"
+        
+        XCOPY ".\README.md" "$targetDir\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
+        
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.lib" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.exe" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.h" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.hpp" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cpp" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.inl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.idl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pidl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        
+        $compress = @{
+          Path = $targetDir
+          CompressionLevel = "Fastest"
+          DestinationPath = ".\opendds-native-win-${{ matrix.BuildPlatform }}.zip"
+        }
+        Compress-Archive @compress        
+
+    - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v3
       with:
-        name: openddsharp-windows-${{ matrix.BuildPlatform }}-${{ github.run_number }}
-        path: |
-            ${{ github.workspace }}/README.md
-            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSWrapper/Release/OpenDDSWrapper.dll
-            ${{ github.workspace }}/Native/build_${{ matrix.BuildPlatform }}/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
+        name: opendds-win-${{ matrix.BuildPlatform }}-${{ github.run_number }}
+        path: ${{ github.workspace }}/opendds-native-win-${{ matrix.BuildPlatform }}.zip
 
   build_linux_native:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        BuildPlatform: [x64]
-        BuildConfiguration: [Release]
+
     env:
       OpenDdsVersion: "3.23.1"
-      LD_RPATH_FLAGS: "-Wl,-z,origin -Wl,-rpath,$ORIGIN"
+      BuildPlatform: "x64"
+      BuildConfiguration: "Release"
+      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
 
     steps:
     - uses: actions/checkout@v3
@@ -126,71 +117,17 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    #- name: Cache OpenDDS libraries
-    #  id: opendds-libraries-linux-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-    #    key: opendds-linux-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
-
-    #- name: Cache OpenDDSharp native
-    #  id: openddsharp-libraries-linux-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so
-    #      ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
-    #    key: openddsharp-linux-${{ github.run_number }}
-
-    #- name: Build Native (No cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-linux-cd.outputs.cache-hit != 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-    #  working-directory: ${{ github.workspace }}/Build
-
-    #- name: Build Native (Cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-linux-cd.outputs.cache-hit == 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
-    #  working-directory: ${{ github.workspace }}/Build
-
-    - name: Build Native
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-      working-directory: ${{ github.workspace }}/Build
-
     - name: Cache OpenDDS libraries
-      uses: actions/upload-artifact@v3
+      id: opendds-libraries-linux-cd
+      uses: actions/cache@v3
       with:
-        name: opendds-linux-x64-${{ github.run_number }}
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-          ${{ github.workspace }}/ext/OpenDDS_Linux/bin
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
@@ -199,106 +136,98 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
-          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo          
+          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl          
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-cd
 
-    - name: Cache OpenDDSharp native
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux-cd.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-linux-cd.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Stage Native
+      shell: pwsh
+      run: |
+        $sourceDir = "./ext/OpenDDS_Linux"
+        $targetDir = "./opendds-native-linux-x64"
+        mkdir "$targetDir"
+        
+        rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v -LKH --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
+                
+        rsync -r -m -v --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir       
+        rsync -r -m -v -L --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
+        
+        ls -la ./opendds-native-linux-x64
+        ls -la ./opendds-native-linux-x64/OpenDDS_Linux
+        ls -la ./opendds-native-linux-x64/Native
+        
+        zip -r "opendds-native-linux-x64.zip" "./opendds-native-linux-x64"
+
+    - name: Artifact OpenDDS libraries
       uses: actions/upload-artifact@v3
       with:
-        name: openddsharp-linux-x64-${{ github.run_number }}
-        path: |
-          ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so
-          ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
+        name: opendds-linux-x64-${{ github.run_number }}
+        path: ${{ github.workspace }}/opendds-native-linux-x64.zip
 
   build_macos_native:
     runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        BuildPlatform: [x64]
-        BuildConfiguration: [Release]
+
     env:
       OpenDdsVersion: "3.23.1"
+      BuildPlatform: "x64"
+      BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
-
     - uses: actions/checkout@v3
 
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
 
-    #- name: Cache OpenDDS libraries
-    #  id: opendds-libraries-macos-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-    #    key: opendds-macos-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-cd
-
-    #- name: Cache OpenDDSharp native
-    #  id: openddsharp-libraries-macos-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib
-    #      ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
-    #    key: openddsharp-macos-${{ github.run_number }}
-
-    #- name: Build Native (No cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-macos-cd.outputs.cache-hit != 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-    #  working-directory: ${{ github.workspace }}/Build
-      
-    #- name: Build Native (Cached)
-    #  shell: pwsh
-    #  if: steps.opendds-libraries-macos-cd.outputs.cache-hit == 'true'
-    #  run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
-    #  working-directory: ${{ github.workspace }}/Build
-
-    - name: Build Native
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-      working-directory: ${{ github.workspace }}/Build
-
-    - name: Artifacts OpenDDS libraries
-      uses: actions/upload-artifact@v3
+    - name: Cache OpenDDS libraries
+      id: opendds-libraries-macos-cd
+      uses: actions/cache@v3
       with:
-        name: opendds-macos-x64-${{ github.run_number }}
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
@@ -307,26 +236,76 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo          
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl          
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
+        key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
 
-    - name: Artifact OpenDDSharp native
-      id: openddsharp-libraries-macos-cd
+    - name: Build Native (No cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos-cd.outputs.cache-hit != 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      working-directory: ${{ github.workspace }}/Build
+      
+    - name: Build Native (Cached)
+      shell: pwsh
+      if: steps.opendds-libraries-macos-cd.outputs.cache-hit == 'true'
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      working-directory: ${{ github.workspace }}/Build
+
+    - name: Stage Native
+      shell: pwsh
+      run: |
+        $sourceDir = "./ext/OpenDDS_MacOS"
+        $targetDir = "./opendds-native-osx-x64"
+        mkdir "$targetDir"
+        
+        rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v -LKH --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir       
+        rsync -r -m -v -L --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        
+        rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
+                
+        ls -la ./opendds-native-osx-x64
+        ls -la ./opendds-native-osx-x64/OpenDDS_MacOS
+        ls -la ./opendds-native-osx-x64/Native
+
+        zip -r "opendds-native-osx-x64.zip" "./opendds-native-osx-x64"
+
+    - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v3
       with:
-        name: openddsharp-macos-x64-${{ github.run_number }}
-        path: |
-          ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib
-          ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
+        name: opendds-osx-x64-${{ github.run_number }}
+        path: ${{ github.workspace }}/opendds-native-osx-x64.zip
 
-  build_openddsharp_windows:
+  build_artifacts:
     runs-on: windows-latest
+
     needs: [build_windows_native, build_linux_native, build_macos_native]
+
     env:
       OpenDdsVersion: "3.23.1"
       MajorVersion: "0"
@@ -335,189 +314,63 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
+    - name: Setup dotnet 6.0
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture 'x64' -Channel 6.0;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
+    - name: Setup dotnet 7.0
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture 'x64' -Channel 7.0;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+    
     - name: Get branch names
       id: branch-name
       uses: tj-actions/branch-names@v6
 
-    #- name: Restore OpenDDS libraries Windows x86
-    #  id: restore-opendds-libraries-windows-x86
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.dll
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.lib
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.exe
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_x86/VERSION.txt
-    #    key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x86-cd1
-
-    #- name: Restore OpenDDSharp native Windows x86
-    #  id: restore-openddsharp-libraries-windows-x86
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/Native/build_x86/OpenDDSWrapper/Release/OpenDDSWrapper.dll
-    #      ${{ github.workspace }}/Native/build_x86/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-    #    key: openddsharp-windows-Release-x86-${{ github.run_number }}-1
-
-    #- name: Restore OpenDDS libraries Windows x64
-    #  id: restore-opendds-libraries-windows-x64
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.dll
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.lib
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.exe
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_x64/VERSION.txt
-    #    key: opendds-windows-${{ env.OpenDdsVersion }}-Release-x64-cd1
-
-    #- name: Restore OpenDDSharp native Windows x64
-    #  id: restore-openddsharp-libraries-windows-x64
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/Native/build_x64/OpenDDSWrapper/Release/OpenDDSWrapper.dll
-    #      ${{ github.workspace }}/Native/build_x64/OpenDDSharp.IdlGenerator/Release/openddsharp_idl.exe
-    #    key: openddsharp-windows-Release-x64-${{ github.run_number }}-1
-
-    #- name: Restore OpenDDS libraries Linux
-    #  id: restore-opendds-libraries-linux-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
-    #      ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-    #    key: opendds-linux-${{ env.OpenDdsVersion }}-Release-x64-cd
-
-    #- name: Restore OpenDDSharp native Linux
-    #  id: restore-openddsharp-libraries-linux
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so
-    #      ${{ github.workspace }}/Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl
-    #    key: openddsharp-linux-${{ github.run_number }}
-
-    #- name: Restore OpenDDS libraries MacOS
-    #  id: restore-opendds-libraries-macos-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
-    #      ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-    #    key: opendds-macos-${{ env.OpenDdsVersion }}-Release-x64-cd
-
-    #- name: Restore OpenDDSharp native MacOS
-    #  id: restore-openddsharp-libraries-macos-cd
-    #  uses: actions/cache@v3
-    #  with:
-    #    path: |
-    #      ${{ github.workspace }}/README.md
-    #      ${{ github.workspace }}/Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib
-    #      ${{ github.workspace }}/Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl
-    #    key: openddsharp-macos-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDSx86
+    - name: Download OpenDDS Native win-x86
       uses: actions/download-artifact@v3
       with:
-        name: opendds-windows-x86-${{ github.run_number }}
+        name: opendds-win-x86-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDSharp x86
+    - name: Download OpenDDS Native win-x64
       uses: actions/download-artifact@v3
       with:
-        name: openddsharp-windows-x86-${{ github.run_number }}
+        name: opendds-win-x64-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDS x64
-      uses: actions/download-artifact@v3
-      with:
-        name: opendds-windows-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDSharp x64
-      uses: actions/download-artifact@v3
-      with:
-        name: openddsharp-windows-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDS Linux
+    - name: Download OpenDDS Native linux-x64
       uses: actions/download-artifact@v3
       with:
         name: opendds-linux-x64-${{ github.run_number }}
 
-    - name: Download artifacts OpenDDSharp Linux
+    - name: Download OpenDDS Native osx-x64
       uses: actions/download-artifact@v3
       with:
-        name: openddsharp-linux-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDS MacOS
-      uses: actions/download-artifact@v3
-      with:
-        name: opendds-macos-x64-${{ github.run_number }}
-
-    - name: Download artifacts OpenDDSharp MacOS
-      uses: actions/download-artifact@v3
-      with:
-        name: openddsharp-macos-x64-${{ github.run_number }}
+        name: opendds-osx-x64-${{ github.run_number }}
+        
+    - name: Prepare OpenDDS Native
+      shell: pwsh
+      run: |
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x86.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-linux-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-osx-x64.zip" -DestinationPath "."
+        
+        XCOPY ".\opendds-native-win-x64\OpenDDS_x64\*" "${{ github.workspace }}\ext\OpenDDS_x64\" /D /S /Y /M
+        XCOPY ".\opendds-native-win-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        
+        XCOPY ".\opendds-native-win-x86\OpenDDS_x86\*" "${{ github.workspace }}\ext\OpenDDS_x86\" /D /S /Y /M
+        XCOPY ".\opendds-native-win-x86\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        
+        XCOPY ".\opendds-native-linux-x64\OpenDDS_Linux\*" "${{ github.workspace }}\ext\OpenDDS_Linux\" /D /S /Y /M
+        XCOPY ".\opendds-native-linux-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        
+        XCOPY ".\opendds-native-osx-x64\OpenDDS_MacOS\*" "${{ github.workspace }}\ext\OpenDDS_MacOS\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
 
     - name: Set release version
       shell: pwsh
@@ -548,22 +401,6 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
-    - name: Build & Test with Cake
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --BuildConfiguration=Release --BuildPlatform=x64 --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
-      working-directory: ${{ github.workspace }}/Build
-
-    - name: Prepare coverage result
-      shell: pwsh
-      run: Get-ChildItem -Path ${{ github.workspace }}/TestResults -Include *.info -Recurse | ForEach-Object { Copy-Item -Path $_.FullName -Destination ${{ github.workspace }}/TestResults }
-      working-directory: ${{ github.workspace }}
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@v1.2.4
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN }}
-        path-to-lcov: ${{ github.workspace }}/TestResults/coverage.info
-
     - name: Build OpenDDSharp solution AnyCPU
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
@@ -578,14 +415,116 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
-        path: |
-          ${{ github.workspace }}/Release/*.nupkg
+        path:  ${{ github.workspace }}/Release/*.nupkg
+  
+  test_artifacts:
+    needs: build_artifacts
 
-    - name: Publish NuGet packages
-      if:  ${{ github.event.inputs.publish == 'true' }}
-      env:
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
-      working-directory: ${{ github.workspace }}/Build
+    env:
+      OpenDdsVersion: "3.23.1"
+      MajorVersion: "0"
+      MinorVersion: "8"
 
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            runtime: win-x86
+          - os: windows-latest
+            runtime: win-x64
+          - os: ubuntu-latest
+            runtime: linux-x64
+          - os: macos-latest
+            runtime: osx-x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Download OpenDDSharp NuGets
+        uses: actions/download-artifact@v3
+        with:
+          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+          path: ${{ github.workspace }}/nupkg
+          
+      - name: Test .NET development
+        shell: pwsh     
+        run: |
+          $year = (Get-Date).ToString("yy")
+          $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
+          dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
+          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.$year$dayOfYear.${{ github.run_number }}-beta.nupkg"
+          New-Item -Path "." -Name "Test" -ItemType "directory"
+          cd Test
+          dotnet new openddsharp-idl-project
+          Remove-Item ./IDL/Test.idl
+          Copy-Item "${{ github.workspace }}/Tests/TestIdlStandard/IDL/Test.idl" -Destination "./IDL" -Force
+          dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
+          dotnet build Test.csproj --configuration Release
+          dotnet clean Test.csproj
+          cd ..
+          New-Item -Path "." -Name "TestConsole" -ItemType "directory"
+          cd TestConsole
+          dotnet new openddsharp-console-app
+          Remove-Item Program.cs
+          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
+          dotnet add TestConsole.csproj reference ../Test/Test.csproj
+          dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
+          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          
+          $publishFolder = "${{ github.workspace }}/Publish/"
+          $executable = "TestConsole"
+          if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows))
+          {
+              $publishFolder = "${{ github.workspace }}\Publish\"
+              $executable += ".exe"
+          }
+          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration Release --runtime ${{ matrix.runtime }} --self-contained
+          cd ${{ github.workspace }}
+
+          $pinfo = New-Object System.Diagnostics.ProcessStartInfo
+          $pinfo.FileName = $publishFolder + $executable
+          $pinfo.RedirectStandardError = $true
+          $pinfo.RedirectStandardOutput = $false
+          $pinfo.UseShellExecute = $false
+          $pinfo.WorkingDirectory = "$publishFolder"
+          $pinfo.CreateNoWindow = $true
+          
+          $p = New-Object System.Diagnostics.Process
+          $p.StartInfo = $pinfo
+          $p.Start() | Out-Null
+         
+          $p.WaitForExit()
+
+          $stderr = $p.StandardError.ReadToEnd()
+          if ($stderr)
+          {
+              Write-Error "stderr: $stderr"
+          }
+          
+          Write-Host "exit code: $($p.ExitCode)"
+
+  publish_artifacts:
+    needs: test_artifacts
+    if: ${{ github.event.inputs.publish == 'true' }}
+    runs-on: windows-latest
+
+    steps:
+      - name: Download OpenDDSharp NuGets
+        uses: actions/download-artifact@v3
+        with:
+          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+          path: ${{ github.workspace }}/Release
+
+      - name: Publish NuGet packages        
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        shell: pwsh
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.Standard.ps1 --target=Publish --NugetApiKey="$env:NUGET_API_KEY" --BranchName=${{ steps.branch-name.outputs.current_branch }}
+        working-directory: ${{ github.workspace }}/Build

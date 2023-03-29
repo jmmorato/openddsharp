@@ -17,44 +17,42 @@ concurrency:
 jobs:
   build_windows:
     runs-on: windows-latest
+
     strategy:
       fail-fast: false
       matrix:
         BuildPlatform: [x64, x86]
         BuildConfiguration: [Release, Debug]
+
     env:
       OpenDdsVersion: "3.23.1"
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: Setup dotnet 3.1
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 3.1;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        
-    - name: Setup dotnet 5.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 5.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        
+      
     - name: Setup dotnet 6.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 6.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
     - name: Setup dotnet 7.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'
+
+#    - name: Setup dotnet 6.0
+#      shell: pwsh
+#      run: |
+#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+#        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 6.0;
+#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+#        
+#    - name: Setup dotnet 7.0
+#      shell: pwsh
+#      run: |
+#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+#        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
+#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
@@ -74,7 +72,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-${{ matrix.BuildPlatform }}-windows-ci
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-ci
 
     - name: Build & Test with Cake (No cached)
       shell: pwsh
@@ -113,26 +111,18 @@ jobs:
 
   build_linux:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
 
     env:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
-      BuildConfiguration: "Release"
+      BuildConfiguration: "Release"        
+      LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: Setup dotnet 3.1
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '3.1.x'
-        
-    - name: Setup dotnet 5.0  
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '5.0.x'
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
@@ -152,8 +142,8 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-          ${{ github.workspace }}/ext/OpenDDS_Linux/bin
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin
+          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
@@ -162,13 +152,12 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/dcpsinfo_dump/dcpsinfo_dump
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ env.BuildConfiguration }}-${{ env.BuildPlatform }}-linux-ci1
+        key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
       shell: pwsh
@@ -249,25 +238,18 @@ jobs:
 
   build_macos:
     runs-on: macos-latest
+
     strategy:
       fail-fast: false
+
     env:
       OpenDdsVersion: "3.23.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: Setup dotnet 3.1
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '3.1.x'
-
-    - name: Setup dotnet 5.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '5.0.x'
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
@@ -287,7 +269,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
@@ -297,13 +279,12 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/dcpsinfo_dump/dcpsinfo_dump
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/repoctl/repoctl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
-        key: opendds-standard-cache-${{ env.OpenDdsVersion }}-${{ env.BuildConfiguration }}-${{ env.BuildPlatform }}-macos-ci
+        key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
       shell: pwsh

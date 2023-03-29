@@ -40,14 +40,14 @@ namespace OpenDDSharp.Build.Standard.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            string path = Path.Combine(solutionPath, "ext");
+            var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+            var path = Path.Combine(solutionPath, "ext");
 
-            foreach (string file in Directory.GetFiles(path, "config.cmake", SearchOption.AllDirectories))
+            foreach (var file in Directory.GetFiles(path, "config.cmake", SearchOption.AllDirectories))
             {
                 var lines = File.ReadAllLines(file);
-                StringBuilder stringBuilder = new StringBuilder();
-                foreach (string line in lines)
+                var stringBuilder = new StringBuilder();
+                foreach (var line in lines)
                 {
                     if (line.StartsWith("#") || _variablesToRemove.Any(line.Contains))
                     {
