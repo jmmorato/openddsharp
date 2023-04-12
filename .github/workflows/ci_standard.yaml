@@ -25,7 +25,7 @@ jobs:
         BuildConfiguration: [Release, Debug]
 
     env:
-      OpenDdsVersion: "3.23.1"
+      OpenDdsVersion: "3.24"
 
     steps:
     - uses: actions/checkout@v3
@@ -116,7 +116,7 @@ jobs:
       fail-fast: false
 
     env:
-      OpenDdsVersion: "3.23.1"
+      OpenDdsVersion: "3.24"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"        
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
@@ -243,7 +243,7 @@ jobs:
       fail-fast: false
 
     env:
-      OpenDdsVersion: "3.23.1"
+      OpenDdsVersion: "3.24"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
