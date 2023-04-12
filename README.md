@@ -14,7 +14,7 @@ publish and subscribe model.
 OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)  
 OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)
 
-OpenDDSharp has been compiled with OpenDDS v3.23.1
+OpenDDSharp has been compiled with OpenDDS v3.24
 
 | Package                                                           | NuGet                                                            |
 |-------------------------------------------------------------------|------------------------------------------------------------------|
@@ -40,7 +40,7 @@ It will give you the first hints on how to work with the API and how to organize
 A detailed [API Documentation](https://www.openddsharp.com/api/index.html) is available online.
 Navigate through the namespaces to get information about the implemented OpenDDSharp APIs.
 
-As OpenDDSharp is a wrapper of [OpenDDS](https://opendds.org), the [OpenDDS Developer's Guide](https://download.objectcomputing.com/OpenDDS/OpenDDS-latest.pdf)
+As OpenDDSharp is a wrapper of [OpenDDS](https://opendds.org), the [OpenDDS Developer's Guide](https://opendds.readthedocs.io/en/latest/)
 is also a valuable resource that you can use but keep in mind that not everything is implemented yet. 
 
 # Roadmap Overview
