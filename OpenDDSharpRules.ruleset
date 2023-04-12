@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Swiss Timing All Rules" Description="Swiss Timing All Rules" ToolsVersion="16.0">
+<RuleSet Name="AllRules" Description="OpenDDSharp All Rules" ToolsVersion="17.0">
   <Include Path="allrules.ruleset" Action="Default" />
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
     <Rule Id="CA1008" Action="Warning" />

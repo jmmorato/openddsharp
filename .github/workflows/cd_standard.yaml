@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  OpenDdsVersion: "3.23.1"
+  OpenDdsVersion: "3.24"
   MajorVersion: "0"
   MinorVersion: "8"
 
