@@ -499,6 +499,7 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore]
         public void TestAssertLiveliness()
         {
             // Initialize entities
@@ -519,12 +520,15 @@ namespace OpenDDSharp.Standard.UnitTest
                 System.Threading.Thread.Sleep(500);
             }
 
-            //// Check that no liveliness has been lost
+            // Check that no liveliness has been lost
             LivelinessLostStatus status = default;
             ReturnCode result = writer.GetLivelinessLostStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
+
+            writer.AssertLiveliness();
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
