@@ -935,6 +935,7 @@ namespace OpenDDSharp.Standard.UnitTest.Helpers
             TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
             TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
             RtpsUdpInst rui = new RtpsUdpInst(inst);
+            rui.UseMulticast = false;
             config.Insert(rui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);

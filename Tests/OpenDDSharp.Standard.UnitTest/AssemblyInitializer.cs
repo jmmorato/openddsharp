@@ -58,6 +58,11 @@ namespace OpenDDSharp.Standard.UnitTest
             Ace.Init();
 
             RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
+            disc.ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+            };
+            disc.SedpMulticast = false;
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -75,7 +80,7 @@ namespace OpenDDSharp.Standard.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory();
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
