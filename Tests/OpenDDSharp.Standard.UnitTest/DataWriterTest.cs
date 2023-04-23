@@ -499,7 +499,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore]
         public void TestAssertLiveliness()
         {
             // Initialize entities
