@@ -16,7 +16,11 @@ elseif(UNIX)
     set(CMAKE_INSTALL_RPATH $ORIGIN)
 endif()
 
+set(OPENDDS_RAPIDJSON "/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_MacOS")
+
 add_library(${PROJECT_NAME} SHARED ${WRAPPER_FILES})
+
+target_include_directories(${PROJECT_NAME} PUBLIC "/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_MacOS/tools/rapidjson/include")
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PUBLIC /wd4190)
@@ -28,5 +32,8 @@ elseif(UNIX)
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,$ORIGIN")
 endif()
 
-OPENDDS_TARGET_SOURCES(${PROJECT_NAME} ${IDL_FILES})
+OPENDDS_TARGET_SOURCES(${PROJECT_NAME}
+ PUBLIC
+  ${IDL_FILES}
+  OPENDDS_IDL_OPTIONS -Sa --no-dcps-data-type-warnings)
 target_link_libraries(${PROJECT_NAME} OpenDDS::OpenDDS)

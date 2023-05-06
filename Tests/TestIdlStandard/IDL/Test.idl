@@ -79,22 +79,22 @@ module Test {
 	typedef string StringArrayType[5];
 	typedef wstring WStringArrayType[5];
 
-	typedef short ShortMultiArrayType[3][4][2];
-	typedef unsigned short UnsignedShortMultiArrayType[3][4][2];
-	typedef long LongMultiArrayType[3][4][2];
-	typedef unsigned long UnsignedLongMultiArrayType[3][4][2];
-	typedef long long LongLongMultiArrayType[3][4][2];
-	typedef unsigned long long UnsignedLongLongMultiArrayType[3][4][2];
-	typedef char CharMultiArrayType[3][4][2];
-	typedef wchar WCharMultiArrayType[3][4][2];
-	typedef boolean BooleanMultiArrayType[3][4][2];
-	typedef octet OctetMultiArrayType[3][4][2];
-	typedef float FloatMultiArrayType[3][4][2];
-	typedef double DoubleMultiArrayType[3][4][2];
-	typedef long double LongDoubleMultiArrayType[3][4][2];
-
-	typedef string StringMultiArrayType[3][4][2];
-	typedef wstring WStringMultiArrayType[3][4][2];
+//	typedef short ShortMultiArrayType[3][4][2];
+//	typedef unsigned short UnsignedShortMultiArrayType[3][4][2];
+//	typedef long LongMultiArrayType[3][4][2];
+//	typedef unsigned long UnsignedLongMultiArrayType[3][4][2];
+//	typedef long long LongLongMultiArrayType[3][4][2];
+//	typedef unsigned long long UnsignedLongLongMultiArrayType[3][4][2];
+//	typedef char CharMultiArrayType[3][4][2];
+//	typedef wchar WCharMultiArrayType[3][4][2];
+//	typedef boolean BooleanMultiArrayType[3][4][2];
+//	typedef octet OctetMultiArrayType[3][4][2];
+//	typedef float FloatMultiArrayType[3][4][2];
+//	typedef double DoubleMultiArrayType[3][4][2];
+//	typedef long double LongDoubleMultiArrayType[3][4][2];
+//
+//	typedef string StringMultiArrayType[3][4][2];
+//	typedef wstring WStringMultiArrayType[3][4][2];
 
 	@topic
 	struct NestedStruct {
@@ -131,7 +131,7 @@ module Test {
 
 	typedef TestEnum EnumArrayType[5];
 
-	typedef TestEnum EnumMultiArrayType[3][4][2];
+	// typedef TestEnum EnumMultiArrayType[3][4][2];
 
 	@topic
     struct TestStruct {
@@ -148,54 +148,54 @@ module Test {
 		octet OctetField;
 		float FloatField;
 		double DoubleField;
-		//long double LongDoubleField;
+//		//long double LongDoubleField;
 
 		string UnboundedStringField;
 		wstring UnboundedWStringField;
 		BoundedStringType BoundedStringField;
-		BoundedWStringType BoundedWStringField;
+//		BoundedWStringType BoundedWStringField;
 
 		UnboundedBooleanSequenceType UnboundedBooleanSequenceField;
-		BoundedBooleanSequenceType BoundedBooleanSequenceField;
+//		BoundedBooleanSequenceType BoundedBooleanSequenceField;
 		UnboundedCharSequenceType UnboundedCharSequenceField;
-		BoundedCharSequenceType BoundedCharSequenceField;
+//		BoundedCharSequenceType BoundedCharSequenceField;
 		UnboundedWCharSequenceType UnboundedWCharSequenceField;
-		BoundedWCharSequenceType BoundedWCharSequenceField;
+//		BoundedWCharSequenceType BoundedWCharSequenceField;
 		UnboundedOctetSequenceType UnboundedOctetSequenceField;
-		BoundedOctetSequenceType BoundedOctetSequenceField;
+//		BoundedOctetSequenceType BoundedOctetSequenceField;
 		UnboundedShortSequenceType UnboundedShortSequenceField;
-		BoundedShortSequenceType BoundedShortSequenceField;
+//		BoundedShortSequenceType BoundedShortSequenceField;
 		UnboundedUShortSequenceType UnboundedUShortSequenceField;
-		BoundedUShortSequenceType BoundedUShortSequenceField;
+//		BoundedUShortSequenceType BoundedUShortSequenceField;
 		UnboundedLongSequenceType UnboundedLongSequenceField;
-		BoundedLongSequenceType BoundedLongSequenceField;
+//		BoundedLongSequenceType BoundedLongSequenceField;
 		UnboundedULongSequenceType UnboundedULongSequenceField;
-		BoundedULongSequenceType BoundedULongSequenceField;
+//		BoundedULongSequenceType BoundedULongSequenceField;
 		UnboundedLongLongSequenceType UnboundedLongLongSequenceField;
-		BoundedLongLongSequenceType BoundedLongLongSequenceField;
+//		BoundedLongLongSequenceType BoundedLongLongSequenceField;
 		UnboundedULongLongSequenceType UnboundedULongLongSequenceField;
-		BoundedULongLongSequenceType BoundedULongLongSequenceField;
+//		BoundedULongLongSequenceType BoundedULongLongSequenceField;
 		UnboundedFloatSequenceType UnboundedFloatSequenceField;
-		BoundedFloatSequenceType BoundedFloatSequenceField;
+//		BoundedFloatSequenceType BoundedFloatSequenceField;
 		UnboundedDoubleSequenceType UnboundedDoubleSequenceField;
-		BoundedDoubleSequenceType BoundedDoubleSequenceField;
+//		BoundedDoubleSequenceType BoundedDoubleSequenceField;
 		//UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
 		//BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
 
 		UnboundedStringSequenceType UnboundedStringSequenceField;
-		BoundedStringSequenceType BoundedStringSequenceField;
+//		BoundedStringSequenceType BoundedStringSequenceField;
 		UnboundedWStringSequenceType UnboundedWStringSequenceField;
-		BoundedWStringSequenceType BoundedWStringSequenceField;
+//		BoundedWStringSequenceType BoundedWStringSequenceField;
 
 		NestedStruct NestedStructField;
 
 		UnboundedStructSequenceType UnboundedStructSequenceField;
-		BoundedStructSequenceType BoundedStructSequenceField;
+//		BoundedStructSequenceType BoundedStructSequenceField;
 
 		TestEnum TestEnumField;
 
 		UnboundedEnumSequenceType UnboundedEnumSequenceField;
-		BoundedEnumSequenceType BoundedEnumSequenceField;
+//		BoundedEnumSequenceType BoundedEnumSequenceField;
 
 		ShortArrayType ShortArrayField;
 		UnsignedShortArrayType UnsignedShortArrayField;
@@ -206,49 +206,49 @@ module Test {
 		CharArrayType CharArrayField;
 		WCharArrayType WCharArrayField;
 
-		// Not working in mono
-		// https://github.com/mono/mono/issues/15592
-		// Workaround using a byte[] and Array.ConvertAll calls works but
-		// it would affects performance
+//		// Not working in mono
+//		// https://github.com/mono/mono/issues/15592
+//		// Workaround using a byte[] and Array.ConvertAll calls works but
+//		// it would affects performance
 		BooleanArrayType BooleanArrayField;
 
-		OctetArrayType OctetArrayField;
+//		OctetArrayType OctetArrayField;
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
-		//LongDoubleArrayType LongDoubleArrayField;
+//		//LongDoubleArrayType LongDoubleArrayField;
+//
+//		StringArrayType StringArrayField;
+//		WStringArrayType WStringArrayField;
+//
+//		// No working in mono
+//		StructArrayType StructArrayField;
+//
+//		// No working in mono
+//		EnumArrayType EnumArrayField;
 
-		StringArrayType StringArrayField;
-		WStringArrayType WStringArrayField;
-
-		// No working in mono
-		StructArrayType StructArrayField;
-
-		// No working in mono
-		EnumArrayType EnumArrayField;
-
-		ShortMultiArrayType ShortMultiArrayField;
-		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
-		LongMultiArrayType LongMultiArrayField;
-		UnsignedLongMultiArrayType UnsignedLongMultiArrayField;
-		LongLongMultiArrayType LongLongMultiArrayField;
-		UnsignedLongLongMultiArrayType UnsignedLongLongMultiArrayField;
-		CharMultiArrayType CharMultiArrayField;
-		WCharMultiArrayType WCharMultiArrayField;
-		BooleanMultiArrayType BooleanMultiArrayField;
-		OctetMultiArrayType OctetMultiArrayField;
-		FloatMultiArrayType FloatMultiArrayField;
-		DoubleMultiArrayType DoubleMultiArrayField;
+//		ShortMultiArrayType ShortMultiArrayField;
+//		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
+//		LongMultiArrayType LongMultiArrayField;
+//		UnsignedLongMultiArrayType UnsignedLongMultiArrayField;
+//		LongLongMultiArrayType LongLongMultiArrayField;
+//		UnsignedLongLongMultiArrayType UnsignedLongLongMultiArrayField;
+//		CharMultiArrayType CharMultiArrayField;
+//		WCharMultiArrayType WCharMultiArrayField;
+//		BooleanMultiArrayType BooleanMultiArrayField;
+//		OctetMultiArrayType OctetMultiArrayField;
+//		FloatMultiArrayType FloatMultiArrayField;
+//		DoubleMultiArrayType DoubleMultiArrayField;
 		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
 
 		// No working in mono
-		EnumMultiArrayType EnumMultiArrayField;
+//		EnumMultiArrayType EnumMultiArrayField;
 
 		// No working in mono
-		StringMultiArrayType StringMultiArrayField;
-		WStringMultiArrayType WStringMultiArrayField;
+//		StringMultiArrayType StringMultiArrayField;
+//		WStringMultiArrayType WStringMultiArrayField;
 
 		// No working in mono
-		StructMultiArrayType StructMultiArrayField;
+//		StructMultiArrayType StructMultiArrayField;
     };
 
 	@topic

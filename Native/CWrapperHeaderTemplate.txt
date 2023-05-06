@@ -18,6 +18,8 @@ EXTERN_METHOD_EXPORT <%SCOPED%>DataWriter_ptr <%SCOPED_METHOD%>DataWriter_Narrow
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Write_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance);
@@ -72,3 +74,40 @@ EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextIns
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, int handle);
+
+#include <fstream>
+    using std::ofstream;
+#include <iostream>
+using std::cout;
+using std::endl;
+using namespace std;
+
+/////////////////////////////////////////////////
+// <%TYPE%> Utility Methods
+/////////////////////////////////////////////////
+int <%SCOPED_METHOD%>_to_file(const char* json_data)
+{
+    ofstream stream;
+
+    stream.open("./mysample.txt", std::ofstream::binary);
+    if( !stream )
+        cout << "Opening file failed" << endl;
+    // use operator<< for clarity
+    stream << json_data << endl;
+    // test if write was succesful - not *really* necessary
+    if( !stream )
+        cout << "Write failed" << endl;
+
+    return 0;
+}
+<%SCOPED%>_var <%SCOPED_METHOD%>_DecodeJsonSample(const char* json_data)
+{
+    <%SCOPED_METHOD%>_to_file(json_data);
+    <%SCOPED%>TypeSupport_var ts = new <%SCOPED%>TypeSupportImpl;
+    OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);
+    <%SCOPED%>_var samplev;
+    ts->decode_from_string(json_data, samplev, format);
+
+    return samplev;
+}
+
