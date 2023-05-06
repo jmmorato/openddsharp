@@ -50,11 +50,11 @@ module HelloWorld{
 
 Build the project to auto-generate and compile the C# code for the defined structure:
 
-`dotnet build TestMessage.csproj --runtime <runtime_identifier>`
+`dotnet build TestMessage/TestMessage.csproj --runtime <runtime_identifier> --configuration <Release|Debug>`
 
 > [!NOTE]
 > The implemented runtime identifiers are:
-> - win-64
+> - win-x64
 > - win-x86
 > - linux-x64
 > - osx-x64
@@ -68,12 +68,12 @@ Once you have defined your data transport types in the IDL project, it's time to
 Using the following command, you will create a console application that includes the OpenDDSharp reference, some boilerplate code
 and the configuration required to initialize your domain participant:
 
-`dotnet new openddsharp-console-app --name Publisher --output Publisher`
+`dotnet new openddsharp-console-app --name HelloWorldPublisher --output HelloWorldPublisher`
 
 You should add a reference to the previously created data transport types project to be able to use them in your publisher application.
 You can do it with the following command:
 
-`dotnet add Publisher/Publisher.csproj reference TestMessage/TestMessage.csproj`
+`dotnet add HelloWorldPublisher/HelloWorldPublisher.csproj reference TestMessage/TestMessage.csproj`
 
 ### Create the DDS DomainParticipant
 
@@ -204,9 +204,9 @@ Ace.Fini();
 
 Same than with the publisher application, you can create the subscriber application and reference the data transport types project using the OpenDDSharp console template by using the following commands:
 
-`dotnet new openddsharp-console-app --name Subscriber --output Subscriber`
+`dotnet new openddsharp-console-app --name HelloWorldSubscriber --output HelloWorldSubscriber`
 
-`dotnet add Subscriber/Subscriber.csproj reference TestMessage/TestMessage.csproj`
+`dotnet add HelloWorldSubscriber/HelloWorldSubscriber.csproj reference TestMessage/TestMessage.csproj`
 
 ### Create the domain participant, register the type and create the topic
 
@@ -251,7 +251,7 @@ while (true)
     if ((mask & StatusKind.DataAvailableStatus) != 0)
     {
         List<Message> receivedData = new List<Message>();
-        List<SampleInfo> receivedInfo = new Lis<SampleInfo>();
+        List<SampleInfo> receivedInfo = new List<SampleInfo>();
         result = messageReader.Take(receivedData, receivedInfo);
 
         if (result == ReturnCode.Ok)
@@ -290,13 +290,13 @@ Ace.Fini();
 
 Build the publisher and subscriber project with the following commands:
 
-`dotnet build HelloPublisher.csproj --configuration Release|Debug --runtime <runtime_identifier> --no-self-contained`
+`dotnet build HelloWorldPublisher/HelloWorldPublisher.csproj --configuration <Release|Debug> --runtime <runtime_identifier> --no-self-contained`
 
-`dotnet build HelloSubscriber.csproj --configuration Release|Debug --runtime <runtime_identifier> --no-self-contained`
+`dotnet build HelloWorldSubscriber/HelloWorldSubscriber.csproj --configuration <Release|Debug> --runtime <runtime_identifier> --no-self-contained`
 
 > [!NOTE]
 > The implemented runtime identifiers are:
-> - win-64
+> - win-x64
 > - win-x86
 > - linux-x64
 > - osx-x64
