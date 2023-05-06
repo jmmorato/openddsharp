@@ -290,9 +290,9 @@ Ace.Fini();
 
 Build the publisher and subscriber project with the following commands:
 
-`dotnet build HelloPublisher.csproj --configuration <Release|Debug> --runtime <runtime_identifier> --no-self-contained`
+`dotnet build HelloWorldPublisher/HelloWorldPublisher.csproj --configuration <Release|Debug> --runtime <runtime_identifier> --no-self-contained`
 
-`dotnet build HelloSubscriber.csproj --configuration <Release|Debug> --runtime <runtime_identifier> --no-self-contained`
+`dotnet build HelloWorldSubscriber/HelloWorldSubscriber.csproj --configuration <Release|Debug> --runtime <runtime_identifier> --no-self-contained`
 
 > [!NOTE]
 > The implemented runtime identifiers are:
