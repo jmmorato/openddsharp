@@ -36,6 +36,9 @@
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DoubleJsonConverter.cs" />
+    <Compile Include="Helpers\FloatJsonConverter.cs" />
+    <Compile Include="Helpers\OctetArrayConverter.cs" />
     <Compile Include="TestTypeSupport.cs" />
     <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>

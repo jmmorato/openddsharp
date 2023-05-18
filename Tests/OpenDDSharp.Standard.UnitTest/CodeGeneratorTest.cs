@@ -238,9 +238,9 @@ namespace OpenDDSharp.Standard.UnitTest
                 // BoundedULongLongSequenceField = { 1, 2, 3, 100, 200 },
                 UnboundedULongLongSequenceField = { 1, 2, 3, 100, 200, 300, 1000 },
                 // BoundedFloatSequenceField = { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
-                UnboundedFloatSequenceField = { 1.5f, -2.6f, 3.7f, -100.8f, 200.9f, -300.1f, 1000.1f },
+                UnboundedFloatSequenceField = { 1f, -2.6f, 3.7f, -100.8f, 200.9f, -300.1f, 1000.1f },
                 // BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
-                UnboundedDoubleSequenceField = { 1.5d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
+                UnboundedDoubleSequenceField = { 1d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
                 // //BoundedLongDoubleSequenceField = { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
                 // //UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
             };
@@ -288,29 +288,29 @@ namespace OpenDDSharp.Standard.UnitTest
             // Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
             Assert.IsTrue(data.UnboundedBooleanSequenceField is IList<bool>);
             // Assert.IsTrue(data.BoundedCharSequenceField is IList<char>);
-            // Assert.IsTrue(data.UnboundedCharSequenceField is IList<char>);
+            Assert.IsTrue(data.UnboundedCharSequenceField is IList<char>);
             // Assert.IsTrue(data.BoundedWCharSequenceField is IList<char>);
-            // Assert.IsTrue(data.UnboundedWCharSequenceField is IList<char>);
+            Assert.IsTrue(data.UnboundedWCharSequenceField is IList<char>);
             // Assert.IsTrue(data.BoundedOctetSequenceField is IList<byte>);
-            // Assert.IsTrue(data.UnboundedOctetSequenceField is IList<byte>);
+            Assert.IsTrue(data.UnboundedOctetSequenceField is IList<byte>);
             // Assert.IsTrue(data.BoundedShortSequenceField is IList<short>);
-            // Assert.IsTrue(data.UnboundedShortSequenceField is IList<short>);
+            Assert.IsTrue(data.UnboundedShortSequenceField is IList<short>);
             // Assert.IsTrue(data.BoundedUShortSequenceField is IList<ushort>);
-            // Assert.IsTrue(data.UnboundedUShortSequenceField is IList<ushort>);
+            Assert.IsTrue(data.UnboundedUShortSequenceField is IList<ushort>);
             // Assert.IsTrue(data.BoundedLongSequenceField is IList<int>);
-            // Assert.IsTrue(data.UnboundedLongSequenceField is IList<int>);
+            Assert.IsTrue(data.UnboundedLongSequenceField is IList<int>);
             // Assert.IsTrue(data.BoundedULongSequenceField is IList<uint>);
-            // Assert.IsTrue(data.UnboundedULongSequenceField is IList<uint>);
+            Assert.IsTrue(data.UnboundedULongSequenceField is IList<uint>);
             // Assert.IsTrue(data.BoundedLongLongSequenceField is IList<long>);
-            // Assert.IsTrue(data.UnboundedLongLongSequenceField is IList<long>);
+            Assert.IsTrue(data.UnboundedLongLongSequenceField is IList<long>);
             // Assert.IsTrue(data.BoundedULongLongSequenceField is IList<ulong>);
-            // Assert.IsTrue(data.UnboundedULongLongSequenceField is IList<ulong>);
+            Assert.IsTrue(data.UnboundedULongLongSequenceField is IList<ulong>);
             // Assert.IsTrue(data.BoundedFloatSequenceField is IList<float>);
-            // Assert.IsTrue(data.UnboundedFloatSequenceField is IList<float>);
+            Assert.IsTrue(data.UnboundedFloatSequenceField is IList<float>);
             // Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
-            // Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
-            // //Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
-            // //Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
+            Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
+            //Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
+            //Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
 
             // Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
@@ -318,52 +318,52 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedBooleanSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedCharSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedCharSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedCharSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedCharSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedCharSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedCharSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedWCharSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedWCharSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedWCharSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedWCharSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedOctetSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedOctetSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedWCharSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedWCharSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedOctetSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedOctetSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedOctetSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedOctetSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedShortSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedShortSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedShortSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedShortSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedShortSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedShortSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedUShortSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedUShortSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedUShortSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedUShortSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedUShortSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedUShortSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedLongSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedLongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedLongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedLongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedLongSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedLongSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedULongSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedULongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedULongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedULongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedULongSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedULongSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedLongLongSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedLongLongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedLongLongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedLongLongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedLongLongSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedLongLongSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedULongLongSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedULongLongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedULongLongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedULongLongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedULongLongSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedULongLongSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedFloatSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedFloatSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedFloatSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedFloatSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedFloatSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedFloatSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedDoubleSequenceField);
             // Assert.AreEqual(0, defaultStruct.BoundedDoubleSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.UnboundedDoubleSequenceField);
-            // Assert.AreEqual(0, defaultStruct.UnboundedDoubleSequenceField.Count);
-            // //Assert.IsNotNull(defaultStruct.BoundedLongDoubleSequenceField);
-            // //Assert.AreEqual(0, defaultStruct.BoundedLongDoubleSequenceField.Count);
-            // //Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
-            // //Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedDoubleSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedDoubleSequenceField.Count);
+            //Assert.IsNotNull(defaultStruct.BoundedLongDoubleSequenceField);
+            //Assert.AreEqual(0, defaultStruct.BoundedLongDoubleSequenceField.Count);
+            //Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
+            //Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
         }
 
         /// <summary>
@@ -378,17 +378,17 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStruct data = new TestStruct
             {
                 BooleanArrayField = new[] { true, true, false, false, true },
-                // CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
-                // WCharArrayField = new[] { 'i', 'j', 'k', 'l', 'm' },
-                // OctetArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
-                // ShortArrayField = new short[] { 4, -5, 6, -7, 8 },
-                // UnsignedShortArrayField = new ushort[] { 4, 5, 6, 7, 8 },
-                // LongArrayField = new[] { -1, 2, -3, 100, -200 },
-                // UnsignedLongArrayField = new[] { 1u, 2u, 3u, 100u, 200u },
-                // LongLongArrayField = new[] { -1L, 2L, -3L, 100L, -200L },
-                // UnsignedLongLongArrayField = new[] { 1UL, 2UL, 3UL, 100UL, 200UL },
-                FloatArrayField = new[] { -1.01f, 2.1f, -3.2f, 100.3f, -200.4f },
-                DoubleArrayField = new[] { -1.02d, 2.1d, -3.2d, 100.3d, -200.4d },
+                CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
+                WCharArrayField = new[] { 'i', 'j', 'k', 'l', 'm' },
+                OctetArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
+                ShortArrayField = new short[] { 4, -5, 6, -7, 8 },
+                UnsignedShortArrayField = new ushort[] { 4, 5, 6, 7, 8 },
+                LongArrayField = new[] { -1, 2, -3, 100, -200 },
+                UnsignedLongArrayField = new[] { 1u, 2u, 3u, 100u, 200u },
+                LongLongArrayField = new[] { -1L, 2L, -3L, 100L, -200L },
+                UnsignedLongLongArrayField = new[] { 1UL, 2UL, 3UL, 100UL, 200UL },
+                FloatArrayField = new[] { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
+                DoubleArrayField = new[] { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
                 //LongDoubleArrayField = new[] { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
             };
             var ret = _dataWriter.Write(data);
@@ -407,21 +407,21 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(data.BooleanArrayField.SequenceEqual(received.BooleanArrayField));
             Assert.IsTrue(data.CharArrayField.SequenceEqual(received.CharArrayField));
             Assert.IsTrue(data.WCharArrayField.SequenceEqual(received.WCharArrayField));
-            // Assert.IsTrue(data.OctetArrayField.SequenceEqual(received.OctetArrayField));
+            Assert.IsTrue(data.OctetArrayField.SequenceEqual(received.OctetArrayField));
             Assert.IsTrue(data.ShortArrayField.SequenceEqual(received.ShortArrayField));
             Assert.IsTrue(data.UnsignedShortArrayField.SequenceEqual(received.UnsignedShortArrayField));
             Assert.IsTrue(data.LongArrayField.SequenceEqual(received.LongArrayField));
             Assert.IsTrue(data.UnsignedLongArrayField.SequenceEqual(received.UnsignedLongArrayField));
             Assert.IsTrue(data.LongLongArrayField.SequenceEqual(received.LongLongArrayField));
             Assert.IsTrue(data.UnsignedLongLongArrayField.SequenceEqual(received.UnsignedLongLongArrayField));
-            // Assert.IsTrue(data.FloatArrayField.SequenceEqual(received.FloatArrayField));
-            // Assert.IsTrue(data.DoubleArrayField.SequenceEqual(received.DoubleArrayField));
+            Assert.IsTrue(data.FloatArrayField.SequenceEqual(received.FloatArrayField));
+            Assert.IsTrue(data.DoubleArrayField.SequenceEqual(received.DoubleArrayField));
             //Assert.IsTrue(data.LongDoubleArrayField.SequenceEqual(received.LongDoubleArrayField));
 
             Assert.AreEqual(typeof(bool[]), data.BooleanArrayField.GetType());
             Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
             Assert.AreEqual(typeof(char[]), data.WCharArrayField.GetType());
-            // Assert.AreEqual(typeof(byte[]), data.OctetArrayField.GetType());
+            Assert.AreEqual(typeof(byte[]), data.OctetArrayField.GetType());
             Assert.AreEqual(typeof(short[]), data.ShortArrayField.GetType());
             Assert.AreEqual(typeof(ushort[]), data.UnsignedShortArrayField.GetType());
             Assert.AreEqual(typeof(int[]), data.LongArrayField.GetType());
@@ -453,12 +453,12 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(default, i);
             }
 
-            // Assert.IsNotNull(defaultStruct.OctetArrayField);
-            // Assert.AreEqual(5, defaultStruct.OctetArrayField.Length);
-            // foreach (var i in defaultStruct.OctetArrayField)
-            // {
-            //     Assert.AreEqual(default, i);
-            // }
+            Assert.IsNotNull(defaultStruct.OctetArrayField);
+            Assert.AreEqual(5, defaultStruct.OctetArrayField.Length);
+            foreach (var i in defaultStruct.OctetArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
 
             Assert.IsNotNull(defaultStruct.ShortArrayField);
             Assert.AreEqual(5, defaultStruct.ShortArrayField.Length);
@@ -999,7 +999,7 @@ namespace OpenDDSharp.Standard.UnitTest
         public void TestGeneratedStringSequences()
         {
             TestStruct defaultStruct = new TestStruct();
-        
+
             TestStruct data = new TestStruct
             {
                 // BoundedStringSequenceField =
@@ -1074,69 +1074,69 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedWStringSequenceField.Count);
         }
 
-        // /// <summary>
-        // /// Test the code generated for the array of strings.
-        // /// </summary>
-        // [TestMethod]
-        // [TestCategory(TEST_CATEGORY)]
-        // public void TestGeneratedStringArrays()
-        // {
-        //     TestStruct defaultStruct = new TestStruct();
-        //
-        //     TestStruct data = new TestStruct
-        //     {
-        //         StringArrayField = new[]
-        //         {
-        //             "Pressure pushing down on me",
-        //             "Pressing down on you, no man ask for",
-        //             "Under pressure that burns a building down",
-        //             "Splits a family in two",
-        //             "Puts people on streets",
-        //         },
-        //         WStringArrayField = new[]
-        //         {
-        //             "Rebel Rebel, you've turn your dress",
-        //             "Rebel Rebel, your face is a mess",
-        //             "Rebel Rebel, how could they know?",
-        //             "Hot tramp,",
-        //             "I love you so!",
-        //         },
-        //     };
-        //
-        //     _dataWriter.Write(data);
-        //
-        //     var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-        //     Assert.AreEqual(ReturnCode.Ok, ret);
-        //
-        //     // To allow to change the thread context.
-        //     System.Threading.Thread.Sleep(10);
-        //
-        //     TestStruct received = new TestStruct();
-        //     SampleInfo sampleInfo = new SampleInfo();
-        //     ret = _dataReader.ReadNextSample(received, sampleInfo);
-        //     Assert.AreEqual(ReturnCode.Ok, ret);
-        //
-        //     Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
-        //     Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
-        //
-        //     Assert.AreEqual(typeof(string[]), data.StringArrayField.GetType());
-        //     Assert.AreEqual(typeof(string[]), data.WStringArrayField.GetType());
-        //
-        //     Assert.IsNotNull(defaultStruct.StringArrayField);
-        //     Assert.AreEqual(5, defaultStruct.StringArrayField.Length);
-        //     foreach (var s in defaultStruct.StringArrayField)
-        //     {
-        //         Assert.AreEqual(string.Empty, s);
-        //     }
-        //
-        //     Assert.IsNotNull(defaultStruct.WStringArrayField);
-        //     Assert.AreEqual(5, defaultStruct.WStringArrayField.Length);
-        //     foreach (var s in defaultStruct.WStringArrayField)
-        //     {
-        //         Assert.AreEqual(string.Empty, s);
-        //     }
-        // }
-        //
+        /// <summary>
+        /// Test the code generated for the array of strings.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                StringArrayField = new[]
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets",
+                },
+                // WStringArrayField = new[]
+                // {
+                //     "Rebel Rebel, you've turn your dress",
+                //     "Rebel Rebel, your face is a mess",
+                //     "Rebel Rebel, how could they know?",
+                //     "Hot tramp,",
+                //     "I love you so!",
+                // },
+            };
+
+            _dataWriter.Write(data);
+
+            var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
+
+            TestStruct received = new TestStruct();
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
+            // Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
+
+            Assert.AreEqual(typeof(string[]), data.StringArrayField.GetType());
+            // Assert.AreEqual(typeof(string[]), data.WStringArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StringArrayField);
+            Assert.AreEqual(5, defaultStruct.StringArrayField.Length);
+            foreach (var s in defaultStruct.StringArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+
+            // Assert.IsNotNull(defaultStruct.WStringArrayField);
+            // Assert.AreEqual(5, defaultStruct.WStringArrayField.Length);
+            // foreach (var s in defaultStruct.WStringArrayField)
+            // {
+            //     Assert.AreEqual(string.Empty, s);
+            // }
+        }
+
         // /// <summary>
         // /// Test the code generated for the multiarray of strings.
         // /// </summary>
@@ -1225,7 +1225,7 @@ namespace OpenDDSharp.Standard.UnitTest
         //     //     Assert.AreEqual(string.Empty, s);
         //     // }
         // }
-        
+
         /// <summary>
         /// Test the code generated for the structures types.
         /// </summary>
@@ -1272,7 +1272,7 @@ namespace OpenDDSharp.Standard.UnitTest
         public void TestGeneratedStructureSequences()
         {
             TestStruct defaultStruct = new TestStruct();
-        
+
             TestStruct data = new TestStruct
             {
                 UnboundedStructSequenceField =
@@ -1327,56 +1327,57 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedStructSequenceField.Count);
         }
 
-        // /// <summary>
-        // /// Test the code generated for the array of structures.
-        // /// </summary>
-        // [TestMethod]
-        // [TestCategory(TEST_CATEGORY)]
-        // public void TestGeneratedStructureArrays()
-        // {
-        //     TestStruct defaultStruct = new TestStruct();
-        //
-        //     TestStruct data = new TestStruct
-        //     {
-        //         StructArrayField = new NestedStruct[]
-        //         {
-        //             new NestedStruct { Message = "Pressure pushing down on me", Id = 1 },
-        //             new NestedStruct { Message = "Pressing down on you, no man ask for", Id = 2 },
-        //             new NestedStruct { Message = "Under pressure that burns a building down", Id = 3 },
-        //             new NestedStruct { Message = "Splits a family in two", Id = 4 },
-        //             new NestedStruct { Message = "Puts people on streets", Id = 5 },
-        //         },
-        //     };
-        //
-        //     _dataWriter.Write(data);
-        //
-        //     var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-        //     Assert.AreEqual(ReturnCode.Ok, ret);
-        //
-        //     // To allow to change the thread context.
-        //     System.Threading.Thread.Sleep(10);
-        //
-        //     TestStruct received = new TestStruct();
-        //     SampleInfo sampleInfo = new SampleInfo();
-        //     ret = _dataReader.ReadNextSample(received, sampleInfo);
-        //     Assert.AreEqual(ReturnCode.Ok, ret);
-        //
-        //     for (int i = 0; i < 5; i++)
-        //     {
-        //         Assert.AreEqual(data.StructArrayField[i].Id, received.StructArrayField[i].Id);
-        //         Assert.AreEqual(data.StructArrayField[i].Message, received.StructArrayField[i].Message);
-        //     }
-        //
-        //     Assert.AreEqual(typeof(NestedStruct[]), data.StructArrayField.GetType());
-        //
-        //     Assert.IsNotNull(defaultStruct.StructArrayField);
-        //     Assert.AreEqual(5, defaultStruct.StructArrayField.Length);
-        //     foreach (var s in defaultStruct.StructArrayField)
-        //     {
-        //         Assert.IsNotNull(s);
-        //     }
-        // }
-        //
+        /// <summary>
+        /// Test the code generated for the array of structures.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructureArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                StructArrayField = new NestedStruct[]
+                {
+                    new NestedStruct { Message = "Pressure pushing down on me", Id = 1 },
+                    new NestedStruct { Message = "Pressing down on you, no man ask for", Id = 2 },
+                    new NestedStruct { Message = "Under pressure that burns a building down", Id = 3 },
+                    new NestedStruct { Message = "Splits a family in two", Id = 4 },
+                    new NestedStruct { Message = "Puts people on streets", Id = 5 },
+                },
+            };
+
+            var ret = _dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
+
+            TestStruct received = new TestStruct();
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(data.StructArrayField[i].Id, received.StructArrayField[i].Id);
+                Assert.AreEqual(data.StructArrayField[i].Message, received.StructArrayField[i].Message);
+            }
+
+            Assert.AreEqual(typeof(NestedStruct[]), data.StructArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StructArrayField);
+            Assert.AreEqual(5, defaultStruct.StructArrayField.Length);
+            foreach (var s in defaultStruct.StructArrayField)
+            {
+                Assert.IsNotNull(s);
+            }
+        }
+
         // /// <summary>
         // /// Test the code generated for the multiarray of structures.
         // /// </summary>
@@ -1520,45 +1521,46 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedEnumSequenceField.Count);
         }
 
-        // /// <summary>
-        // /// Test the code generated for the array of enumerations.
-        // /// </summary>
-        // [TestMethod]
-        // [TestCategory(TEST_CATEGORY)]
-        // public void TestGeneratedEnumArrays()
-        // {
-        //     TestStruct defaultStruct = new TestStruct();
-        //
-        //     TestStruct data = new TestStruct
-        //     {
-        //         EnumArrayField = new TestEnum[] { TestEnum.ENUM1, TestEnum.ENUM3, TestEnum.ENUM5, TestEnum.ENUM7, TestEnum.ENUM11 },
-        //     };
-        //
-        //     _dataWriter.Write(data);
-        //
-        //     var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-        //     Assert.AreEqual(ReturnCode.Ok, ret);
-        //
-        //     // To allow to change the thread context.
-        //     System.Threading.Thread.Sleep(10);
-        //
-        //     TestStruct received = new TestStruct();
-        //     SampleInfo sampleInfo = new SampleInfo();
-        //     ret = _dataReader.ReadNextSample(received, sampleInfo);
-        //     Assert.AreEqual(ReturnCode.Ok, ret);
-        //
-        //     Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
-        //
-        //     Assert.AreEqual(typeof(TestEnum[]), data.EnumArrayField.GetType());
-        //
-        //     Assert.IsNotNull(defaultStruct.EnumArrayField);
-        //     Assert.AreEqual(5, defaultStruct.EnumArrayField.Length);
-        //     foreach (var s in defaultStruct.EnumArrayField)
-        //     {
-        //         Assert.AreEqual(default, s);
-        //     }
-        // }
-        //
+        /// <summary>
+        /// Test the code generated for the array of enumerations.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumArrays()
+        {
+            TestStruct defaultStruct = new TestStruct();
+
+            TestStruct data = new TestStruct
+            {
+                EnumArrayField = new TestEnum[] { TestEnum.ENUM1, TestEnum.ENUM3, TestEnum.ENUM5, TestEnum.ENUM7, TestEnum.ENUM11 },
+            };
+
+            var ret = _dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            // To allow to change the thread context.
+            System.Threading.Thread.Sleep(10);
+
+            TestStruct received = new TestStruct();
+            SampleInfo sampleInfo = new SampleInfo();
+            ret = _dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
+
+            Assert.AreEqual(typeof(TestEnum[]), data.EnumArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.EnumArrayField);
+            Assert.AreEqual(5, defaultStruct.EnumArrayField.Length);
+            foreach (var s in defaultStruct.EnumArrayField)
+            {
+                Assert.AreEqual(default, s);
+            }
+        }
+
         // /// <summary>
         // /// Test the code generated for the multiarray of enumerations.
         // /// </summary>

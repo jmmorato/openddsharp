@@ -212,19 +212,19 @@ module Test {
 //		// it would affects performance
 		BooleanArrayType BooleanArrayField;
 
-//		OctetArrayType OctetArrayField;
+		OctetArrayType OctetArrayField; // wrong serialization
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
 //		//LongDoubleArrayType LongDoubleArrayField;
-//
-//		StringArrayType StringArrayField;
-//		WStringArrayType WStringArrayField;
-//
+
+		StringArrayType StringArrayField;
+//		WStringArrayType WStringArrayField; not working when not initialized
+
 //		// No working in mono
-//		StructArrayType StructArrayField;
-//
+		StructArrayType StructArrayField;
+
 //		// No working in mono
-//		EnumArrayType EnumArrayField;
+		EnumArrayType EnumArrayField;
 
 //		ShortMultiArrayType ShortMultiArrayField;
 //		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;

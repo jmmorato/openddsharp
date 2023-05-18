@@ -130,7 +130,15 @@
             List<IntPtr> toRelease = new List<IntPtr>();
 
             //<%TYPE%>Wrapper wrapper = data.ToNative(toRelease);
-            string wrapper = JsonSerializer.Serialize(data);
+            string wrapper = JsonSerializer.Serialize(data, new JsonSerializerOptions
+            {
+                Converters =
+                {
+                    new OctetArrayConverter(),
+                    new FloatJsonConverter(),
+                    new DoubleJsonConverter()
+                }
+            });
             ret = (ReturnCode)Write(_native, wrapper, handle);
 
             // Always free the unmanaged memory.
