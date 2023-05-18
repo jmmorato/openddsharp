@@ -6,7 +6,7 @@ Some sections of the specification are not included in this documentation becaus
 
 The following legend is used to define the current version status:
 
-:white_check_mark: Fully implemented
+:heavy_check_mark: Fully implemented
 
 :ballot_box_with_check: Partially implemented
 
@@ -16,11 +16,11 @@ The following legend is used to define the current version status:
 
 ### Modules
 
-:white_check_mark: IDL modules are mapped to C# namespaces of the same name.
+:heavy_check_mark: IDL modules are mapped to C# namespaces of the same name.
 
-:white_check_mark: All IDL type declarations within the IDL module shall be mapped to corresponding C# declarations within the generated namespace.
+:heavy_check_mark: All IDL type declarations within the IDL module shall be mapped to corresponding C# declarations within the generated namespace.
 
-:white_check_mark: IDL declarations not enclosed in any module shall be mapped into the global scope.
+:heavy_check_mark: IDL declarations not enclosed in any module shall be mapped into the global scope.
 
 ### Constants
 :ballot_box_with_check: IDL constants shall be mapped to `public sealed class`es of the same name within the equivalent scope and namespace where they are defined.
@@ -79,7 +79,7 @@ The following legend is used to define the current version status:
 
 #### Char Types
 
-:white_check_mark: The IDL `char` type shall be mapped to the C# type `char`.
+:heavy_check_mark: The IDL `char` type shall be mapped to the C# type `char`.
 
 > [!NOTE]
 > IDL characters are 8-bit quantities representing elements of a character set, while C# characters are
@@ -87,22 +87,22 @@ The following legend is used to define the current version status:
 
 #### Wide Char Types
 
-:white_check_mark: The IDL `wchar` type shall be mapped to the C# type `char`.
+:heavy_check_mark: The IDL `wchar` type shall be mapped to the C# type `char`.
 
 #### Boolean
 
-:white_check_mark: The IDL boolean type shall be mapped to the C# `bool`, and the IDL constants `TRUE` and `FALSE` shall be mapped to
+:heavy_check_mark: The IDL boolean type shall be mapped to the C# `bool`, and the IDL constants `TRUE` and `FALSE` shall be mapped to
 the corresponding C# boolean literals `true` and `false`.
 
 ### Template Types
 
 #### Sequences
 
-:white_check_mark: IDL sequences shall be mapped to the C# System.Collections.Generic.IList<T> interface, instantiated with the mapped type T of the sequence elements.
+:heavy_check_mark: IDL sequences shall be mapped to the C# System.Collections.Generic.IList<T> interface, instantiated with the mapped type T of the sequence elements.
 
-:white_check_mark: In the mapping, everywhere the sequence type is needed, a System.Collections.Generic.IList<T> shall be used.
+:heavy_check_mark: In the mapping, everywhere the sequence type is needed, a System.Collections.Generic.IList<T> shall be used.
 
-:white_check_mark: Implementations of System.Collections.Generic.IList<T> shall be writable.
+:heavy_check_mark: Implementations of System.Collections.Generic.IList<T> shall be writable.
 
 :x: Bounds checking on bounded sequences may raise an exception if necessary.
 
@@ -134,15 +134,15 @@ the corresponding C# boolean literals `true` and `false`.
 
 #### Strings
 
-:white_check_mark: IDL `string`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
+:heavy_check_mark: IDL `string`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
 
-:white_check_mark: The resulting strings shall be encoded in UTF-16 format.
+:heavy_check_mark: The resulting strings shall be encoded in UTF-16 format.
 
 #### Wstrings
 
-:white_check_mark: IDL `wstring`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
+:heavy_check_mark: IDL `wstring`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
 
-:white_check_mark: The resulting strings shall be encoded in UTF-16 format.
+:heavy_check_mark: The resulting strings shall be encoded in UTF-16 format.
 
 #### Fixed Type
 
@@ -154,28 +154,28 @@ the corresponding C# boolean literals `true` and `false`.
 
 #### Structures
 
-:white_check_mark: An IDL struct shall be mapped to a C# `public class` with the same name.
+:heavy_check_mark: An IDL struct shall be mapped to a C# `public class` with the same name.
 
 :ballot_box_with_check: The `class` shall provide the following:
 
-- :white_check_mark: A public property of the equivalent type for each member of the structure, including both a getter and a setter.
+- :heavy_check_mark: A public property of the equivalent type for each member of the structure, including both a getter and a setter.
   - :x: In general, properties representing IDL sequences and maps shall include only a getter.
   - :x: As an exception, properties representing sequences and maps that are marked with the `@external`
         annotation (see the Standardized Annotations building block) shall include both a getter and a setter.
 - :ballot_box_with_check: Property setters shall perform shallow assignments of reference types and deep copies of value types.
-- :white_check_mark: A public default constructor that takes no parameters
+- :heavy_check_mark: A public default constructor that takes no parameters
 - :x: A public copy constructor that takes as a parameter an object of the mapped class.
   - :x: The copy constructor shall perform a deep copy of every member of the structure.
   - :x: Implementations supporting the Standardized Annotations building block shall perform a shallow assignment for members annotated with `@external`
 - :x: A public constructor that accepts parameters for each member (i.e., the all values constructor). The
 constructor shall perform shallow assignments of reference types and deep copies of value types.
 
-:white_check_mark: The default constructor shall initialize member fields as follows:
-- :white_check_mark: All primitive members shall be left as initialized by the C# default initialization.
-- :white_check_mark: All string members in the struct shall be initialized to string.Empty.
-- :white_check_mark: All array members shall be initialized to an array of the declared size whose elements are initialized with their default constructor.
-- :white_check_mark: All sequence members shall be initialized to zero-length sequences of the corresponding type.
-- :white_check_mark: All other members shall be initialized to an object created with their respective default constructor.
+:heavy_check_mark: The default constructor shall initialize member fields as follows:
+- :heavy_check_mark: All primitive members shall be left as initialized by the C# default initialization.
+- :heavy_check_mark: All string members in the struct shall be initialized to string.Empty.
+- :heavy_check_mark: All array members shall be initialized to an array of the declared size whose elements are initialized with their default constructor.
+- :heavy_check_mark: All sequence members shall be initialized to zero-length sequences of the corresponding type.
+- :heavy_check_mark: All other members shall be initialized to an object created with their respective default constructor.
 
 :x: The class shall implement the `IEquatable<T>` interface, where `T` is the corresponding class name.
 
@@ -225,7 +225,7 @@ the corresponding property value and the discriminator value of choice.
 
 #### Enumerations
 
-:white_check_mark: An IDL `enum` shall be mapped to a C# `public enum` with the same name as the IDL enum type.
+:heavy_check_mark: An IDL `enum` shall be mapped to a C# `public enum` with the same name as the IDL enum type.
 
 :x: If the IDL enumeration declaration is preceded by a `@bit_bound` annotation; the corresponding C# enum type shall
 be `sbyte` for bit bound values between 1 and 8; `short`, for bit bound values between 9 and 16; `int`, for bit bound
@@ -233,17 +233,17 @@ values between 17 and 32; and `long`, for bit bound values between 33 and 64.
 
 ### Arrays
 
-:white_check_mark: An IDL array shall be mapped to a C# array of the mapped element type or to a C# `class` offering an interface
+:heavy_check_mark: An IDL array shall be mapped to a C# array of the mapped element type or to a C# `class` offering an interface
 compatible with that of a C# native array of the mapped element type. 
 
-:white_check_mark: In the mapping, everywhere the array type is needed, an array or an equivalent class of the mapped element type shall be used.
+:heavy_check_mark: In the mapping, everywhere the array type is needed, an array or an equivalent class of the mapped element type shall be used.
 
 :x: The bounds for the array shall be checked by the setter of the corresponding property and a `System.ArgumentOutOfRangeException` shall be
 raised if a bounds violation occurs.
 
 ### Naming Data Types
 
-:white_check_mark: C# does not have a `typedef` construct; therefore, the declaration of types using `typedef` in IDL shall not result in
+:heavy_check_mark: C# does not have a `typedef` construct; therefore, the declaration of types using `typedef` in IDL shall not result in
 the creation of any C# type. Instead, the use of an IDL `typedef` type shall be replaced with the type referenced by
 the `typedef` statement. For nested `typedef`s, the `typedef`ed type shall be replaced with the original type in the
 sequence of `typedef` statements.
@@ -258,7 +258,7 @@ an any instance as well as the actual type of that value.
 
 ### Structures with Single Inheritance
 
-:white_check_mark: An IDL `struct` that inherits from a base IDL `struct`, shall be declared as a
+:heavy_check_mark: An IDL `struct` that inherits from a base IDL `struct`, shall be declared as a
 C# `public class` that extends the `class` resulting from mapping the base IDL `struct`.
 
 :ballot_box_with_check: The resulting C# `public class` shall be mapped according to the general mapping rules for IDL `struct`s with the following additions:
@@ -340,21 +340,22 @@ various constructs throughout an IDL document, and their impact on the language 
 context in which they are applied. The following table summarize the annotations that have an impact in the 
 C# language mapping and the current OpenDDSharp implementation status.
 
-| General Purpose Annotation | Status |
-| -------------------------- | ------ |
-| `@optional`                | :x:    |
-| `@position`                | :x:    |
-| `@value`                   | :x:    |
-| `@key`                     | :x:    |
-| `@default_literal`         | :x:    |
-| `@default`                 | :x:    |
-| `@range`                   | :x:    |
-| `@min`                     | :x:    |
-| `@max`                     | :x:    |
-| `@unit`                    | :x:    |
-| `@bit_bound`               | :x:    |
-| `@external`                | :x:    |
-| `@verbatim`                | :x:    |
+| General Purpose Annotation | Status               |
+|----------------------------|----------------------|
+| `@key`                     | :heavy_check_mark:   |
+| `@topic`                   | :heavy_check_mark:   |
+| `@optional`                | :x:                  |
+| `@position`                | :x:                  |
+| `@value`                   | :x:                  |
+| `@default_literal`         | :x:                  |
+| `@default`                 | :x:                  |
+| `@range`                   | :x:                  |
+| `@min`                     | :x:                  |
+| `@max`                     | :x:                  |
+| `@unit`                    | :x:                  |
+| `@bit_bound`               | :x:                  |
+| `@external`                | :x:                  |
+| `@verbatim`                | :x:                  |
 
 # IDL to C# Language Mapping Annotations
 
