@@ -54,18 +54,18 @@ The following legend is used to define the current version status:
 | ------------------ | ------- | ------------------ |
 | int8               | sbyte   | :x:                |
 | uint8              | byte    | :x:                |
-| short              | short   | :heavy_check_mark: |
-| int16              | short   | :heavy_check_mark: |
-| unsigned short     | ushort  | :heavy_check_mark: |
-| uint16             | ushort  | :heavy_check_mark: |
-| long               | int     | :heavy_check_mark: |
-| int32              | int     | :heavy_check_mark: |
-| unsigned long      | uint    | :heavy_check_mark: |
-| uint32             | uint    | :heavy_check_mark: |
-| long long          | long    | :heavy_check_mark: |
-| int64              | long    | :heavy_check_mark: |
-| unsigned long long | ulong   | :heavy_check_mark: |
-| uint64             | ulong   | :heavy_check_mark: |
+| short              | short   | :white_check_mark: |
+| int16              | short   | :white_check_mark: |
+| unsigned short     | ushort  | :white_check_mark: |
+| uint16             | ushort  | :white_check_mark: |
+| long               | int     | :white_check_mark: |
+| int32              | int     | :white_check_mark: |
+| unsigned long      | uint    | :white_check_mark: |
+| uint32             | uint    | :white_check_mark: |
+| long long          | long    | :white_check_mark: |
+| int64              | long    | :white_check_mark: |
+| unsigned long long | ulong   | :white_check_mark: |
+| uint64             | ulong   | :white_check_mark: |
 
 #### Floating-Point Types
 
@@ -73,8 +73,8 @@ The following legend is used to define the current version status:
 
 | IDL Type    | C# Type | Status             |
 | ----------- | ------- | ------------------ |
-| float       | float   | :heavy_check_mark: |
-| double      | double  | :heavy_check_mark: |
+| float       | float   | :white_check_mark: |
+| double      | double  | :white_check_mark: |
 | long double | decimal | :x:                |
 
 #### Char Types
@@ -110,27 +110,27 @@ the corresponding C# boolean literals `true` and `false`.
 
 | IDL Type                       | C# Type                                     | Status             |
 | ------------------------------ | ------------------------------------------- | ------------------ |
-| sequence\<boolean\>            | System.Collections.Generic.IList\<bool\>    | :heavy_check_mark: |
-| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :heavy_check_mark: |
-| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :heavy_check_mark: |
+| sequence\<boolean\>            | System.Collections.Generic.IList\<bool\>    | :white_check_mark: |
+| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :white_check_mark: |
+| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :white_check_mark: |
 | sequence\<int8\>               | System.Collections.Generic.IList\<sbyte\>   | :x:                |
 | sequence\<uint8\>              | System.Collections.Generic.IList\<byte\>    | :x:                |
-| sequence\<octet\>              | System.Collections.Generic.IList\<byte\>    | :heavy_check_mark: |
-| sequence\<short\>              | System.Collections.Generic.IList\<short\>   | :heavy_check_mark: |
-| sequence\<int16\>              | System.Collections.Generic.IList\<short\>   | :heavy_check_mark: |
-| sequence\<unsigned short\>     | System.Collections.Generic.IList\<ushort\>  | :heavy_check_mark: |
-| sequence\<uint16\>             | System.Collections.Generic.IList\<ushort\>  | :heavy_check_mark: |
-| sequence\<long\>               | System.Collections.Generic.IList\<int\>     | :heavy_check_mark: |
-| sequence\<int32\>              | System.Collections.Generic.IList\<int\>     | :heavy_check_mark: |
-| sequence\<unsigned long\>      | System.Collections.Generic.IList\<uint\>    | :heavy_check_mark: |
-| sequence\<uint32\>             | System.Collections.Generic.IList\<uint\>    | :heavy_check_mark: |
-| sequence\<long long\>          | System.Collections.Generic.IList\<long\>    | :heavy_check_mark: |
-| sequence\<int64\>              | System.Collections.Generic.IList\<long\>    | :heavy_check_mark: |
-| sequence\<unsigned long long\> | System.Collections.Generic.IList\<ulong\>   | :heavy_check_mark: |
-| sequence\<uint64\>             | System.Collections.Generic.IList\<ulong\>   | :heavy_check_mark: |
-| sequence\<float\>              | System.Collections.Generic.IList\<float\>   | :heavy_check_mark: |
-| sequence\<double\>             | System.Collections.Generic.IList\<double\>  | :heavy_check_mark: |
-| sequence\<long double\>        | System.Collections.Generic.IList\<decimal\> | :heavy_check_mark: |
+| sequence\<octet\>              | System.Collections.Generic.IList\<byte\>    | :white_check_mark: |
+| sequence\<short\>              | System.Collections.Generic.IList\<short\>   | :white_check_mark: |
+| sequence\<int16\>              | System.Collections.Generic.IList\<short\>   | :white_check_mark: |
+| sequence\<unsigned short\>     | System.Collections.Generic.IList\<ushort\>  | :white_check_mark: |
+| sequence\<uint16\>             | System.Collections.Generic.IList\<ushort\>  | :white_check_mark: |
+| sequence\<long\>               | System.Collections.Generic.IList\<int\>     | :white_check_mark: |
+| sequence\<int32\>              | System.Collections.Generic.IList\<int\>     | :white_check_mark: |
+| sequence\<unsigned long\>      | System.Collections.Generic.IList\<uint\>    | :white_check_mark: |
+| sequence\<uint32\>             | System.Collections.Generic.IList\<uint\>    | :white_check_mark: |
+| sequence\<long long\>          | System.Collections.Generic.IList\<long\>    | :white_check_mark: |
+| sequence\<int64\>              | System.Collections.Generic.IList\<long\>    | :white_check_mark: |
+| sequence\<unsigned long long\> | System.Collections.Generic.IList\<ulong\>   | :white_check_mark: |
+| sequence\<uint64\>             | System.Collections.Generic.IList\<ulong\>   | :white_check_mark: |
+| sequence\<float\>              | System.Collections.Generic.IList\<float\>   | :white_check_mark: |
+| sequence\<double\>             | System.Collections.Generic.IList\<double\>  | :white_check_mark: |
+| sequence\<long double\>        | System.Collections.Generic.IList\<decimal\> | :white_check_mark: |
 
 #### Strings
 
@@ -340,21 +340,22 @@ various constructs throughout an IDL document, and their impact on the language 
 context in which they are applied. The following table summarize the annotations that have an impact in the 
 C# language mapping and the current OpenDDSharp implementation status.
 
-| General Purpose Annotation | Status |
-| -------------------------- | ------ |
-| `@optional`                | :x:    |
-| `@position`                | :x:    |
-| `@value`                   | :x:    |
-| `@key`                     | :x:    |
-| `@default_literal`         | :x:    |
-| `@default`                 | :x:    |
-| `@range`                   | :x:    |
-| `@min`                     | :x:    |
-| `@max`                     | :x:    |
-| `@unit`                    | :x:    |
-| `@bit_bound`               | :x:    |
-| `@external`                | :x:    |
-| `@verbatim`                | :x:    |
+| General Purpose Annotation | Status               |
+|----------------------------|----------------------|
+| `@key`                     | :white_check_mark:   |
+| `@topic`                   | :white_check_mark:   |
+| `@optional`                | :x:                  |
+| `@position`                | :x:                  |
+| `@value`                   | :x:                  |
+| `@default_literal`         | :x:                  |
+| `@default`                 | :x:                  |
+| `@range`                   | :x:                  |
+| `@min`                     | :x:                  |
+| `@max`                     | :x:                  |
+| `@unit`                    | :x:                  |
+| `@bit_bound`               | :x:                  |
+| `@external`                | :x:                  |
+| `@verbatim`                | :x:                  |
 
 # IDL to C# Language Mapping Annotations
 
