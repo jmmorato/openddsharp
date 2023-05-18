@@ -12,6 +12,7 @@ be_produce.cpp
 be_util.h be_util.cpp
 cli_generator.h cli_generator.cpp
 csharp_generator.h csharp_generator.cpp
+csharp_json_generator.h csharp_json_generator.cpp
 cwrapper_generator.h cwrapper_generator.cpp
 dds_generator.h dds_generator.cpp
 dds_visitor.h dds_visitor.cpp

@@ -22,7 +22,7 @@ using System.Globalization;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
-using Test;
+using StructWrapper;
 
 namespace TestSupportProcess
 {

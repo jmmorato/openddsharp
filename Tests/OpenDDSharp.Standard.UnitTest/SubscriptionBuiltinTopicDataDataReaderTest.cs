@@ -23,7 +23,7 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
-using Test;
+using StructWrapper;
 
 namespace OpenDDSharp.Standard.UnitTest
 {

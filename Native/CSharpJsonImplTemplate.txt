@@ -127,9 +127,7 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            List<IntPtr> toRelease = new List<IntPtr>();
 
-            //<%TYPE%>Wrapper wrapper = data.ToNative(toRelease);
             string wrapper = JsonSerializer.Serialize(data, new JsonSerializerOptions
             {
                 Converters =
@@ -139,13 +137,8 @@
                     new DoubleJsonConverter()
                 }
             });
-            ret = (ReturnCode)Write(_native, wrapper, handle);
 
-            // Always free the unmanaged memory.
-            foreach (IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
+            ret = (ReturnCode)Write(_native, wrapper, handle);
 
             return ret;
         }
@@ -265,10 +258,6 @@
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow(IntPtr dw);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Write(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
         
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Json", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

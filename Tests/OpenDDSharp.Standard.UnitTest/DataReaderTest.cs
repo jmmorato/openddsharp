@@ -25,7 +25,7 @@
 // using OpenDDSharp.DDS;
 // using OpenDDSharp.Standard.UnitTest.Helpers;
 // using OpenDDSharp.Standard.UnitTest.Listeners;
-// using Test;
+// using StructWrapper;
 //
 // namespace OpenDDSharp.Standard.UnitTest
 // {

@@ -141,6 +141,9 @@ public:
 	bool csharp() const;
 	void csharp(bool b);
 
+    bool csharp_json() const;
+    void csharp_json(bool b);
+
 	bool cwrapper() const;
 	void cwrapper(bool b);
 
@@ -221,7 +224,7 @@ private:
   bool java_, suppress_idl_, suppress_typecode_,
     no_default_gen_, generate_itl_, generate_v8_,
     generate_rapidjson_, face_ts_,
-	cppcli_, csharp_, cwrapper_;
+	cppcli_, csharp_, csharp_json_, cwrapper_;
 
   ACE_CString export_macro_, export_include_,
     versioning_name_, versioning_begin_, versioning_end_,

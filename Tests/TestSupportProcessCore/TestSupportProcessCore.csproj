@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestIdlStandard\TestIdlStandard.csproj" />
+    <ProjectReference Include="..\TestIdlStruct\TestIdlStruct.csproj" />
   </ItemGroup>
 
 </Project>

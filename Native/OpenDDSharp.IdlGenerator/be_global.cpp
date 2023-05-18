@@ -43,6 +43,7 @@ BE_GlobalData::BE_GlobalData()
   , java_(false)
   , cppcli_(true)
   , csharp_(false)
+  , csharp_json_(false)
   , cwrapper_(false)
   , suppress_idl_(false)
   , suppress_typecode_(false)
@@ -219,6 +220,16 @@ bool BE_GlobalData::csharp() const
 	return this->csharp_;
 }
 
+void BE_GlobalData::csharp_json(bool b)
+{
+    this->csharp_json_ = b;
+}
+
+bool BE_GlobalData::csharp_json() const
+{
+    return this->csharp_json_;
+}
+
 void BE_GlobalData::cwrapper(bool b)
 {
 	this->cwrapper_ = b;
@@ -297,7 +308,7 @@ BE_GlobalData::open_streams(const char* filename)
     filebase = filebase.substr(idx + 1);
   }
 
-	if (csharp_) {
+	if (csharp_ || csharp_json_) {
 		impl_name_ = (filebase + "TypeSupport.cs").c_str();
 	}
 	else {
@@ -378,9 +389,14 @@ BE_GlobalData::parse_args(long& i, char** av)
   }
   case 'c':
   {
+      csharp_ = false;
+      csharp_json_ = false;
+      cwrapper_ = false;
       cppcli_ = false;
       if (0 == ACE_OS::strcmp(av[i], "-csharp"))
           csharp_ = true;
+      else if (0 == ACE_OS::strcmp(av[i], "-csharp_json"))
+          csharp_json_ = true;
       else if (0 == ACE_OS::strcmp(av[i], "-cwrapper"))
           cwrapper_ = true;
       else if (0 == ACE_OS::strcmp(av[i], "-cppcli"))

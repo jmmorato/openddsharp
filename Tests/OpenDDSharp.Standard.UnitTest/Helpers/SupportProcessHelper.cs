@@ -24,7 +24,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Test;
+using StructWrapper;
 
 namespace OpenDDSharp.Standard.UnitTest.Helpers
 {

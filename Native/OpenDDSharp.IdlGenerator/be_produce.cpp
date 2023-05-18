@@ -219,7 +219,7 @@ string to_header(const char* cpp_name)
 				}
 				break;
 			case BE_GlobalData::STREAM_CPP:
-				if (!be_global->csharp()) {
+				if (!be_global->csharp() && !be_global->csharp_json()) {
 					out << "#include \"" << be_global->header_name_.c_str() << "\"\n\n";
 				}
 				else {
@@ -341,7 +341,7 @@ void BE_produce()
     BE_abort();
   }
 
-  if (!java_ts_only && !be_global->csharp()) {
+  if (!java_ts_only && !be_global->csharp() && !be_global->csharp_json()) {
     postprocess(be_global->header_name_.c_str(),
                 be_global->header_, BE_GlobalData::STREAM_H);
   }

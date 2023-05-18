@@ -24,7 +24,7 @@ using System.Threading;
 using OpenDDSharp;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
-using Test;
+using StructWrapper;
 
 namespace ConsoleDemoCore
 {

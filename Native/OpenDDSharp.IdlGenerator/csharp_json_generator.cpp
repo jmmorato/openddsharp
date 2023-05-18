@@ -17,7 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-#include "csharp_generator.h"
+#include "csharp_json_generator.h"
 #include "be_extern.h"
 #include "be_util.h"
 
@@ -64,24 +64,24 @@ namespace {
 	}
 }
 
-csharp_generator::csharp_generator()
-	: impl_template_(read_template("CSharpStructImpl"))
+csharp_json_generator::csharp_json_generator()
+	: impl_template_(read_template("CSharpJsonImpl"))
 {
 }
 
-bool csharp_generator::gen_module(AST_Module* node) {
+bool csharp_json_generator::gen_module(AST_Module* node) {
 	be_global->impl_ << "namespace " << node->name()->last_component()->get_string() << "\n{\n";
 
 	return true;
 }
 
-bool csharp_generator::gen_module_end() {
+bool csharp_json_generator::gen_module_end() {
 	be_global->impl_ << "}\n";
 
 	return true;
 }
 
-bool csharp_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AST_Constant* constant) {
+bool csharp_json_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AST_Constant* constant) {
 	std::string csharp_type("");
 	std::string str_value("");
 
@@ -182,7 +182,7 @@ bool csharp_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AS
 	return true;
 }
 
-bool csharp_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std::vector<AST_EnumVal*>& contents, const char* repoid) {
+bool csharp_json_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std::vector<AST_EnumVal*>& contents, const char* repoid) {
 	be_global->impl_ << "    #region " << name->last_component()->get_string() << " Enumeration\n"
 					 << "    public enum " << name->last_component()->get_string() << "\n"
 					 << "    {\n";
@@ -206,11 +206,11 @@ bool csharp_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std:
 	return true;
 }
 
-bool csharp_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
+bool csharp_json_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
 	return true;
 }
 
-bool csharp_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
+bool csharp_json_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
 {
 	const std::string scoped_name = scoped(name);
 	const std::string short_name = name->last_component()->get_string();
@@ -259,7 +259,7 @@ bool csharp_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name
 	return true;
 }
 
-bool csharp_generator::gen_union(AST_Union*, UTL_ScopedName* name, const std::vector<AST_UnionBranch*>&, AST_Type*, const char*)
+bool csharp_json_generator::gen_union(AST_Union*, UTL_ScopedName* name, const std::vector<AST_UnionBranch*>&, AST_Type*, const char*)
 {
 	if (idl_global->is_dcps_type(name)) {
 		std::cerr << "ERROR: union " << scoped(name) << " can not be used as a "
@@ -273,7 +273,7 @@ bool csharp_generator::gen_union(AST_Union*, UTL_ScopedName* name, const std::ve
 	return true;
 }
 
-std::string csharp_generator::declare_struct_fields(const std::vector<AST_Field*>& fields, const std::string indent) {
+std::string csharp_json_generator::declare_struct_fields(const std::vector<AST_Field*>& fields, const std::string indent) {
 	std::string ret("");
 
 	for (unsigned int i = 0; i < fields.size(); i++) {
@@ -292,7 +292,7 @@ std::string csharp_generator::declare_struct_fields(const std::vector<AST_Field*
 	return ret;
 }
 
-std::string csharp_generator::declare_marshal_fields(const std::vector<AST_Field*>& fields, const std::string indent) {
+std::string csharp_json_generator::declare_marshal_fields(const std::vector<AST_Field*>& fields, const std::string indent) {
 	std::string ret("");
 
 	for (unsigned int i = 0; i < fields.size(); i++) {
@@ -338,7 +338,7 @@ std::string csharp_generator::declare_marshal_fields(const std::vector<AST_Field
 	return ret;
 }
 
-std::string csharp_generator::implement_struct_constructor(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
+std::string csharp_json_generator::implement_struct_constructor(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
 	std::string ret(indent);
 	ret.append("public ");
 	ret.append(name);
@@ -368,7 +368,7 @@ std::string csharp_generator::implement_struct_constructor(const std::vector<AST
 	return ret;
 }
 
-std::string csharp_generator::implement_struct_properties(const std::vector<AST_Field*>& fields, const std::string indent) {
+std::string csharp_json_generator::implement_struct_properties(const std::vector<AST_Field*>& fields, const std::string indent) {
 	std::string ret("");
 
 	for (unsigned int i = 0; i < fields.size(); i++) {
@@ -398,7 +398,7 @@ std::string csharp_generator::implement_struct_properties(const std::vector<AST_
 	return ret;
 }
 
-std::string csharp_generator::implement_struct_to_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
+std::string csharp_json_generator::implement_struct_to_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
 	std::string ret(indent);
 	ret.append("internal ");
 	ret.append(name);
@@ -430,7 +430,7 @@ std::string csharp_generator::implement_struct_to_native(const std::vector<AST_F
 	return ret;
 }
 
-std::string csharp_generator::implement_struct_from_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
+std::string csharp_json_generator::implement_struct_from_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
 	std::string ret(indent);
 	ret.append("internal void FromNative(");
 	ret.append(name);
@@ -452,7 +452,7 @@ std::string csharp_generator::implement_struct_from_native(const std::vector<AST
 	return ret;
 }
 
-std::string csharp_generator::get_csharp_type(AST_Type* type) {
+std::string csharp_json_generator::get_csharp_type(AST_Type* type) {
 	AST_Decl::NodeType node_type = type->node_type();
 	std::string ret(type->flat_name());
 
@@ -562,7 +562,7 @@ std::string csharp_generator::get_csharp_type(AST_Type* type) {
 	return ret;
 }
 
-std::string csharp_generator::get_marshal_type(AST_Type* type) {
+std::string csharp_json_generator::get_marshal_type(AST_Type* type) {
 	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret(type->flat_name());
 
@@ -675,7 +675,7 @@ std::string csharp_generator::get_marshal_type(AST_Type* type) {
 	return ret;
 }
 
-std::string csharp_generator::get_linux_marshal_type(AST_Type* type) {
+std::string csharp_json_generator::get_linux_marshal_type(AST_Type* type) {
 	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
@@ -725,7 +725,7 @@ std::string csharp_generator::get_linux_marshal_type(AST_Type* type) {
 	return ret;
 }
 
-std::string csharp_generator::get_marshal_as_attribute(AST_Type* type, std::string indent) {
+std::string csharp_json_generator::get_marshal_as_attribute(AST_Type* type, std::string indent) {
 	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
@@ -827,7 +827,7 @@ std::string csharp_generator::get_marshal_as_attribute(AST_Type* type, std::stri
 	return ret;
 }
 
-std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* type) {
+std::string csharp_json_generator::get_marshal_attribute_unmanaged_type(AST_Type* type) {
 	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
@@ -917,7 +917,7 @@ std::string csharp_generator::get_marshal_attribute_unmanaged_type(AST_Type* typ
 	return ret;
 }
 
-std::string csharp_generator::get_linux_marshal_attribute_unmanaged_type(AST_Type* type) {
+std::string csharp_json_generator::get_linux_marshal_attribute_unmanaged_type(AST_Type* type) {
 	const AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
@@ -1007,7 +1007,7 @@ std::string csharp_generator::get_linux_marshal_attribute_unmanaged_type(AST_Typ
 	return ret;
 }
 
-std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
+std::string csharp_json_generator::get_csharp_default_value(AST_Type* type) {
 	AST_Decl::NodeType node_type = type->node_type();
 	std::string ret(type->flat_name());
 
@@ -1140,7 +1140,7 @@ std::string csharp_generator::get_csharp_default_value(AST_Type* type) {
 	return ret;
 }
 
-std::string csharp_generator::get_csharp_constructor_initialization(AST_Type* type, const char * name) {
+std::string csharp_json_generator::get_csharp_constructor_initialization(AST_Type* type, const char * name) {
 	AST_Decl::NodeType node_type = type->node_type();
 	std::string ret("");
 
@@ -1253,7 +1253,7 @@ std::string csharp_generator::get_csharp_constructor_initialization(AST_Type* ty
 	return ret;
 }
 
-std::string csharp_generator::get_field_to_native(AST_Type* type, const char * name, const std::string indent) {
+std::string csharp_json_generator::get_field_to_native(AST_Type* type, const char * name, const std::string indent) {
 	std::string ret("");
 	const AST_Decl::NodeType node_type = type->node_type();
 	switch (node_type)
@@ -1996,7 +1996,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 	return ret;
 }
 
-std::string csharp_generator::get_field_from_native(AST_Type* type, const char * name, const std::string indent) {
+std::string csharp_json_generator::get_field_from_native(AST_Type* type, const char * name, const std::string indent) {
 	std::string ret(indent);
 	const AST_Decl::NodeType node_type = type->node_type();
 	switch (node_type)

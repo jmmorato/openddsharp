@@ -1,5 +1,5 @@
 
-module Test {
+module JsonWrapper {
 
 	enum SupportTestKind {
 		InconsistentTopicTest,
@@ -153,7 +153,7 @@ module Test {
 		string UnboundedStringField;
 		wstring UnboundedWStringField;
 		BoundedStringType BoundedStringField;
-//		BoundedWStringType BoundedWStringField;
+		BoundedWStringType BoundedWStringField;
 
 		UnboundedBooleanSequenceType UnboundedBooleanSequenceField;
 //		BoundedBooleanSequenceType BoundedBooleanSequenceField;
@@ -218,7 +218,7 @@ module Test {
 //		//LongDoubleArrayType LongDoubleArrayField;
 
 		StringArrayType StringArrayField;
-//		WStringArrayType WStringArrayField; not working when not initialized
+		WStringArrayType WStringArrayField;
 
 //		// No working in mono
 		StructArrayType StructArrayField;

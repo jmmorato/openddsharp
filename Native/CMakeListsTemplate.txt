@@ -16,11 +16,7 @@ elseif(UNIX)
     set(CMAKE_INSTALL_RPATH $ORIGIN)
 endif()
 
-set(OPENDDS_RAPIDJSON "/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_MacOS")
-
 add_library(${PROJECT_NAME} SHARED ${WRAPPER_FILES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC "/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_MacOS/tools/rapidjson/include")
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PUBLIC /wd4190)

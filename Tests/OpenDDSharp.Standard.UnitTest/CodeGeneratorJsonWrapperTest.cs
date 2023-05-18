@@ -19,10 +19,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
-using Test;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
@@ -30,7 +30,7 @@ namespace OpenDDSharp.Standard.UnitTest
     /// Code generator unit test class.
     /// </summary>
     [TestClass]
-    public class CodeGeneratorTest
+    public class CodeGeneratorJsonWrapperTest
     {
         #region Constants
         private const string TEST_CATEGORY = "CodeGenerator";
@@ -957,7 +957,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 UnboundedStringField = "Hello, I love you, won't you tell me your name?",
                 UnboundedWStringField = "She's walking down the street\nBlind to every eye she meets\nDo you think you'll be the guy\nTo make the queen of the angels sigh?",
                 BoundedStringField = "Hello, I love you, won't you te",
-                // BoundedWStringField = "Hello, I love you, won't you te",
+                BoundedWStringField = "Hello, I love you, won't you te",
             };
             var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -978,17 +978,17 @@ namespace OpenDDSharp.Standard.UnitTest
             // TODO: I would expect ".Substring(0, 32)" is received but it seems the whole string is transported. 
             // Check with OpenDDS test and report for clarification if the behaviour is confirmed.
             Assert.AreEqual(data.BoundedStringField, received.BoundedStringField);
-            // Assert.AreEqual(data.BoundedWStringField, received.BoundedWStringField);
+            Assert.AreEqual(data.BoundedWStringField, received.BoundedWStringField);
 
             Assert.AreEqual(typeof(string), data.UnboundedStringField.GetType());
             Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());
             Assert.AreEqual(typeof(string), data.BoundedStringField.GetType());
-            // Assert.AreEqual(typeof(string), data.BoundedWStringField.GetType());
+            Assert.AreEqual(typeof(string), data.BoundedWStringField.GetType());
 
             Assert.AreEqual(defaultStruct.UnboundedStringField, string.Empty);
             Assert.AreEqual(defaultStruct.UnboundedWStringField, string.Empty);
             Assert.AreEqual(defaultStruct.BoundedStringField, string.Empty);
-            // Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
         }
 
         /// <summary>
@@ -1093,14 +1093,14 @@ namespace OpenDDSharp.Standard.UnitTest
                     "Splits a family in two",
                     "Puts people on streets",
                 },
-                // WStringArrayField = new[]
-                // {
-                //     "Rebel Rebel, you've turn your dress",
-                //     "Rebel Rebel, your face is a mess",
-                //     "Rebel Rebel, how could they know?",
-                //     "Hot tramp,",
-                //     "I love you so!",
-                // },
+                WStringArrayField = new[]
+                {
+                    "Rebel Rebel, you've turn your dress",
+                    "Rebel Rebel, your face is a mess",
+                    "Rebel Rebel, how could they know?",
+                    "Hot tramp,",
+                    "I love you so!",
+                },
             };
 
             _dataWriter.Write(data);
@@ -1117,10 +1117,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
-            // Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
+            Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
 
             Assert.AreEqual(typeof(string[]), data.StringArrayField.GetType());
-            // Assert.AreEqual(typeof(string[]), data.WStringArrayField.GetType());
+            Assert.AreEqual(typeof(string[]), data.WStringArrayField.GetType());
 
             Assert.IsNotNull(defaultStruct.StringArrayField);
             Assert.AreEqual(5, defaultStruct.StringArrayField.Length);
@@ -1129,12 +1129,12 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(string.Empty, s);
             }
 
-            // Assert.IsNotNull(defaultStruct.WStringArrayField);
-            // Assert.AreEqual(5, defaultStruct.WStringArrayField.Length);
-            // foreach (var s in defaultStruct.WStringArrayField)
-            // {
-            //     Assert.AreEqual(string.Empty, s);
-            // }
+            Assert.IsNotNull(defaultStruct.WStringArrayField);
+            Assert.AreEqual(5, defaultStruct.WStringArrayField.Length);
+            foreach (var s in defaultStruct.WStringArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
         }
 
         // /// <summary>

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard", "Sou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleDemoCore", "Examples\ConsoleDemoCore\ConsoleDemoCore.csproj", "{12F78B1F-EBE5-4A82-A98F-62AE1B21D57A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIdlStandard", "Tests\TestIdlStandard\TestIdlStandard.csproj", "{C8E20403-7589-4002-9721-E42D025FB344}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIdlStruct", "Tests\TestIdlStruct\TestIdlStruct.csproj", "{C8E20403-7589-4002-9721-E42D025FB344}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1A656994-CDE3-4E34-A404-D9E87C9E7FED} = {1A656994-CDE3-4E34-A404-D9E87C9E7FED}
 	EndProjectSection
@@ -45,6 +45,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard.Doc", "Documentation\OpenDDSharp.Standard.Doc\OpenDDSharp.Standard.Doc.csproj", "{F0055EFE-3537-4325-845B-1A4E5446CC5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.BuildTasks", "Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj", "{1A656994-CDE3-4E34-A404-D9E87C9E7FED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestIdlJson", "Tests\TestIdlJson\TestIdlJson.csproj", "{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -182,6 +184,22 @@ Global
 		{1A656994-CDE3-4E34-A404-D9E87C9E7FED}.Release|x86.ActiveCfg = Release|Any CPU
 		{1A656994-CDE3-4E34-A404-D9E87C9E7FED}.Debug|ARM64.ActiveCfg = Debug|Any CPU
 		{1A656994-CDE3-4E34-A404-D9E87C9E7FED}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|Any CPU.Build.0 = Debug|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|x64.ActiveCfg = Debug|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|x64.Build.0 = Debug|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|x86.ActiveCfg = Debug|x86
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|x86.Build.0 = Debug|x86
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Debug|ARM64.Build.0 = Debug|ARM64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|Any CPU.ActiveCfg = Release|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|Any CPU.Build.0 = Release|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|x64.ActiveCfg = Release|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|x64.Build.0 = Release|x64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|x86.ActiveCfg = Release|x86
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|x86.Build.0 = Release|x86
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|ARM64.ActiveCfg = Release|ARM64
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD}.Release|ARM64.Build.0 = Release|ARM64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +211,7 @@ Global
 		{BF64F3F0-4B74-47CB-BE56-D7755E4E120E} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
 		{F456B7F5-5018-4337-9771-CB335304827A} = {BEAB5E70-13D0-47EE-B7DD-9056EFFF5567}
 		{F0055EFE-3537-4325-845B-1A4E5446CC5E} = {DD4809A9-6F47-4686-8433-D8A10F3EB9E8}
+		{B59C0CE3-D395-42FB-BB83-66EA9BB4E9CD} = {892C06BC-E34F-46C8-AB2A-738A288D8D9F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F982C01-616F-4A76-9E24-30312AAD0A53}

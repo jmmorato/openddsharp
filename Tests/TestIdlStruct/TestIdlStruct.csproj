@@ -13,6 +13,7 @@
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
+    <RootNamespace>TestIdlStandard</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
@@ -84,7 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <IdlTemplates Include="..\..\Native\CSharpImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
+    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpJsonImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
   </ItemGroup>
 
   <!-- Ensure templates are copied for code generation-->
@@ -198,25 +199,25 @@
 
   <ItemGroup>
 	<!-- OpenDDS native Libraries -->
-	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlStandardWrapper.dll" Visible="false" />
+	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlStructWrapper.dll" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		<TargetPath>TestIdlStandardWrapper.dll</TargetPath>
+		<TargetPath>TestIdlStructWrapper.dll</TargetPath>
 	</ContentWithTargetPath>
 
-	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.so" Visible="false" />
+	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlStructWrapper.so" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		<TargetPath>libTestIdlStandardWrapper.so</TargetPath>
+		<TargetPath>libTestIdlStructWrapper.so</TargetPath>
 	</ContentWithTargetPath>
 
-	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlStandardWrapper.dylib" Visible="false" />
+	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlStructWrapper.dylib" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		<TargetPath>libTestIdlStandardWrapper.dylib</TargetPath>
+		<TargetPath>libTestIdlStructWrapper.dylib</TargetPath>
 	</ContentWithTargetPath>
   </ItemGroup>
 

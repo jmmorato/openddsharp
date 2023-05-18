@@ -83,25 +83,29 @@
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_MacOS\bin" />
 
     <!--Code generation templates x86-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src="..\ext\OpenDDS_x86\dds\idl\IDLTemplate.txt" target="tools\DDS_x86\dds\idl" />
 
     <!--Code generation templates x64-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src="..\ext\OpenDDS_x64\dds\idl\IDLTemplate.txt" target="tools\DDS_x64\dds\idl" />
 
     <!--Code generation templates Linux-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src="..\ext\OpenDDS_Linux\dds\idl\IDLTemplate.txt" target="tools\DDS_Linux\dds\idl" />
 
     <!--Code generation templates MacOS-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src="..\ext\OpenDDS_MacOS\dds\idl\IDLTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
