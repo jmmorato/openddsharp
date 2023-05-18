@@ -6,7 +6,7 @@ Some sections of the specification are not included in this documentation becaus
 
 The following legend is used to define the current version status:
 
-:heavy_check_mark: Fully implemented
+:white_check_mark: Fully implemented
 
 :ballot_box_with_check: Partially implemented
 
@@ -16,11 +16,11 @@ The following legend is used to define the current version status:
 
 ### Modules
 
-:heavy_check_mark: IDL modules are mapped to C# namespaces of the same name.
+:white_check_mark: IDL modules are mapped to C# namespaces of the same name.
 
-:heavy_check_mark: All IDL type declarations within the IDL module shall be mapped to corresponding C# declarations within the generated namespace.
+:white_check_mark: All IDL type declarations within the IDL module shall be mapped to corresponding C# declarations within the generated namespace.
 
-:heavy_check_mark: IDL declarations not enclosed in any module shall be mapped into the global scope.
+:white_check_mark: IDL declarations not enclosed in any module shall be mapped into the global scope.
 
 ### Constants
 :ballot_box_with_check: IDL constants shall be mapped to `public sealed class`es of the same name within the equivalent scope and namespace where they are defined.
@@ -54,18 +54,18 @@ The following legend is used to define the current version status:
 | ------------------ | ------- | ------------------ |
 | int8               | sbyte   | :x:                |
 | uint8              | byte    | :x:                |
-| short              | short   | :heavy_check_mark: |
-| int16              | short   | :heavy_check_mark: |
-| unsigned short     | ushort  | :heavy_check_mark: |
-| uint16             | ushort  | :heavy_check_mark: |
-| long               | int     | :heavy_check_mark: |
-| int32              | int     | :heavy_check_mark: |
-| unsigned long      | uint    | :heavy_check_mark: |
-| uint32             | uint    | :heavy_check_mark: |
-| long long          | long    | :heavy_check_mark: |
-| int64              | long    | :heavy_check_mark: |
-| unsigned long long | ulong   | :heavy_check_mark: |
-| uint64             | ulong   | :heavy_check_mark: |
+| short              | short   | :white_check_mark: |
+| int16              | short   | :white_check_mark: |
+| unsigned short     | ushort  | :white_check_mark: |
+| uint16             | ushort  | :white_check_mark: |
+| long               | int     | :white_check_mark: |
+| int32              | int     | :white_check_mark: |
+| unsigned long      | uint    | :white_check_mark: |
+| uint32             | uint    | :white_check_mark: |
+| long long          | long    | :white_check_mark: |
+| int64              | long    | :white_check_mark: |
+| unsigned long long | ulong   | :white_check_mark: |
+| uint64             | ulong   | :white_check_mark: |
 
 #### Floating-Point Types
 
@@ -73,13 +73,13 @@ The following legend is used to define the current version status:
 
 | IDL Type    | C# Type | Status             |
 | ----------- | ------- | ------------------ |
-| float       | float   | :heavy_check_mark: |
-| double      | double  | :heavy_check_mark: |
+| float       | float   | :white_check_mark: |
+| double      | double  | :white_check_mark: |
 | long double | decimal | :x:                |
 
 #### Char Types
 
-:heavy_check_mark: The IDL `char` type shall be mapped to the C# type `char`.
+:white_check_mark: The IDL `char` type shall be mapped to the C# type `char`.
 
 > [!NOTE]
 > IDL characters are 8-bit quantities representing elements of a character set, while C# characters are
@@ -87,22 +87,22 @@ The following legend is used to define the current version status:
 
 #### Wide Char Types
 
-:heavy_check_mark: The IDL `wchar` type shall be mapped to the C# type `char`.
+:white_check_mark: The IDL `wchar` type shall be mapped to the C# type `char`.
 
 #### Boolean
 
-:heavy_check_mark: The IDL boolean type shall be mapped to the C# `bool`, and the IDL constants `TRUE` and `FALSE` shall be mapped to
+:white_check_mark: The IDL boolean type shall be mapped to the C# `bool`, and the IDL constants `TRUE` and `FALSE` shall be mapped to
 the corresponding C# boolean literals `true` and `false`.
 
 ### Template Types
 
 #### Sequences
 
-:heavy_check_mark: IDL sequences shall be mapped to the C# System.Collections.Generic.IList<T> interface, instantiated with the mapped type T of the sequence elements.
+:white_check_mark: IDL sequences shall be mapped to the C# System.Collections.Generic.IList<T> interface, instantiated with the mapped type T of the sequence elements.
 
-:heavy_check_mark: In the mapping, everywhere the sequence type is needed, a System.Collections.Generic.IList<T> shall be used.
+:white_check_mark: In the mapping, everywhere the sequence type is needed, a System.Collections.Generic.IList<T> shall be used.
 
-:heavy_check_mark: Implementations of System.Collections.Generic.IList<T> shall be writable.
+:white_check_mark: Implementations of System.Collections.Generic.IList<T> shall be writable.
 
 :x: Bounds checking on bounded sequences may raise an exception if necessary.
 
@@ -110,39 +110,39 @@ the corresponding C# boolean literals `true` and `false`.
 
 | IDL Type                       | C# Type                                     | Status             |
 | ------------------------------ | ------------------------------------------- | ------------------ |
-| sequence\<boolean\>            | System.Collections.Generic.IList\<bool\>    | :heavy_check_mark: |
-| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :heavy_check_mark: |
-| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :heavy_check_mark: |
+| sequence\<boolean\>            | System.Collections.Generic.IList\<bool\>    | :white_check_mark: |
+| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :white_check_mark: |
+| sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :white_check_mark: |
 | sequence\<int8\>               | System.Collections.Generic.IList\<sbyte\>   | :x:                |
 | sequence\<uint8\>              | System.Collections.Generic.IList\<byte\>    | :x:                |
-| sequence\<octet\>              | System.Collections.Generic.IList\<byte\>    | :heavy_check_mark: |
-| sequence\<short\>              | System.Collections.Generic.IList\<short\>   | :heavy_check_mark: |
-| sequence\<int16\>              | System.Collections.Generic.IList\<short\>   | :heavy_check_mark: |
-| sequence\<unsigned short\>     | System.Collections.Generic.IList\<ushort\>  | :heavy_check_mark: |
-| sequence\<uint16\>             | System.Collections.Generic.IList\<ushort\>  | :heavy_check_mark: |
-| sequence\<long\>               | System.Collections.Generic.IList\<int\>     | :heavy_check_mark: |
-| sequence\<int32\>              | System.Collections.Generic.IList\<int\>     | :heavy_check_mark: |
-| sequence\<unsigned long\>      | System.Collections.Generic.IList\<uint\>    | :heavy_check_mark: |
-| sequence\<uint32\>             | System.Collections.Generic.IList\<uint\>    | :heavy_check_mark: |
-| sequence\<long long\>          | System.Collections.Generic.IList\<long\>    | :heavy_check_mark: |
-| sequence\<int64\>              | System.Collections.Generic.IList\<long\>    | :heavy_check_mark: |
-| sequence\<unsigned long long\> | System.Collections.Generic.IList\<ulong\>   | :heavy_check_mark: |
-| sequence\<uint64\>             | System.Collections.Generic.IList\<ulong\>   | :heavy_check_mark: |
-| sequence\<float\>              | System.Collections.Generic.IList\<float\>   | :heavy_check_mark: |
-| sequence\<double\>             | System.Collections.Generic.IList\<double\>  | :heavy_check_mark: |
-| sequence\<long double\>        | System.Collections.Generic.IList\<decimal\> | :heavy_check_mark: |
+| sequence\<octet\>              | System.Collections.Generic.IList\<byte\>    | :white_check_mark: |
+| sequence\<short\>              | System.Collections.Generic.IList\<short\>   | :white_check_mark: |
+| sequence\<int16\>              | System.Collections.Generic.IList\<short\>   | :white_check_mark: |
+| sequence\<unsigned short\>     | System.Collections.Generic.IList\<ushort\>  | :white_check_mark: |
+| sequence\<uint16\>             | System.Collections.Generic.IList\<ushort\>  | :white_check_mark: |
+| sequence\<long\>               | System.Collections.Generic.IList\<int\>     | :white_check_mark: |
+| sequence\<int32\>              | System.Collections.Generic.IList\<int\>     | :white_check_mark: |
+| sequence\<unsigned long\>      | System.Collections.Generic.IList\<uint\>    | :white_check_mark: |
+| sequence\<uint32\>             | System.Collections.Generic.IList\<uint\>    | :white_check_mark: |
+| sequence\<long long\>          | System.Collections.Generic.IList\<long\>    | :white_check_mark: |
+| sequence\<int64\>              | System.Collections.Generic.IList\<long\>    | :white_check_mark: |
+| sequence\<unsigned long long\> | System.Collections.Generic.IList\<ulong\>   | :white_check_mark: |
+| sequence\<uint64\>             | System.Collections.Generic.IList\<ulong\>   | :white_check_mark: |
+| sequence\<float\>              | System.Collections.Generic.IList\<float\>   | :white_check_mark: |
+| sequence\<double\>             | System.Collections.Generic.IList\<double\>  | :white_check_mark: |
+| sequence\<long double\>        | System.Collections.Generic.IList\<decimal\> | :white_check_mark: |
 
 #### Strings
 
-:heavy_check_mark: IDL `string`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
+:white_check_mark: IDL `string`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
 
-:heavy_check_mark: The resulting strings shall be encoded in UTF-16 format.
+:white_check_mark: The resulting strings shall be encoded in UTF-16 format.
 
 #### Wstrings
 
-:heavy_check_mark: IDL `wstring`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
+:white_check_mark: IDL `wstring`s, both bounded and unbounded variants, shall be mapped to C# `string`s.
 
-:heavy_check_mark: The resulting strings shall be encoded in UTF-16 format.
+:white_check_mark: The resulting strings shall be encoded in UTF-16 format.
 
 #### Fixed Type
 
@@ -154,28 +154,28 @@ the corresponding C# boolean literals `true` and `false`.
 
 #### Structures
 
-:heavy_check_mark: An IDL struct shall be mapped to a C# `public class` with the same name.
+:white_check_mark: An IDL struct shall be mapped to a C# `public class` with the same name.
 
 :ballot_box_with_check: The `class` shall provide the following:
 
-- :heavy_check_mark: A public property of the equivalent type for each member of the structure, including both a getter and a setter.
+- :white_check_mark: A public property of the equivalent type for each member of the structure, including both a getter and a setter.
   - :x: In general, properties representing IDL sequences and maps shall include only a getter.
   - :x: As an exception, properties representing sequences and maps that are marked with the `@external`
         annotation (see the Standardized Annotations building block) shall include both a getter and a setter.
 - :ballot_box_with_check: Property setters shall perform shallow assignments of reference types and deep copies of value types.
-- :heavy_check_mark: A public default constructor that takes no parameters
+- :white_check_mark: A public default constructor that takes no parameters
 - :x: A public copy constructor that takes as a parameter an object of the mapped class.
   - :x: The copy constructor shall perform a deep copy of every member of the structure.
   - :x: Implementations supporting the Standardized Annotations building block shall perform a shallow assignment for members annotated with `@external`
 - :x: A public constructor that accepts parameters for each member (i.e., the all values constructor). The
 constructor shall perform shallow assignments of reference types and deep copies of value types.
 
-:heavy_check_mark: The default constructor shall initialize member fields as follows:
-- :heavy_check_mark: All primitive members shall be left as initialized by the C# default initialization.
-- :heavy_check_mark: All string members in the struct shall be initialized to string.Empty.
-- :heavy_check_mark: All array members shall be initialized to an array of the declared size whose elements are initialized with their default constructor.
-- :heavy_check_mark: All sequence members shall be initialized to zero-length sequences of the corresponding type.
-- :heavy_check_mark: All other members shall be initialized to an object created with their respective default constructor.
+:white_check_mark: The default constructor shall initialize member fields as follows:
+- :white_check_mark: All primitive members shall be left as initialized by the C# default initialization.
+- :white_check_mark: All string members in the struct shall be initialized to string.Empty.
+- :white_check_mark: All array members shall be initialized to an array of the declared size whose elements are initialized with their default constructor.
+- :white_check_mark: All sequence members shall be initialized to zero-length sequences of the corresponding type.
+- :white_check_mark: All other members shall be initialized to an object created with their respective default constructor.
 
 :x: The class shall implement the `IEquatable<T>` interface, where `T` is the corresponding class name.
 
@@ -225,7 +225,7 @@ the corresponding property value and the discriminator value of choice.
 
 #### Enumerations
 
-:heavy_check_mark: An IDL `enum` shall be mapped to a C# `public enum` with the same name as the IDL enum type.
+:white_check_mark: An IDL `enum` shall be mapped to a C# `public enum` with the same name as the IDL enum type.
 
 :x: If the IDL enumeration declaration is preceded by a `@bit_bound` annotation; the corresponding C# enum type shall
 be `sbyte` for bit bound values between 1 and 8; `short`, for bit bound values between 9 and 16; `int`, for bit bound
@@ -233,17 +233,17 @@ values between 17 and 32; and `long`, for bit bound values between 33 and 64.
 
 ### Arrays
 
-:heavy_check_mark: An IDL array shall be mapped to a C# array of the mapped element type or to a C# `class` offering an interface
+:white_check_mark: An IDL array shall be mapped to a C# array of the mapped element type or to a C# `class` offering an interface
 compatible with that of a C# native array of the mapped element type. 
 
-:heavy_check_mark: In the mapping, everywhere the array type is needed, an array or an equivalent class of the mapped element type shall be used.
+:white_check_mark: In the mapping, everywhere the array type is needed, an array or an equivalent class of the mapped element type shall be used.
 
 :x: The bounds for the array shall be checked by the setter of the corresponding property and a `System.ArgumentOutOfRangeException` shall be
 raised if a bounds violation occurs.
 
 ### Naming Data Types
 
-:heavy_check_mark: C# does not have a `typedef` construct; therefore, the declaration of types using `typedef` in IDL shall not result in
+:white_check_mark: C# does not have a `typedef` construct; therefore, the declaration of types using `typedef` in IDL shall not result in
 the creation of any C# type. Instead, the use of an IDL `typedef` type shall be replaced with the type referenced by
 the `typedef` statement. For nested `typedef`s, the `typedef`ed type shall be replaced with the original type in the
 sequence of `typedef` statements.
@@ -258,7 +258,7 @@ an any instance as well as the actual type of that value.
 
 ### Structures with Single Inheritance
 
-:heavy_check_mark: An IDL `struct` that inherits from a base IDL `struct`, shall be declared as a
+:white_check_mark: An IDL `struct` that inherits from a base IDL `struct`, shall be declared as a
 C# `public class` that extends the `class` resulting from mapping the base IDL `struct`.
 
 :ballot_box_with_check: The resulting C# `public class` shall be mapped according to the general mapping rules for IDL `struct`s with the following additions:
@@ -342,8 +342,8 @@ C# language mapping and the current OpenDDSharp implementation status.
 
 | General Purpose Annotation | Status               |
 |----------------------------|----------------------|
-| `@key`                     | :heavy_check_mark:   |
-| `@topic`                   | :heavy_check_mark:   |
+| `@key`                     | :white_check_mark:   |
+| `@topic`                   | :white_check_mark:   |
 | `@optional`                | :x:                  |
 | `@position`                | :x:                  |
 | `@value`                   | :x:                  |
