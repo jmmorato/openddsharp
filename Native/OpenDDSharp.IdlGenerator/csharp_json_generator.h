@@ -41,6 +41,7 @@ private:
 	std::string declare_marshal_fields(const std::vector<AST_Field*>& fields, const std::string indent);
 	std::string implement_struct_constructor(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent);
 	std::string implement_struct_properties(const std::vector<AST_Field*>& fields, const std::string indent);
+    std::string implement_struct_memberwise_copy(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent);
 	std::string implement_struct_to_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent);
 	std::string implement_struct_from_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent);
 	std::string get_csharp_type(AST_Type* type);

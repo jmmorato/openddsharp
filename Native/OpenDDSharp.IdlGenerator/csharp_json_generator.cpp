@@ -237,6 +237,7 @@ bool csharp_json_generator::gen_struct(AST_Structure* structure, UTL_ScopedName*
 					 << implement_struct_constructor(fields, short_name, "        ").c_str()
 					 << "        #endregion" << "\n\n"
 					 << "        #region Methods" << "\n"
+                     << implement_struct_memberwise_copy(fields, short_name, "        ").c_str()
 					 << implement_struct_to_native(fields, short_name, "        ").c_str()
 					 << implement_struct_from_native(fields, short_name, "        ").c_str()
 					 << "        #endregion" << "\n"
@@ -396,6 +397,34 @@ std::string csharp_json_generator::implement_struct_properties(const std::vector
 	}
 
 	return ret;
+}
+
+std::string csharp_json_generator::implement_struct_memberwise_copy(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
+    std::string ret(indent);
+    ret.append("internal void MemberwiseCopy(");
+    ret.append(name);
+    ret.append(" source)\n");
+
+    ret.append(indent);
+    ret.append("{\n");
+
+    for (unsigned int i = 0; i < fields.size(); i++) {
+        AST_Field* field = fields[i];
+        AST_Type* field_type = field->field_type();
+        const char * field_name = field->local_name()->get_string();
+
+        ret.append(indent);
+        ret.append("    ");
+        ret.append(field_name);
+        ret.append(" = source.");
+        ret.append(field_name);
+        ret.append(";\n");
+    }
+
+    ret.append(indent);
+    ret.append("}\n\n");
+
+    return ret;
 }
 
 std::string csharp_json_generator::implement_struct_to_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {

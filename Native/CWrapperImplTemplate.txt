@@ -140,6 +140,23 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     return (int)ret;
 }
 
+int <%SCOPED_METHOD%>DataReader_ReadNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo)
+{
+    <%SCOPED%> sample;
+    ::DDS::ReturnCode_t ret = dr->read_next_sample(sample, *sampleInfo);
+
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        <%SCOPED%>TypeSupport_var ts = new <%SCOPED%>TypeSupportImpl;
+        OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);
+        CORBA::String_var buffer;
+        ts->encode_to_string(sample, buffer, format);
+        json_data = CORBA::string_dup(buffer);
+    }
+    
+    return (int)ret;
+}
+
 int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo)
 {
     <%SCOPED%> nativeData = data->to_native();;

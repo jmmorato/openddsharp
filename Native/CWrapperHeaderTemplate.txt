@@ -45,6 +45,8 @@ EXTERN_METHOD_EXPORT <%SCOPED%>DataReader_ptr <%SCOPED_METHOD%>DataReader_Narrow
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_ReadNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo);
 
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);

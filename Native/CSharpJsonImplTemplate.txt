@@ -132,6 +132,7 @@
             {
                 Converters =
                 {
+                    new JsonStringEnumConverter(),
                     new OctetArrayConverter(),
                     new FloatJsonConverter(),
                     new DoubleJsonConverter()
@@ -990,17 +991,29 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            <%TYPE%>Wrapper wrapper = new <%TYPE%>Wrapper();
+            IntPtr ptr = IntPtr.Zero;
             SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
-            ret = (ReturnCode)ReadNextSample(_native, ref wrapper, ref infoWrapper);
+            ret = (ReturnCode)ReadNextSample(_native, ref ptr, ref infoWrapper);
             if (ret == ReturnCode.Ok)
             {
-                data.FromNative(wrapper);
+                var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(json_data))
+                {
+                    var sample = JsonSerializer.Deserialize<<%TYPE%>>(json_data, new JsonSerializerOptions
+                    {
+                        Converters =
+                        {
+                            new JsonStringEnumConverter(),
+                            new OctetArrayConverter(),
+                            new FloatJsonConverter(),
+                            new DoubleJsonConverter()
+                        }
+                    });
+                    
+                    data.MemberwiseCopy(sample);
+                }
+                
                 sampleInfo.FromNative(infoWrapper);
-
-                // Always free the unmanaged memory.
-                // As the unmanaged memory was reserved in C++ we need a method to release it from C++.
-                Release(ref wrapper);
             }
 
             return ret;
@@ -1130,8 +1143,8 @@
         private static extern int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int ReadNextSample(IntPtr dr, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, [In, Out] ref SampleInfoWrapper sampleInfo);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample", CallingConvention = CallingConvention.Cdecl)]
