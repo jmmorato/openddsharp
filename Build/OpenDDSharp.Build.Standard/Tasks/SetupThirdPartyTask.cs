@@ -86,7 +86,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             Git(context, "fetch");
             Git(context, "fetch --tags");
             // Git(context, $"checkout tags/{_versionTag}");
-            Git(context, $"checkout 8383236b106fae7a0fd1d0409106e5bb5fe4d0b7");
+            // Git(context, $"checkout 8383236b106fae7a0fd1d0409106e5bb5fe4d0b7");
 
             context.Log.Information("Apply required OpenDDSharp patches to OpenDDS...");
             foreach (string patchPath in Directory.GetFiles(BuildContext.PATCHES_FOLDER, "*.patch"))

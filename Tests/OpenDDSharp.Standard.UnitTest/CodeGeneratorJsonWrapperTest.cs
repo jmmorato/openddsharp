@@ -100,8 +100,8 @@ namespace OpenDDSharp.Standard.UnitTest
         public void TestCleanup()
         {
             _publisher?.DeleteDataWriter(_dw);
-            _dr?.DeleteContainedEntities();
             _publisher?.DeleteContainedEntities();
+            _dr?.DeleteContainedEntities();
             _subscriber?.DeleteDataReader(_dr);
             _subscriber?.DeleteContainedEntities();
             _participant?.DeletePublisher(_publisher);
@@ -219,27 +219,27 @@ namespace OpenDDSharp.Standard.UnitTest
             {
                 BoundedBooleanSequenceField = { true, true, false, false, true },
                 UnboundedBooleanSequenceField = { true, true, false, false, true, true, false },
-                // BoundedCharSequenceField = { 'z' },
+                BoundedCharSequenceField = { 'z' },
                 UnboundedCharSequenceField = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' },
-                // BoundedWCharSequenceField = { 'i', 'j', 'k', 'l', 'm' },
+                BoundedWCharSequenceField = { 'i', 'j', 'k', 'l', 'm' },
                 UnboundedWCharSequenceField = { 'n', 'o', 'p' },
-                // BoundedOctetSequenceField = { 0x01, 0x02, 0x03 },
+                BoundedOctetSequenceField = { 0x01, 0x02, 0x03 },
                 UnboundedOctetSequenceField = { 0x04, 0x05, 0x06, 0x07, 0x08 },
-                // BoundedShortSequenceField = { -1, 2, -3 },
+                BoundedShortSequenceField = { -1, 2, -3 },
                 UnboundedShortSequenceField = { 4, -5, 6, -7, 8 },
-                // BoundedUShortSequenceField = { 1, 2, 3 },
+                BoundedUShortSequenceField = { 1, 2, 3 },
                 UnboundedUShortSequenceField = { 4, 5, 6, 7, 8 },
-                // BoundedLongSequenceField = { -1, 2, -3, 100, -200 },
+                BoundedLongSequenceField = { -1, 2, -3, 100, -200 },
                 UnboundedLongSequenceField = { 1, -2, 3, -100, 200, -300, 1000 },
-                // BoundedULongSequenceField = { 1, 2, 3, 100, 200 },
+                BoundedULongSequenceField = { 1, 2, 3, 100, 200 },
                 UnboundedULongSequenceField = { 1, 2, 3, 100, 200, 300, 1000 },
-                // BoundedLongLongSequenceField = { -1, 2, -3, 100, -200 },
+                BoundedLongLongSequenceField = { -1, 2, -3, 100, -200 },
                 UnboundedLongLongSequenceField = { 1, -2, 3, -100, 200, -300, 1000 },
-                // BoundedULongLongSequenceField = { 1, 2, 3, 100, 200 },
+                BoundedULongLongSequenceField = { 1, 2, 3, 100, 200 },
                 UnboundedULongLongSequenceField = { 1, 2, 3, 100, 200, 300, 1000 },
-                // BoundedFloatSequenceField = { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
+                BoundedFloatSequenceField = { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
                 UnboundedFloatSequenceField = { 1f, -2.6f, 3.7f, -100.8f, 200.9f, -300.1f, 1000.1f },
-                // BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
+                BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
                 UnboundedDoubleSequenceField = { 1d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
                 // //BoundedLongDoubleSequenceField = { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
                 // UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
@@ -260,54 +260,54 @@ namespace OpenDDSharp.Standard.UnitTest
 
             Assert.IsTrue(data.BoundedBooleanSequenceField.SequenceEqual(received.BoundedBooleanSequenceField));
             Assert.IsTrue(data.UnboundedBooleanSequenceField.SequenceEqual(received.UnboundedBooleanSequenceField));
-            // Assert.IsTrue(data.BoundedCharSequenceField.SequenceEqual(received.BoundedCharSequenceField));
+            Assert.IsTrue(data.BoundedCharSequenceField.SequenceEqual(received.BoundedCharSequenceField));
             Assert.IsTrue(data.UnboundedCharSequenceField.SequenceEqual(received.UnboundedCharSequenceField));
-            // Assert.IsTrue(data.BoundedWCharSequenceField.SequenceEqual(received.BoundedWCharSequenceField));
+            Assert.IsTrue(data.BoundedWCharSequenceField.SequenceEqual(received.BoundedWCharSequenceField));
             Assert.IsTrue(data.UnboundedWCharSequenceField.SequenceEqual(received.UnboundedWCharSequenceField));
-            // Assert.IsTrue(data.BoundedOctetSequenceField.SequenceEqual(received.BoundedOctetSequenceField));
+            Assert.IsTrue(data.BoundedOctetSequenceField.SequenceEqual(received.BoundedOctetSequenceField));
             Assert.IsTrue(data.UnboundedOctetSequenceField.SequenceEqual(received.UnboundedOctetSequenceField));
-            // Assert.IsTrue(data.BoundedShortSequenceField.SequenceEqual(received.BoundedShortSequenceField));
+            Assert.IsTrue(data.BoundedShortSequenceField.SequenceEqual(received.BoundedShortSequenceField));
             Assert.IsTrue(data.UnboundedShortSequenceField.SequenceEqual(received.UnboundedShortSequenceField));
-            // Assert.IsTrue(data.BoundedUShortSequenceField.SequenceEqual(received.BoundedUShortSequenceField));
+            Assert.IsTrue(data.BoundedUShortSequenceField.SequenceEqual(received.BoundedUShortSequenceField));
             Assert.IsTrue(data.UnboundedUShortSequenceField.SequenceEqual(received.UnboundedUShortSequenceField));
-            // Assert.IsTrue(data.BoundedLongSequenceField.SequenceEqual(received.BoundedLongSequenceField));
+            Assert.IsTrue(data.BoundedLongSequenceField.SequenceEqual(received.BoundedLongSequenceField));
             Assert.IsTrue(data.UnboundedLongSequenceField.SequenceEqual(received.UnboundedLongSequenceField));
-            // Assert.IsTrue(data.BoundedULongSequenceField.SequenceEqual(received.BoundedULongSequenceField));
+            Assert.IsTrue(data.BoundedULongSequenceField.SequenceEqual(received.BoundedULongSequenceField));
             Assert.IsTrue(data.UnboundedULongSequenceField.SequenceEqual(received.UnboundedULongSequenceField));
-            // Assert.IsTrue(data.BoundedLongLongSequenceField.SequenceEqual(received.BoundedLongLongSequenceField));
+            Assert.IsTrue(data.BoundedLongLongSequenceField.SequenceEqual(received.BoundedLongLongSequenceField));
             Assert.IsTrue(data.UnboundedLongLongSequenceField.SequenceEqual(received.UnboundedLongLongSequenceField));
-            // Assert.IsTrue(data.BoundedULongLongSequenceField.SequenceEqual(received.BoundedULongLongSequenceField));
+            Assert.IsTrue(data.BoundedULongLongSequenceField.SequenceEqual(received.BoundedULongLongSequenceField));
             Assert.IsTrue(data.UnboundedULongLongSequenceField.SequenceEqual(received.UnboundedULongLongSequenceField));
-            // Assert.IsTrue(data.BoundedFloatSequenceField.SequenceEqual(received.BoundedFloatSequenceField));
+            Assert.IsTrue(data.BoundedFloatSequenceField.SequenceEqual(received.BoundedFloatSequenceField));
             Assert.IsTrue(data.UnboundedFloatSequenceField.SequenceEqual(received.UnboundedFloatSequenceField));
-            // Assert.IsTrue(data.BoundedDoubleSequenceField.SequenceEqual(received.BoundedDoubleSequenceField));
+            Assert.IsTrue(data.BoundedDoubleSequenceField.SequenceEqual(received.BoundedDoubleSequenceField));
             Assert.IsTrue(data.UnboundedDoubleSequenceField.SequenceEqual(received.UnboundedDoubleSequenceField));
             //Assert.IsTrue(data.BoundedLongDoubleSequenceField.SequenceEqual(received.BoundedLongDoubleSequenceField));
             // Assert.IsTrue(data.UnboundedLongDoubleSequenceField.SequenceEqual(received.UnboundedLongDoubleSequenceField));
 
             Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
             Assert.IsTrue(data.UnboundedBooleanSequenceField is IList<bool>);
-            // Assert.IsTrue(data.BoundedCharSequenceField is IList<char>);
+            Assert.IsTrue(data.BoundedCharSequenceField is IList<char>);
             Assert.IsTrue(data.UnboundedCharSequenceField is IList<char>);
-            // Assert.IsTrue(data.BoundedWCharSequenceField is IList<char>);
+            Assert.IsTrue(data.BoundedWCharSequenceField is IList<char>);
             Assert.IsTrue(data.UnboundedWCharSequenceField is IList<char>);
-            // Assert.IsTrue(data.BoundedOctetSequenceField is IList<byte>);
+            Assert.IsTrue(data.BoundedOctetSequenceField is IList<byte>);
             Assert.IsTrue(data.UnboundedOctetSequenceField is IList<byte>);
-            // Assert.IsTrue(data.BoundedShortSequenceField is IList<short>);
+            Assert.IsTrue(data.BoundedShortSequenceField is IList<short>);
             Assert.IsTrue(data.UnboundedShortSequenceField is IList<short>);
-            // Assert.IsTrue(data.BoundedUShortSequenceField is IList<ushort>);
+            Assert.IsTrue(data.BoundedUShortSequenceField is IList<ushort>);
             Assert.IsTrue(data.UnboundedUShortSequenceField is IList<ushort>);
-            // Assert.IsTrue(data.BoundedLongSequenceField is IList<int>);
+            Assert.IsTrue(data.BoundedLongSequenceField is IList<int>);
             Assert.IsTrue(data.UnboundedLongSequenceField is IList<int>);
-            // Assert.IsTrue(data.BoundedULongSequenceField is IList<uint>);
+            Assert.IsTrue(data.BoundedULongSequenceField is IList<uint>);
             Assert.IsTrue(data.UnboundedULongSequenceField is IList<uint>);
-            // Assert.IsTrue(data.BoundedLongLongSequenceField is IList<long>);
+            Assert.IsTrue(data.BoundedLongLongSequenceField is IList<long>);
             Assert.IsTrue(data.UnboundedLongLongSequenceField is IList<long>);
-            // Assert.IsTrue(data.BoundedULongLongSequenceField is IList<ulong>);
+            Assert.IsTrue(data.BoundedULongLongSequenceField is IList<ulong>);
             Assert.IsTrue(data.UnboundedULongLongSequenceField is IList<ulong>);
-            // Assert.IsTrue(data.BoundedFloatSequenceField is IList<float>);
+            Assert.IsTrue(data.BoundedFloatSequenceField is IList<float>);
             Assert.IsTrue(data.UnboundedFloatSequenceField is IList<float>);
-            // Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
+            Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
             Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
             //Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
             // Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
@@ -316,48 +316,48 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedBooleanSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedBooleanSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedCharSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedCharSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedCharSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedCharSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedCharSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedWCharSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedWCharSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedWCharSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedWCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedWCharSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedWCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedOctetSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedOctetSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedOctetSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedOctetSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedOctetSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedOctetSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedShortSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedShortSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedShortSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedShortSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedShortSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedShortSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedUShortSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedUShortSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedUShortSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedUShortSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedLongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedLongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedUShortSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedUShortSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedLongSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedLongSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedLongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedULongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedULongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedULongSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedULongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedULongSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedULongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedLongLongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedLongLongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedLongLongSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedLongLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedLongLongSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedLongLongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedULongLongSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedULongLongSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedULongLongSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedULongLongSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedULongLongSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedULongLongSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedFloatSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedFloatSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedFloatSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedFloatSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedFloatSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedFloatSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedDoubleSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedDoubleSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedDoubleSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedDoubleSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedDoubleSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedDoubleSequenceField.Count);
             //Assert.IsNotNull(defaultStruct.BoundedLongDoubleSequenceField);
@@ -1002,14 +1002,14 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TestStruct data = new TestStruct
             {
-                // BoundedStringSequenceField =
-                // {
-                //     "Pressure pushing down on me",
-                //     "Pressing down on you, no man ask for",
-                //     "Under pressure that burns a building down",
-                //     "Splits a family in two",
-                //     "Puts people on streets",
-                // },
+                BoundedStringSequenceField =
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets",
+                },
                 UnboundedStringSequenceField =
                 {
                     "You've got your mother in a whirl",
@@ -1023,13 +1023,13 @@ namespace OpenDDSharp.Standard.UnitTest
                     "They put you down, they say I'm wrong",
                     "You tacky thing, you put them on",
                 },
-                // BoundedWStringSequenceField =
-                // {
-                //     "Rebel Rebel, you've turn your dress",
-                //     "Rebel Rebel, your face is a mess",
-                //     "Rebel Rebel, how could they know?",
-                //     "Hot tramp, I love you so!",
-                // },
+                BoundedWStringSequenceField =
+                {
+                    "Rebel Rebel, you've turn your dress",
+                    "Rebel Rebel, your face is a mess",
+                    "Rebel Rebel, how could they know?",
+                    "Hot tramp, I love you so!",
+                },
                 UnboundedWStringSequenceField =
                 {
                     "Well, you've got your diamonds",
@@ -1038,7 +1038,7 @@ namespace OpenDDSharp.Standard.UnitTest
                     "You let everybody know",
                     "But don't play with me,",
                     "'cause you're playing with fire",
-                }
+                },
             };
 
             _dataWriter.Write(data);
@@ -1054,22 +1054,22 @@ namespace OpenDDSharp.Standard.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // Assert.IsTrue(data.BoundedStringSequenceField.SequenceEqual(received.BoundedStringSequenceField));
+            Assert.IsTrue(data.BoundedStringSequenceField.SequenceEqual(received.BoundedStringSequenceField));
             Assert.IsTrue(data.UnboundedStringSequenceField.SequenceEqual(received.UnboundedStringSequenceField));
-            // Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
+            Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
             Assert.IsTrue(data.UnboundedWStringSequenceField.SequenceEqual(received.UnboundedWStringSequenceField));
 
-            // Assert.IsTrue(data.BoundedStringSequenceField is IList<string>);
+            Assert.IsTrue(data.BoundedStringSequenceField is IList<string>);
             Assert.IsTrue(data.UnboundedStringSequenceField is IList<string>);
-            // Assert.IsTrue(data.BoundedWStringSequenceField is IList<string>);
+            Assert.IsTrue(data.BoundedWStringSequenceField is IList<string>);
             Assert.IsTrue(data.UnboundedWStringSequenceField is IList<string>);
 
-            // Assert.IsNotNull(defaultStruct.BoundedStringSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedStringSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedStringSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedStringSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedStringSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedStringSequenceField.Count);
-            // Assert.IsNotNull(defaultStruct.BoundedWStringSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedWStringSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedWStringSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedWStringSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedWStringSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedWStringSequenceField.Count);
         }
@@ -1285,14 +1285,14 @@ namespace OpenDDSharp.Standard.UnitTest
                     new NestedStruct { Id = 5, Message = "And you'll ask yourself" },
                     new NestedStruct { Id = 6, Message = "Where is my mind?" },
                 },
-                // BoundedStructSequenceField =
-                // {
-                //     new NestedStruct { Id = 1, Message = "With your feet in the air and your head on the ground" },
-                //     new NestedStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
-                //     new NestedStruct { Id = 3, Message = "Your head will collapse" },
-                //     new NestedStruct { Id = 4, Message = "But there's nothing in it" },
-                //     new NestedStruct { Id = 5, Message = "And you'll ask yourself" },
-                // }
+                BoundedStructSequenceField =
+                {
+                    new NestedStruct { Id = 1, Message = "With your feet in the air and your head on the ground" },
+                    new NestedStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
+                    new NestedStruct { Id = 3, Message = "Your head will collapse" },
+                    new NestedStruct { Id = 4, Message = "But there's nothing in it" },
+                    new NestedStruct { Id = 5, Message = "And you'll ask yourself" },
+                }
             };
 
             var ret = _dataWriter.Write(data);
@@ -1309,22 +1309,22 @@ namespace OpenDDSharp.Standard.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // for (int i = 1; i < data.BoundedStructSequenceField.Count; i++)
-            // {
-            //     Assert.AreEqual(data.BoundedStructSequenceField[i].Id, received.BoundedStructSequenceField[i].Id);
-            //     Assert.AreEqual(data.BoundedStructSequenceField[i].Message, received.BoundedStructSequenceField[i].Message);
-            // }
-            // for (int i = 1; i < data.BoundedStructSequenceField.Count; i++)
-            // {
-            //     Assert.AreEqual(data.UnboundedStructSequenceField[i].Id, received.UnboundedStructSequenceField[i].Id);
-            //     Assert.AreEqual(data.UnboundedStructSequenceField[i].Message, received.UnboundedStructSequenceField[i].Message);
-            // }
+            for (int i = 1; i < data.BoundedStructSequenceField.Count; i++)
+            {
+                Assert.AreEqual(data.BoundedStructSequenceField[i].Id, received.BoundedStructSequenceField[i].Id);
+                Assert.AreEqual(data.BoundedStructSequenceField[i].Message, received.BoundedStructSequenceField[i].Message);
+            }
+            for (int i = 1; i < data.BoundedStructSequenceField.Count; i++)
+            {
+                Assert.AreEqual(data.UnboundedStructSequenceField[i].Id, received.UnboundedStructSequenceField[i].Id);
+                Assert.AreEqual(data.UnboundedStructSequenceField[i].Message, received.UnboundedStructSequenceField[i].Message);
+            }
 
-            // Assert.IsTrue(data.BoundedStructSequenceField is IList<NestedStruct>);
+            Assert.IsTrue(data.BoundedStructSequenceField is IList<NestedStruct>);
             Assert.IsTrue(data.UnboundedStructSequenceField is IList<NestedStruct>);
 
-            // Assert.IsNotNull(defaultStruct.BoundedStructSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedStructSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedStructSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedStructSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedStructSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedStructSequenceField.Count);
         }
@@ -1496,7 +1496,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TestStruct data = new TestStruct
             {
                 UnboundedEnumSequenceField = { TestEnum.ENUM10, TestEnum.ENUM9, TestEnum.ENUM8, TestEnum.ENUM7, TestEnum.ENUM6, TestEnum.ENUM5 },
-                // BoundedEnumSequenceField = { TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5 },
+                BoundedEnumSequenceField = { TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5 },
             };
 
             _dataWriter.Write(data);
@@ -1512,14 +1512,14 @@ namespace OpenDDSharp.Standard.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
+            Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
             Assert.IsTrue(data.UnboundedEnumSequenceField.SequenceEqual(received.UnboundedEnumSequenceField));
 
-            // Assert.IsTrue(data.BoundedEnumSequenceField is IList<TestEnum>);
+            Assert.IsTrue(data.BoundedEnumSequenceField is IList<TestEnum>);
             Assert.IsTrue(data.UnboundedEnumSequenceField is IList<TestEnum>);
 
-            // Assert.IsNotNull(defaultStruct.BoundedEnumSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedEnumSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedEnumSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedEnumSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedEnumSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedEnumSequenceField.Count);
         }
@@ -1622,44 +1622,44 @@ namespace OpenDDSharp.Standard.UnitTest
         //     //     Assert.AreEqual(default, s);
         //     // }
         // }
-        //
-        // /// <summary>
-        // /// Test the code generated for the constants.
-        // /// </summary>
-        // [TestMethod]
-        // [TestCategory(TEST_CATEGORY)]
-        // public void TestGeneratedConstants()
-        // {
-        //     Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(int), TEST_LONG_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(long), TEST_LONGLONG_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(ushort), TEST_USHORT_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(uint), TEST_ULONG_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(ulong), TEST_ULONGLONG_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(char), TEST_CHAR_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(char), TEST_WCHAR_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(bool), TEST_BOOLEAN_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(byte), TEST_OCTET_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(float), TEST_FLOAT_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(double), TEST_DOUBLE_CONST.Value.GetType());
-        //     Assert.AreEqual(typeof(TestEnum), TEST_ENUM_CONST.Value.GetType());
-        //
-        //     Assert.AreEqual(-1, TEST_SHORT_CONST.Value);
-        //     Assert.AreEqual((ushort)1, TEST_USHORT_CONST.Value);
-        //     Assert.AreEqual(-2, TEST_LONG_CONST.Value);
-        //     Assert.AreEqual(2U, TEST_ULONG_CONST.Value);
-        //     Assert.AreEqual(-3L, TEST_LONGLONG_CONST.Value);
-        //     Assert.AreEqual(3UL, TEST_ULONGLONG_CONST.Value);
-        //     Assert.AreEqual(4.1f, TEST_FLOAT_CONST.Value);
-        //     Assert.AreEqual(5.1, TEST_DOUBLE_CONST.Value);
-        //     Assert.AreEqual('X', TEST_CHAR_CONST.Value);
-        //     Assert.AreEqual('S', TEST_WCHAR_CONST.Value);
-        //     Assert.AreEqual(0x42, TEST_OCTET_CONST.Value);
-        //     Assert.IsTrue(TEST_BOOLEAN_CONST.Value);
-        //     Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_STRING_CONST.Value);
-        //     Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_WSTRING_CONST.Value);
-        //     Assert.AreEqual(TestEnum.ENUM6, TEST_ENUM_CONST.Value);
-        // }
+
+        /// <summary>
+        /// Test the code generated for the constants.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedConstants()
+        {
+            Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(int), TEST_LONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(long), TEST_LONGLONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(ushort), TEST_USHORT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(uint), TEST_ULONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(ulong), TEST_ULONGLONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(char), TEST_CHAR_CONST.Value.GetType());
+            Assert.AreEqual(typeof(char), TEST_WCHAR_CONST.Value.GetType());
+            Assert.AreEqual(typeof(bool), TEST_BOOLEAN_CONST.Value.GetType());
+            Assert.AreEqual(typeof(byte), TEST_OCTET_CONST.Value.GetType());
+            Assert.AreEqual(typeof(float), TEST_FLOAT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(double), TEST_DOUBLE_CONST.Value.GetType());
+            Assert.AreEqual(typeof(TestEnum), TEST_ENUM_CONST.Value.GetType());
+
+            Assert.AreEqual(-1, TEST_SHORT_CONST.Value);
+            Assert.AreEqual((ushort)1, TEST_USHORT_CONST.Value);
+            Assert.AreEqual(-2, TEST_LONG_CONST.Value);
+            Assert.AreEqual(2U, TEST_ULONG_CONST.Value);
+            Assert.AreEqual(-3L, TEST_LONGLONG_CONST.Value);
+            Assert.AreEqual(3UL, TEST_ULONGLONG_CONST.Value);
+            Assert.AreEqual(4.1f, TEST_FLOAT_CONST.Value);
+            Assert.AreEqual(5.1, TEST_DOUBLE_CONST.Value);
+            Assert.AreEqual('X', TEST_CHAR_CONST.Value);
+            Assert.AreEqual('S', TEST_WCHAR_CONST.Value);
+            Assert.AreEqual(0x42, TEST_OCTET_CONST.Value);
+            Assert.IsTrue(TEST_BOOLEAN_CONST.Value);
+            Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_STRING_CONST.Value);
+            Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_WSTRING_CONST.Value);
+            Assert.AreEqual(TestEnum.ENUM6, TEST_ENUM_CONST.Value);
+        }
         #endregion
 
         #region Methods

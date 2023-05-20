@@ -197,21 +197,21 @@ module JsonWrapper {
 		// Bounded sequences error when enconding/decoding to JSON
 		// Reproducible in OpenDDS with vread_vwrite test.
 		BoundedBooleanSequenceType BoundedBooleanSequenceField;
-//		BoundedCharSequenceType BoundedCharSequenceField;
-//		BoundedWCharSequenceType BoundedWCharSequenceField;
-//		BoundedOctetSequenceType BoundedOctetSequenceField;
-//		BoundedShortSequenceType BoundedShortSequenceField;
-//		BoundedUShortSequenceType BoundedUShortSequenceField;
-//		BoundedLongSequenceType BoundedLongSequenceField;
-//		BoundedULongSequenceType BoundedULongSequenceField;
-//		BoundedLongLongSequenceType BoundedLongLongSequenceField;
-//		BoundedULongLongSequenceType BoundedULongLongSequenceField;
-//		BoundedFloatSequenceType BoundedFloatSequenceField;
-//		BoundedDoubleSequenceType BoundedDoubleSequenceField;
-//		BoundedStringSequenceType BoundedStringSequenceField;
-//		BoundedWStringSequenceType BoundedWStringSequenceField;
-//		BoundedStructSequenceType BoundedStructSequenceField;
-//		BoundedEnumSequenceType BoundedEnumSequenceField;
+		BoundedCharSequenceType BoundedCharSequenceField;
+		BoundedWCharSequenceType BoundedWCharSequenceField;
+		BoundedOctetSequenceType BoundedOctetSequenceField;
+		BoundedShortSequenceType BoundedShortSequenceField;
+		BoundedUShortSequenceType BoundedUShortSequenceField;
+		BoundedLongSequenceType BoundedLongSequenceField;
+		BoundedULongSequenceType BoundedULongSequenceField;
+		BoundedLongLongSequenceType BoundedLongLongSequenceField;
+		BoundedULongLongSequenceType BoundedULongLongSequenceField;
+		BoundedFloatSequenceType BoundedFloatSequenceField;
+		BoundedDoubleSequenceType BoundedDoubleSequenceField;
+		BoundedStringSequenceType BoundedStringSequenceField;
+		BoundedWStringSequenceType BoundedWStringSequenceField;
+		BoundedStructSequenceType BoundedStructSequenceField;
+		BoundedEnumSequenceType BoundedEnumSequenceField;
 
         // No multiarray serialization on System.Text.Json
 //		ShortMultiArrayType ShortMultiArrayField;
