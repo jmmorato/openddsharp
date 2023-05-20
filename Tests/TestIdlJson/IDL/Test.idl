@@ -196,7 +196,7 @@ module JsonWrapper {
 		
 		// Bounded sequences error when enconding/decoding to JSON
 		// Reproducible in OpenDDS with vread_vwrite test.
-//		BoundedBooleanSequenceType BoundedBooleanSequenceField;
+		BoundedBooleanSequenceType BoundedBooleanSequenceField;
 //		BoundedCharSequenceType BoundedCharSequenceField;
 //		BoundedWCharSequenceType BoundedWCharSequenceField;
 //		BoundedOctetSequenceType BoundedOctetSequenceField;
@@ -236,11 +236,11 @@ module JsonWrapper {
 
         // long double issues on MacOS ARM64? SEGV received.
         // Reproducible with OpenDDS HelloWorld test.
-        long double LongDoubleField;
-        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-        //BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
-        LongDoubleArrayType LongDoubleArrayField;
-		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
+//        long double LongDoubleField;
+//        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+//        //BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+//        LongDoubleArrayType LongDoubleArrayField;
+//		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 
 	@topic

@@ -143,7 +143,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 OctetField = 0x42,
                 FloatField = 42.0f,
                 DoubleField = 23.23d,
-                LongDoubleField = 69.69m,
+                // LongDoubleField = 69.69m,
             };
             var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -171,7 +171,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(data.OctetField, received.OctetField);
             Assert.AreEqual(data.FloatField, received.FloatField);
             Assert.AreEqual(data.DoubleField, received.DoubleField);
-            Assert.AreEqual(data.LongDoubleField, received.LongDoubleField);
+            // Assert.AreEqual(data.LongDoubleField, received.LongDoubleField);
 
             Assert.AreEqual(typeof(short), data.ShortField.GetType());
             Assert.AreEqual(typeof(int), data.LongField.GetType());
@@ -185,7 +185,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(byte), data.OctetField.GetType());
             Assert.AreEqual(typeof(float), data.FloatField.GetType());
             Assert.AreEqual(typeof(double), data.DoubleField.GetType());
-            Assert.AreEqual(typeof(decimal), data.LongDoubleField.GetType());
+            // Assert.AreEqual(typeof(decimal), data.LongDoubleField.GetType());
 
             Assert.AreEqual(0, defaultStruct.ShortField);
             Assert.AreEqual(0, defaultStruct.LongField);
@@ -199,7 +199,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.OctetField);
             Assert.AreEqual(0.0f, defaultStruct.FloatField);
             Assert.AreEqual(0.0, defaultStruct.DoubleField);
-            Assert.AreEqual(0.0m, defaultStruct.LongDoubleField);
+            // Assert.AreEqual(0.0m, defaultStruct.LongDoubleField);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace OpenDDSharp.Standard.UnitTest
 
             TestStruct data = new TestStruct
             {
-                // BoundedBooleanSequenceField = { true, true, false, false, true },
+                BoundedBooleanSequenceField = { true, true, false, false, true },
                 UnboundedBooleanSequenceField = { true, true, false, false, true, true, false },
                 // BoundedCharSequenceField = { 'z' },
                 UnboundedCharSequenceField = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' },
@@ -242,7 +242,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 // BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
                 UnboundedDoubleSequenceField = { 1d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
                 // //BoundedLongDoubleSequenceField = { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
-                UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
+                // UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
             };
             var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -258,7 +258,7 @@ namespace OpenDDSharp.Standard.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // Assert.IsTrue(data.BoundedBooleanSequenceField.SequenceEqual(received.BoundedBooleanSequenceField));
+            Assert.IsTrue(data.BoundedBooleanSequenceField.SequenceEqual(received.BoundedBooleanSequenceField));
             Assert.IsTrue(data.UnboundedBooleanSequenceField.SequenceEqual(received.UnboundedBooleanSequenceField));
             // Assert.IsTrue(data.BoundedCharSequenceField.SequenceEqual(received.BoundedCharSequenceField));
             Assert.IsTrue(data.UnboundedCharSequenceField.SequenceEqual(received.UnboundedCharSequenceField));
@@ -283,9 +283,9 @@ namespace OpenDDSharp.Standard.UnitTest
             // Assert.IsTrue(data.BoundedDoubleSequenceField.SequenceEqual(received.BoundedDoubleSequenceField));
             Assert.IsTrue(data.UnboundedDoubleSequenceField.SequenceEqual(received.UnboundedDoubleSequenceField));
             //Assert.IsTrue(data.BoundedLongDoubleSequenceField.SequenceEqual(received.BoundedLongDoubleSequenceField));
-            Assert.IsTrue(data.UnboundedLongDoubleSequenceField.SequenceEqual(received.UnboundedLongDoubleSequenceField));
+            // Assert.IsTrue(data.UnboundedLongDoubleSequenceField.SequenceEqual(received.UnboundedLongDoubleSequenceField));
 
-            // Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
+            Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
             Assert.IsTrue(data.UnboundedBooleanSequenceField is IList<bool>);
             // Assert.IsTrue(data.BoundedCharSequenceField is IList<char>);
             Assert.IsTrue(data.UnboundedCharSequenceField is IList<char>);
@@ -310,10 +310,10 @@ namespace OpenDDSharp.Standard.UnitTest
             // Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
             Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
             //Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
-            Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
+            // Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
 
-            // Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
-            // Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedBooleanSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedBooleanSequenceField.Count);
             // Assert.IsNotNull(defaultStruct.BoundedCharSequenceField);
@@ -362,8 +362,8 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedDoubleSequenceField.Count);
             //Assert.IsNotNull(defaultStruct.BoundedLongDoubleSequenceField);
             //Assert.AreEqual(0, defaultStruct.BoundedLongDoubleSequenceField.Count);
-            Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
-            Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
+            // Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
+            // Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace OpenDDSharp.Standard.UnitTest
                 UnsignedLongLongArrayField = new[] { 1UL, 2UL, 3UL, 100UL, 200UL },
                 FloatArrayField = new[] { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
                 DoubleArrayField = new[] { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
-                LongDoubleArrayField = new[] { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
+                // LongDoubleArrayField = new[] { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
             };
             var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -416,7 +416,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsTrue(data.UnsignedLongLongArrayField.SequenceEqual(received.UnsignedLongLongArrayField));
             Assert.IsTrue(data.FloatArrayField.SequenceEqual(received.FloatArrayField));
             Assert.IsTrue(data.DoubleArrayField.SequenceEqual(received.DoubleArrayField));
-            Assert.IsTrue(data.LongDoubleArrayField.SequenceEqual(received.LongDoubleArrayField));
+            // Assert.IsTrue(data.LongDoubleArrayField.SequenceEqual(received.LongDoubleArrayField));
 
             Assert.AreEqual(typeof(bool[]), data.BooleanArrayField.GetType());
             Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
@@ -430,7 +430,7 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(typeof(ulong[]), data.UnsignedLongLongArrayField.GetType());
             Assert.AreEqual(typeof(float[]), data.FloatArrayField.GetType());
             Assert.AreEqual(typeof(double[]), data.DoubleArrayField.GetType());
-            Assert.AreEqual(typeof(decimal[]), data.LongDoubleArrayField.GetType());
+            // Assert.AreEqual(typeof(decimal[]), data.LongDoubleArrayField.GetType());
 
             Assert.IsNotNull(defaultStruct.BooleanArrayField);
             Assert.AreEqual(5, defaultStruct.BooleanArrayField.Length);
@@ -516,12 +516,12 @@ namespace OpenDDSharp.Standard.UnitTest
                 Assert.AreEqual(default, i);
             }
 
-            Assert.IsNotNull(defaultStruct.LongDoubleArrayField);
-            Assert.AreEqual(5, defaultStruct.LongDoubleArrayField.Length);
-            foreach (var i in defaultStruct.LongDoubleArrayField)
-            {
-                Assert.AreEqual(default, i);
-            }
+            // Assert.IsNotNull(defaultStruct.LongDoubleArrayField);
+            // Assert.AreEqual(5, defaultStruct.LongDoubleArrayField.Length);
+            // foreach (var i in defaultStruct.LongDoubleArrayField)
+            // {
+            //     Assert.AreEqual(default, i);
+            // }
         }
 
         // /// <summary>
