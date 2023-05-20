@@ -135,7 +135,8 @@
                     new JsonStringEnumConverter(),
                     new OctetArrayConverter(),
                     new FloatJsonConverter(),
-                    new DoubleJsonConverter()
+                    new DoubleJsonConverter(),
+                    new DecimalJsonConverter(),
                 }
             });
 
@@ -1006,12 +1007,15 @@
                             new JsonStringEnumConverter(),
                             new OctetArrayConverter(),
                             new FloatJsonConverter(),
-                            new DoubleJsonConverter()
+                            new DoubleJsonConverter(),
+                            new DecimalJsonConverter(),
                         }
                     });
                     
                     data.MemberwiseCopy(sample);
                 }
+                
+                Marshal.FreeHGlobal(ptr);
                 
                 sampleInfo.FromNative(infoWrapper);
             }

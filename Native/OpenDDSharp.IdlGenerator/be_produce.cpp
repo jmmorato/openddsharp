@@ -228,8 +228,6 @@ string to_header(const char* cpp_name)
 						<< "using System.Security;\n"
 						<< "using System.Collections.Generic;\n"
 					    << "using System.Runtime.InteropServices;\n"
-						<< "using System.Text.Json;\n"
-                        << "using System.Text.Json.Serialization;\n"
 						<< "using OpenDDSharp;\n"
 						<< "using OpenDDSharp.DDS;\n";
 

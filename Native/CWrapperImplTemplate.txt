@@ -40,16 +40,18 @@ int <%SCOPED_METHOD%>DataWriter_Write_Json(<%SCOPED%>DataWriter_ptr dw, const ch
     //<%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
     <%SCOPED_METHOD%>_to_file(json_data);
     <%SCOPED%>TypeSupport_var ts = new <%SCOPED%>TypeSupportImpl;
-    OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);
+    OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);    
     <%SCOPED%>_var samplev;
     ::DDS::ReturnCode_t ret = ts->decode_from_string(json_data, samplev, format);
-    if (ret !=::DDS::RETCODE_OK)
+    if (ret != ::DDS::RETCODE_OK)
     {
         return ret;
     }
-    const <%SCOPED%> sample = *samplev;
+    const <%SCOPED%> sample = samplev.in();
 
-    return dw->write(sample, handle);
+    ret = dw->write(sample, handle);
+    
+    return ret;
 }
 
 int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time)

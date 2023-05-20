@@ -148,7 +148,6 @@ module JsonWrapper {
 		octet OctetField;
 		float FloatField;
 		double DoubleField;
-//		//long double LongDoubleField;
 
 		string UnboundedStringField;
 		wstring UnboundedWStringField;
@@ -156,46 +155,25 @@ module JsonWrapper {
 		BoundedWStringType BoundedWStringField;
 
 		UnboundedBooleanSequenceType UnboundedBooleanSequenceField;
-//		BoundedBooleanSequenceType BoundedBooleanSequenceField;
 		UnboundedCharSequenceType UnboundedCharSequenceField;
-//		BoundedCharSequenceType BoundedCharSequenceField;
 		UnboundedWCharSequenceType UnboundedWCharSequenceField;
-//		BoundedWCharSequenceType BoundedWCharSequenceField;
 		UnboundedOctetSequenceType UnboundedOctetSequenceField;
-//		BoundedOctetSequenceType BoundedOctetSequenceField;
 		UnboundedShortSequenceType UnboundedShortSequenceField;
-//		BoundedShortSequenceType BoundedShortSequenceField;
 		UnboundedUShortSequenceType UnboundedUShortSequenceField;
-//		BoundedUShortSequenceType BoundedUShortSequenceField;
 		UnboundedLongSequenceType UnboundedLongSequenceField;
-//		BoundedLongSequenceType BoundedLongSequenceField;
 		UnboundedULongSequenceType UnboundedULongSequenceField;
-//		BoundedULongSequenceType BoundedULongSequenceField;
 		UnboundedLongLongSequenceType UnboundedLongLongSequenceField;
-//		BoundedLongLongSequenceType BoundedLongLongSequenceField;
 		UnboundedULongLongSequenceType UnboundedULongLongSequenceField;
-//		BoundedULongLongSequenceType BoundedULongLongSequenceField;
 		UnboundedFloatSequenceType UnboundedFloatSequenceField;
-//		BoundedFloatSequenceType BoundedFloatSequenceField;
 		UnboundedDoubleSequenceType UnboundedDoubleSequenceField;
-//		BoundedDoubleSequenceType BoundedDoubleSequenceField;
-		//UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-		//BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
-
 		UnboundedStringSequenceType UnboundedStringSequenceField;
-//		BoundedStringSequenceType BoundedStringSequenceField;
 		UnboundedWStringSequenceType UnboundedWStringSequenceField;
-//		BoundedWStringSequenceType BoundedWStringSequenceField;
 
 		NestedStruct NestedStructField;
-
 		UnboundedStructSequenceType UnboundedStructSequenceField;
-//		BoundedStructSequenceType BoundedStructSequenceField;
 
 		TestEnum TestEnumField;
-
 		UnboundedEnumSequenceType UnboundedEnumSequenceField;
-//		BoundedEnumSequenceType BoundedEnumSequenceField;
 
 		ShortArrayType ShortArrayField;
 		UnsignedShortArrayType UnsignedShortArrayField;
@@ -205,27 +183,37 @@ module JsonWrapper {
 		UnsignedLongLongArrayType UnsignedLongLongArrayField;
 		CharArrayType CharArrayField;
 		WCharArrayType WCharArrayField;
-
-//		// Not working in mono
-//		// https://github.com/mono/mono/issues/15592
-//		// Workaround using a byte[] and Array.ConvertAll calls works but
-//		// it would affects performance
 		BooleanArrayType BooleanArrayField;
-
-		OctetArrayType OctetArrayField; // wrong serialization
+		OctetArrayType OctetArrayField;
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
-//		//LongDoubleArrayType LongDoubleArrayField;
 
 		StringArrayType StringArrayField;
 		WStringArrayType WStringArrayField;
 
-//		// No working in mono
 		StructArrayType StructArrayField;
-
-//		// No working in mono
 		EnumArrayType EnumArrayField;
+		
+		// Bounded sequences error when enconding/decoding to JSON
+		// Reproducible in OpenDDS with vread_vwrite test.
+//		BoundedBooleanSequenceType BoundedBooleanSequenceField;
+//		BoundedCharSequenceType BoundedCharSequenceField;
+//		BoundedWCharSequenceType BoundedWCharSequenceField;
+//		BoundedOctetSequenceType BoundedOctetSequenceField;
+//		BoundedShortSequenceType BoundedShortSequenceField;
+//		BoundedUShortSequenceType BoundedUShortSequenceField;
+//		BoundedLongSequenceType BoundedLongSequenceField;
+//		BoundedULongSequenceType BoundedULongSequenceField;
+//		BoundedLongLongSequenceType BoundedLongLongSequenceField;
+//		BoundedULongLongSequenceType BoundedULongLongSequenceField;
+//		BoundedFloatSequenceType BoundedFloatSequenceField;
+//		BoundedDoubleSequenceType BoundedDoubleSequenceField;
+//		BoundedStringSequenceType BoundedStringSequenceField;
+//		BoundedWStringSequenceType BoundedWStringSequenceField;
+//		BoundedStructSequenceType BoundedStructSequenceField;
+//		BoundedEnumSequenceType BoundedEnumSequenceField;
 
+        // No multiarray serialization on System.Text.Json
 //		ShortMultiArrayType ShortMultiArrayField;
 //		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
 //		LongMultiArrayType LongMultiArrayField;
@@ -238,17 +226,21 @@ module JsonWrapper {
 //		OctetMultiArrayType OctetMultiArrayField;
 //		FloatMultiArrayType FloatMultiArrayField;
 //		DoubleMultiArrayType DoubleMultiArrayField;
-		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
 
-		// No working in mono
 //		EnumMultiArrayType EnumMultiArrayField;
 
-		// No working in mono
 //		StringMultiArrayType StringMultiArrayField;
 //		WStringMultiArrayType WStringMultiArrayField;
 
-		// No working in mono
 //		StructMultiArrayType StructMultiArrayField;
+
+        // long double issues on MacOS ARM64? SEGV received.
+        // Reproducible with OpenDDS HelloWorld test.
+//      long double LongDoubleField;
+//      UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+//      //BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+//      LongDoubleArrayType LongDoubleArrayField;
+//		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 
 	@topic
