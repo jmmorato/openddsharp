@@ -79,22 +79,22 @@ module JsonWrapper {
 	typedef string StringArrayType[5];
 	typedef wstring WStringArrayType[5];
 
-//	typedef short ShortMultiArrayType[3][4][2];
-//	typedef unsigned short UnsignedShortMultiArrayType[3][4][2];
-//	typedef long LongMultiArrayType[3][4][2];
-//	typedef unsigned long UnsignedLongMultiArrayType[3][4][2];
-//	typedef long long LongLongMultiArrayType[3][4][2];
-//	typedef unsigned long long UnsignedLongLongMultiArrayType[3][4][2];
-//	typedef char CharMultiArrayType[3][4][2];
-//	typedef wchar WCharMultiArrayType[3][4][2];
-//	typedef boolean BooleanMultiArrayType[3][4][2];
-//	typedef octet OctetMultiArrayType[3][4][2];
-//	typedef float FloatMultiArrayType[3][4][2];
-//	typedef double DoubleMultiArrayType[3][4][2];
-//	typedef long double LongDoubleMultiArrayType[3][4][2];
-//
-//	typedef string StringMultiArrayType[3][4][2];
-//	typedef wstring WStringMultiArrayType[3][4][2];
+	typedef short ShortMultiArrayType[3][4][2];
+	typedef unsigned short UnsignedShortMultiArrayType[3][4][2];
+	typedef long LongMultiArrayType[3][4][2];
+	typedef unsigned long UnsignedLongMultiArrayType[3][4][2];
+	typedef long long LongLongMultiArrayType[3][4][2];
+	typedef unsigned long long UnsignedLongLongMultiArrayType[3][4][2];
+	typedef char CharMultiArrayType[3][4][2];
+	typedef wchar WCharMultiArrayType[3][4][2];
+	typedef boolean BooleanMultiArrayType[3][4][2];
+	typedef octet OctetMultiArrayType[3][4][2];
+	typedef float FloatMultiArrayType[3][4][2];
+	typedef double DoubleMultiArrayType[3][4][2];
+	typedef long double LongDoubleMultiArrayType[3][4][2];
+
+	typedef string StringMultiArrayType[3][4][2];
+	typedef wstring WStringMultiArrayType[3][4][2];
 
 	@topic
 	struct NestedStruct {
@@ -131,7 +131,7 @@ module JsonWrapper {
 
 	typedef TestEnum EnumArrayType[5];
 
-	// typedef TestEnum EnumMultiArrayType[3][4][2];
+	 typedef TestEnum EnumMultiArrayType[3][4][2];
 
 	@topic
     struct TestStruct {
@@ -196,6 +196,7 @@ module JsonWrapper {
 		
 		// Bounded sequences error when enconding/decoding to JSON
 		// Reproducible in OpenDDS with vread_vwrite test.
+		// Fix code pull requested to OpenDDS
 		BoundedBooleanSequenceType BoundedBooleanSequenceField;
 		BoundedCharSequenceType BoundedCharSequenceField;
 		BoundedWCharSequenceType BoundedWCharSequenceField;
@@ -213,34 +214,34 @@ module JsonWrapper {
 		BoundedStructSequenceType BoundedStructSequenceField;
 		BoundedEnumSequenceType BoundedEnumSequenceField;
 
-        // No multiarray serialization on System.Text.Json
-//		ShortMultiArrayType ShortMultiArrayField;
-//		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
-//		LongMultiArrayType LongMultiArrayField;
-//		UnsignedLongMultiArrayType UnsignedLongMultiArrayField;
-//		LongLongMultiArrayType LongLongMultiArrayField;
-//		UnsignedLongLongMultiArrayType UnsignedLongLongMultiArrayField;
-//		CharMultiArrayType CharMultiArrayField;
-//		WCharMultiArrayType WCharMultiArrayField;
-//		BooleanMultiArrayType BooleanMultiArrayField;
-//		OctetMultiArrayType OctetMultiArrayField;
-//		FloatMultiArrayType FloatMultiArrayField;
-//		DoubleMultiArrayType DoubleMultiArrayField;
+		ShortMultiArrayType ShortMultiArrayField;
+		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
+		LongMultiArrayType LongMultiArrayField;
+		UnsignedLongMultiArrayType UnsignedLongMultiArrayField;
+		LongLongMultiArrayType LongLongMultiArrayField;
+		UnsignedLongLongMultiArrayType UnsignedLongLongMultiArrayField;
+		CharMultiArrayType CharMultiArrayField;
+		WCharMultiArrayType WCharMultiArrayField;
+		BooleanMultiArrayType BooleanMultiArrayField;
+		OctetMultiArrayType OctetMultiArrayField;
+		FloatMultiArrayType FloatMultiArrayField;
+		DoubleMultiArrayType DoubleMultiArrayField;
 
-//		EnumMultiArrayType EnumMultiArrayField;
+		EnumMultiArrayType EnumMultiArrayField;
 
-//		StringMultiArrayType StringMultiArrayField;
-//		WStringMultiArrayType WStringMultiArrayField;
+		StringMultiArrayType StringMultiArrayField;
+		WStringMultiArrayType WStringMultiArrayField;
 
-//		StructMultiArrayType StructMultiArrayField;
+		StructMultiArrayType StructMultiArrayField;
 
         // long double issues on MacOS ARM64? SEGV received.
         // Reproducible with OpenDDS HelloWorld test.
-//        long double LongDoubleField;
-//        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-//        //BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
-//        LongDoubleArrayType LongDoubleArrayField;
-//		//LongDoubleMultiArrayType LongDoubleMultiArrayField;
+        // TO BE REPORTED
+        long double LongDoubleField;
+        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+        LongDoubleArrayType LongDoubleArrayField;
+		LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 
 	@topic
