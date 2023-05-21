@@ -23,8 +23,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StructWrapper;
 
 namespace OpenDDSharp.Standard.UnitTest.Helpers
 {

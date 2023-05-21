@@ -22,11 +22,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
 using OpenDDSharp.Standard.UnitTest.Listeners;
-using StructWrapper;
 
 namespace OpenDDSharp.Standard.UnitTest
 {

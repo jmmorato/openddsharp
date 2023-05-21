@@ -18,10 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
+using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.Standard.UnitTest.Helpers;
-using StructWrapper;
 
 namespace OpenDDSharp.Standard.UnitTest
 {

@@ -18,8 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
-using OpenDDSharp.OpenDDS.DCPS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenDDSharp.OpenDDS.DCPS;
 
 namespace OpenDDSharp.Standard.UnitTest
 {
