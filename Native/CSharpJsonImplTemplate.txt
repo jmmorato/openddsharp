@@ -26,6 +26,36 @@
         {            
             return (ReturnCode)UnregisterType(_native, dp.ToNative(), typeName);
         }
+        
+        public static string EncodeToString(<%TYPE%> sample)
+        {
+            return JsonSerializer.Serialize(sample, new JsonSerializerOptions
+            {
+                Converters =
+                {
+                    new JsonStringEnumConverter(),
+                    new OctetArrayConverter(),
+                    new FloatJsonConverter(),
+                    new DoubleJsonConverter(),
+                    new DecimalJsonConverter(),
+                }
+            });
+        }
+        
+        public static <%TYPE%> DecodeFromString(string str)
+        {
+            return JsonSerializer.Deserialize<<%TYPE%>>(str, new JsonSerializerOptions
+            {
+                Converters =
+                {
+                    new JsonStringEnumConverter(),
+                    new OctetArrayConverter(),
+                    new FloatJsonConverter(),
+                    new DoubleJsonConverter(),
+                    new DecimalJsonConverter(),
+                }
+            });
+        }
         #endregion
 
         #region PInvoke
@@ -66,9 +96,8 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            List<IntPtr> toRelease = new List<IntPtr>();
-            <%TYPE%>Wrapper wrapper = instance.ToNative(toRelease);
-            ret = RegisterInstance(_native, wrapper);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(instance);
+            ret = RegisterInstance(_native, json_data);
 
             return ret;
         }
@@ -77,41 +106,36 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            List<IntPtr> toRelease = new List<IntPtr>();
-            <%TYPE%>Wrapper wrapper = instance.ToNative(toRelease);
-            ret = RegisterInstanceTimestamp(_native, wrapper, timestamp);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(instance);
+            ret = RegisterInstanceTimestamp(_native, json_data, timestamp);
 
             return ret;
         }
 
         public ReturnCode UnregisterInstance(<%TYPE%> data)
         {
-            List<IntPtr> toRelease = new List<IntPtr>();
-            <%SCOPED%>Wrapper native = data.ToNative(toRelease);
-
             InstanceHandle handle = LookupInstance(data);
             if (handle == InstanceHandle.HandleNil) 
             {
                 return ReturnCode.PreconditionNotMet;
             }
 
-	        return (ReturnCode)UnregisterInstance(_native, native, handle);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+	        return (ReturnCode)UnregisterInstance(_native, json_data, handle);
         }
 
 		public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle)
         {
-            List<IntPtr> toRelease = new List<IntPtr>();
-            <%SCOPED%>Wrapper native = data.ToNative(toRelease);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
 
-            return (ReturnCode)UnregisterInstance(_native, native, handle);
+            return (ReturnCode)UnregisterInstance(_native, json_data, handle);
         }
 
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
         {
-            List<IntPtr> toRelease = new List<IntPtr>();
-            <%SCOPED%>Wrapper native = data.ToNative(toRelease);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
 
-            return (ReturnCode)UnregisterInstanceTimestamp(_native, native, handle, timestamp);
+            return (ReturnCode)UnregisterInstanceTimestamp(_native, json_data, handle, timestamp);
         }
 
         public ReturnCode Write(<%TYPE%> data)
@@ -128,19 +152,9 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            string wrapper = JsonSerializer.Serialize(data, new JsonSerializerOptions
-            {
-                Converters =
-                {
-                    new JsonStringEnumConverter(),
-                    new OctetArrayConverter(),
-                    new FloatJsonConverter(),
-                    new DoubleJsonConverter(),
-                    new DecimalJsonConverter(),
-                }
-            });
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
 
-            ret = (ReturnCode)Write(_native, wrapper, handle);
+            ret = (ReturnCode)Write(_native, json_data, handle);
 
             return ret;
         }
@@ -153,16 +167,10 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            List<IntPtr> toRelease = new List<IntPtr>();
 
-            <%TYPE%>Wrapper wrapper = data.ToNative(toRelease);
-            ret = (ReturnCode)WriteWithTimestamp(_native, wrapper, handle, timestamp);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
 
-            // Always free the unmanaged memory.
-            foreach(IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
+            ret = (ReturnCode)WriteWithTimestamp(_native, json_data, handle, timestamp);
 
             return ret;
         }
@@ -180,16 +188,11 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            List<IntPtr> toRelease = new List<IntPtr>();
 
-            ret = (ReturnCode)Dispose(_native, data.ToNative(toRelease), handle);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
 
-            // Always free the unmanaged memory.
-            foreach (IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
-
+            ret = (ReturnCode)Dispose(_native, json_data, handle);
+            
             return ret;
         }
 
@@ -201,15 +204,10 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            List<IntPtr> toRelease = new List<IntPtr>();
 
-            ret = (ReturnCode)DisposeTimestamp(_native, data.ToNative(toRelease), handle, timestamp);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
 
-            // Always free the unmanaged memory.
-            foreach(IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
+            ret = (ReturnCode)DisposeTimestamp(_native, json_data, handle, timestamp);
 
             return ret;
         }
@@ -227,13 +225,22 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            <%TYPE%>Wrapper aux = new <%TYPE%>Wrapper();
+            var ptr = IntPtr.Zero;
 
-            ret = (ReturnCode)GetKeyValue(_native, ref aux, handle);
+            ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);
 
             if (ret == ReturnCode.Ok)
             {
-                data.FromNative(aux);
+                var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+
+                if (!string.IsNullOrWhiteSpace(json_data))
+                {
+                    var sample = <%TYPE%>TypeSupport.DecodeFromString(json_data);
+
+                    data.MemberwiseCopy(sample);
+                }
+
+                Marshal.FreeHGlobal(ptr);
             }
 
             return ret;
@@ -242,17 +249,27 @@
         public InstanceHandle LookupInstance(<%TYPE%> instance)
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
-            List<IntPtr> toRelease = new List<IntPtr>();
+                        
+            var json_data = GetJsonData(instance);
 
-            ret = LookupInstance(_native, instance.ToNative(toRelease));
-
-            // Always free the unmanaged memory.
-            foreach (IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
+            ret = LookupInstance(_native, json_data);
 
             return ret;
+        }
+        
+        private string GetJsonData(<%TYPE%> sample)
+        {
+            return JsonSerializer.Serialize(sample, new JsonSerializerOptions
+            {
+                Converters =
+                {
+                    new JsonStringEnumConverter(),
+                    new OctetArrayConverter(),
+                    new FloatJsonConverter(),
+                    new DoubleJsonConverter(),
+                    new DecimalJsonConverter(),
+                }
+            });
         }
         #endregion
 
@@ -263,43 +280,43 @@
         
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Json", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern int Write(IntPtr dw, [MarshalAs(UnmanagedType.LPStr)]string jsonData, int handle);
+        private static extern int Write(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int WriteWithTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int WriteWithTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstance(IntPtr dw, <%TYPE%>Wrapper instance);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int RegisterInstance(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstanceTimestamp(IntPtr dw, <%TYPE%>Wrapper instance, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int RegisterInstanceTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstance(IntPtr dw, <%TYPE%>Wrapper instance, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int UnregisterInstance(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstanceTimestamp(IntPtr dw, <%TYPE%>Wrapper instance, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int UnregisterInstanceTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int LookupInstance(IntPtr dw, <%TYPE%>Wrapper instance);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int LookupInstance(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Dispose(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Dispose(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int DisposeTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In] <%TYPE%>Wrapper data, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int DisposeTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetKeyValue(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Json", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetKeyValue(IntPtr dw, [In, Out] ref IntPtr json_data, int handle);
         #endregion
     }
 
@@ -994,27 +1011,20 @@
             ReturnCode ret = ReturnCode.Error;
             IntPtr ptr = IntPtr.Zero;
             SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
+            
             ret = (ReturnCode)ReadNextSample(_native, ref ptr, ref infoWrapper);
+
             if (ret == ReturnCode.Ok)
             {
                 var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+                
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
-                    var sample = JsonSerializer.Deserialize<<%TYPE%>>(json_data, new JsonSerializerOptions
-                    {
-                        Converters =
-                        {
-                            new JsonStringEnumConverter(),
-                            new OctetArrayConverter(),
-                            new FloatJsonConverter(),
-                            new DoubleJsonConverter(),
-                            new DecimalJsonConverter(),
-                        }
-                    });
-                    
+                    var sample = <%TYPE%>TypeSupport.DecodeFromString(json_data);
+
                     data.MemberwiseCopy(sample);
                 }
-                
+
                 Marshal.FreeHGlobal(ptr);
                 
                 sampleInfo.FromNative(infoWrapper);

@@ -37,19 +37,14 @@ int <%SCOPED_METHOD%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METH
 
 int <%SCOPED_METHOD%>DataWriter_Write_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle)
 {
-    //<%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
-    <%SCOPED_METHOD%>_to_file(json_data);
-    <%SCOPED%>TypeSupport_var ts = new <%SCOPED%>TypeSupportImpl;
-    OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);    
-    <%SCOPED%>_var samplev;
-    ::DDS::ReturnCode_t ret = ts->decode_from_string(json_data, samplev, format);
-    if (ret != ::DDS::RETCODE_OK)
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
     {
-        return ret;
+        return ::DDS::RETCODE_ERROR;
     }
-    const <%SCOPED%> sample = samplev.in();
+    <%SCOPED%> sample = samplev.in();
 
-    ret = dw->write(sample, handle);
+    ::DDS::ReturnCode_t ret = dw->write(sample, handle);    
     
     return ret;
 }
@@ -61,11 +56,35 @@ int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp(<%SCOPED%>DataWriter_ptr dw, 
     return dw->write_w_timestamp(nativeData, handle, time);
 }
 
+int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->write_w_timestamp(sample, handle, time);
+}
+
 int <%SCOPED_METHOD%>DataWriter_RegisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance)
 {
     <%SCOPED%> nativeData = instance.to_native();
 
     return dw->register_instance(nativeData);
+}
+
+int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->register_instance(sample);
 }
 
 int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance, ::DDS::Time_t time)
@@ -75,11 +94,35 @@ int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp(<%SCOPED%>DataWriter_p
     return dw->register_instance_w_timestamp(nativeData, time);
 }
 
+int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::Time_t time)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->register_instance_w_timestamp(sample, time);
+}
+
 int <%SCOPED_METHOD%>DataWriter_UnregisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance, ::DDS::InstanceHandle_t handle)
 {
     <%SCOPED%> nativeData = instance.to_native();
 
     return dw->unregister_instance(nativeData, handle);
+}
+
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->unregister_instance(sample, handle);
 }
 
 int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time)
@@ -89,11 +132,35 @@ int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp(<%SCOPED%>DataWriter
     return dw->unregister_instance_w_timestamp(nativeData, handle, time);
 }
 
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->unregister_instance_w_timestamp(sample, handle, time);
+}
+
 int <%SCOPED_METHOD%>DataWriter_LookupInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance)
 {
     <%SCOPED%> nativeData = instance.to_native();
 
     return dw->lookup_instance(nativeData);
+}
+
+int <%SCOPED_METHOD%>DataWriter_LookupInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->lookup_instance(sample);
 }
 
 int <%SCOPED_METHOD%>DataWriter_Dispose(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle)
@@ -103,11 +170,35 @@ int <%SCOPED_METHOD%>DataWriter_Dispose(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_ME
     return dw->dispose(nativeData, handle);
 }
 
+int <%SCOPED_METHOD%>DataWriter_Dispose_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->dispose(sample, handle);
+}
+
 int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time)
 {
     <%SCOPED%> nativeData = data.to_native();
 
     return dw->dispose_w_timestamp(nativeData, handle, time);
+}
+
+int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->dispose_w_timestamp(sample, handle, time);
 }
 
 int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper* data, int handle)
@@ -119,6 +210,19 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPE
     if (ret == ::DDS::RETCODE_OK)
     {
         data->from_native(nativeData);
+    }
+
+    return ret;
+}
+
+int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>DataWriter_ptr dw, char* & json_data, int handle)
+{
+    <%SCOPED%> sample;
+    ::DDS::ReturnCode_t ret = dw->get_key_value(sample, handle);
+
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
     }
 
     return ret;
@@ -149,11 +253,7 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample_Json(<%SCOPED%>DataReader_ptr dr,
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        <%SCOPED%>TypeSupport_var ts = new <%SCOPED%>TypeSupportImpl;
-        OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);
-        CORBA::String_var buffer;
-        ts->encode_to_string(sample, buffer, format);
-        json_data = CORBA::string_dup(buffer);
+        json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
     }
     
     return (int)ret;
