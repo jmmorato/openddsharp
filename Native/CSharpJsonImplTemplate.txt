@@ -1108,10 +1108,6 @@
 
         #region PInvoke
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>Wrapper_release", CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr Release([MarshalAs(UnmanagedType.Struct), In, Out] ref <%TYPE%>Wrapper data);
-
-        [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow(IntPtr dr);
 
