@@ -31,6 +31,7 @@
         {
             return JsonSerializer.Serialize(sample, new JsonSerializerOptions
             {
+                AllowTrailingCommas = false,
                 Converters =
                 {
                     new JsonStringEnumConverter(),
@@ -46,6 +47,7 @@
         {
             return JsonSerializer.Deserialize<<%TYPE%>>(str, new JsonSerializerOptions
             {
+                AllowTrailingCommas = true,
                 Converters =
                 {
                     new JsonStringEnumConverter(),
