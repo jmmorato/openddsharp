@@ -242,7 +242,7 @@
                     data.MemberwiseCopy(sample);
                 }
 
-                Marshal.FreeHGlobal(ptr);
+                MarshalHelper.ReleaseNativeStringPointer(ptr);
             }
 
             return ret;
@@ -379,8 +379,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -428,8 +428,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -492,8 +492,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -541,8 +541,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -605,8 +605,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -654,8 +654,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -718,8 +718,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -767,8 +767,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -831,8 +831,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -880,8 +880,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -944,8 +944,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -993,8 +993,8 @@
                     }
                 }
                 
-                Marshal.FreeHGlobal(rd);
-                Marshal.FreeHGlobal(ri);
+                MarshalHelper.ReleaseNativeStringSequence(rd);
+                MarshalHelper.ReleaseNativePointer(ri);
             }
 
             return ret;
@@ -1024,7 +1024,7 @@
                     data.MemberwiseCopy(sample);
                 }
 
-                Marshal.FreeHGlobal(ptr);
+                MarshalHelper.ReleaseNativeStringPointer(ptr);
                 
                 sampleInfo.FromNative(infoWrapper);
             }
@@ -1054,7 +1054,7 @@
                     data.MemberwiseCopy(sample);
                 }
                 
-                Marshal.FreeHGlobal(ptr);
+                MarshalHelper.ReleaseNativeStringPointer(ptr);
 
                 sampleInfo.FromNative(infoWrapper);
             }
@@ -1090,7 +1090,7 @@
                     data.MemberwiseCopy(sample);
                 }
 
-                Marshal.FreeHGlobal(ptr);
+                MarshalHelper.ReleaseNativeStringPointer(ptr);
             }
 
             return ret;

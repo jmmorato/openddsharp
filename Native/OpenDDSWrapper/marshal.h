@@ -124,3 +124,11 @@ static void ptr_to_unbounded_basic_string_sequence(void* ptr, TAO::unbounded_bas
 }
 
 EXTERN_METHOD_EXPORT void release_native_ptr(void* ptr);
+
+EXTERN_METHOD_EXPORT void release_basic_string_ptr(char* ptr);
+
+EXTERN_METHOD_EXPORT void release_wide_string_ptr(wchar_t* ptr);
+
+EXTERN_METHOD_EXPORT void release_basic_string_sequence_ptr(void* & ptr);
+
+EXTERN_METHOD_EXPORT void release_wide_string_sequence_ptr(void* & ptr);

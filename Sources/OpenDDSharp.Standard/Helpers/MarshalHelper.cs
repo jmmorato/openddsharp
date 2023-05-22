@@ -257,9 +257,9 @@ namespace OpenDDSharp.Helpers
 
         public static void ReleaseNativePointer(this IntPtr ptr)
         {
-            UnsafeNativeMethods.ReleaseNative(ptr);
+            UnsafeNativeMethods.ReleasePointer(ptr);
         }
-#endregion
+        #endregion
 
         #region UnsafeNativeMethods
         /// <summary>
@@ -272,7 +272,7 @@ namespace OpenDDSharp.Helpers
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(API_DLL, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void ReleaseNative(IntPtr ptr);
+            internal static extern void ReleasePointer(IntPtr ptr);
         }
         #endregion
     }

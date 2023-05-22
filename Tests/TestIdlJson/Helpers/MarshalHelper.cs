@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 
 internal static class MarshalHelper
 {
     private static readonly UTF32Encoding _utf32Encoding = new UTF32Encoding(!BitConverter.IsLittleEndian, false);
     private static readonly Encoding _utf16Encoding = Encoding.Unicode;
+    private const string API_DLL = @"OpenDDSWrapper";
 
     public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
     {
@@ -834,4 +837,60 @@ internal static class MarshalHelper
             }
         }
     }
+    
+    public static void ReleaseNativePointer(this IntPtr ptr)
+    {
+        UnsafeNativeMethods.ReleasePointer(ptr);
+    }
+    
+    public static void ReleaseNativeStringPointer(this IntPtr ptr)
+    {
+        UnsafeNativeMethods.ReleaseStringPointer(ptr);
+    }
+    
+    public static void ReleaseNativeWideStringPointer(this IntPtr ptr)
+    {
+        UnsafeNativeMethods.ReleaseWideStringPointer(ptr);
+    }
+    
+    public static void ReleaseNativeStringSequence(this IntPtr ptr)
+    {
+        UnsafeNativeMethods.ReleaseStringSequence(ref ptr);
+    }
+
+    public static void ReleaseNativeWideStringSequence(this IntPtr ptr)
+    {
+        UnsafeNativeMethods.ReleaseWideStringSequence(ref ptr);
+    }
+    
+    #region UnsafeNativeMethods
+    /// <summary>
+    /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+    /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+    /// is secure because no stack walk will be performed.
+    /// </summary>
+    [SuppressUnmanagedCodeSecurity]
+    private static class UnsafeNativeMethods
+    {
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(API_DLL, EntryPoint = "release_native_ptr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void ReleasePointer(IntPtr ptr);
+        
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(API_DLL, EntryPoint = "release_basic_string_ptr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void ReleaseStringPointer(IntPtr ptr);
+        
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(API_DLL, EntryPoint = "release_wide_string_ptr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void ReleaseWideStringPointer(IntPtr ptr);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(API_DLL, EntryPoint = "release_basic_string_sequence_ptr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void ReleaseStringSequence([In, Out] ref IntPtr ptr);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(API_DLL, EntryPoint = "release_wide_string_sequence_ptr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void ReleaseWideStringSequence([In, Out] ref IntPtr ptr);
+    }
+    #endregion
 }
