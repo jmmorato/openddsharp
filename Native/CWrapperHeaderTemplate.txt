@@ -123,7 +123,7 @@ EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextIns
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, int handle);
 
-EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & data, int handle);
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, int handle);
 
 /*
 #include <fstream>

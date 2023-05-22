@@ -883,7 +883,6 @@ int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPE
 int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, int handle)
 {
     <%SCOPED%> sample;
-
     ::DDS::ReturnCode_t ret = dr->get_key_value(sample, handle);
 
     if (ret == ::DDS::RETCODE_OK)
