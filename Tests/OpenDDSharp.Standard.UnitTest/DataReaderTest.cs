@@ -151,6 +151,9 @@ namespace OpenDDSharp.Standard.UnitTest
             // Call GetQos with null parameter.
             result = dataReader.GetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            dataReader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(dataReader);
         }
 
         /// <summary>
@@ -225,6 +228,9 @@ namespace OpenDDSharp.Standard.UnitTest
             // Call SetQos with null parameter
             result = dataReader.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            dataReader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(dataReader);
         }
 
         /// <summary>
@@ -245,6 +251,9 @@ namespace OpenDDSharp.Standard.UnitTest
 #pragma warning restore CS0618 // Type or member is obsolete
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
+
+            dataReader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(dataReader);
         }
 
         /// <summary>
@@ -276,6 +285,9 @@ namespace OpenDDSharp.Standard.UnitTest
 
             received = (MyDataReaderListener)dataReader.Listener;
             Assert.IsNull(received);
+
+            dataReader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(dataReader);
         }
 
         /// <summary>
@@ -307,6 +319,9 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(SampleStateKind.ReadSampleState, condition.SampleStateMask);
             Assert.AreEqual(ViewStateKind.NotNewViewState, condition.ViewStateMask);
             Assert.AreEqual(false, condition.TriggerValue);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
         }
 
         /// <summary>
@@ -363,6 +378,9 @@ namespace OpenDDSharp.Standard.UnitTest
             // Create a QueryCondition with an invalid number of parameters
             condition = reader.CreateQueryCondition(expression, parameter1);
             Assert.IsNull(condition);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
         }
 
         /// <summary>
@@ -428,6 +446,9 @@ namespace OpenDDSharp.Standard.UnitTest
             // Delete the read condition with the correct reader
             result = reader.DeleteReadCondition(readCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
         }
 
         /// <summary>
@@ -462,6 +483,8 @@ namespace OpenDDSharp.Standard.UnitTest
 
             result = _subscriber.DeleteDataReader(reader);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            _subscriber.DeleteDataReader(reader);
         }
 
         /// <summary>
@@ -530,6 +553,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreEqual(SampleRejectedStatusKind.RejectedBySamplesPerInstanceLimit, status.LastReason);
             Assert.AreNotEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -599,6 +626,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, status.NotAliveCount);
             Assert.AreEqual(1, status.NotAliveCountChange);
             Assert.AreEqual(writer.InstanceHandle, status.LastPublicationHandle);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -657,6 +688,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -714,6 +749,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, status.Policies.Count);
             Assert.AreEqual(1, status.Policies.First().Count);
             Assert.AreEqual(11, status.Policies.First().PolicyId);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -791,6 +830,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreEqual(otherWriter.InstanceHandle, status.LastPublicationHandle);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -859,6 +902,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(status);
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -948,6 +995,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ViewStateKind.NewViewState, sampleInfos.First().ViewState);
             Assert.IsNotNull(sampleInfos.First().SourceTimestamp);
             Assert.IsTrue(sampleInfos.First().SourceTimestamp.Seconds > 0);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1018,6 +1069,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(otherWriter.InstanceHandle, list.First());
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1092,6 +1147,10 @@ namespace OpenDDSharp.Standard.UnitTest
 
             result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1209,6 +1268,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, sampleInfos.Count);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1351,6 +1414,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, data[0].ShortField);
             Assert.AreEqual(3, data[1].Id);
             Assert.AreEqual(3, data[1].ShortField);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1476,6 +1543,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(0, data[0].ShortField);
             Assert.AreEqual(2, data[1].Id);
             Assert.AreEqual(2, data[1].ShortField);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1609,6 +1680,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreEqual(3, data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1721,6 +1796,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreEqual(3, data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1825,6 +1904,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreEqual(3, data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1922,6 +2005,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(4, samples.Count);
             Assert.AreEqual(4, sampleInfos.Count);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2021,6 +2108,10 @@ namespace OpenDDSharp.Standard.UnitTest
             Assert.AreEqual(ReturnCode.NoData, result);
             Assert.AreEqual(0, samples.Count);
             Assert.AreEqual(0, sampleInfos.Count);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2087,6 +2178,10 @@ namespace OpenDDSharp.Standard.UnitTest
             data = new TestStruct();
             result = dataReader.GetKeyValue(data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2136,6 +2231,10 @@ namespace OpenDDSharp.Standard.UnitTest
             // Lookup for an existing instance
             handle = dataReader.LookupInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
         }
         #endregion
     }

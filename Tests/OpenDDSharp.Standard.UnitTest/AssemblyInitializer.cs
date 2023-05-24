@@ -106,9 +106,7 @@ namespace OpenDDSharp.Standard.UnitTest
             TransportRegistry.Close();
             var ret = ParticipantService.Instance.Shutdown();
             Assert.AreEqual(ReturnCode.Ok, ret);
-
-            // TODO: Not working on master branch of OpenDDS
-            //Assert.IsTrue(ParticipantService.Instance.IsShutdown);
+            Assert.IsTrue(ParticipantService.Instance.IsShutdown);
 
             Ace.Fini();
         }
