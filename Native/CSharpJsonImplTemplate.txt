@@ -98,7 +98,9 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(instance);
+            var str = <%TYPE%>TypeSupport.EncodeToString(instance);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
+
             ret = RegisterInstance(_native, json_data);
 
             return ret;
@@ -108,7 +110,9 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(instance);
+            var str = <%TYPE%>TypeSupport.EncodeToString(instance);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
+
             ret = RegisterInstanceTimestamp(_native, json_data, timestamp);
 
             return ret;
@@ -122,20 +126,24 @@
                 return ReturnCode.PreconditionNotMet;
             }
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
+
 	        return (ReturnCode)UnregisterInstance(_native, json_data, handle);
         }
 
 		public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle)
         {
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             return (ReturnCode)UnregisterInstance(_native, json_data, handle);
         }
 
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
         {
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             return (ReturnCode)UnregisterInstanceTimestamp(_native, json_data, handle, timestamp);
         }
@@ -154,7 +162,8 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)Write(_native, json_data, handle);
 
@@ -170,7 +179,8 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)WriteWithTimestamp(_native, json_data, handle, timestamp);
 
@@ -191,7 +201,8 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)Dispose(_native, json_data, handle);
             
@@ -207,7 +218,8 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)DisposeTimestamp(_native, json_data, handle, timestamp);
 
@@ -252,7 +264,8 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
                         
-            var json_data = <%TYPE%>TypeSupport.EncodeToString(instance);
+            var str = <%TYPE%>TypeSupport.EncodeToString(instance);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = LookupInstance(_native, json_data);
 
@@ -267,39 +280,39 @@
         
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Json", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        private static extern int Write(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle);
+        private static extern int Write(IntPtr dw, [In] IntPtr jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int WriteWithTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int WriteWithTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstance(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
+        private static extern int RegisterInstance(IntPtr dw, [In] IntPtr jsonData);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int RegisterInstanceTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstance(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle);
+        private static extern int UnregisterInstance(IntPtr dw, [In] IntPtr jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int UnregisterInstanceTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int UnregisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int LookupInstance(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
+        private static extern int LookupInstance(IntPtr dw, [In] IntPtr jsonData);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int Dispose(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle);
+        private static extern int Dispose(IntPtr dw, [In] IntPtr jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int DisposeTimestamp(IntPtr dw, [MarshalAs(UnmanagedType.LPStr), In]string jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int DisposeTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Json", CallingConvention = CallingConvention.Cdecl)]
