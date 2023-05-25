@@ -233,7 +233,7 @@
 
             if (ret == ReturnCode.Ok)
             {
-                var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
 
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
@@ -358,7 +358,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -407,7 +407,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -471,7 +471,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -520,7 +520,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -584,7 +584,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -633,7 +633,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -697,7 +697,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -746,7 +746,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -810,7 +810,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -859,7 +859,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -923,7 +923,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -972,7 +972,7 @@
                 IList<string> data = new List<string>();
                 IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
 
-                MarshalHelper.PtrToStringSequence(rd, ref data, false);
+                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
                 MarshalHelper.PtrToSequence(ri, ref info);
 
                 if (data != null)
@@ -1015,7 +1015,7 @@
 
             if (ret == ReturnCode.Ok)
             {
-                var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
                 
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
@@ -1045,7 +1045,7 @@
             ret = (ReturnCode)TakeNextSample(_native, ref ptr, ref infoWrapper);
             if (ret == ReturnCode.Ok)
             {
-                var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
             
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
@@ -1081,7 +1081,7 @@
 
             if (ret == ReturnCode.Ok)
             {
-                var json_data = Marshal.PtrToStringAnsi(ptr) ?? string.Empty;
+                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
                 
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {

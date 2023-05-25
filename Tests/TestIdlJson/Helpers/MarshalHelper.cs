@@ -471,6 +471,37 @@ internal static class MarshalHelper
             }
         }
     }
+    
+    public static void PtrToUTF8StringSequence(this IntPtr ptr, ref IList<string> sequence)
+    {
+        // Ensure a not null empty list to populate
+        if (sequence == null)
+        {
+            sequence = new List<string>();
+        }
+        else
+        {
+            sequence.Clear();
+        }
+
+        if (ptr == IntPtr.Zero)
+        {
+            return;
+        }
+
+        // Start by reading the size of the array
+        var length = Marshal.ReadInt32(ptr);
+
+        // Populate the array
+        for (var i = 0; i < length; i++)
+        {
+            // Get the unmanaged pointer
+            var pointer = Marshal.PtrToStructure<IntPtr>(ptr + sizeof(int) + (IntPtr.Size * i));
+
+            // Convert the pointer in a string
+            sequence.Add(StringFromNativeUtf8(pointer));
+        }
+    }
 
     public static List<IntPtr> StringSequenceToPtr(this IList<string> sequence, ref IntPtr ptr, bool isUnicode)
     {
@@ -861,6 +892,43 @@ internal static class MarshalHelper
     public static void ReleaseNativeWideStringSequence(this IntPtr ptr)
     {
         UnsafeNativeMethods.ReleaseWideStringSequence(ref ptr);
+    }
+    
+    public static IntPtr NativeUtf8FromString(string managedString)
+    {
+        if (managedString == null)
+        {
+            return IntPtr.Zero;
+        }
+
+        var len = Encoding.UTF8.GetByteCount(managedString);
+        
+        var buffer = new byte[len + 1];
+        Encoding.UTF8.GetBytes(managedString, 0, managedString.Length, buffer, 0);
+
+        var nativeUtf8 = Marshal.AllocHGlobal(buffer.Length);
+        Marshal.Copy(buffer, 0, nativeUtf8, buffer.Length);
+
+        return nativeUtf8;
+    }
+        
+    public static string StringFromNativeUtf8(IntPtr nativeUtf8)
+    {
+        if (nativeUtf8 == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        var len = 0;
+        while (Marshal.ReadByte(nativeUtf8, len) != 0)
+        {
+            ++len;
+        }
+
+        var buffer = new byte[len];
+        Marshal.Copy(nativeUtf8, buffer, 0, buffer.Length);
+        
+        return Encoding.UTF8.GetString(buffer);
     }
     
     #region UnsafeNativeMethods
