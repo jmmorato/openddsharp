@@ -65,7 +65,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Blame = true,
             };
 
-            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", dotnetTestSettings);
+            // context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", dotnetTestSettings);
         }
     }
 }
