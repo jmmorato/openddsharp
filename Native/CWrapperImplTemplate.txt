@@ -217,7 +217,7 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPE
 
 int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>DataWriter_ptr dw, char* & json_data, int handle)
 {
-    <%SCOPED%> sample;
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);;
     ::DDS::ReturnCode_t ret = dw->get_key_value(sample, handle);
 
     if (ret == ::DDS::RETCODE_OK)
@@ -882,7 +882,7 @@ int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPE
 
 int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, int handle)
 {
-    <%SCOPED%> sample;
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
     ::DDS::ReturnCode_t ret = dr->get_key_value(sample, handle);
 
     if (ret == ::DDS::RETCODE_OK)

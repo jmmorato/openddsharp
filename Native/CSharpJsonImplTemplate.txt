@@ -239,8 +239,9 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-            var ptr = IntPtr.Zero;
-
+            
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var ptr = MarshalHelper.NativeUtf8FromString(str);
             ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);
 
             if (ret == ReturnCode.Ok)
@@ -1087,10 +1088,10 @@
                 return ReturnCode.BadParameter;
             }
 
-            ReturnCode ret = ReturnCode.Error;
-            var ptr = IntPtr.Zero;
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
+            var ptr = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);            
+            var ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);            
 
             if (ret == ReturnCode.Ok)
             {
