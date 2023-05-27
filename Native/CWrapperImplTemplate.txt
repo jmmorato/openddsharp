@@ -228,7 +228,6 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>DataWriter_ptr dw, ch
     }
 
     return ret;
-    <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
 }
 
 <%SCOPED%>DataReader_ptr <%SCOPED_METHOD%>DataReader_Narrow(DDS::DataReader_ptr dr)
