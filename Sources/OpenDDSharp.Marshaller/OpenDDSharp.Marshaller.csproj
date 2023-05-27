@@ -36,4 +36,9 @@
         <PackageReference Include="System.Text.Json" Version="7.0.2" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\..\icon_128.png" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
+    </ItemGroup>
+
 </Project>
