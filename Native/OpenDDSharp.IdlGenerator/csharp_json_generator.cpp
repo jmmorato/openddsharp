@@ -413,6 +413,12 @@ std::string csharp_json_generator::get_csharp_type(AST_Type* type) {
 
 		switch (predefined_type->pt())
 		{
+    case AST_PredefinedType::PT_int8:
+      ret = "sbyte";
+      break;
+    case AST_PredefinedType::PT_uint8:
+      ret = "byte";
+      break;
 		case AST_PredefinedType::PT_short:
 			ret = "Int16";
 			break;
@@ -519,6 +525,8 @@ std::string csharp_json_generator::get_csharp_default_value(AST_Type* type, cons
 		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
 		switch (predefined_type->pt())
 		{
+    case AST_PredefinedType::PT_int8:
+    case AST_PredefinedType::PT_uint8:
 		case AST_PredefinedType::PT_short:
 		case AST_PredefinedType::PT_long:
 		case AST_PredefinedType::PT_longlong:

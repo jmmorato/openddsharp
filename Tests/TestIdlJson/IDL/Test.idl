@@ -55,6 +55,10 @@ module JsonWrapper {
 	typedef sequence<double, 5> BoundedDoubleSequenceType;
 	typedef sequence<long double> UnboundedLongDoubleSequenceType;
 	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
+	typedef sequence<int8> UnboundedInt8SequenceType;
+    typedef sequence<int8, 5> BoundedInt8SequenceType;
+    typedef sequence<uint8> UnboundedUInt8SequenceType;
+    typedef sequence<uint8, 5> BoundedUInt8SequenceType;
 
 	typedef sequence<string> UnboundedStringSequenceType;
 	typedef sequence<string, 5> BoundedStringSequenceType;
@@ -66,7 +70,7 @@ module JsonWrapper {
 	typedef long LongArrayType[5];
 	typedef unsigned long UnsignedLongArrayType[5];
 	typedef long long LongLongArrayType[5];
-	typedef unsigned long long UnsignedLongLongArrayType[5];
+	typedef unsigned long long UnsignedLongLongArrayType[5];	
 
 	typedef char CharArrayType[5];
 	typedef wchar WCharArrayType[5];
@@ -75,6 +79,8 @@ module JsonWrapper {
 	typedef float FloatArrayType[5];
 	typedef double DoubleArrayType[5];
 	typedef long double LongDoubleArrayType[5];
+	typedef int8 Int8ArrayType[5];
+	typedef uint8 UInt8ArrayType[5];
 
 	typedef string StringArrayType[5];
 	typedef wstring WStringArrayType[5];
@@ -92,6 +98,8 @@ module JsonWrapper {
 	typedef float FloatMultiArrayType[3][4][2];
 	typedef double DoubleMultiArrayType[3][4][2];
 	typedef long double LongDoubleMultiArrayType[3][4][2];
+	typedef int8 Int8MultiArrayType[3][4][2];
+	typedef uint8 UInt8MultiArrayType[3][4][2];
 
 	typedef string StringMultiArrayType[3][4][2];
 	typedef wstring WStringMultiArrayType[3][4][2];
@@ -148,6 +156,8 @@ module JsonWrapper {
 		octet OctetField;
 		float FloatField;
 		double DoubleField;
+		int8 Int8Field;
+        uint8 UInt8Field;
 
 		string UnboundedStringField;
 		wstring UnboundedWStringField;
@@ -168,6 +178,8 @@ module JsonWrapper {
 		UnboundedDoubleSequenceType UnboundedDoubleSequenceField;
 		UnboundedStringSequenceType UnboundedStringSequenceField;
 		UnboundedWStringSequenceType UnboundedWStringSequenceField;
+		UnboundedInt8SequenceType UnboundedInt8SequenceField;
+        UnboundedUInt8SequenceType UnboundedUInt8SequenceField;
 
 		NestedStruct NestedStructField;
 		UnboundedStructSequenceType UnboundedStructSequenceField;
@@ -187,16 +199,15 @@ module JsonWrapper {
 		OctetArrayType OctetArrayField;
 		FloatArrayType FloatArrayField;
 		DoubleArrayType DoubleArrayField;
+		Int8ArrayType Int8ArrayField;
+		UInt8ArrayType UInt8ArrayField;
 
 		StringArrayType StringArrayField;
 		WStringArrayType WStringArrayField;
 
 		StructArrayType StructArrayField;
 		EnumArrayType EnumArrayField;
-		
-		// Bounded sequences error when enconding/decoding to JSON
-		// Reproducible in OpenDDS with vread_vwrite test.
-		// Fixed code pull requested to OpenDDS
+
 		BoundedBooleanSequenceType BoundedBooleanSequenceField;
 		BoundedCharSequenceType BoundedCharSequenceField;
 		BoundedWCharSequenceType BoundedWCharSequenceField;
@@ -213,6 +224,8 @@ module JsonWrapper {
 		BoundedWStringSequenceType BoundedWStringSequenceField;
 		BoundedStructSequenceType BoundedStructSequenceField;
 		BoundedEnumSequenceType BoundedEnumSequenceField;
+		BoundedInt8SequenceType BoundedInt8SequenceField;
+        BoundedUInt8SequenceType BoundedUInt8SequenceField;
 
 		ShortMultiArrayType ShortMultiArrayField;
 		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
@@ -226,6 +239,8 @@ module JsonWrapper {
 		OctetMultiArrayType OctetMultiArrayField;
 		FloatMultiArrayType FloatMultiArrayField;
 		DoubleMultiArrayType DoubleMultiArrayField;
+		Int8MultiArrayType Int8MultiArrayField;
+		UInt8MultiArrayType UInt8MultiArrayField;
 
 		EnumMultiArrayType EnumMultiArrayField;
 

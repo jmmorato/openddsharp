@@ -135,8 +135,6 @@ bool cwrapper_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* na
 
   be_global->header_ << "};\n\n";
 
-
-
 	if (be_global->is_topic_type(structure)) {
 		std::string header = header_template_;
 		replaceAll(header, replacements);
@@ -291,6 +289,10 @@ std::string cwrapper_generator::get_cwrapper_type(AST_Type* type) {
 
 		switch (predefined_type->pt())
 		{
+    case AST_PredefinedType::PT_int8:
+    case AST_PredefinedType::PT_uint8:
+      ret = "CORBA::Octet";
+      break;
 		case AST_PredefinedType::PT_short:
 			ret = "CORBA::Short";
 			break;
@@ -492,15 +494,15 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 
 			ret.append("#endif\n");
 		}
-        else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
-            ret.append("        ret.");
+    else if (predefined_type->pt() == AST_PredefinedType::PT_wchar) {
+      ret.append("        ret.");
 			ret.append(name);
 			ret.append(" = marshal::ptr_to_wchar(");
 			ret.append(name);
 			ret.append(");\n");
         }
 		else {
-            ret.append("        ret.");
+      ret.append("        ret.");
 			ret.append(name);
 			ret.append(" = ");
 			ret.append(name);
@@ -624,7 +626,9 @@ std::string cwrapper_generator::get_field_to_native(AST_Type* type, const char *
 
 				ret.append("            }\n");
 				break;
-			}
+			} else if (predefined_type->pt() == AST_PredefinedType::PT_int8 || predefined_type->pt() == AST_PredefinedType::PT_uint8) {
+        break;
+      }
 		}
 		default:
 		{
@@ -1160,7 +1164,9 @@ std::string cwrapper_generator::get_field_from_native(AST_Type* type, const char
 
 				ret.append("        }\n");
 				break;
-			}
+			}  else if (predefined_type->pt() == AST_PredefinedType::PT_int8 || predefined_type->pt() == AST_PredefinedType::PT_uint8) {
+        break;
+      }
 		}
 		default:
 		{

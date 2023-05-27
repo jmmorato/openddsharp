@@ -131,6 +131,8 @@ namespace OpenDDSharp.UnitTest
 
             var data = new TestStruct
             {
+                Int8Field = -1,
+                UInt8Field = 1,
                 ShortField = -1,
                 LongField = -2,
                 LongLongField = -3,
@@ -159,6 +161,8 @@ namespace OpenDDSharp.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
+            Assert.AreEqual(data.Int8Field, received.Int8Field);
+            Assert.AreEqual(data.UInt8Field, received.UInt8Field);
             Assert.AreEqual(data.ShortField, received.ShortField);
             Assert.AreEqual(data.LongField, received.LongField);
             Assert.AreEqual(data.LongLongField, received.LongLongField);
@@ -243,6 +247,10 @@ namespace OpenDDSharp.UnitTest
                 UnboundedDoubleSequenceField = { 1d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
                 BoundedLongDoubleSequenceField = { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
                 UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
+                BoundedInt8SequenceField = { -1, 2, -3 },
+                UnboundedInt8SequenceField = { 4, -5, 6, -7, 8 },
+                BoundedUInt8SequenceField = { 1, 2, 3 },
+                UnboundedUInt8SequenceField = { 4, 5, 6, 7, 8 },
             };
             var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -284,6 +292,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.UnboundedDoubleSequenceField.SequenceEqual(received.UnboundedDoubleSequenceField));
             Assert.IsTrue(data.BoundedLongDoubleSequenceField.SequenceEqual(received.BoundedLongDoubleSequenceField));
             Assert.IsTrue(data.UnboundedLongDoubleSequenceField.SequenceEqual(received.UnboundedLongDoubleSequenceField));
+            Assert.IsTrue(data.BoundedInt8SequenceField.SequenceEqual(received.BoundedInt8SequenceField));
+            Assert.IsTrue(data.UnboundedInt8SequenceField.SequenceEqual(received.UnboundedInt8SequenceField));
+            Assert.IsTrue(data.BoundedUInt8SequenceField.SequenceEqual(received.BoundedUInt8SequenceField));
+            Assert.IsTrue(data.UnboundedUInt8SequenceField.SequenceEqual(received.UnboundedUInt8SequenceField));
 
             Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
             Assert.IsTrue(data.UnboundedBooleanSequenceField is IList<bool>);
@@ -311,6 +323,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
             Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
             Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
+            Assert.IsTrue(data.BoundedInt8SequenceField is IList<sbyte>);
+            Assert.IsTrue(data.UnboundedInt8SequenceField is IList<sbyte>);
+            Assert.IsTrue(data.BoundedUInt8SequenceField is IList<byte>);
+            Assert.IsTrue(data.UnboundedUInt8SequenceField is IList<byte>);
 
             Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
             Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
@@ -364,6 +380,10 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, defaultStruct.BoundedLongDoubleSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedLongDoubleSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedLongDoubleSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedInt8SequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedInt8SequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedUInt8SequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedUInt8SequenceField.Count);
         }
 
         /// <summary>
@@ -390,6 +410,8 @@ namespace OpenDDSharp.UnitTest
                 FloatArrayField = new[] { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
                 DoubleArrayField = new[] { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
                 LongDoubleArrayField = new[] { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
+                Int8ArrayField = new sbyte[] { 4, -5, 6, -7, 8 },
+                UInt8ArrayField = new byte[] { 4, 5, 6, 7, 8 },
             };
             var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -417,6 +439,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.FloatArrayField.SequenceEqual(received.FloatArrayField));
             Assert.IsTrue(data.DoubleArrayField.SequenceEqual(received.DoubleArrayField));
             Assert.IsTrue(data.LongDoubleArrayField.SequenceEqual(received.LongDoubleArrayField));
+            Assert.IsTrue(data.Int8ArrayField.SequenceEqual(received.Int8ArrayField));
+            Assert.IsTrue(data.UInt8ArrayField.SequenceEqual(received.UInt8ArrayField));
 
             Assert.AreEqual(typeof(bool[]), data.BooleanArrayField.GetType());
             Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
@@ -431,6 +455,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(float[]), data.FloatArrayField.GetType());
             Assert.AreEqual(typeof(double[]), data.DoubleArrayField.GetType());
             Assert.AreEqual(typeof(decimal[]), data.LongDoubleArrayField.GetType());
+            Assert.AreEqual(typeof(sbyte[]), data.Int8ArrayField.GetType());
+            Assert.AreEqual(typeof(byte[]), data.UInt8ArrayField.GetType());
 
             Assert.IsNotNull(defaultStruct.BooleanArrayField);
             Assert.AreEqual(5, defaultStruct.BooleanArrayField.Length);
@@ -522,10 +548,24 @@ namespace OpenDDSharp.UnitTest
             {
                 Assert.AreEqual(default, i);
             }
+
+            Assert.IsNotNull(defaultStruct.Int8ArrayField);
+            Assert.AreEqual(5, defaultStruct.Int8ArrayField.Length);
+            foreach (var i in defaultStruct.Int8ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UInt8ArrayField);
+            Assert.AreEqual(5, defaultStruct.UInt8ArrayField.Length);
+            foreach (var i in defaultStruct.UInt8ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
         }
 
         /// <summary>
-        /// Test the code generated for the multiarray of basic types.
+        /// Test the code generated for the multi-array of basic types.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -847,6 +887,54 @@ namespace OpenDDSharp.UnitTest
                         new[] { 23.23m, 24.24m },
                     },
                 },
+                Int8MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new sbyte[] { 01, 02 },
+                        new sbyte[] { 03, 04 },
+                        new sbyte[] { 05, 06 },
+                        new sbyte[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new sbyte[] { 09, 10 },
+                        new sbyte[] { 11, 12 },
+                        new sbyte[] { 13, 14 },
+                        new sbyte[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new sbyte[] { 17, 18 },
+                        new sbyte[] { 19, 20 },
+                        new sbyte[] { 21, 22 },
+                        new sbyte[] { 23, 24 },
+                    },
+                },
+                UInt8MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new byte[] { 01, 02 },
+                        new byte[] { 03, 04 },
+                        new byte[] { 05, 06 },
+                        new byte[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new byte[] { 09, 10 },
+                        new byte[] { 11, 12 },
+                        new byte[] { 13, 14 },
+                        new byte[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new byte[] { 17, 18 },
+                        new byte[] { 19, 20 },
+                        new byte[] { 21, 22 },
+                        new byte[] { 23, 24 },
+                    },
+                },
             };
 
             var ret = _dataWriter.Write(data);
@@ -876,6 +964,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(CompareMultiArray(data.FloatMultiArrayField, received.FloatMultiArrayField));
             Assert.IsTrue(CompareMultiArray(data.DoubleMultiArrayField, received.DoubleMultiArrayField));
             Assert.IsTrue(CompareMultiArray(data.LongDoubleMultiArrayField, received.LongDoubleMultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.Int8MultiArrayField, received.Int8MultiArrayField));
+            Assert.IsTrue(CompareMultiArray(data.UInt8MultiArrayField, received.UInt8MultiArrayField));
 
             Assert.AreEqual(typeof(bool[][][]), data.BooleanMultiArrayField.GetType());
             Assert.AreEqual(typeof(char[][][]), data.CharMultiArrayField.GetType());
@@ -890,6 +980,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(float[][][]), data.FloatMultiArrayField.GetType());
             Assert.AreEqual(typeof(double[][][]), data.DoubleMultiArrayField.GetType());
             Assert.AreEqual(typeof(decimal[][][]), data.LongDoubleMultiArrayField.GetType());
+            Assert.AreEqual(typeof(sbyte[][][]), data.Int8MultiArrayField.GetType());
+            Assert.AreEqual(typeof(byte[][][]), data.UInt8MultiArrayField.GetType());
 
             for (var i0 = 0; i0 < 3; i0++)
             {
@@ -910,6 +1002,8 @@ namespace OpenDDSharp.UnitTest
                         Assert.AreEqual(default, defaultStruct.FloatMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.DoubleMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.LongDoubleMultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.Int8MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.UInt8MultiArrayField[i0][i1][i2]);
                     }
                 }
             }

@@ -51,9 +51,9 @@ The following legend is used to define the current version status:
 :ballot_box_with_check: IDL integer types shall be mapped as shown in the following table:
 
 | IDL Type           | C# Type | Status             |
-| ------------------ | ------- | ------------------ |
-| int8               | sbyte   | :x:                |
-| uint8              | byte    | :x:                |
+|--------------------|---------|--------------------|
+| int8               | sbyte   | :white_check_mark: |
+| uint8              | byte    | :white_check_mark: |
 | short              | short   | :white_check_mark: |
 | int16              | short   | :white_check_mark: |
 | unsigned short     | ushort  | :white_check_mark: |
@@ -72,10 +72,10 @@ The following legend is used to define the current version status:
 :ballot_box_with_check: IDL floating-point types shall be mapped as shown in the following table:
 
 | IDL Type    | C# Type | Status             |
-| ----------- | ------- | ------------------ |
+|-------------|---------|--------------------|
 | float       | float   | :white_check_mark: |
 | double      | double  | :white_check_mark: |
-| long double | decimal | :x:                |
+| long double | decimal | :white_check_mark: |
 
 #### Char Types
 
@@ -109,7 +109,7 @@ the corresponding C# boolean literals `true` and `false`.
 :ballot_box_with_check: The following table shows the mapping for sequences of basic types:
 
 | IDL Type                       | C# Type                                     | Status             |
-| ------------------------------ | ------------------------------------------- | ------------------ |
+|--------------------------------|---------------------------------------------|--------------------|
 | sequence\<boolean\>            | System.Collections.Generic.IList\<bool\>    | :white_check_mark: |
 | sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :white_check_mark: |
 | sequence\<char\>               | System.Collections.Generic.IList\<char\>    | :white_check_mark: |
