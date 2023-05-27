@@ -4,11 +4,36 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <Platforms>x64;x86;ARM64</Platforms>
         <Configurations>Debug;Release</Configurations>
+        <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>latest</LangVersion>
+        <Authors>Jose Morato</Authors>
+        <Company>OpenDDSharp</Company>
+        <Copyright>Copyright © Jose Morato 2023. All rights reserved.</Copyright>
+        <Description>
+            OpenDDSharp IDL code generator support classes.
+        </Description>
+    </PropertyGroup>
+
+    <!-- NuGet properties -->
+    <PropertyGroup>
+        <PackageProjectUrl>https://www.openddsharp.com</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
+        <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
+        <PackageIcon>icon_128.png</PackageIcon>
+        <PackageTags>OpenDDSharp DDS OpenDDS</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <!-- Create a ref assembly to include in the ref NuGet dir.
+         It makes a warning: https://github.com/NuGet/Home/issues/4184 -->
+        <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+        <NoWarn>NU5131</NoWarn>
+        <Version>1.0.0</Version>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Memory" Version="4.5.5" />
-      <PackageReference Include="System.Text.Json" Version="7.0.2" />
+        <PackageReference Include="System.Memory" Version="4.5.5" />
+        <PackageReference Include="System.Text.Json" Version="7.0.2" />
     </ItemGroup>
 
 </Project>
