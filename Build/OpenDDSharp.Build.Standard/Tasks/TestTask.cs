@@ -38,7 +38,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.Log.Information("Starting test task...");
 
             var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.Standard.UnitTest/bin/{context.BuildConfiguration}/net6.0/{context.RunTime}");
+            var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.UnitTest/bin/{context.BuildConfiguration}/net6.0/{context.RunTime}");
             context.Log.Information($"Unit test path: {path}");
             var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/3.2.0/build/netstandard1.0");
             var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
@@ -65,7 +65,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Blame = true,
             };
 
-            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", dotnetTestSettings);
+            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
         }
     }
 }

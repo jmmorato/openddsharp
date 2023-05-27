@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestIdlStruct", "Tests\Test
 		{1A656994-CDE3-4E34-A404-D9E87C9E7FED} = {1A656994-CDE3-4E34-A404-D9E87C9E7FED}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard.UnitTest", "Tests\OpenDDSharp.Standard.UnitTest\OpenDDSharp.Standard.UnitTest.csproj", "{DA9645FE-381E-495E-9652-3DF086570B71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.UnitTest", "Tests\OpenDDSharp.UnitTest\OpenDDSharp.UnitTest.csproj", "{DA9645FE-381E-495E-9652-3DF086570B71}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BF64F3F0-4B74-47CB-BE56-D7755E4E120E} = {BF64F3F0-4B74-47CB-BE56-D7755E4E120E}
 	EndProjectSection
