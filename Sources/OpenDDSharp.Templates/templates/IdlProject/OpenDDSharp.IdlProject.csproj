@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Compile Include="OpenDDSharp.IdlProjectTypeSupport.cs" />
-    <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
@@ -20,6 +19,7 @@
   <ItemGroup>
     <PackageReference Include="OpenDDSharp.Standard.IdlGenerator" Version="1.0.0" />
     <PackageReference Include="OpenDDSharp.Standard" Version="1.0.0" />
+    <PackageReference Include="OpenDDSharp.Marshaller" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

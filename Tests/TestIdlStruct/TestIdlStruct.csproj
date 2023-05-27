@@ -37,11 +37,7 @@
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\DoubleJsonConverter.cs" />
-    <Compile Include="Helpers\FloatJsonConverter.cs" />
-    <Compile Include="Helpers\OctetArrayConverter.cs" />
     <Compile Include="TestTypeSupport.cs" />
-    <Compile Include="Helpers\MarshalHelper.cs" />
   </ItemGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true'">
@@ -81,6 +77,7 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj" />
+    <ProjectReference Include="..\..\Sources\OpenDDSharp.Marshaller\OpenDDSharp.Marshaller.csproj" />
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
   </ItemGroup>
 
