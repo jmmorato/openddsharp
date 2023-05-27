@@ -19,6 +19,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using JsonWrapper;
 using OpenDDSharp;
@@ -173,527 +175,623 @@ namespace ConsoleDemoCore
             return new TestStruct
             {
                 ShortField = -1,
-                // LongField = -2,
-                // LongLongField = -3,
-                // UnsignedShortField = 1,
-                // UnsignedLongField = 2,
-                // UnsignedLongLongField = 3,
-                // BooleanField = true,
-                // CharField = 'C',
-                // WCharField = 'W',
-                // FloatField = 42.42f,
-                // DoubleField = 0.42,
-                // OctetField = 0x42,
-                // UnboundedStringField = "Unbounded string field.",
-                // UnboundedWStringField = "Unbounded WString field.",
-                // BoundedStringField = "Bounded string field.",
-                // BoundedWStringField = "Bounded WString field.",
-                // BoundedBooleanSequenceField = { true, true, false },
-                // UnboundedBooleanSequenceField = { true, true, false, true, true, false },
-                // BoundedCharSequenceField = { '1', '2', '3', '4', '5' },
-                // UnboundedCharSequenceField = { '1', '2', '3', '4', '5', '6' },
-                // BoundedWCharSequenceField = { '1', '2', '3', '4', '5' },
-                // UnboundedWCharSequenceField = { '1', '2', '3', '4', '5', '6' },
-                // BoundedOctetSequenceField = { 0x42, 0x69 },
-                // UnboundedOctetSequenceField = { 0x42, 0x69, 0x42, 0x69, 0x42, 0x69 },
-                // BoundedShortSequenceField = { 1, 2, 3, 4, 5 },
-                // UnboundedShortSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
-                // BoundedUShortSequenceField = { 1, 2, 3, 4, 5 },
-                // UnboundedUShortSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
-                // BoundedLongSequenceField = { 1, 2, 3, 4, 5 },
-                // UnboundedLongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
-                // BoundedULongSequenceField = { 1, 2, 3, 4, 5 },
-                // UnboundedULongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
-                // BoundedLongLongSequenceField = { 1, 2, 3, 4, 5 },
-                // UnboundedLongLongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
-                // BoundedULongLongSequenceField = { 1, 2, 3, 4, 5 },
-                // UnboundedULongLongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
-                // BoundedFloatSequenceField = { 0.42f, 42.42f, 1f, 2f, 3f },
-                // UnboundedFloatSequenceField = { 0.42f, 42.42f, 1f, 2f, 3f, 0.42f, 42.42f, 1f, 2f, 3f },
-                // BoundedDoubleSequenceField = { 0.42, 42.42, 1, 2, 3 },
-                // UnboundedDoubleSequenceField = { 0.42, 42.42, 1, 2, 3, 0.42, 42.42, 1, 2, 3 },
-                // BoundedStringSequenceField = { "This", "is", "the", "end." },
-                // BoundedWStringSequenceField = { "This", "is", "the", "end." },
-                // UnboundedStringSequenceField = { "This", "is", "the", "end.", "This", "is", "the", "end." },
-                // UnboundedWStringSequenceField = { "This", "is", "the", "end.", "This", "is", "the", "end." },
-                // NestedStructField = { Id = 1, Message = "This is the end." },
-                // BoundedStructSequenceField =
-                // {
-                //     new NestedStruct { Id = 1, Message = "This is the end." },
-                //     new NestedStruct { Id = 2, Message = "my only friend, the end." },
-                // },
-                // UnboundedStructSequenceField =
-                // {
-                //     new NestedStruct { Id = 1, Message = "This is the end." },
-                //     new NestedStruct { Id = 2, Message = "my only friend, the end." },
-                // },
-                // TestEnumField = TestEnum.ENUM12,
-                // BoundedEnumSequenceField =
-                // {
-                //     TestEnum.ENUM1,
-                //     TestEnum.ENUM2,
-                //     TestEnum.ENUM3,
-                //     TestEnum.ENUM4,
-                //     TestEnum.ENUM5,
-                // },
-                // UnboundedEnumSequenceField =
-                // {
-                //     TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5, TestEnum.ENUM6,
-                //     TestEnum.ENUM7, TestEnum.ENUM8, TestEnum.ENUM9, TestEnum.ENUM10, TestEnum.ENUM11, TestEnum.ENUM12
-                // },
-                // ShortArrayField = new short[] { 1, -2, 3, -4, 5 },
-                // UnsignedShortArrayField = new ushort[] { 1, 2, 3, 4, 5 },
-                // LongArrayField = new[] { 1, -2, 3, -4, 5 },
-                // UnsignedLongArrayField = new uint[] { 1, 2, 3, 4, 5 },
-                // LongLongArrayField = new long[] { 1, -2, 3, -4, 5 },
-                // UnsignedLongLongArrayField = new ulong[] { 1, 2, 3, 4, 5 },
-                // CharArrayField = new[] { 'A', 'B', 'C', 'D', 'E' },
-                // WCharArrayField = new[] { 'A', 'B', 'C', 'D', 'E' },
-                // BooleanArrayField = new[] { true, true, false, true, true },
-                // OctetArrayField = new byte[] { 0x42, 0x42, 0x69, 0x42, 0x42 },
-                // FloatArrayField = new[] { 0.42f, 0.4242f, 1f, 2f, 3f },
-                // DoubleArrayField = new[] { 0.42, 0.4242, 1, 2, 3 },
-                // StringArrayField = new[] { "This", "is", "the", "end", "my only friend, the end." },
-                // WStringArrayField = new[] { "This", "is", "the", "end", "my only friend, the end." },
-                // EnumArrayField = new[]
-                // {
-                //     TestEnum.ENUM1,
-                //     TestEnum.ENUM2,
-                //     TestEnum.ENUM3,
-                //     TestEnum.ENUM4,
-                //     TestEnum.ENUM5,
-                // },
-                // StructArrayField = new[]
-                // {
-                //     new NestedStruct { Id = 1, Message = "This is the end." },
-                //     new NestedStruct { Id = 2, Message = "This is the end." },
-                //     new NestedStruct { Id = 3, Message = "This is the end." },
-                //     new NestedStruct { Id = 4, Message = "This is the end." },
-                //     new NestedStruct { Id = 5, Message = "This is the end." },
-                // },
-                // ShortMultiArrayField = new short[,,]
-                // {
-                //     {
-                //         { -01, -02 },
-                //         { -03, -04 },
-                //         { -05, -06 },
-                //         { -07, -08 },
-                //     },
-                //     {
-                //         { -09, -10 },
-                //         { -11, -12 },
-                //         { -13, -14 },
-                //         { -15, -16 },
-                //     },
-                //     {
-                //         { -17, -18 },
-                //         { -19, -20 },
-                //         { -21, -22 },
-                //         { -23, -24 },
-                //     }
-                // },
-                // UnsignedShortMultiArrayField = new ushort[,,]
-                // {
-                //     {
-                //         { 01, 02 },
-                //         { 03, 04 },
-                //         { 05, 06 },
-                //         { 07, 08 },
-                //     },
-                //     {
-                //         { 09, 10 },
-                //         { 11, 12 },
-                //         { 13, 14 },
-                //         { 15, 16 },
-                //     },
-                //     {
-                //         { 17, 18 },
-                //         { 19, 20 },
-                //         { 21, 22 },
-                //         { 23, 24 },
-                //     }
-                // },
-                // LongMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { -01, 02 },
-                //         { -03, 04 },
-                //         { -05, 06 },
-                //         { -07, 08 },
-                //     },
-                //     {
-                //         { -09, 10 },
-                //         { -11, 12 },
-                //         { -13, 14 },
-                //         { -15, 16 },
-                //     },
-                //     {
-                //         { -17, 18 },
-                //         { -19, 20 },
-                //         { -21, 22 },
-                //         { -23, 24 },
-                //     },
-                // },
-                // UnsignedLongMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { 25U, 26U },
-                //         { 27U, 28U },
-                //         { 29U, 30U },
-                //         { 31U, 32U },
-                //     },
-                //     {
-                //         { 33U, 34U },
-                //         { 35U, 36U },
-                //         { 37U, 38U },
-                //         { 39U, 40U },
-                //     },
-                //     {
-                //         { 41U, 42U },
-                //         { 43U, 44U },
-                //         { 45U, 46U },
-                //         { 47U, 48U },
-                //     },
-                // },
-                // LongLongMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { -25L, -26L },
-                //         { -27L, -28L },
-                //         { -29L, -30L },
-                //         { -31L, -32L },
-                //     },
-                //     {
-                //         { -33L, -34L },
-                //         { -35L, -36L },
-                //         { -37L, -38L },
-                //         { -39L, -40L },
-                //     },
-                //     {
-                //         { -41L, -42L },
-                //         { -43L, -44L },
-                //         { -45L, -46L },
-                //         { -47L, -48L },
-                //     },
-                // },
-                // UnsignedLongLongMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { 49UL, 50UL },
-                //         { 51UL, 52UL },
-                //         { 53UL, 54UL },
-                //         { 55UL, 56UL },
-                //     },
-                //     {
-                //         { 57UL, 58UL },
-                //         { 59UL, 60UL },
-                //         { 61UL, 62UL },
-                //         { 63UL, 64UL },
-                //     },
-                //     {
-                //         { 65UL, 66UL },
-                //         { 67UL, 68UL },
-                //         { 69UL, 70UL },
-                //         { 71UL, 72UL },
-                //     },
-                // },
-                // FloatMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { 01.01f, 02.02f },
-                //         { 03.03f, 04.04f },
-                //         { 05.05f, 06.06f },
-                //         { 07.07f, 08.08f },
-                //     },
-                //     {
-                //         { 09.09f, 10.10f },
-                //         { 11.11f, 12.12f },
-                //         { 13.13f, 14.14f },
-                //         { 15.15f, 16.16f },
-                //     },
-                //     {
-                //         { 17.17f, 18.18f },
-                //         { 19.19f, 20.20f },
-                //         { 21.21f, 22.22f },
-                //         { 23.23f, 24.24f },
-                //     },
-                // },
-                // DoubleMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { 01.01, 02.02 },
-                //         { 03.03, 04.04 },
-                //         { 05.05, 06.06 },
-                //         { 07.07, 08.08 },
-                //     },
-                //     {
-                //         { 09.09, 10.10 },
-                //         { 11.11, 12.12 },
-                //         { 13.13, 14.14 },
-                //         { 15.15, 16.16 },
-                //     },
-                //     {
-                //         { 17.17, 18.18 },
-                //         { 19.19, 20.20 },
-                //         { 21.21, 22.22 },
-                //         { 23.23, 24.24 },
-                //     },
-                // },
-                // BooleanMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { true, false },
-                //         { true, false },
-                //         { true, false },
-                //         { true, false },
-                //     },
-                //     {
-                //         { true, false },
-                //         { true, false },
-                //         { true, false },
-                //         { true, false },
-                //     },
-                //     {
-                //         { true, false },
-                //         { true, false },
-                //         { true, false },
-                //         { true, false },
-                //     },
-                // },
-                // OctetMultiArrayField = new byte[,,]
-                // {
-                //     {
-                //         { 01, 02 },
-                //         { 03, 04 },
-                //         { 05, 06 },
-                //         { 07, 08 },
-                //     },
-                //     {
-                //         { 09, 10 },
-                //         { 11, 12 },
-                //         { 13, 14 },
-                //         { 15, 16 },
-                //     },
-                //     {
-                //         { 17, 18 },
-                //         { 19, 20 },
-                //         { 21, 22 },
-                //         { 23, 24 },
-                //     },
-                // },
-                // EnumMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { TestEnum.ENUM1, TestEnum.ENUM2 },
-                //         { TestEnum.ENUM3, TestEnum.ENUM4 },
-                //         { TestEnum.ENUM5, TestEnum.ENUM6 },
-                //         { TestEnum.ENUM7, TestEnum.ENUM8 },
-                //     },
-                //     {
-                //         { TestEnum.ENUM9, TestEnum.ENUM10 },
-                //         { TestEnum.ENUM11, TestEnum.ENUM12 },
-                //         { TestEnum.ENUM1, TestEnum.ENUM2 },
-                //         { TestEnum.ENUM3, TestEnum.ENUM4 },
-                //     },
-                //     {
-                //         { TestEnum.ENUM5, TestEnum.ENUM6 },
-                //         { TestEnum.ENUM7, TestEnum.ENUM8 },
-                //         { TestEnum.ENUM9, TestEnum.ENUM10 },
-                //         { TestEnum.ENUM11, TestEnum.ENUM12 },
-                //     },
-                // },
-                // StructMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { new NestedStruct { Id = 1, Message = "01" }, new NestedStruct { Id = 2, Message = "02" } },
-                //         { new NestedStruct { Id = 3, Message = "03" }, new NestedStruct { Id = 4, Message = "04" } },
-                //         { new NestedStruct { Id = 5, Message = "05" }, new NestedStruct { Id = 6, Message = "06" } },
-                //         { new NestedStruct { Id = 7, Message = "07" }, new NestedStruct { Id = 8, Message = "08" } },
-                //     },
-                //     {
-                //         { new NestedStruct { Id = 9, Message = "09" }, new NestedStruct { Id = 10, Message = "10" } },
-                //         { new NestedStruct { Id = 11, Message = "11" }, new NestedStruct { Id = 12, Message = "12" } },
-                //         { new NestedStruct { Id = 13, Message = "13" }, new NestedStruct { Id = 14, Message = "14" } },
-                //         { new NestedStruct { Id = 15, Message = "15" }, new NestedStruct { Id = 16, Message = "16" } },
-                //     },
-                //     {
-                //         { new NestedStruct { Id = 17, Message = "17" }, new NestedStruct { Id = 18, Message = "18" } },
-                //         { new NestedStruct { Id = 19, Message = "19" }, new NestedStruct { Id = 20, Message = "20" } },
-                //         { new NestedStruct { Id = 21, Message = "21" }, new NestedStruct { Id = 22, Message = "22" } },
-                //         { new NestedStruct { Id = 23, Message = "23" }, new NestedStruct { Id = 24, Message = "24" } },
-                //     },
-                // },
-                // StringMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { "01", "02" },
-                //         { "03", "04" },
-                //         { "05", "06" },
-                //         { "07", "08" },
-                //     },
-                //     {
-                //         { "09", "10" },
-                //         { "11", "12" },
-                //         { "13", "14" },
-                //         { "15", "16" },
-                //     },
-                //     {
-                //         { "17", "18" },
-                //         { "19", "20" },
-                //         { "21", "22" },
-                //         { "23", "24" },
-                //     },
-                // },
-                // WStringMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { "01", "02" },
-                //         { "03", "04" },
-                //         { "05", "06" },
-                //         { "07", "08" },
-                //     },
-                //     {
-                //         { "09", "10" },
-                //         { "11", "12" },
-                //         { "13", "14" },
-                //         { "15", "16" },
-                //     },
-                //     {
-                //         { "17", "18" },
-                //         { "19", "20" },
-                //         { "21", "22" },
-                //         { "23", "24" },
-                //     },
-                // },
-                // CharMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { '1', '2' },
-                //         { '3', '4' },
-                //         { '5', '6' },
-                //         { '7', '8' },
-                //     },
-                //     {
-                //         { '9', '0' },
-                //         { '1', '2' },
-                //         { '3', '4' },
-                //         { '5', '6' },
-                //     },
-                //     {
-                //         { '7', '8' },
-                //         { '9', '0' },
-                //         { '1', '2' },
-                //         { '3', '4' },
-                //     },
-                // },
-                // WCharMultiArrayField = new[,,]
-                // {
-                //     {
-                //         { '1', '2' },
-                //         { '3', '4' },
-                //         { '5', '6' },
-                //         { '7', '8' },
-                //     },
-                //     {
-                //         { '9', '0' },
-                //         { '1', '2' },
-                //         { '3', '4' },
-                //         { '5', '6' },
-                //     },
-                //     {
-                //         { '7', '8' },
-                //         { '9', '0' },
-                //         { '1', '2' },
-                //         { '3', '4' },
-                //     },
-                // },
+                LongField = -2,
+                LongLongField = -3,
+                UnsignedShortField = 1,
+                UnsignedLongField = 2,
+                UnsignedLongLongField = 3,
+                BooleanField = true,
+                CharField = 'C',
+                WCharField = 'W',
+                FloatField = 42.42f,
+                DoubleField = 0.42,
+                OctetField = 0x42,
+                UnboundedStringField = "Unbounded string field.",
+                UnboundedWStringField = "Unbounded WString field.",
+                BoundedStringField = "Bounded string field.",
+                BoundedWStringField = "Bounded WString field.",
+                BoundedBooleanSequenceField = { true, true, false },
+                UnboundedBooleanSequenceField = { true, true, false, true, true, false },
+                BoundedCharSequenceField = { '1', '2', '3', '4', '5' },
+                UnboundedCharSequenceField = { '1', '2', '3', '4', '5', '6' },
+                BoundedWCharSequenceField = { '1', '2', '3', '4', '5' },
+                UnboundedWCharSequenceField = { '1', '2', '3', '4', '5', '6' },
+                BoundedOctetSequenceField = { 0x42, 0x69 },
+                UnboundedOctetSequenceField = { 0x42, 0x69, 0x42, 0x69, 0x42, 0x69 },
+                BoundedShortSequenceField = { 1, 2, 3, 4, 5 },
+                UnboundedShortSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
+                BoundedUShortSequenceField = { 1, 2, 3, 4, 5 },
+                UnboundedUShortSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
+                BoundedLongSequenceField = { 1, 2, 3, 4, 5 },
+                UnboundedLongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
+                BoundedULongSequenceField = { 1, 2, 3, 4, 5 },
+                UnboundedULongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
+                BoundedLongLongSequenceField = { 1, 2, 3, 4, 5 },
+                UnboundedLongLongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
+                BoundedULongLongSequenceField = { 1, 2, 3, 4, 5 },
+                UnboundedULongLongSequenceField = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 },
+                BoundedFloatSequenceField = { 0.42f, 42.42f, 1f, 2f, 3f },
+                UnboundedFloatSequenceField = { 0.42f, 42.42f, 1f, 2f, 3f, 0.42f, 42.42f, 1f, 2f, 3f },
+                BoundedDoubleSequenceField = { 0.42, 42.42, 1, 2, 3 },
+                UnboundedDoubleSequenceField = { 0.42, 42.42, 1, 2, 3, 0.42, 42.42, 1, 2, 3 },
+                BoundedStringSequenceField = { "This", "is", "the", "end." },
+                BoundedWStringSequenceField = { "This", "is", "the", "end." },
+                UnboundedStringSequenceField = { "This", "is", "the", "end.", "This", "is", "the", "end." },
+                UnboundedWStringSequenceField = { "This", "is", "the", "end.", "This", "is", "the", "end." },
+                NestedStructField = { Id = 1, Message = "This is the end." },
+                BoundedStructSequenceField =
+                {
+                    new NestedStruct { Id = 1, Message = "This is the end." },
+                    new NestedStruct { Id = 2, Message = "my only friend, the end." },
+                },
+                UnboundedStructSequenceField =
+                {
+                    new NestedStruct { Id = 1, Message = "This is the end." },
+                    new NestedStruct { Id = 2, Message = "my only friend, the end." },
+                },
+                TestEnumField = TestEnum.ENUM12,
+                BoundedEnumSequenceField =
+                {
+                    TestEnum.ENUM1,
+                    TestEnum.ENUM2,
+                    TestEnum.ENUM3,
+                    TestEnum.ENUM4,
+                    TestEnum.ENUM5,
+                },
+                UnboundedEnumSequenceField =
+                {
+                    TestEnum.ENUM1, TestEnum.ENUM2, TestEnum.ENUM3, TestEnum.ENUM4, TestEnum.ENUM5, TestEnum.ENUM6,
+                    TestEnum.ENUM7, TestEnum.ENUM8, TestEnum.ENUM9, TestEnum.ENUM10, TestEnum.ENUM11, TestEnum.ENUM12
+                },
+                ShortArrayField = new short[] { 1, -2, 3, -4, 5 },
+                UnsignedShortArrayField = new ushort[] { 1, 2, 3, 4, 5 },
+                LongArrayField = new[] { 1, -2, 3, -4, 5 },
+                UnsignedLongArrayField = new uint[] { 1, 2, 3, 4, 5 },
+                LongLongArrayField = new long[] { 1, -2, 3, -4, 5 },
+                UnsignedLongLongArrayField = new ulong[] { 1, 2, 3, 4, 5 },
+                CharArrayField = new[] { 'A', 'B', 'C', 'D', 'E' },
+                WCharArrayField = new[] { 'A', 'B', 'C', 'D', 'E' },
+                BooleanArrayField = new[] { true, true, false, true, true },
+                OctetArrayField = new byte[] { 0x42, 0x42, 0x69, 0x42, 0x42 },
+                FloatArrayField = new[] { 0.42f, 0.4242f, 1f, 2f, 3f },
+                DoubleArrayField = new[] { 0.42, 0.4242, 1, 2, 3 },
+                StringArrayField = new[] { "This", "is", "the", "end", "my only friend, the end." },
+                WStringArrayField = new[] { "This", "is", "the", "end", "my only friend, the end." },
+                EnumArrayField = new[]
+                {
+                    TestEnum.ENUM1,
+                    TestEnum.ENUM2,
+                    TestEnum.ENUM3,
+                    TestEnum.ENUM4,
+                    TestEnum.ENUM5,
+                },
+                StructArrayField = new[]
+                {
+                    new NestedStruct { Id = 1, Message = "This is the end." },
+                    new NestedStruct { Id = 2, Message = "This is the end." },
+                    new NestedStruct { Id = 3, Message = "This is the end." },
+                    new NestedStruct { Id = 4, Message = "This is the end." },
+                    new NestedStruct { Id = 5, Message = "This is the end." },
+                },
+                BooleanMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                    },
+                    new[]
+                    {
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                    },
+                    new[]
+                    {
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                    },
+                },
+                CharMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                        new[] { '5', '6' },
+                        new[] { '7', '8' },
+                    },
+                    new[]
+                    {
+                        new[] { '9', '0' },
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                        new[] { '5', '6' },
+                    },
+                    new[]
+                    {
+                        new[] { '7', '8' },
+                        new[] { '9', '0' },
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                    },
+                },
+                WCharMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                        new[] { '5', '6' },
+                        new[] { '7', '8' },
+                    },
+                    new[]
+                    {
+                        new[] { '9', '0' },
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                        new[] { '5', '6' },
+                    },
+                    new[]
+                    {
+                        new[] { '7', '8' },
+                        new[] { '9', '0' },
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                    },
+                },
+                OctetMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new byte[] { 01, 02 },
+                        new byte[] { 03, 04 },
+                        new byte[] { 05, 06 },
+                        new byte[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new byte[] { 09, 10 },
+                        new byte[] { 11, 12 },
+                        new byte[] { 13, 14 },
+                        new byte[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new byte[] { 17, 18 },
+                        new byte[] { 19, 20 },
+                        new byte[] { 21, 22 },
+                        new byte[] { 23, 24 },
+                    },
+                },
+                ShortMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new short[] { 01, 02 },
+                        new short[] { 03, 04 },
+                        new short[] { 05, 06 },
+                        new short[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new short[] { 09, 10 },
+                        new short[] { 11, 12 },
+                        new short[] { 13, 14 },
+                        new short[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new short[] { 17, 18 },
+                        new short[] { 19, 20 },
+                        new short[] { 21, 22 },
+                        new short[] { 23, 24 },
+                    },
+                },
+                UnsignedShortMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new ushort[] { 01, 02 },
+                        new ushort[] { 03, 04 },
+                        new ushort[] { 05, 06 },
+                        new ushort[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new ushort[] { 09, 10 },
+                        new ushort[] { 11, 12 },
+                        new ushort[] { 13, 14 },
+                        new ushort[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new ushort[] { 17, 18 },
+                        new ushort[] { 19, 20 },
+                        new ushort[] { 21, 22 },
+                        new ushort[] { 23, 24 },
+                    },
+                },
+                LongMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { -01, 02 },
+                        new[] { -03, 04 },
+                        new[] { -05, 06 },
+                        new[] { -07, 08 },
+                    },
+                    new[]
+                    {
+                        new[] { -09, 10 },
+                        new[] { -11, 12 },
+                        new[] { -13, 14 },
+                        new[] { -15, 16 },
+                    },
+                    new[]
+                    {
+                        new[] { -17, 18 },
+                        new[] { -19, 20 },
+                        new[] { -21, 22 },
+                        new[] { -23, 24 },
+                    },
+                },
+                UnsignedLongMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 25U, 26U },
+                        new[] { 27U, 28U },
+                        new[] { 29U, 30U },
+                        new[] { 31U, 32U },
+                    },
+                    new[]
+                    {
+                        new[] { 33U, 34U },
+                        new[] { 35U, 36U },
+                        new[] { 37U, 38U },
+                        new[] { 39U, 40U },
+                    },
+                    new[]
+                    {
+                        new[] { 41U, 42U },
+                        new[] { 43U, 44U },
+                        new[] { 45U, 46U },
+                        new[] { 47U, 48U },
+                    },
+                },
+                LongLongMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { -25L, -26L },
+                        new[] { -27L, -28L },
+                        new[] { -29L, -30L },
+                        new[] { -31L, -32L },
+                    },
+                    new[]
+                    {
+                        new[] { -33L, -34L },
+                        new[] { -35L, -36L },
+                        new[] { -37L, -38L },
+                        new[] { -39L, -40L },
+                    },
+                    new[]
+                    {
+                        new[] { -41L, -42L },
+                        new[] { -43L, -44L },
+                        new[] { -45L, -46L },
+                        new[] { -47L, -48L },
+                    },
+                },
+                UnsignedLongLongMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 49UL, 50UL },
+                        new[] { 51UL, 52UL },
+                        new[] { 53UL, 54UL },
+                        new[] { 55UL, 56UL },
+                    },
+                    new[]
+                    {
+                        new[] { 57UL, 58UL },
+                        new[] { 59UL, 60UL },
+                        new[] { 61UL, 62UL },
+                        new[] { 63UL, 64UL },
+                    },
+                    new[]
+                    {
+                        new[] { 65UL, 66UL },
+                        new[] { 67UL, 68UL },
+                        new[] { 69UL, 70UL },
+                        new[] { 71UL, 72UL },
+                    },
+                },
+                FloatMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 01.01f, 02.02f },
+                        new[] { 03.03f, 04.04f },
+                        new[] { 05.05f, 06.06f },
+                        new[] { 07.07f, 08.08f },
+                    },
+                    new[]
+                    {
+                        new[] { 09.09f, 10.10f },
+                        new[] { 11.11f, 12.12f },
+                        new[] { 13.13f, 14.14f },
+                        new[] { 15.15f, 16.16f },
+                    },
+                    new[]
+                    {
+                        new[] { 17.17f, 18.18f },
+                        new[] { 19.19f, 20.20f },
+                        new[] { 21.21f, 22.22f },
+                        new[] { 23.23f, 24.24f },
+                    },
+                },
+                DoubleMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 01.01, 02.02 },
+                        new[] { 03.03, 04.04 },
+                        new[] { 05.05, 06.06 },
+                        new[] { 07.07, 08.08 },
+                    },
+                    new[]
+                    {
+                        new[] { 09.09, 10.10 },
+                        new[] { 11.11, 12.12 },
+                        new[] { 13.13, 14.14 },
+                        new[] { 15.15, 16.16 },
+                    },
+                    new[]
+                    {
+                        new[] { 17.17, 18.18 },
+                        new[] { 19.19, 20.20 },
+                        new[] { 21.21, 22.22 },
+                        new[] { 23.23, 24.24 },
+                    },
+                },
+                StructMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[]
+                        {
+                            new NestedStruct{ Id = 1, Message = "01" },
+                            new NestedStruct{ Id = 2, Message = "02" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 3, Message = "03" },
+                            new NestedStruct { Id = 4, Message = "04" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 5, Message = "05" },
+                            new NestedStruct { Id = 6, Message = "06" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 7, Message = "07" },
+                            new NestedStruct { Id = 8, Message = "08" },
+                        },
+                    },
+                    new[]
+                    {
+                        new[]
+                        {
+                            new NestedStruct { Id = 9, Message = "09" },
+                            new NestedStruct { Id = 10, Message = "10" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 11, Message = "11" },
+                            new NestedStruct { Id = 12, Message = "12" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 13, Message = "13" },
+                            new NestedStruct { Id = 14, Message = "14" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 15, Message = "15" },
+                            new NestedStruct{ Id = 16, Message = "16" },
+                        },
+                    },
+                    new[]
+                    {
+                        new[]
+                        {
+                            new NestedStruct{ Id = 17, Message = "17" },
+                            new NestedStruct{ Id = 18, Message = "18" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct{ Id = 19, Message = "19" },
+                            new NestedStruct{ Id = 20, Message = "20" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct{ Id = 21, Message = "21" },
+                            new NestedStruct{ Id = 22, Message = "22" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct{ Id = 23, Message = "23" },
+                            new NestedStruct{ Id = 24, Message = "24" },
+                        },
+                    },
+                },
+                StringMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { "01", "02" },
+                        new[] { "03", "04" },
+                        new[] { "05", "06" },
+                        new[] { "07", "08" },
+                    },
+                    new[]
+                    {
+                        new[] { "09", "10" },
+                        new[] { "11", "12" },
+                        new[] { "13", "14" },
+                        new[] { "15", "16" },
+                    },
+                    new[]
+                    {
+                        new[] { "17", "18" },
+                        new[] { "19", "20" },
+                        new[] { "21", "22" },
+                        new[] { "23", "24" },
+                    },
+                },
+                WStringMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { "01", "02" },
+                        new[] { "03", "04" },
+                        new[] { "05", "06" },
+                        new[] { "07", "08" },
+                    },
+                    new[]
+                    {
+                        new[] { "09", "10" },
+                        new[] { "11", "12" },
+                        new[] { "13", "14" },
+                        new[] { "15", "16" },
+                    },
+                    new[]
+                    {
+                        new[] { "17", "18" },
+                        new[] { "19", "20" },
+                        new[] { "21", "22" },
+                        new[] { "23", "24" },
+                    },
+                },
+                EnumMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { TestEnum.ENUM1, TestEnum.ENUM2 },
+                        new[] { TestEnum.ENUM3, TestEnum.ENUM4 },
+                        new[] { TestEnum.ENUM5, TestEnum.ENUM6 },
+                        new[] { TestEnum.ENUM7, TestEnum.ENUM8 },
+                    },
+                    new[]
+                    {
+                        new[] { TestEnum.ENUM9, TestEnum.ENUM10 },
+                        new[] { TestEnum.ENUM11, TestEnum.ENUM12 },
+                        new[] { TestEnum.ENUM1, TestEnum.ENUM2 },
+                        new[] { TestEnum.ENUM3, TestEnum.ENUM4 },
+                    },
+                    new[]
+                    {
+                        new[] { TestEnum.ENUM5, TestEnum.ENUM6 },
+                        new[] { TestEnum.ENUM7, TestEnum.ENUM8 },
+                        new[] { TestEnum.ENUM9, TestEnum.ENUM10 },
+                        new[] { TestEnum.ENUM11, TestEnum.ENUM12 },
+                    },
+                },
             };
         }
 
         private static void PrintReceivedSample(TestStruct received)
         {
             PrintStructField(nameof(received.ShortField), received.ShortField);
-            // PrintStructField(nameof(received.LongField), received.LongField);
-            // PrintStructField(nameof(received.LongLongField), received.LongLongField);
-            // PrintStructField(nameof(received.UnsignedShortField), received.UnsignedShortField);
-            // PrintStructField(nameof(received.UnsignedLongField), received.UnsignedLongField);
-            // PrintStructField(nameof(received.UnsignedLongLongField), received.UnsignedLongLongField);
-            // PrintStructField(nameof(received.CharField), received.CharField);
-            // PrintStructField(nameof(received.WCharField), received.WCharField);
-            // PrintStructField(nameof(received.BooleanField), received.BooleanField);
-            // PrintStructField(nameof(received.OctetField), received.OctetField);
-            // PrintStructField(nameof(received.FloatField), received.FloatField);
-            // PrintStructField(nameof(received.DoubleField), received.DoubleField);
-            // PrintStructField(nameof(received.UnboundedStringField), received.UnboundedStringField);
-            // PrintStructField(nameof(received.UnboundedWStringField), received.UnboundedWStringField);
-            // PrintStructField(nameof(received.BoundedStringField), received.BoundedStringField);
-            // PrintStructField(nameof(received.BoundedWStringField), received.BoundedWStringField);
-            // PrintStructField(nameof(received.BoundedBooleanSequenceField), string.Join(", ", received.BoundedBooleanSequenceField));
-            // PrintStructField(nameof(received.UnboundedBooleanSequenceField), string.Join(", ", received.UnboundedBooleanSequenceField));
-            // PrintStructField(nameof(received.BoundedCharSequenceField), string.Join(", ", received.BoundedCharSequenceField));
-            // PrintStructField(nameof(received.UnboundedCharSequenceField), string.Join(", ", received.UnboundedCharSequenceField));
-            // PrintStructField(nameof(received.BoundedWCharSequenceField), string.Join(", ", received.BoundedWCharSequenceField));
-            // PrintStructField(nameof(received.UnboundedWCharSequenceField), string.Join(", ", received.UnboundedWCharSequenceField));
-            // PrintStructField(nameof(received.BoundedOctetSequenceField), string.Join(", ", received.BoundedOctetSequenceField));
-            // PrintStructField(nameof(received.UnboundedOctetSequenceField), string.Join(", ", received.UnboundedOctetSequenceField));
-            // PrintStructField(nameof(received.BoundedShortSequenceField), string.Join(", ", received.BoundedShortSequenceField));
-            // PrintStructField(nameof(received.UnboundedShortSequenceField), string.Join(", ", received.UnboundedShortSequenceField));
-            // PrintStructField(nameof(received.BoundedUShortSequenceField), string.Join(", ", received.BoundedUShortSequenceField));
-            // PrintStructField(nameof(received.UnboundedUShortSequenceField), string.Join(", ", received.UnboundedUShortSequenceField));
-            // PrintStructField(nameof(received.BoundedLongSequenceField), string.Join(", ", received.BoundedLongSequenceField));
-            // PrintStructField(nameof(received.UnboundedLongSequenceField), string.Join(", ", received.UnboundedLongSequenceField));
-            // PrintStructField(nameof(received.BoundedULongSequenceField), string.Join(", ", received.BoundedULongSequenceField));
-            // PrintStructField(nameof(received.UnboundedULongSequenceField), string.Join(", ", received.UnboundedULongSequenceField));
-            // PrintStructField(nameof(received.BoundedLongLongSequenceField), string.Join(", ", received.BoundedLongLongSequenceField));
-            // PrintStructField(nameof(received.UnboundedLongLongSequenceField), string.Join(", ", received.UnboundedLongLongSequenceField));
-            // PrintStructField(nameof(received.BoundedULongLongSequenceField), string.Join(", ", received.BoundedULongLongSequenceField));
-            // PrintStructField(nameof(received.UnboundedULongLongSequenceField), string.Join(", ", received.UnboundedULongLongSequenceField));
-            // PrintStructField(nameof(received.BoundedFloatSequenceField), string.Join(", ", received.BoundedFloatSequenceField));
-            // PrintStructField(nameof(received.UnboundedFloatSequenceField), string.Join(", ", received.UnboundedFloatSequenceField));
-            // PrintStructField(nameof(received.BoundedDoubleSequenceField), string.Join(", ", received.BoundedDoubleSequenceField));
-            // PrintStructField(nameof(received.UnboundedDoubleSequenceField), string.Join(", ", received.UnboundedDoubleSequenceField));
-            // PrintStructField(nameof(received.BoundedStringSequenceField), string.Join(" ", received.BoundedStringSequenceField));
-            // PrintStructField(nameof(received.BoundedWStringSequenceField), string.Join(" ", received.BoundedWStringSequenceField));
-            // PrintStructField(nameof(received.UnboundedStringSequenceField), string.Join(" ", received.UnboundedStringSequenceField));
-            // PrintStructField(nameof(received.UnboundedWStringSequenceField), string.Join(" ", received.UnboundedWStringSequenceField));
-            // PrintStructField(nameof(received.NestedStructField), $"Id: {received.NestedStructField.Id} Message: {received.NestedStructField.Message}");
-            // PrintStructField(nameof(received.BoundedStructSequenceField), string.Join(" ", received.BoundedStructSequenceField?.Select(s => $"ID: {s.Id} MESSAGE: {s.Message}") ?? Array.Empty<string>()));
-            // PrintStructField(nameof(received.UnboundedStructSequenceField), string.Join(" ", received.UnboundedStructSequenceField?.Select(s => $"ID: {s.Id} MESSAGE: {s.Message}") ?? Array.Empty<string>()));
-            // PrintStructField(nameof(received.TestEnumField), received.TestEnumField);
-            // PrintStructField(nameof(received.BoundedEnumSequenceField), string.Join(", ", received.BoundedEnumSequenceField));
-            // PrintStructField(nameof(received.UnboundedEnumSequenceField), string.Join(", ", received.UnboundedEnumSequenceField));
-            // PrintStructField(nameof(received.ShortArrayField), string.Join(", ", received.ShortArrayField));
-            // PrintStructField(nameof(received.UnsignedShortArrayField), string.Join(", ", received.UnsignedShortArrayField));
-            // PrintStructField(nameof(received.LongArrayField), string.Join(", ", received.LongArrayField));
-            // PrintStructField(nameof(received.UnsignedLongArrayField), string.Join(", ", received.UnsignedLongArrayField));
-            // PrintStructField(nameof(received.LongLongArrayField), string.Join(", ", received.LongLongArrayField));
-            // PrintStructField(nameof(received.UnsignedLongLongArrayField), string.Join(", ", received.UnsignedLongLongArrayField));
-            // PrintStructField(nameof(received.CharArrayField), string.Join(", ", received.CharArrayField));
-            // PrintStructField(nameof(received.WCharArrayField), string.Join(", ", received.WCharArrayField));
-            // PrintStructField(nameof(received.BooleanArrayField), string.Join(", ", received.BooleanArrayField));
-            // PrintStructField(nameof(received.OctetArrayField), string.Join(", ", received.OctetArrayField));
-            // PrintStructField(nameof(received.FloatArrayField), string.Join(", ", received.FloatArrayField));
-            // PrintStructField(nameof(received.DoubleArrayField), string.Join(", ", received.DoubleArrayField));
-            // PrintStructField(nameof(received.StringArrayField), string.Join(" ", received.StringArrayField));
-            // PrintStructField(nameof(received.WStringArrayField), string.Join(" ", received.WStringArrayField));
-            // PrintStructField(nameof(received.EnumArrayField), string.Join(" ", received.EnumArrayField));
-            // PrintStructField(nameof(received.StructArrayField), string.Join(" ", received.StructArrayField.Select(s => $"ID: {s.Id} MESSAGE: {s.Message}")));
-            // PrintStructField(nameof(received.ShortMultiArrayField), string.Join(" ", received.ShortMultiArrayField.Cast<short>()));
-            // PrintStructField(nameof(received.UnsignedShortMultiArrayField), string.Join(" ", received.UnsignedShortMultiArrayField.Cast<ushort>()));
-            // PrintStructField(nameof(received.LongMultiArrayField), string.Join(" ", received.LongMultiArrayField.Cast<int>()));
-            // PrintStructField(nameof(received.UnsignedLongMultiArrayField), string.Join(" ", received.UnsignedLongMultiArrayField.Cast<uint>()));
-            // PrintStructField(nameof(received.LongLongMultiArrayField), string.Join(" ", received.LongLongMultiArrayField.Cast<long>()));
-            // PrintStructField(nameof(received.UnsignedLongLongMultiArrayField), string.Join(" ", received.UnsignedLongLongMultiArrayField.Cast<ulong>()));
-            // PrintStructField(nameof(received.FloatMultiArrayField), string.Join(" ", received.FloatMultiArrayField.Cast<float>()));
-            // PrintStructField(nameof(received.DoubleMultiArrayField), string.Join(" ", received.DoubleMultiArrayField.Cast<double>()));
-            // PrintStructField(nameof(received.BooleanMultiArrayField), string.Join(" ", received.BooleanMultiArrayField.Cast<bool>()));
-            // PrintStructField(nameof(received.OctetMultiArrayField), string.Join(" ", received.OctetMultiArrayField.Cast<byte>()));
-            // PrintStructField(nameof(received.EnumMultiArrayField), string.Join(" ", received.EnumMultiArrayField.Cast<TestEnum>()));
-            // PrintStructField(nameof(received.StructMultiArrayField), string.Join(" ", received.StructMultiArrayField.Cast<NestedStruct>().Select(s => $"ID: {s.Id} MESSAGE: {s.Message}")));
-            // PrintStructField(nameof(received.StringMultiArrayField), string.Join(" ", received.StringMultiArrayField.Cast<string>()));
-            // PrintStructField(nameof(received.WStringMultiArrayField), string.Join(" ", received.WStringMultiArrayField.Cast<string>()));
-            // PrintStructField(nameof(received.CharMultiArrayField), string.Join(" ", received.CharMultiArrayField.Cast<char>()));
-            // PrintStructField(nameof(received.WCharMultiArrayField), string.Join(" ", received.WCharMultiArrayField.Cast<char>()));
+            PrintStructField(nameof(received.LongField), received.LongField);
+            PrintStructField(nameof(received.LongLongField), received.LongLongField);
+            PrintStructField(nameof(received.UnsignedShortField), received.UnsignedShortField);
+            PrintStructField(nameof(received.UnsignedLongField), received.UnsignedLongField);
+            PrintStructField(nameof(received.UnsignedLongLongField), received.UnsignedLongLongField);
+            PrintStructField(nameof(received.CharField), received.CharField);
+            PrintStructField(nameof(received.WCharField), received.WCharField);
+            PrintStructField(nameof(received.BooleanField), received.BooleanField);
+            PrintStructField(nameof(received.OctetField), received.OctetField);
+            PrintStructField(nameof(received.FloatField), received.FloatField);
+            PrintStructField(nameof(received.DoubleField), received.DoubleField);
+            PrintStructField(nameof(received.UnboundedStringField), received.UnboundedStringField);
+            PrintStructField(nameof(received.UnboundedWStringField), received.UnboundedWStringField);
+            PrintStructField(nameof(received.BoundedStringField), received.BoundedStringField);
+            PrintStructField(nameof(received.BoundedWStringField), received.BoundedWStringField);
+            PrintStructField(nameof(received.BoundedBooleanSequenceField), string.Join(", ", received.BoundedBooleanSequenceField));
+            PrintStructField(nameof(received.UnboundedBooleanSequenceField), string.Join(", ", received.UnboundedBooleanSequenceField));
+            PrintStructField(nameof(received.BoundedCharSequenceField), string.Join(", ", received.BoundedCharSequenceField));
+            PrintStructField(nameof(received.UnboundedCharSequenceField), string.Join(", ", received.UnboundedCharSequenceField));
+            PrintStructField(nameof(received.BoundedWCharSequenceField), string.Join(", ", received.BoundedWCharSequenceField));
+            PrintStructField(nameof(received.UnboundedWCharSequenceField), string.Join(", ", received.UnboundedWCharSequenceField));
+            PrintStructField(nameof(received.BoundedOctetSequenceField), string.Join(", ", received.BoundedOctetSequenceField));
+            PrintStructField(nameof(received.UnboundedOctetSequenceField), string.Join(", ", received.UnboundedOctetSequenceField));
+            PrintStructField(nameof(received.BoundedShortSequenceField), string.Join(", ", received.BoundedShortSequenceField));
+            PrintStructField(nameof(received.UnboundedShortSequenceField), string.Join(", ", received.UnboundedShortSequenceField));
+            PrintStructField(nameof(received.BoundedUShortSequenceField), string.Join(", ", received.BoundedUShortSequenceField));
+            PrintStructField(nameof(received.UnboundedUShortSequenceField), string.Join(", ", received.UnboundedUShortSequenceField));
+            PrintStructField(nameof(received.BoundedLongSequenceField), string.Join(", ", received.BoundedLongSequenceField));
+            PrintStructField(nameof(received.UnboundedLongSequenceField), string.Join(", ", received.UnboundedLongSequenceField));
+            PrintStructField(nameof(received.BoundedULongSequenceField), string.Join(", ", received.BoundedULongSequenceField));
+            PrintStructField(nameof(received.UnboundedULongSequenceField), string.Join(", ", received.UnboundedULongSequenceField));
+            PrintStructField(nameof(received.BoundedLongLongSequenceField), string.Join(", ", received.BoundedLongLongSequenceField));
+            PrintStructField(nameof(received.UnboundedLongLongSequenceField), string.Join(", ", received.UnboundedLongLongSequenceField));
+            PrintStructField(nameof(received.BoundedULongLongSequenceField), string.Join(", ", received.BoundedULongLongSequenceField));
+            PrintStructField(nameof(received.UnboundedULongLongSequenceField), string.Join(", ", received.UnboundedULongLongSequenceField));
+            PrintStructField(nameof(received.BoundedFloatSequenceField), string.Join(", ", received.BoundedFloatSequenceField));
+            PrintStructField(nameof(received.UnboundedFloatSequenceField), string.Join(", ", received.UnboundedFloatSequenceField));
+            PrintStructField(nameof(received.BoundedDoubleSequenceField), string.Join(", ", received.BoundedDoubleSequenceField));
+            PrintStructField(nameof(received.UnboundedDoubleSequenceField), string.Join(", ", received.UnboundedDoubleSequenceField));
+            PrintStructField(nameof(received.BoundedStringSequenceField), string.Join(" ", received.BoundedStringSequenceField));
+            PrintStructField(nameof(received.BoundedWStringSequenceField), string.Join(" ", received.BoundedWStringSequenceField));
+            PrintStructField(nameof(received.UnboundedStringSequenceField), string.Join(" ", received.UnboundedStringSequenceField));
+            PrintStructField(nameof(received.UnboundedWStringSequenceField), string.Join(" ", received.UnboundedWStringSequenceField));
+            PrintStructField(nameof(received.NestedStructField), $"Id: {received.NestedStructField.Id} Message: {received.NestedStructField.Message}");
+            PrintStructField(nameof(received.BoundedStructSequenceField), string.Join(" ", received.BoundedStructSequenceField?.Select(s => $"ID: {s.Id} MESSAGE: {s.Message}") ?? Array.Empty<string>()));
+            PrintStructField(nameof(received.UnboundedStructSequenceField), string.Join(" ", received.UnboundedStructSequenceField?.Select(s => $"ID: {s.Id} MESSAGE: {s.Message}") ?? Array.Empty<string>()));
+            PrintStructField(nameof(received.TestEnumField), received.TestEnumField);
+            PrintStructField(nameof(received.BoundedEnumSequenceField), string.Join(", ", received.BoundedEnumSequenceField));
+            PrintStructField(nameof(received.UnboundedEnumSequenceField), string.Join(", ", received.UnboundedEnumSequenceField));
+            PrintStructField(nameof(received.ShortArrayField), string.Join(", ", received.ShortArrayField));
+            PrintStructField(nameof(received.UnsignedShortArrayField), string.Join(", ", received.UnsignedShortArrayField));
+            PrintStructField(nameof(received.LongArrayField), string.Join(", ", received.LongArrayField));
+            PrintStructField(nameof(received.UnsignedLongArrayField), string.Join(", ", received.UnsignedLongArrayField));
+            PrintStructField(nameof(received.LongLongArrayField), string.Join(", ", received.LongLongArrayField));
+            PrintStructField(nameof(received.UnsignedLongLongArrayField), string.Join(", ", received.UnsignedLongLongArrayField));
+            PrintStructField(nameof(received.CharArrayField), string.Join(", ", received.CharArrayField));
+            PrintStructField(nameof(received.WCharArrayField), string.Join(", ", received.WCharArrayField));
+            PrintStructField(nameof(received.BooleanArrayField), string.Join(", ", received.BooleanArrayField));
+            PrintStructField(nameof(received.OctetArrayField), string.Join(", ", received.OctetArrayField));
+            PrintStructField(nameof(received.FloatArrayField), string.Join(", ", received.FloatArrayField));
+            PrintStructField(nameof(received.DoubleArrayField), string.Join(", ", received.DoubleArrayField));
+            PrintStructField(nameof(received.StringArrayField), string.Join(" ", received.StringArrayField));
+            PrintStructField(nameof(received.WStringArrayField), string.Join(" ", received.WStringArrayField));
+            PrintStructField(nameof(received.EnumArrayField), string.Join(" ", received.EnumArrayField));
+            PrintStructField(nameof(received.StructArrayField), string.Join(" ", received.StructArrayField.Select(s => $"ID: {s.Id} MESSAGE: {s.Message}")));
+            PrintStructField(nameof(received.ShortMultiArrayField), PrintMultiArray(received.ShortMultiArrayField));
+            PrintStructField(nameof(received.UnsignedShortMultiArrayField), PrintMultiArray(received.UnsignedShortMultiArrayField));
+            PrintStructField(nameof(received.LongMultiArrayField), PrintMultiArray(received.LongMultiArrayField));
+            PrintStructField(nameof(received.UnsignedLongMultiArrayField), PrintMultiArray(received.UnsignedLongMultiArrayField));
+            PrintStructField(nameof(received.LongLongMultiArrayField), PrintMultiArray(received.LongLongMultiArrayField));
+            PrintStructField(nameof(received.UnsignedLongLongMultiArrayField), PrintMultiArray(received.UnsignedLongLongMultiArrayField));
+            PrintStructField(nameof(received.FloatMultiArrayField), PrintMultiArray(received.FloatMultiArrayField));
+            PrintStructField(nameof(received.DoubleMultiArrayField), PrintMultiArray(received.DoubleMultiArrayField));
+            PrintStructField(nameof(received.BooleanMultiArrayField), PrintMultiArray(received.BooleanMultiArrayField));
+            PrintStructField(nameof(received.OctetMultiArrayField), PrintMultiArray(received.OctetMultiArrayField));
+            PrintStructField(nameof(received.EnumMultiArrayField), PrintMultiArray(received.EnumMultiArrayField));
+            PrintStructField(nameof(received.StructMultiArrayField), PrintStructMultiArray(received.StructMultiArrayField));
+            PrintStructField(nameof(received.StringMultiArrayField), PrintMultiArray(received.StringMultiArrayField));
+            PrintStructField(nameof(received.WStringMultiArrayField), PrintMultiArray(received.WStringMultiArrayField));
+            PrintStructField(nameof(received.CharMultiArrayField), PrintMultiArray(received.CharMultiArrayField));
+            PrintStructField(nameof(received.WCharMultiArrayField), PrintMultiArray(received.WCharMultiArrayField));
             Console.ResetColor();
         }
 
@@ -746,6 +844,50 @@ namespace ConsoleDemoCore
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write(fieldValue);
             Console.WriteLine();
+        }
+
+        private static string PrintMultiArray<T>(T[][][] data)
+        {
+            var ret = new StringBuilder();
+            foreach (var t in data)
+            {
+                foreach (var t1 in t)
+                {
+                    foreach (var t2 in t1)
+                    {
+                        if (ret.Length > 0)
+                        {
+                            ret.Append(", ");
+                        }
+
+                        ret.Append(t2);
+                    }
+                }
+            }
+
+            return ret.ToString();
+        }
+
+        private static string PrintStructMultiArray(NestedStruct[][][] data)
+        {
+            var ret = new StringBuilder();
+            foreach (var t in data)
+            {
+                foreach (var t1 in t)
+                {
+                    foreach (var t2 in t1)
+                    {
+                        if (ret.Length > 0)
+                        {
+                            ret.Append(", ");
+                        }
+
+                        ret.Append($"ID: {t2.Id} MESSAGE: {t2.Message}");
+                    }
+                }
+            }
+
+            return ret.ToString();
         }
     }
 }
