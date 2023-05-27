@@ -387,19 +387,34 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj -property:Configuration=Release
       working-directory: ${{ github.workspace }}
 
-    - name: Build OpenDDSharp solution x86
+    - name: Build OpenDDSharp x86
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x86
       working-directory: ${{ github.workspace }}
 
-    - name: Build OpenDDSharp solution x64
+    - name: Build OpenDDSharp x64
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
-    - name: Build OpenDDSharp solution AnyCPU
+    - name: Build OpenDDSharp AnyCPU
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
+      working-directory: ${{ github.workspace }}
+      
+    - name: Build OpenDDSharp.Marshaller x86
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj -property:Configuration=Release -property:Platform=x86
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.Marshaller x64
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj -property:Configuration=Release -property:Platform=x64
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.Marshaller AnyCPU
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj -property:Configuration=Release -property:Platform=AnyCPU
       working-directory: ${{ github.workspace }}
 
     - name: Create release packages

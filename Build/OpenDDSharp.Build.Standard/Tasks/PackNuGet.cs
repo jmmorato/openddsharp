@@ -67,7 +67,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
-                NoBuild = true,
+                NoBuild = false,
                 ArgumentCustomization = args => args.Append($"/p:Version={version}"),
                 OutputDirectory = ".",
             });
@@ -76,7 +76,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
-                NoBuild = true,
+                NoBuild = false,
                 ArgumentCustomization = args => args.Append($"/p:Version={version}"),
                 OutputDirectory = ".",
             });

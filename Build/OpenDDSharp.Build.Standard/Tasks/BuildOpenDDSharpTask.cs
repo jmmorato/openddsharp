@@ -123,19 +123,6 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 },
                 Runtime = context.RunTime,
             });
-
-            context.DotNetBuild("./Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj", new DotNetBuildSettings
-            {
-                Configuration = context.BuildConfiguration,
-                WorkingDirectory = solutionFolder,
-                EnvironmentVariables =
-                {
-                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
-                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
-                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
-                },
-            });
         }
     }
 }
