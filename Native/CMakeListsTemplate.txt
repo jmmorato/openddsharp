@@ -32,4 +32,4 @@ OPENDDS_TARGET_SOURCES(${PROJECT_NAME}
  PUBLIC
   ${IDL_FILES}
   OPENDDS_IDL_OPTIONS -Sa --no-dcps-data-type-warnings)
-target_link_libraries(${PROJECT_NAME} OpenDDS::OpenDDS)
+target_link_libraries(${PROJECT_NAME} OpenDDS::OpenDDS ACE::ACE TAO::TAO)
