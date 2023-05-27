@@ -1406,7 +1406,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append("        }\n");
 
 			ret.append(indent);
-			ret.append("        MarshalHelper.SequenceToPtr(aux, ref wrapper.");
+			ret.append("        MarshalHelper.SequenceToPtr(aux, out wrapper.");
 			ret.append(name);
 			ret.append(");\n");
 
@@ -1425,7 +1425,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(indent);
 			ret.append("    toRelease.AddRange(MarshalHelper.StringSequenceToPtr(");
 			ret.append(name);
-			ret.append(", ref wrapper.");
+			ret.append(", out wrapper.");
 			ret.append(name);
 			if (base_node_type == AST_Decl::NT_string) {
 				ret.append(", false));\n");
@@ -1446,7 +1446,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(indent);
 			ret.append("    MarshalHelper.EnumSequenceToPtr(");
 			ret.append(name);
-			ret.append(", ref wrapper.");
+			ret.append(", out wrapper.");
 			ret.append(name);
 			ret.append(");\n");
 
@@ -1475,7 +1475,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(".ToArray()).ToList();\n");
 
 				ret.append(indent);
-				ret.append("        MarshalHelper.SequenceToPtr(aux, ref wrapper.");
+				ret.append("        MarshalHelper.SequenceToPtr(aux, out wrapper.");
 				ret.append(name);
 				ret.append(");\n");
 
@@ -1493,7 +1493,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(indent);
 				ret.append("    MarshalHelper.WCharSequenceToPtr(");
 				ret.append(name);
-				ret.append(", ref wrapper.");
+				ret.append(", out wrapper.");
 				ret.append(name);
 				ret.append(");\n");
 
@@ -1507,7 +1507,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(indent);
 				ret.append("    MarshalHelper.BooleanSequenceToPtr(");
 				ret.append(name);
-				ret.append(", ref wrapper.");
+				ret.append(", out wrapper.");
 				ret.append(name);
 				ret.append(");\n");
 
@@ -1521,7 +1521,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 				ret.append(indent);
 				ret.append("    MarshalHelper.LongDoubleSequenceToPtr(");
 				ret.append(name);
-				ret.append(", ref wrapper.");
+				ret.append(", out wrapper.");
 				ret.append(name);
 				ret.append(");\n");
 
@@ -1537,7 +1537,7 @@ std::string csharp_generator::get_field_to_native(AST_Type* type, const char * n
 			ret.append(indent);
 			ret.append("    MarshalHelper.SequenceToPtr(");
 			ret.append(name);
-			ret.append(", ref wrapper.");
+			ret.append(", out wrapper.");
 			ret.append(name);
 			ret.append(");\n");
 

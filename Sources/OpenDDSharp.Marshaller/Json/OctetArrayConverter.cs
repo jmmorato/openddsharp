@@ -6,14 +6,18 @@ using System.Text.Json.Serialization;
 
 namespace OpenDDSharp.Marshaller.Json
 {
+    /// <summary>
+    /// Octet array converter.
+    /// </summary>
     public sealed class OctetArrayConverter : JsonConverter<byte[]>
     {
+        /// <inheritdoc/>
         public override byte[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var bytes = new List<byte>();
             if (reader.TokenType != JsonTokenType.StartArray)
             {
-                return null;
+                return Array.Empty<byte>();
             }
 
             while (reader.Read())
@@ -29,9 +33,10 @@ namespace OpenDDSharp.Marshaller.Json
                 }
             }
 
-            return !bytes.Any() ? null : bytes.ToArray();
+            return !bytes.Any() ? Array.Empty<byte>() : bytes.ToArray();
         }
 
+        /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
         {
             if (value is null)

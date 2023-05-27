@@ -1,18 +1,29 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
 namespace OpenDDSharp.Marshaller
 {
+    /// <summary>
+    /// Helper class for marshalling.
+    /// </summary>
     public static class MarshalHelper
     {
-        private static readonly UTF32Encoding _utf32Encoding = new UTF32Encoding(!BitConverter.IsLittleEndian, false);
-        private static readonly Encoding _utf16Encoding = Encoding.Unicode;
         private const string API_DLL = @"OpenDDSWrapper";
 
+        private static readonly UTF32Encoding _utf32Encoding = new UTF32Encoding(!BitConverter.IsLittleEndian, false);
+        private static readonly Encoding _utf16Encoding = Encoding.Unicode;
+
+        /// <summary>
+        /// Convert a pointer to a sequence.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
+        /// <param name="capacity">The sequence bound.</param>
+        /// <typeparam name="T">The type of the sequence elements.</typeparam>
         public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
@@ -43,7 +54,13 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
-        public static void SequenceToPtr<T>(this IList<T> sequence, ref IntPtr ptr)
+        /// <summary>
+        /// Convert a sequence to a pointer.
+        /// </summary>
+        /// <param name="sequence">The sequence to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        /// <typeparam name="T">The type of the sequence elements.</typeparam>
+        public static void SequenceToPtr<T>(this IList<T> sequence, out IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -72,6 +89,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Convert a pointer to a sequence of decimals.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
+        /// <param name="capacity">The sequence bound.</param>
         public static void PtrToLongDoubleSequence(this IntPtr ptr, ref IList<decimal> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
@@ -102,7 +125,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
-        public static void LongDoubleSequenceToPtr(this IList<decimal> sequence, ref IntPtr ptr)
+        /// <summary>
+        /// Convert a sequence of decimals to a pointer.
+        /// </summary>
+        /// <param name="sequence">The sequence to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        public static void LongDoubleSequenceToPtr(this IList<decimal> sequence, out IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -131,6 +159,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        ///  Convert a pointer to a wchar character.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <returns>The converted character.</returns>
         public static char PtrToWChar(this IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
@@ -148,6 +181,11 @@ namespace OpenDDSharp.Marshaller
                 : _utf32Encoding.GetString(bytes).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Convert a wchar character to a pointer.
+        /// </summary>
+        /// <param name="c">The character to be converted.</param>
+        /// <returns>The converted pointer.</returns>
         public static IntPtr WCharToPtr(this char c)
         {
             if (c == default(char))
@@ -175,6 +213,12 @@ namespace OpenDDSharp.Marshaller
             return ptr;
         }
 
+        /// <summary>
+        /// Convert a pointer to a sequence of wchar characters.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
+        /// <param name="capacity">The sequence bound.</param>
         public static void PtrToWCharSequence(this IntPtr ptr, ref IList<char> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
@@ -218,14 +262,19 @@ namespace OpenDDSharp.Marshaller
             }
             else
             {
-                foreach (var item in str.ToCharArray())
+                foreach (var item in str)
                 {
                     sequence.Add(item);
                 }
             }
         }
 
-        public static void WCharSequenceToPtr(this IList<char> sequence, ref IntPtr ptr)
+        /// <summary>
+        /// Convert a sequence of wchar characters to a pointer.
+        /// </summary>
+        /// <param name="sequence">The sequence to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        public static void WCharSequenceToPtr(this IList<char> sequence, out IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -259,6 +308,13 @@ namespace OpenDDSharp.Marshaller
             Marshal.Copy(bytes, 0, ptr + sizeof(int), bytes.Length);
         }
 
+        /// <summary>
+        /// Convert a pointer to a sequence of enums.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
+        /// <param name="capacity">The sequence bound.</param>
+        /// <typeparam name="T">The enumeration type.</typeparam>
         public static void PtrToEnumSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0) where T : Enum
         {
             // Ensure a not null empty list to populate
@@ -290,7 +346,13 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
-        public static void EnumSequenceToPtr<T>(this IList<T> sequence, ref IntPtr ptr) where T : Enum
+        /// <summary>
+        /// Convert a sequence of enums to a pointer.
+        /// </summary>
+        /// <param name="sequence">The sequence to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        /// <typeparam name="T">The enumeration type.</typeparam>
+        public static void EnumSequenceToPtr<T>(this IList<T> sequence, out IntPtr ptr) where T : Enum
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -322,6 +384,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a pointer to a sequence of <see cref="bool"/>.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
+        /// <param name="capacity">The sequence bound.</param>
         public static void PtrToBooleanSequence(this IntPtr ptr, ref IList<bool> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
@@ -353,7 +421,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
-        public static void BooleanSequenceToPtr(this IList<bool> sequence, ref IntPtr ptr)
+        /// <summary>
+        /// Converts a list of boolean values to a pointer.
+        /// </summary>
+        /// <param name="sequence">The sequence to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        public static void BooleanSequenceToPtr(this IList<bool> sequence, out IntPtr ptr)
         {
             if (sequence == null || sequence.Count == 0)
             {
@@ -382,6 +455,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a pointer to a string.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <returns>The converted string.</returns>
         public static string PtrToWideString(this IntPtr ptr)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -412,6 +490,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a string to a pointer to a sequence of wide characters.
+        /// </summary>
+        /// <param name="str">The string to be converted</param>
+        /// <returns>The converted pointer.</returns>
         public static IntPtr WideStringToPtr(this string str)
         {
             byte[] bytes;
@@ -436,6 +519,13 @@ namespace OpenDDSharp.Marshaller
             return unmanagedPointer;
         }
 
+        /// <summary>
+        ///  Converts a pointer to a sequence of strings to a list of strings.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
+        /// <param name="isUnicode">Indicates whether the strings are unicode encoded.</param>
+        /// <param name="capacity">The initial sequence bound.</param>
         public static void PtrToStringSequence(this IntPtr ptr, ref IList<string> sequence, bool isUnicode,
             int capacity = 0)
         {
@@ -475,6 +565,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Convert a pointer to a sequence of UTF8 strings.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="sequence">The destination sequence.</param>
         public static void PtrToUTF8StringSequence(this IntPtr ptr, ref IList<string> sequence)
         {
             // Ensure a not null empty list to populate
@@ -506,7 +601,14 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
-        public static List<IntPtr> StringSequenceToPtr(this IList<string> sequence, ref IntPtr ptr, bool isUnicode)
+        /// <summary>
+        /// Converts a sequence of strings to a pointer.
+        /// </summary>
+        /// <param name="sequence">The sequence to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        /// <param name="isUnicode">Indicates whether the strings are unicode encoded.</param>
+        /// <returns>A list of pointers to be released.</returns>
+        public static List<IntPtr> StringSequenceToPtr(this IList<string> sequence, out IntPtr ptr, bool isUnicode)
         {
             var toRelease = new List<IntPtr>();
 
@@ -543,6 +645,12 @@ namespace OpenDDSharp.Marshaller
             return toRelease;
         }
 
+        /// <summary>
+        /// Convert a pointer to a multi-dimensional array.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="array">The destination array.</param>
+        /// <typeparam name="T">The type of the array elements.</typeparam>
         public static void PtrToMultiArray<T>(this IntPtr ptr, Array array)
         {
             // We need to ensure that the array is not null before the call 
@@ -571,6 +679,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Convert a multi-dimensional array to a pointer.
+        /// </summary>
+        /// <param name="array">The array to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        /// <typeparam name="T">The type of the array elements.</typeparam>
         public static void MultiArrayToPtr<T>(this Array array, ref IntPtr ptr)
         {
             if (array == null || array.Length == 0)
@@ -609,6 +723,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a pointer to a multi-dimensional array of enums
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="array">The destination array.</param>
+        /// <typeparam name="T">The type of the array elements.</typeparam>
         public static void PtrToEnumMultiArray<T>(this IntPtr ptr, Array array) where T : Enum
         {
             // We need to ensure that the array is not null before the call 
@@ -637,6 +757,12 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Convert a multi-dimensional array to a pointer.
+        /// </summary>
+        /// <param name="array">The array to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        /// <typeparam name="T">The type of the array elements.</typeparam>
         public static void EnumMultiArrayToPtr<T>(this Array array, ref IntPtr ptr) where T : Enum
         {
             if (array == null || array.Length == 0)
@@ -666,6 +792,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a multi-dimensional array of boolean to a pointer
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="array">The destination array.</param>
         public static void PtrToBooleanMultiArray(this IntPtr ptr, Array array)
         {
             // We need to ensure that the array is not null before the call 
@@ -693,6 +824,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a multi-dimensional array of boolean values to a pointer.
+        /// </summary>
+        /// <param name="array">The array to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
         public static void BooleanMultiArrayToPtr(this Array array, ref IntPtr ptr)
         {
             if (array == null || array.Length == 0)
@@ -717,6 +853,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a pointer to a multi-dimensional array of wchar characters.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="array">The destination array.</param>
         public static void PtrToWCharMultiArray(this IntPtr ptr, Array array)
         {
             // We need to ensure that the array is not null before the call 
@@ -759,6 +900,13 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Converts a multi-dimensional array of strings to an array of pointers to strings.
+        /// </summary>
+        /// <param name="array">The array to be converted.</param>
+        /// <param name="ptr">The destination pointer.</param>
+        /// <param name="isUnicode">Indicates if the string are encoded in unicode.</param>
+        /// <returns>A list of pointers to be released.</returns>
         public static List<IntPtr> StringMultiArrayToPtr(this Array array, ref IntPtr ptr, bool isUnicode)
         {
             List<IntPtr> toRelease = new List<IntPtr>();
@@ -797,6 +945,12 @@ namespace OpenDDSharp.Marshaller
             return toRelease;
         }
 
+        /// <summary>
+        /// Convert a pointer to a multi-dimensional array of strings.
+        /// </summary>
+        /// <param name="ptr">The pointer to be converted.</param>
+        /// <param name="array">The destination array.</param>
+        /// <param name="isUnicode">Indicates if the string are encoded in unicode.</param>
         public static void PtrToStringMultiArray(this IntPtr ptr, Array array, bool isUnicode)
         {
             // We need to ensure that the array is not null before the call
@@ -834,28 +988,11 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
-        public static decimal ToDecimal(this double d)
-        {
-            if (double.IsNaN(d))
-            {
-                return decimal.MinValue;
-            }
-
-            Console.WriteLine("ToDecimal: " + d);
-            if (d <= (double)decimal.MinValue)
-            {
-                return decimal.MinValue;
-            }
-            else if (d >= (double)decimal.MaxValue)
-            {
-                return decimal.MaxValue;
-            }
-            else
-            {
-                return (decimal)d;
-            }
-        }
-
+        /// <summary>
+        /// Update the dimensions array.
+        /// </summary>
+        /// <param name="array">The array to be updated.</param>
+        /// <param name="dimensions">The new dimensions for the array.</param>
         public static void UpdateDimensionsArray(this Array array, int[] dimensions)
         {
             dimensions[array.Rank - 1]++;
@@ -874,31 +1011,56 @@ namespace OpenDDSharp.Marshaller
             }
         }
 
+        /// <summary>
+        /// Release a native pointer.
+        /// </summary>
+        /// <param name="ptr">The pointer to be released.</param>
         public static void ReleaseNativePointer(this IntPtr ptr)
         {
             UnsafeNativeMethods.ReleasePointer(ptr);
         }
 
+        /// <summary>
+        /// Release a native string pointer.
+        /// </summary>
+        /// <param name="ptr">The pointer to be released.</param>
         public static void ReleaseNativeStringPointer(this IntPtr ptr)
         {
             UnsafeNativeMethods.ReleaseStringPointer(ptr);
         }
 
+        /// <summary>
+        /// Release a native wide string pointer.
+        /// </summary>
+        /// <param name="ptr">The pointer to be released.</param>
         public static void ReleaseNativeWideStringPointer(this IntPtr ptr)
         {
             UnsafeNativeMethods.ReleaseWideStringPointer(ptr);
         }
 
+        /// <summary>
+        /// Release a native string sequence.
+        /// </summary>
+        /// <param name="ptr">The pointer to be released.</param>
         public static void ReleaseNativeStringSequence(this IntPtr ptr)
         {
             UnsafeNativeMethods.ReleaseStringSequence(ref ptr);
         }
 
+        /// <summary>
+        /// Release a native wide string sequence.
+        /// </summary>
+        /// <param name="ptr">The pointer to be released.</param>
         public static void ReleaseNativeWideStringSequence(this IntPtr ptr)
         {
             UnsafeNativeMethods.ReleaseWideStringSequence(ref ptr);
         }
 
+        /// <summary>
+        /// Convert a managed string to a native pointer.
+        /// </summary>
+        /// <param name="managedString">The string to be converted.</param>
+        /// <returns>The converted pointer.</returns>
         public static IntPtr NativeUtf8FromString(string managedString)
         {
             if (managedString == null)
@@ -917,6 +1079,11 @@ namespace OpenDDSharp.Marshaller
             return nativeUtf8;
         }
 
+        /// <summary>
+        /// Convert a native pointer to a string.
+        /// </summary>
+        /// <param name="nativeUtf8">The native pointer.</param>
+        /// <returns>The converted string.</returns>
         public static string StringFromNativeUtf8(IntPtr nativeUtf8)
         {
             if (nativeUtf8 == IntPtr.Zero)
