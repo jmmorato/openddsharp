@@ -117,6 +117,26 @@ bool cwrapper_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* na
 					   << implement_struct_release(fields, short_name, scoped_name)
 					   << "};\n\n";
 
+  be_global->header_ << "void " << scoped_method << "_CopyKeys("
+                     << scoped_name
+                     << " *source, "
+                     << scoped_name
+                     << " *destination) {\n";
+
+  for (unsigned int i = 0; i < fields.size(); i++) {
+    AST_Field *field = fields[i];
+    AST_Type *type = field->field_type();
+    const char *name = field->local_name()->get_string();
+    bool is_key = true;
+    if (be_global->check_key(field, is_key)) {
+      be_global->header_ << "  destination->" << name << " = source->" << name << ";\n";
+    }
+  }
+
+  be_global->header_ << "};\n\n";
+
+
+
 	if (be_global->is_topic_type(structure)) {
 		std::string header = header_template_;
 		replaceAll(header, replacements);

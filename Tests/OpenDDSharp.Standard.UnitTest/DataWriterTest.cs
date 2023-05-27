@@ -953,7 +953,6 @@ namespace OpenDDSharp.Standard.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("JSON serialization not working for default native samples because are not correctly initialized.")]
         public void TestGetKeyValue()
         {
             // Initialize entities
