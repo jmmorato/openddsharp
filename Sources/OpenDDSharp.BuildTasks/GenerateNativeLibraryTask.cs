@@ -147,6 +147,8 @@ namespace OpenDDSharp.BuildTasks
                     using (StreamWriter writer = new (outputPath))
                     {
                         writer.WriteLine("#include <tao/orb.idl>");
+                        writer.WriteLine("#include <tao/Int8Seq.pidl>");
+                        writer.WriteLine("#include <tao/UInt8Seq.pidl>");
 
                         while (!reader.EndOfStream)
                         {
