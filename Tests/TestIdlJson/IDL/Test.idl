@@ -178,8 +178,8 @@ module JsonWrapper {
 		UnboundedDoubleSequenceType UnboundedDoubleSequenceField;
 		UnboundedStringSequenceType UnboundedStringSequenceField;
 		UnboundedWStringSequenceType UnboundedWStringSequenceField;
-		UnboundedInt8SequenceType UnboundedInt8SequenceField;
-        UnboundedUInt8SequenceType UnboundedUInt8SequenceField;
+//		UnboundedInt8SequenceType UnboundedInt8SequenceField;
+//        UnboundedUInt8SequenceType UnboundedUInt8SequenceField;
 
 		NestedStruct NestedStructField;
 		UnboundedStructSequenceType UnboundedStructSequenceField;
@@ -224,8 +224,8 @@ module JsonWrapper {
 		BoundedWStringSequenceType BoundedWStringSequenceField;
 		BoundedStructSequenceType BoundedStructSequenceField;
 		BoundedEnumSequenceType BoundedEnumSequenceField;
-		BoundedInt8SequenceType BoundedInt8SequenceField;
-        BoundedUInt8SequenceType BoundedUInt8SequenceField;
+//		BoundedInt8SequenceType BoundedInt8SequenceField;
+//        BoundedUInt8SequenceType BoundedUInt8SequenceField;
 
 		ShortMultiArrayType ShortMultiArrayField;
 		UnsignedShortMultiArrayType UnsignedShortMultiArrayField;
