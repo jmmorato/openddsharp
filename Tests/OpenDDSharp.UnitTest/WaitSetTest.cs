@@ -42,7 +42,6 @@ namespace OpenDDSharp.UnitTest
         private Subscriber _subscriber;
         private Publisher _publisher;
         private DataWriter _writer;
-        private TestStructDataWriter _dataWriter;
         private DataReader _reader;
         #endregion
 
@@ -83,7 +82,6 @@ namespace OpenDDSharp.UnitTest
 
             _writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(_writer);
-            _dataWriter = new TestStructDataWriter(_writer);
 
             DataReaderQos qos = new DataReaderQos();
             qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;

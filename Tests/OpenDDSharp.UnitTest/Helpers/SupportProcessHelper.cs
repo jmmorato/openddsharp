@@ -31,7 +31,6 @@ namespace OpenDDSharp.UnitTest.Helpers
     internal class SupportProcessHelper
     {
         #region Constants
-        private const string SOLUTION_PATH = @"../../../../../../";
 #if Windows
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/ACE";

@@ -61,7 +61,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TestIdlJson\TestIdlJson.csproj" />
-    <ProjectReference Include="..\TestIdlStruct\TestIdlStruct.csproj" />
   </ItemGroup>
 
   <ItemGroup>

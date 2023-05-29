@@ -37,16 +37,6 @@ public:
 private:
 	std::string header_template_;
 	std::string impl_template_;
-
-	std::string declare_struct_fields(const std::vector<AST_Field*>& fields);
-	std::string implement_struct_to_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name);
-	std::string implement_struct_from_native(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name);
-	std::string implement_struct_release(const std::vector<AST_Field*>& fields, const std::string name, const std::string scoped_name);
-	std::string get_cwrapper_type(AST_Type* type);	
-	std::string get_array_definition(AST_Type* type);
-	std::string get_field_to_native(AST_Type* type, const char * name);
-	std::string get_field_from_native(AST_Type* type, const char * name);
-	std::string get_field_release(AST_Type* type, const char * name);
 };
 
 #endif

@@ -135,7 +135,7 @@ namespace OpenDDSharp.UnitTest
                 count--;
             }
 
-            Assert.AreEqual(ret, ReturnCode.Ok);
+            Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
             TestHelper.TestNonDefaultPublicationData(data.First());

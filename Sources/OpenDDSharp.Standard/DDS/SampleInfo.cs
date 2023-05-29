@@ -120,6 +120,10 @@ namespace OpenDDSharp.DDS
             };
         }
 
+        /// <summary>
+        /// Internal usage only.
+        /// </summary>
+        /// <param name="wrapper">The wrapper structure.</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void FromNative(SampleInfoWrapper wrapper)
         {

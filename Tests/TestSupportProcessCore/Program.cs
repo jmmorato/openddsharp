@@ -19,14 +19,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Globalization;
+using JsonWrapper;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
-using StructWrapper;
 
-namespace TestSupportProcess
+namespace TestSupportProcessCore
 {
-    static class Program
+    internal static class Program
     {
         private const string RTPS_DISCOVERY = "RtpsDiscovery";
         private const string INFOREPO_DISCOVERY = "InfoRepo";
@@ -34,7 +34,7 @@ namespace TestSupportProcess
         private const int INFOREPO_DOMAIN = 23;
         private const int RTPS_DOMAIN = 42;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length < 1)
             {
@@ -67,7 +67,7 @@ namespace TestSupportProcess
                         TestOnSubscriptionLostDisconnected();
                         break;
                     default:
-                        throw new InvalidOperationException("Unkwnon test requested." + testKind.ToString());
+                        throw new InvalidOperationException("Unknown test requested." + testKind.ToString());
                 }
             }
             else
