@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-<!--    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net462;net47;net471;net472;net48;net481;net6.0;net7.0;</TargetFrameworks>-->
-<!--    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">net6.0;net7.0;</TargetFrameworks>-->
+    <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64'">true</IsARM64>
+    <TargetFrameworks Condition="'$(IsARM64)'!='true'">net462;net47;net471;net472;net48;net481;net6.0;net7.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsARM64)'=='true'">net6.0;net7.0;</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
