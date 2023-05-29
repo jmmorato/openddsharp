@@ -6,7 +6,7 @@
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
     <owners>Jose Morato</owners>
-    <projectUrl>http://www.openddsharp.com</projectUrl>
+    <projectUrl>https://www.openddsharp.com</projectUrl>
     <icon>icon_128.png</icon>
     <license type="file">LICENSE.txt</license>
     <releaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</releaseNotes>
@@ -83,25 +83,29 @@
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\bin\generate_export_file.pl" target="tools\ACE_MacOS\bin" />
 
     <!--Code generation templates x86-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src="..\ext\OpenDDS_x86\dds\idl\IDLTemplate.txt" target="tools\DDS_x86\dds\idl" />
 
     <!--Code generation templates x64-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src="..\ext\OpenDDS_x64\dds\idl\IDLTemplate.txt" target="tools\DDS_x64\dds\idl" />
 
     <!--Code generation templates Linux-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src="..\ext\OpenDDS_Linux\dds\idl\IDLTemplate.txt" target="tools\DDS_Linux\dds\idl" />
 
     <!--Code generation templates MacOS-->
-    <file src=".\CSharpImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
+    <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
+    <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
     <file src="..\ext\OpenDDS_MacOS\dds\idl\IDLTemplate.txt" target="tools\DDS_MacOS\dds\idl" />
@@ -118,6 +122,7 @@
     <file src="..\ext\OpenDDS_x86\dds\**\*.pidl" target="tools\DDS_x86\dds" />
     <file src="..\ext\OpenDDS_x86\FACE\**\*.h" target="tools\DDS_x86\FACE" />
     <file src="..\ext\OpenDDS_x86\FACE\**\*.hpp" target="tools\DDS_x86\FACE" />
+    <file src="..\ext\OpenDDS_x86\tools\rapidjson\include\**\*.h" target="tools\DDS_x86\tools\rapidjson\include" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.h" target="tools\ACE_x86\ace" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.inl" target="tools\ACE_x86\ace" />
     <file src="..\ext\OpenDDS_x86\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_x86\ace" />
@@ -138,6 +143,7 @@
     <file src="..\ext\OpenDDS_x64\dds\**\*.pidl" target="tools\DDS_x64\dds" />
     <file src="..\ext\OpenDDS_x64\FACE\**\*.h" target="tools\DDS_x64\FACE" />
     <file src="..\ext\OpenDDS_x64\FACE\**\*.hpp" target="tools\DDS_x64\FACE" />
+    <file src="..\ext\OpenDDS_x64\tools\rapidjson\include\**\*.h" target="tools\DDS_x64\tools\rapidjson\include" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.h" target="tools\ACE_x64\ace" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.inl" target="tools\ACE_x64\ace" />
     <file src="..\ext\OpenDDS_x64\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_x64\ace" />
@@ -158,6 +164,7 @@
     <file src="..\ext\OpenDDS_Linux\dds\**\*.pidl" target="tools\DDS_Linux\dds" />
     <file src="..\ext\OpenDDS_Linux\FACE\**\*.h" target="tools\DDS_Linux\FACE" />
     <file src="..\ext\OpenDDS_Linux\FACE\**\*.hpp" target="tools\DDS_Linux\FACE" />
+    <file src="..\ext\OpenDDS_Linux\tools\rapidjson\include\**\*.h" target="tools\DDS_Linux\tools\rapidjson\include" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\**\*.h" target="tools\ACE_Linux\ace" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\**\*.inl" target="tools\ACE_Linux\ace" />
     <file src="..\ext\OpenDDS_Linux\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_Linux\ace" />
@@ -178,6 +185,7 @@
     <file src="..\ext\OpenDDS_MacOS\dds\**\*.pidl" target="tools\DDS_MacOS\dds" />
     <file src="..\ext\OpenDDS_MacOS\FACE\**\*.h" target="tools\DDS_MacOS\FACE" />
     <file src="..\ext\OpenDDS_MacOS\FACE\**\*.hpp" target="tools\DDS_MacOS\FACE" />
+    <file src="..\ext\OpenDDS_MacOS\tools\rapidjson\include\**\*.h" target="tools\DDS_MacOS\tools\rapidjson\include" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\ace\**\*.h" target="tools\ACE_MacOS\ace" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\ace\**\*.inl" target="tools\ACE_MacOS\ace" />
     <file src="..\ext\OpenDDS_MacOS\ACE_TAO\ACE\ace\**\*.cpp" target="tools\ACE_MacOS\ace" />

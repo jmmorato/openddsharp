@@ -231,7 +231,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_Shutdown", CallingConvention = CallingConvention.Cdecl)]
-
             public static extern ReturnCode Shutdown();
 
             [SuppressUnmanagedCodeSecurity]

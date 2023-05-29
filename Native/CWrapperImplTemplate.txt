@@ -1,7 +1,3 @@
-void <%SCOPED_METHOD%>Wrapper_release(<%SCOPED_METHOD%>Wrapper* obj)
-{
-    obj->release();
-}
 
 <%SCOPED%>TypeSupport_ptr <%SCOPED_METHOD%>TypeSupport_new()
 {
@@ -28,72 +24,126 @@ int <%SCOPED_METHOD%>TypeSupport_UnregisterType(<%SCOPED%>TypeSupport_ptr native
     return <%SCOPED%>DataWriter::_narrow(dw);
 }
 
-int <%SCOPED_METHOD%>DataWriter_Write(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle)
+int <%SCOPED_METHOD%>DataWriter_Write_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle)
 {
-    <%SCOPED%> nativeData = data.to_native();
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
 
-    return dw->write(nativeData, handle);
+    ::DDS::ReturnCode_t ret = dw->write(sample, handle);    
+    
+    return ret;
 }
 
-int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time) {
-    <%SCOPED%> nativeData = data.to_native();
-
-    return dw->write_w_timestamp(nativeData, handle, time);
-}
-
-int <%SCOPED_METHOD%>DataWriter_RegisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance) {
-    <%SCOPED%> nativeData = instance.to_native();
-
-    return dw->register_instance(nativeData);
-}
-
-int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance, ::DDS::Time_t time) {
-    <%SCOPED%> nativeData = instance.to_native();
-
-    return dw->register_instance_w_timestamp(nativeData, time);
-}
-
-int <%SCOPED_METHOD%>DataWriter_UnregisterInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance, ::DDS::InstanceHandle_t handle) {
-    <%SCOPED%> nativeData = instance.to_native();
-
-    return dw->unregister_instance(nativeData, handle);
-}
-
-int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time) {
-    <%SCOPED%> nativeData = instance.to_native();
-
-    return dw->unregister_instance_w_timestamp(nativeData, handle, time);
-}
-
-int <%SCOPED_METHOD%>DataWriter_LookupInstance(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper instance) {
-    <%SCOPED%> nativeData = instance.to_native();
-
-    return dw->lookup_instance(nativeData);
-}
-
-int <%SCOPED_METHOD%>DataWriter_Dispose(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle)
+int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time)
 {
-    <%SCOPED%> nativeData = data.to_native();
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
 
-    return dw->dispose(nativeData, handle);
+    return dw->write_w_timestamp(sample, handle, time);
 }
 
-int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper data, int handle, ::DDS::Time_t time)
+int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data)
 {
-    <%SCOPED%> nativeData = data.to_native();
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
 
-    return dw->dispose_w_timestamp(nativeData, handle, time);
+    return dw->register_instance(sample);
 }
 
-int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPED_METHOD%>Wrapper* data, int handle)
+int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::Time_t time)
 {
-    <%SCOPED%> nativeData = data->to_native();
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
 
-    ::DDS::ReturnCode_t ret = dw->get_key_value(nativeData, handle);
+    return dw->register_instance_w_timestamp(sample, time);
+}
+
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->unregister_instance(sample, handle);
+}
+
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->unregister_instance_w_timestamp(sample, handle, time);
+}
+
+int <%SCOPED_METHOD%>DataWriter_LookupInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->lookup_instance(sample);
+}
+
+int <%SCOPED_METHOD%>DataWriter_Dispose_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->dispose(sample, handle);
+}
+
+int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
+
+    return dw->dispose_w_timestamp(sample, handle, time);
+}
+
+int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>DataWriter_ptr dw, char* & json_data, int handle)
+{
+    <%SCOPED%> sample_key;
+    ::DDS::ReturnCode_t ret = dw->get_key_value(sample_key, handle);
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        data->from_native(nativeData);
+        <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+        <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
+        json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
     }
 
     return ret;
@@ -104,33 +154,33 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue(<%SCOPED%>DataWriter_ptr dw, <%SCOPE
     return <%SCOPED%>DataReader::_narrow(dr);
 }
 
-int <%SCOPED_METHOD%>DataReader_ReadNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo)
+int <%SCOPED_METHOD%>DataReader_ReadNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo)
 {
-    <%SCOPED%> nativeData = data->to_native();
-    ::DDS::ReturnCode_t ret = dr->read_next_sample(nativeData, *sampleInfo);
+    <%SCOPED%> sample;
+    ::DDS::ReturnCode_t ret = dr->read_next_sample(sample, *sampleInfo);
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        data->from_native(nativeData);
+        json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
     }
     
     return (int)ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, ::DDS::SampleInfo* sampleInfo)
+int <%SCOPED_METHOD%>DataReader_TakeNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo)
 {
-    <%SCOPED%> nativeData = data->to_native();;
+    <%SCOPED%> sample;
+    ::DDS::ReturnCode_t ret = dr->take_next_sample(sample, *sampleInfo);
 
-    ::DDS::ReturnCode_t ret = dr->take_next_sample(nativeData, *sampleInfo);
     if (ret == ::DDS::RETCODE_OK)
     {        
-        data->from_native(nativeData);
+        json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
     }
 
     return (int)ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;
@@ -138,12 +188,10 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     ::DDS::ReturnCode_t ret = dr->read(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -155,7 +203,7 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;
@@ -163,12 +211,10 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     ::DDS::ReturnCode_t ret = dr->read_w_condition(received_data, info_seq, maxSamples, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -180,19 +226,17 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->take(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -204,7 +248,7 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;
@@ -212,12 +256,10 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     ::DDS::ReturnCode_t ret = dr->take_w_condition(received_data, info_seq, maxSamples, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -229,25 +271,29 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper instance) {
-    <%SCOPED%> nativeData = instance.to_native();
+int <%SCOPED_METHOD%>DataReader_LookupInstance_Json(<%SCOPED%>DataReader_ptr dr, const char* json_data)
+{
+    <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+    if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();
 
-    return dr->lookup_instance(nativeData);
+    return dr->lookup_instance(sample);
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->read_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -259,7 +305,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;
@@ -267,12 +313,10 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     ::DDS::ReturnCode_t ret = dr->read_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -284,19 +328,17 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->take_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -308,7 +350,7 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;
@@ -316,12 +358,10 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     ::DDS::ReturnCode_t ret = dr->take_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -333,19 +373,17 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->read_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -357,19 +395,17 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->read_next_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -381,19 +417,17 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstance(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->take_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -405,19 +439,17 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
+::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
 {
     <%SCOPED%>Seq received_data;
     ::DDS::SampleInfoSeq info_seq;    
     ::DDS::ReturnCode_t ret = dr->take_next_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
     if (ret == ::DDS::RETCODE_OK)
     {
-        TAO::unbounded_value_sequence<<%SCOPED_METHOD%>Wrapper> seq(received_data.length());
+        TAO::unbounded_value_sequence<char*> seq(received_data.length());
         seq.length(received_data.length());
-        for (unsigned int i = 0; i < received_data.length(); i++) {
-            <%SCOPED_METHOD%>Wrapper aux;
-            aux.from_native(received_data[i]);
-            seq[i] = aux;
+        for (unsigned int i = 0; i < received_data.length(); i++) {            
+            seq[i] = <%SCOPED_METHOD%>_EncodeJsonSample(received_data[i]);;
         }
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
@@ -429,15 +461,16 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance(<%SCOPED%>DataReader_ptr dr, <%SC
     return ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_GetKeyValue(<%SCOPED%>DataReader_ptr dr, <%SCOPED_METHOD%>Wrapper* data, int handle)
-{
-    <%SCOPED%> nativeData = data->to_native();
-
-    ::DDS::ReturnCode_t ret = dr->get_key_value(nativeData, handle);
+int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, int handle)
+{   
+    <%SCOPED%> sample_key;
+    ::DDS::ReturnCode_t ret = dr->get_key_value(sample_key, handle);
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        data->from_native(nativeData);
+        <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
+        <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
+        json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
     }
 
     return ret;

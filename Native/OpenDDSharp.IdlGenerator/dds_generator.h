@@ -230,7 +230,7 @@ struct Function {
 
 inline std::string scoped(UTL_ScopedName* sn)
 {
-	if (!be_global->csharp())
+	if (!be_global->csharp() && !be_global->csharp_json())
 		return dds_generator::scoped_helper(sn, "::");
 	else
 		return dds_generator::scoped_helper(sn, ".");
@@ -238,7 +238,7 @@ inline std::string scoped(UTL_ScopedName* sn)
 
 inline std::string module_scope(UTL_ScopedName* sn)
 {
-	if(!be_global->csharp())
+	if(!be_global->csharp() && !be_global->csharp_json())
 		return dds_generator::module_scope_helper(sn, "::");
 	else
 		return dds_generator::module_scope_helper(sn, ".");

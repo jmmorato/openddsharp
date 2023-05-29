@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Tests\TestIdlStandard\TestIdlStandard.csproj" />
+    <ProjectReference Include="..\..\Tests\TestIdlJson\TestIdlJson.csproj" />
 
 	<!-- Analyzer API for our custom checks. -->
 	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0">
@@ -39,6 +39,13 @@
     <None Update="rtps.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+	
+  <ItemGroup>
+	<AssemblyAttribute Include="System.CLSCompliant">
+	  <_Parameter1>true</_Parameter1>
+      <_Parameter1_TypeName>System.Boolean</_Parameter1_TypeName>
+	</AssemblyAttribute>
   </ItemGroup>
 
 </Project>
