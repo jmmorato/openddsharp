@@ -67,7 +67,16 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
-                NoBuild = true,
+                NoBuild = false,
+                ArgumentCustomization = args => args.Append($"/p:Version={version}"),
+                OutputDirectory = ".",
+            });
+
+            path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Marshaller", "OpenDDSharp.Marshaller.csproj");
+            context.DotNetPack(path, new DotNetPackSettings
+            {
+                Configuration = "Release",
+                NoBuild = false,
                 ArgumentCustomization = args => args.Append($"/p:Version={version}"),
                 OutputDirectory = ".",
             });

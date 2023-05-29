@@ -26,6 +26,9 @@ using Microsoft.Build.Utilities;
 
 namespace OpenDDSharp.BuildTasks
 {
+    /// <summary>
+    /// Build task to generate the native IDL library.
+    /// </summary>
     public class GenerateNativeLibraryTask : Task
     {
         #region Fields
@@ -52,6 +55,10 @@ namespace OpenDDSharp.BuildTasks
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <returns>Returns <c>true</c> if success, otherwise <c>false</c>.</returns>
         public override bool Execute()
         {
             returnValue = DoExecute();
@@ -140,6 +147,8 @@ namespace OpenDDSharp.BuildTasks
                     using (StreamWriter writer = new (outputPath))
                     {
                         writer.WriteLine("#include <tao/orb.idl>");
+                        writer.WriteLine("#include <tao/Int8Seq.pidl>");
+                        writer.WriteLine("#include <tao/UInt8Seq.pidl>");
 
                         while (!reader.EndOfStream)
                         {

@@ -28,5 +28,8 @@ elseif(UNIX)
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,$ORIGIN")
 endif()
 
-OPENDDS_TARGET_SOURCES(${PROJECT_NAME} ${IDL_FILES})
-target_link_libraries(${PROJECT_NAME} OpenDDS::OpenDDS)
+OPENDDS_TARGET_SOURCES(${PROJECT_NAME}
+ PUBLIC
+  ${IDL_FILES}
+  OPENDDS_IDL_OPTIONS -Sa --no-dcps-data-type-warnings)
+target_link_libraries(${PROJECT_NAME} OpenDDS::OpenDDS ACE::ACE TAO::TAO)

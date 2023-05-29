@@ -47,7 +47,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
 
             context.Log.Information("Restoring NuGet packages...");
-            context.DotNetRestore("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetRestoreSettings
+            context.DotNetRestore("./Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", new DotNetRestoreSettings
             {
                 ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
                 NoCache = true,
@@ -65,8 +65,17 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 Runtime = context.RunTime,
             });
 
+            context.DotNetRestore("./Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj", new DotNetRestoreSettings
+            {
+                ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
+                NoCache = true,
+                PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
+                WorkingDirectory = solutionFolder,
+                Runtime = context.RunTime,
+            });
+
             context.Log.Information("Clean solution...");
-            context.DotNetClean("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetCleanSettings
+            context.DotNetClean("./Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", new DotNetCleanSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,
@@ -101,7 +110,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 },
                 Runtime = context.RunTime,
             });
-            context.DotNetBuild("./Tests/OpenDDSharp.Standard.UnitTest/OpenDDSharp.Standard.UnitTest.csproj", new DotNetBuildSettings
+            context.DotNetBuild("./Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", new DotNetBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,

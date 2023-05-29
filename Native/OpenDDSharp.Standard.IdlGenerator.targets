@@ -176,18 +176,18 @@
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharpWindowsX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x64/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x64/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_Linux/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_Linux/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpMacOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
 	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-	  <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_MacOS/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_MacOS/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 </Project>

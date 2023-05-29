@@ -2,6 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/jmmorato/openddsharp/badge.svg)](https://coveralls.io/github/jmmorato/openddsharp)
 
 # OpenDDSharp
+
 OpenDDS wrapper for .NET languages.
 
 OpenDDS is an open source implementation of the Object Management Group

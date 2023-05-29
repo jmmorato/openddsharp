@@ -23,20 +23,27 @@ using Microsoft.Build.Utilities;
 
 namespace OpenDDSharp.BuildTasks
 {
+    /// <summary>
+    /// Build task to set an environment variable.
+    /// </summary>
     public class SetEnvVar : Task
     {
         /// <summary>
-        /// Environment variable name to be changed.
+        /// Gets or sets the environment variable name to be changed.
         /// </summary>
         [Required]
         public string Variable { get; set; }
 
         /// <summary>
-        /// Enviroment variable value to be set.
+        /// Gets or sets the environment variable value to be set.
         /// </summary>
         [Required]
         public string Value { get; set; }
 
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <returns>Always returns <c>true</c>.</returns>
         public override bool Execute()
         {
             Environment.SetEnvironmentVariable(Variable, Value);

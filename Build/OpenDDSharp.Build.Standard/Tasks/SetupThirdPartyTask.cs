@@ -34,7 +34,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
     [TaskName("SetupThirdParty")]
     public sealed class SetupThirdPartyTask : FrostingTask<BuildContext>
     {
-        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/OpenDDS/OpenDDS.git";
+        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/jmmorato/OpenDDS.git";
         private DirectoryPath _clonePath;
         private string _versionTag;
 
@@ -85,24 +85,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             context.Log.Information("Checkout OpenDDS version v{0}", context.OpenDdsVersion);
             Git(context, "fetch");
             Git(context, "fetch --tags");
-            Git(context, $"checkout tags/{_versionTag}");
-
-            context.Log.Information("Apply required OpenDDSharp patches to OpenDDS...");
-            foreach (string patchPath in Directory.GetFiles(BuildContext.PATCHES_FOLDER, "*.patch"))
-            {
-                DirectoryPath patchDirectory = new DirectoryPath(patchPath);
-                if (BuildContext.IsLinux)
-                {
-                    var linuxPath = System.IO.Path.GetFullPath(patchDirectory.FullPath);
-
-                    context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
-                    Git(context, "apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath);
-                }
-                else
-                {
-                    Git(context, "apply " + patchDirectory.FullPath);
-                }
-            }
+            // Git(context, $"checkout tags/{_versionTag}");
 
             context.Log.Information("Call OpenDDS configure script");
 
@@ -150,6 +133,23 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
+                }
+            }
+
+            context.Log.Information("Apply required OpenDDSharp patches to OpenDDS...");
+            foreach (var patchPath in Directory.GetFiles(BuildContext.PATCHES_FOLDER, "*.patch"))
+            {
+                var patchDirectory = new DirectoryPath(patchPath);
+                if (BuildContext.IsLinux)
+                {
+                    var linuxPath = System.IO.Path.GetFullPath(patchDirectory.FullPath);
+
+                    context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
+                    Git(context, "apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath);
+                }
+                else
+                {
+                    Git(context, "apply " + patchDirectory.FullPath);
                 }
             }
         }
