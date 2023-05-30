@@ -765,6 +765,7 @@ namespace OpenDDSharp.UnitTest
 
             // Wait for discovery
             writer.WaitForSubscriptions(1, 1000);
+            dataReader.WaitForPublications(1, 1000);
 
             // Write an instance with the simplest overload
             ReturnCode result = dataWriter.Write(new TestStruct { Id = 1 });
@@ -820,6 +821,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, infos.Count);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
+
+            _publisher.DeleteDataWriter(writer);
+            dataReader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(dataReader);
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
