@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "SubscriberListener.h"
 
 OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onDataOnReadersDeclaration onDataOnReaders,
-                                                                             onDataAvailableDeclaration onDataAvalaible,
+                                                                             onDataAvailableDeclaration onDataAvailable,
                                                                              onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
                                                                              onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
                                                                              onSampleRejectedDeclaration onSampleRejected,
@@ -28,11 +28,11 @@ OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onD
                                                                              onSubscriptionMatchedDeclaration onSubscriptionMatched,
                                                                              onSampleLostDeclaration onSampleLost) {
 	return new OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl(onDataOnReaders,
-																 onDataAvalaible,
-																 onRequestedDeadlineMissed,
-																 onRequestedIncompatibleQos,
-																 onSampleRejected,
-																 onLivelinessChanged,
-																 onSubscriptionMatched,
-																 onSampleLost);
+                                                               onDataAvailable,
+                                                               onRequestedDeadlineMissed,
+                                                               onRequestedIncompatibleQos,
+                                                               onSampleRejected,
+                                                               onLivelinessChanged,
+                                                               onSubscriptionMatched,
+                                                               onSampleLost);
 }

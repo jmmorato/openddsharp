@@ -27,13 +27,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 typedef void(__stdcall* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
 
 // DataReader delegates.
-typedef void(__stdcall* onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
-typedef void(__stdcall* onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
-typedef void(__stdcall* onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
-typedef void(__stdcall* onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);
-typedef void(__stdcall* onLivelinessChangedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::LivelinessChangedStatus& status);
-typedef void(__stdcall* onSubscriptionMatchedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
-typedef void(__stdcall* onSampleLostDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleLostStatus& status);
+typedef void(__stdcall onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
+typedef void(__stdcall onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
+typedef void(__stdcall onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
+typedef void(__stdcall onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);
+typedef void(__stdcall onLivelinessChangedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::LivelinessChangedStatus& status);
+typedef void(__stdcall onSubscriptionMatchedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
+typedef void(__stdcall onSampleLostDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleLostStatus& status);
 
 // DataWriter delegates
 typedef void(__stdcall* onOfferedDeadlineMissedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
