@@ -58,21 +58,6 @@ namespace OpenDDSharp.DDS
         private readonly IntPtr _native;
         private bool _disposed;
 
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnDataAvailableDelegate _onDataAvailable;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnRequestedDeadlineMissedDelegate _onRequestedDeadlineMissed;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnRequestedIncompatibleQosDelegate _onRequestedIncompatibleQos;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnSampleRejectedDelegate _onSampleRejected;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnLivelinessChangedDelegate _onLivelinessChanged;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnSubscriptionMatchedDelegate _onSubscriptionMatched;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnSampleLostDelegate _onSampleLost;
-
         private GCHandle _gchDataAvailable;
         private GCHandle _gchRequestedDeadlineMissed;
         private GCHandle _gchRequestedIncompatibleQos;
@@ -88,34 +73,34 @@ namespace OpenDDSharp.DDS
         /// </summary>
         protected DataReaderListener()
         {
-            _onDataAvailable = OnDataAvailableHandler;
-            _gchDataAvailable = GCHandle.Alloc(_onDataAvailable);
+            OnDataAvailableDelegate onDataAvailable = OnDataAvailableHandler;
+            _gchDataAvailable = GCHandle.Alloc(onDataAvailable);
 
-            _onRequestedDeadlineMissed = OnRequestedDeadlineMissedHandler;
-            _gchRequestedDeadlineMissed = GCHandle.Alloc(_onRequestedDeadlineMissed);
+            OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed = OnRequestedDeadlineMissedHandler;
+            _gchRequestedDeadlineMissed = GCHandle.Alloc(onRequestedDeadlineMissed);
 
-            _onRequestedIncompatibleQos = OnRequestedIncompatibleQosHandler;
-            _gchRequestedIncompatibleQos = GCHandle.Alloc(_onRequestedIncompatibleQos);
+            OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos = OnRequestedIncompatibleQosHandler;
+            _gchRequestedIncompatibleQos = GCHandle.Alloc(onRequestedIncompatibleQos);
 
-            _onSampleRejected = OnSampleRejectedHandler;
-            _gchSampleRejected = GCHandle.Alloc(_onSampleRejected);
+            OnSampleRejectedDelegate onSampleRejected = OnSampleRejectedHandler;
+            _gchSampleRejected = GCHandle.Alloc(onSampleRejected);
 
-            _onLivelinessChanged = OnLivelinessChangedHandler;
-            _gchLivelinessChanged = GCHandle.Alloc(_onLivelinessChanged);
+            OnLivelinessChangedDelegate onLivelinessChanged = OnLivelinessChangedHandler;
+            _gchLivelinessChanged = GCHandle.Alloc(onLivelinessChanged);
 
-            _onSubscriptionMatched = OnSubscriptionMatchedHandler;
-            _gchSubscriptionMatched = GCHandle.Alloc(_onSubscriptionMatched);
+            OnSubscriptionMatchedDelegate onSubscriptionMatched = OnSubscriptionMatchedHandler;
+            _gchSubscriptionMatched = GCHandle.Alloc(onSubscriptionMatched);
 
-            _onSampleLost = OnSampleLostHandler;
-            _gchSampleLost = GCHandle.Alloc(_onSampleLost);
+            OnSampleLostDelegate onSampleLost = OnSampleLostHandler;
+            _gchSampleLost = GCHandle.Alloc(onSampleLost);
 
-            _native = UnsafeNativeMethods.NewDataReaderListener(_onDataAvailable,
-                                                                _onRequestedDeadlineMissed,
-                                                                _onRequestedIncompatibleQos,
-                                                                _onSampleRejected,
-                                                                _onLivelinessChanged,
-                                                                _onSubscriptionMatched,
-                                                                _onSampleLost);
+            _native = UnsafeNativeMethods.NewDataReaderListener(onDataAvailable,
+                                                                onRequestedDeadlineMissed,
+                                                                onRequestedIncompatibleQos,
+                                                                onSampleRejected,
+                                                                onLivelinessChanged,
+                                                                onSubscriptionMatched,
+                                                                onSampleLost);
         }
 
         /// <summary>

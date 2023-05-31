@@ -144,6 +144,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnDataAvailable()
         {
+            TestContext.WriteLine(nameof(TestOnDataAvailable) + "has started");
+
             // Attach to the event
             var count = 0;
             DataReader reader = null;
@@ -161,11 +163,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
+            var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
+            TestContext.WriteLine(nameof(TestOnDataAvailable) + " entities discovered");
+
             // Write some instances
-            var total = 5;
+            const int total = 5;
             for (var i = 1; i <= total; i++)
             {
                 result = _dataWriter.Write(new TestStruct
@@ -178,11 +182,15 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
+            TestContext.WriteLine(nameof(TestOnDataAvailable) + " data written");
+
             Thread.Sleep(100);
 
             Assert.AreEqual(total, count);
             Assert.IsNotNull(reader);
             Assert.AreEqual(_reader, reader);
+
+            TestContext.WriteLine(nameof(TestOnDataAvailable) + "has ended");
         }
 
         /// <summary>
