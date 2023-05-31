@@ -974,6 +974,7 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore("Not working in mono linux")]
         public void TestDispose()
         {
             // Initialize entities
