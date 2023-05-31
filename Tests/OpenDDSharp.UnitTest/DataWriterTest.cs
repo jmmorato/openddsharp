@@ -32,7 +32,6 @@ namespace OpenDDSharp.UnitTest
     /// <see cref="DataWriter"/> unit test class.
     /// </summary>
     [TestClass]
-    [Ignore("Not working in mono linux")]
     public class DataWriterTest
     {
         #region Constants
@@ -855,6 +854,7 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore("Not working in mono linux")]
         public void TestWrite()
         {
             // Initialize entities
