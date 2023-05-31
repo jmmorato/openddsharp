@@ -33,7 +33,7 @@ namespace OpenDDSharp.UnitTest
     /// <see cref="DataReaderListener"/> unit test class.
     /// </summary>
     [TestClass]
-    [Ignore("Not working in mono linux")]
+    // [Ignore("Not working in mono linux")]
     public class DataReaderListenerTest
     {
         #region Constants
