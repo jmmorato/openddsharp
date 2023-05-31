@@ -109,6 +109,7 @@ namespace OpenDDSharp.UnitTest
         {
             // Create a DataReader and check the TopicDescription and Subscriber properties
             var reader = _subscriber.CreateDataReader(_topic);
+
             Assert.IsNotNull(reader);
             Assert.IsNotNull(reader.TopicDescription);
             Assert.AreSame(_topic, reader.TopicDescription);
@@ -116,6 +117,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreSame(_topic.Participant, reader.TopicDescription.Participant);
             Assert.AreEqual(_topic.TypeName, reader.TopicDescription.TypeName);
             Assert.AreSame(_subscriber, reader.Subscriber);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
         }
 
         /// <summary>
@@ -207,8 +211,13 @@ namespace OpenDDSharp.UnitTest
             var otherDataReader = _subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(otherDataReader);
 
-            qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             result = otherDataReader.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -448,7 +457,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             reader.DeleteContainedEntities();
+            otherReader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
+            _subscriber.DeleteDataReader(otherReader);
         }
 
         /// <summary>
@@ -483,8 +494,6 @@ namespace OpenDDSharp.UnitTest
 
             result = _subscriber.DeleteDataReader(reader);
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            _subscriber.DeleteDataReader(reader);
         }
 
         /// <summary>
@@ -499,14 +508,14 @@ namespace OpenDDSharp.UnitTest
             {
                 Reliability =
                 {
-                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
                 ResourceLimits =
                 {
                     MaxInstances = 1,
                     MaxSamples = 1,
-                    MaxSamplesPerInstance = 1
-                }
+                    MaxSamplesPerInstance = 1,
+                },
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
@@ -556,7 +565,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -588,9 +599,14 @@ namespace OpenDDSharp.UnitTest
 
             // Creates a datawriter
             var publisher = _participant.CreatePublisher();
-            var dwQos = new DataWriterQos();
-            dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-            dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
+            var dwQos = new DataWriterQos
+            {
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                    LeaseDuration = new Duration { Seconds = 1 },
+                },
+            };
             var writer = publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestStructDataWriter(writer);
@@ -629,7 +645,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -691,7 +709,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -752,7 +772,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -833,7 +855,10 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(otherWriter);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -905,7 +930,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -998,7 +1025,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1072,7 +1101,10 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(otherWriter);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1104,7 +1136,7 @@ namespace OpenDDSharp.UnitTest
 
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
             // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
-            // WORKAROUND: Create another particpant for the DataReader.
+            // WORKAROUND: Create another participant for the DataReader.
             var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
@@ -1150,7 +1182,11 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            otherParticipant.DeletePublisher(publisher);
+            otherParticipant.DeleteTopic(otherTopic);
+            AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
         }
 
         /// <summary>
@@ -1271,7 +1307,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1417,7 +1455,8 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1546,7 +1585,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1568,7 +1609,7 @@ namespace OpenDDSharp.UnitTest
                 History =
                 {
                     Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
-                }
+                },
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
@@ -1683,7 +1724,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1799,7 +1842,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -1907,7 +1952,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -2008,7 +2055,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -2111,7 +2160,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -2181,7 +2232,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
 
         /// <summary>
@@ -2234,7 +2287,9 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            _publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
         }
         #endregion
     }
