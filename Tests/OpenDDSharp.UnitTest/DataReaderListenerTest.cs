@@ -65,13 +65,15 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
+            TestContext.WriteLine($"{TestContext.TestName} test initialize started.");
+
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
@@ -80,19 +82,35 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(TestContext.TestName, _topic.Name);
             Assert.AreEqual(typeName, _topic.TypeName);
 
-            SubscriberQos sQos = new SubscriberQos();
-            sQos.EntityFactory.AutoenableCreatedEntities = false;
-            sQos.Presentation.OrderedAccess = true;
-            sQos.Presentation.CoherentAccess = true;
-            sQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            var sQos = new SubscriberQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                Presentation =
+                {
+                    OrderedAccess = true,
+                    CoherentAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos,
+                },
+            };
             _subscriber = _participant.CreateSubscriber(sQos);
             Assert.IsNotNull(_subscriber);
 
-            PublisherQos pQos = new PublisherQos();
-            pQos.EntityFactory.AutoenableCreatedEntities = false;
-            pQos.Presentation.OrderedAccess = true;
-            pQos.Presentation.CoherentAccess = true;
-            pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            var pQos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                Presentation =
+                {
+                    OrderedAccess = true,
+                    CoherentAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos,
+                },
+            };
             _publisher = _participant.CreatePublisher(pQos);
             Assert.IsNotNull(_publisher);
 
@@ -100,11 +118,18 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_writer);
             _dataWriter = new TestStructDataWriter(_writer);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _listener = new MyDataReaderListener();
             _reader = _subscriber.CreateDataReader(_topic, qos, _listener);
             Assert.IsNotNull(_reader);
+
+            TestContext.WriteLine($"{TestContext.TestName} test initialize ended.");
         }
 
         /// <summary>
@@ -113,6 +138,8 @@ namespace OpenDDSharp.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
+            TestContext.WriteLine($"{TestContext.TestName} test cleanup started");
+
             _publisher?.DeleteDataWriter(_writer);
             _reader?.DeleteContainedEntities();
             _publisher?.DeleteContainedEntities();
@@ -133,6 +160,9 @@ namespace OpenDDSharp.UnitTest
             _topic = null;
             _writer = null;
             _reader = null;
+            _listener = null;
+            
+            TestContext.WriteLine($"{TestContext.TestName} test cleanup ended.");
         }
         #endregion
 

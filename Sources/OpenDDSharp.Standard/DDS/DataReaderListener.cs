@@ -32,24 +32,31 @@ namespace OpenDDSharp.DDS
     public abstract class DataReaderListener : IDisposable
     {
         #region Delegates
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnDataAvailableDelegate(IntPtr reader);
 
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnRequestedDeadlineMissedDelegate(IntPtr reader, ref RequestedDeadlineMissedStatus status);
 
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnRequestedIncompatibleQosDelegate(IntPtr reader, ref RequestedIncompatibleQosStatusWrapper status);
 
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnSampleRejectedDelegate(IntPtr reader, ref SampleRejectedStatus status);
 
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnLivelinessChangedDelegate(IntPtr reader, ref LivelinessChangedStatus status);
 
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnSubscriptionMatchedDelegate(IntPtr reader, ref SubscriptionMatchedStatus status);
 
+        [SuppressUnmanagedCodeSecurity]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void OnSampleLostDelegate(IntPtr reader, ref SampleLostStatus status);
         #endregion
