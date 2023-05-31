@@ -104,13 +104,16 @@ namespace OpenDDSharp.UnitTest
         public void TestProperties()
         {
             // Create a DataWriter and check the Topic and Participant properties
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
+
             Assert.IsNotNull(writer);
             Assert.IsNotNull(writer.Topic);
             Assert.IsNotNull(writer.Publisher);
             Assert.AreSame(_topic, writer.Topic);
             Assert.AreSame(_publisher, writer.Publisher);
             Assert.IsNull(writer.Listener);
+
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -120,7 +123,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewDataWriterQos()
         {
-            DataWriterQos qos = new DataWriterQos();
+            var qos = new DataWriterQos();
             TestHelper.TestDefaultDataWriterQos(qos);
         }
 
@@ -132,20 +135,22 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQos()
         {
             // Create a non-default QoS and create a DataWriter with it
-            DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
+            var qos = TestHelper.CreateNonDefaultDataWriterQos();
 
-            DataWriter dataWriter = _publisher.CreateDataWriter(_topic, qos);
+            var dataWriter = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(dataWriter);
 
             // Call GetQos and check the values received
             qos = new DataWriterQos();
-            ReturnCode result = dataWriter.GetQos(qos);
+            var result = dataWriter.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataWriterQos(qos);
 
             // Test GetQos with null parameter
             result = dataWriter.GetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            _publisher.DeleteDataWriter(dataWriter);
         }
 
         /// <summary>
@@ -156,12 +161,12 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQos()
         {
             // Create a new DataWriter using the default QoS
-            DataWriter dataWriter = _publisher.CreateDataWriter(_topic);
+            var dataWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(dataWriter);
 
             // Get the qos to ensure that is using the default properties
-            DataWriterQos qos = new DataWriterQos();
-            ReturnCode result = dataWriter.GetQos(qos);
+            var qos = new DataWriterQos();
+            var result = dataWriter.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
 
@@ -171,8 +176,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.ImmutablePolicy, result);
 
             // Change some mutable properties and check them
-            qos = new DataWriterQos();
-            qos.OwnershipStrength.Value = 100;
+            qos = new DataWriterQos
+            {
+                OwnershipStrength =
+                {
+                    Value = 100,
+                },
+            };
 
             result = dataWriter.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -183,16 +193,26 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(100, qos.OwnershipStrength.Value);
 
             // Try to set immutable QoS properties before enable the DataWriter
-            PublisherQos pubQos = new PublisherQos();
-            pubQos.EntityFactory.AutoenableCreatedEntities = false;
+            var pubQos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+            };
             result = _publisher.SetQos(pubQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            DataWriter otherDataWriter = _publisher.CreateDataWriter(_topic);
+            var otherDataWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(otherDataWriter);
 
-            qos = new DataWriterQos();
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
+            qos = new DataWriterQos
+            {
+                Ownership =
+                {
+                    Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos,
+                },
+            };
             result = otherDataWriter.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -212,6 +232,9 @@ namespace OpenDDSharp.UnitTest
             // Test SetQos with null parameter
             result = dataWriter.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            _publisher.DeleteDataWriter(dataWriter);
+            _publisher.DeleteDataWriter(otherDataWriter);
         }
 
         /// <summary>
@@ -222,16 +245,19 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
             // Create a new DataWriter with a listener
-            MyDataWriterListener listener = new MyDataWriterListener();
-            DataWriter dataWriter = _publisher.CreateDataWriter(_topic, null, listener);
+            var listener = new MyDataWriterListener();
+            var dataWriter = _publisher.CreateDataWriter(_topic, null, listener);
             Assert.IsNotNull(dataWriter);
 
             // Call to GetListener and check the listener received
 #pragma warning disable CS0618 // Type or member is obsolete
-            MyDataWriterListener received = (MyDataWriterListener)dataWriter.GetListener();
+            var received = (MyDataWriterListener)dataWriter.GetListener();
 #pragma warning restore CS0618 // Type or member is obsolete
+
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
+
+            _publisher.DeleteDataWriter(dataWriter);
         }
 
         /// <summary>
@@ -242,18 +268,18 @@ namespace OpenDDSharp.UnitTest
         public void TestSetListener()
         {
             // Create a new DataWriter without listener
-            DataWriter dataWriter = _publisher.CreateDataWriter(_topic);
+            var dataWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(dataWriter);
 
-            MyDataWriterListener listener = (MyDataWriterListener)dataWriter.Listener;
+            var listener = (MyDataWriterListener)dataWriter.Listener;
             Assert.IsNull(listener);
 
             // Create a listener, set it and check that is correctly set
             listener = new MyDataWriterListener();
-            ReturnCode result = dataWriter.SetListener(listener, StatusMask.AllStatusMask);
+            var result = dataWriter.SetListener(listener, StatusMask.AllStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            MyDataWriterListener received = (MyDataWriterListener)dataWriter.Listener;
+            var received = (MyDataWriterListener)dataWriter.Listener;
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
@@ -263,6 +289,8 @@ namespace OpenDDSharp.UnitTest
 
             received = (MyDataWriterListener)dataWriter.Listener;
             Assert.IsNull(received);
+
+            _publisher.DeleteDataWriter(dataWriter);
         }
 
         /// <summary>
@@ -273,22 +301,27 @@ namespace OpenDDSharp.UnitTest
         public void TestWaitForAcknowledgments()
         {
             // Initialize entities
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader reader = subscriber.CreateDataReader(_topic);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
             // Write some instances and wait for acknowledgments
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                ReturnCode result = dataWriter.Write(new TestStruct
+                var result = dataWriter.Write(new TestStruct
                 {
                     Id = i,
                 });
@@ -297,6 +330,12 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
+
+            _publisher.DeleteDataWriter(writer);
+            reader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
@@ -307,22 +346,27 @@ namespace OpenDDSharp.UnitTest
         public void TestGetLivelinessLostStatus()
         {
             // Initialize entities
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-            dwQos.Liveliness.LeaseDuration = new Duration
+            var dwQos = new DataWriterQos
             {
-                Seconds = 1,
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                    LeaseDuration = new Duration
+                    {
+                        Seconds = 1,
+                    },
+                },
             };
-            DataWriter writer = _publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
             Assert.IsNotNull(dataWriter);
 
             // After half second liveliness should not be lost yet
             System.Threading.Thread.Sleep(500);
 
             LivelinessLostStatus status = default;
-            ReturnCode result = writer.GetLivelinessLostStatus(ref status);
+            var result = writer.GetLivelinessLostStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
@@ -334,6 +378,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
+
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -344,23 +390,31 @@ namespace OpenDDSharp.UnitTest
         public void TestGetOfferedDeadlineMissedStatus()
         {
             // Initialize entities
-            DataWriterQos qos = new DataWriterQos();
-            qos.Deadline.Period = new Duration
+            var qos = new DataWriterQos
             {
-                Seconds = 1,
+                Deadline =
+                {
+                    Period = new Duration
+                    {
+                        Seconds = 1,
+                    },
+                },
             };
-            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(_topic);
+            var reader = subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(reader);
 
             // Wait for discovery and write an instance
-            bool found = writer.WaitForSubscriptions(1, 1000);
+            var found = writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            found = reader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
 
             dataWriter.Write(new TestStruct
@@ -372,7 +426,7 @@ namespace OpenDDSharp.UnitTest
             System.Threading.Thread.Sleep(500);
 
             OfferedDeadlineMissedStatus status = default;
-            ReturnCode result = writer.GetOfferedDeadlineMissedStatus(ref status);
+            var result = writer.GetOfferedDeadlineMissedStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
@@ -386,6 +440,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
+
+            _publisher.DeleteDataWriter(writer);
+            reader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
@@ -396,14 +456,19 @@ namespace OpenDDSharp.UnitTest
         public void TestGetOfferedIncompatibleQosStatus()
         {
             // Initialize entities
-            DataWriterQos qos = new DataWriterQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            var qos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
+                },
+            };
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
 
             // If not matched readers should return the default status
             OfferedIncompatibleQosStatus status = default;
-            ReturnCode result = writer.GetOfferedIncompatibleQosStatus(ref status);
+            var result = writer.GetOfferedIncompatibleQosStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
@@ -412,12 +477,17 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.LastPolicyId);
 
             // Create a not compatible reader
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader reader = subscriber.CreateDataReader(_topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
             // Wait for discovery and check the status
@@ -433,6 +503,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.Policies.Count);
             Assert.AreEqual(1, status.Policies.First().Count);
             Assert.AreEqual(11, status.Policies.First().PolicyId);
+
+            _publisher.DeleteDataWriter(writer);
+            reader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
@@ -443,14 +519,19 @@ namespace OpenDDSharp.UnitTest
         public void TestGetPublicationMatchedStatus()
         {
             // Initialize entities
-            DataWriterQos qos = new DataWriterQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            var qos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
+                },
+            };
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
 
             // If not DataReaders are created should return the default status
             PublicationMatchedStatus status = default;
-            ReturnCode result = writer.GetPublicationMatchedStatus(ref status);
+            var result = writer.GetPublicationMatchedStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.CurrentCount);
             Assert.AreEqual(0, status.CurrentCountChange);
@@ -459,12 +540,17 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastSubscriptionHandle);
 
             // Create a not compatible reader
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader reader = subscriber.CreateDataReader(_topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
             // Wait for discovery and check the status
@@ -479,7 +565,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastSubscriptionHandle);
 
             // Create a compatible reader
-            DataReader otherReader = subscriber.CreateDataReader(_topic);
+            var otherReader = subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(otherReader);
 
             // Wait for discovery and check the status
@@ -492,6 +578,14 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreEqual(otherReader.InstanceHandle, status.LastSubscriptionHandle);
+
+            _publisher.DeleteDataWriter(writer);
+            reader.DeleteContainedEntities();
+            otherReader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteDataReader(otherReader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
@@ -502,26 +596,31 @@ namespace OpenDDSharp.UnitTest
         public void TestAssertLiveliness()
         {
             // Initialize entities
-            DataWriterQos qos = new DataWriterQos();
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
+            var qos = new DataWriterQos
             {
-                Seconds = 1,
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                    LeaseDuration = new Duration
+                    {
+                        Seconds = 1,
+                    },
+                },
             };
-            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
 
             // Manually assert liveliness
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                ReturnCode assertResult = writer.AssertLiveliness();
+                var assertResult = writer.AssertLiveliness();
                 Assert.AreEqual(ReturnCode.Ok, assertResult);
                 System.Threading.Thread.Sleep(500);
             }
 
             // Check that no liveliness has been lost
             LivelinessLostStatus status = default;
-            ReturnCode result = writer.GetLivelinessLostStatus(ref status);
+            var result = writer.GetLivelinessLostStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
@@ -538,27 +637,37 @@ namespace OpenDDSharp.UnitTest
         public void TestGetMatchedSubscriptions()
         {
             // Initialize entities
-            DataWriterQos qos = new DataWriterQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            var qos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
+                },
+            };
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
 
             // Test matched subscriptions without any match
-            List<InstanceHandle> list = new List<InstanceHandle>
+            var list = new List<InstanceHandle>
             {
                 InstanceHandle.HandleNil,
             };
-            ReturnCode result = writer.GetMatchedSubscriptions(list);
+            var result = writer.GetMatchedSubscriptions(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, list.Count);
 
             // Create a not compatible reader
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader reader = subscriber.CreateDataReader(_topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
             // Wait for discovery and check the matched subscriptions
@@ -569,7 +678,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, list.Count);
 
             // Create a compatible reader
-            DataReader otherReader = subscriber.CreateDataReader(_topic);
+            var otherReader = subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(otherReader);
 
             // Wait for discovery and check the matched subscriptions
@@ -578,11 +687,19 @@ namespace OpenDDSharp.UnitTest
             result = writer.GetMatchedSubscriptions(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(otherReader.InstanceHandle, list.First());
+            Assert.AreEqual(otherReader.InstanceHandle, list[0]);
 
             // Test with null parameter
             result = writer.GetMatchedSubscriptions(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            _publisher.DeleteDataWriter(writer);
+            reader.DeleteContainedEntities();
+            otherReader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteDataReader(otherReader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
@@ -593,9 +710,9 @@ namespace OpenDDSharp.UnitTest
         public void TestGetMatchedSubscriptionData()
         {
             // Initialize entities
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataWriter writer = _publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             // DCPSInfoRepo-based discovery generates Built-In Topic data once (inside the
@@ -609,38 +726,40 @@ namespace OpenDDSharp.UnitTest
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
             // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
             // WORKAROUND: Create another participant for the DataReader.
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic otherTopic = otherParticipant.CreateTopic(nameof(TestGetMatchedSubscriptionData), typeName);
+            var otherTopic = otherParticipant.CreateTopic(nameof(TestGetMatchedSubscriptionData), typeName);
             Assert.IsNotNull(otherTopic);
 
-            Subscriber subscriber = otherParticipant.CreateSubscriber();
+            var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader reader = subscriber.CreateDataReader(otherTopic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var reader = subscriber.CreateDataReader(otherTopic, drQos);
             Assert.IsNotNull(reader);
 
-            // Wait for subscriptions
-            bool found = writer.WaitForSubscriptions(1, 5000);
+            // Wait for subscriptions/publications
+            var found = writer.WaitForSubscriptions(1, 5000);
+            Assert.IsTrue(found);
+            found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
             // Get the matched subscriptions
-            List<InstanceHandle> list = new List<InstanceHandle>();
+            var list = new List<InstanceHandle>();
             result = writer.GetMatchedSubscriptions(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
 
             // Get the matched subscription data
             SubscriptionBuiltinTopicData data = default;
-            result = writer.GetMatchedSubscriptionData(list.First(), ref data);
+            result = writer.GetMatchedSubscriptionData(list[0], ref data);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
@@ -650,6 +769,14 @@ namespace OpenDDSharp.UnitTest
 
             result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            _publisher.DeleteDataWriter(writer);
+            reader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            otherParticipant.DeleteSubscriber(subscriber);
+            otherParticipant.DeleteTopic(otherTopic);
+            AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
         }
 
         /// <summary>
@@ -660,18 +787,20 @@ namespace OpenDDSharp.UnitTest
         public void TestRegisterInstance()
         {
             // Initialize entities
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
             // Register an instance
-            InstanceHandle handle = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             // Register an instance with timestamp
-            InstanceHandle otherHandle = dataWriter.RegisterInstance(new TestStruct { Id = 2 }, DateTime.Now.ToTimestamp());
+            var otherHandle = dataWriter.RegisterInstance(new TestStruct { Id = 2 }, DateTime.Now.ToTimestamp());
             Assert.AreNotEqual(InstanceHandle.HandleNil, otherHandle);
             Assert.AreNotEqual(handle, otherHandle);
+
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -682,17 +811,17 @@ namespace OpenDDSharp.UnitTest
         public void TestUnregisterInstance()
         {
             // Initialize entities
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
             // Unregister not registered instance
-            ReturnCode result = dataWriter.UnregisterInstance(new TestStruct { Id = 1 });
+            var result = dataWriter.UnregisterInstance(new TestStruct { Id = 1 });
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
 
             // Register an instance
-            TestStruct instance1 = new TestStruct { Id = 1 };
-            InstanceHandle handle1 = dataWriter.RegisterInstance(instance1);
+            var instance1 = new TestStruct { Id = 1 };
+            var handle1 = dataWriter.RegisterInstance(instance1);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
             // Unregister the previous registered instance with the simplest overload
@@ -700,8 +829,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Register a new instance
-            TestStruct instance2 = new TestStruct { Id = 2 };
-            InstanceHandle handle2 = dataWriter.RegisterInstance(instance2);
+            var instance2 = new TestStruct { Id = 2 };
+            var handle2 = dataWriter.RegisterInstance(instance2);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle2);
 
             // Unregister the previous registered instance with the handle
@@ -709,13 +838,15 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Register a new instance
-            TestStruct instance3 = new TestStruct { Id = 3 };
-            InstanceHandle handle3 = dataWriter.RegisterInstance(instance3);
+            var instance3 = new TestStruct { Id = 3 };
+            var handle3 = dataWriter.RegisterInstance(instance3);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle3);
 
             // Unregister the previous registered instance with the handle and the timestamp
             result = dataWriter.UnregisterInstance(new TestStruct { Id = 3 }, handle3, DateTime.Now.ToTimestamp());
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -726,49 +857,57 @@ namespace OpenDDSharp.UnitTest
         public void TestWrite()
         {
             // Initialize entities
-            Duration duration = new Duration { Seconds = 5 };
+            var duration = new Duration { Seconds = 5 };
 
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            MyDataReaderListener listener = new MyDataReaderListener();
-            DataReader dataReader = subscriber.CreateDataReader(_topic, qos, listener);
+            DataReaderQos qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var listener = new MyDataReaderListener();
+            var dataReader = subscriber.CreateDataReader(_topic, qos, listener);
             Assert.IsNotNull(dataReader);
 
-            int count = 0;
+            var count = 0;
             Timestamp timestamp = default;
-            ReturnCode retReadInstance = ReturnCode.Error;
-            InstanceHandle lookupHandle = InstanceHandle.HandleNil;
-            List<TestStruct> samples = new List<TestStruct>();
-            List<SampleInfo> infos = new List<SampleInfo>();
+            var retReadInstance = ReturnCode.Error;
+            var lookupHandle = InstanceHandle.HandleNil;
+            var samples = new List<TestStruct>();
+            var infos = new List<SampleInfo>();
             listener.DataAvailable += (reader) =>
             {
                 count++;
-                if (count == 4)
+                if (count != 4)
                 {
-                    TestStructDataReader dr = new TestStructDataReader(reader);
+                    return;
+                }
+                var dr = new TestStructDataReader(reader);
 
-                    lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
-                    retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
-                    if (retReadInstance == ReturnCode.Ok && infos.Count == 1)
-                    {
-                        timestamp = infos.First().SourceTimestamp;
-                    }
+                lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
+                retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
+                if (retReadInstance == ReturnCode.Ok && infos.Count == 1)
+                {
+                    timestamp = infos[0].SourceTimestamp;
                 }
             };
 
             // Wait for discovery
-            writer.WaitForSubscriptions(1, 1000);
-            dataReader.WaitForPublications(1, 1000);
+            var found = writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+            found = dataReader.WaitForPublications(1, 1000);
+            Assert.IsTrue(found);
 
             // Write an instance with the simplest overload
-            ReturnCode result = dataWriter.Write(new TestStruct { Id = 1 });
+            var result = dataWriter.Write(new TestStruct { Id = 1 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(duration);
@@ -788,8 +927,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2, count);
 
             // Write an instance with the handle parameter with a previously registered instance
-            TestStruct instance = new TestStruct { Id = 3 };
-            InstanceHandle handle = dataWriter.RegisterInstance(instance);
+            var instance = new TestStruct { Id = 3 };
+            var handle = dataWriter.RegisterInstance(instance);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = dataWriter.Write(instance, handle);
@@ -802,9 +941,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(3, count);
 
             // Write an instance with the handle parameter and the timestamp
-            Timestamp now = DateTime.Now.ToTimestamp();
-            TestStruct instance1 = new TestStruct { Id = 4 };
-            InstanceHandle handle1 = dataWriter.RegisterInstance(instance1);
+            var now = DateTime.Now.ToTimestamp();
+            var instance1 = new TestStruct { Id = 4 };
+            var handle1 = dataWriter.RegisterInstance(instance1);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
             result = dataWriter.Write(instance1, handle1, now);
@@ -825,6 +964,7 @@ namespace OpenDDSharp.UnitTest
             _publisher.DeleteDataWriter(writer);
             dataReader.DeleteContainedEntities();
             subscriber.DeleteDataReader(dataReader);
+            subscriber.DeleteContainedEntities();
             _participant.DeleteSubscriber(subscriber);
         }
 
@@ -836,42 +976,52 @@ namespace OpenDDSharp.UnitTest
         public void TestDispose()
         {
             // Initialize entities
-            Duration duration = new Duration { Seconds = 5 };
+            var duration = new Duration { Seconds = 5 };
 
-            DataWriterQos qos = new DataWriterQos();
-            qos.WriterDataLifecycle.AutodisposeUnregisteredInstances = false;
-            DataWriter writer = _publisher.CreateDataWriter(_topic, qos);
+            var qos = new DataWriterQos
+            {
+                WriterDataLifecycle =
+                {
+                    AutodisposeUnregisteredInstances = false,
+                },
+            };
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
+            var drQos = new DataReaderQos();
             qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            MyDataReaderListener listener = new MyDataReaderListener();
-            DataReader dataReader = subscriber.CreateDataReader(_topic, drQos, listener);
+            var listener = new MyDataReaderListener();
+            var dataReader = subscriber.CreateDataReader(_topic, drQos, listener);
             Assert.IsNotNull(dataReader);
-            int count = 0;
+
+            var count = 0;
             Timestamp timestamp = default;
             listener.DataAvailable += (reader) =>
             {
-                List<TestStruct> samples = new List<TestStruct>();
-                List<SampleInfo> infos = new List<SampleInfo>();
-                TestStructDataReader dr = new TestStructDataReader(reader);
-                ReturnCode ret = dr.Take(samples, infos);
-                if (ret == ReturnCode.Ok)
+                var samples = new List<TestStruct>();
+                var infos = new List<SampleInfo>();
+                var dr = new TestStructDataReader(reader);
+                var ret = dr.Take(samples, infos);
+                if (ret != ReturnCode.Ok)
                 {
-                    foreach (var info in infos)
+                    return;
+                }
+
+                foreach (var info in infos)
+                {
+                    if (info.InstanceState != InstanceStateKind.NotAliveDisposedInstanceState)
                     {
-                        if (info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
-                        {
-                            count++;
-                            if (count == 3)
-                            {
-                                timestamp = infos.First().SourceTimestamp;
-                            }
-                        }
+                        continue;
+                    }
+
+                    count++;
+                    if (count == 3)
+                    {
+                        timestamp = infos[0].SourceTimestamp;
                     }
                 }
             };
@@ -881,11 +1031,11 @@ namespace OpenDDSharp.UnitTest
             dataReader.WaitForPublications(1, 1000);
 
             // Dispose an instance that does not exist
-            ReturnCode result = dataWriter.Dispose(new TestStruct { Id = 1 }, InstanceHandle.HandleNil);
+            var result = dataWriter.Dispose(new TestStruct { Id = 1 }, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Error, result);
 
             // Call dispose with the simplest overload
-            TestStruct instance1 = new TestStruct { Id = 1 };
+            var instance1 = new TestStruct { Id = 1 };
             result = dataWriter.Write(instance1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -905,8 +1055,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Call dispose with the handle parameter
-            TestStruct instance2 = new TestStruct { Id = 2 };
-            InstanceHandle handle2 = dataWriter.RegisterInstance(instance2);
+            var instance2 = new TestStruct { Id = 2 };
+            var handle2 = dataWriter.RegisterInstance(instance2);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle2);
 
             result = dataWriter.Write(instance2, handle2);
@@ -928,9 +1078,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2, count);
 
             // Call dispose with the handle parameter and specific timestamp
-            Timestamp now = DateTime.Now.ToTimestamp();
-            TestStruct instance3 = new TestStruct { Id = 3 };
-            InstanceHandle handle3 = dataWriter.RegisterInstance(instance3);
+            var now = DateTime.Now.ToTimestamp();
+            var instance3 = new TestStruct { Id = 3 };
+            var handle3 = dataWriter.RegisterInstance(instance3);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle3);
 
             result = dataWriter.Write(instance3, handle3);
@@ -952,6 +1102,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(3, count);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
+
+            _publisher.DeleteDataWriter(writer);
+            dataReader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(dataReader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
         }
 
         /// <summary>
@@ -962,18 +1118,18 @@ namespace OpenDDSharp.UnitTest
         public void TestGetKeyValue()
         {
             // Initialize entities
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
             // Call GetKeyValue with HandleNil
-            TestStruct data = new TestStruct();
-            ReturnCode result = dataWriter.GetKeyValue(data, InstanceHandle.HandleNil);
+            var data = new TestStruct();
+            var result = dataWriter.GetKeyValue(data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Register an instance
-            TestStruct instance = new TestStruct { Id = 1 };
-            InstanceHandle handle = dataWriter.RegisterInstance(instance);
+            var instance = new TestStruct { Id = 1 };
+            var handle = dataWriter.RegisterInstance(instance);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             // Call GetKeyValue
@@ -981,6 +1137,8 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.GetKeyValue(data, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.Id);
+
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -991,22 +1149,24 @@ namespace OpenDDSharp.UnitTest
         public void TestLookupInstance()
         {
             // Initialize entities
-            DataWriter writer = _publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
             // Lookup for a non-existing instance
-            InstanceHandle handle = dataWriter.LookupInstance(new TestStruct { Id = 1 });
+            var handle = dataWriter.LookupInstance(new TestStruct { Id = 1 });
             Assert.AreEqual(InstanceHandle.HandleNil, handle);
 
             // Register an instance
-            InstanceHandle handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
             // Lookup for an existing instance
             handle = dataWriter.LookupInstance(new TestStruct { Id = 1 });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
             Assert.AreEqual(handle1, handle);
+
+            _publisher.DeleteDataWriter(writer);
         }
         #endregion
     }
