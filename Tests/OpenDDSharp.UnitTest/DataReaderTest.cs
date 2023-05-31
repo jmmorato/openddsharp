@@ -200,11 +200,16 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(qos.UserData);
             Assert.IsNotNull(qos.UserData.Value);
             Assert.AreEqual(1, qos.UserData.Value.Count);
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            Assert.AreEqual(0x42, qos.UserData.Value[0]);
 
             // Try to set immutable QoS properties before enable the datareader.
-            var subQos = new SubscriberQos();
-            subQos.EntityFactory.AutoenableCreatedEntities = false;
+            var subQos = new SubscriberQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+            };
             result = _subscriber.SetQos(subQos); 
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -279,7 +284,7 @@ namespace OpenDDSharp.UnitTest
             var listener = (MyDataReaderListener)dataReader.Listener;
             Assert.IsNull(listener);
 
-            // Create a listener, set it and check that is correctly setted
+            // Create a listener, set it and check that is correctly set
             listener = new MyDataReaderListener();
             var result = dataReader.SetListener(listener, StatusMask.AllStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1006,22 +1011,22 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(data);
             Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, data.First().Id);
+            Assert.AreEqual(1, data[0].Id);
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.IsTrue(sampleInfos.First().ValidData);
-            Assert.AreEqual(0, sampleInfos.First().AbsoluteGenerationRank);
-            Assert.AreEqual(0, sampleInfos.First().DisposedGenerationCount);
-            Assert.AreEqual(0, sampleInfos.First().GenerationRank);
-            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().InstanceHandle);
-            Assert.AreEqual(InstanceStateKind.AliveInstanceState, sampleInfos.First().InstanceState);
-            Assert.AreEqual(0, sampleInfos.First().NoWritersGenerationCount);
-            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().PublicationHandle);
-            Assert.AreEqual(0, sampleInfos.First().SampleRank);
-            Assert.AreEqual(SampleStateKind.NotReadSampleState, sampleInfos.First().SampleState);
-            Assert.AreEqual(ViewStateKind.NewViewState, sampleInfos.First().ViewState);
-            Assert.IsNotNull(sampleInfos.First().SourceTimestamp);
-            Assert.IsTrue(sampleInfos.First().SourceTimestamp.Seconds > 0);
+            Assert.IsTrue(sampleInfos[0].ValidData);
+            Assert.AreEqual(0, sampleInfos[0].AbsoluteGenerationRank);
+            Assert.AreEqual(0, sampleInfos[0].DisposedGenerationCount);
+            Assert.AreEqual(0, sampleInfos[0].GenerationRank);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos[0].InstanceHandle);
+            Assert.AreEqual(InstanceStateKind.AliveInstanceState, sampleInfos[0].InstanceState);
+            Assert.AreEqual(0, sampleInfos[0].NoWritersGenerationCount);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos[0].PublicationHandle);
+            Assert.AreEqual(0, sampleInfos[0].SampleRank);
+            Assert.AreEqual(SampleStateKind.NotReadSampleState, sampleInfos[0].SampleState);
+            Assert.AreEqual(ViewStateKind.NewViewState, sampleInfos[0].ViewState);
+            Assert.IsNotNull(sampleInfos[0].SourceTimestamp);
+            Assert.IsTrue(sampleInfos[0].SourceTimestamp.Seconds > 0);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
@@ -1097,7 +1102,7 @@ namespace OpenDDSharp.UnitTest
 
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(otherWriter.InstanceHandle, list.First());
+            Assert.AreEqual(otherWriter.InstanceHandle, list[0]);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
@@ -1169,7 +1174,7 @@ namespace OpenDDSharp.UnitTest
 
             // Get the matched publication data
             PublicationBuiltinTopicData data = default;
-            result = reader.GetMatchedPublicationData(list.First(), ref data);
+            result = reader.GetMatchedPublicationData(list[0], ref data);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultPublicationData(data);
 
@@ -1248,7 +1253,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data.First().Id);
+            Assert.AreEqual(1, data[0].Id);
 
             // Write another sample of the same instance
             result = dataWriter.Write(new TestStruct { Id = 1, ShortField = 2 });
@@ -1267,7 +1272,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data.First().Id);
+            Assert.AreEqual(1, data[0].Id);
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();
@@ -1294,8 +1299,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data.First().Id);
-            Assert.AreEqual(2, data.First().ShortField);
+            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual(2, data[0].ShortField);
 
             // Read the data with mask parameters
             result = dataReader.Read(data, sampleInfos, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
@@ -1371,7 +1376,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data.First().Id);
+            Assert.AreEqual(1, data[0].Id);
 
             // Take again to test NoData
             result = dataReader.Take(data, sampleInfos);
@@ -1400,8 +1405,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(2, data.First().Id);
-            Assert.AreEqual(1, data.First().ShortField);
+            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual(1, data[0].ShortField);
 
             // Take all the remaining samples
             result = dataReader.Take(data, sampleInfos, ResourceLimitsQosPolicy.LengthUnlimited);
@@ -1438,8 +1443,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data.First().Id);
-            Assert.AreEqual(2, data.First().ShortField);
+            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual(2, data[0].ShortField);
 
             // Take the data with mask parameters
             result = dataReader.Take(data, sampleInfos, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
@@ -1558,8 +1563,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data.First().Id);
-            Assert.AreEqual(1, data.First().ShortField);
+            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual(1, data[0].ShortField);
 
             // Read instance with mask parameters
             result = dataReader.ReadInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateKind.NewViewState | ViewStateKind.NotNewViewState, InstanceStateKind.AliveInstanceState | InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState);
@@ -1709,8 +1714,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data.First().Id);
-            Assert.AreEqual(3, data.First().ShortField);
+            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual(3, data[0].ShortField);
 
             // Take instance with mask parameters
             result = dataReader.ReadInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
@@ -1857,9 +1862,17 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             ReturnCode result;
             var duration = new Duration { Seconds = 5 };
-            var drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            drQos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+            };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
             var dataReader = new TestStructDataReader(reader);
@@ -2218,10 +2231,10 @@ namespace OpenDDSharp.UnitTest
             result = dataReader.Read(structs, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos.First().InstanceHandle);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos[0].InstanceHandle);
 
             var data = new TestStruct();
-            result = dataReader.GetKeyValue(data, sampleInfos.First().InstanceHandle);
+            result = dataReader.GetKeyValue(data, sampleInfos[0].InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.Id);
 
