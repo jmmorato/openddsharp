@@ -24,25 +24,25 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef _WIN32
 // Subscriber delegates.
-typedef void(__stdcall* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
+typedef void(__cdecl* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
 
 // DataReader delegates.
-typedef void(__stdcall* onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
-typedef void(__stdcall* onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
-typedef void(__stdcall* onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
-typedef void(__stdcall* onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);
-typedef void(__stdcall* onLivelinessChangedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::LivelinessChangedStatus& status);
-typedef void(__stdcall* onSubscriptionMatchedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
-typedef void(__stdcall* onSampleLostDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleLostStatus& status);
+typedef void(__cdecl* onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
+typedef void(__cdecl* onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
+typedef void(__cdecl* onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
+typedef void(__cdecl* onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);
+typedef void(__cdecl* onLivelinessChangedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::LivelinessChangedStatus& status);
+typedef void(__cdecl* onSubscriptionMatchedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
+typedef void(__cdecl* onSampleLostDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleLostStatus& status);
 
 // DataWriter delegates
-typedef void(__stdcall* onOfferedDeadlineMissedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
-typedef void(__stdcall* onOfferedIncompatibleQosDeclaration)(::DDS::Entity_ptr writer, const OfferedIncompatibleQosStatusWrapper& status);
-typedef void(__stdcall* onLivelinessLostDeclaration)(::DDS::Entity_ptr writer, const ::DDS::LivelinessLostStatus& status);
-typedef void(__stdcall* onPublicationMatchedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::PublicationMatchedStatus& status);
+typedef void(__cdecl* onOfferedDeadlineMissedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status);
+typedef void(__cdecl* onOfferedIncompatibleQosDeclaration)(::DDS::Entity_ptr writer, const OfferedIncompatibleQosStatusWrapper& status);
+typedef void(__cdecl* onLivelinessLostDeclaration)(::DDS::Entity_ptr writer, const ::DDS::LivelinessLostStatus& status);
+typedef void(__cdecl* onPublicationMatchedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 
 // Topic delegates
-typedef void(__stdcall* onInconsistentTopicDeclaration)(::DDS::TopicDescription_ptr topic, const ::DDS::InconsistentTopicStatus& status);
+typedef void(__cdecl* onInconsistentTopicDeclaration)(::DDS::TopicDescription_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 #else
 // Subscriber delegates.
 typedef void(onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);

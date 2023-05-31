@@ -25,10 +25,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 EXTERN_METHOD_EXPORT
 OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onDataOnReadersDeclaration onDataOnReaders,
-																			 onDataAvailabeDeclaration onDataAvalaible,
-																			 onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
-																			 onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
-																			 onSampleRejectedDeclaration onSampleRejected,
-																			 onLivelinessChangedDeclaration onLivelinessChanged,
-																			 onSubscriptionMatchedDeclaration onSubscriptionMatched,
-																			 onSampleLostDeclaration onSampleLost);
+                                                                             onDataAvailableDeclaration onDataAvalaible,
+                                                                             onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
+                                                                             onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+                                                                             onSampleRejectedDeclaration onSampleRejected,
+                                                                             onLivelinessChangedDeclaration onLivelinessChanged,
+                                                                             onSubscriptionMatchedDeclaration onSubscriptionMatched,
+                                                                             onSampleLostDeclaration onSampleLost);
