@@ -19,14 +19,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DataReaderListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvalaible,
+::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvailable,
 																			std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
 																			std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
 																			std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
 																			std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
 																			std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost) {	
-	_onDataAvalaible = onDataAvalaible;
+																			std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost) {
+    _onDataAvailable = onDataAvailable;
 	_onRequestedDeadlineMissed = onRequestedDeadlineMissed;
 	_onRequestedIncompatibleQos = onRequestedIncompatibleQos;
 	_onSampleRejected = onSampleRejected;
@@ -35,19 +35,23 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 	_onSampleLost = onSampleLost;
 }
 
-::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::~DataReaderListenerImpl() {	
-	_onDataAvalaible = NULL;
-	_onRequestedDeadlineMissed = NULL;
-	_onRequestedIncompatibleQos = NULL;
-	_onSampleRejected = NULL;
-	_onLivelinessChanged = NULL;
-	_onSubscriptionMatched = NULL;
-	_onSampleLost = NULL;
+::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::~DataReaderListenerImpl() {
+  dispose();
 };
 
+void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::dispose() {
+  _onDataAvailable = NULL;
+  _onRequestedDeadlineMissed = NULL;
+  _onRequestedIncompatibleQos = NULL;
+  _onSampleRejected = NULL;
+  _onLivelinessChanged = NULL;
+  _onSubscriptionMatched = NULL;
+  _onSampleLost = NULL;
+}
+
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_data_available(::DDS::DataReader_ptr reader) {
-	if (_onDataAvalaible) {
-		_onDataAvalaible(static_cast< ::DDS::Entity_ptr>(reader));
+	if (_onDataAvailable) {
+		_onDataAvailable(static_cast< ::DDS::Entity_ptr>(reader));
 	}
 };
 

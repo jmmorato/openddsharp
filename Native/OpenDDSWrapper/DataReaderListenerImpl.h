@@ -30,7 +30,7 @@ namespace OpenDDSharp {
 
 			class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DataReaderListener> {
 			private:				
-				std::function<void(::DDS::Entity_ptr)> _onDataAvalaible;
+				std::function<void(::DDS::Entity_ptr)> _onDataAvailable;
 				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> _onRequestedDeadlineMissed;
 				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> _onRequestedIncompatibleQos;
 				std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> _onSampleRejected;
@@ -39,7 +39,7 @@ namespace OpenDDSharp {
 				std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> _onSampleLost;
 
 			public:
-				DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvalaible,
+				DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvailable,
 									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
 									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
 									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
@@ -64,6 +64,8 @@ namespace OpenDDSharp {
 				virtual void on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
 
 				virtual void on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
+
+        void dispose();
 			};
 
 			typedef OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl* DataReaderListenerImpl_ptr;

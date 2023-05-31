@@ -17,6 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -28,33 +29,34 @@ namespace OpenDDSharp.DDS
     /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DataReader" />
     /// such that the application can be notified of relevant status changes.
     /// </summary>
-    public abstract class DataReaderListener
+    public abstract class DataReaderListener : IDisposable
     {
         #region Delegates
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnDataAvailableDelegate(IntPtr reader);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnRequestedDeadlineMissedDelegate(IntPtr reader, ref RequestedDeadlineMissedStatus status);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnRequestedIncompatibleQosDelegate(IntPtr reader, ref RequestedIncompatibleQosStatusWrapper status);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSampleRejectedDelegate(IntPtr reader, ref SampleRejectedStatus status);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnLivelinessChangedDelegate(IntPtr reader, ref LivelinessChangedStatus status);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSubscriptionMatchedDelegate(IntPtr reader, ref SubscriptionMatchedStatus status);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSampleLostDelegate(IntPtr reader, ref SampleLostStatus status);
         #endregion
 
         #region Fields
         private readonly IntPtr _native;
+        private bool _disposed;
 
         [MarshalAs(UnmanagedType.FunctionPtr)]
         private readonly OnDataAvailableDelegate _onDataAvailable;
@@ -86,34 +88,34 @@ namespace OpenDDSharp.DDS
         /// </summary>
         protected DataReaderListener()
         {
-            _onDataAvailable = new OnDataAvailableDelegate(OnDataAvailableHandler);
+            _onDataAvailable = OnDataAvailableHandler;
             _gchDataAvailable = GCHandle.Alloc(_onDataAvailable);
 
-            _onRequestedDeadlineMissed = new OnRequestedDeadlineMissedDelegate(OnRequestedDeadlineMissedHandler);
+            _onRequestedDeadlineMissed = OnRequestedDeadlineMissedHandler;
             _gchRequestedDeadlineMissed = GCHandle.Alloc(_onRequestedDeadlineMissed);
 
-            _onRequestedIncompatibleQos = new OnRequestedIncompatibleQosDelegate(OnRequestedIncompatibleQosHandler);
+            _onRequestedIncompatibleQos = OnRequestedIncompatibleQosHandler;
             _gchRequestedIncompatibleQos = GCHandle.Alloc(_onRequestedIncompatibleQos);
 
-            _onSampleRejected = new OnSampleRejectedDelegate(OnSampleRejectedHandler);
+            _onSampleRejected = OnSampleRejectedHandler;
             _gchSampleRejected = GCHandle.Alloc(_onSampleRejected);
 
-            _onLivelinessChanged = new OnLivelinessChangedDelegate(OnLivelinessChangedHandler);
+            _onLivelinessChanged = OnLivelinessChangedHandler;
             _gchLivelinessChanged = GCHandle.Alloc(_onLivelinessChanged);
 
-            _onSubscriptionMatched = new OnSubscriptionMatchedDelegate(OnSubscriptionMatchedHandler);
+            _onSubscriptionMatched = OnSubscriptionMatchedHandler;
             _gchSubscriptionMatched = GCHandle.Alloc(_onSubscriptionMatched);
 
-            _onSampleLost = new OnSampleLostDelegate(OnSampleLostHandler);
+            _onSampleLost = OnSampleLostHandler;
             _gchSampleLost = GCHandle.Alloc(_onSampleLost);
 
-            _native = NewDataReaderListener(_onDataAvailable,
-                                            _onRequestedDeadlineMissed,
-                                            _onRequestedIncompatibleQos,
-                                            _onSampleRejected,
-                                            _onLivelinessChanged,
-                                            _onSubscriptionMatched,
-                                            _onSampleLost);
+            _native = UnsafeNativeMethods.NewDataReaderListener(_onDataAvailable,
+                                                                _onRequestedDeadlineMissed,
+                                                                _onRequestedIncompatibleQos,
+                                                                _onSampleRejected,
+                                                                _onLivelinessChanged,
+                                                                _onSubscriptionMatched,
+                                                                _onSampleLost);
         }
 
         /// <summary>
@@ -121,6 +123,239 @@ namespace OpenDDSharp.DDS
         /// </summary>
         ~DataReaderListener()
         {
+            Dispose(false);
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.DataAvailableStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.DataAvailableStatus" /> indicates that samples are available on the <see cref="DataReader" />.
+        /// Applications receiving this status can use the various take and read operations on the <see cref="DataReader" /> to retrieve the data.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        protected abstract void OnDataAvailable(DataReader reader);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.RequestedDeadlineMissedStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.RequestedDeadlineMissedStatus" /> indicates that the deadline requested via the
+        /// <see cref="DeadlineQosPolicy" /> was not respected for a specific instance.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="RequestedDeadlineMissedStatus" />.</param>
+        protected abstract void OnRequestedDeadlineMissed(DataReader reader, RequestedDeadlineMissedStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.RequestedIncompatibleQosStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.RequestedIncompatibleQosStatus" /> indicates that one or more QoS policy values that
+        /// were requested were incompatible with what was offered.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="RequestedIncompatibleQosStatus" />.</param>
+        protected abstract void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.SampleRejectedStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.SampleRejectedStatus" /> indicates that a sample received by the
+        /// <see cref="DataReader" /> has been rejected.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="SampleRejectedStatus" />.</param>
+        protected abstract void OnSampleRejected(DataReader reader, SampleRejectedStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.LivelinessChangedStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.LivelinessChangedStatus" /> indicates that there have been liveliness changes for one or
+        /// more <see cref="DataWriter" />s that are publishing instances for this <see cref="DataReader" />.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="LivelinessChangedStatus" />.</param>
+        protected abstract void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.SubscriptionMatchedStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.SubscriptionMatchedStatus" /> indicates that either a compatible <see cref="DataWriter" /> has been
+        /// matched or a previously matched <see cref="DataWriter" /> has ceased to be matched.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="SubscriptionMatchedStatus" />.</param>
+        protected abstract void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status);
+
+        /// <summary>
+        /// <para>Handles the <see cref="StatusKind.SampleLostStatus" /> communication status.</para>
+        /// <para>The <see cref="StatusKind.SampleLostStatus" /> indicates that a sample has been lost and 
+        /// never received by the <see cref="DataReader" />.</para>
+        /// </summary>
+        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
+        /// <param name="status">The current <see cref="SampleLostStatus" />.</param>
+        protected abstract void OnSampleLost(DataReader reader, SampleLostStatus status);
+
+        private void OnDataAvailableHandler(IntPtr reader)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            OnDataAvailable(dataReader);
+        }
+
+        private void OnRequestedDeadlineMissedHandler(IntPtr reader, ref RequestedDeadlineMissedStatus status)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            OnRequestedDeadlineMissed(dataReader, status);
+        }
+
+        private void OnRequestedIncompatibleQosHandler(IntPtr reader, ref RequestedIncompatibleQosStatusWrapper status)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            RequestedIncompatibleQosStatus ret = default;
+            ret.FromNative(status);
+
+            OnRequestedIncompatibleQos(dataReader, ret);
+        }
+
+        private void OnSampleRejectedHandler(IntPtr reader, ref SampleRejectedStatus status)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            OnSampleRejected(dataReader, status);
+        }
+
+        private void OnLivelinessChangedHandler(IntPtr reader, ref LivelinessChangedStatus status)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            OnLivelinessChanged(dataReader, status);
+        }
+
+        private void OnSubscriptionMatchedHandler(IntPtr reader, ref SubscriptionMatchedStatus status)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            OnSubscriptionMatched(dataReader, status);
+        }
+
+        private void OnSampleLostHandler(IntPtr reader, ref SampleLostStatus status)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            var entity = EntityManager.Instance.Find(reader);
+
+            DataReader dataReader = null;
+            if (entity != null)
+            {
+                dataReader = entity as DataReader;
+            }
+
+            OnSampleLost(dataReader, status);
+        }
+
+        internal IntPtr ToNative()
+        {
+            return _native;
+        }
+        #endregion
+
+        #region IDisposable Members
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="DataReaderListener" />.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing,
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">True to free managed resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+
+            ReleaseUnmanagedResources();
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            UnsafeNativeMethods.DisposeDataReaderListener(_native);
+
             if (_gchDataAvailable.IsAllocated)
             {
                 _gchDataAvailable.Free();
@@ -156,187 +391,7 @@ namespace OpenDDSharp.DDS
                 _gchSampleLost.Free();
             }
 
-            MarshalHelper.ReleaseNativePointer(_native);
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.DataAvailableStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.DataAvailableStatus" /> indicates that samples are available on the <see cref="DataReader" />.
-        /// Applications receiving this status can use the various take and read operations on the <see cref="DataReader" /> to retrieve the data.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        public abstract void OnDataAvailable(DataReader reader);
-
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.RequestedDeadlineMissedStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.RequestedDeadlineMissedStatus" /> indicates that the deadline requested via the
-        /// <see cref="DeadlineQosPolicy" /> was not respected for a specific instance.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        /// <param name="status">The current <see cref="RequestedDeadlineMissedStatus" />.</param>
-        public abstract void OnRequestedDeadlineMissed(DataReader reader, RequestedDeadlineMissedStatus status);
-
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.RequestedIncompatibleQosStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.RequestedIncompatibleQosStatus" /> indicates that one or more QoS policy values that
-        /// were requested were incompatible with what was offered.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        /// <param name="status">The current <see cref="RequestedIncompatibleQosStatus" />.</param>
-        public abstract void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status);
-
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.SampleRejectedStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.SampleRejectedStatus" /> indicates that a sample received by the
-        /// <see cref="DataReader" /> has been rejected.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        /// <param name="status">The current <see cref="SampleRejectedStatus" />.</param>
-        public abstract void OnSampleRejected(DataReader reader, SampleRejectedStatus status);
-
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.LivelinessChangedStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.LivelinessChangedStatus" /> indicates that there have been liveliness changes for one or
-        /// more <see cref="DataWriter" />s that are publishing instances for this <see cref="DataReader" />.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        /// <param name="status">The current <see cref="LivelinessChangedStatus" />.</param>
-        public abstract void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status);
-
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.SubscriptionMatchedStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.SubscriptionMatchedStatus" /> indicates that either a compatible <see cref="DataWriter" /> has been
-        /// matched or a previously matched <see cref="DataWriter" /> has ceased to be matched.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        /// <param name="status">The current <see cref="SubscriptionMatchedStatus" />.</param>
-        public abstract void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status);
-
-        /// <summary>
-        /// <para>Handles the <see cref="StatusKind.SampleLostStatus" /> communication status.</para>
-        /// <para>The <see cref="StatusKind.SampleLostStatus" /> indicates that a sample has been lost and 
-        /// never received by the <see cref="DataReader" />.</para>
-        /// </summary>
-        /// <param name="reader">The <see cref="DataReader" /> that triggered the event.</param>
-        /// <param name="status">The current <see cref="SampleLostStatus" />.</param>
-        public abstract void OnSampleLost(DataReader reader, SampleLostStatus status);
-
-        private void OnDataAvailableHandler(IntPtr reader)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            OnDataAvailable(dataReader);
-        }
-
-        private void OnRequestedDeadlineMissedHandler(IntPtr reader, ref RequestedDeadlineMissedStatus status)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            OnRequestedDeadlineMissed(dataReader, status);
-        }
-
-        private void OnRequestedIncompatibleQosHandler(IntPtr reader, ref RequestedIncompatibleQosStatusWrapper status)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            RequestedIncompatibleQosStatus ret = default;
-            ret.FromNative(status);
-
-            OnRequestedIncompatibleQos(dataReader, ret);
-        }
-
-        private void OnSampleRejectedHandler(IntPtr reader, ref SampleRejectedStatus status)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            OnSampleRejected(dataReader, status);
-        }
-
-        private void OnLivelinessChangedHandler(IntPtr reader, ref LivelinessChangedStatus status)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            OnLivelinessChanged(dataReader, status);
-        }
-
-        private void OnSubscriptionMatchedHandler(IntPtr reader, ref SubscriptionMatchedStatus status)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            OnSubscriptionMatched(dataReader, status);
-        }
-
-        private void OnSampleLostHandler(IntPtr reader, ref SampleLostStatus status)
-        {
-            Entity entity = EntityManager.Instance.Find(reader);
-
-            DataReader dataReader = null;
-            if (entity != null)
-            {
-                dataReader = entity as DataReader;
-            }
-
-            OnSampleLost(dataReader, status);
-        }
-
-        private IntPtr NewDataReaderListener(OnDataAvailableDelegate onDataAvailabe,
-                                             OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
-                                             OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
-                                             OnSampleRejectedDelegate onSampleRejected,
-                                             OnLivelinessChangedDelegate onLivelinessChanged,
-                                             OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                             OnSampleLostDelegate onSampleLost)
-        {
-            return UnsafeNativeMethods.NewDataReaderListener(onDataAvailabe,
-                                                             onRequestedDeadlineMissed,
-                                                             onRequestedIncompatibleQos,
-                                                             onSampleRejected,
-                                                             onLivelinessChanged,
-                                                             onSubscriptionMatched,
-                                                             onSampleLost);
-        }
-
-        internal IntPtr ToNative()
-        {
-            return _native;
+            _native.ReleaseNativePointer();
         }
         #endregion
 
@@ -351,13 +406,17 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReaderListener_New", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NewDataReaderListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
+            public static extern IntPtr NewDataReaderListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvailable,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataReaderListener_Dispose", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr DisposeDataReaderListener(IntPtr native);
         }
         #endregion
     }

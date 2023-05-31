@@ -31,3 +31,6 @@ OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onD
 																			 onLivelinessChangedDeclaration onLivelinessChanged,
 																			 onSubscriptionMatchedDeclaration onSubscriptionMatched,
 																			 onSampleLostDeclaration onSampleLost);
+
+EXTERN_METHOD_EXPORT
+void DataReaderListener_Dispose(OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr ptr);

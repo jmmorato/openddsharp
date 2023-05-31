@@ -34,3 +34,7 @@ OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onD
 																 onSubscriptionMatched,
 																 onSampleLost);
 }
+
+void DataReaderListener_Dispose(OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr ptr) {
+  ptr->dispose();
+}
