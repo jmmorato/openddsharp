@@ -23,29 +23,30 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DdsDcpsDomainC.h>
 #include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/Service_Participant.h>
+#include "ListenerDelegates.h"
 
 namespace OpenDDSharp {
 	namespace OpenDDS {
 		namespace DDS {
 
 			class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DataReaderListener> {
-			private:				
-				std::function<void(::DDS::Entity_ptr)> _onDataAvailable;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> _onRequestedDeadlineMissed;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> _onRequestedIncompatibleQos;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> _onSampleRejected;
-				std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> _onLivelinessChanged;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> _onSubscriptionMatched;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> _onSampleLost;
+			private:
+        onDataAvailableDeclaration*  _onDataAvailable;
+        onRequestedDeadlineMissedDeclaration* _onRequestedDeadlineMissed;
+        onRequestedIncompatibleQosDeclaration* _onRequestedIncompatibleQos;
+        onSampleRejectedDeclaration* _onSampleRejected;
+        onLivelinessChangedDeclaration* _onLivelinessChanged;
+        onSubscriptionMatchedDeclaration* _onSubscriptionMatched;
+        onSampleLostDeclaration* _onSampleLost;
 
 			public:
-				DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvailable,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost);
+				DataReaderListenerImpl(onDataAvailableDeclaration* onDataAvailable,
+                               onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
+                               onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
+                               onSampleRejectedDeclaration* onSampleRejected,
+                               onLivelinessChangedDeclaration* onLivelinessChanged,
+                               onSubscriptionMatchedDeclaration* onSubscriptionMatched,
+                               onSampleLostDeclaration* onSampleLost);
 
 			protected:
 				virtual ~DataReaderListenerImpl();

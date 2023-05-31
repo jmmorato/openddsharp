@@ -24,13 +24,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ListenerDelegates.h"
 
 EXTERN_METHOD_EXPORT
-OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onDataAvailabeDeclaration onDataAvalaible,
-																			 onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
-																			 onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
-																			 onSampleRejectedDeclaration onSampleRejected,
-																			 onLivelinessChangedDeclaration onLivelinessChanged,
-																			 onSubscriptionMatchedDeclaration onSubscriptionMatched,
-																			 onSampleLostDeclaration onSampleLost);
+OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onDataAvailableDeclaration* onDataAvailable,
+                                                                             onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
+                                                                             onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
+                                                                             onSampleRejectedDeclaration* onSampleRejected,
+                                                                             onLivelinessChangedDeclaration* onLivelinessChanged,
+                                                                             onSubscriptionMatchedDeclaration* onSubscriptionMatched,
+                                                                             onSampleLostDeclaration* onSampleLost);
 
 EXTERN_METHOD_EXPORT
 void DataReaderListener_Dispose(OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr ptr);

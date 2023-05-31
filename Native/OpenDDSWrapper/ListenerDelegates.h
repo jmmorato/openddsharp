@@ -27,7 +27,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 typedef void(__stdcall* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
 
 // DataReader delegates.
-typedef void(__stdcall* onDataAvailabeDeclaration)(::DDS::Entity_ptr reader);
+typedef void(__stdcall* onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
 typedef void(__stdcall* onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
 typedef void(__stdcall* onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
 typedef void(__stdcall* onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);
@@ -48,7 +48,7 @@ typedef void(__stdcall* onInconsistentTopicDeclaration)(::DDS::TopicDescription_
 typedef void(onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
 
 // DataReader delegates.
-typedef void(onDataAvailabeDeclaration)(::DDS::Entity_ptr reader);
+typedef void(onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
 typedef void(onRequestedDeadlineMissedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
 typedef void(onRequestedIncompatibleQosDeclaration)(::DDS::Entity_ptr reader, const RequestedIncompatibleQosStatusWrapper& status);
 typedef void(onSampleRejectedDeclaration)(::DDS::Entity_ptr reader, const ::DDS::SampleRejectedStatus& status);

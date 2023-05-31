@@ -20,13 +20,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "SubscriberListener.h"
 
 OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onDataOnReadersDeclaration onDataOnReaders,
-																			 onDataAvailabeDeclaration onDataAvalaible,
-																			 onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
-																			 onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
-																			 onSampleRejectedDeclaration onSampleRejected,
-																			 onLivelinessChangedDeclaration onLivelinessChanged,
-																			 onSubscriptionMatchedDeclaration onSubscriptionMatched,
-																			 onSampleLostDeclaration onSampleLost) {
+                                                                             onDataAvailableDeclaration onDataAvalaible,
+                                                                             onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
+                                                                             onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+                                                                             onSampleRejectedDeclaration onSampleRejected,
+                                                                             onLivelinessChangedDeclaration onLivelinessChanged,
+                                                                             onSubscriptionMatchedDeclaration onSubscriptionMatched,
+                                                                             onSampleLostDeclaration onSampleLost) {
 	return new OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl(onDataOnReaders,
 																 onDataAvalaible,
 																 onRequestedDeadlineMissed,

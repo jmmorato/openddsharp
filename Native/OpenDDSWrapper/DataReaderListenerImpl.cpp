@@ -19,16 +19,16 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DataReaderListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvailable,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-																			std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost) {
-    _onDataAvailable = onDataAvailable;
-	_onRequestedDeadlineMissed = onRequestedDeadlineMissed;
-	_onRequestedIncompatibleQos = onRequestedIncompatibleQos;
+::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::DataReaderListenerImpl(onDataAvailableDeclaration* onDataAvailable,
+                                                                            onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
+                                                                            onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
+                                                                            onSampleRejectedDeclaration* onSampleRejected,
+                                                                            onLivelinessChangedDeclaration* onLivelinessChanged,
+                                                                            onSubscriptionMatchedDeclaration* onSubscriptionMatched,
+                                                                            onSampleLostDeclaration* onSampleLost) {
+  _onDataAvailable = onDataAvailable;
+  _onRequestedDeadlineMissed = onRequestedDeadlineMissed;
+  _onRequestedIncompatibleQos = onRequestedIncompatibleQos;
 	_onSampleRejected = onSampleRejected;
 	_onLivelinessChanged = onLivelinessChanged;
 	_onSubscriptionMatched = onSubscriptionMatched;
