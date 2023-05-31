@@ -19,13 +19,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DataReaderListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::DataReaderListenerImpl(onDataAvailableDeclaration* onDataAvailable,
-                                                                            onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
-                                                                            onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
-                                                                            onSampleRejectedDeclaration* onSampleRejected,
-                                                                            onLivelinessChangedDeclaration* onLivelinessChanged,
-                                                                            onSubscriptionMatchedDeclaration* onSubscriptionMatched,
-                                                                            onSampleLostDeclaration* onSampleLost) {
+::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::DataReaderListenerImpl(onDataAvailableDeclaration onDataAvailable,
+                                                                            onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
+                                                                            onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+                                                                            onSampleRejectedDeclaration onSampleRejected,
+                                                                            onLivelinessChangedDeclaration onLivelinessChanged,
+                                                                            onSubscriptionMatchedDeclaration onSubscriptionMatched,
+                                                                            onSampleLostDeclaration onSampleLost) {
   _onDataAvailable = onDataAvailable;
   _onRequestedDeadlineMissed = onRequestedDeadlineMissed;
   _onRequestedIncompatibleQos = onRequestedIncompatibleQos;

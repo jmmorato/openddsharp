@@ -19,13 +19,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DataReaderListener.h"
 
-OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onDataAvailableDeclaration* onDataAvailable,
-                                                                             onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
-                                                                             onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
-                                                                             onSampleRejectedDeclaration* onSampleRejected,
-                                                                             onLivelinessChangedDeclaration* onLivelinessChanged,
-                                                                             onSubscriptionMatchedDeclaration* onSubscriptionMatched,
-                                                                             onSampleLostDeclaration* onSampleLost) {
+OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl_ptr DataReaderListener_New(onDataAvailableDeclaration onDataAvailable,
+                                                                             onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
+                                                                             onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
+                                                                             onSampleRejectedDeclaration onSampleRejected,
+                                                                             onLivelinessChangedDeclaration onLivelinessChanged,
+                                                                             onSubscriptionMatchedDeclaration onSubscriptionMatched,
+                                                                             onSampleLostDeclaration onSampleLost) {
 	return new OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl(onDataAvailable,
                                                                onRequestedDeadlineMissed,
                                                                onRequestedIncompatibleQos,
