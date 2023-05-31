@@ -196,6 +196,9 @@ namespace OpenDDSharp.UnitTest
             var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
+            found = _reader.WaitForPublications(1, 1000);
+            Assert.IsTrue(found);
+
             TestContext.WriteLine(nameof(TestOnDataAvailable) + " entities discovered");
 
             // Write some instances
