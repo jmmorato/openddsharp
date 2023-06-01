@@ -25,6 +25,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 EXTERN_METHOD_EXPORT
 OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr DataWriterListener_New(onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissed,
-																		     onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
-																		     onLivelinessLostDeclaration onLivelinessLost,
-																		     onPublicationMatchedDeclaration onPublicationMatched);
+                                                                             onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
+                                                                             onLivelinessLostDeclaration onLivelinessLost,
+                                                                             onPublicationMatchedDeclaration onPublicationMatched);
+
+EXTERN_METHOD_EXPORT
+void DataWriterListener_Dispose(OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr ptr);

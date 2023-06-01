@@ -28,3 +28,7 @@ OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr DataWriterListener_New(onO
 																 onLivelinessLost,
 																 onPublicationMatched);
 }
+
+void DataWriterListener_Dispose(OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr ptr) {
+  ptr->dispose();
+}

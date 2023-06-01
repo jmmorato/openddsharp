@@ -161,7 +161,7 @@ namespace OpenDDSharp.UnitTest
             _writer = null;
             _reader = null;
             _listener = null;
-            
+
             TestContext.WriteLine($"{TestContext.TestName} test cleanup ended.");
         }
         #endregion
@@ -223,6 +223,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(reader);
             Assert.AreEqual(_reader, reader);
 
+            // Remove the listener to avoid extra messages
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             TestContext.WriteLine(nameof(TestOnDataAvailable) + "has ended");
         }
 
@@ -266,7 +270,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
+            var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
             // Attach to the event
@@ -298,6 +302,10 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, lastInstanceHandle);
+
+            // Remove the listener to avoid extra messages
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
@@ -363,6 +371,10 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, policies.First().Count);
             Assert.AreEqual(11, policies.First().PolicyId);
 
+            // Remove the listener to avoid extra messages
+            result = _reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             _publisher.DeleteDataWriter(otherDataWriter);
         }
 
@@ -373,12 +385,12 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnSampleRejected()
         {
-            int count = 0;
+            var count = 0;
             DataReader dataReader = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
-            InstanceHandle lastInstanceHandle = InstanceHandle.HandleNil;
-            SampleRejectedStatusKind lastReason = SampleRejectedStatusKind.NotRejected;
+            var totalCount = 0;
+            var totalCountChange = 0;
+            var lastInstanceHandle = InstanceHandle.HandleNil;
+            var lastReason = SampleRejectedStatusKind.NotRejected;
 
             // Attach to the event
             _listener.SampleRejected += (r, s) =>
@@ -393,12 +405,20 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Prepare QoS for the test
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            drQos.ResourceLimits.MaxInstances = 1;
-            drQos.ResourceLimits.MaxSamples = 1;
-            drQos.ResourceLimits.MaxSamplesPerInstance = 1;
-            ReturnCode result = _reader.SetQos(drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+                ResourceLimits =
+                {
+                    MaxInstances = 1,
+                    MaxSamples = 1,
+                    MaxSamplesPerInstance = 1,
+                },
+            };
+            var result = _reader.SetQos(drQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Enable entities
@@ -409,15 +429,15 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
+            var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
             // Write two samples of the same instances
-            for (int i = 1; i <= 2; i++)
+            for (var i = 1; i <= 2; i++)
             {
                 result = _dataWriter.Write(new TestStruct
                 {
-                    Id = 1
+                    Id = 1,
                 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -445,23 +465,23 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnLivelinessChanged()
         {
-            int count = 0;
-            using (ManualResetEventSlim evt1 = new ManualResetEventSlim(false))
-            using (ManualResetEventSlim evt2 = new ManualResetEventSlim(false))
+            var count = 0;
+            using (var evt1 = new ManualResetEventSlim(false))
+            using (var evt2 = new ManualResetEventSlim(false))
             {
                 DataReader firstDataReader = null;
-                int firstAliveCount = 0;
-                int firstAliveCountChange = 0;
-                int firstNotAliveCount = 1;
-                int firstNotAliveCountChange = 1;
-                InstanceHandle firstLastPublicationHandle = InstanceHandle.HandleNil;
+                var firstAliveCount = 0;
+                var firstAliveCountChange = 0;
+                var firstNotAliveCount = 1;
+                var firstNotAliveCountChange = 1;
+                var firstLastPublicationHandle = InstanceHandle.HandleNil;
 
                 DataReader secondDataReader = null;
-                int secondAliveCount = 1;
-                int secondAliveCountChange = 1;
-                int secondNotAliveCount = 0;
-                int secondNotAliveCountChange = 0;
-                InstanceHandle secondLastPublicationHandle = InstanceHandle.HandleNil;
+                var secondAliveCount = 1;
+                var secondAliveCountChange = 1;
+                var secondNotAliveCount = 0;
+                var secondNotAliveCountChange = 0;
+                var secondLastPublicationHandle = InstanceHandle.HandleNil;
 
                 // Attach to the event
                 _listener.LivelinessChanged += (r, s) =>
@@ -493,14 +513,24 @@ namespace OpenDDSharp.UnitTest
                 };
 
                 // Prepare the QoS for the test
-                DataReaderQos drQos = new DataReaderQos();
-                drQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
-                ReturnCode result = _reader.SetQos(drQos);
+                var drQos = new DataReaderQos
+                {
+                    Liveliness =
+                    {
+                        LeaseDuration = new Duration { Seconds = 1 },
+                    },
+                };
+                var result = _reader.SetQos(drQos);
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                DataWriterQos dwQos = new DataWriterQos();
-                dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-                dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
+                var dwQos = new DataWriterQos
+                {
+                    Liveliness =
+                    {
+                        Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                        LeaseDuration = new Duration { Seconds = 1 },
+                    },
+                };
                 result = _writer.SetQos(dwQos);
                 Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -512,7 +542,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 // Wait for discovery
-                bool found = _writer.WaitForSubscriptions(1, 1000);
+                var found = _writer.WaitForSubscriptions(1, 1000);
                 Assert.IsTrue(found);
                 found = _reader.WaitForPublications(1, 1000);
                 Assert.IsTrue(found);
@@ -556,21 +586,21 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnSubscriptionMatched()
         {
-            int count = 0;
+            var count = 0;
 
             DataReader firstDataReader = null;
-            int firstTotalCount = 0;
-            int firstTotalCountChange = 0;
-            int firstCurrentCount = 1;
-            int firstCurrentCountChange = 1;
-            InstanceHandle firstHandle = InstanceHandle.HandleNil;
+            var firstTotalCount = 0;
+            var firstTotalCountChange = 0;
+            var firstCurrentCount = 1;
+            var firstCurrentCountChange = 1;
+            var firstHandle = InstanceHandle.HandleNil;
 
             DataReader secondDataReader = null;
-            int secondTotalCount = 1;
-            int secondTotalCountChange = 1;
-            int secondCurrentCount = 0;
-            int secondCurrentCountChange = 0;
-            InstanceHandle secondHandle = InstanceHandle.HandleNil;
+            var secondTotalCount = 1;
+            var secondTotalCountChange = 1;
+            var secondCurrentCount = 0;
+            var secondCurrentCountChange = 0;
+            var secondHandle = InstanceHandle.HandleNil;
 
             // Attach to the event
             _listener.SubscriptionMatched += (r, s) =>
@@ -600,7 +630,7 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Enable entities
-            ReturnCode result = _writer.Enable();
+            var result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _reader.Enable();
@@ -642,12 +672,12 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnSampleLost()
         {
-            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
+            using (var evt = new ManualResetEventSlim(false))
             {
                 DataReader reader = null;
-                int count = 0;
-                int totalCount = 0;
-                int totalCountChange = 0;
+                var count = 0;
+                var totalCount = 0;
+                var totalCountChange = 0;
 
                 // Attach to the event
                 _listener.SampleLost += (r, s) =>
@@ -662,12 +692,23 @@ namespace OpenDDSharp.UnitTest
                 };
 
                 // Prepare QoS for the test
-                DataReaderQos drQos = new DataReaderQos();
-                drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-                drQos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-                drQos.History.Kind = HistoryQosPolicyKind.KeepLastHistoryQos;
-                drQos.History.Depth = 1;
-                ReturnCode result = _reader.SetQos(drQos);
+                var drQos = new DataReaderQos
+                {
+                    Reliability =
+                    {
+                        Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
+                    },
+                    DestinationOrder =
+                    {
+                        Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos,
+                    },
+                    History =
+                    {
+                        Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+                        Depth = 1,
+                    },
+                };
+                var result = _reader.SetQos(drQos);
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 // Enable entities
@@ -682,10 +723,10 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(_writer.WaitForSubscriptions(1, 5_000));
 
                 // Write two samples of the same instances
-                InstanceHandle handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+                var handle = _dataWriter.RegisterInstance(new TestStruct { Id = 1 });
                 Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-                Timestamp time = DateTime.Now.ToTimestamp();
+                var time = DateTime.Now.ToTimestamp();
                 result = _dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
                 Assert.AreEqual(ReturnCode.Ok, result);
 

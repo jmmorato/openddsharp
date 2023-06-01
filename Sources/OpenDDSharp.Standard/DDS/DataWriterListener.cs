@@ -28,33 +28,18 @@ namespace OpenDDSharp.DDS
     /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="DataWriter" />
     /// such that the application can be notified of relevant status changes.
     /// </summary>
-    public abstract class DataWriterListener
+    public abstract class DataWriterListener : IDisposable
     {
         #region Delegates
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnOfferedDeadlineMissedDelegate(IntPtr writer, ref OfferedDeadlineMissedStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnOfferedIncompatibleQosDelegate(IntPtr writer, ref OfferedIncompatibleQosStatusWrapper status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnLivelinessLostDelegate(IntPtr writer, ref LivelinessLostStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnPublicationMatchedDelegate(IntPtr writer, ref PublicationMatchedStatus status);
         #endregion
 
         #region Fields
         private readonly IntPtr _native;
-
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnOfferedDeadlineMissedDelegate _onOfferedDeadlineMissed;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnOfferedIncompatibleQosDelegate _onOfferedIncompatibleQos;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnLivelinessLostDelegate _onLivelinessLost;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnPublicationMatchedDelegate _onPublicationMatched;
+        private bool _disposed;
 
         private GCHandle _gchOfferedDeadlineMissed;
         private GCHandle _gchOfferedIncompatibleQos;
@@ -68,22 +53,22 @@ namespace OpenDDSharp.DDS
         /// </summary>
         protected DataWriterListener()
         {
-            _onOfferedDeadlineMissed = new OnOfferedDeadlineMissedDelegate(OnOfferedDeadlineMissedHandler);
-            _gchOfferedDeadlineMissed = GCHandle.Alloc(_onOfferedDeadlineMissed);
+            OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed = OnOfferedDeadlineMissedHandler;
+            _gchOfferedDeadlineMissed = GCHandle.Alloc(onOfferedDeadlineMissed);
 
-            _onOfferedIncompatibleQos = new OnOfferedIncompatibleQosDelegate(OnOfferedIncompatibleQosHandler);
-            _gchOfferedIncompatibleQos = GCHandle.Alloc(_onOfferedIncompatibleQos);
+            OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos = OnOfferedIncompatibleQosHandler;
+            _gchOfferedIncompatibleQos = GCHandle.Alloc(onOfferedIncompatibleQos);
 
-            _onLivelinessLost = new OnLivelinessLostDelegate(OnLivelinessLostHandler);
-            _gchLivelinessLost = GCHandle.Alloc(_onLivelinessLost);
+            OnLivelinessLostDelegate onLivelinessLost = OnLivelinessLostHandler;
+            _gchLivelinessLost = GCHandle.Alloc(onLivelinessLost);
 
-            _onPublicationMatched = new OnPublicationMatchedDelegate(OnPublicationMatchedHandler);
-            _gchPublicationMatched = GCHandle.Alloc(_onPublicationMatched);
+            OnPublicationMatchedDelegate onPublicationMatched = OnPublicationMatchedHandler;
+            _gchPublicationMatched = GCHandle.Alloc(onPublicationMatched);
 
-            _native = NewDataWriterListener(_onOfferedDeadlineMissed,
-                                            _onOfferedIncompatibleQos,
-                                            _onLivelinessLost,
-                                            _onPublicationMatched);
+            _native = NewDataWriterListener(onOfferedDeadlineMissed,
+                                            onOfferedIncompatibleQos,
+                                            onLivelinessLost,
+                                            onPublicationMatched);
         }
 
         /// <summary>
@@ -91,27 +76,7 @@ namespace OpenDDSharp.DDS
         /// </summary>
         ~DataWriterListener()
         {
-            if (_gchOfferedDeadlineMissed.IsAllocated)
-            {
-                _gchOfferedDeadlineMissed.Free();
-            }
-
-            if (_gchOfferedIncompatibleQos.IsAllocated)
-            {
-                _gchOfferedIncompatibleQos.Free();
-            }
-
-            if (_gchLivelinessLost.IsAllocated)
-            {
-                _gchLivelinessLost.Free();
-            }
-
-            if (_gchPublicationMatched.IsAllocated)
-            {
-                _gchPublicationMatched.Free();
-            }
-
-            MarshalHelper.ReleaseNativePointer(_native);
+            Dispose(false);
         }
         #endregion
 
@@ -226,6 +191,61 @@ namespace OpenDDSharp.DDS
         }
         #endregion
 
+        #region IDisposable Members
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="DataReaderListener" />.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing,
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">True to free managed resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+
+            ReleaseUnmanagedResources();
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            UnsafeNativeMethods.DisposeDataWriterListener(_native);
+
+            if (_gchOfferedDeadlineMissed.IsAllocated)
+            {
+                _gchOfferedDeadlineMissed.Free();
+            }
+
+            if (_gchOfferedIncompatibleQos.IsAllocated)
+            {
+                _gchOfferedIncompatibleQos.Free();
+            }
+
+            if (_gchLivelinessLost.IsAllocated)
+            {
+                _gchLivelinessLost.Free();
+            }
+
+            if (_gchPublicationMatched.IsAllocated)
+            {
+                _gchPublicationMatched.Free();
+            }
+
+            _native.ReleaseNativePointer();
+        }
+        #endregion
+
         #region UnsafeNativeMethods
         /// <summary>
         /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
@@ -241,6 +261,10 @@ namespace OpenDDSharp.DDS
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_Dispose", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr DisposeDataWriterListener(IntPtr native);
         }
         #endregion
     }
