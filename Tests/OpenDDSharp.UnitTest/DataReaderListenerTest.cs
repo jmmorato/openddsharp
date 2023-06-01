@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using JsonWrapper;
@@ -65,7 +66,8 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            TestContext.WriteLine($"{TestContext.TestName} test initialize started.");
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.WriteLine($"{TestContext.TestName} test initialize started.");
 
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
@@ -129,7 +131,7 @@ namespace OpenDDSharp.UnitTest
             _reader = _subscriber.CreateDataReader(_topic, qos, _listener);
             Assert.IsNotNull(_reader);
 
-            TestContext.WriteLine($"{TestContext.TestName} test initialize ended.");
+            Trace.WriteLine($"{TestContext.TestName} test initialize ended.");
         }
 
         /// <summary>
@@ -138,7 +140,7 @@ namespace OpenDDSharp.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            TestContext.WriteLine($"{TestContext.TestName} test cleanup started");
+            Trace.WriteLine($"{TestContext.TestName} test cleanup started");
 
             _publisher?.DeleteDataWriter(_writer);
             _reader?.DeleteContainedEntities();
@@ -162,7 +164,7 @@ namespace OpenDDSharp.UnitTest
             _reader = null;
             _listener = null;
 
-            TestContext.WriteLine($"{TestContext.TestName} test cleanup ended.");
+            Trace.WriteLine($"{TestContext.TestName} test cleanup ended.");
         }
         #endregion
 
@@ -174,7 +176,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnDataAvailable()
         {
-            TestContext.WriteLine(nameof(TestOnDataAvailable) + "has started");
+            Trace.WriteLine(nameof(TestOnDataAvailable) + "has started");
 
             // Attach to the event
             var count = 0;
@@ -199,7 +201,7 @@ namespace OpenDDSharp.UnitTest
             found = _reader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
 
-            TestContext.WriteLine(nameof(TestOnDataAvailable) + " entities discovered");
+            Trace.WriteLine(nameof(TestOnDataAvailable) + " entities discovered");
 
             // Write some instances
             const int total = 5;
@@ -215,7 +217,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            TestContext.WriteLine(nameof(TestOnDataAvailable) + " data written");
+            Trace.WriteLine(nameof(TestOnDataAvailable) + " data written");
 
             Thread.Sleep(100);
 
@@ -227,7 +229,7 @@ namespace OpenDDSharp.UnitTest
             result = _reader.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            TestContext.WriteLine(nameof(TestOnDataAvailable) + "has ended");
+            Trace.WriteLine(nameof(TestOnDataAvailable) + " has ended");
         }
 
         /// <summary>
