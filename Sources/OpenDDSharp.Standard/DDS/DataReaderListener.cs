@@ -33,17 +33,11 @@ namespace OpenDDSharp.DDS
     {
         #region Delegates
         private delegate void OnDataAvailableDelegate(IntPtr reader);
-
         private delegate void OnRequestedDeadlineMissedDelegate(IntPtr reader, ref RequestedDeadlineMissedStatus status);
-
         private delegate void OnRequestedIncompatibleQosDelegate(IntPtr reader, ref RequestedIncompatibleQosStatusWrapper status);
-
         private delegate void OnSampleRejectedDelegate(IntPtr reader, ref SampleRejectedStatus status);
-        
         private delegate void OnLivelinessChangedDelegate(IntPtr reader, ref LivelinessChangedStatus status);
-        
         private delegate void OnSubscriptionMatchedDelegate(IntPtr reader, ref SubscriptionMatchedStatus status);
-        
         private delegate void OnSampleLostDelegate(IntPtr reader, ref SampleLostStatus status);
         #endregion
 

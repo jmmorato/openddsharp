@@ -31,6 +31,9 @@ namespace OpenDDSharp {
 
 			class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DataReaderListener> {
 			private:
+        ACE_Thread_Mutex _lock;
+        bool _disposed = false;
+
         onDataAvailableDeclaration*  _onDataAvailable;
         onRequestedDeadlineMissedDeclaration* _onRequestedDeadlineMissed;
         onRequestedIncompatibleQosDeclaration* _onRequestedIncompatibleQos;
