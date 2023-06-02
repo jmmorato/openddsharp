@@ -20,11 +20,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "PublisherListener.h"
 
 OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr PublisherListener_New(onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissed,
-																		   onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
-																		   onLivelinessLostDeclaration onLivelinessLost,
-																		   onPublicationMatchedDeclaration onPublicationMatched) {
+                                                                           onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
+                                                                           onLivelinessLostDeclaration onLivelinessLost,
+                                                                           onPublicationMatchedDeclaration onPublicationMatched) {
 	return new OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl(onOfferedDeadlineMissed,
-																onOfferedIncompatibleQos,
-																onLivelinessLost,
-																onPublicationMatched);
+                                                              onOfferedIncompatibleQos,
+                                                              onLivelinessLost,
+                                                              onPublicationMatched);
+}
+
+void PublisherListener_Dispose(OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr ptr) {
+  ptr->dispose();
 }

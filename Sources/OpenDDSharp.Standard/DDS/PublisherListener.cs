@@ -28,33 +28,18 @@ namespace OpenDDSharp.DDS
     /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="Publisher" />
     /// such that the application can be notified of relevant status changes.
     /// </summary>
-    public abstract class PublisherListener
+    public abstract class PublisherListener : IDisposable
     {
         #region Delegates
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnOfferedDeadlineMissedDelegate(IntPtr writer, ref OfferedDeadlineMissedStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnOfferedIncompatibleQosDelegate(IntPtr writer, ref OfferedIncompatibleQosStatusWrapper status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnLivelinessLostDelegate(IntPtr writer, ref LivelinessLostStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnPublicationMatchedDelegate(IntPtr writer, ref PublicationMatchedStatus status);
         #endregion
 
         #region Fields
         private readonly IntPtr _native;
-
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnOfferedDeadlineMissedDelegate _onOfferedDeadlineMissed;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnOfferedIncompatibleQosDelegate _onOfferedIncompatibleQos;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnLivelinessLostDelegate _onLivelinessLost;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnPublicationMatchedDelegate _onPublicationMatched;
+        private bool _disposed;
 
         private GCHandle _gchOfferedDeadlineMissed;
         private GCHandle _gchOfferedIncompatibleQos;
@@ -68,22 +53,22 @@ namespace OpenDDSharp.DDS
         /// </summary>
         protected PublisherListener()
         {
-            _onOfferedDeadlineMissed = new OnOfferedDeadlineMissedDelegate(OnOfferedDeadlineMissedHandler);
-            _gchOfferedDeadlineMissed = GCHandle.Alloc(_onOfferedDeadlineMissed);
+            OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed = OnOfferedDeadlineMissedHandler;
+            _gchOfferedDeadlineMissed = GCHandle.Alloc(onOfferedDeadlineMissed);
 
-            _onOfferedIncompatibleQos = new OnOfferedIncompatibleQosDelegate(OnOfferedIncompatibleQosHandler);
-            _gchOfferedIncompatibleQos = GCHandle.Alloc(_onOfferedIncompatibleQos);
+            OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos = OnOfferedIncompatibleQosHandler;
+            _gchOfferedIncompatibleQos = GCHandle.Alloc(onOfferedIncompatibleQos);
 
-            _onLivelinessLost = new OnLivelinessLostDelegate(OnLivelinessLostHandler);
-            _gchLivelinessLost = GCHandle.Alloc(_onLivelinessLost);
+            OnLivelinessLostDelegate onLivelinessLost = OnLivelinessLostHandler;
+            _gchLivelinessLost = GCHandle.Alloc(onLivelinessLost);
 
-            _onPublicationMatched = new OnPublicationMatchedDelegate(OnPublicationMatchedHandler);
-            _gchPublicationMatched = GCHandle.Alloc(_onPublicationMatched);
+            OnPublicationMatchedDelegate onPublicationMatched = OnPublicationMatchedHandler;
+            _gchPublicationMatched = GCHandle.Alloc(onPublicationMatched);
 
-            _native = NewPublisherListener(_onOfferedDeadlineMissed,
-                                           _onOfferedIncompatibleQos,
-                                           _onLivelinessLost,
-                                           _onPublicationMatched);
+            _native = UnsafeNativeMethods.NewPublisherListener(onOfferedDeadlineMissed,
+                onOfferedIncompatibleQos,
+                onLivelinessLost,
+                onPublicationMatched);
         }
 
         /// <summary>
@@ -91,27 +76,7 @@ namespace OpenDDSharp.DDS
         /// </summary>
         ~PublisherListener()
         {
-            if (_gchOfferedDeadlineMissed.IsAllocated)
-            {
-                _gchOfferedDeadlineMissed.Free();
-            }
-
-            if (_gchOfferedIncompatibleQos.IsAllocated)
-            {
-                _gchOfferedIncompatibleQos.Free();
-            }
-
-            if (_gchLivelinessLost.IsAllocated)
-            {
-                _gchLivelinessLost.Free();
-            }
-
-            if (_gchPublicationMatched.IsAllocated)
-            {
-                _gchPublicationMatched.Free();
-            }
-
-            MarshalHelper.ReleaseNativePointer(_native);
+            Dispose(false);
         }
         #endregion
 
@@ -209,20 +174,64 @@ namespace OpenDDSharp.DDS
             OnPublicationMatched(dataWriter, status);
         }
 
-        private IntPtr NewPublisherListener(OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                            OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                            OnLivelinessLostDelegate onLivelinessLost,
-                                            OnPublicationMatchedDelegate onPublicationMatched)
-        {
-            return UnsafeNativeMethods.NewPublisherListener(onOfferedDeadlineMissed,
-                                                              onOfferedIncompatibleQos,
-                                                              onLivelinessLost,
-                                                              onPublicationMatched);
-        }
-
         internal IntPtr ToNative()
         {
             return _native;
+        }
+        #endregion
+
+        #region IDisposable Members
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="DataReaderListener" />.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing,
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">True to free managed resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+
+            ReleaseUnmanagedResources();
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            UnsafeNativeMethods.DisposePublisherListener(_native);
+
+            if (_gchOfferedDeadlineMissed.IsAllocated)
+            {
+                _gchOfferedDeadlineMissed.Free();
+            }
+
+            if (_gchOfferedIncompatibleQos.IsAllocated)
+            {
+                _gchOfferedIncompatibleQos.Free();
+            }
+
+            if (_gchLivelinessLost.IsAllocated)
+            {
+                _gchLivelinessLost.Free();
+            }
+
+            if (_gchPublicationMatched.IsAllocated)
+            {
+                _gchPublicationMatched.Free();
+            }
+
+            _native.ReleaseNativePointer();
         }
         #endregion
 
@@ -241,6 +250,10 @@ namespace OpenDDSharp.DDS
                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "PublisherListener_Dispose", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr DisposePublisherListener(IntPtr native);
         }
         #endregion
     }

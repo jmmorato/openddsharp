@@ -23,6 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DdsDcpsDomainC.h>
 #include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/Service_Participant.h>
+#include "ListenerDelegates.h"
 
 namespace OpenDDSharp {
 	namespace OpenDDS {
@@ -30,16 +31,19 @@ namespace OpenDDSharp {
 
 			class PublisherListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::PublisherListener> {
 			private:
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> _onOfferedDeadlineMissed;
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> _onOfferedIncompatibleQos;
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> _onLivelinessLost;
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> _onPublicationMatched;
+          ACE_Thread_Mutex _lock;
+          bool _disposed = false;
+
+          onOfferedDeadlineMissedDeclaration* _onOfferedDeadlineMissed;
+          onOfferedIncompatibleQosDeclaration* _onOfferedIncompatibleQos;
+          onLivelinessLostDeclaration* _onLivelinessLost;
+          onPublicationMatchedDeclaration* _onPublicationMatched;
 
 			public:
-				PublisherListenerImpl(std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
-									  std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
-									  std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
-									  std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched);
+				PublisherListenerImpl(onOfferedDeadlineMissedDeclaration* onOfferedDeadlineMissed,
+                              onOfferedIncompatibleQosDeclaration* onOfferedIncompatibleQos,
+                              onLivelinessLostDeclaration* onLivelinessLost,
+                              onPublicationMatchedDeclaration* onPublicationMatched);
 
 			protected:
 				virtual ~PublisherListenerImpl();
@@ -52,6 +56,8 @@ namespace OpenDDSharp {
 				virtual void on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status);
 
 				virtual void on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status);
+
+          void dispose();
 			};
 
 			typedef OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl* PublisherListenerImpl_ptr;
