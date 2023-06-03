@@ -28,53 +28,22 @@ namespace OpenDDSharp.DDS
     /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="Subscriber" />
     /// such that the application can be notified of relevant status changes.
     /// </summary>
-    public abstract class SubscriberListener
+    public abstract class SubscriberListener : IDisposable
     {
         #region Delegates
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnDataOnReadersDelegate(IntPtr subscriber);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnDataAvailableDelegate(IntPtr reader);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnRequestedDeadlineMissedDelegate(IntPtr reader, ref RequestedDeadlineMissedStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnRequestedIncompatibleQosDelegate(IntPtr reader, ref RequestedIncompatibleQosStatusWrapper status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSampleRejectedDelegate(IntPtr reader, ref SampleRejectedStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnLivelinessChangedDelegate(IntPtr reader, ref LivelinessChangedStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSubscriptionMatchedDelegate(IntPtr reader, ref SubscriptionMatchedStatus status);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnSampleLostDelegate(IntPtr reader, ref SampleLostStatus status);
         #endregion
 
         #region Fields
         private readonly IntPtr _native;
-
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnDataOnReadersDelegate _onDataOnReaders;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnDataAvailableDelegate _onDataAvailable;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnRequestedDeadlineMissedDelegate _onRequestedDeadlineMissed;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnRequestedIncompatibleQosDelegate _onRequestedIncompatibleQos;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnSampleRejectedDelegate _onSampleRejected;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnLivelinessChangedDelegate _onLivelinessChanged;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnSubscriptionMatchedDelegate _onSubscriptionMatched;
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnSampleLostDelegate _onSampleLost;
+        private bool _disposed;
 
         private GCHandle _gchDataOnReaders;
         private GCHandle _gchDataAvailable;
@@ -92,38 +61,39 @@ namespace OpenDDSharp.DDS
         /// </summary>
         protected SubscriberListener()
         {
-            _onDataOnReaders = new OnDataOnReadersDelegate(OnDataOnReadersHandler);
-            _gchDataOnReaders = GCHandle.Alloc(_onDataOnReaders);
+            OnDataOnReadersDelegate onDataOnReaders = OnDataOnReadersHandler;
+            _gchDataOnReaders = GCHandle.Alloc(onDataOnReaders);
 
-            _onDataAvailable = new OnDataAvailableDelegate(OnDataAvailableHandler);
-            _gchDataAvailable = GCHandle.Alloc(_onDataAvailable);
+            OnDataAvailableDelegate onDataAvailable = OnDataAvailableHandler;
+            _gchDataAvailable = GCHandle.Alloc(onDataAvailable);
 
-            _onRequestedDeadlineMissed = new OnRequestedDeadlineMissedDelegate(OnRequestedDeadlineMissedHandler);
-            _gchRequestedDeadlineMissed = GCHandle.Alloc(_onRequestedDeadlineMissed);
+            OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed = OnRequestedDeadlineMissedHandler;
+            _gchRequestedDeadlineMissed = GCHandle.Alloc(onRequestedDeadlineMissed);
 
-            _onRequestedIncompatibleQos = new OnRequestedIncompatibleQosDelegate(OnRequestedIncompatibleQosHandler);
-            _gchRequestedIncompatibleQos = GCHandle.Alloc(_onRequestedIncompatibleQos);
+            OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos = OnRequestedIncompatibleQosHandler;
+            _gchRequestedIncompatibleQos = GCHandle.Alloc(onRequestedIncompatibleQos);
 
-            _onSampleRejected = new OnSampleRejectedDelegate(OnSampleRejectedHandler);
-            _gchSampleRejected = GCHandle.Alloc(_onSampleRejected);
+            OnSampleRejectedDelegate onSampleRejected = OnSampleRejectedHandler;
+            _gchSampleRejected = GCHandle.Alloc(onSampleRejected);
 
-            _onLivelinessChanged = new OnLivelinessChangedDelegate(OnLivelinessChangedHandler);
-            _gchLivelinessChanged = GCHandle.Alloc(_onLivelinessChanged);
+            OnLivelinessChangedDelegate onLivelinessChanged = OnLivelinessChangedHandler;
+            _gchLivelinessChanged = GCHandle.Alloc(onLivelinessChanged);
 
-            _onSubscriptionMatched = new OnSubscriptionMatchedDelegate(OnSubscriptionMatchedHandler);
-            _gchSubscriptionMatched = GCHandle.Alloc(_onSubscriptionMatched);
+            OnSubscriptionMatchedDelegate onSubscriptionMatched = OnSubscriptionMatchedHandler;
+            _gchSubscriptionMatched = GCHandle.Alloc(onSubscriptionMatched);
 
-            _onSampleLost = new OnSampleLostDelegate(OnSampleLostHandler);
-            _gchSampleLost = GCHandle.Alloc(_onSampleLost);
+            OnSampleLostDelegate onSampleLost = OnSampleLostHandler;
+            _gchSampleLost = GCHandle.Alloc(onSampleLost);
 
-            _native = NewSubscriberListener(_onDataOnReaders,
-                                            _onDataAvailable,
-                                            _onRequestedDeadlineMissed,
-                                            _onRequestedIncompatibleQos,
-                                            _onSampleRejected,
-                                            _onLivelinessChanged,
-                                            _onSubscriptionMatched,
-                                            _onSampleLost);
+
+            _native = UnsafeNativeMethods.NewSubscriberListener(onDataOnReaders,
+                                                                onDataAvailable,
+                                                                onRequestedDeadlineMissed,
+                                                                onRequestedIncompatibleQos,
+                                                                onSampleRejected,
+                                                                onLivelinessChanged,
+                                                                onSubscriptionMatched,
+                                                                onSampleLost);
         }
 
         /// <summary>
@@ -131,47 +101,7 @@ namespace OpenDDSharp.DDS
         /// </summary>
         ~SubscriberListener()
         {
-            if (_gchDataOnReaders.IsAllocated)
-            {
-                _gchDataOnReaders.Free();
-            }
-
-            if (_gchDataAvailable.IsAllocated)
-            {
-                _gchDataAvailable.Free();
-            }
-
-            if (_gchRequestedDeadlineMissed.IsAllocated)
-            {
-                _gchRequestedDeadlineMissed.Free();
-            }
-
-            if (_gchRequestedIncompatibleQos.IsAllocated)
-            {
-                _gchRequestedIncompatibleQos.Free();
-            }
-
-            if (_gchSampleRejected.IsAllocated)
-            {
-                _gchSampleRejected.Free();
-            }
-
-            if (_gchLivelinessChanged.IsAllocated)
-            {
-                _gchLivelinessChanged.Free();
-            }
-
-            if (_gchSubscriptionMatched.IsAllocated)
-            {
-                _gchSubscriptionMatched.Free();
-            }
-
-            if (_gchSampleLost.IsAllocated)
-            {
-                _gchSampleLost.Free();
-            }
-
-            MarshalHelper.ReleaseNativePointer(_native);
+            Dispose(false);
         }
         #endregion
 
@@ -354,28 +284,84 @@ namespace OpenDDSharp.DDS
             OnSampleLost(dataReader, status);
         }
 
-        private IntPtr NewSubscriberListener(OnDataOnReadersDelegate onDataOnReaders,
-                                             OnDataAvailableDelegate onDataAvailabe,
-                                             OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
-                                             OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
-                                             OnSampleRejectedDelegate onSampleRejected,
-                                             OnLivelinessChangedDelegate onLivelinessChanged,
-                                             OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                             OnSampleLostDelegate onSampleLost)
-        {
-            return UnsafeNativeMethods.NewSubscriberListener(onDataOnReaders,
-                                                             onDataAvailabe,
-                                                             onRequestedDeadlineMissed,
-                                                             onRequestedIncompatibleQos,
-                                                             onSampleRejected,
-                                                             onLivelinessChanged,
-                                                             onSubscriptionMatched,
-                                                             onSampleLost);
-        }
-
         internal IntPtr ToNative()
         {
             return _native;
+        }
+        #endregion
+
+        #region IDisposable Members
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="DataReaderListener" />.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing,
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">True to free managed resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+
+            ReleaseUnmanagedResources();
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            UnsafeNativeMethods.DisposeSubscriberListener(_native);
+
+            if (_gchDataOnReaders.IsAllocated)
+            {
+                _gchDataOnReaders.Free();
+            }
+
+            if (_gchDataAvailable.IsAllocated)
+            {
+                _gchDataAvailable.Free();
+            }
+
+            if (_gchRequestedDeadlineMissed.IsAllocated)
+            {
+                _gchRequestedDeadlineMissed.Free();
+            }
+
+            if (_gchRequestedIncompatibleQos.IsAllocated)
+            {
+                _gchRequestedIncompatibleQos.Free();
+            }
+
+            if (_gchSampleRejected.IsAllocated)
+            {
+                _gchSampleRejected.Free();
+            }
+
+            if (_gchLivelinessChanged.IsAllocated)
+            {
+                _gchLivelinessChanged.Free();
+            }
+
+            if (_gchSubscriptionMatched.IsAllocated)
+            {
+                _gchSubscriptionMatched.Free();
+            }
+
+            if (_gchSampleLost.IsAllocated)
+            {
+                _gchSampleLost.Free();
+            }
+
+            _native.ReleaseNativePointer();
         }
         #endregion
 
@@ -391,13 +377,17 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "SubscriberListener_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewSubscriberListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataOnReadersDelegate onDataOnReaders,
-                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvalaible,
+                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvailable,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
                                                               [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "SubscriberListener_Dispose", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr DisposeSubscriberListener(IntPtr native);
         }
         #endregion
     }

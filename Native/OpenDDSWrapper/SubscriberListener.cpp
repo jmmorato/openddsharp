@@ -36,3 +36,7 @@ OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onD
                                                                onSubscriptionMatched,
                                                                onSampleLost);
 }
+
+void SubscriberListener_Dispose(OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr ptr) {
+  ptr->dispose();
+}

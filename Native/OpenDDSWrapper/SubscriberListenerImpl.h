@@ -23,6 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DdsDcpsDomainC.h>
 #include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/Service_Participant.h>
+#include "ListenerDelegates.h"
 
 namespace OpenDDSharp {
 	namespace OpenDDS {
@@ -30,24 +31,27 @@ namespace OpenDDSharp {
 
 			class SubscriberListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::SubscriberListener> {
 			private:
-				std::function<void(::DDS::Entity_ptr)> _onDataOnReaders;
-				std::function<void(::DDS::Entity_ptr)> _onDataAvalaible;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> _onRequestedDeadlineMissed;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> _onRequestedIncompatibleQos;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> _onSampleRejected;
-				std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> _onLivelinessChanged;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> _onSubscriptionMatched;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> _onSampleLost;
+          ACE_Thread_Mutex _lock;
+          bool _disposed = false;
+
+          onDataOnReadersDeclaration* _onDataOnReaders;
+          onDataAvailableDeclaration*  _onDataAvailable;
+          onRequestedDeadlineMissedDeclaration* _onRequestedDeadlineMissed;
+          onRequestedIncompatibleQosDeclaration* _onRequestedIncompatibleQos;
+          onSampleRejectedDeclaration* _onSampleRejected;
+          onLivelinessChangedDeclaration* _onLivelinessChanged;
+          onSubscriptionMatchedDeclaration* _onSubscriptionMatched;
+          onSampleLostDeclaration* _onSampleLost;
 
 			public:
-				SubscriberListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataOnReaders,
-									   std::function<void(::DDS::Entity_ptr)> onDataAvalaible,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost);
+				SubscriberListenerImpl(onDataOnReadersDeclaration* onDataOnReaders,
+                               onDataAvailableDeclaration* onDataAvailable,
+                               onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
+                               onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
+                               onSampleRejectedDeclaration* onSampleRejected,
+                               onLivelinessChangedDeclaration* onLivelinessChanged,
+                               onSubscriptionMatchedDeclaration* onSubscriptionMatched,
+                               onSampleLostDeclaration* onSampleLost);
 
 			protected:
 				virtual ~SubscriberListenerImpl();
@@ -68,6 +72,8 @@ namespace OpenDDSharp {
 				virtual void on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
 
 				virtual void on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
+
+        void dispose();
 			};
 
 			typedef OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl* SubscriberListenerImpl_ptr;

@@ -32,3 +32,6 @@ OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onD
                                                                              onLivelinessChangedDeclaration onLivelinessChanged,
                                                                              onSubscriptionMatchedDeclaration onSubscriptionMatched,
                                                                              onSampleLostDeclaration onSampleLost);
+
+EXTERN_METHOD_EXPORT
+void SubscriberListener_Dispose(OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr ptr);
