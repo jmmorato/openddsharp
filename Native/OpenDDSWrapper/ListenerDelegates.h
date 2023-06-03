@@ -24,7 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef _WIN32
 // Subscriber delegates.
-typedef void(__stdcall* onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
+typedef void(__stdcall onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
 
 // DataReader delegates.
 typedef void(__stdcall onDataAvailableDeclaration)(::DDS::Entity_ptr reader);
@@ -42,7 +42,7 @@ typedef void(__stdcall onLivelinessLostDeclaration)(::DDS::Entity_ptr writer, co
 typedef void(__stdcall onPublicationMatchedDeclaration)(::DDS::Entity_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 
 // Topic delegates
-typedef void(__stdcall* onInconsistentTopicDeclaration)(::DDS::TopicDescription_ptr topic, const ::DDS::InconsistentTopicStatus& status);
+typedef void(__stdcall onInconsistentTopicDeclaration)(::DDS::TopicDescription_ptr topic, const ::DDS::InconsistentTopicStatus& status);
 #else
 // Subscriber delegates.
 typedef void(onDataOnReadersDeclaration)(::DDS::Entity_ptr subscriber);
