@@ -214,6 +214,7 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO"
         LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/lib:."
+        MONO_THREADS_SUSPEND: "preemptive"
 
     - name: Test Report
       uses: dorny/test-reporter@v1
