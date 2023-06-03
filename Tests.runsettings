@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
-
+  <RunConfiguration>
+    <DisableAppDomain>True</DisableAppDomain>
+    <ExecutionThreadApartmentState>MTA</ExecutionThreadApartmentState>
+  </RunConfiguration>
   <MSTest>
     <!-- Do not run the test assemblies in parallel since they could interfere each other. -->
     <DisableParallelization>true</DisableParallelization>
