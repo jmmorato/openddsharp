@@ -22,3 +22,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr TopicListener_New(onInconsistentTopicDeclaration onInconsistentTopic) {	
 	return new OpenDDSharp::OpenDDS::DDS::TopicListenerImpl(onInconsistentTopic);;
 }
+
+void TopicListener_Dispose(OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr ptr) {
+  ptr->dispose();
+}

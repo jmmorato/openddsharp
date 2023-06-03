@@ -17,7 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using System.Diagnostics;
+
 using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -63,9 +63,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _listener = new MyTopicListener();
@@ -75,11 +75,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(TestContext.TestName, _topic.Name);
             Assert.AreEqual(typeName, _topic.TypeName);
 
-            PublisherQos pQos = new PublisherQos();
-            pQos.EntityFactory.AutoenableCreatedEntities = false;
-            pQos.Presentation.OrderedAccess = true;
-            pQos.Presentation.CoherentAccess = true;
-            pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            var pQos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                Presentation =
+                {
+                    OrderedAccess = true,
+                    CoherentAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos,
+                },
+            };
             _publisher = _participant.CreatePublisher(pQos);
             Assert.IsNotNull(_publisher);
 
@@ -98,7 +106,10 @@ namespace OpenDDSharp.UnitTest
             _participant?.DeletePublisher(_publisher);
             _participant?.DeleteTopic(_topic);
             _participant?.DeleteContainedEntities();
+
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            _listener.Dispose();
 
             _participant = null;
             _publisher = null;
@@ -115,14 +126,14 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnInconsistentTopic()
         {
-            using (ManualResetEventSlim evt = new ManualResetEventSlim(false))
+            using (var evt = new ManualResetEventSlim(false))
             {
                 Topic topic = null;
-                int totalCount = 0;
-                int totalCountChange = 0;
+                var totalCount = 0;
+                var totalCountChange = 0;
 
                 // Attach to the event
-                int count = 0;
+                var count = 0;
                 _listener.InconsistentTopic += (t, s) =>
                 {
                     topic = t;
@@ -134,14 +145,14 @@ namespace OpenDDSharp.UnitTest
                 };
 
                 // Enable entities
-                ReturnCode result = _writer.Enable();
+                var result = _writer.Enable();
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                SupportProcessHelper supportProcess = new SupportProcessHelper(TestContext);
-                Process process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
+                var supportProcess = new SupportProcessHelper(TestContext);
+                var process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
                 // Wait the signal
-                bool wait = evt.Wait(20000);
+                var wait = evt.Wait(20000);
                 Assert.IsTrue(wait);
                 Assert.AreSame(_topic, topic);
                 Assert.AreEqual(1, totalCount);

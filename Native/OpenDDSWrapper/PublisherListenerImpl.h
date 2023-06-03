@@ -57,7 +57,7 @@ namespace OpenDDSharp {
 
 				virtual void on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status);
 
-          void dispose();
+        void dispose();
 			};
 
 			typedef OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl* PublisherListenerImpl_ptr;

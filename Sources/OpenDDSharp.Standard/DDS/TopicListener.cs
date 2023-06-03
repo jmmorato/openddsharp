@@ -28,18 +28,15 @@ namespace OpenDDSharp.DDS
     /// Abstract class that can be implemented by an application-provided class and then registered with the <see cref="Topic" />
     /// such that the application can be notified of relevant status changes.
     /// </summary>
-    public abstract class TopicListener
+    public abstract class TopicListener : IDisposable
     {
         #region Delegates
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnInconsistentTopicDelegate(IntPtr topic, ref InconsistentTopicStatus status);
         #endregion
 
         #region Fields
         private readonly IntPtr _native;
-
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        private readonly OnInconsistentTopicDelegate _onInconsistentTopic;
+        private bool _disposed;
 
         private GCHandle _gchInconsistentTopic;
         #endregion
@@ -50,10 +47,10 @@ namespace OpenDDSharp.DDS
         /// </summary>
         protected TopicListener()
         {
-            _onInconsistentTopic = new OnInconsistentTopicDelegate(OnInconsistentTopicHandler);
-            _gchInconsistentTopic = GCHandle.Alloc(_onInconsistentTopic);
+            OnInconsistentTopicDelegate onInconsistentTopic = OnInconsistentTopicHandler;
+            _gchInconsistentTopic = GCHandle.Alloc(onInconsistentTopic);
 
-            _native = NewTopicListener(_onInconsistentTopic);
+            _native = UnsafeNativeMethods.NewTopicListener(onInconsistentTopic);
         }
 
         /// <summary>
@@ -61,12 +58,7 @@ namespace OpenDDSharp.DDS
         /// </summary>
         ~TopicListener()
         {
-            if (_gchInconsistentTopic.IsAllocated)
-            {
-                _gchInconsistentTopic.Free();
-            }
-
-            MarshalHelper.ReleaseNativePointer(_native);
+            Dispose(false);
         }
         #endregion
 
@@ -81,7 +73,7 @@ namespace OpenDDSharp.DDS
         public abstract void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status);
 
         private void OnInconsistentTopicHandler(IntPtr topic, ref InconsistentTopicStatus status)
-        {            
+        {
             Entity entity = EntityManager.Instance.Find(topic);
 
             Topic t = null;
@@ -93,14 +85,49 @@ namespace OpenDDSharp.DDS
             OnInconsistentTopic(t, status);
         }
 
-        private IntPtr NewTopicListener(OnInconsistentTopicDelegate onInconsistentTopic)
-        {
-            return UnsafeNativeMethods.NewTopicListener(onInconsistentTopic);
-        }
-
         internal IntPtr ToNative()
         {
             return _native;
+        }
+        #endregion
+
+        #region IDisposable Members
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="DataReaderListener" />.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing,
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">True to free managed resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+
+            ReleaseUnmanagedResources();
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            UnsafeNativeMethods.DisposeTopicListener(_native);
+
+            if (_gchInconsistentTopic.IsAllocated)
+            {
+                _gchInconsistentTopic.Free();
+            }
+
+            _native.ReleaseNativePointer();
         }
         #endregion
 
@@ -116,6 +143,10 @@ namespace OpenDDSharp.DDS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr NewTopicListener([MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_Dispose", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr DisposeTopicListener(IntPtr native);
         }
         #endregion
     }

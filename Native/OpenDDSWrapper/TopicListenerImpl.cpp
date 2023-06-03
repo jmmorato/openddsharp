@@ -19,15 +19,37 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "TopicListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(std::function<void(::DDS::TopicDescription_ptr, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic) {
+::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(onInconsistentTopicDeclaration onInconsistentTopic) {
 	_onInconsistentTopic = onInconsistentTopic;
 }
 
 ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::~TopicListenerImpl() {
-	_onInconsistentTopic = NULL;
+  dispose();
 };
 
+void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::dispose() {
+  _lock.acquire();
+
+  if (_disposed) {
+    return;
+  }
+
+  _onInconsistentTopic = NULL;
+
+  _disposed = true;
+
+  _lock.release();
+}
+
 void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
+  _lock.acquire();
+
+  if (_disposed) {
+    return;
+  }
+
+  _lock.release();
+
 	if (_onInconsistentTopic) {
 		_onInconsistentTopic(static_cast< ::DDS::TopicDescription_ptr>(topic), status);
 	}
