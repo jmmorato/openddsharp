@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "DomainParticipantListener.h"
 
 OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantListener_New(onDataOnReadersDeclaration onDataOnReaders,
-                                                                                           onDataAvailableDeclaration onDataAvalaible,
+                                                                                           onDataAvailableDeclaration onDataAvailable,
                                                                                            onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
                                                                                            onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
                                                                                            onSampleRejectedDeclaration onSampleRejected,
@@ -32,17 +32,21 @@ OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantLi
                                                                                            onLivelinessLostDeclaration onLivelinessLost,
                                                                                            onPublicationMatchedDeclaration onPublicationMatched,
                                                                                            onInconsistentTopicDeclaration onInconsistentTopic) {
-	return new OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl(onDataOnReaders, 
-																	    onDataAvalaible,
-																		onRequestedDeadlineMissed,
-																		onRequestedIncompatibleQos,
-																		onSampleRejected,
-																		onLivelinessChanged,
-																		onSubscriptionMatched,
-																		onSampleLost,
-																		onOfferedDeadlineMissed,
-																        onOfferedIncompatibleQos,
-																		onLivelinessLost,
-																		onPublicationMatched,
-																		onInconsistentTopic);
+	return new OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl(onDataOnReaders,
+                                                                      onDataAvailable,
+                                                                      onRequestedDeadlineMissed,
+                                                                      onRequestedIncompatibleQos,
+                                                                      onSampleRejected,
+                                                                      onLivelinessChanged,
+                                                                      onSubscriptionMatched,
+                                                                      onSampleLost,
+                                                                      onOfferedDeadlineMissed,
+                                                                      onOfferedIncompatibleQos,
+                                                                      onLivelinessLost,
+                                                                      onPublicationMatched,
+                                                                      onInconsistentTopic);
+}
+
+void DomainParticipantListener_Dispose(OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr ptr) {
+  ptr->dispose();
 }

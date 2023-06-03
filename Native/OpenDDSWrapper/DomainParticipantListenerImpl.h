@@ -23,6 +23,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DdsDcpsDomainC.h>
 #include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/Service_Participant.h>
+#include "ListenerDelegates.h"
 
 namespace OpenDDSharp {
 	namespace OpenDDS {
@@ -30,36 +31,39 @@ namespace OpenDDSharp {
 
 			class DomainParticipantListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DomainParticipantListener> {
 			private:
-				std::function<void(::DDS::Entity_ptr)> _onDataOnReaders;
-				std::function<void(::DDS::Entity_ptr)> _onDataAvalaible;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> _onRequestedDeadlineMissed;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> _onRequestedIncompatibleQos;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> _onSampleRejected;
-				std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> _onLivelinessChanged;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> _onSubscriptionMatched;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> _onSampleLost;
+        ACE_Thread_Mutex _lock;
+        bool _disposed = false;
 
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> _onOfferedDeadlineMissed;
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> _onOfferedIncompatibleQos;
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> _onLivelinessLost;
-				std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> _onPublicationMatched;
+        onDataOnReadersDeclaration* _onDataOnReaders;
+        onDataAvailableDeclaration*  _onDataAvailable;
+        onRequestedDeadlineMissedDeclaration* _onRequestedDeadlineMissed;
+        onRequestedIncompatibleQosDeclaration* _onRequestedIncompatibleQos;
+        onSampleRejectedDeclaration* _onSampleRejected;
+        onLivelinessChangedDeclaration* _onLivelinessChanged;
+        onSubscriptionMatchedDeclaration* _onSubscriptionMatched;
+        onSampleLostDeclaration* _onSampleLost;
 
-				std::function<void(::DDS::TopicDescription_ptr topic, ::DDS::InconsistentTopicStatus status)> _onInconsistentTopic;
+        onOfferedDeadlineMissedDeclaration* _onOfferedDeadlineMissed;
+        onOfferedIncompatibleQosDeclaration* _onOfferedIncompatibleQos;
+        onLivelinessLostDeclaration* _onLivelinessLost;
+        onPublicationMatchedDeclaration* _onPublicationMatched;
+
+        onInconsistentTopicDeclaration* _onInconsistentTopic;
 
 			public:
-				DomainParticipantListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataOnReaders,
-											  std::function<void(::DDS::Entity_ptr)> onDataAvalaible,
-											  std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
-											  std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
-											  std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
-											  std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
-											  std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-											  std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost,
-											  std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedDeadlineMissedStatus status)> onOfferedDeadlineMissed,
-											  std::function<void(::DDS::Entity_ptr writer, ::DDS::OfferedIncompatibleQosStatus status)> onOfferedIncompatibleQos,
-											  std::function<void(::DDS::Entity_ptr writer, ::DDS::LivelinessLostStatus status)> onLivelinessLost,
-											  std::function<void(::DDS::Entity_ptr writer, ::DDS::PublicationMatchedStatus status)> onPublicationMatched,
-											  std::function<void(::DDS::TopicDescription_ptr topic, ::DDS::InconsistentTopicStatus status)> onInconsistentTopic);
+				DomainParticipantListenerImpl(onDataOnReadersDeclaration* onDataOnReaders,
+                                      onDataAvailableDeclaration* onDataAvailable,
+                                      onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
+                                      onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
+                                      onSampleRejectedDeclaration* onSampleRejected,
+                                      onLivelinessChangedDeclaration* onLivelinessChanged,
+                                      onSubscriptionMatchedDeclaration* onSubscriptionMatched,
+                                      onSampleLostDeclaration* onSampleLost,
+                                      onOfferedDeadlineMissedDeclaration* onOfferedDeadlineMissed,
+                                      onOfferedIncompatibleQosDeclaration* onOfferedIncompatibleQos,
+                                      onLivelinessLostDeclaration* onLivelinessLost,
+                                      onPublicationMatchedDeclaration* onPublicationMatched,
+                                      onInconsistentTopicDeclaration* onInconsistentTopic);
 
 			protected:
 				virtual ~DomainParticipantListenerImpl();
@@ -93,6 +97,8 @@ namespace OpenDDSharp {
 
 				/* Topic methods */
 				virtual void on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
+
+        void dispose();
 			};
 
 			typedef OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl* DomainParticipantListenerImpl_ptr;

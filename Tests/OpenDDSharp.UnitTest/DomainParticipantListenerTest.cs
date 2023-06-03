@@ -34,7 +34,6 @@ namespace OpenDDSharp.UnitTest
     /// <see cref="DomainParticipantListener"/> unit test class.
     /// </summary>
     [TestClass]
-    [Ignore("Not working in mono linux")]
     public class DomainParticipantListenerTest
     {
         #region Constants
@@ -123,7 +122,10 @@ namespace OpenDDSharp.UnitTest
             _participant?.DeleteSubscriber(_subscriber);
             _participant?.DeleteTopic(_topic);
             _participant?.DeleteContainedEntities();
+
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            _listener.Dispose();
 
             _participant = null;
             _publisher = null;
