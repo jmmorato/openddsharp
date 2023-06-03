@@ -253,11 +253,11 @@ module JsonWrapper {
         // Or the compiler version used (clang14).
         // SEGV received. Reproducible with OpenDDS HelloWorld test.
         // TO BE REPORTED
-        long double LongDoubleField;
-        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
-        LongDoubleArrayType LongDoubleArrayField;
-		LongDoubleMultiArrayType LongDoubleMultiArrayField;
+//        long double LongDoubleField;
+//        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+//        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+//        LongDoubleArrayType LongDoubleArrayField;
+//		  LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 
 	@topic
