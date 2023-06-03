@@ -1,9 +1,7 @@
 ﻿<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64'">true</IsARM64>
-    <TargetFrameworks Condition="'$(IsARM64)'!='true'">net462;net47;net471;net472;net48;netstandard2.0;net481;net6.0;net7.0;</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsARM64)'=='true'">net6.0;net7.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0;</TargetFrameworks>
     <LangVersion>7.3</LangVersion>
     <Platforms>x64;x86;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
