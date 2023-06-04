@@ -713,6 +713,21 @@ namespace OpenDDSharp.UnitTest
             // Check the received instances
             Assert.AreEqual(10, subscriberReceived);
             Assert.AreEqual(5, readerReceived);
+
+            // Remove the listener to avoid extra messages
+            result = writer.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = reader.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            reader.DeleteContainedEntities();
+            subscriber.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteTopic(topic);
         }
 
         /// <summary>

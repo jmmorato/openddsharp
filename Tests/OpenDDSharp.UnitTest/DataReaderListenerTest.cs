@@ -65,9 +65,6 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-            Trace.WriteLine($"{TestContext.TestName} test initialize started.");
-
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
@@ -129,8 +126,6 @@ namespace OpenDDSharp.UnitTest
             _listener = new MyDataReaderListener();
             _reader = _subscriber.CreateDataReader(_topic, qos, _listener);
             Assert.IsNotNull(_reader);
-
-            Trace.WriteLine($"{TestContext.TestName} test initialize ended.");
         }
 
         /// <summary>
@@ -139,9 +134,7 @@ namespace OpenDDSharp.UnitTest
         [TestCleanup]
         public void TestCleanup()
         {
-            Trace.WriteLine($"{TestContext.TestName} test cleanup started");
-
-            // _publisher?.DeleteDataWriter(_writer);
+            _publisher?.DeleteDataWriter(_writer);
             _reader?.DeleteContainedEntities();
             _publisher?.DeleteContainedEntities();
             _subscriber?.DeleteDataReader(_reader);
@@ -162,8 +155,6 @@ namespace OpenDDSharp.UnitTest
             _writer = null;
             _reader = null;
             _listener = null;
-
-            Trace.WriteLine($"{TestContext.TestName} test cleanup ended.");
         }
         #endregion
 
@@ -175,8 +166,6 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnDataAvailable()
         {
-            Trace.WriteLine(nameof(TestOnDataAvailable) + "has started");
-
             // Attach to the event
             var count = 0;
             DataReader reader = null;
@@ -200,8 +189,6 @@ namespace OpenDDSharp.UnitTest
             found = _reader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
 
-            Trace.WriteLine(nameof(TestOnDataAvailable) + " entities discovered");
-
             // Write some instances
             const int total = 5;
             for (var i = 1; i <= total; i++)
@@ -216,8 +203,6 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            Trace.WriteLine(nameof(TestOnDataAvailable) + " data written");
-
             Thread.Sleep(100);
 
             Assert.AreEqual(total, count);
@@ -227,8 +212,6 @@ namespace OpenDDSharp.UnitTest
             // Remove the listener to avoid extra messages
             result = _reader.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            Trace.WriteLine(nameof(TestOnDataAvailable) + " has ended");
         }
 
         /// <summary>
