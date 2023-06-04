@@ -647,7 +647,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNotifyDataReaders()
         {
-            using (var evt = new ManualResetEventSlim(false))
+            using (var evtReader = new ManualResetEventSlim(false))
+            using (var evtSubscriber = new ManualResetEventSlim(false))
             {
                 // Initialize entities
                 TestStructTypeSupport support = new TestStructTypeSupport();
@@ -676,10 +677,7 @@ namespace OpenDDSharp.UnitTest
                 subListener.DataOnReaders += (sub) =>
                 {
                     subscriberReceived++;
-                    if (subscriberReceived % 2 == 0)
-                    {
-                        sub?.NotifyDataReaders();
-                    }
+                    evtSubscriber?.Set();
                 };
                 Subscriber subscriber = _participant.CreateSubscriber(null, subListener);
                 Assert.IsNotNull(subscriber);
@@ -690,7 +688,7 @@ namespace OpenDDSharp.UnitTest
                     readerReceived++;
                     if (readerReceived == 5)
                     {
-                        evt.Set();
+                        evtReader.Set();
                     }
                 };
                 DataReader reader = subscriber.CreateDataReader(topic, null, readListener);
@@ -713,9 +711,16 @@ namespace OpenDDSharp.UnitTest
                         Seconds = 5,
                     });
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    Assert.IsTrue(evtSubscriber.Wait(5_000));
+                    evtSubscriber.Reset();
+                    if (subscriberReceived % 2 == 0)
+                    {
+                        subscriber?.NotifyDataReaders();
+                    }
                 }
 
-                Assert.IsTrue(evt.Wait(5_000));
+                Assert.IsTrue(evtReader.Wait(5_000));
 
                 // Check the received instances
                 Assert.AreEqual(10, subscriberReceived);
