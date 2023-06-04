@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -646,88 +647,98 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNotifyDataReaders()
         {
-            // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
-            Assert.IsNotNull(topic);
-            Assert.IsNull(topic.Listener);
-            Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
-            Assert.AreEqual(typeName, topic.TypeName);
-
-            Publisher publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
-            DataWriter writer = publisher.CreateDataWriter(topic);
-            Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
-
-            int subscriberReceived = 0;
-            int readerReceived = 0;
-
-            // Create the Subscriber and the DataReader with the corresponding listeners
-            MySubscriberListener subListener = new MySubscriberListener();
-            subListener.DataOnReaders += (sub) =>
+            using (var evt = new ManualResetEventSlim(false))
             {
-                subscriberReceived++;
-                if (subscriberReceived % 2 == 0)
+                // Initialize entities
+                TestStructTypeSupport support = new TestStructTypeSupport();
+                string typeName = support.GetTypeName();
+                ReturnCode result = support.RegisterType(_participant, typeName);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+                Assert.IsNotNull(topic);
+                Assert.IsNull(topic.Listener);
+                Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
+                Assert.AreEqual(typeName, topic.TypeName);
+
+                Publisher publisher = _participant.CreatePublisher();
+                Assert.IsNotNull(publisher);
+
+                DataWriter writer = publisher.CreateDataWriter(topic);
+                Assert.IsNotNull(writer);
+                TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+
+                int subscriberReceived = 0;
+                int readerReceived = 0;
+
+                // Create the Subscriber and the DataReader with the corresponding listeners
+                MySubscriberListener subListener = new MySubscriberListener();
+                subListener.DataOnReaders += (sub) =>
                 {
-                    sub.NotifyDataReaders();
+                    subscriberReceived++;
+                    if (subscriberReceived % 2 == 0)
+                    {
+                        sub?.NotifyDataReaders();
+                    }
+                };
+                Subscriber subscriber = _participant.CreateSubscriber(null, subListener);
+                Assert.IsNotNull(subscriber);
+
+                MyDataReaderListener readListener = new MyDataReaderListener();
+                readListener.DataAvailable += (read) =>
+                {
+                    readerReceived++;
+                    if (readerReceived == 5)
+                    {
+                        evt.Set();
+                    }
+                };
+                DataReader reader = subscriber.CreateDataReader(topic, null, readListener);
+                Assert.IsNotNull(reader);
+
+                Assert.IsTrue(writer.WaitForSubscriptions(1, 5000));
+                Assert.IsTrue(reader.WaitForPublications(1, 5000));
+
+                // Publish instances
+                for (int i = 0; i < 10; i++)
+                {
+                    dataWriter.Write(new TestStruct
+                    {
+                        Id = i,
+                        ShortField = (short)i,
+                    });
+
+                    var ret = dataWriter.WaitForAcknowledgments(new Duration
+                    {
+                        Seconds = 5,
+                    });
+                    Assert.AreEqual(ReturnCode.Ok, ret);
                 }
-            };
-            Subscriber subscriber = _participant.CreateSubscriber(null, subListener);
-            Assert.IsNotNull(subscriber);
 
-            MyDataReaderListener readListener = new MyDataReaderListener();
-            readListener.DataAvailable += (read) =>
-            {
-                readerReceived++;
-            };
-            DataReader reader = subscriber.CreateDataReader(topic, null, readListener);
-            Assert.IsNotNull(reader);
+                Assert.IsTrue(evt.Wait(5_000));
 
-            Assert.IsTrue(writer.WaitForSubscriptions(1, 5000));
-            Assert.IsTrue(reader.WaitForPublications(1, 5000));
+                // Check the received instances
+                Assert.AreEqual(10, subscriberReceived);
+                Assert.AreEqual(5, readerReceived);
 
-            // Publish instances
-            for (int i = 0; i < 10; i++)
-            {
-                dataWriter.Write(new TestStruct
-                {
-                    Id = i,
-                    ShortField = (short)i,
-                });
+                // Remove the listener to avoid extra messages
+                result = subscriber.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-                var ret = dataWriter.WaitForAcknowledgments(new Duration
-                {
-                    Seconds = 5,
-                });
-                Assert.AreEqual(ReturnCode.Ok, ret);
+                result = writer.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = reader.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                publisher.DeleteDataWriter(writer);
+                publisher.DeleteContainedEntities();
+                reader.DeleteContainedEntities();
+                subscriber.DeleteContainedEntities();
+                _participant.DeletePublisher(publisher);
+                _participant.DeleteSubscriber(subscriber);
+                _participant.DeleteTopic(topic);
             }
-
-            System.Threading.Thread.Sleep(1000);
-
-            // Check the received instances
-            Assert.AreEqual(10, subscriberReceived);
-            Assert.AreEqual(5, readerReceived);
-
-            // Remove the listener to avoid extra messages
-            result = writer.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            result = reader.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            reader.DeleteContainedEntities();
-            subscriber.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
-            _participant.DeleteSubscriber(subscriber);
-            _participant.DeleteTopic(topic);
         }
 
         /// <summary>

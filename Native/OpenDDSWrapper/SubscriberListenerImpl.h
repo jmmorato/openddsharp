@@ -35,7 +35,7 @@ namespace OpenDDSharp {
                 bool _disposed = false;
 
                 void* _onDataOnReaders;
-                void*  _onDataAvailable;
+                void* _onDataAvailable;
                 void* _onRequestedDeadlineMissed;
                 void* _onRequestedIncompatibleQos;
                 void* _onSampleRejected;
@@ -73,7 +73,7 @@ namespace OpenDDSharp {
 
 				virtual void on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
 
-        void dispose();
+                void dispose();
 			};
 
 			typedef OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl* SubscriberListenerImpl_ptr;

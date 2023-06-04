@@ -85,7 +85,6 @@ namespace OpenDDSharp.DDS
             OnSampleLostDelegate onSampleLost = OnSampleLostHandler;
             _gchSampleLost = GCHandle.Alloc(onSampleLost);
 
-
             _native = UnsafeNativeMethods.NewSubscriberListener(
                 Marshal.GetFunctionPointerForDelegate(onDataOnReaders),
                 Marshal.GetFunctionPointerForDelegate(onDataAvailable),
