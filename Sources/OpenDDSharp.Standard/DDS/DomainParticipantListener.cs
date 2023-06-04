@@ -116,19 +116,20 @@ namespace OpenDDSharp.DDS
             OnInconsistentTopicDelegate onInconsistentTopic = OnInconsistentTopicHandler;
             _gchInconsistentTopic = GCHandle.Alloc(onInconsistentTopic);
 
-            _native = UnsafeNativeMethods.NewDomainParticipantListener(onDataOnReaders,
-                                                                       onDataAvailable,
-                                                                       onRequestedDeadlineMissed,
-                                                                       onRequestedIncompatibleQos,
-                                                                       onSampleRejected,
-                                                                       onLivelinessChanged,
-                                                                       onSubscriptionMatched,
-                                                                       onSampleLost,
-                                                                       onOfferedDeadlineMissed,
-                                                                       onOfferedIncompatibleQos,
-                                                                       onLivelinessLost,
-                                                                       onPublicationMatched,
-                                                                       onInconsistentTopic);
+            _native = UnsafeNativeMethods.NewDomainParticipantListener(
+                Marshal.GetFunctionPointerForDelegate(onDataOnReaders),
+                Marshal.GetFunctionPointerForDelegate(onDataAvailable),
+                Marshal.GetFunctionPointerForDelegate(onRequestedDeadlineMissed),
+                Marshal.GetFunctionPointerForDelegate(onRequestedIncompatibleQos),
+                Marshal.GetFunctionPointerForDelegate(onSampleRejected),
+                Marshal.GetFunctionPointerForDelegate(onLivelinessChanged),
+                Marshal.GetFunctionPointerForDelegate(onSubscriptionMatched),
+                Marshal.GetFunctionPointerForDelegate(onSampleLost),
+                Marshal.GetFunctionPointerForDelegate(onOfferedDeadlineMissed),
+                Marshal.GetFunctionPointerForDelegate(onOfferedIncompatibleQos),
+                Marshal.GetFunctionPointerForDelegate(onLivelinessLost),
+                Marshal.GetFunctionPointerForDelegate(onPublicationMatched),
+                Marshal.GetFunctionPointerForDelegate(onInconsistentTopic));
         }
 
         /// <summary>
@@ -551,19 +552,19 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantListener_New", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NewDomainParticipantListener([MarshalAs(UnmanagedType.FunctionPtr)] OnDataOnReadersDelegate onDataOnReaders,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnDataAvailableDelegate onDataAvailable,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedDeadlineMissedDelegate onRequestedDeadlineMissed,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnRequestedIncompatibleQosDelegate onRequestedIncompatibleQos,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleRejectedDelegate onSampleRejected,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessChangedDelegate onLivelinessChanged,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnSubscriptionMatchedDelegate onSubscriptionMatched,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnSampleLostDelegate onSampleLost,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched,
-                                                                     [MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
+            public static extern IntPtr NewDomainParticipantListener(IntPtr onDataOnReaders,
+                IntPtr onDataAvailable,
+                IntPtr onRequestedDeadlineMissed,
+                IntPtr onRequestedIncompatibleQos,
+                IntPtr onSampleRejected,
+                IntPtr onLivelinessChanged,
+                IntPtr onSubscriptionMatched,
+                IntPtr onSampleLost,
+                IntPtr onOfferedDeadlineMissed,
+                IntPtr onOfferedIncompatibleQos,
+                IntPtr onLivelinessLost,
+                IntPtr onPublicationMatched,
+                IntPtr onInconsistentTopic);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DomainParticipantListener_Dispose", CallingConvention = CallingConvention.Cdecl)]

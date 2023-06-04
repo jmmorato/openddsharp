@@ -31,27 +31,27 @@ namespace OpenDDSharp {
 
 			class SubscriberListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::SubscriberListener> {
 			private:
-          ACE_Thread_Mutex _lock;
-          bool _disposed = false;
+                ACE_Thread_Mutex _lock;
+                bool _disposed = false;
 
-          onDataOnReadersDeclaration* _onDataOnReaders;
-          onDataAvailableDeclaration*  _onDataAvailable;
-          onRequestedDeadlineMissedDeclaration* _onRequestedDeadlineMissed;
-          onRequestedIncompatibleQosDeclaration* _onRequestedIncompatibleQos;
-          onSampleRejectedDeclaration* _onSampleRejected;
-          onLivelinessChangedDeclaration* _onLivelinessChanged;
-          onSubscriptionMatchedDeclaration* _onSubscriptionMatched;
-          onSampleLostDeclaration* _onSampleLost;
+                void* _onDataOnReaders;
+                void*  _onDataAvailable;
+                void* _onRequestedDeadlineMissed;
+                void* _onRequestedIncompatibleQos;
+                void* _onSampleRejected;
+                void* _onLivelinessChanged;
+                void* _onSubscriptionMatched;
+                void* _onSampleLost;
 
 			public:
-				SubscriberListenerImpl(onDataOnReadersDeclaration* onDataOnReaders,
-                               onDataAvailableDeclaration* onDataAvailable,
-                               onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
-                               onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
-                               onSampleRejectedDeclaration* onSampleRejected,
-                               onLivelinessChangedDeclaration* onLivelinessChanged,
-                               onSubscriptionMatchedDeclaration* onSubscriptionMatched,
-                               onSampleLostDeclaration* onSampleLost);
+				SubscriberListenerImpl(void* onDataOnReaders,
+                                       void* onDataAvailable,
+                                       void* onRequestedDeadlineMissed,
+                                       void* onRequestedIncompatibleQos,
+                                       void* onSampleRejected,
+                                       void* onLivelinessChanged,
+                                       void* onSubscriptionMatched,
+                                       void* onSampleLost);
 
 			protected:
 				virtual ~SubscriberListenerImpl();

@@ -30,13 +30,13 @@ namespace OpenDDSharp {
 
 			class TopicListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::TopicListener> {
 			private:
-        ACE_Thread_Mutex _lock;
-        bool _disposed = false;
+                ACE_Thread_Mutex _lock;
+                bool _disposed = false;
 
-        onInconsistentTopicDeclaration* _onInconsistentTopic;
+                void* _onInconsistentTopic;
 
 			public:
-				TopicListenerImpl(onInconsistentTopicDeclaration onInconsistentTopic);
+				TopicListenerImpl(void* onInconsistentTopic);
 
 			protected:
 				virtual ~TopicListenerImpl();

@@ -34,7 +34,6 @@ namespace OpenDDSharp.UnitTest
     /// <see cref="DataReaderListener"/> unit test class.
     /// </summary>
     [TestClass]
-    // [Ignore("Not working in mono linux")]
     public class DataReaderListenerTest
     {
         #region Constants
@@ -142,7 +141,7 @@ namespace OpenDDSharp.UnitTest
         {
             Trace.WriteLine($"{TestContext.TestName} test cleanup started");
 
-            _publisher?.DeleteDataWriter(_writer);
+            // _publisher?.DeleteDataWriter(_writer);
             _reader?.DeleteContainedEntities();
             _publisher?.DeleteContainedEntities();
             _subscriber?.DeleteDataReader(_reader);
@@ -497,6 +496,7 @@ namespace OpenDDSharp.UnitTest
                         firstNotAliveCount = s.NotAliveCount;
                         firstNotAliveCountChange = s.NotAliveCountChange;
                         firstLastPublicationHandle = s.LastPublicationHandle;
+                        count++;
                         evt1.Set();
                     }
                     else
@@ -508,10 +508,9 @@ namespace OpenDDSharp.UnitTest
                         secondNotAliveCount = s.NotAliveCount;
                         secondNotAliveCountChange = s.NotAliveCountChange;
                         secondLastPublicationHandle = s.LastPublicationHandle;
+                        count++;
                         evt2.Set();
                     }
-
-                    count++;
                 };
 
                 // Prepare the QoS for the test

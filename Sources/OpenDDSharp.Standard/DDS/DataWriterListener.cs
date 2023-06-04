@@ -65,10 +65,10 @@ namespace OpenDDSharp.DDS
             OnPublicationMatchedDelegate onPublicationMatched = OnPublicationMatchedHandler;
             _gchPublicationMatched = GCHandle.Alloc(onPublicationMatched);
 
-            _native = NewDataWriterListener(onOfferedDeadlineMissed,
-                                            onOfferedIncompatibleQos,
-                                            onLivelinessLost,
-                                            onPublicationMatched);
+            _native = UnsafeNativeMethods.NewDataWriterListener(Marshal.GetFunctionPointerForDelegate(onOfferedDeadlineMissed),
+                Marshal.GetFunctionPointerForDelegate(onOfferedIncompatibleQos),
+                Marshal.GetFunctionPointerForDelegate(onLivelinessLost),
+                Marshal.GetFunctionPointerForDelegate(onPublicationMatched));
         }
 
         /// <summary>
@@ -174,17 +174,6 @@ namespace OpenDDSharp.DDS
             OnPublicationMatched(dataWriter, status);
         }
 
-        private IntPtr NewDataWriterListener(OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                             OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                             OnLivelinessLostDelegate onLivelinessLost,
-                                             OnPublicationMatchedDelegate onPublicationMatched)
-        {
-            return UnsafeNativeMethods.NewDataWriterListener(onOfferedDeadlineMissed,
-                                                             onOfferedIncompatibleQos,
-                                                             onLivelinessLost,
-                                                             onPublicationMatched);
-        }
-
         internal IntPtr ToNative()
         {
             return _native;
@@ -257,10 +246,10 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NewDataWriterListener([MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                              [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
+            public static extern IntPtr NewDataWriterListener(IntPtr onOfferedDeadlineMissed,
+                IntPtr onOfferedIncompatibleQos,
+                IntPtr onLivelinessLost,
+                IntPtr onPublicationMatched);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_Dispose", CallingConvention = CallingConvention.Cdecl)]

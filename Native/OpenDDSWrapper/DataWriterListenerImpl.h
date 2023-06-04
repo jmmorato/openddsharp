@@ -31,19 +31,19 @@ namespace OpenDDSharp {
 
 			class DataWriterListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DataWriterListener> {
 			private:
-        ACE_Thread_Mutex _lock;
-        bool _disposed = false;
+                ACE_Thread_Mutex _lock;
+                bool _disposed = false;
 
-        onOfferedDeadlineMissedDeclaration* _onOfferedDeadlineMissed;
-        onOfferedIncompatibleQosDeclaration* _onOfferedIncompatibleQos;
-        onLivelinessLostDeclaration* _onLivelinessLost;
-        onPublicationMatchedDeclaration* _onPublicationMatched;
+                void* _onOfferedDeadlineMissed;
+                void* _onOfferedIncompatibleQos;
+                void* _onLivelinessLost;
+                void* _onPublicationMatched;
 
 			public:
-				DataWriterListenerImpl(onOfferedDeadlineMissedDeclaration* onOfferedDeadlineMissed,
-                               onOfferedIncompatibleQosDeclaration* onOfferedIncompatibleQos,
-                               onLivelinessLostDeclaration* onLivelinessLost,
-                               onPublicationMatchedDeclaration* onPublicationMatched);
+				DataWriterListenerImpl(void* onOfferedDeadlineMissed,
+                                       void* onOfferedIncompatibleQos,
+                                       void* onLivelinessLost,
+                                       void* onPublicationMatched);
 
 			protected:
 				virtual ~DataWriterListenerImpl();

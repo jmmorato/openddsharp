@@ -17,9 +17,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+#include <thread>
 #include "TopicListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(onInconsistentTopicDeclaration onInconsistentTopic) {
+::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(void* onInconsistentTopic) {
 	_onInconsistentTopic = onInconsistentTopic;
 }
 
@@ -42,15 +43,21 @@ void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::dispose() {
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
-  _lock.acquire();
+    _lock.acquire();
 
-  if (_disposed) {
-    return;
-  }
+    if (_disposed) {
+        return;
+    }
 
-  _lock.release();
+    _lock.release();
 
-	if (_onInconsistentTopic) {
-		_onInconsistentTopic(static_cast< ::DDS::TopicDescription_ptr>(topic), status);
-	}
+    if (_onInconsistentTopic) {
+        auto f = [](void* ptr, ::DDS::TopicDescription_ptr entity, const ::DDS::InconsistentTopicStatus& st)
+        {
+            reinterpret_cast<onInconsistentTopicDeclaration>(ptr)(entity, st);
+        };
+
+        std::thread thread(f, _onInconsistentTopic, static_cast< ::DDS::TopicDescription_ptr>(topic), status);
+        thread.join();
+    }
 };

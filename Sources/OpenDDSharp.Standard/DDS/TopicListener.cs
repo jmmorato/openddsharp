@@ -50,7 +50,7 @@ namespace OpenDDSharp.DDS
             OnInconsistentTopicDelegate onInconsistentTopic = OnInconsistentTopicHandler;
             _gchInconsistentTopic = GCHandle.Alloc(onInconsistentTopic);
 
-            _native = UnsafeNativeMethods.NewTopicListener(onInconsistentTopic);
+            _native = UnsafeNativeMethods.NewTopicListener(Marshal.GetFunctionPointerForDelegate(onInconsistentTopic));
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_New", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NewTopicListener([MarshalAs(UnmanagedType.FunctionPtr)] OnInconsistentTopicDelegate onInconsistentTopic);
+            public static extern IntPtr NewTopicListener(IntPtr onInconsistentTopic);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TopicListener_Dispose", CallingConvention = CallingConvention.Cdecl)]

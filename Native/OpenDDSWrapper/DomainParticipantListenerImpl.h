@@ -31,39 +31,39 @@ namespace OpenDDSharp {
 
 			class DomainParticipantListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DomainParticipantListener> {
 			private:
-        ACE_Thread_Mutex _lock;
-        bool _disposed = false;
+                ACE_Thread_Mutex _lock;
+                bool _disposed = false;
 
-        onDataOnReadersDeclaration* _onDataOnReaders;
-        onDataAvailableDeclaration*  _onDataAvailable;
-        onRequestedDeadlineMissedDeclaration* _onRequestedDeadlineMissed;
-        onRequestedIncompatibleQosDeclaration* _onRequestedIncompatibleQos;
-        onSampleRejectedDeclaration* _onSampleRejected;
-        onLivelinessChangedDeclaration* _onLivelinessChanged;
-        onSubscriptionMatchedDeclaration* _onSubscriptionMatched;
-        onSampleLostDeclaration* _onSampleLost;
+                void* _onDataOnReaders;
+                void*  _onDataAvailable;
+                void* _onRequestedDeadlineMissed;
+                void* _onRequestedIncompatibleQos;
+                void* _onSampleRejected;
+                void* _onLivelinessChanged;
+                void* _onSubscriptionMatched;
+                void* _onSampleLost;
 
-        onOfferedDeadlineMissedDeclaration* _onOfferedDeadlineMissed;
-        onOfferedIncompatibleQosDeclaration* _onOfferedIncompatibleQos;
-        onLivelinessLostDeclaration* _onLivelinessLost;
-        onPublicationMatchedDeclaration* _onPublicationMatched;
+                void* _onOfferedDeadlineMissed;
+                void* _onOfferedIncompatibleQos;
+                void* _onLivelinessLost;
+                void* _onPublicationMatched;
 
-        onInconsistentTopicDeclaration* _onInconsistentTopic;
+                void* _onInconsistentTopic;
 
 			public:
-				DomainParticipantListenerImpl(onDataOnReadersDeclaration* onDataOnReaders,
-                                      onDataAvailableDeclaration* onDataAvailable,
-                                      onRequestedDeadlineMissedDeclaration* onRequestedDeadlineMissed,
-                                      onRequestedIncompatibleQosDeclaration* onRequestedIncompatibleQos,
-                                      onSampleRejectedDeclaration* onSampleRejected,
-                                      onLivelinessChangedDeclaration* onLivelinessChanged,
-                                      onSubscriptionMatchedDeclaration* onSubscriptionMatched,
-                                      onSampleLostDeclaration* onSampleLost,
-                                      onOfferedDeadlineMissedDeclaration* onOfferedDeadlineMissed,
-                                      onOfferedIncompatibleQosDeclaration* onOfferedIncompatibleQos,
-                                      onLivelinessLostDeclaration* onLivelinessLost,
-                                      onPublicationMatchedDeclaration* onPublicationMatched,
-                                      onInconsistentTopicDeclaration* onInconsistentTopic);
+				DomainParticipantListenerImpl(void* onDataOnReaders,
+                                              void* onDataAvailable,
+                                              void* onRequestedDeadlineMissed,
+                                              void* onRequestedIncompatibleQos,
+                                              void* onSampleRejected,
+                                              void* onLivelinessChanged,
+                                              void* onSubscriptionMatched,
+                                              void* onSampleLost,
+                                              void* onOfferedDeadlineMissed,
+                                              void* onOfferedIncompatibleQos,
+                                              void* onLivelinessLost,
+                                              void* onPublicationMatched,
+                                              void* onInconsistentTopic);
 
 			protected:
 				virtual ~DomainParticipantListenerImpl();

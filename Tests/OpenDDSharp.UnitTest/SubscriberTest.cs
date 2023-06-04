@@ -644,7 +644,6 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("Not working in mono linux")]
         public void TestNotifyDataReaders()
         {
             // Initialize entities
@@ -824,7 +823,6 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("Not working in mono linux")]
         public void TestBeginEndAccess()
         {
             // OpenDDS Issue: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.

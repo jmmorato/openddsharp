@@ -2,7 +2,6 @@
 <RunSettings>
   <RunConfiguration>
     <DisableAppDomain>True</DisableAppDomain>
-    <ExecutionThreadApartmentState>MTA</ExecutionThreadApartmentState>
   </RunConfiguration>
   <MSTest>
     <!-- Do not run the test assemblies in parallel since they could interfere each other. -->

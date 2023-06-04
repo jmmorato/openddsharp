@@ -65,10 +65,11 @@ namespace OpenDDSharp.DDS
             OnPublicationMatchedDelegate onPublicationMatched = OnPublicationMatchedHandler;
             _gchPublicationMatched = GCHandle.Alloc(onPublicationMatched);
 
-            _native = UnsafeNativeMethods.NewPublisherListener(onOfferedDeadlineMissed,
-                onOfferedIncompatibleQos,
-                onLivelinessLost,
-                onPublicationMatched);
+            _native = UnsafeNativeMethods.NewPublisherListener(
+                Marshal.GetFunctionPointerForDelegate(onOfferedDeadlineMissed),
+                Marshal.GetFunctionPointerForDelegate(onOfferedIncompatibleQos),
+                Marshal.GetFunctionPointerForDelegate(onLivelinessLost),
+                Marshal.GetFunctionPointerForDelegate(onPublicationMatched));
         }
 
         /// <summary>
@@ -246,10 +247,10 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "PublisherListener_New", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NewPublisherListener([MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedDeadlineMissedDelegate onOfferedDeadlineMissed,
-                                                             [MarshalAs(UnmanagedType.FunctionPtr)] OnOfferedIncompatibleQosDelegate onOfferedIncompatibleQos,
-                                                             [MarshalAs(UnmanagedType.FunctionPtr)] OnLivelinessLostDelegate onLivelinessLost,
-                                                             [MarshalAs(UnmanagedType.FunctionPtr)] OnPublicationMatchedDelegate onPublicationMatched);
+            public static extern IntPtr NewPublisherListener(IntPtr onOfferedDeadlineMissed,
+                                                             IntPtr onOfferedIncompatibleQos,
+                                                             IntPtr onLivelinessLost,
+                                                             IntPtr onPublicationMatched);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "PublisherListener_Dispose", CallingConvention = CallingConvention.Cdecl)]
