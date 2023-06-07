@@ -66,9 +66,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
@@ -77,19 +77,35 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(TestContext.TestName, _topic.Name);
             Assert.AreEqual(typeName, _topic.TypeName);
 
-            SubscriberQos sQos = new SubscriberQos();
-            sQos.EntityFactory.AutoenableCreatedEntities = false;
-            sQos.Presentation.OrderedAccess = true;
-            sQos.Presentation.CoherentAccess = true;
-            sQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            var sQos = new SubscriberQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                Presentation =
+                {
+                    OrderedAccess = true,
+                    CoherentAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos,
+                },
+            };
             _subscriber = _participant.CreateSubscriber(sQos);
             Assert.IsNotNull(_subscriber);
 
-            PublisherQos pQos = new PublisherQos();
-            pQos.EntityFactory.AutoenableCreatedEntities = false;
-            pQos.Presentation.OrderedAccess = true;
-            pQos.Presentation.CoherentAccess = true;
-            pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            var pQos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                Presentation =
+                {
+                    OrderedAccess = true,
+                    CoherentAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos,
+                },
+            };
             _publisher = _participant.CreatePublisher(pQos);
             Assert.IsNotNull(_publisher);
 
@@ -98,8 +114,13 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_writer);
             _dataWriter = new TestStructDataWriter(_writer);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(_reader);
         }
@@ -119,7 +140,10 @@ namespace OpenDDSharp.UnitTest
             _participant?.DeleteSubscriber(_subscriber);
             _participant?.DeleteTopic(_topic);
             _participant?.DeleteContainedEntities();
+
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            _listener.Dispose();
 
             _participant = null;
             _publisher = null;
@@ -139,12 +163,12 @@ namespace OpenDDSharp.UnitTest
         public void TestOnOfferedDeadlineMissed()
         {
             DataWriter writer = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
+            var totalCount = 0;
+            var totalCountChange = 0;
             var lastInstanceHandle = InstanceHandle.HandleNil;
 
             // Attach to the event
-            int count = 0;
+            var count = 0;
             _listener.OfferedDeadlineMissed += (w, s) =>
             {
                 writer = w;
@@ -155,9 +179,14 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Prepare QoS for the test
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Deadline.Period = new Duration { Seconds = 1 };
-            ReturnCode result = _writer.SetQos(dwQos);
+            var dwQos = new DataWriterQos
+            {
+                Deadline =
+                {
+                    Period = new Duration { Seconds = 1 },
+                },
+            };
+            var result = _writer.SetQos(dwQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Enable entities
@@ -168,10 +197,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery and write an instance
-            bool found = _writer.WaitForSubscriptions(1, 1000);
+            var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
-            _dataWriter.Write(new TestStruct { Id = 1 });
+            var instance = new TestStruct { Id = 1 };
+            var instanceHandle = _dataWriter.RegisterInstance(instance);
+            _dataWriter.Write(instance, instanceHandle);
 
             // After half second deadline should not be lost yet
             System.Threading.Thread.Sleep(500);
@@ -183,6 +214,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_writer, writer);
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
+            Assert.AreEqual(instanceHandle, lastInstanceHandle);
 
             // Remove the listener to avoid extra messages
             result = _dataWriter.SetListener(null);
@@ -197,13 +229,13 @@ namespace OpenDDSharp.UnitTest
         public void TestOnOfferedIncompatibleQos()
         {
             DataWriter dw = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
-            int lastPolicyId = 0;
+            var totalCount = 0;
+            var totalCountChange = 0;
+            var lastPolicyId = 0;
             ICollection<QosPolicyCount> policies = new List<QosPolicyCount>();
 
             // Attach to the event
-            int count = 0;
+            var count = 0;
             _listener.OfferedIncompatibleQos += (w, s) =>
             {
                 dw = w;
@@ -216,13 +248,23 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Prepare QoS for the test
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-            ReturnCode result = _writer.SetQos(dwQos);
+            var dwQos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
+                },
+            };
+            var result = _writer.SetQos(dwQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             result = _reader.SetQos(drQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -258,11 +300,11 @@ namespace OpenDDSharp.UnitTest
         public void TestOnLivelinessLost()
         {
             DataWriter dw = null;
-            int totalCount = 0;
-            int totalCountChange = 0;
+            var totalCount = 0;
+            var totalCountChange = 0;
 
             // Attach to the event
-            int count = 0;
+            var count = 0;
             _listener.LivelinessLost += (w, s) =>
             {
                 dw = w;
@@ -273,10 +315,15 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Prepare QoS for the test
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos;
-            dwQos.Liveliness.LeaseDuration = new Duration { Seconds = 1 };
-            ReturnCode result = _writer.SetQos(dwQos);
+            var dwQos = new DataWriterQos
+            {
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                    LeaseDuration = new Duration { Seconds = 1 },
+                },
+            };
+            var result = _writer.SetQos(dwQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Enable entities
@@ -290,6 +337,7 @@ namespace OpenDDSharp.UnitTest
             // After one second and a half one liveliness should be lost
             System.Threading.Thread.Sleep(1000);
             Assert.AreEqual(1, count);
+            Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
 
@@ -306,14 +354,14 @@ namespace OpenDDSharp.UnitTest
         public void TestOnPublicationMatched()
         {
             DataWriter dw = null;
-            int currentCount = 0;
-            int currentCountChange = 0;
-            int totalCount = 0;
-            int totalCountChange = 0;
-            InstanceHandle handle = InstanceHandle.HandleNil;
+            var currentCount = 0;
+            var currentCountChange = 0;
+            var totalCount = 0;
+            var totalCountChange = 0;
+            var handle = InstanceHandle.HandleNil;
 
             // Attach to the event
-            int count = 0;
+            var count = 0;
             _listener.PublicationMatched += (w, s) =>
             {
                 dw = w;
@@ -327,14 +375,14 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Enable entities
-            ReturnCode result = _writer.Enable();
+            var result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _reader.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            bool found = _writer.WaitForSubscriptions(1, 1000);
+            var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
             System.Threading.Thread.Sleep(100);

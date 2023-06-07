@@ -89,7 +89,7 @@ namespace OpenDDSharp.DDS
             }
 
             DataWriterQosWrapper qosWrapper = default;
-            var ret = UnsafeNativeMethods.GetQos64(_native, ref qosWrapper);
+            var ret = UnsafeNativeMethods.GetQos(_native, ref qosWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -392,7 +392,7 @@ namespace OpenDDSharp.DDS
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_GetQos", CallingConvention = CallingConvention.Cdecl)]
-            public static extern ReturnCode GetQos64(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataWriterQosWrapper qos);
+            public static extern ReturnCode GetQos(IntPtr dw, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataWriterQosWrapper qos);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriter_SetQos", CallingConvention = CallingConvention.Cdecl)]

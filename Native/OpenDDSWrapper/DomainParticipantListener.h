@@ -24,16 +24,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ListenerDelegates.h"
 
 EXTERN_METHOD_EXPORT
-OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantListener_New(onDataOnReadersDeclaration onDataOnReaders,
-																						   onDataAvailabeDeclaration onDataAvalaible,
-																						   onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
-																						   onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
-																						   onSampleRejectedDeclaration onSampleRejected,
-																						   onLivelinessChangedDeclaration onLivelinessChanged,
-																						   onSubscriptionMatchedDeclaration onSubscriptionMatched,
-																						   onSampleLostDeclaration onSampleLost,
-																						   onOfferedDeadlineMissedDeclaration onOfferedDeadlineMissed,
-																						   onOfferedIncompatibleQosDeclaration onOfferedIncompatibleQos,
-																						   onLivelinessLostDeclaration onLivelinessLost,
-																						   onPublicationMatchedDeclaration onPublicationMatched,
-																						   onInconsistentTopicDeclaration onInconsistentTopic);
+OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr DomainParticipantListener_New(void* onDataOnReaders,
+                                                                                           void* onDataAvailable,
+                                                                                           void* onRequestedDeadlineMissed,
+                                                                                           void* onRequestedIncompatibleQos,
+                                                                                           void* onSampleRejected,
+                                                                                           void* onLivelinessChanged,
+                                                                                           void* onSubscriptionMatched,
+                                                                                           void* onSampleLost,
+                                                                                           void* onOfferedDeadlineMissed,
+                                                                                           void* onOfferedIncompatibleQos,
+                                                                                           void* onLivelinessLost,
+                                                                                           void* onPublicationMatched,
+                                                                                           void* onInconsistentTopic);
+
+EXTERN_METHOD_EXPORT
+void DomainParticipantListener_Dispose(OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr ptr);

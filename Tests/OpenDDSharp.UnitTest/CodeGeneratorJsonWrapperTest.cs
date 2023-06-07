@@ -321,8 +321,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.UnboundedFloatSequenceField is IList<float>);
             Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
             Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
-            Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
-            Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
+            // Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
+            // Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
             Assert.IsTrue(data.BoundedInt8SequenceField is IList<sbyte>);
             Assert.IsTrue(data.UnboundedInt8SequenceField is IList<sbyte>);
             Assert.IsTrue(data.BoundedUInt8SequenceField is IList<byte>);

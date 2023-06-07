@@ -23,51 +23,59 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DdsDcpsDomainC.h>
 #include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/Service_Participant.h>
+#include "ListenerDelegates.h"
 
 namespace OpenDDSharp {
-	namespace OpenDDS {
-		namespace DDS {
+    namespace OpenDDS {
+        namespace DDS {
 
-			class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DataReaderListener> {
-			private:				
-				std::function<void(::DDS::Entity_ptr)> _onDataAvalaible;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> _onRequestedDeadlineMissed;
-				std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> _onRequestedIncompatibleQos;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> _onSampleRejected;
-				std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> _onLivelinessChanged;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> _onSubscriptionMatched;
-				std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> _onSampleLost;
+            class DataReaderListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::DataReaderListener> {
+            private:
+                ACE_Thread_Mutex _lock;
+                bool _disposed = false;
 
-			public:
-				DataReaderListenerImpl(std::function<void(::DDS::Entity_ptr)> onDataAvalaible,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedDeadlineMissedStatus)> onRequestedDeadlineMissed,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::RequestedIncompatibleQosStatus)> onRequestedIncompatibleQos,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleRejectedStatus)> onSampleRejected,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::LivelinessChangedStatus)> onLivelinessChanged,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SubscriptionMatchedStatus)> onSubscriptionMatched,
-									   std::function<void(::DDS::Entity_ptr, ::DDS::SampleLostStatus)> onSampleLost);
+            public:
+                void*  _onDataAvailable;
+                void* _onRequestedDeadlineMissed;
+                void* _onRequestedIncompatibleQos;
+                void* _onSampleRejected;
+                void* _onLivelinessChanged;
+                void* _onSubscriptionMatched;
+                void* _onSampleLost;
 
-			protected:
-				virtual ~DataReaderListenerImpl();
+            public:
+                DataReaderListenerImpl(void* onDataAvailable,
+                                       void* onRequestedDeadlineMissed,
+                                       void* onRequestedIncompatibleQos,
+                                       void* onSampleRejected,
+                                       void* onLivelinessChanged,
+                                       void* onSubscriptionMatched,
+                                       void* onSampleLost);
 
-			public:
-				virtual void on_data_available(::DDS::DataReader_ptr reader);
+            protected:
+                virtual ~DataReaderListenerImpl();
 
-				virtual void on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
+            public:
+                virtual void on_data_available(::DDS::DataReader_ptr reader);
 
-				virtual void on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status);
+                virtual void on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status);
 
-				virtual void on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status);
+                virtual void on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status);
 
-				virtual void on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status);
+                virtual void on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status);
 
-				virtual void on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
+                virtual void on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status);
 
-				virtual void on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
-			};
+                virtual void on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status);
 
-			typedef OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl* DataReaderListenerImpl_ptr;
+                virtual void on_sample_lost(::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status);
 
-		};
-	};
+                void dispose();
+//                static void* worker(void* args);
+            };
+
+            typedef OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl* DataReaderListenerImpl_ptr;
+
+        };
+    };
 };
