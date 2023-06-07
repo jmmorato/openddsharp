@@ -67,6 +67,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_data_available(::DD
         return;
     }
 
+    _lock.release();
+
     if (_onDataAvailable) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity)
         {
@@ -76,8 +78,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_data_available(::DD
         std::thread thread(f, _onDataAvailable, static_cast< ::DDS::Entity_ptr>(reader));
         thread.join();
     }
-
-    _lock.release();
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_deadline_missed(::DDS::DataReader_ptr reader, const ::DDS::RequestedDeadlineMissedStatus& status) {
@@ -86,6 +86,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_deadline_
     if (_disposed) {
         return;
     }
+
+    _lock.release();
 
     if (_onRequestedDeadlineMissed) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::RequestedDeadlineMissedStatus& st)
@@ -96,8 +98,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_deadline_
         std::thread thread(f, _onRequestedDeadlineMissed, static_cast< ::DDS::Entity_ptr>(reader), status);
         thread.join();
     }
-
-    _lock.release();
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_incompatible_qos(::DDS::DataReader_ptr reader, const ::DDS::RequestedIncompatibleQosStatus& status) {
@@ -106,6 +106,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_incompati
     if (_disposed) {
         return;
     }
+
+    _lock.release();
 
     if (_onRequestedIncompatibleQos) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::RequestedIncompatibleQosStatus& st)
@@ -116,8 +118,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_incompati
         std::thread thread(f, _onRequestedIncompatibleQos, static_cast< ::DDS::Entity_ptr>(reader), status);
         thread.join();
     }
-
-    _lock.release();
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_rejected(::DDS::DataReader_ptr reader, const ::DDS::SampleRejectedStatus& status) {
@@ -126,6 +126,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_rejected(::D
     if (_disposed) {
         return;
     }
+
+    _lock.release();
 
     if (_onSampleRejected) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::SampleRejectedStatus& st)
@@ -136,8 +138,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_rejected(::D
         std::thread thread(f, _onSampleRejected, static_cast< ::DDS::Entity_ptr>(reader), status);
         thread.join();
     }
-
-    _lock.release();
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_liveliness_changed(::DDS::DataReader_ptr reader, const ::DDS::LivelinessChangedStatus& status) {
@@ -146,6 +146,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_liveliness_changed(
     if (_disposed) {
         return;
     }
+
+    _lock.release();
 
     if (_onLivelinessChanged) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::LivelinessChangedStatus& st)
@@ -156,8 +158,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_liveliness_changed(
         std::thread thread(f, _onLivelinessChanged, static_cast< ::DDS::Entity_ptr>(reader), status);
         thread.join();
     }
-
-    _lock.release();
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_subscription_matched(::DDS::DataReader_ptr reader, const ::DDS::SubscriptionMatchedStatus& status) {
@@ -166,6 +166,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_subscription_matche
     if (_disposed) {
         return;
     }
+
+    _lock.release();
 
     if (_onSubscriptionMatched) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::SubscriptionMatchedStatus& st)
@@ -176,8 +178,6 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_subscription_matche
         std::thread thread(f, _onSubscriptionMatched, static_cast< ::DDS::Entity_ptr>(reader), status);
         thread.join();
     }
-
-    _lock.release();
 }
 
 void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_lost( ::DDS::DataReader_ptr reader, const ::DDS::SampleLostStatus& status) {
@@ -186,6 +186,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_lost( ::DDS:
     if (_disposed) {
         return;
     }
+
+    _lock.release();
 
     if (_onSampleLost) {
         auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::SampleLostStatus& st)
@@ -196,6 +198,4 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_lost( ::DDS:
         std::thread thread(f, _onSampleLost, static_cast< ::DDS::Entity_ptr>(reader), status);
         thread.join();
     }
-
-    _lock.release();
 }
