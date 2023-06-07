@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0;net6.0;net7.0;</TargetFrameworks>
         <Platforms>x64;x86;ARM64</Platforms>
         <Configurations>Debug;Release</Configurations>
         <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
@@ -32,11 +32,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Memory" Version="4.5.5" />
-        <PackageReference Include="System.Text.Json" Version="7.0.2" />
+        <PackageReference Include="System.Memory" Version="4.5.5" Condition="'$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'" />
+        <PackageReference Include="System.Text.Json" Version="7.0.2" Condition="'$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'" />
 
         <!-- Analyzer API for our custom checks. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
@@ -47,7 +47,7 @@
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.1.0.70676">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

@@ -24,7 +24,6 @@ namespace OpenDDSharp.UnitTest.Listeners
 {
     internal class MySubscriberListener : SubscriberListener
     {
-        public Action<DataReader> ConnectionDeleted { get; set; }
         public Action<DataReader> DataAvailable { get; set; }
         public Action<Subscriber> DataOnReaders { get; set; }
         public Action<DataReader, LivelinessChangedStatus> LivelinessChanged { get; set; }

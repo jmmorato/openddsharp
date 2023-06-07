@@ -24,7 +24,6 @@ namespace OpenDDSharp.UnitTest.Listeners
 {
     internal class MyDataReaderListener : DataReaderListener
     {
-        public Action<DataReader> ConnectionDeleted { get; set; }
         public Action<DataReader> DataAvailable { get; set; }
         public Action<DataReader, LivelinessChangedStatus> LivelinessChanged { get; set; }
         public Action<DataReader, RequestedDeadlineMissedStatus> RequestedDeadlineMissed { get; set; }
@@ -33,37 +32,37 @@ namespace OpenDDSharp.UnitTest.Listeners
         public Action<DataReader, SampleRejectedStatus> SampleRejected { get; set; }
         public Action<DataReader, SubscriptionMatchedStatus> SubscriptionMatched { get; set; }
 
-        public override void OnDataAvailable(DataReader reader)
+        protected override void OnDataAvailable(DataReader reader)
         {
             DataAvailable?.Invoke(reader);
         }
 
-        public override void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status)
+        protected override void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status)
         {
             LivelinessChanged?.Invoke(reader, status);
         }
 
-        public override void OnRequestedDeadlineMissed(DataReader reader, RequestedDeadlineMissedStatus status)
+        protected override void OnRequestedDeadlineMissed(DataReader reader, RequestedDeadlineMissedStatus status)
         {
             RequestedDeadlineMissed?.Invoke(reader, status);
         }
 
-        public override void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status)
+        protected override void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status)
         {
             RequestedIncompatibleQos?.Invoke(reader, status);
         }
 
-        public override void OnSampleLost(DataReader reader, SampleLostStatus status)
+        protected override void OnSampleLost(DataReader reader, SampleLostStatus status)
         {
             SampleLost?.Invoke(reader, status);
         }
 
-        public override void OnSampleRejected(DataReader reader, SampleRejectedStatus status)
+        protected override void OnSampleRejected(DataReader reader, SampleRejectedStatus status)
         {
             SampleRejected?.Invoke(reader, status);
         }
 
-        public override void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status)
+        protected override void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status)
         {
             SubscriptionMatched?.Invoke(reader, status);
         }

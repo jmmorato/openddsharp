@@ -121,6 +121,6 @@ char* <%SCOPED_METHOD%>_EncodeJsonSample(<%SCOPED%> sample)
     OpenDDS::DCPS::RepresentationFormat_var format = ts->make_format(OpenDDS::DCPS::JSON_DATA_REPRESENTATION);
     CORBA::String_var buffer;
     ts->encode_to_string(sample, buffer, format);
-    return buffer._retn();
+    return CORBA::string_dup(buffer);
 }
 

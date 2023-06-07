@@ -62,9 +62,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
@@ -123,11 +123,11 @@ namespace OpenDDSharp.UnitTest
         public void TestProperties()
         {
             // Create a content filtered topic and check the properties
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            string query = "Id <= 1";
-            string topicName = "FilteredTopic";
-            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic(topicName, _topic, query);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            const string query = "Id <= 1";
+            const string topicName = "FilteredTopic";
+            var filteredTopic = _participant.CreateContentFilteredTopic(topicName, _topic, query);
             Assert.IsNotNull(filteredTopic);
             Assert.AreEqual(topicName, filteredTopic.Name);
             Assert.AreEqual(typeName, filteredTopic.TypeName);
@@ -144,17 +144,17 @@ namespace OpenDDSharp.UnitTest
         public void TestGetExpressionParameters()
         {
             // Create a content filtered topic without expression parameters
-            string query = "Id <= 1";
-            string topicName = "FilteredTopic";
-            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic(topicName, _topic, query);
+            var query = "Id <= 1";
+            var topicName = "FilteredTopic";
+            var filteredTopic = _participant.CreateContentFilteredTopic(topicName, _topic, query);
             Assert.IsNotNull(filteredTopic);
 
             // Test with null parameter
-            ReturnCode result = filteredTopic.GetExpressionParameters(null);
+            var result = filteredTopic.GetExpressionParameters(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Check empty expression parameters
-            List<string> parameters = new List<string> { "1" };
+            var parameters = new List<string> { "1" };
             result = filteredTopic.GetExpressionParameters(parameters);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(parameters);
@@ -163,8 +163,8 @@ namespace OpenDDSharp.UnitTest
             // Create a content filtered topic with one expression parameter
             query = "Id <= %0";
             topicName = "FilteredTopic1";
-            string parameter1 = "10";
-            ContentFilteredTopic filteredTopic1 = _participant.CreateContentFilteredTopic(topicName, _topic, query, parameter1);
+            var parameter1 = "10";
+            var filteredTopic1 = _participant.CreateContentFilteredTopic(topicName, _topic, query, parameter1);
             Assert.IsNotNull(filteredTopic1);
 
             parameters = new List<string> { "1" };
@@ -178,8 +178,8 @@ namespace OpenDDSharp.UnitTest
             query = "Id <= %0 AND Id <= %1";
             topicName = "FilteredTopic2";
             parameter1 = "0";
-            string parameter2 = "10";
-            ContentFilteredTopic filteredTopic2 = _participant.CreateContentFilteredTopic(topicName, _topic, query, parameter1, parameter2);
+            const string parameter2 = "10";
+            var filteredTopic2 = _participant.CreateContentFilteredTopic(topicName, _topic, query, parameter1, parameter2);
             Assert.IsNotNull(filteredTopic2);
 
             parameters = new List<string> { "1" };
@@ -199,13 +199,13 @@ namespace OpenDDSharp.UnitTest
         public void TestSetExpressionParameters()
         {
             // Create a content filtered topic with two expression parameter
-            string query = "Id <= %0 AND Id <= %1";
-            string topicName = "FilteredTopic";
-            string parameter1 = "0";
-            string parameter2 = "10";
+            const string query = "Id <= %0 AND Id <= %1";
+            const string topicName = "FilteredTopic";
+            const string parameter1 = "0";
+            const string parameter2 = "10";
 
             // Test with incorrect number of parameters
-            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic(topicName, _topic, query, parameter1);
+            var filteredTopic = _participant.CreateContentFilteredTopic(topicName, _topic, query, parameter1);
             Assert.IsNull(filteredTopic);
 
             // Test with correct number of parameters
@@ -213,7 +213,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(filteredTopic);
 
             // Test with null parameter
-            ReturnCode result = filteredTopic.SetExpressionParameters(null);
+            var result = filteredTopic.SetExpressionParameters(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Test with incorrect number of expression parameters
@@ -227,7 +227,7 @@ namespace OpenDDSharp.UnitTest
             result = filteredTopic.SetExpressionParameters(parameter2, parameter1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            List<string> parameters = new List<string> { "1" };
+            var parameters = new List<string> { "1" };
             result = filteredTopic.GetExpressionParameters(parameters);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(parameters);

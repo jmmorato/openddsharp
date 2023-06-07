@@ -19,20 +19,24 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "SubscriberListener.h"
 
-OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(onDataOnReadersDeclaration onDataOnReaders,
-																			 onDataAvailabeDeclaration onDataAvalaible,
-																			 onRequestedDeadlineMissedDeclaration onRequestedDeadlineMissed,
-																			 onRequestedIncompatibleQosDeclaration onRequestedIncompatibleQos,
-																			 onSampleRejectedDeclaration onSampleRejected,
-																			 onLivelinessChangedDeclaration onLivelinessChanged,
-																			 onSubscriptionMatchedDeclaration onSubscriptionMatched,
-																			 onSampleLostDeclaration onSampleLost) {
+OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr SubscriberListener_New(void* onDataOnReaders,
+                                                                             void* onDataAvailable,
+                                                                             void* onRequestedDeadlineMissed,
+                                                                             void* onRequestedIncompatibleQos,
+                                                                             void* onSampleRejected,
+                                                                             void* onLivelinessChanged,
+                                                                             void* onSubscriptionMatched,
+                                                                             void* onSampleLost) {
 	return new OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl(onDataOnReaders,
-																 onDataAvalaible,
-																 onRequestedDeadlineMissed,
-																 onRequestedIncompatibleQos,
-																 onSampleRejected,
-																 onLivelinessChanged,
-																 onSubscriptionMatched,
-																 onSampleLost);
+                                                                onDataAvailable,
+                                                                onRequestedDeadlineMissed,
+                                                                onRequestedIncompatibleQos,
+                                                                onSampleRejected,
+                                                                onLivelinessChanged,
+                                                                onSubscriptionMatched,
+                                                                onSampleLost);
+}
+
+void SubscriberListener_Dispose(OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr ptr) {
+  ptr->dispose();
 }
