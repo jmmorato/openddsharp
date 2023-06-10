@@ -12,8 +12,13 @@
     <Authors>Jose Morato</Authors>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
-    <Description>OpenDDS wrapper for .NET languages.
-      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
+    <Description>
+      OpenDDS wrapper for .NET languages.
+
+      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS),
+      developed and copyrighted by Object Computing Incorporated (OCI).
+      The OMG DDS specification is intended to be suitable for systems whose requirements include real-time,
+      high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Configurations>Debug;Release</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -74,7 +79,7 @@
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />    
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
 	<None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-x64\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
-    <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+    <None Include="$(IntermediateOutputPath)/ref/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+    <None Include="$(IntermediateOutputPath)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
   </ItemGroup>
 </Project>
