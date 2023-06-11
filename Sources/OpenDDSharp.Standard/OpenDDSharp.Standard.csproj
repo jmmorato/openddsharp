@@ -12,8 +12,13 @@
     <Authors>Jose Morato</Authors>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
-    <Description>OpenDDS wrapper for .NET languages.
-      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
+    <Description>
+      OpenDDS wrapper for .NET languages.
+
+      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS),
+      developed and copyrighted by Object Computing Incorporated (OCI).
+      The OMG DDS specification is intended to be suitable for systems whose requirements include real-time,
+      high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Configurations>Debug;Release</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -48,7 +53,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.1.0.70676">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.3.0.71466">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
@@ -69,12 +74,45 @@
     
     <!-- As we put libraries in the `runtimes\{rid}\lib` folder, .NET Core will ignore
      the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
-     directories. We keep the one in the `lib` for applications using .NET Framework. -->    
-    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x64\lib\$(TargetFramework)" Visible="false" />    
-    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\win-x86\lib\$(TargetFramework)" Visible="false" />    
-    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\linux-x64\lib\$(TargetFramework)" Visible="false" />
-	<None Include="$(MSBuildProjectDirectory)/bin/x64/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="runtimes\osx-x64\lib\$(TargetFramework)" Visible="false" />
-    <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/$(AssemblyName).dll" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
-    <None Include="$(MSBuildProjectDirectory)/bin/Release/$(TargetFramework)/$(AssemblyName).xml" Pack="true" PackagePath="ref\$(TargetFramework)" Visible="false" />
+     directories. We keep the one in the `lib` for applications using .NET Framework. -->
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x64\lib\netstandard2.0;runtimes\linux-x64\lib\netstandard2.0;runtimes\osx-x64\lib\netstandard2.0;</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net6.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x64\lib\net6.0;runtimes\linux-x64\lib\net6.0;runtimes\osx-x64\lib\net6.0;</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net7.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x64\lib\net7.0;runtimes\linux-x64\lib\net7.0;;runtimes\osx-x64\lib\net7.0;</PackagePath>
+    </None>
+
+    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x86\lib\netstandard2.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/net6.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x86\lib\net6.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/net7.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x86\lib\net7.0;</PackagePath>
+    </None>
+
+    <None Include="$(IntermediateOutputPath)/netstandard2.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>ref\netstandard2.0</PackagePath>
+    </None>
+    <None Include="$(IntermediateOutputPath)/net6.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>ref\net6.0</PackagePath>
+    </None>
+    <None Include="$(IntermediateOutputPath)/net7.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>ref\net7.0</PackagePath>
+    </None>
+
+    <None Include="$(IntermediateOutputPath)/netstandard2.0/$(AssemblyName).xml" Pack="true" Visible="false">
+      <PackagePath>ref\netstandard2.0</PackagePath>
+    </None>
+    <None Include="$(IntermediateOutputPath)/net6.0/$(AssemblyName).xml" Pack="true" Visible="false">
+      <PackagePath>ref\net6.0</PackagePath>
+    </None>
+    <None Include="$(IntermediateOutputPath)/net7.0/$(AssemblyName).xml" Pack="true" Visible="false">
+      <PackagePath>ref\net7.0</PackagePath>
+    </None>
   </ItemGroup>
 </Project>

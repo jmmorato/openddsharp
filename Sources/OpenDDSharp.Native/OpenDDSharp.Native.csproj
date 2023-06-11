@@ -10,7 +10,11 @@
     <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
     <Description>
       OpenDDS native libaries.
-      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS), developed and copyrighted by Object Computing Incorporated (OCI). The OMG DDS specification is intended to be suitable for systems whose requirements include real-time, high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
+
+      OpenDDS is an open source implementation of the Object Management Group (OMG) Data Distribution Service (DDS),
+      developed and copyrighted by Object Computing Incorporated (OCI).
+      The OMG DDS specification is intended to be suitable for systems whose requirements include real-time,
+      high volume, robustness, failure tolerant data distribution utilizing a publish and subscribe model.
     </Description>
     <Platforms>x64;x86;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
@@ -163,10 +167,6 @@
       <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
-<!--    <Content Include="..\..\ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">-->
-<!--      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>-->
-<!--      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>-->
-<!--    </Content>-->
     <Content Include="..\..\ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so*" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
       <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
@@ -233,10 +233,6 @@
 		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-<!--	<Content Include="..\..\ext\OpenDDS_MacOS\dds\InfoRepo\libOpenDDS_InfoRepoLib.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">-->
-<!--		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>-->
-<!--		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>-->
-<!--	</Content>-->
 	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
 		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
