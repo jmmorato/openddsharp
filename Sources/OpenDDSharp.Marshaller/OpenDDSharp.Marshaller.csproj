@@ -31,10 +31,12 @@
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="System.Memory" Version="4.5.5" Condition="'$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'" />
-        <PackageReference Include="System.Text.Json" Version="7.0.2" Condition="'$(TargetFramework)' != 'net6.0' AND '$(TargetFramework)' != 'net7.0'" />
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+        <PackageReference Include="System.Memory" Version="4.5.5" />
+        <PackageReference Include="System.Text.Json" Version="7.0.2" />
+    </ItemGroup>
 
+    <ItemGroup>
         <!-- Analyzer API for our custom checks. -->
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0">
             <PrivateAssets>all</PrivateAssets>
