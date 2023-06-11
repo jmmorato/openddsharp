@@ -28,7 +28,7 @@ using Cake.Frosting;
 namespace OpenDDSharp.Build.Standard.Tasks
 {
     /// <summary>
-    /// Pack NuGet packages taks.
+    /// Pack NuGet packages tasks.
     /// </summary>
     [TaskName("PackNuGet")]
     [IsDependentOn(typeof(PrepareLinuxLibraries))]
