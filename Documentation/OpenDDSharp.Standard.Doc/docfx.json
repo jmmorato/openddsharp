@@ -55,6 +55,8 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
+      "default",
+      "modern",
       "templates/openddsharp"
     ],
     "postProcessors": [],
@@ -65,7 +67,7 @@
     "disableGitFeatures": false,
     "globalMetadata": {
       "_appTitle": "OpenDDSharp Documentation",
-      "_appFooter": "<span>Copyright &copy; 2018-2022 Jose Morat&oacute;</span>"
+      "_appFooter": "<span>Copyright &copy; 2018 Jose Morat&oacute;</span>"
     }
   }
 }
