@@ -77,7 +77,7 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\..\Sources\OpenDDSharp.Marshaller\OpenDDSharp.Marshaller.csproj" />
-	<ProjectReference Include="..\..\Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj" />
+	<ProjectReference Include="..\..\Sources\OpenDDSharp\OpenDDSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
