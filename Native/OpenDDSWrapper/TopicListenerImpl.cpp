@@ -49,8 +49,6 @@ void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS
         return;
     }
 
-    _lock.release();
-
     if (_onInconsistentTopic) {
         auto f = [](void* ptr, ::DDS::TopicDescription_ptr entity, const ::DDS::InconsistentTopicStatus& st)
         {
@@ -60,4 +58,6 @@ void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS
         std::thread thread(f, _onInconsistentTopic, static_cast< ::DDS::TopicDescription_ptr>(topic), status);
         thread.join();
     }
+
+    _lock.release();
 };

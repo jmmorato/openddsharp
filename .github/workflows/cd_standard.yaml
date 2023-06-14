@@ -376,7 +376,7 @@ jobs:
     - name: Dotnet restore
       shell: cmd
       run: |
-        dotnet restore ${{ github.workspace }}/OpenDDSharp.Standard.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
@@ -389,17 +389,17 @@ jobs:
 
     - name: Build OpenDDSharp x86
       shell: cmd
-      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x86
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=x86
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp x64
       shell: cmd
-      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=x64
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp AnyCPU
       shell: cmd
-      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Standard/OpenDDSharp.Standard.csproj -property:Configuration=Release -property:Platform=AnyCPU
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=AnyCPU
       working-directory: ${{ github.workspace }}
       
     - name: Build OpenDDSharp.Marshaller x86
