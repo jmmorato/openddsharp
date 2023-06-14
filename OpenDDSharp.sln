@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{892C06BC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{DD4809A9-6F47-4686-8433-D8A10F3EB9E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard", "Sources\OpenDDSharp.Standard\OpenDDSharp.Standard.csproj", "{E9C9793D-5761-4222-850D-DF8B42C2A920}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp", "Sources\OpenDDSharp\OpenDDSharp.csproj", "{E9C9793D-5761-4222-850D-DF8B42C2A920}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleDemoCore", "Examples\ConsoleDemoCore\ConsoleDemoCore.csproj", "{12F78B1F-EBE5-4A82-A98F-62AE1B21D57A}"
 EndProject

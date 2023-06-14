@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>OpenDDSharp.Standard.IdlGenerator</id>
+    <id>OpenDDSharp.IdlGenerator</id>
     <version>1.0.0.0</version>
     <title>OpenDDSharp IDL Generator</title>
     <authors>Jose Morato</authors>
@@ -283,7 +283,7 @@
     <file src="..\ext\OpenDDS_MacOS\dds\DCPS\libOpenDDS_Util.dylib" target="tools\DDS_MacOS\lib" />
 
     <!--Target file-->
-    <file src=".\OpenDDSharp.Standard.IdlGenerator.targets" target="build\" />
+    <file src=".\OpenDDSharp.IdlGenerator.targets" target="build\" />
 
     <!--Resource files-->
     <file src="..\LICENSE.txt" target="" />

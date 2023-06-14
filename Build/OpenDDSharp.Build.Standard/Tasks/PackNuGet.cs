@@ -45,7 +45,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
 
             string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            string path = Path.Combine(solutionPath, "Sources", "OpenDDSharp.Standard", "OpenDDSharp.Standard.csproj");
+            string path = Path.Combine(solutionPath, "Sources", "OpenDDSharp", "OpenDDSharp.csproj");
             context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
@@ -81,7 +81,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
                 OutputDirectory = ".",
             });
 
-            path = Path.Combine(solutionPath, "Native", "OpenDDSharp.Standard.IdlGenerator.nuspec");
+            path = Path.Combine(solutionPath, "Native", "OpenDDSharp.IdlGenerator.nuspec");
             var filePath = new Cake.Core.IO.FilePath(path);
             context.NuGetPack(filePath, new NuGetPackSettings
             {
