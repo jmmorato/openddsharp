@@ -18,17 +18,17 @@ OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthed
 
 OpenDDSharp has been compiled with OpenDDS v3.24.1
 
-| Package                                                           | NuGet                                                            |
-|-------------------------------------------------------------------|------------------------------------------------------------------|
-| [OpenDDSharp.Standard][OpenDDSharpNuget]                          | [![OpenDDSharpShield]][OpenDDSharpNuget]                         |
-| [OpenDDSharp.Standard.IdlGenerator][OpenDDSharpIdlGeneratorNuget] | [![OpenDDSharpIdlGeneratorShield]][OpenDDSharpIdlGeneratorNuget] |
-| [OpenDDSharp.Native][OpenDDSharpNativeNuget]                      | [![OpenDDSharpNativeShield]][OpenDDSharpNativeNuget]             |
-| [OpenDDSharp.Templates][OpenDDSharpTemplatesNuget]                | [![OpenDDSharpTemplatesShield]][OpenDDSharpTemplatesNuget]       |
+| Package                                                   | NuGet                                                            |
+|-----------------------------------------------------------|------------------------------------------------------------------|
+| [OpenDDSharp][OpenDDSharpNuget]                           | [![OpenDDSharpShield]][OpenDDSharpNuget]                         |
+| [OpenDDSharp.IdlGenerator][OpenDDSharpIdlGeneratorNuget]  | [![OpenDDSharpIdlGeneratorShield]][OpenDDSharpIdlGeneratorNuget] |
+| [OpenDDSharp.Native][OpenDDSharpNativeNuget]              | [![OpenDDSharpNativeShield]][OpenDDSharpNativeNuget]             |
+| [OpenDDSharp.Templates][OpenDDSharpTemplatesNuget]        | [![OpenDDSharpTemplatesShield]][OpenDDSharpTemplatesNuget]       |
 
-[OpenDDSharpNuget]: https://www.nuget.org/packages/OpenDDSharp.Standard/
-[OpenDDSharpShield]: https://img.shields.io/nuget/v/OpenDDSharp.Standard.svg
-[OpenDDSharpIdlGeneratorNuget]: https://www.nuget.org/packages/OpenDDSharp.Standard.IdlGenerator/
-[OpenDDSharpIdlGeneratorShield]: https://img.shields.io/nuget/v/OpenDDSharp.Standard.IdlGenerator.svg
+[OpenDDSharpNuget]: https://www.nuget.org/packages/OpenDDSharp/
+[OpenDDSharpShield]: https://img.shields.io/nuget/v/OpenDDSharp.svg
+[OpenDDSharpIdlGeneratorNuget]: https://www.nuget.org/packages/OpenDDSharp.IdlGenerator/
+[OpenDDSharpIdlGeneratorShield]: https://img.shields.io/nuget/v/OpenDDSharp.IdlGenerator.svg
 [OpenDDSharpNativeNuget]: https://www.nuget.org/packages/OpenDDSharp.Native/
 [OpenDDSharpNativeShield]: https://img.shields.io/nuget/v/OpenDDSharp.Native.svg
 [OpenDDSharpTemplatesNuget]: https://www.nuget.org/packages/OpenDDSharp.Templates/
@@ -43,7 +43,7 @@ A detailed [API Documentation](https://www.openddsharp.com/api/index.html) is av
 Navigate through the namespaces to get information about the implemented OpenDDSharp APIs.
 
 As OpenDDSharp is a wrapper of [OpenDDS](https://opendds.org), the [OpenDDS Developer's Guide](https://opendds.readthedocs.io/en/latest/)
-is also a valuable resource that you can use but keep in mind that not everything is implemented yet. 
+is also a valuable resource that you can use but keep in mind that not everything is implemented yet.
 
 # Roadmap Overview
 OpenDDSharp started as a proof of concept during a distributed system technology selection based on the following OpenDDS articles:
@@ -114,7 +114,7 @@ As in almost all open sources projects, pull request are welcome.
 If you find bugs or your project requires a not implemented feature, feel free to code it yourself and create a pull request.
 
 Try to structure your code nicely and follow the OpenDDSharp coding guidelines (OpenDDSharp.ruleset).
-All pull requests will be reviewed and merged when approved. 
+All pull requests will be reviewed and merged when approved.
 
 ## Sponsor it
 If you are using OpenDDSharp successfully in your projects or just want an open source alternative for your DDS systems in C#,

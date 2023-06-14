@@ -62,3 +62,8 @@ Native/build*/
 .vscode
 #Ignore Rider hidden folder
 .idea
+
+#Documentation auto-generated files
+Documentation/_site/
+Documentation/log.txt
+Documentation/api/*.yml
