@@ -18,44 +18,31 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using System.Linq;
-using System.Text;
+using Cake.Common.Tools.NuGet;
+using Cake.Common.Tools.NuGet.Push;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
-    /// Prepare cmake config files taks.
+    /// Publish NuGet packages task.
     /// </summary>
-    [TaskName("PrepareCMakeConfig")]
-    public class PrepareCMakeConfig : FrostingTask<BuildContext>
+    [TaskName("PublishNuGet")]
+    public class PublishNuGet : FrostingTask<BuildContext>
     {
-        private readonly string[] _variablesToRemove = new string[]
-        {
-            "OPENDDS_MPC",
-            "OPENDDS_ACE",
-            "OPENDDS_TAO",
-        };
-
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
             var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            var path = Path.Combine(solutionPath, "ext");
+            var releaseFolder = Path.Combine(solutionPath, "Release");
 
-            foreach (var file in Directory.GetFiles(path, "config.cmake", SearchOption.AllDirectories))
+            foreach (var file in Directory.GetFiles(releaseFolder, "*.nupkg"))
             {
-                var lines = File.ReadAllLines(file);
-                var stringBuilder = new StringBuilder();
-                foreach (var line in lines)
+                context.NuGetPush(file, new NuGetPushSettings
                 {
-                    if (line.StartsWith("#") || _variablesToRemove.Any(line.Contains))
-                    {
-                        continue;
-                    }
-                    stringBuilder.AppendLine(line);
-                }
-                File.WriteAllText(file, stringBuilder.ToString());
+                    ApiKey = context.NugetApiKey,
+                    Source = "https://api.nuget.org/v3/index.json",
+                });
             }
         }
     }

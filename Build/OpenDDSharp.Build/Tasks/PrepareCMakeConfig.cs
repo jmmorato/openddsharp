@@ -18,31 +18,44 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.IO;
-using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Push;
+using System.Linq;
+using System.Text;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
-    /// Publish NuGet packages task.
+    /// Prepare cmake config files taks.
     /// </summary>
-    [TaskName("PublishNuGet")]
-    public class PublishNuGet : FrostingTask<BuildContext>
+    [TaskName("PrepareCMakeConfig")]
+    public class PrepareCMakeConfig : FrostingTask<BuildContext>
     {
+        private readonly string[] _variablesToRemove = new string[]
+        {
+            "OPENDDS_MPC",
+            "OPENDDS_ACE",
+            "OPENDDS_TAO",
+        };
+
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
             var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            var releaseFolder = Path.Combine(solutionPath, "Release");
+            var path = Path.Combine(solutionPath, "ext");
 
-            foreach (var file in Directory.GetFiles(releaseFolder, "*.nupkg"))
+            foreach (var file in Directory.GetFiles(path, "config.cmake", SearchOption.AllDirectories))
             {
-                context.NuGetPush(file, new NuGetPushSettings
+                var lines = File.ReadAllLines(file);
+                var stringBuilder = new StringBuilder();
+                foreach (var line in lines)
                 {
-                    ApiKey = context.NugetApiKey,
-                    Source = "https://api.nuget.org/v3/index.json",
-                });
+                    if (line.StartsWith("#") || _variablesToRemove.Any(line.Contains))
+                    {
+                        continue;
+                    }
+                    stringBuilder.AppendLine(line);
+                }
+                File.WriteAllText(file, stringBuilder.ToString());
             }
         }
     }

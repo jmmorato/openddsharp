@@ -19,7 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Pack artifacts task.

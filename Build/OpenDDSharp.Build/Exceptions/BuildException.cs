@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Runtime.Serialization;
 
-namespace OpenDDSharp.Build.Standard.Exceptions
+namespace OpenDDSharp.Build.Exceptions
 {
     /// <summary>
     /// Build exception class.

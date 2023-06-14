@@ -19,16 +19,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
-    /// Set product version task.
+    /// Publish artifacts task.
     /// </summary>
-    [TaskName("SetVersion")]
-    [IsDependentOn(typeof(SetVersionAssemblyInfo))]
-    [IsDependentOn(typeof(SetVersionNuspec))]
-    [IsDependentOn(typeof(SetVersionProjectTemplate))]
-    public class SetVersion : FrostingTask
+    [TaskName("Publish")]
+    [IsDependentOn(typeof(PublishNuGet))]
+    public class Publish : FrostingTask
     {
     }
 }

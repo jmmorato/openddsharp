@@ -27,7 +27,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Build OpenDDSharp task.

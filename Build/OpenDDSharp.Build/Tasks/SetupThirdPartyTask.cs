@@ -24,9 +24,9 @@ using Cake.Common.Tools.VSWhere;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Frosting;
-using OpenDDSharp.Build.Standard.Exceptions;
+using OpenDDSharp.Build.Exceptions;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Setup third party required projects.

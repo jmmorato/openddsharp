@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 This file is part of OpenDDSharp.
 
 OpenDDSharp is a .NET wrapper for OpenDDS.
@@ -19,14 +19,23 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
-    /// Publish artifacts task.
+    /// Represents the program to run.
     /// </summary>
-    [TaskName("Publish")]
-    [IsDependentOn(typeof(PublishNuGet))]
-    public class Publish : FrostingTask
+    public static class Program
     {
+        /// <summary>
+        /// Main entry point.
+        /// </summary>
+        /// <param name="args">The program given arguments.</param>
+        /// <returns>The integer result of the program.</returns>
+        public static int Main(string[] args)
+        {
+            return new CakeHost()
+                .UseContext<BuildContext>()
+                .Run(args);
+        }
     }
 }

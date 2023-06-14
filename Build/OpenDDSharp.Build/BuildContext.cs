@@ -24,7 +24,7 @@ using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard
+namespace OpenDDSharp.Build
 {
     /// <summary>
     /// Build context class to be shared between tasks.

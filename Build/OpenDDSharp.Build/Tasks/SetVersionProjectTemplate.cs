@@ -17,35 +17,42 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using Cake.Frosting;
-using Cake.FileHelpers;
 using Cake.Common.IO;
-using Cake.Core.IO;
-using System;
+using Cake.Common.Xml;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
+using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Set version in the assembly info files.
     /// </summary>
-    [TaskName("SetVersionAssemblyInfo")]
-    public class SetVersionAssemblyInfo : FrostingTask<BuildContext>
+    [TaskName("SetVersionProjectTemplate")]
+    public class SetVersionProjectTemplate : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            context.Log.Information("Set version in AssemblyInfo...");
+            context.Log.Information("Set version in ProjectTemplate...");
 
             string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
+            if (context.IsDevelop)
+            {
+                version += $"-beta";
+            }
+
             DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
-            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyVersion\\(\")(.+?)(?=\"\\))", version);
-            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyFileVersion\\(\")(.+?)(?=\"\\))", version);
+            foreach (var file in context.GetFiles($"{path}/**/OpenDDSharp.IdlProject.csproj"))
+            {
+                context.XmlPoke(file, "/Project/ItemGroup/PackageReference/@Version", version);
+            }
 
-            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=File_Version\\s)(.+?)(?=\\s)", version.Replace('.', ','));
-            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=File_Version_Str\\s\")(.+?)(?=\")", version);
-            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=Assembly_Version\\sL\")(.+?)(?=\")", version);
+            foreach (var file in context.GetFiles($"{path}/**/OpenDDSharp.ConsoleApp.csproj"))
+            {
+                context.XmlPoke(file, "/Project/ItemGroup/PackageReference/@Version", version);
+            }
         }
     }
 }

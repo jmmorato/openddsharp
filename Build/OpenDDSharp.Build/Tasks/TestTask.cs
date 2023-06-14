@@ -24,7 +24,7 @@ using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using Path = System.IO.Path;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Run OpenDDSharp unit test task.

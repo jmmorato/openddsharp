@@ -23,9 +23,9 @@ using Cake.Common;
 using Cake.Common.IO;
 using Cake.Common.Tools.MSBuild;
 using Cake.Frosting;
-using OpenDDSharp.Build.Standard.Exceptions;
+using OpenDDSharp.Build.Exceptions;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Build third-party projects task.

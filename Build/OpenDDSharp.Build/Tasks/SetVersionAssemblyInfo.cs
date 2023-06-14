@@ -18,35 +18,34 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Frosting;
-using Cake.Common.Xml;
-using Cake.Core.IO;
+using Cake.FileHelpers;
 using Cake.Common.IO;
+using Cake.Core.IO;
+using System;
 using Cake.Core.Diagnostics;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Set version in the assembly info files.
     /// </summary>
-    [TaskName("SetVersionNuspec")]
-    public class SetVersionNuspec : FrostingTask<BuildContext>
+    [TaskName("SetVersionAssemblyInfo")]
+    public class SetVersionAssemblyInfo : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            context.Log.Information("Set version in NuSpec...");
+            context.Log.Information("Set version in AssemblyInfo...");
 
             string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
-            if (context.IsDevelop)
-            {
-                version += $"-beta";
-            }
             DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
-            foreach (var file in context.GetFiles($"{path}/**/*.IdlGenerator.nuspec"))
-            {
-                context.XmlPoke(file, "/package/metadata/version", version);
-            }
+            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyVersion\\(\")(.+?)(?=\"\\))", version);
+            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyFileVersion\\(\")(.+?)(?=\"\\))", version);
+
+            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=File_Version\\s)(.+?)(?=\\s)", version.Replace('.', ','));
+            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=File_Version_Str\\s\")(.+?)(?=\")", version);
+            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=Assembly_Version\\sL\")(.+?)(?=\")", version);
         }
     }
 }

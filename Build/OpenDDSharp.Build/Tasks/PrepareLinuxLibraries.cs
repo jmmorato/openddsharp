@@ -21,7 +21,7 @@ using System.IO;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Prepare linux files taks.

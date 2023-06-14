@@ -25,7 +25,7 @@ using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Standard.Tasks
+namespace OpenDDSharp.Build.Tasks
 {
     /// <summary>
     /// Pack NuGet packages tasks.
