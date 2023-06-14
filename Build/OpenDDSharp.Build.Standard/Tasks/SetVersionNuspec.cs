@@ -43,7 +43,7 @@ namespace OpenDDSharp.Build.Standard.Tasks
             }
             DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
-            foreach (var file in context.GetFiles($"{path}/**/*.Standard.IdlGenerator.nuspec"))
+            foreach (var file in context.GetFiles($"{path}/**/*.IdlGenerator.nuspec"))
             {
                 context.XmlPoke(file, "/package/metadata/version", version);
             }

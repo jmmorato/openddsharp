@@ -48,7 +48,7 @@ namespace OpenDDSharp.Build.Standard
 
         internal const string OPENDDSHARP_SOLUTION_FOLDER = "../../";
 
-        internal const string OPENDDSHARP_SOLUTION_FILE = OPENDDSHARP_SOLUTION_FOLDER + "OpenDDSharp.Standard.sln";
+        internal const string OPENDDSHARP_SOLUTION_FILE = OPENDDSHARP_SOLUTION_FOLDER + "OpenDDSharp.sln";
         #endregion
 
         #region Properties
