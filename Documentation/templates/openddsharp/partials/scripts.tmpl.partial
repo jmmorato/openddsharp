@@ -1,0 +1,36 @@
+{{!Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See LICENSE file in the project root for full license information.}}
+
+<script type="text/javascript" src="{{_rel}}styles/docfx.vendor.js"></script>
+<script type="text/javascript" src="{{_rel}}styles/docfx.js"></script>
+<script type="text/javascript" src="{{_rel}}styles/main.js"></script>
+
+<!-- mermaid support -->
+<script src="https://unpkg.com/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>    
+    // select <pre class="lang-mermaid"> _and_ <pre><code class="lang-mermaid">
+    document.querySelectorAll("pre.lang-mermaid, pre>code.lang-mermaid").forEach($el => {
+      // if the second selector got a hit, reference the parent <pre>
+      if ($el.tagName === "CODE")
+        $el = $el.parentElement
+      // put the Mermaid contents in the expected <div class="mermaid">
+      // plus keep the original contents in a nice <details>
+      $el.outerHTML = `
+        <div class="mermaid">${$el.textContent}</div>
+        <details>
+          <summary>Diagram source</summary>
+          <pre>${$el.textContent}</pre>
+        </details>
+      `
+    })
+    
+    // initialize Mermaid to [1] log errors, [2] have loose security for first-party
+    // authored diagrams, and [3] respect a preferred dark color scheme
+    mermaid.initialize({
+      logLevel: "error", // [1]
+      securityLevel: "loose", // [2]
+      startOnLoad: true,
+      theme: (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ?
+        "light" :
+        "default" // [3]
+    })
+</script>

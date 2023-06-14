@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Templates", "So
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BEAB5E70-13D0-47EE-B7DD-9056EFFF5567}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Build.Standard", "Build\OpenDDSharp.Build.Standard\OpenDDSharp.Build.Standard.csproj", "{F456B7F5-5018-4337-9771-CB335304827A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Build", "Build\OpenDDSharp.Build\OpenDDSharp.Build.csproj", "{F456B7F5-5018-4337-9771-CB335304827A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Standard.Doc", "Documentation\OpenDDSharp.Standard.Doc\OpenDDSharp.Standard.Doc.csproj", "{F0055EFE-3537-4325-845B-1A4E5446CC5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.Doc", "Documentation\OpenDDSharp.Doc.csproj", "{F0055EFE-3537-4325-845B-1A4E5446CC5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.BuildTasks", "Sources\OpenDDSharp.BuildTasks\OpenDDSharp.BuildTasks.csproj", "{1A656994-CDE3-4E34-A404-D9E87C9E7FED}"
 EndProject
