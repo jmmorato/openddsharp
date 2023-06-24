@@ -86,6 +86,7 @@ namespace OpenDDSharp.Build.Tasks
             Git(context, "fetch");
             Git(context, "fetch --tags");
             // Git(context, $"checkout tags/{_versionTag}");
+            Git(context, $"checkout 27ea3728477342c43e71a618cf6476cf7c3e6728");
 
             context.Log.Information("Call OpenDDS configure script");
 
