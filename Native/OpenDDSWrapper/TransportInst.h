@@ -30,18 +30,6 @@ EXTERN_METHOD_EXPORT
 char* TransportInst_GetName(::OpenDDS::DCPS::TransportInst* ti);
 
 EXTERN_METHOD_EXPORT
-size_t TransportInst_GetQueueMessagesPerPool(::OpenDDS::DCPS::TransportInst* ti);
-
-EXTERN_METHOD_EXPORT
-void TransportInst_SetQueueMessagesPerPool(::OpenDDS::DCPS::TransportInst* ti, size_t value);
-
-EXTERN_METHOD_EXPORT
-size_t TransportInst_GetQueueInitialPools(::OpenDDS::DCPS::TransportInst* ti);
-
-EXTERN_METHOD_EXPORT
-void TransportInst_SetQueueInitialPools(::OpenDDS::DCPS::TransportInst* ti, size_t value);
-
-EXTERN_METHOD_EXPORT
 CORBA::ULong TransportInst_GetMaxPacketSize(::OpenDDS::DCPS::TransportInst* ti);
 
 EXTERN_METHOD_EXPORT

@@ -60,8 +60,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(10U, tcpi.MaxSamplesPerPacket);
             Assert.AreEqual(INSTANCE_NAME, tcpi.Name);
             Assert.AreEqual(4096u, tcpi.OptimumPacketSize);
-            Assert.AreEqual(5U, tcpi.QueueInitialPools);
-            Assert.AreEqual(10U, tcpi.QueueMessagesPerPool);
             Assert.AreEqual(TRANSPORT_TYPE, tcpi.TransportType);
             Assert.IsFalse(tcpi.ThreadPerConnection);
 
@@ -91,8 +89,8 @@ namespace OpenDDSharp.UnitTest
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
-                QueueInitialPools = 10U,
-                QueueMessagesPerPool = 20U,
+                // QueueInitialPools = 10U,
+                // QueueMessagesPerPool = 20U,
                 ThreadPerConnection = true,
             };
 
@@ -110,8 +108,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2147481500u, tcpi.MaxPacketSize);
             Assert.AreEqual(20U, tcpi.MaxSamplesPerPacket);
             Assert.AreEqual(2048u, tcpi.OptimumPacketSize);
-            Assert.AreEqual(10U, tcpi.QueueInitialPools);
-            Assert.AreEqual(20U, tcpi.QueueMessagesPerPool);
+            // Assert.AreEqual(10U, tcpi.QueueInitialPools);
+            // Assert.AreEqual(20U, tcpi.QueueMessagesPerPool);
             Assert.IsTrue(tcpi.ThreadPerConnection);
 
             TransportRegistry.Instance.RemoveInst(tcpi);

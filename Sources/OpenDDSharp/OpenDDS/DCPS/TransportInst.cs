@@ -55,35 +55,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
         public string Name => GetName();
 
         /// <summary>
-        /// Gets or sets the number of pre-created link (list) objects per pool for the
-        /// "send queue" of each DataLink. The default value is 10.
-        /// </summary>
-        /// <remarks>
-        /// When backpressure is detected, messages to be
-        /// sent are queued.When the message queue must
-        /// grow, it grows by this number.
-        /// </remarks>
-        public ulong QueueMessagesPerPool
-        {
-            get => GetQueueMessagesPerPool();
-            set => SetQueueMessagesPerPool(value);
-        }
-
-        /// <summary>
-        /// Gets or sets the initial number of pools for the backpressure
-        /// queue. The default value is 5.
-        /// </summary>
-        /// <remarks>
-        /// The default settings of the two backpressure queue values
-        /// preallocate space for 50 messages(5 pools of 10 messages).
-        /// </remarks>
-        public ulong QueueInitialPools
-        {
-            get => GetQueueInitialPools();
-            set => SetQueueInitialPools(value);
-        }
-
-        /// <summary>
         /// Gets or sets the maximum size of a transport packet, including
         /// its transport header, sample header, and sample data.
         /// The default value is 2147481599.
@@ -181,26 +152,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
             return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetName(_native));
         }
 
-        private ulong GetQueueMessagesPerPool()
-        {
-            return UnsafeNativeMethods.GetQueueMessagesPerPool(_native).ToUInt64();
-        }
-
-        private void SetQueueMessagesPerPool(ulong value)
-        {
-            UnsafeNativeMethods.SetQueueMessagesPerPool(_native, new UIntPtr(value));
-        }
-
-        private ulong GetQueueInitialPools()
-        {
-            return UnsafeNativeMethods.GetQueueInitialPools(_native).ToUInt64();
-        }
-
-        private void SetQueueInitialPools(ulong value)
-        {
-            UnsafeNativeMethods.SetQueueInitialPools(_native, new UIntPtr(value));
-        }
-
         private uint GetMaxPacketSize()
         {
             return UnsafeNativeMethods.GetMaxPacketSize(_native);
@@ -283,22 +234,6 @@ namespace OpenDDSharp.OpenDDS.DCPS
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
             public static extern IntPtr GetName(IntPtr ti);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetQueueMessagesPerPool", CallingConvention = CallingConvention.Cdecl)]
-            public static extern UIntPtr GetQueueMessagesPerPool(IntPtr ti);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetQueueMessagesPerPool", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetQueueMessagesPerPool(IntPtr ti, UIntPtr value);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetQueueInitialPools", CallingConvention = CallingConvention.Cdecl)]
-            public static extern UIntPtr GetQueueInitialPools(IntPtr ti);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetQueueInitialPools", CallingConvention = CallingConvention.Cdecl)]
-            public static extern void SetQueueInitialPools(IntPtr ti, UIntPtr value);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetMaxPacketSize", CallingConvention = CallingConvention.Cdecl)]

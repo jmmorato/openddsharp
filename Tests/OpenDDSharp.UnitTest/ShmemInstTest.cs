@@ -56,8 +56,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(10U, shmemi.MaxSamplesPerPacket);
             Assert.AreEqual(INSTANCE_NAME, shmemi.Name);
             Assert.AreEqual(4096u, shmemi.OptimumPacketSize);
-            Assert.AreEqual(5U, shmemi.QueueInitialPools);
-            Assert.AreEqual(10U, shmemi.QueueMessagesPerPool);
             Assert.AreEqual(TRANSPORT_TYPE, shmemi.TransportType);
             Assert.IsFalse(shmemi.ThreadPerConnection);
 
@@ -81,8 +79,8 @@ namespace OpenDDSharp.UnitTest
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
-                QueueInitialPools = 20U,
-                QueueMessagesPerPool = 20U,
+                // QueueInitialPools = 20U,
+                // QueueMessagesPerPool = 20U,
                 ThreadPerConnection = true
             };
 
@@ -94,8 +92,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(20U, shmemi.MaxSamplesPerPacket);
             Assert.AreEqual(INSTANCE_NAME, shmemi.Name);
             Assert.AreEqual(2048u, shmemi.OptimumPacketSize);
-            Assert.AreEqual(20U, shmemi.QueueInitialPools);
-            Assert.AreEqual(20U, shmemi.QueueMessagesPerPool);
+            // Assert.AreEqual(20U, shmemi.QueueInitialPools);
+            // Assert.AreEqual(20U, shmemi.QueueMessagesPerPool);
             Assert.IsTrue(shmemi.ThreadPerConnection);
 
             TransportRegistry.Instance.RemoveInst(shmemi);
