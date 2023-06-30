@@ -183,6 +183,14 @@ namespace OpenDDSharp.UnitTest
 
             Assert.AreEqual(test.Id, received.Id);
             Assert.AreEqual(test.IncludeField.Message, received.IncludeField.Message);
+
+            dr.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(dr);
+            _subscriber.DeleteContainedEntities();
+            _publisher.DeleteDataWriter(dw);
+            _publisher.DeleteContainedEntities();
+            _participant.DeleteTopic(topic);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>

@@ -144,6 +144,7 @@ namespace OpenDDSharp.UnitTest
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
             _listener.Dispose();
+            _listener = null;
 
             _participant = null;
             _publisher = null;
