@@ -182,7 +182,7 @@ namespace OpenDDSharp.DDS
 
         #region IDisposable Members
         /// <summary>
-        /// Releases the unmanaged resources used by the <see cref="DataReaderListener" />.
+        /// Releases the unmanaged resources used by the <see cref="DataWriterListener" />.
         /// </summary>
         public void Dispose()
         {

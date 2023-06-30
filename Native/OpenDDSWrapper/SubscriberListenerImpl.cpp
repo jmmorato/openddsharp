@@ -45,9 +45,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::dispose() {
   _lock.acquire();
 
-  if (_disposed) {
-    return;
-  }
+    if (_disposed) {
+      _lock.release();
+      return;
+    }
 
   _onDataAvailable = NULL;
   _onRequestedDeadlineMissed = NULL;
@@ -66,6 +67,7 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_data_on_readers(::D
     _lock.acquire();
 
     if (_disposed) {
+        _lock.release();
         return;
     }
 
@@ -86,7 +88,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_data_available(::DD
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onDataAvailable) {
@@ -106,7 +109,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_requested_deadline_
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onRequestedDeadlineMissed) {
@@ -126,7 +130,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_requested_incompati
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onRequestedIncompatibleQos) {
@@ -146,7 +151,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_sample_rejected(::D
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSampleRejected) {
@@ -166,7 +172,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_liveliness_changed(
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onLivelinessChanged) {
@@ -186,7 +193,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_subscription_matche
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSubscriptionMatched) {
@@ -206,7 +214,8 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::on_sample_lost(::DDS::
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSampleLost) {
