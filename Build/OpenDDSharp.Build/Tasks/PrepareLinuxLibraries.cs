@@ -31,7 +31,7 @@ namespace OpenDDSharp.Build.Tasks
     {
         private const string OPENDDS_VERSION = "3.25.0-dev";
         private const string ACE_VERSION = "6.5.20";
-        private const string TAO_VERSION = "7.1.1";
+        private const string TAO_VERSION = "2.5.20";
 
         private readonly string[] _aceLibraries =
         {
