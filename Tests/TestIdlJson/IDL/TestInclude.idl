@@ -1,0 +1,8 @@
+module JsonWrapperInclude {
+
+    @topic
+    struct IncludeStruct {
+        @key string Message; 
+    };
+    
+};

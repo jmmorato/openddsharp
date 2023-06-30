@@ -190,4 +190,8 @@
 	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
 	  <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_MacOS/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
+  <ItemGroup>
+    <CsFiles Include="@(IdlFiles->'$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.cs')" />
+    <Compile Include="@(CsFiles)" Link="%(filename).cs" />
+  </ItemGroup>
 </Project>
