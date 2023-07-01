@@ -83,17 +83,17 @@ namespace OpenDDSharp.UnitTest
 
             SubscriberQos sQos = new SubscriberQos();
             sQos.EntityFactory.AutoenableCreatedEntities = false;
-            sQos.Presentation.OrderedAccess = true;
-            sQos.Presentation.CoherentAccess = true;
-            sQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            // sQos.Presentation.OrderedAccess = true;
+            // sQos.Presentation.CoherentAccess = true;
+            // sQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
             _subscriber = _participant.CreateSubscriber(sQos);
             Assert.IsNotNull(_subscriber);
 
             PublisherQos pQos = new PublisherQos();
             pQos.EntityFactory.AutoenableCreatedEntities = false;
-            pQos.Presentation.OrderedAccess = true;
-            pQos.Presentation.CoherentAccess = true;
-            pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
+            // pQos.Presentation.OrderedAccess = true;
+            // pQos.Presentation.CoherentAccess = true;
+            // pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.InstancePresentationQos;
             _publisher = _participant.CreatePublisher(pQos);
             Assert.IsNotNull(_publisher);
 
