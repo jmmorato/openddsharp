@@ -50,6 +50,7 @@ void ::OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl::dispose() {
       return;
     }
 
+  _onDataOnReaders = NULL;
   _onDataAvailable = NULL;
   _onRequestedDeadlineMissed = NULL;
   _onRequestedIncompatibleQos = NULL;
