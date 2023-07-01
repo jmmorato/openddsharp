@@ -246,7 +246,8 @@ namespace OpenDDSharp.DDS
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport(MarshalHelper.API_DLL, EntryPoint = "DataWriterListener_New", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr NewDataWriterListener(IntPtr onOfferedDeadlineMissed,
+            public static extern IntPtr NewDataWriterListener(
+                IntPtr onOfferedDeadlineMissed,
                 IntPtr onOfferedIncompatibleQos,
                 IntPtr onLivelinessLost,
                 IntPtr onPublicationMatched);
