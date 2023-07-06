@@ -56,8 +56,10 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::dispose() {
   _lock.acquire();
 
   if (_disposed) {
+    _lock.release();
     return;
   }
+
   _onDataOnReaders = NULL;
   _onDataAvailable = NULL;
   _onRequestedDeadlineMissed = NULL;
@@ -81,7 +83,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_on_read
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onDataOnReaders) {
@@ -101,7 +104,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_data_availab
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onDataAvailable) {
@@ -121,7 +125,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_de
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onRequestedDeadlineMissed) {
@@ -140,7 +145,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_requested_in
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onRequestedIncompatibleQos) {
@@ -160,7 +166,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_rejec
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSampleRejected) {
@@ -180,7 +187,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_liveliness_c
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onLivelinessChanged) {
@@ -200,7 +208,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_subscription
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSubscriptionMatched) {
@@ -220,7 +229,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_sample_lost(
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSampleLost) {
@@ -240,7 +250,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_offered_dead
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onOfferedDeadlineMissed) {
@@ -260,7 +271,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_offered_inco
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onOfferedIncompatibleQos) {
@@ -280,7 +292,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_liveliness_l
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onLivelinessLost) {
@@ -300,7 +313,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_publication_
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onPublicationMatched) {
@@ -320,7 +334,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl::on_inconsistent
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onInconsistentTopic) {

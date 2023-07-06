@@ -64,8 +64,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(10U, rui.MaxSamplesPerPacket);
             Assert.AreEqual(INSTANCE_NAME, rui.Name);
             Assert.AreEqual(4096u, rui.OptimumPacketSize);
-            Assert.AreEqual(5U, rui.QueueInitialPools);
-            Assert.AreEqual(10U, rui.QueueMessagesPerPool);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 Assert.AreEqual(65536, rui.RcvBufferSize);
@@ -116,8 +114,6 @@ namespace OpenDDSharp.UnitTest
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
-                QueueInitialPools = 20U,
-                QueueMessagesPerPool = 20U,
                 RcvBufferSize = 65530,
                 SendBufferSize = 65530,
                 ThreadPerConnection = true,
@@ -147,8 +143,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(20U, rui.MaxSamplesPerPacket);
             Assert.AreEqual(INSTANCE_NAME, rui.Name);
             Assert.AreEqual(2048u, rui.OptimumPacketSize);
-            Assert.AreEqual(20U, rui.QueueInitialPools);
-            Assert.AreEqual(20U, rui.QueueMessagesPerPool);
             Assert.AreEqual(65530, rui.RcvBufferSize);
             Assert.AreEqual(65530, rui.SendBufferSize);
             Assert.AreEqual(TRANSPORT_TYPE, rui.TransportType);

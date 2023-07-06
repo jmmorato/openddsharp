@@ -10,10 +10,6 @@
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="OpenDDSharp.IdlProjectTypeSupport.cs" />
-  </ItemGroup>
-
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
   <ItemGroup>

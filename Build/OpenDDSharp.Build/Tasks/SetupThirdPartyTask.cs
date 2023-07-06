@@ -86,6 +86,7 @@ namespace OpenDDSharp.Build.Tasks
             Git(context, "fetch");
             Git(context, "fetch --tags");
             // Git(context, $"checkout tags/{_versionTag}");
+            // Git(context, $"checkout 27ea3728477342c43e71a618cf6476cf7c3e6728");
 
             context.Log.Information("Call OpenDDS configure script");
 
@@ -122,7 +123,11 @@ namespace OpenDDSharp.Build.Tasks
                 {
                     Version = version,
                 });
-                var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
+                var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test";
+                if (context.BuildConfiguration == "Release")
+                {
+                    arguments += " --no-debug --optimize";
+                }
                 context.Log.Information(configurePath + arguments);
 
                 var exit = context.StartProcess("cmd.exe", new ProcessSettings

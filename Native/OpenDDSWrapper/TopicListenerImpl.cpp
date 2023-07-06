@@ -32,6 +32,7 @@ void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::dispose() {
   _lock.acquire();
 
   if (_disposed) {
+    _lock.release();
     return;
   }
 
@@ -46,7 +47,8 @@ void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onInconsistentTopic) {

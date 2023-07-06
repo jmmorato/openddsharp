@@ -1,4 +1,4 @@
-# DDS (Data Distribution System) Core Concepts
+# DDS (Data Distribution Service) Core Concepts
 
 ## Introduction
 Data Distribution Service (DDS) is a middleware technology that enables efficient and 
@@ -82,15 +82,6 @@ The DCPS model provides several benefits for distributed systems:
 - **Scalability:** The publish-subscribe model scales well, as data distribution is decoupled from the number of publishers and subscribers.
 - **Flexibility:** Publishers and subscribers can dynamically join or leave the system without affecting other components.
 - **Efficiency:** DCPS optimizes data distribution by utilizing efficient filtering, content-based routing, and data transformation
-
-## Extensible Transport Framework (ETF)
-The Extensible Transport Framework (ETF) in DDS allows for pluggable transport protocols, enabling DDS to work over
-different network technologies. The ETF provides an abstraction layer that separates the DDS core from the underlying
-transport implementation, allowing for flexibility and extensibility.
-
-DDS supports various transport protocols out of the box, such as TCP/IP, UDP/IP, Shared Memory,
-and Real-Time Publish-Subscribe (RTPS) over different network interfaces.
-Additionally, developers can extend the ETF to integrate DDS with custom or proprietary network technologies.
 
 ## DDS Discovery
 DDS Discovery is the mechanism by which participants in a DDS system can discover and establish communication with
@@ -339,6 +330,15 @@ and compatibility with the DDS standard.
 
 OpenDDSharp has been build on top of OpenDDS and provides a .NET API for DDS by p-invoking the native OpenDDS API and
 creating an IDL to C# code generator that can interact with the underlying OpenDDS native layer.
+
+### Extensible Transport Framework (ETF)
+The Extensible Transport Framework (ETF) in OpenDDS allows for pluggable transport protocols, enabling OpenDDS to work over
+different network technologies. The ETF provides an abstraction layer that separates the OpenDDS core from the underlying
+transport implementation, allowing for flexibility and extensibility.
+
+OpenDDS supports various transport protocols out of the box, such as TCP/IP, UDP/IP, Shared Memory,
+and Real-Time Publish-Subscribe (RTPS) over different network interfaces.
+Additionally, developers can extend the ETF to integrate DDS with custom or proprietary network technologies.
 
 ## Conclusion
 This chapter has provided an overview of the core concepts and features of DDS.

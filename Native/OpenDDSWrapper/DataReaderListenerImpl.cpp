@@ -44,6 +44,7 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::dispose() {
   _lock.acquire();
 
   if (_disposed) {
+    _lock.release();
     return;
   }
 
@@ -64,7 +65,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_data_available(::DD
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onDataAvailable) {
@@ -84,7 +86,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_deadline_
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onRequestedDeadlineMissed) {
@@ -104,7 +107,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_requested_incompati
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onRequestedIncompatibleQos) {
@@ -124,7 +128,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_rejected(::D
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSampleRejected) {
@@ -144,7 +149,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_liveliness_changed(
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onLivelinessChanged) {
@@ -164,7 +170,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_subscription_matche
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSubscriptionMatched) {
@@ -184,7 +191,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataReaderListenerImpl::on_sample_lost( ::DDS:
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onSampleLost) {
