@@ -123,7 +123,11 @@ namespace OpenDDSharp.Build.Tasks
                 {
                     Version = version,
                 });
-                var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test --no-debug --optimize";
+                var arguments = " /c \"" + vsPath.FullPath + "\\Common7\\Tools\\VsDevCmd.bat\" && " + configurePath + " -v --ace-github-latest --no-test";
+                if (context.BuildConfiguration == "Release")
+                {
+                    arguments += " --no-debug --optimize";
+                }
                 context.Log.Information(configurePath + arguments);
 
                 var exit = context.StartProcess("cmd.exe", new ProcessSettings
