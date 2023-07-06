@@ -38,6 +38,7 @@ void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::dispose() {
   _lock.acquire();
 
   if (_disposed) {
+    _lock.release();
     return;
   }
 
@@ -55,7 +56,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_offered_deadline_mi
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onOfferedDeadlineMissed) {
@@ -75,7 +77,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_offered_incompatibl
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onOfferedIncompatibleQos) {
@@ -95,7 +98,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_liveliness_lost(::D
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onLivelinessLost) {
@@ -115,7 +119,8 @@ void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_publication_matched
     _lock.acquire();
 
     if (_disposed) {
-        return;
+      _lock.release();
+      return;
     }
 
     if (_onPublicationMatched) {

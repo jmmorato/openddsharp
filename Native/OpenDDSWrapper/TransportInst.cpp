@@ -27,66 +27,50 @@ char* TransportInst_GetName(::OpenDDS::DCPS::TransportInst* ti) {
     return CORBA::string_dup(ti->name().c_str());
 }
 
-size_t TransportInst_GetQueueMessagesPerPool(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->queue_messages_per_pool_;
-}
-
-void TransportInst_SetQueueMessagesPerPool(::OpenDDS::DCPS::TransportInst* ti, size_t value) {
-    ti->queue_messages_per_pool_ = value;
-}
-
-size_t TransportInst_GetQueueInitialPools(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->queue_initial_pools_;
-}
-
-void TransportInst_SetQueueInitialPools(::OpenDDS::DCPS::TransportInst* ti, size_t value) {
-    ti->queue_initial_pools_ = value;
-}
-
 CORBA::ULong TransportInst_GetMaxPacketSize(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->max_packet_size_;
+    return ti->max_packet_size();
 }
 
 void TransportInst_SetMaxPacketSize(::OpenDDS::DCPS::TransportInst* ti, CORBA::ULong value) {
-    ti->max_packet_size_ = value;
+    ti->max_packet_size(value);
 }
 
 size_t TransportInst_GetMaxSamplesPerPacket(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->max_samples_per_packet_;
+    return ti->max_samples_per_packet();
 }
 
 void TransportInst_SetMaxSamplesPerPacket(::OpenDDS::DCPS::TransportInst* ti, size_t value) {
-    ti->max_samples_per_packet_ = value;
+    ti->max_samples_per_packet(value);
 }
 
 CORBA::ULong TransportInst_GetOptimumPacketSize(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->optimum_packet_size_;
+    return ti->optimum_packet_size();
 }
 
 void TransportInst_SetOptimumPacketSize(::OpenDDS::DCPS::TransportInst* ti, CORBA::ULong value) {
-    ti->optimum_packet_size_ = value;    
+    ti->optimum_packet_size(value);
 }
 
 CORBA::Boolean TransportInst_GetThreadPerConnection(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->thread_per_connection_;
+    return ti->thread_per_connection();
 }
 
 void TransportInst_SetThreadPerConnection(::OpenDDS::DCPS::TransportInst* ti, CORBA::Boolean value) {
-    ti->thread_per_connection_ = value;
+    ti->thread_per_connection(value);
 }
 
 long TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->datalink_release_delay_;
+    return ti->datalink_release_delay();
 }
 
 void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, long value) {
-    ti->datalink_release_delay_ = value;
+    ti->datalink_release_delay(value);
 }
 
 size_t TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst* ti) {
-    return ti->datalink_control_chunks_;
+    return ti->datalink_control_chunks();
 }
 
 void TransportInst_SetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst* ti, size_t value) {
-    ti->datalink_control_chunks_ = value;
+    ti->datalink_control_chunks(value);
 }

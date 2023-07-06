@@ -36,9 +36,6 @@
   <ItemGroup>
     <IdlFiles Include="IDL\*.idl" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="TestTypeSupport.cs" />
-  </ItemGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)</DDS_ROOT>
@@ -182,16 +179,20 @@
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharpWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpMacOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
 	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" ContinueOnError="false" />
+	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
+  <ItemGroup>
+    <CsFiles Include="@(IdlFiles->'$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.cs')" />
+    <Compile Include="@(CsFiles)" Link="%(filename).cs" />
+  </ItemGroup>
 
   <ItemGroup>
 	<!-- OpenDDS native Libraries -->
@@ -215,5 +216,9 @@
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		<TargetPath>libTestIdlJsonWrapper.dylib</TargetPath>
 	</ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="obj\ARM64\" />
   </ItemGroup>
 </Project>

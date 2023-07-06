@@ -112,6 +112,10 @@ namespace OpenDDSharp.UnitTest
             // Test GetQos with null parameter.
             result = subscriber.GetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -201,6 +205,10 @@ namespace OpenDDSharp.UnitTest
             // Test SetQos with null parameter
             result = subscriber.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -222,6 +230,10 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
+
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -253,6 +265,10 @@ namespace OpenDDSharp.UnitTest
 
             received = (MySubscriberListener)subscriber.Listener;
             Assert.IsNull(received);
+            
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -297,6 +313,10 @@ namespace OpenDDSharp.UnitTest
             // Test GetDefaultDataReaderQos with null parameter.
             result = subscriber.GetDefaultDataReaderQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -370,6 +390,12 @@ namespace OpenDDSharp.UnitTest
             // Test SetDefaultDataReaderQos with null parameter.
             result = subscriber.SetDefaultDataReaderQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteDataReader(otherReader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -430,6 +456,12 @@ namespace OpenDDSharp.UnitTest
 
             result = participantReader.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteSubscriber(otherSubscriber);
+            _participant.DeleteTopic(topic);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -534,6 +566,17 @@ namespace OpenDDSharp.UnitTest
             result = datareader6.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataReaderQos(qos);
+
+            subscriber.DeleteDataReader(datareader1);
+            subscriber.DeleteDataReader(datareader2);
+            subscriber.DeleteDataReader(datareader3);
+            subscriber.DeleteDataReader(datareader4);
+            subscriber.DeleteDataReader(datareader5);
+            subscriber.DeleteDataReader(datareader6);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteTopic(topic);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -586,6 +629,12 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = subscriber.DeleteDataReader(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            subscriber.DeleteDataReader(datareader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteTopic(topic);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -638,6 +687,8 @@ namespace OpenDDSharp.UnitTest
             drQos.ResourceLimits.MaxSamplesPerInstance = 2;
             var nullDataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNull(nullDataReader);
+
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -743,6 +794,7 @@ namespace OpenDDSharp.UnitTest
                 _participant.DeletePublisher(publisher);
                 _participant.DeleteSubscriber(subscriber);
                 _participant.DeleteTopic(topic);
+                _participant.DeleteContainedEntities();
             }
         }
 
@@ -847,6 +899,15 @@ namespace OpenDDSharp.UnitTest
             // Test GetDataReaders with null parameter
             result = subscriber.GetDataReaders(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            reader.DeleteContainedEntities();
+            subscriber.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteTopic(topic);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -950,7 +1011,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Give some time to the subscriber to process the messages
-            System.Threading.Thread.Sleep(500);
+            Thread.Sleep(500);
+
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(otherWriter);
+            publisher.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteDataReader(otherReader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteTopic(topic);
+            _participant.DeleteTopic(otherTopic);
+            _participant.DeleteContainedEntities();
         }
         #endregion
     }

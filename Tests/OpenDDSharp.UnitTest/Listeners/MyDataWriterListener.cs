@@ -24,7 +24,6 @@ namespace OpenDDSharp.UnitTest.Listeners
 {
     internal class MyDataWriterListener : DataWriterListener
     {
-        public Action<DataWriter> ConnectionDeleted { get; set; }
         public Action<DataWriter, LivelinessLostStatus> LivelinessLost { get; set; }
         public Action<DataWriter, OfferedDeadlineMissedStatus> OfferedDeadlineMissed { get; set; }
         public Action<DataWriter, OfferedIncompatibleQosStatus> OfferedIncompatibleQos { get; set; }
