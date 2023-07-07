@@ -33,8 +33,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Constants
 #if Windows
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS";
-        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/ACE";
-        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS/ACE_TAO/TAO";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS/ACE_wrappers";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS/ACE_wrappers/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug";
         private const string RELEASE_TARGET_FOLDER = @"Release";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64";
@@ -44,8 +44,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
 #elif Linux
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_Linux";
-        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/ACE";
-        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_TAO/TAO";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_wrappers";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_wrappers/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
@@ -54,8 +54,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif OSX
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_MacOS";
-        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_TAO/ACE";
-        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_TAO/TAO";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_wrappers";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_wrappers/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";

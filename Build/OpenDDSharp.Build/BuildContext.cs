@@ -307,8 +307,8 @@ namespace OpenDDSharp.Build
                 DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_MacOS/";
             }
 
-            AceRoot = DdsRoot + "ACE_TAO/ACE/";
-            TaoRoot = DdsRoot + "ACE_TAO/TAO/";
+            AceRoot = DdsRoot + "ACE_wrappers/";
+            TaoRoot = DdsRoot + "ACE_wrappers/TAO/";
             MpcRoot = AceRoot + "MPC/";
             OpenDdsSolutionFile = DdsRoot + "/DDS_TAOv2.sln";
 
