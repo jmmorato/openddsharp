@@ -22,124 +22,124 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <exception>
 
 void TransportRegistry_Close() {
-	::OpenDDS::DCPS::TransportRegistry::close();
+  ::OpenDDS::DCPS::TransportRegistry::close();
 }
 
 void TransportRegistry_Release() {
-	TheTransportRegistry->release();
+  TheTransportRegistry->release();
 }
 
 bool TransportRegistry_GetReleased() {
-	return TheTransportRegistry->released();
+  return TheTransportRegistry->released();
 }
 
-::OpenDDS::DCPS::TransportInst* TransportRegistry_CreateInst(const char * name, const char * transportType) {
-	::OpenDDS::DCPS::TransportInst_rch native = TheTransportRegistry->create_inst(std::string(name), transportType);
-	if (native.is_nil()) {
-		return NULL;
-	}
+::OpenDDS::DCPS::TransportInst *TransportRegistry_CreateInst(const char *name, const char *transportType) {
+  ::OpenDDS::DCPS::TransportInst_rch native = TheTransportRegistry->create_inst(std::string(name), transportType);
+  if (native.is_nil()) {
+    return NULL;
+  }
 
-	::OpenDDS::DCPS::TransportInst* pointer = native.in();
-	pointer->_add_ref();
+  ::OpenDDS::DCPS::TransportInst *pointer = native.in();
+  pointer->_add_ref();
 
-	return pointer;
+  return pointer;
 }
 
-OpenDDS::DCPS::TransportInst* TransportRegistry_GetInst(const char * name) {
-	::OpenDDS::DCPS::TransportInst_rch native = TheTransportRegistry->get_inst(name);
+OpenDDS::DCPS::TransportInst *TransportRegistry_GetInst(const char *name) {
+  ::OpenDDS::DCPS::TransportInst_rch native = TheTransportRegistry->get_inst(name);
 
-    if (native.is_nil()) {
-        return NULL;
-    }
+  if (native.is_nil()) {
+    return NULL;
+  }
 
-	::OpenDDS::DCPS::TransportInst* pointer = native.in();
-    pointer->_add_ref();
+  ::OpenDDS::DCPS::TransportInst *pointer = native.in();
+  pointer->_add_ref();
 
-    return pointer;
+  return pointer;
 }
 
-void TransportRegistry_RemoveInst(::OpenDDS::DCPS::TransportInst* inst) {
-	if (inst == NULL) {
-        return;
-    }
+void TransportRegistry_RemoveInst(::OpenDDS::DCPS::TransportInst *inst) {
+  if (inst == NULL) {
+    return;
+  }
 
-    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
-	TheTransportRegistry->remove_inst(rch);
+  ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
+  TheTransportRegistry->remove_inst(rch);
 }
 
-OpenDDS::DCPS::TransportConfig* TransportRegistry_CreateConfig(const char * name) {
-	::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->create_config(name);
+OpenDDS::DCPS::TransportConfig *TransportRegistry_CreateConfig(const char *name) {
+  ::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->create_config(name);
 
-	if (native.is_nil()) {
-		return NULL;
-	}	
+  if (native.is_nil()) {
+    return NULL;
+  }
 
-	::OpenDDS::DCPS::TransportConfig* pointer = native.in();
-	pointer->_add_ref();
+  ::OpenDDS::DCPS::TransportConfig *pointer = native.in();
+  pointer->_add_ref();
 
-	return pointer;
+  return pointer;
 }
 
-OpenDDS::DCPS::TransportConfig* TransportRegistry_GetConfig(const char * name) {
-	::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->get_config(name);
+OpenDDS::DCPS::TransportConfig *TransportRegistry_GetConfig(const char *name) {
+  ::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->get_config(name);
 
-    if (native.is_nil()) {
-        return NULL;
-    }
+  if (native.is_nil()) {
+    return NULL;
+  }
 
-	::OpenDDS::DCPS::TransportConfig* pointer = native.in();
-    pointer->_add_ref();
+  ::OpenDDS::DCPS::TransportConfig *pointer = native.in();
+  pointer->_add_ref();
 
-    return pointer;
+  return pointer;
 }
 
-void TransportRegistry_RemoveConfig(OpenDDS::DCPS::TransportConfig* cfg) {
-	::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportConfig>(cfg);
-	TheTransportRegistry->remove_config(rch);
+void TransportRegistry_RemoveConfig(OpenDDS::DCPS::TransportConfig *cfg) {
+  ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg);
+  TheTransportRegistry->remove_config(rch);
 }
 
-OpenDDS::DCPS::TransportConfig* TransportRegistry_GetDomainDefaultConfig(CORBA::Int32 domainId) {
-	::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->domain_default_config(domainId);
+OpenDDS::DCPS::TransportConfig *TransportRegistry_GetDomainDefaultConfig(CORBA::Int32 domainId) {
+  ::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->domain_default_config(domainId);
 
-    if (native.is_nil()) {
-        return nullptr;
-    }
+  if (native.is_nil()) {
+    return nullptr;
+  }
 
-	::OpenDDS::DCPS::TransportConfig* pointer = native.in();
-	pointer->_add_ref();
+  ::OpenDDS::DCPS::TransportConfig *pointer = native.in();
+  pointer->_add_ref();
 
-    return pointer;
+  return pointer;
 }
 
-void TransportRegistry_SetDomainDefaultConfig(CORBA::Int32 domainId, OpenDDS::DCPS::TransportConfig* cfg) {
-	::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportConfig>(cfg);
-	TheTransportRegistry->domain_default_config(domainId, rch);
+void TransportRegistry_SetDomainDefaultConfig(CORBA::Int32 domainId, OpenDDS::DCPS::TransportConfig *cfg) {
+  ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg);
+  TheTransportRegistry->domain_default_config(domainId, rch);
 }
 
-void TransportRegistry_BindConfigName(const char * name, ::DDS::Entity_ptr entity) {
-	const std::string str(name);
-	TheTransportRegistry->bind_config(str, entity);
+void TransportRegistry_BindConfigName(const char *name, ::DDS::Entity_ptr entity) {
+  const std::string str(name);
+  TheTransportRegistry->bind_config(str, entity);
 }
 
-void TransportRegistry_BindConfigTransport(OpenDDS::DCPS::TransportConfig* cfg, ::DDS::Entity_ptr entity) {
-	::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportConfig>(cfg);
-	TheTransportRegistry->bind_config(rch, entity);
+void TransportRegistry_BindConfigTransport(OpenDDS::DCPS::TransportConfig *cfg, ::DDS::Entity_ptr entity) {
+  ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg);
+  TheTransportRegistry->bind_config(rch, entity);
 }
 
-OpenDDS::DCPS::TransportConfig* TransportRegistry_GetGlobalConfig() {
-	::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->global_config();
-	
-    if (native.is_nil()) {
-        return NULL;
-    }
+OpenDDS::DCPS::TransportConfig *TransportRegistry_GetGlobalConfig() {
+  ::OpenDDS::DCPS::TransportConfig_rch native = TheTransportRegistry->global_config();
 
-	::OpenDDS::DCPS::TransportConfig* pointer = native.in();
-	pointer->_add_ref();
+  if (native.is_nil()) {
+    return NULL;
+  }
 
-    return pointer;
+  ::OpenDDS::DCPS::TransportConfig *pointer = native.in();
+  pointer->_add_ref();
+
+  return pointer;
 }
 
-void TransportRegistry_SetGlobalConfig(OpenDDS::DCPS::TransportConfig* cfg) {
-	::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportConfig>(cfg);
-	TheTransportRegistry->global_config(rch);
+void TransportRegistry_SetGlobalConfig(OpenDDS::DCPS::TransportConfig *cfg) {
+  ::OpenDDS::DCPS::TransportConfig_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportConfig>(cfg);
+  TheTransportRegistry->global_config(rch);
 }

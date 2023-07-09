@@ -29,49 +29,105 @@ EXTERN_METHOD_EXPORT
 ::DDS::SubscriptionBuiltinTopicDataDataReader_ptr SubscriptionBuiltinTopicDataDataReader_Narrow(DDS::DataReader_ptr dr);
 
 EXTERN_METHOD_EXPORT
-int SubscriptionBuiltinTopicDataDataReader_ReadNextSample(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, SubscriptionBuiltinTopicDataWrapper& data, ::DDS::SampleInfo* sampleInfo);
+int SubscriptionBuiltinTopicDataDataReader_ReadNextSample(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                          SubscriptionBuiltinTopicDataWrapper &data,
+                                                          ::DDS::SampleInfo *sampleInfo);
 
 EXTERN_METHOD_EXPORT
-int SubscriptionBuiltinTopicDataDataReader_TakeNextSample(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, SubscriptionBuiltinTopicDataWrapper& data, ::DDS::SampleInfo* sampleInfo);
+int SubscriptionBuiltinTopicDataDataReader_TakeNextSample(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                          SubscriptionBuiltinTopicDataWrapper &data,
+                                                          ::DDS::SampleInfo *sampleInfo);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_Read(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_Read(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void *&receivedData,
+                                            void *&receivedInfo, CORBA::Long maxSamples,
+                                            ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates,
+                                            ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_ReadWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_ReadWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                         void *&receivedData, void *&receivedInfo,
+                                                         CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_Take(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_Take(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void *&receivedData,
+                                            void *&receivedInfo, CORBA::Long maxSamples,
+                                            ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates,
+                                            ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_TakeWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_TakeWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                         void *&receivedData, void *&receivedInfo,
+                                                         CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT
-int SubscriptionBuiltinTopicDataDataReader_LookupInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, SubscriptionBuiltinTopicDataWrapper instance);
+int SubscriptionBuiltinTopicDataDataReader_LookupInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                          SubscriptionBuiltinTopicDataWrapper instance);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_ReadInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_ReadInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                    void *&receivedData, void *&receivedInfo,
+                                                    ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples,
+                                                    ::DDS::SampleStateMask sampleStates,
+                                                    ::DDS::ViewStateMask viewStates,
+                                                    ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_ReadInstanceWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_ReadInstanceWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                                 void *&receivedData, void *&receivedInfo,
+                                                                 ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples,
+                                                                 ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_TakeInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_TakeInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                    void *&receivedData, void *&receivedInfo,
+                                                    ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples,
+                                                    ::DDS::SampleStateMask sampleStates,
+                                                    ::DDS::ViewStateMask viewStates,
+                                                    ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_TakeInstanceWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_TakeInstanceWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                                 void *&receivedData, void *&receivedInfo,
+                                                                 ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples,
+                                                                 ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_ReadNextInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_ReadNextInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                        void *&receivedData, void *&receivedInfo,
+                                                        ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples,
+                                                        ::DDS::SampleStateMask sampleStates,
+                                                        ::DDS::ViewStateMask viewStates,
+                                                        ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_ReadNextInstanceWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_ReadNextInstanceWithCondition(
+    ::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void *&receivedData, void *&receivedInfo,
+    ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_TakeNextInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+::DDS::ReturnCode_t
+SubscriptionBuiltinTopicDataDataReader_TakeNextInstance(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                        void *&receivedData, void *&receivedInfo,
+                                                        ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples,
+                                                        ::DDS::SampleStateMask sampleStates,
+                                                        ::DDS::ViewStateMask viewStates,
+                                                        ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_TakeNextInstanceWithCondition(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+::DDS::ReturnCode_t SubscriptionBuiltinTopicDataDataReader_TakeNextInstanceWithCondition(
+    ::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, void *&receivedData, void *&receivedInfo,
+    ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT
-int SubscriptionBuiltinTopicDataDataReader_GetKeyValue(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr, SubscriptionBuiltinTopicDataWrapper& data, int handle);
+int SubscriptionBuiltinTopicDataDataReader_GetKeyValue(::DDS::SubscriptionBuiltinTopicDataDataReader_ptr dr,
+                                                       SubscriptionBuiltinTopicDataWrapper &data, int handle);

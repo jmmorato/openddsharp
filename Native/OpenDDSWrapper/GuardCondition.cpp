@@ -20,17 +20,17 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "GuardCondition.h"
 
 ::DDS::GuardCondition_ptr GuardCondition_CreateGuardCondition() {
-	return new ::DDS::GuardCondition();
+  return new ::DDS::GuardCondition();
 }
 
 ::DDS::Condition_ptr GuardCondition_NarrowBase(::DDS::GuardCondition_ptr gc) {
-	return static_cast< ::DDS::Condition_ptr>(gc);
+  return static_cast< ::DDS::Condition_ptr>(gc);
 }
 
 ::CORBA::Boolean GuardCondition_GetTriggerValue(::DDS::GuardCondition_ptr gc) {
-	return gc->get_trigger_value();
+  return gc->get_trigger_value();
 }
 
 void GuardCondition_SetTriggerValue(::DDS::GuardCondition_ptr gc, ::CORBA::Boolean value) {
-	gc->set_trigger_value(value);
+  gc->set_trigger_value(value);
 }

@@ -22,15 +22,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "dds/DdsDcpsDomainC.h"
 
 #ifndef EXTERN_METHOD_EXPORT
-    #ifdef _WIN32
-        #define EXTERN_METHOD_EXPORT extern "C" __declspec(dllexport)
-    #else
-        #define EXTERN_METHOD_EXPORT extern "C"
-    #endif
+#ifdef _WIN32
+#define EXTERN_METHOD_EXPORT extern "C" __declspec(dllexport)
+#else
+#define EXTERN_METHOD_EXPORT extern "C"
+#endif
 #endif
 
 #ifndef EXTERN_STRUCT_EXPORT
-    #define EXTERN_STRUCT_EXPORT extern "C" struct
+#define EXTERN_STRUCT_EXPORT extern "C" struct
 #endif
 
-EXTERN_METHOD_EXPORT void Utils_CreateOctetSeq(unsigned char bytes[], ::DDS::OctetSeq* seq);
+EXTERN_METHOD_EXPORT void Utils_CreateOctetSeq(unsigned char bytes[], ::DDS::OctetSeq *seq);

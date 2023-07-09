@@ -22,70 +22,68 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "marshal.h"
 
-EXTERN_STRUCT_EXPORT RequestedIncompatibleQosStatusWrapper
-{
+EXTERN_STRUCT_EXPORT RequestedIncompatibleQosStatusWrapper {
     ::CORBA::Long total_count;
     ::CORBA::Long total_count_change;
     ::CORBA::Long last_policy_id;
-    void* policies;
+    void *policies;
 
 public:
     RequestedIncompatibleQosStatusWrapper() {
-        total_count = 0;
-        total_count_change = 0;
-        last_policy_id = 0;
-        policies = NULL;
+      total_count = 0;
+      total_count_change = 0;
+      last_policy_id = 0;
+      policies = NULL;
     }
 
     RequestedIncompatibleQosStatusWrapper(const ::DDS::RequestedIncompatibleQosStatus native) {
-        total_count = native.total_count;
-        total_count_change = native.total_count_change;
-        last_policy_id = native.last_policy_id;
-        unbounded_sequence_to_ptr(native.policies, policies);
+      total_count = native.total_count;
+      total_count_change = native.total_count_change;
+      last_policy_id = native.last_policy_id;
+      unbounded_sequence_to_ptr(native.policies, policies);
     }
 
     operator ::DDS::RequestedIncompatibleQosStatus() const {
-        ::DDS::RequestedIncompatibleQosStatus native;
-        native.total_count = total_count;
-        native.total_count_change = total_count_change;
-        native.last_policy_id = last_policy_id;
-        if (policies != NULL) {
-            ptr_to_unbounded_sequence(policies, native.policies);
-        }
-        return native;
+      ::DDS::RequestedIncompatibleQosStatus native;
+      native.total_count = total_count;
+      native.total_count_change = total_count_change;
+      native.last_policy_id = last_policy_id;
+      if (policies != NULL) {
+        ptr_to_unbounded_sequence(policies, native.policies);
+      }
+      return native;
     }
 };
 
-EXTERN_STRUCT_EXPORT OfferedIncompatibleQosStatusWrapper
-{
+EXTERN_STRUCT_EXPORT OfferedIncompatibleQosStatusWrapper {
     ::CORBA::Long total_count;
     ::CORBA::Long total_count_change;
     ::CORBA::Long last_policy_id;
-    void* policies;
+    void *policies;
 
 public:
     OfferedIncompatibleQosStatusWrapper() {
-        total_count = 0;
-        total_count_change = 0;
-        last_policy_id = 0;
-        policies = NULL;
+      total_count = 0;
+      total_count_change = 0;
+      last_policy_id = 0;
+      policies = NULL;
     }
 
     OfferedIncompatibleQosStatusWrapper(const ::DDS::OfferedIncompatibleQosStatus native) {
-        total_count = native.total_count;
-        total_count_change = native.total_count_change;
-        last_policy_id = native.last_policy_id;
-        unbounded_sequence_to_ptr(native.policies, policies);
+      total_count = native.total_count;
+      total_count_change = native.total_count_change;
+      last_policy_id = native.last_policy_id;
+      unbounded_sequence_to_ptr(native.policies, policies);
     }
 
     operator ::DDS::OfferedIncompatibleQosStatus() const {
-        ::DDS::OfferedIncompatibleQosStatus native;
-        native.total_count = total_count;
-        native.total_count_change = total_count_change;
-        native.last_policy_id = last_policy_id;
-        if (policies != NULL) {
-            ptr_to_unbounded_sequence(policies, native.policies);
-        }
-        return native;
+      ::DDS::OfferedIncompatibleQosStatus native;
+      native.total_count = total_count;
+      native.total_count_change = total_count_change;
+      native.last_policy_id = last_policy_id;
+      if (policies != NULL) {
+        ptr_to_unbounded_sequence(policies, native.policies);
+      }
+      return native;
     }
 };

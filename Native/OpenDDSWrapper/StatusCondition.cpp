@@ -20,13 +20,13 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "StatusCondition.h"
 
 ::DDS::Condition_ptr StatusCondition_NarrowBase(::DDS::StatusCondition_ptr status_condition) {
-	return static_cast< ::DDS::Condition_ptr>(status_condition);
+  return static_cast< ::DDS::Condition_ptr>(status_condition);
 }
 
 ::DDS::StatusMask StatusCondition_GetEnabledStatuses(::DDS::StatusCondition_ptr status_condition) {
-	return status_condition->get_enabled_statuses();
+  return status_condition->get_enabled_statuses();
 }
 
 void StatusCondition_SetEnabledStatuses(::DDS::StatusCondition_ptr status_condition, ::DDS::StatusMask value) {
-	status_condition->set_enabled_statuses(value);
+  status_condition->set_enabled_statuses(value);
 }

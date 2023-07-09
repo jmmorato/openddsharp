@@ -24,4 +24,4 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/Discovery.h>
 
 EXTERN_METHOD_EXPORT
-char* Discovery_GetKey(::OpenDDS::DCPS::Discovery* d);
+char *Discovery_GetKey(::OpenDDS::DCPS::Discovery *d);

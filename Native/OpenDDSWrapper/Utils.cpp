@@ -19,18 +19,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "Utils.h"
 
-void Utils_CreateOctetSeq(unsigned char bytes[], ::DDS::OctetSeq* seq)
-{
-    if (bytes == NULL)
-    {
-        seq->length(0);
-        return;
-    }
+void Utils_CreateOctetSeq(unsigned char bytes[], ::DDS::OctetSeq *seq) {
+  if (bytes == NULL) {
+    seq->length(0);
+    return;
+  }
 
-    int size = static_cast<int>(*(&bytes + 1) - bytes);
-    seq->length(size);
-    for (int i = 0; i < size; i++)
-    {
-        seq[i] = bytes[i];
-    }
+  int size = static_cast<int>(*(&bytes + 1) - bytes);
+  seq->length(size);
+  for (int i = 0; i < size; i++) {
+    seq[i] = bytes[i];
+  }
 }

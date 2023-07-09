@@ -20,21 +20,21 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ReadCondition.h"
 
 ::DDS::Condition_ptr ReadCondition_NarrowBase(::DDS::ReadCondition_ptr ptr) {
-	return static_cast< ::DDS::Condition_ptr>(ptr);
+  return static_cast< ::DDS::Condition_ptr>(ptr);
 }
 
 void ReadCondition_Release(::DDS::ReadCondition_ptr ptr) {
-	::DDS::ReadCondition::_tao_release(ptr);
+  ::DDS::ReadCondition::_tao_release(ptr);
 }
 
 ::DDS::SampleStateMask ReadCondition_GetSampleStateMask(::DDS::ReadCondition_ptr ptr) {
-	return ptr->get_sample_state_mask();
+  return ptr->get_sample_state_mask();
 }
 
 ::DDS::ViewStateMask ReadCondition_GetViewStateMask(::DDS::ReadCondition_ptr ptr) {
-	return ptr->get_view_state_mask();
+  return ptr->get_view_state_mask();
 }
 
 ::DDS::InstanceStateMask ReadCondition_GetInstanceStateMask(::DDS::ReadCondition_ptr ptr) {
-	return ptr->get_instance_state_mask();
+  return ptr->get_instance_state_mask();
 }

@@ -19,14 +19,14 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "DataWriterListener.h"
 
-OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr DataWriterListener_New(void* onOfferedDeadlineMissed,
-                                                                             void* onOfferedIncompatibleQos,
-                                                                             void* onLivelinessLost,
-                                                                             void* onPublicationMatched) {
-	return new OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl(onOfferedDeadlineMissed,
-																 onOfferedIncompatibleQos,
-																 onLivelinessLost,
-																 onPublicationMatched);
+OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr DataWriterListener_New(void *onOfferedDeadlineMissed,
+                                                                             void *onOfferedIncompatibleQos,
+                                                                             void *onLivelinessLost,
+                                                                             void *onPublicationMatched) {
+  return new OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl(onOfferedDeadlineMissed,
+                                                               onOfferedIncompatibleQos,
+                                                               onLivelinessLost,
+                                                               onPublicationMatched);
 }
 
 void DataWriterListener_Dispose(OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr ptr) {

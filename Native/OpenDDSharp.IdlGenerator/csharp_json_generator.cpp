@@ -32,790 +32,765 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 namespace {
-	std::string read_template(const char* prefix) {
-		std::string path = be_util::dds_root();
-		path.append("/dds/idl/");
-		path.append(prefix);
-		path.append("Template.txt");
-		std::ifstream ifs(path.c_str());
-		std::ostringstream oss;
-		oss << ifs.rdbuf();
-		return oss.str();
-	}
+    std::string read_template(const char *prefix) {
+      std::string path = be_util::dds_root();
+      path.append("/dds/idl/");
+      path.append(prefix);
+      path.append("Template.txt");
+      std::ifstream ifs(path.c_str());
+      std::ostringstream oss;
+      oss << ifs.rdbuf();
+      return oss.str();
+    }
 
-	void replaceAll(std::string& s, const std::map<std::string, std::string>& rep) {
-		typedef std::map<std::string, std::string>::const_iterator mapiter_t;
-		for (size_t i = s.find("<%"); i < s.length(); i = s.find("<%", i + 1)) {
-			size_t n = s.find("%>", i) - i + 2;
-			mapiter_t iter = rep.find(s.substr(i + 2, n - 4));
-			if (iter != rep.end()) {
-				s.replace(i, n, iter->second);
-			}
-		}
-	}
+    void replaceAll(std::string &s, const std::map<std::string, std::string> &rep) {
+      typedef std::map<std::string, std::string>::const_iterator mapiter_t;
+      for (size_t i = s.find("<%"); i < s.length(); i = s.find("<%", i + 1)) {
+        size_t n = s.find("%>", i) - i + 2;
+        mapiter_t iter = rep.find(s.substr(i + 2, n - 4));
+        if (iter != rep.end()) {
+          s.replace(i, n, iter->second);
+        }
+      }
+    }
 
-	std::string replaceString(std::string str, const std::string& from, const std::string& to) {
-		size_t start_pos = 0;
-		while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-			str.replace(start_pos, from.length(), to);
-			start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
-		}
-		return str;
-	}
+    std::string replaceString(std::string str, const std::string &from, const std::string &to) {
+      size_t start_pos = 0;
+      while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+      }
+      return str;
+    }
 }
 
 csharp_json_generator::csharp_json_generator()
-	: impl_template_(read_template("CSharpJsonImpl"))
-{
+    : impl_template_(read_template("CSharpJsonImpl")) {
 }
 
-bool csharp_json_generator::gen_module(AST_Module* node) {
-	be_global->impl_ << "namespace " << node->name()->last_component()->get_string() << "\n{\n";
+bool csharp_json_generator::gen_module(AST_Module *node) {
+  be_global->impl_ << "namespace " << node->name()->last_component()->get_string() << "\n{\n";
 
-	return true;
+  return true;
 }
 
 bool csharp_json_generator::gen_module_end() {
-	be_global->impl_ << "}\n";
+  be_global->impl_ << "}\n";
 
-	return true;
+  return true;
 }
 
-bool csharp_json_generator::gen_const(UTL_ScopedName* name, bool nestedInInteface, AST_Constant* constant) {
-	std::string csharp_type("");
-	std::string str_value("");
+bool csharp_json_generator::gen_const(UTL_ScopedName *name, bool nestedInInteface, AST_Constant *constant) {
+  std::string csharp_type("");
+  std::string str_value("");
 
-	switch (constant->et()) {
-	case AST_Expression::EV_short:
-		str_value = std::to_string(constant->constant_value()->ev()->u.sval);
-		csharp_type = "System.Int16";
-		break;
-	case AST_Expression::EV_ushort:
-		str_value = std::to_string(constant->constant_value()->ev()->u.usval);
-		csharp_type = "System.UInt16";
-		break;
-	case AST_Expression::EV_long:
-		str_value = std::to_string(constant->constant_value()->ev()->u.lval);
-		csharp_type = "System.Int32";
-		break;
-	case AST_Expression::EV_ulong:
-		str_value = std::to_string(constant->constant_value()->ev()->u.ulval);
-		csharp_type = "System.UInt32";
-		break;
-	case AST_Expression::EV_float:
-		str_value = std::to_string(constant->constant_value()->ev()->u.fval);
-		str_value.append("f");
-		csharp_type = "System.Single";
-		break;
-	case AST_Expression::EV_double:
-		str_value = std::to_string(constant->constant_value()->ev()->u.dval);
-		csharp_type = "System.Double";
-		break;
-	case AST_Expression::EV_char:
-	case AST_Expression::EV_wchar:
-	{
-		std::ostringstream value("");
-		constant->constant_value()->dump(value);
-		str_value = "'";
-		str_value.append(value.str());
-		str_value.append("'");
-		csharp_type = "System.Char";
-		break;
-	}
-	case AST_Expression::EV_octet:
-		str_value = std::to_string(constant->constant_value()->ev()->u.oval);
-		csharp_type = "System.Byte";
-		break;
-	case AST_Expression::EV_bool:
-		str_value = constant->constant_value()->ev()->u.bval ? "true" : "false";
-		csharp_type = "System.Boolean";
-		break;
-	case AST_Expression::EV_string:
-		str_value = "\"";
-		str_value.append(constant->constant_value()->ev()->u.strval->get_string());
-		str_value.append("\"");
-		csharp_type = "System.String";
-		break;
-	case AST_Expression::EV_wstring:
-		str_value = "\"";
-		str_value.append(constant->constant_value()->ev()->u.wstrval);
-		str_value.append("\"");
-		csharp_type = "System.String";
-		break;
-	case AST_Expression::EV_longlong:
-		str_value = std::to_string(constant->constant_value()->ev()->u.llval);
-		csharp_type = "System.Int64";
-		break;
-	case AST_Expression::EV_ulonglong:
-		str_value = std::to_string(constant->constant_value()->ev()->u.ullval);
-		csharp_type = "System.UInt64";
-		break;
-	case AST_Expression::EV_fixed:
-		str_value = std::to_string(static_cast<long double>(constant->constant_value()->ev()->u.fixedval));
-		csharp_type = "System.Decimal";
-		break;
-	case AST_Expression::EV_enum:
-	{
-		std::ostringstream value("");
-		constant->constant_value()->n()->dump(value);
-		str_value = replaceString(std::string(value.str()), std::string("::"), std::string("."));
+  switch (constant->et()) {
+    case AST_Expression::EV_short:
+      str_value = std::to_string(constant->constant_value()->ev()->u.sval);
+      csharp_type = "System.Int16";
+      break;
+    case AST_Expression::EV_ushort:
+      str_value = std::to_string(constant->constant_value()->ev()->u.usval);
+      csharp_type = "System.UInt16";
+      break;
+    case AST_Expression::EV_long:
+      str_value = std::to_string(constant->constant_value()->ev()->u.lval);
+      csharp_type = "System.Int32";
+      break;
+    case AST_Expression::EV_ulong:
+      str_value = std::to_string(constant->constant_value()->ev()->u.ulval);
+      csharp_type = "System.UInt32";
+      break;
+    case AST_Expression::EV_float:
+      str_value = std::to_string(constant->constant_value()->ev()->u.fval);
+      str_value.append("f");
+      csharp_type = "System.Single";
+      break;
+    case AST_Expression::EV_double:
+      str_value = std::to_string(constant->constant_value()->ev()->u.dval);
+      csharp_type = "System.Double";
+      break;
+    case AST_Expression::EV_char:
+    case AST_Expression::EV_wchar: {
+      std::ostringstream value("");
+      constant->constant_value()->dump(value);
+      str_value = "'";
+      str_value.append(value.str());
+      str_value.append("'");
+      csharp_type = "System.Char";
+      break;
+    }
+    case AST_Expression::EV_octet:
+      str_value = std::to_string(constant->constant_value()->ev()->u.oval);
+      csharp_type = "System.Byte";
+      break;
+    case AST_Expression::EV_bool:
+      str_value = constant->constant_value()->ev()->u.bval ? "true" : "false";
+      csharp_type = "System.Boolean";
+      break;
+    case AST_Expression::EV_string:
+      str_value = "\"";
+      str_value.append(constant->constant_value()->ev()->u.strval->get_string());
+      str_value.append("\"");
+      csharp_type = "System.String";
+      break;
+    case AST_Expression::EV_wstring:
+      str_value = "\"";
+      str_value.append(constant->constant_value()->ev()->u.wstrval);
+      str_value.append("\"");
+      csharp_type = "System.String";
+      break;
+    case AST_Expression::EV_longlong:
+      str_value = std::to_string(constant->constant_value()->ev()->u.llval);
+      csharp_type = "System.Int64";
+      break;
+    case AST_Expression::EV_ulonglong:
+      str_value = std::to_string(constant->constant_value()->ev()->u.ullval);
+      csharp_type = "System.UInt64";
+      break;
+    case AST_Expression::EV_fixed:
+      str_value = std::to_string(static_cast<long double>(constant->constant_value()->ev()->u.fixedval));
+      csharp_type = "System.Decimal";
+      break;
+    case AST_Expression::EV_enum: {
+      std::ostringstream value("");
+      constant->constant_value()->n()->dump(value);
+      str_value = replaceString(std::string(value.str()), std::string("::"), std::string("."));
 
-		std::ostringstream type("");
-		constant->enum_full_name()->dump(type);
-		std::string str_type = type.str();
-		if (str_type.rfind("::", 0) == 0) {
-			str_type = str_type.substr(2);
-		}
-		csharp_type = replaceString(std::string(str_type), std::string("::"), std::string("."));
-		break;
-	}
-	default:
-		// CODE REVIEW: Error and stop?
-		return true;
-	}
+      std::ostringstream type("");
+      constant->enum_full_name()->dump(type);
+      std::string str_type = type.str();
+      if (str_type.rfind("::", 0) == 0) {
+        str_type = str_type.substr(2);
+      }
+      csharp_type = replaceString(std::string(str_type), std::string("::"), std::string("."));
+      break;
+    }
+    default:
+      // CODE REVIEW: Error and stop?
+      return true;
+  }
 
-	be_global->impl_ << "    public static class " << name->last_component()->get_string() << "\n"
-					 << "    {\n"
-					 << "        public static readonly " << csharp_type << " Value = " << str_value << ";\n"
-				     << "    }\n\n";
+  be_global->impl_ << "    public static class " << name->last_component()->get_string() << "\n"
+                   << "    {\n"
+                   << "        public static readonly " << csharp_type << " Value = " << str_value << ";\n"
+                   << "    }\n\n";
 
-	return true;
+  return true;
 }
 
-bool csharp_json_generator::gen_enum(AST_Enum* node, UTL_ScopedName* name, const std::vector<AST_EnumVal*>& contents, const char* repoid) {
-	be_global->impl_ << "    #region " << name->last_component()->get_string() << " Enumeration\n"
-					 << "    public enum " << name->last_component()->get_string() << "\n"
-					 << "    {\n";
+bool csharp_json_generator::gen_enum(AST_Enum *node, UTL_ScopedName *name, const std::vector<AST_EnumVal *> &contents,
+                                     const char *repoid) {
+  be_global->impl_ << "    #region " << name->last_component()->get_string() << " Enumeration\n"
+                   << "    public enum " << name->last_component()->get_string() << "\n"
+                   << "    {\n";
 
-	for (unsigned int i = 0; i < contents.size(); i++) {
-		AST_EnumVal* val = contents[i];
+  for (unsigned int i = 0; i < contents.size(); i++) {
+    AST_EnumVal *val = contents[i];
 
-		be_global->impl_ << "        " << val->local_name()->get_string() << " = ";
-		val->constant_value()->dump(be_global->impl_);
+    be_global->impl_ << "        " << val->local_name()->get_string() << " = ";
+    val->constant_value()->dump(be_global->impl_);
 
-		if (i + 1 < contents.size()) {
-			be_global->impl_ << ",";
-		}
-
-		be_global->impl_ << "\n";
-	}
-
-	be_global->impl_ << "    }\n";
-	be_global->impl_ << "    #endregion\n\n";
-
-	return true;
-}
-
-bool csharp_json_generator::gen_typedef(AST_Typedef* node, UTL_ScopedName* name, AST_Type* base, const char* repoid) {
-	return true;
-}
-
-bool csharp_json_generator::gen_struct(AST_Structure* structure, UTL_ScopedName* name, const std::vector<AST_Field*>& fields, AST_Type::SIZE_TYPE, const char*)
-{
-	const std::string scoped_name = scoped(name);
-	const std::string short_name = name->last_component()->get_string();
-
-	std::map<std::string, std::string> replacements;
-	replacements["SCOPED"] = scoped_name;
-	replacements["TYPE"] = short_name;
-	replacements["SEQ"] = be_global->sequence_suffix().c_str();
-	replacements["SCOPED_METHOD"] = replaceString(std::string(scoped_name), std::string("."), std::string("_"));
-
-	be_global->impl_ << "    #region " << short_name << " Definitions\n"
-					 << "    public class " << short_name << "\n"
-					 << "    {\n"
-					 << "        #region Constants\n"
-					 << "        internal const string API_DLL = \"" << be_global->project_name() << "Wrapper\";\n"
-					 << "        #endregion\n\n"
-					 << "        #region Fields" << "\n"
-					 << declare_struct_fields(fields, "        ").c_str()
-					 << "        #endregion" << "\n\n"
-					 << "        #region Properties" << "\n"
-					 << implement_struct_properties(fields, "        ").c_str()
-					 << "        #endregion" << " \n\n"
-					 << "        #region Constructors" << "\n"
-					 << implement_struct_constructor(fields, short_name, "        ").c_str()
-					 << "        #endregion" << "\n\n"
-					 << "        #region Methods" << "\n"
-                     << implement_struct_memberwise_copy(fields, short_name, "        ").c_str()
-					 << "        #endregion" << "\n"
-					 << "    }\n\n";
-
-	if (be_global->is_topic_type(structure)) {
-		std::string impl = impl_template_;
-		replaceAll(impl, replacements);
-		be_global->impl_ << impl;
-	}
-
-	be_global->impl_ << "\n    #endregion" << "\n\n";
-
-	return true;
-}
-
-bool csharp_json_generator::gen_union(AST_Union*, UTL_ScopedName* name, const std::vector<AST_UnionBranch*>&, AST_Type*, const char*)
-{
-	if (idl_global->is_dcps_type(name)) {
-		std::cerr << "ERROR: union " << scoped(name) << " can not be used as a "
-			"DCPS_DATA_TYPE (only structs can be Topic types)" << std::endl;
-		return false;
-	}
-
-	//TODO: Implement unions.
-	std::cerr << "ERROR: union not implemented yet." << std::endl;
-
-	return true;
-}
-
-std::string csharp_json_generator::declare_struct_fields(const std::vector<AST_Field*>& fields, const std::string indent) {
-	std::string ret("");
-
-	for (unsigned int i = 0; i < fields.size(); i++) {
-		AST_Field* field = fields[i];
-		AST_Type* type = field->field_type();
-		const char* name = field->local_name()->get_string();
-		std::string type_name = get_csharp_type(type);
-
-		ret.append(indent);
-		ret.append(type_name.c_str());
-		ret.append(" _");
-		ret.append(name);
-		ret.append(";\n");
-	}
-
-	return ret;
-}
-
-std::string csharp_json_generator::implement_struct_constructor(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
-	std::string ret(indent);
-	ret.append("public ");
-	ret.append(name);
-	ret.append("()\n");
-	ret.append(indent);
-	ret.append("{\n");
-
-	for (unsigned int i = 0; i < fields.size(); ++i) {
-		AST_Field* field = fields[i];
-		AST_Type* type = field->field_type();
-
-		if (type->node_type() != AST_Decl::NT_enum) {
-			char* field_name = field->local_name()->get_string();
-			std::string default_value = get_csharp_default_value(type, field_name);
-			std::string initialization = get_csharp_constructor_initialization(type, field_name);
-
-            ret.append(indent + "    _");
-            ret.append(field_name);
-            ret.append(" = ");
-            ret.append(default_value);
-            ret.append(";\n");
-            ret.append(initialization);
-		}
-	}
-
-	ret.append(indent + "}\n");
-	return ret;
-}
-
-std::string csharp_json_generator::implement_struct_properties(const std::vector<AST_Field*>& fields, const std::string indent) {
-	std::string ret("");
-
-	for (unsigned int i = 0; i < fields.size(); i++) {
-		AST_Field* field = fields[i];
-		AST_Type* type = field->field_type();
-		const char* field_name = field->local_name()->get_string();
-		std::string csharp_type = get_csharp_type(type);
-
-		if (i != 0) {
-			ret.append("\n");
-		}
-		ret.append(indent + "public ");
-		ret.append(csharp_type);
-		ret.append(" ");
-		ret.append(field_name);
-		ret.append("\n");
-		ret.append(indent + "{\n");
-		ret.append(indent + "    get { return _");
-		ret.append(field_name);
-		ret.append("; }\n");
-		ret.append(indent + "    set { _");
-		ret.append(field_name);
-		ret.append(" = value; }\n");
-		ret.append(indent + "}\n");
-	}
-
-	return ret;
-}
-
-std::string csharp_json_generator::implement_struct_memberwise_copy(const std::vector<AST_Field*>& fields, const std::string name, const std::string indent) {
-    std::string ret(indent);
-    ret.append("internal void MemberwiseCopy(");
-    ret.append(name);
-    ret.append(" source)\n");
-
-    ret.append(indent);
-    ret.append("{\n");
-
-    for (unsigned int i = 0; i < fields.size(); i++) {
-        AST_Field* field = fields[i];
-        AST_Type* field_type = field->field_type();
-        const char * field_name = field->local_name()->get_string();
-
-        ret.append(indent);
-        ret.append("    ");
-        ret.append(field_name);
-        ret.append(" = source.");
-        ret.append(field_name);
-        ret.append(";\n");
+    if (i + 1 < contents.size()) {
+      be_global->impl_ << ",";
     }
 
+    be_global->impl_ << "\n";
+  }
+
+  be_global->impl_ << "    }\n";
+  be_global->impl_ << "    #endregion\n\n";
+
+  return true;
+}
+
+bool csharp_json_generator::gen_typedef(AST_Typedef *node, UTL_ScopedName *name, AST_Type *base, const char *repoid) {
+  return true;
+}
+
+bool csharp_json_generator::gen_struct(AST_Structure *structure, UTL_ScopedName *name,
+                                       const std::vector<AST_Field *> &fields, AST_Type::SIZE_TYPE, const char *) {
+  const std::string scoped_name = scoped(name);
+  const std::string short_name = name->last_component()->get_string();
+
+  std::map<std::string, std::string> replacements;
+  replacements["SCOPED"] = scoped_name;
+  replacements["TYPE"] = short_name;
+  replacements["SEQ"] = be_global->sequence_suffix().c_str();
+  replacements["SCOPED_METHOD"] = replaceString(std::string(scoped_name), std::string("."), std::string("_"));
+
+  be_global->impl_ << "    #region " << short_name << " Definitions\n"
+                   << "    public class " << short_name << "\n"
+                   << "    {\n"
+                   << "        #region Constants\n"
+                   << "        internal const string API_DLL = \"" << be_global->project_name() << "Wrapper\";\n"
+                   << "        #endregion\n\n"
+                   << "        #region Fields" << "\n"
+                   << declare_struct_fields(fields, "        ").c_str()
+                   << "        #endregion" << "\n\n"
+                   << "        #region Properties" << "\n"
+                   << implement_struct_properties(fields, "        ").c_str()
+                   << "        #endregion" << " \n\n"
+                   << "        #region Constructors" << "\n"
+                   << implement_struct_constructor(fields, short_name, "        ").c_str()
+                   << "        #endregion" << "\n\n"
+                   << "        #region Methods" << "\n"
+                   << implement_struct_memberwise_copy(fields, short_name, "        ").c_str()
+                   << "        #endregion" << "\n"
+                   << "    }\n\n";
+
+  if (be_global->is_topic_type(structure)) {
+    std::string impl = impl_template_;
+    replaceAll(impl, replacements);
+    be_global->impl_ << impl;
+  }
+
+  be_global->impl_ << "\n    #endregion" << "\n\n";
+
+  return true;
+}
+
+bool
+csharp_json_generator::gen_union(AST_Union *, UTL_ScopedName *name, const std::vector<AST_UnionBranch *> &, AST_Type *,
+                                 const char *) {
+  if (idl_global->is_dcps_type(name)) {
+    std::cerr << "ERROR: union " << scoped(name) << " can not be used as a "
+                                                    "DCPS_DATA_TYPE (only structs can be Topic types)" << std::endl;
+    return false;
+  }
+
+  //TODO: Implement unions.
+  std::cerr << "ERROR: union not implemented yet." << std::endl;
+
+  return true;
+}
+
+std::string
+csharp_json_generator::declare_struct_fields(const std::vector<AST_Field *> &fields, const std::string indent) {
+  std::string ret("");
+
+  for (unsigned int i = 0; i < fields.size(); i++) {
+    AST_Field *field = fields[i];
+    AST_Type *type = field->field_type();
+    const char *name = field->local_name()->get_string();
+    std::string type_name = get_csharp_type(type);
+
     ret.append(indent);
-    ret.append("}\n\n");
+    ret.append(type_name.c_str());
+    ret.append(" _");
+    ret.append(name);
+    ret.append(";\n");
+  }
 
-    return ret;
+  return ret;
 }
 
-std::string csharp_json_generator::get_csharp_type(AST_Type* type) {
-	AST_Decl::NodeType node_type = type->node_type();
-	std::string ret(type->flat_name());
+std::string
+csharp_json_generator::implement_struct_constructor(const std::vector<AST_Field *> &fields, const std::string name,
+                                                    const std::string indent) {
+  std::string ret(indent);
+  ret.append("public ");
+  ret.append(name);
+  ret.append("()\n");
+  ret.append(indent);
+  ret.append("{\n");
 
-	switch (node_type)
-	{
-	case AST_Decl::NT_union:
-	case AST_Decl::NT_struct:
-	{
-		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
-		break;
-	}
-	case AST_Decl::NT_enum:
-	{
-		ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
-		break;
-	}
-	case AST_Decl::NT_typedef:
-	{
-		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-		ret = get_csharp_type(typedef_type->base_type());
-		break;
-	}
-	case AST_Decl::NT_fixed:
-	{
-		ret = "decimal";
-		break;
-	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{
-		ret = "string";
-		break;
-	}
-	case AST_Decl::NT_pre_defined:
-	{
-		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
+  for (unsigned int i = 0; i < fields.size(); ++i) {
+    AST_Field *field = fields[i];
+    AST_Type *type = field->field_type();
 
-		switch (predefined_type->pt())
-		{
-    case AST_PredefinedType::PT_int8:
-      ret = "sbyte";
-      break;
-    case AST_PredefinedType::PT_uint8:
-      ret = "byte";
-      break;
-		case AST_PredefinedType::PT_short:
-			ret = "Int16";
-			break;
-		case AST_PredefinedType::PT_long:
-			ret = "Int32";
-			break;
-		case AST_PredefinedType::PT_longlong:
-			ret = "Int64";
-			break;
-		case AST_PredefinedType::PT_ushort:
-			ret = "UInt16";
-			break;
-		case AST_PredefinedType::PT_ulong:
-			ret = "UInt32";
-			break;
-		case AST_PredefinedType::PT_ulonglong:
-			ret = "UInt64";
-			break;
-		case AST_PredefinedType::PT_float:
-			ret = "Single";
-			break;
-		case AST_PredefinedType::PT_double:
-			ret = "Double";
-			break;
-		case AST_PredefinedType::PT_longdouble:
-			ret = "Decimal";
-			break;
-		case AST_PredefinedType::PT_octet:
-			ret = "Byte";			
-			break;
-		case AST_PredefinedType::PT_char:
-		case AST_PredefinedType::PT_wchar:
-			ret = "Char";
-			break;
-		case AST_PredefinedType::PT_boolean:
-			ret = "Boolean";
-			break;
-		}
-		break;
-	}
-	case AST_Decl::NT_array:
-	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(arr_type->base_type());
+    if (type->node_type() != AST_Decl::NT_enum) {
+      char *field_name = field->local_name()->get_string();
+      std::string default_value = get_csharp_default_value(type, field_name);
+      std::string initialization = get_csharp_constructor_initialization(type, field_name);
 
-		ret = base_type;
-		ret.append("[");
-		for (unsigned int i = 1; i < arr_type->n_dims(); i++) {
-			ret.append("][");
-		}
-		ret.append("]");
-		break;
-	}
-	case AST_Decl::NT_sequence:
-	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(seq_type->base_type());
+      ret.append(indent + "    _");
+      ret.append(field_name);
+      ret.append(" = ");
+      ret.append(default_value);
+      ret.append(";\n");
+      ret.append(initialization);
+    }
+  }
 
-		ret = "IList<";
-		ret.append(base_type);
-		ret.append(">");
-		break;
-	}
-	default:
-		break;
-	}
-
-	return ret;
+  ret.append(indent + "}\n");
+  return ret;
 }
 
-std::string csharp_json_generator::get_csharp_default_value(AST_Type* type, const char * field_name) {
-	AST_Decl::NodeType node_type = type->node_type();
-	std::string ret(type->flat_name());
+std::string
+csharp_json_generator::implement_struct_properties(const std::vector<AST_Field *> &fields, const std::string indent) {
+  std::string ret("");
 
-	switch (node_type)
-	{
-	case AST_Decl::NT_union:
-	case AST_Decl::NT_struct:
-	{
-		ret = "new ";
-		ret.append(replaceString(std::string(type->full_name()), std::string("::"), std::string(".")));
-		ret.append("()");
-		break;
-	}
-	case AST_Decl::NT_typedef:
-	{
-		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-		ret = get_csharp_default_value(typedef_type->base_type(), field_name);
-		break;
-	}
-	case AST_Decl::NT_fixed:
-	{
-		ret = "0";
-		break;
-	}
-	case AST_Decl::NT_string:
-	case AST_Decl::NT_wstring:
-	{
-		ret = "string.Empty";
-		break;
-	}
-	case AST_Decl::NT_pre_defined:
-	{
-		AST_PredefinedType * predefined_type = AST_PredefinedType::narrow_from_decl(type);
-		switch (predefined_type->pt())
-		{
-    case AST_PredefinedType::PT_int8:
-    case AST_PredefinedType::PT_uint8:
-		case AST_PredefinedType::PT_short:
-		case AST_PredefinedType::PT_long:
-		case AST_PredefinedType::PT_longlong:
-		case AST_PredefinedType::PT_ushort:
-		case AST_PredefinedType::PT_ulong:
-		case AST_PredefinedType::PT_ulonglong:
-		case AST_PredefinedType::PT_float:
-		case AST_PredefinedType::PT_double:
-		case AST_PredefinedType::PT_longdouble:
-		case AST_PredefinedType::PT_octet:
-			ret = "0";
-			break;
-		case AST_PredefinedType::PT_char:
-		case AST_PredefinedType::PT_wchar:
-			ret = "default(char)";
-			break;
-		case AST_PredefinedType::PT_boolean:
-			ret = "false";
-			break;
-		}
-		break;
-	}
-	case AST_Decl::NT_array:
-	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(arr_type->base_type());
-		AST_Expression** dims = arr_type->dims();
-		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+  for (unsigned int i = 0; i < fields.size(); i++) {
+    AST_Field *field = fields[i];
+    AST_Type *type = field->field_type();
+    const char *field_name = field->local_name()->get_string();
+    std::string csharp_type = get_csharp_type(type);
 
-		switch (base_node_type)
-		{
-		case AST_Decl::NT_union:
-		case AST_Decl::NT_struct:
-		{
-			unsigned int total_dim = arr_type->n_dims();
-			ret = "new ";
-			ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
-			ret.append("[");
-			ret.append(std::to_string(dims[0]->ev()->u.ulval));
-			for (unsigned int i = 1; i < total_dim; i++) {
-				ret.append("][");
-			}
-			ret.append("]");
-			break;
-		}
-		case AST_Decl::NT_string:
-		case AST_Decl::NT_wstring:
-		{
-			unsigned int total_dim = arr_type->n_dims();
-			ret = "new string[";
-			ret.append(std::to_string(dims[0]->ev()->u.ulval));
-			for (unsigned int i = 1; i < total_dim; i++) {
-				ret.append("][");
-			}
-			ret.append("]");
-			break;
-		}
-		default:
-		{
-            unsigned int total_dim = arr_type->n_dims();
-            std::string csharp_base_type = get_csharp_type(arr_type->base_type());
+    if (i != 0) {
+      ret.append("\n");
+    }
+    ret.append(indent + "public ");
+    ret.append(csharp_type);
+    ret.append(" ");
+    ret.append(field_name);
+    ret.append("\n");
+    ret.append(indent + "{\n");
+    ret.append(indent + "    get { return _");
+    ret.append(field_name);
+    ret.append("; }\n");
+    ret.append(indent + "    set { _");
+    ret.append(field_name);
+    ret.append(" = value; }\n");
+    ret.append(indent + "}\n");
+  }
 
-            // First dimension initialization
-            ret ="new ";
+  return ret;
+}
+
+std::string
+csharp_json_generator::implement_struct_memberwise_copy(const std::vector<AST_Field *> &fields, const std::string name,
+                                                        const std::string indent) {
+  std::string ret(indent);
+  ret.append("internal void MemberwiseCopy(");
+  ret.append(name);
+  ret.append(" source)\n");
+
+  ret.append(indent);
+  ret.append("{\n");
+
+  for (unsigned int i = 0; i < fields.size(); i++) {
+    AST_Field *field = fields[i];
+    AST_Type *field_type = field->field_type();
+    const char *field_name = field->local_name()->get_string();
+
+    ret.append(indent);
+    ret.append("    ");
+    ret.append(field_name);
+    ret.append(" = source.");
+    ret.append(field_name);
+    ret.append(";\n");
+  }
+
+  ret.append(indent);
+  ret.append("}\n\n");
+
+  return ret;
+}
+
+std::string csharp_json_generator::get_csharp_type(AST_Type *type) {
+  AST_Decl::NodeType node_type = type->node_type();
+  std::string ret(type->flat_name());
+
+  switch (node_type) {
+    case AST_Decl::NT_union:
+    case AST_Decl::NT_struct: {
+      ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
+      break;
+    }
+    case AST_Decl::NT_enum: {
+      ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
+      break;
+    }
+    case AST_Decl::NT_typedef: {
+      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(type);
+      ret = get_csharp_type(typedef_type->base_type());
+      break;
+    }
+    case AST_Decl::NT_fixed: {
+      ret = "decimal";
+      break;
+    }
+    case AST_Decl::NT_string:
+    case AST_Decl::NT_wstring: {
+      ret = "string";
+      break;
+    }
+    case AST_Decl::NT_pre_defined: {
+      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType*>(type);
+
+      switch (predefined_type->pt()) {
+        case AST_PredefinedType::PT_int8:
+          ret = "sbyte";
+          break;
+        case AST_PredefinedType::PT_uint8:
+          ret = "byte";
+          break;
+        case AST_PredefinedType::PT_short:
+          ret = "Int16";
+          break;
+        case AST_PredefinedType::PT_long:
+          ret = "Int32";
+          break;
+        case AST_PredefinedType::PT_longlong:
+          ret = "Int64";
+          break;
+        case AST_PredefinedType::PT_ushort:
+          ret = "UInt16";
+          break;
+        case AST_PredefinedType::PT_ulong:
+          ret = "UInt32";
+          break;
+        case AST_PredefinedType::PT_ulonglong:
+          ret = "UInt64";
+          break;
+        case AST_PredefinedType::PT_float:
+          ret = "Single";
+          break;
+        case AST_PredefinedType::PT_double:
+          ret = "Double";
+          break;
+        case AST_PredefinedType::PT_longdouble:
+          ret = "Decimal";
+          break;
+        case AST_PredefinedType::PT_octet:
+          ret = "Byte";
+          break;
+        case AST_PredefinedType::PT_char:
+        case AST_PredefinedType::PT_wchar:
+          ret = "Char";
+          break;
+        case AST_PredefinedType::PT_boolean:
+          ret = "Boolean";
+          break;
+      }
+      break;
+    }
+    case AST_Decl::NT_array: {
+      AST_Array *arr_type = dynamic_cast<AST_Array*>(type);
+      std::string base_type = get_csharp_type(arr_type->base_type());
+
+      ret = base_type;
+      ret.append("[");
+      for (unsigned int i = 1; i < arr_type->n_dims(); i++) {
+        ret.append("][");
+      }
+      ret.append("]");
+      break;
+    }
+    case AST_Decl::NT_sequence: {
+      AST_Sequence *seq_type = dynamic_cast<AST_Sequence*>(type);
+      std::string base_type = get_csharp_type(seq_type->base_type());
+
+      ret = "IList<";
+      ret.append(base_type);
+      ret.append(">");
+      break;
+    }
+    default:
+      break;
+  }
+
+  return ret;
+}
+
+std::string csharp_json_generator::get_csharp_default_value(AST_Type *type, const char *field_name) {
+  AST_Decl::NodeType node_type = type->node_type();
+  std::string ret(type->flat_name());
+
+  switch (node_type) {
+    case AST_Decl::NT_union:
+    case AST_Decl::NT_struct: {
+      ret = "new ";
+      ret.append(replaceString(std::string(type->full_name()), std::string("::"), std::string(".")));
+      ret.append("()");
+      break;
+    }
+    case AST_Decl::NT_typedef: {
+      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(type);
+      ret = get_csharp_default_value(typedef_type->base_type(), field_name);
+      break;
+    }
+    case AST_Decl::NT_fixed: {
+      ret = "0";
+      break;
+    }
+    case AST_Decl::NT_string:
+    case AST_Decl::NT_wstring: {
+      ret = "string.Empty";
+      break;
+    }
+    case AST_Decl::NT_pre_defined: {
+      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType*>(type);
+      switch (predefined_type->pt()) {
+        case AST_PredefinedType::PT_int8:
+        case AST_PredefinedType::PT_uint8:
+        case AST_PredefinedType::PT_short:
+        case AST_PredefinedType::PT_long:
+        case AST_PredefinedType::PT_longlong:
+        case AST_PredefinedType::PT_ushort:
+        case AST_PredefinedType::PT_ulong:
+        case AST_PredefinedType::PT_ulonglong:
+        case AST_PredefinedType::PT_float:
+        case AST_PredefinedType::PT_double:
+        case AST_PredefinedType::PT_longdouble:
+        case AST_PredefinedType::PT_octet:
+          ret = "0";
+          break;
+        case AST_PredefinedType::PT_char:
+        case AST_PredefinedType::PT_wchar:
+          ret = "default(char)";
+          break;
+        case AST_PredefinedType::PT_boolean:
+          ret = "false";
+          break;
+      }
+      break;
+    }
+    case AST_Decl::NT_array: {
+      AST_Array *arr_type = dynamic_cast<AST_Array*>(type);
+      std::string base_type = get_csharp_type(arr_type->base_type());
+      AST_Expression **dims = arr_type->dims();
+      AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+
+      switch (base_node_type) {
+        case AST_Decl::NT_union:
+        case AST_Decl::NT_struct: {
+          unsigned int total_dim = arr_type->n_dims();
+          ret = "new ";
+          ret.append(
+              replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+          ret.append("[");
+          ret.append(std::to_string(dims[0]->ev()->u.ulval));
+          for (unsigned int i = 1; i < total_dim; i++) {
+            ret.append("][");
+          }
+          ret.append("]");
+          break;
+        }
+        case AST_Decl::NT_string:
+        case AST_Decl::NT_wstring: {
+          unsigned int total_dim = arr_type->n_dims();
+          ret = "new string[";
+          ret.append(std::to_string(dims[0]->ev()->u.ulval));
+          for (unsigned int i = 1; i < total_dim; i++) {
+            ret.append("][");
+          }
+          ret.append("]");
+          break;
+        }
+        default: {
+          unsigned int total_dim = arr_type->n_dims();
+          std::string csharp_base_type = get_csharp_type(arr_type->base_type());
+
+          // First dimension initialization
+          ret = "new ";
+          ret.append(csharp_base_type);
+          ret.append("[");
+          ret.append(std::to_string(dims[0]->ev()->u.ulval));
+          for (unsigned int i = 1; i < total_dim; i++) {
+            ret.append("][");
+          }
+          ret.append("]");
+          break;
+        }
+      }
+      break;
+    }
+    case AST_Decl::NT_sequence: {
+      AST_Sequence *seq_type = dynamic_cast<AST_Sequence*>(type);
+      std::string base_type = get_csharp_type(seq_type->base_type());
+
+      ret = "new List<";
+      ret.append(base_type);
+      ret.append(">(");
+      unsigned int bound = seq_type->max_size()->ev()->u.ulval;
+      if (bound > 0) {
+        ret.append(std::to_string(bound));
+      }
+      ret.append(")");
+      break;
+    }
+    default:
+      break;
+  }
+
+  return ret;
+}
+
+std::string csharp_json_generator::get_csharp_constructor_initialization(AST_Type *type, const char *name) {
+  AST_Decl::NodeType node_type = type->node_type();
+  std::string ret("");
+
+  switch (node_type) {
+    case AST_Decl::NT_typedef: {
+      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(type);
+      ret = get_csharp_constructor_initialization(typedef_type->base_type(), name);
+      break;
+    }
+    case AST_Decl::NT_array: {
+      AST_Array *arr_type = dynamic_cast<AST_Array*>(type);
+      std::string base_type = get_csharp_type(arr_type->base_type());
+      AST_Expression **dims = arr_type->dims();
+      AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
+      unsigned int total_dim = arr_type->n_dims();
+      std::string csharp_base_type = get_csharp_type(arr_type->base_type());
+
+      switch (base_node_type) {
+        case AST_Decl::NT_union:
+        case AST_Decl::NT_struct: {
+          std::string loop_indent("            ");
+          for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+            ret.append(loop_indent);
+            ret.append("for (int i");
+            ret.append(std::to_string(i));
+            ret.append(" = 0; i");
+            ret.append(std::to_string(i));
+            ret.append(" < ");
+            ret.append(std::to_string(dims[i]->ev()->u.ulval));
+            ret.append("; ++i");
+            ret.append(std::to_string(i));
+            ret.append(") {\n");
+
+            loop_indent.append("    ");
+
+            if (i + 1 < total_dim) {
+              ret.append(loop_indent);
+              ret.append(name);
+              for (unsigned int j = 0; j < i + 1; ++j) {
+
+                ret.append("[i");
+                ret.append(std::to_string(j));
+                ret.append("]");
+              }
+              ret.append(" = new ");
+              ret.append(csharp_base_type);
+              ret.append("[");
+              ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
+              ret.append("]");
+              for (unsigned int j = i + 2; j < total_dim; ++j) {
+                ret.append("[]");
+              }
+              ret.append(";\n");
+            }
+          }
+
+          ret.append(loop_indent);
+          ret.append(name);
+          ret.append("[");
+          for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+            ret.append("i");
+            ret.append(std::to_string(i));
+            if (i + 1 < arr_type->n_dims()) {
+              ret.append("][");
+            }
+          }
+          ret.append("] = new ");
+          ret.append(
+              replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
+          ret.append("();\n");
+
+          for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+            loop_indent.erase(0, 4);
+            ret.append(loop_indent);
+            ret.append("}\n");
+          }
+          break;
+        }
+        case AST_Decl::NT_string:
+        case AST_Decl::NT_wstring: {
+          std::string loop_indent("            ");
+          for (ACE_UINT32 i = 0; i < total_dim; i++) {
+            ret.append(loop_indent);
+            ret.append("for (int i");
+            ret.append(std::to_string(i));
+            ret.append(" = 0; i");
+            ret.append(std::to_string(i));
+            ret.append(" < ");
+            ret.append(std::to_string(dims[i]->ev()->u.ulval));
+            ret.append("; ++i");
+            ret.append(std::to_string(i));
+            ret.append(") {\n");
+
+            loop_indent.append("    ");
+
+            if (i + 1 < total_dim) {
+              ret.append(loop_indent);
+              ret.append(name);
+              for (unsigned int j = 0; j < i + 1; ++j) {
+
+                ret.append("[i");
+                ret.append(std::to_string(j));
+                ret.append("]");
+              }
+              ret.append(" = new ");
+              ret.append(csharp_base_type);
+              ret.append("[");
+              ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
+              ret.append("]");
+              for (unsigned int j = i + 2; j < total_dim; ++j) {
+                ret.append("[]");
+              }
+              ret.append(";\n");
+            }
+          }
+
+          ret.append(loop_indent);
+          ret.append(name);
+          ret.append("[");
+          for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+            ret.append("i");
+            ret.append(std::to_string(i));
+            if (i + 1 < arr_type->n_dims()) {
+              ret.append("][");
+            }
+          }
+          ret.append("] = string.Empty;\n");
+
+          for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
+            loop_indent.erase(0, 4);
+            ret.append(loop_indent);
+            ret.append("}\n");
+          }
+          break;
+        }
+        default: {
+          // Remaining dimensions initialization for jagger arrays
+          std::string loop_indent("            ");
+          for (unsigned int i = 1; i < total_dim; ++i) {
+            ret.append(loop_indent + "for (int i");
+            ret.append(std::to_string(i - 1));
+            ret.append(" = 0; i");
+            ret.append(std::to_string(i - 1));
+            ret.append(" < ");
+            ret.append(std::to_string(dims[i - 1]->ev()->u.ulval));
+            ret.append(" ; ++i");
+            ret.append(std::to_string(i - 1));
+            ret.append(" ) {\n");
+
+            loop_indent.append("    ");
+            ret.append(loop_indent);
+            ret.append(name);
+            for (unsigned int j = 0; j < i; ++j) {
+
+              ret.append("[i");
+              ret.append(std::to_string(j));
+              ret.append("]");
+            }
+            ret.append(" = new ");
             ret.append(csharp_base_type);
             ret.append("[");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            for (unsigned int i = 1; i < total_dim; i++) {
-                ret.append("][");
-            }
+            ret.append(std::to_string(dims[i]->ev()->u.ulval));
             ret.append("]");
-			break;
-		}
-		}
-		break;
-	}
-	case AST_Decl::NT_sequence:
-	{
-		AST_Sequence* seq_type = AST_Sequence::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(seq_type->base_type());
-
-		ret = "new List<";
-		ret.append(base_type);
-		ret.append(">(");
-		unsigned int bound = seq_type->max_size()->ev()->u.ulval;
-		if (bound > 0) {
-			ret.append(std::to_string(bound));
-		}
-		ret.append(")");
-		break;
-	}
-	default:
-		break;
-	}
-
-	return ret;
-}
-
-std::string csharp_json_generator::get_csharp_constructor_initialization(AST_Type* type, const char * name) {
-	AST_Decl::NodeType node_type = type->node_type();
-	std::string ret("");
-
-	switch (node_type)
-	{
-	case AST_Decl::NT_typedef:
-	{
-		AST_Typedef* typedef_type = AST_Typedef::narrow_from_decl(type);
-		ret = get_csharp_constructor_initialization(typedef_type->base_type(), name);
-		break;
-	}
-	case AST_Decl::NT_array:
-	{
-		AST_Array* arr_type = AST_Array::narrow_from_decl(type);
-		std::string base_type = get_csharp_type(arr_type->base_type());
-		AST_Expression** dims = arr_type->dims();
-		AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
-        unsigned int total_dim = arr_type->n_dims();
-        std::string csharp_base_type = get_csharp_type(arr_type->base_type());
-
-		switch (base_node_type)
-		{
-		case AST_Decl::NT_union:
-		case AST_Decl::NT_struct:
-		{
-			std::string loop_indent("            ");
-			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
-				ret.append(loop_indent);
-				ret.append("for (int i");
-				ret.append(std::to_string(i));
-				ret.append(" = 0; i");
-				ret.append(std::to_string(i));
-				ret.append(" < ");
-				ret.append(std::to_string(dims[i]->ev()->u.ulval));
-				ret.append("; ++i");
-				ret.append(std::to_string(i));
-				ret.append(") {\n");
-
-				loop_indent.append("    ");
-
-                if (i + 1 < total_dim)
-                {
-                    ret.append(loop_indent);
-                    ret.append(name);
-                    for (unsigned int j = 0; j < i + 1; ++j) {
-
-                        ret.append("[i");
-                        ret.append(std::to_string(j));
-                        ret.append("]");
-                    }
-                    ret.append(" = new ");
-                    ret.append(csharp_base_type);
-                    ret.append("[");
-                    ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
-                    ret.append("]");
-                    for (unsigned int j = i + 2; j < total_dim; ++j) {
-                        ret.append("[]");
-                    }
-                    ret.append(";\n");
-                }
-			}
-
-			ret.append(loop_indent);
-			ret.append(name);
-			ret.append("[");
-			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
-				ret.append("i");
-				ret.append(std::to_string(i));
-				if (i + 1 < arr_type->n_dims()) {
-					ret.append("][");
-				}
-			}
-			ret.append("] = new ");
-			ret.append(replaceString(std::string(arr_type->base_type()->full_name()), std::string("::"), std::string(".")));
-			ret.append("();\n");
-
-			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
-				loop_indent.erase(0, 4);
-				ret.append(loop_indent);
-				ret.append("}\n");
-			}
-			break;
-		}
-		case AST_Decl::NT_string:
-		case AST_Decl::NT_wstring:
-		{
-			std::string loop_indent("            ");
-			for (ACE_UINT32 i = 0; i < total_dim; i++) {
-				ret.append(loop_indent);
-				ret.append("for (int i");
-				ret.append(std::to_string(i));
-				ret.append(" = 0; i");
-				ret.append(std::to_string(i));
-				ret.append(" < ");
-				ret.append(std::to_string(dims[i]->ev()->u.ulval));
-				ret.append("; ++i");
-				ret.append(std::to_string(i));
-				ret.append(") {\n");
-
-				loop_indent.append("    ");
-
-                if (i + 1 < total_dim)
-                {
-                    ret.append(loop_indent);
-                    ret.append(name);
-                    for (unsigned int j = 0; j < i + 1; ++j) {
-
-                        ret.append("[i");
-                        ret.append(std::to_string(j));
-                        ret.append("]");
-                    }
-                    ret.append(" = new ");
-                    ret.append(csharp_base_type);
-                    ret.append("[");
-                    ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
-                    ret.append("]");
-                    for (unsigned int j = i + 2; j < total_dim; ++j) {
-                        ret.append("[]");
-                    }
-                    ret.append(";\n");
-                }
-			}
-
-			ret.append(loop_indent);
-			ret.append(name);
-			ret.append("[");
-			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
-				ret.append("i");
-				ret.append(std::to_string(i));
-				if (i + 1 < arr_type->n_dims()) {
-					ret.append("][");
-				}
-			}
-			ret.append("] = string.Empty;\n");
-
-			for (ACE_UINT32 i = 0; i < arr_type->n_dims(); i++) {
-				loop_indent.erase(0, 4);
-				ret.append(loop_indent);
-				ret.append("}\n");
-			}
-			break;
-		}
-		default:
-		{
-            // Remaining dimensions initialization for jagger arrays
-            std::string loop_indent("            ");
-            for (unsigned int i = 1; i < total_dim; ++i) {
-                ret.append(loop_indent + "for (int i");
-                ret.append(std::to_string(i - 1));
-                ret.append(" = 0; i");
-                ret.append(std::to_string(i - 1));
-                ret.append(" < ");
-                ret.append(std::to_string(dims[i - 1]->ev()->u.ulval));
-                ret.append(" ; ++i");
-                ret.append(std::to_string(i - 1));
-                ret.append(" ) {\n");
-
-                loop_indent.append("    ");
-                ret.append(loop_indent);
-                ret.append(name);
-                for (unsigned int j = 0; j < i; ++j) {
-
-                    ret.append("[i");
-                    ret.append(std::to_string(j));
-                    ret.append("]");
-                }
-                ret.append(" = new ");
-                ret.append(csharp_base_type);
-                ret.append("[");
-                ret.append(std::to_string(dims[i]->ev()->u.ulval));
-                ret.append("]");
-                for (unsigned int j = i + 1; j < total_dim; ++j) {
-                    ret.append("[]");
-                }
-                ret.append(";\n");
+            for (unsigned int j = i + 1; j < total_dim; ++j) {
+              ret.append("[]");
             }
+            ret.append(";\n");
+          }
 
-            for (unsigned int i = total_dim; i > 1; --i) {
-                loop_indent.erase(0, 4);
-                ret.append(loop_indent);
-                ret.append("}\n");
-            }
-			break;
-		}
-		}
-		break;
-	}
-	default:
-		break;
-	}
+          for (unsigned int i = total_dim; i > 1; --i) {
+            loop_indent.erase(0, 4);
+            ret.append(loop_indent);
+            ret.append("}\n");
+          }
+          break;
+        }
+      }
+      break;
+    }
+    default:
+      break;
+  }
 
-	return ret;
+  return ret;
 }

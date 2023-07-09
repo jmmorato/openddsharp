@@ -20,18 +20,18 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <thread>
 #include "DataWriterListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::DataWriterListenerImpl(void* onOfferedDeadlineMissed,
-                                                                            void* onOfferedIncompatibleQos,
-                                                                            void* onLivelinessLost,
-                                                                            void* onPublicationMatched) {
-	_onOfferedDeadlineMissed = onOfferedDeadlineMissed;
-	_onOfferedIncompatibleQos = onOfferedIncompatibleQos;
-	_onLivelinessLost = onLivelinessLost;
-	_onPublicationMatched = onPublicationMatched;
+::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::DataWriterListenerImpl(void *onOfferedDeadlineMissed,
+                                                                            void *onOfferedIncompatibleQos,
+                                                                            void *onLivelinessLost,
+                                                                            void *onPublicationMatched) {
+  _onOfferedDeadlineMissed = onOfferedDeadlineMissed;
+  _onOfferedIncompatibleQos = onOfferedIncompatibleQos;
+  _onLivelinessLost = onLivelinessLost;
+  _onPublicationMatched = onPublicationMatched;
 }
 
 ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::~DataWriterListenerImpl() {
-	dispose();
+  dispose();
 };
 
 void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::dispose() {
@@ -52,87 +52,87 @@ void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::dispose() {
   _lock.release();
 }
 
-void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_offered_deadline_missed(::DDS::DataWriter_ptr writer, const ::DDS::OfferedDeadlineMissedStatus& status) {
-    _lock.acquire();
+void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_offered_deadline_missed(::DDS::DataWriter_ptr writer,
+                                                                                     const ::DDS::OfferedDeadlineMissedStatus &status) {
+  _lock.acquire();
 
-    if (_disposed) {
-      _lock.release();
-      return;
-    }
-
-    if (_onOfferedDeadlineMissed) {
-        auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::OfferedDeadlineMissedStatus& st)
-        {
-            reinterpret_cast<onOfferedDeadlineMissedDeclaration>(ptr)(entity, st);
-        };
-
-        std::thread thread(f, _onOfferedDeadlineMissed, static_cast< ::DDS::Entity_ptr>(writer), status);
-        thread.join();
-    }
-
+  if (_disposed) {
     _lock.release();
+    return;
+  }
+
+  if (_onOfferedDeadlineMissed) {
+    auto f = [](void *ptr, ::DDS::Entity_ptr entity, const ::DDS::OfferedDeadlineMissedStatus &st) {
+        reinterpret_cast<onOfferedDeadlineMissedDeclaration>(ptr)(entity, st);
+    };
+
+    std::thread thread(f, _onOfferedDeadlineMissed, static_cast< ::DDS::Entity_ptr>(writer), status);
+    thread.join();
+  }
+
+  _lock.release();
 };
 
-void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer, const ::DDS::OfferedIncompatibleQosStatus& status) {
-    _lock.acquire();
+void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_offered_incompatible_qos(::DDS::DataWriter_ptr writer,
+                                                                                      const ::DDS::OfferedIncompatibleQosStatus &status) {
+  _lock.acquire();
 
-    if (_disposed) {
-      _lock.release();
-      return;
-    }
-
-    if (_onOfferedIncompatibleQos) {
-        auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::OfferedIncompatibleQosStatus& st)
-        {
-            reinterpret_cast<onOfferedIncompatibleQosDeclaration>(ptr)(entity, st);
-        };
-
-        std::thread thread(f, _onOfferedIncompatibleQos, static_cast< ::DDS::Entity_ptr>(writer), status);
-        thread.join();
-    }
-
+  if (_disposed) {
     _lock.release();
+    return;
+  }
+
+  if (_onOfferedIncompatibleQos) {
+    auto f = [](void *ptr, ::DDS::Entity_ptr entity, const ::DDS::OfferedIncompatibleQosStatus &st) {
+        reinterpret_cast<onOfferedIncompatibleQosDeclaration>(ptr)(entity, st);
+    };
+
+    std::thread thread(f, _onOfferedIncompatibleQos, static_cast< ::DDS::Entity_ptr>(writer), status);
+    thread.join();
+  }
+
+  _lock.release();
 };
 
-void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_liveliness_lost(::DDS::DataWriter_ptr writer, const ::DDS::LivelinessLostStatus& status) {
-    _lock.acquire();
+void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_liveliness_lost(::DDS::DataWriter_ptr writer,
+                                                                             const ::DDS::LivelinessLostStatus &status) {
+  _lock.acquire();
 
-    if (_disposed) {
-      _lock.release();
-      return;
-    }
-
-    if (_onLivelinessLost) {
-        auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::LivelinessLostStatus& st)
-        {
-            reinterpret_cast<onLivelinessLostDeclaration>(ptr)(entity, st);
-        };
-
-        std::thread thread(f, _onLivelinessLost, static_cast< ::DDS::Entity_ptr>(writer), status);
-        thread.join();
-    }
-
+  if (_disposed) {
     _lock.release();
+    return;
+  }
+
+  if (_onLivelinessLost) {
+    auto f = [](void *ptr, ::DDS::Entity_ptr entity, const ::DDS::LivelinessLostStatus &st) {
+        reinterpret_cast<onLivelinessLostDeclaration>(ptr)(entity, st);
+    };
+
+    std::thread thread(f, _onLivelinessLost, static_cast< ::DDS::Entity_ptr>(writer), status);
+    thread.join();
+  }
+
+  _lock.release();
 };
 
-void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_publication_matched(::DDS::DataWriter_ptr writer, const ::DDS::PublicationMatchedStatus& status) {
-    _lock.acquire();
+void ::OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl::on_publication_matched(::DDS::DataWriter_ptr writer,
+                                                                                 const ::DDS::PublicationMatchedStatus &status) {
+  _lock.acquire();
 
-    if (_disposed) {
-      _lock.release();
-      return;
-    }
-
-    if (_onPublicationMatched) {
-        auto f = [](void* ptr, ::DDS::Entity_ptr entity, const ::DDS::PublicationMatchedStatus& st)
-        {
-            reinterpret_cast<onPublicationMatchedDeclaration>(ptr)(entity, st);
-        };
-
-        std::thread thread(f, _onPublicationMatched, static_cast< ::DDS::Entity_ptr>(writer), status);
-        thread.join();
-    }
-
+  if (_disposed) {
     _lock.release();
+    return;
+  }
+
+  if (_onPublicationMatched) {
+    auto f = [](void *ptr, ::DDS::Entity_ptr entity, const ::DDS::PublicationMatchedStatus &st) {
+        reinterpret_cast<onPublicationMatchedDeclaration>(ptr)(entity, st);
+    };
+
+    std::thread thread(f, _onPublicationMatched, static_cast< ::DDS::Entity_ptr>(writer), status);
+    thread.join();
+  }
+
+  _lock.release();
 };
 

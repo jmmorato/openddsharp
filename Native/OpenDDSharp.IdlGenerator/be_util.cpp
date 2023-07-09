@@ -22,8 +22,7 @@
 
 // Prepare an argument for a BE
 void
-be_util::prep_be_arg(char* arg)
-{
+be_util::prep_be_arg(char *arg) {
   static const char WB_EXPORT_MACRO[] = "export_macro=";
   static const size_t SZ_WB_EXPORT_MACRO = sizeof(WB_EXPORT_MACRO) - 1;
   static const char WB_EXPORT_INCLUDE[] = "export_include=";
@@ -91,68 +90,64 @@ be_util::prep_be_arg(char* arg)
 }
 
 void
-be_util::arg_post_proc()
-{
+be_util::arg_post_proc() {
 }
 
 void
-be_util::usage()
-{
+be_util::usage() {
   ACE_DEBUG((LM_DEBUG,
-    ACE_TEXT(" -o <dir>\t\tsets output directory for all files\n")
-    ACE_TEXT(" -Lface\t\t\tgenerate FACE IDL to C++ mapping\n")
-    ACE_TEXT(" -Lspcpp\t\tgenerate Safety Profile IDL to C++ mapping\n")
-    ACE_TEXT(" -Lc++11\t\tgenerate IDL to C++11 mapping\n")
-    ACE_TEXT(" -SI\t\t\tsuppress generation of *TypeSupport.idl\n")
-    ACE_TEXT(" -Sa\t\t\tsuppress IDL any (ignored, for tao_idl compatibility)\n")
-    ACE_TEXT(" -St\t\t\tsuppress IDL typecode when -L* option is present\n")
-    ACE_TEXT(" -Sdefault\t\texclude default TypeSupport generators from output\n")
-    ACE_TEXT(" -Gitl\t\t\tgenerate ITL\n")
-    ACE_TEXT(" -GfaceTS\t\tgenerate FACE TS API for DCPS data types\n")
-    ACE_TEXT(" -Gv8\t\t\tgenerate TypeSupport for converting data samples ")
-    ACE_TEXT("to v8 JavaScript objects\n")
-    ACE_TEXT("\t\t\t\t-Wb,v8 is an alternative form for this option\n")
-    ACE_TEXT(" -Grapidjson\t\tgenerate TypeSupport for converting data samples ")
-    ACE_TEXT("to RapidJSON JavaScript objects\n")
-    ACE_TEXT(" --[no-]default-nested\tTopic types must be declared. True by default.\n")
-    ACE_TEXT(" --no-dcps-data-type-warnings\t\tdon't warn about #pragma DCPS_DATA_TYPE\n")
-    ACE_TEXT(" -Wb,export_macro=<macro name>\t\tsets export macro ")
-    ACE_TEXT("for all files\n")
-    ACE_TEXT("\t\t\t\t\t\t--export=<macro name> is an alternative form for this option\n")
-    ACE_TEXT(" -Wb,export_include=<include path>\tsets export include ")
-    ACE_TEXT("file for all files\n")
-    ACE_TEXT(" -Wb,versioning_name=<macro name>\tsets versioning name macro ")
-    ACE_TEXT("for all files\n")
-    ACE_TEXT(" -Wb,versioning_begin=<macro name>\tsets versioning begin macro ")
-    ACE_TEXT("for all files\n")
-    ACE_TEXT(" -Wb,versioning_end=<macro name>\tsets versioning end macro ")
-    ACE_TEXT("for all files\n")
-    ACE_TEXT(" -Wb,pch_include=<include path>\t\tsets include ")
-    ACE_TEXT("file for precompiled header mechanism\n")
-    ACE_TEXT(" -Wb,cpp_include=<include path>\t\tsets additional include ")
-    ACE_TEXT("file for cpp files. Useful for 'after the fact'\n\t\t\t\t\ttypesupport generation ")
-    ACE_TEXT("with different features enabled than in the\n\t\t\t\t\tfirst pass.\n")
-    ACE_TEXT(" -Wb,java[=<output_file>]\t\tenables Java support ")
-    ACE_TEXT("for TypeSupport files.  Do not specify an\n\t\t\t\t\t'output_file'")
-    ACE_TEXT("except for special cases.\n")
-    ACE_TEXT(" -Wb,tao_include_prefix=<path>\t\tPrefix for including the TAO-")
-    ACE_TEXT("generated header file.\n")
-    ACE_TEXT(" -Wb,ts_cpp_include=<include>\t\tadd <include> to *TypeSupportImpl.cpp\n")
-    ));
+      ACE_TEXT(" -o <dir>\t\tsets output directory for all files\n")
+                ACE_TEXT(" -Lface\t\t\tgenerate FACE IDL to C++ mapping\n")
+                ACE_TEXT(" -Lspcpp\t\tgenerate Safety Profile IDL to C++ mapping\n")
+                ACE_TEXT(" -Lc++11\t\tgenerate IDL to C++11 mapping\n")
+                ACE_TEXT(" -SI\t\t\tsuppress generation of *TypeSupport.idl\n")
+                ACE_TEXT(" -Sa\t\t\tsuppress IDL any (ignored, for tao_idl compatibility)\n")
+                ACE_TEXT(" -St\t\t\tsuppress IDL typecode when -L* option is present\n")
+                ACE_TEXT(" -Sdefault\t\texclude default TypeSupport generators from output\n")
+                ACE_TEXT(" -Gitl\t\t\tgenerate ITL\n")
+                ACE_TEXT(" -GfaceTS\t\tgenerate FACE TS API for DCPS data types\n")
+                ACE_TEXT(" -Gv8\t\t\tgenerate TypeSupport for converting data samples ")
+                ACE_TEXT("to v8 JavaScript objects\n")
+                ACE_TEXT("\t\t\t\t-Wb,v8 is an alternative form for this option\n")
+                ACE_TEXT(" -Grapidjson\t\tgenerate TypeSupport for converting data samples ")
+                ACE_TEXT("to RapidJSON JavaScript objects\n")
+                ACE_TEXT(" --[no-]default-nested\tTopic types must be declared. True by default.\n")
+                ACE_TEXT(" --no-dcps-data-type-warnings\t\tdon't warn about #pragma DCPS_DATA_TYPE\n")
+                ACE_TEXT(" -Wb,export_macro=<macro name>\t\tsets export macro ")
+                ACE_TEXT("for all files\n")
+                ACE_TEXT("\t\t\t\t\t\t--export=<macro name> is an alternative form for this option\n")
+                ACE_TEXT(" -Wb,export_include=<include path>\tsets export include ")
+                ACE_TEXT("file for all files\n")
+                ACE_TEXT(" -Wb,versioning_name=<macro name>\tsets versioning name macro ")
+                ACE_TEXT("for all files\n")
+                ACE_TEXT(" -Wb,versioning_begin=<macro name>\tsets versioning begin macro ")
+                ACE_TEXT("for all files\n")
+                ACE_TEXT(" -Wb,versioning_end=<macro name>\tsets versioning end macro ")
+                ACE_TEXT("for all files\n")
+                ACE_TEXT(" -Wb,pch_include=<include path>\t\tsets include ")
+                ACE_TEXT("file for precompiled header mechanism\n")
+                ACE_TEXT(" -Wb,cpp_include=<include path>\t\tsets additional include ")
+                ACE_TEXT("file for cpp files. Useful for 'after the fact'\n\t\t\t\t\ttypesupport generation ")
+                ACE_TEXT("with different features enabled than in the\n\t\t\t\t\tfirst pass.\n")
+                ACE_TEXT(" -Wb,java[=<output_file>]\t\tenables Java support ")
+                ACE_TEXT("for TypeSupport files.  Do not specify an\n\t\t\t\t\t'output_file'")
+                ACE_TEXT("except for special cases.\n")
+                ACE_TEXT(" -Wb,tao_include_prefix=<path>\t\tPrefix for including the TAO-")
+                ACE_TEXT("generated header file.\n")
+                ACE_TEXT(" -Wb,ts_cpp_include=<include>\t\tadd <include> to *TypeSupportImpl.cpp\n")
+            ));
 }
 
-AST_Generator*
-be_util::generator_init()
-{
-  AST_Generator* gen = 0;
+AST_Generator *
+be_util::generator_init() {
+  AST_Generator *gen = 0;
   ACE_NEW_RETURN(gen, AST_Generator, 0);
   return gen;
 }
 
-const char*
-be_util::dds_root()
-{
-  static const char* value = ACE_OS::getenv("DDS_ROOT");
+const char *
+be_util::dds_root() {
+  static const char *value = ACE_OS::getenv("DDS_ROOT");
   if (!value || !value[0]) {
     ACE_ERROR((LM_ERROR, "Error - The environment variable DDS_ROOT must be set.\n"));
     BE_abort();

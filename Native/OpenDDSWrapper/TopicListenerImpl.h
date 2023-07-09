@@ -25,30 +25,31 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ListenerDelegates.h"
 
 namespace OpenDDSharp {
-	namespace OpenDDS {
-		namespace DDS {
+    namespace OpenDDS {
+        namespace DDS {
 
-			class TopicListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject< ::DDS::TopicListener> {
-			private:
+            class TopicListenerImpl : public virtual ::OpenDDS::DCPS::LocalObject<::DDS::TopicListener> {
+            private:
                 ACE_Thread_Mutex _lock;
                 bool _disposed = false;
 
-                void* _onInconsistentTopic;
+                void *_onInconsistentTopic;
 
-			public:
-				TopicListenerImpl(void* onInconsistentTopic);
+            public:
+                TopicListenerImpl(void *onInconsistentTopic);
 
-			protected:
-				virtual ~TopicListenerImpl();
+            protected:
+                virtual ~TopicListenerImpl();
 
-			public:
-				virtual void on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status);
+            public:
+                virtual void
+                on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus &status);
 
-        void dispose();
-			};
+                void dispose();
+            };
 
-			typedef OpenDDSharp::OpenDDS::DDS::TopicListenerImpl* TopicListenerImpl_ptr;
+            typedef OpenDDSharp::OpenDDS::DDS::TopicListenerImpl *TopicListenerImpl_ptr;
 
-		};
-	};
+        };
+    };
 };

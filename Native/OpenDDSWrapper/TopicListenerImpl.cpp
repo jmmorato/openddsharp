@@ -20,8 +20,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <thread>
 #include "TopicListenerImpl.h"
 
-::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(void* onInconsistentTopic) {
-	_onInconsistentTopic = onInconsistentTopic;
+::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::TopicListenerImpl(void *onInconsistentTopic) {
+  _onInconsistentTopic = onInconsistentTopic;
 }
 
 ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::~TopicListenerImpl() {
@@ -43,23 +43,23 @@ void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::dispose() {
   _lock.release();
 }
 
-void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic, const ::DDS::InconsistentTopicStatus& status) {
-    _lock.acquire();
+void ::OpenDDSharp::OpenDDS::DDS::TopicListenerImpl::on_inconsistent_topic(::DDS::Topic_ptr topic,
+                                                                           const ::DDS::InconsistentTopicStatus &status) {
+  _lock.acquire();
 
-    if (_disposed) {
-      _lock.release();
-      return;
-    }
-
-    if (_onInconsistentTopic) {
-        auto f = [](void* ptr, ::DDS::TopicDescription_ptr entity, const ::DDS::InconsistentTopicStatus& st)
-        {
-            reinterpret_cast<onInconsistentTopicDeclaration>(ptr)(entity, st);
-        };
-
-        std::thread thread(f, _onInconsistentTopic, static_cast< ::DDS::TopicDescription_ptr>(topic), status);
-        thread.join();
-    }
-
+  if (_disposed) {
     _lock.release();
+    return;
+  }
+
+  if (_onInconsistentTopic) {
+    auto f = [](void *ptr, ::DDS::TopicDescription_ptr entity, const ::DDS::InconsistentTopicStatus &st) {
+        reinterpret_cast<onInconsistentTopicDeclaration>(ptr)(entity, st);
+    };
+
+    std::thread thread(f, _onInconsistentTopic, static_cast< ::DDS::TopicDescription_ptr>(topic), status);
+    thread.join();
+  }
+
+  _lock.release();
 };
