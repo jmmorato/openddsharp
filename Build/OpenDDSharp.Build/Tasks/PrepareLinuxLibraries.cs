@@ -35,7 +35,7 @@ namespace OpenDDSharp.Build.Tasks
 
         private readonly string[] _aceLibraries =
         {
-            @"ext\OpenDDS_Linux\ACE_wrappers\ACE\ace\libACE.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\ace\libACE.so",
         };
 
         private readonly string[] _taoLibraries =
