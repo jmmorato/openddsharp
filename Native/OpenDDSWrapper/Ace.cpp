@@ -20,9 +20,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Ace.h"
 
 int Ace_Init() {
-	return ACE::init();
+  return ACE::init();
 }
 
 int Ace_Fini() {
-	return ACE::fini();
+  return ACE::fini();
 }

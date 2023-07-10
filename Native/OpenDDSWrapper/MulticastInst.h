@@ -28,103 +28,103 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/framework/TransportInst_rch.h>
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::MulticastInst* MulticastInst_new(::OpenDDS::DCPS::TransportInst* inst);
+::OpenDDS::DCPS::MulticastInst *MulticastInst_new(::OpenDDS::DCPS::TransportInst *inst);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean MulticastInst_GetIsReliable(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::Boolean MulticastInst_GetIsReliable(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean MulticastInst_GetReliable(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::Boolean MulticastInst_GetReliable(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetReliable(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Boolean value);
+void MulticastInst_SetReliable(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean MulticastInst_GetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::Boolean MulticastInst_GetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Boolean value);
+void MulticastInst_SetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UShort MulticastInst_GetPortOffset(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::UShort MulticastInst_GetPortOffset(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst* mi, CORBA::UShort value);
+void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst *mi, CORBA::UShort value);
 
 EXTERN_METHOD_EXPORT
-char* MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst* mi);
+char *MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst* mi, char* value);
+void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value);
 
 EXTERN_METHOD_EXPORT
-char* MulticastInst_GetLocalAddress(::OpenDDS::DCPS::MulticastInst* mi);
+char *MulticastInst_GetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetLocalAddress(::OpenDDS::DCPS::MulticastInst* mi, char* value);
+void MulticastInst_SetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Double MulticastInst_GetSynBackoff(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::Double MulticastInst_GetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Double value);
+void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Double value);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
+void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
+void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-size_t MulticastInst_GetNakDepth(::OpenDDS::DCPS::MulticastInst* mi);
+size_t MulticastInst_GetNakDepth(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst* mi, size_t value);
+void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst *mi, size_t value);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
+void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-size_t MulticastInst_GetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst* mi);
+size_t MulticastInst_GetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst* mi, size_t value);
+void MulticastInst_SetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst *mi, size_t value);
 
 EXTERN_METHOD_EXPORT
-size_t MulticastInst_GetNakMax(::OpenDDS::DCPS::MulticastInst* mi);
+size_t MulticastInst_GetNakMax(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst* mi, size_t value);
+void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst *mi, size_t value);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi);
+TimeValueWrapper MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst* mi, TimeValueWrapper value);
+void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Octet MulticastInst_GetTtl(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::Octet MulticastInst_GetTtl(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetTtl(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Octet value);
+void MulticastInst_SetTtl(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Octet value);
 
 EXTERN_METHOD_EXPORT
-size_t MulticastInst_GetRcvBufferSize(::OpenDDS::DCPS::MulticastInst* mi);
+size_t MulticastInst_GetRcvBufferSize(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetRcvBufferSize(::OpenDDS::DCPS::MulticastInst* mi, size_t value);
+void MulticastInst_SetRcvBufferSize(::OpenDDS::DCPS::MulticastInst *mi, size_t value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean MulticastInst_GetAsyncSend(::OpenDDS::DCPS::MulticastInst* mi);
+CORBA::Boolean MulticastInst_GetAsyncSend(::OpenDDS::DCPS::MulticastInst *mi);
 
 EXTERN_METHOD_EXPORT
-void MulticastInst_SetAsyncSend(::OpenDDS::DCPS::MulticastInst* mi, CORBA::Boolean value);
+void MulticastInst_SetAsyncSend(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value);

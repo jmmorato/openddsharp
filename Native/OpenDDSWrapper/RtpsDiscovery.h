@@ -28,94 +28,94 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::Discovery* RtpsDiscovery_NarrowBase(::OpenDDS::RTPS::RtpsDiscovery* d);
+::OpenDDS::DCPS::Discovery *RtpsDiscovery_NarrowBase(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::RTPS::RtpsDiscovery* RtpsDiscovery_new(const char* key);
+::OpenDDS::RTPS::RtpsDiscovery *RtpsDiscovery_new(const char *key);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper RtpsDiscovery_GetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery* d);
+TimeValueWrapper RtpsDiscovery_GetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery* d, TimeValueWrapper value);
+void RtpsDiscovery_SetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d, TimeValueWrapper value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt16 RtpsDiscovery_GetPB(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::UInt16 RtpsDiscovery_GetPB(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetPB(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value);
+void RtpsDiscovery_SetPB(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt16 RtpsDiscovery_GetDG(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::UInt16 RtpsDiscovery_GetDG(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetDG(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value);
+void RtpsDiscovery_SetDG(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt16 RtpsDiscovery_GetPG(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::UInt16 RtpsDiscovery_GetPG(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetPG(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value);
+void RtpsDiscovery_SetPG(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt16 RtpsDiscovery_GetD0(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::UInt16 RtpsDiscovery_GetD0(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetD0(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value);
+void RtpsDiscovery_SetD0(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt16 RtpsDiscovery_GetD1(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::UInt16 RtpsDiscovery_GetD1(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetD1(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value);
+void RtpsDiscovery_SetD1(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt16 RtpsDiscovery_GetDX(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::UInt16 RtpsDiscovery_GetDX(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetDX(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value);
+void RtpsDiscovery_SetDX(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Octet RtpsDiscovery_GetTtl(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::Octet RtpsDiscovery_GetTtl(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::Octet value);
+void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::Octet value);
 
 EXTERN_METHOD_EXPORT
-char* RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d);
+char *RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d, char* value);
+void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);
 
 EXTERN_METHOD_EXPORT
-char* RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d);
+char *RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d, char* value);
+void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean RtpsDiscovery_GetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery* d);
+CORBA::Boolean RtpsDiscovery_GetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::Boolean value);
+void RtpsDiscovery_SetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-char* RtpsDiscovery_GetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery* d);
+char *RtpsDiscovery_GetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery* d, char* value);
+void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);
 
 EXTERN_METHOD_EXPORT
-char* RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery* d);
+char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery* d, char* value);
+void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);
 
 EXTERN_METHOD_EXPORT
-void* RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery* d);
+void *RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-char* RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery* d);
+char *RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
-void RtpsDiscovery_SetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery* d, char* value);
+void RtpsDiscovery_SetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);

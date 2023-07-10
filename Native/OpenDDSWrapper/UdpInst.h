@@ -27,25 +27,25 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/framework/TransportInst_rch.h>
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::UdpInst* UdpInst_new(::OpenDDS::DCPS::TransportInst* inst);
+::OpenDDS::DCPS::UdpInst *UdpInst_new(::OpenDDS::DCPS::TransportInst *inst);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean UdpInst_GetIsReliable(::OpenDDS::DCPS::UdpInst* ui);
+CORBA::Boolean UdpInst_GetIsReliable(::OpenDDS::DCPS::UdpInst *ui);
 
 EXTERN_METHOD_EXPORT
-CORBA::Int32 UdpInst_GetSendBufferSize(::OpenDDS::DCPS::UdpInst* ui);
+CORBA::Int32 UdpInst_GetSendBufferSize(::OpenDDS::DCPS::UdpInst *ui);
 
 EXTERN_METHOD_EXPORT
-void UdpInst_SetSendBufferSize(::OpenDDS::DCPS::UdpInst* ui, CORBA::Int32 value);
+void UdpInst_SetSendBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Int32 UdpInst_GetRcvBufferSize(::OpenDDS::DCPS::UdpInst* ui);
+CORBA::Int32 UdpInst_GetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui);
 
 EXTERN_METHOD_EXPORT
-void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst* ui, CORBA::Int32 value);
+void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value);
 
 EXTERN_METHOD_EXPORT
-char* UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst* ui);
+char *UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst *ui);
 
 EXTERN_METHOD_EXPORT
-void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst* ui, char* value);
+void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst *ui, char *value);

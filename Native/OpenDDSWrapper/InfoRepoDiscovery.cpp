@@ -19,26 +19,26 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "InfoRepoDiscovery.h"
 
-::OpenDDS::DCPS::Discovery* InfoRepoDiscovery_NarrowBase(::OpenDDS::DCPS::InfoRepoDiscovery* d) {
-	return  dynamic_cast< ::OpenDDS::DCPS::InfoRepoDiscovery*>(d);
+::OpenDDS::DCPS::Discovery *InfoRepoDiscovery_NarrowBase(::OpenDDS::DCPS::InfoRepoDiscovery *d) {
+  return dynamic_cast< ::OpenDDS::DCPS::InfoRepoDiscovery *>(d);
 }
 
-::OpenDDS::DCPS::InfoRepoDiscovery* InfoRepoDiscovery_new(const char* key, const char* ior) {
-	return new ::OpenDDS::DCPS::InfoRepoDiscovery(key, ior);
+::OpenDDS::DCPS::InfoRepoDiscovery *InfoRepoDiscovery_new(const char *key, const char *ior) {
+  return new ::OpenDDS::DCPS::InfoRepoDiscovery(key, ior);
 }
 
-CORBA::Long InfoRepoDiscovery_GetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery* idr) {
-	return idr->bit_transport_port();
+CORBA::Long InfoRepoDiscovery_GetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery *idr) {
+  return idr->bit_transport_port();
 }
 
-void InfoRepoDiscovery_SetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery* idr, CORBA::Long port_number) {
-	idr->bit_transport_port(port_number);
+void InfoRepoDiscovery_SetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery *idr, CORBA::Long port_number) {
+  idr->bit_transport_port(port_number);
 }
 
-char* InfoRepoDiscovery_GetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery* idr) {
-	return CORBA::string_dup(idr->bit_transport_ip().c_str());
+char *InfoRepoDiscovery_GetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery *idr) {
+  return CORBA::string_dup(idr->bit_transport_ip().c_str());
 }
 
-void InfoRepoDiscovery_SetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery* idr, char* ip) {
-	idr->bit_transport_ip(ip);
+void InfoRepoDiscovery_SetBitTransportIp(::OpenDDS::DCPS::InfoRepoDiscovery *idr, char *ip) {
+  idr->bit_transport_ip(ip);
 }

@@ -24,7 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "ListenerDelegates.h"
 
 EXTERN_METHOD_EXPORT
-OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr TopicListener_New(void* onInconsistentTopic);
+OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr TopicListener_New(void *onInconsistentTopic);
 
 EXTERN_METHOD_EXPORT
 void TopicListener_Dispose(OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr ptr);

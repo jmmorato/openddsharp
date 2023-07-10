@@ -19,170 +19,170 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "RtpsDiscovery.h"
 
-::OpenDDS::DCPS::Discovery* RtpsDiscovery_NarrowBase(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return  dynamic_cast< ::OpenDDS::RTPS::RtpsDiscovery*>(d);
+::OpenDDS::DCPS::Discovery *RtpsDiscovery_NarrowBase(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return dynamic_cast< ::OpenDDS::RTPS::RtpsDiscovery *>(d);
 }
 
-::OpenDDS::RTPS::RtpsDiscovery* RtpsDiscovery_new(const char* key) {
-	return new ::OpenDDS::RTPS::RtpsDiscovery(key);
+::OpenDDS::RTPS::RtpsDiscovery *RtpsDiscovery_new(const char *key) {
+  return new ::OpenDDS::RTPS::RtpsDiscovery(key);
 }
 
-TimeValueWrapper RtpsDiscovery_GetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->resend_period();
+TimeValueWrapper RtpsDiscovery_GetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->resend_period();
 }
 
-void RtpsDiscovery_SetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery* d, TimeValueWrapper value) {
-	d->resend_period(value);
+void RtpsDiscovery_SetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d, TimeValueWrapper value) {
+  d->resend_period(value);
 }
 
-CORBA::UInt16 RtpsDiscovery_GetPB(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->pb();
+CORBA::UInt16 RtpsDiscovery_GetPB(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->pb();
 }
 
-void RtpsDiscovery_SetPB(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value) {
-	d->pb(value);
+void RtpsDiscovery_SetPB(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value) {
+  d->pb(value);
 }
 
-CORBA::UInt16 RtpsDiscovery_GetDG(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->dg();
+CORBA::UInt16 RtpsDiscovery_GetDG(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->dg();
 }
 
-void RtpsDiscovery_SetDG(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value) {
-	d->dg(value);
+void RtpsDiscovery_SetDG(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value) {
+  d->dg(value);
 }
 
-CORBA::UInt16 RtpsDiscovery_GetPG(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->pg();
+CORBA::UInt16 RtpsDiscovery_GetPG(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->pg();
 }
 
-void RtpsDiscovery_SetPG(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value) {
-	d->pg(value);
+void RtpsDiscovery_SetPG(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value) {
+  d->pg(value);
 }
 
-CORBA::UInt16 RtpsDiscovery_GetD0(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->d0();
+CORBA::UInt16 RtpsDiscovery_GetD0(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->d0();
 }
 
-void RtpsDiscovery_SetD0(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value) {
-	d->d0(value);
+void RtpsDiscovery_SetD0(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value) {
+  d->d0(value);
 }
 
-CORBA::UInt16 RtpsDiscovery_GetD1(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->d1();
+CORBA::UInt16 RtpsDiscovery_GetD1(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->d1();
 }
 
-void RtpsDiscovery_SetD1(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value) {
-	d->d1(value);
+void RtpsDiscovery_SetD1(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value) {
+  d->d1(value);
 }
 
-CORBA::UInt16 RtpsDiscovery_GetDX(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->dx();
+CORBA::UInt16 RtpsDiscovery_GetDX(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->dx();
 }
 
-void RtpsDiscovery_SetDX(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::UInt16 value) {
-	d->dx(value);
+void RtpsDiscovery_SetDX(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::UInt16 value) {
+  d->dx(value);
 }
 
-CORBA::Octet RtpsDiscovery_GetTtl(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->ttl();
+CORBA::Octet RtpsDiscovery_GetTtl(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->ttl();
 }
 
-void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::Octet value) {
-	d->ttl(value);
+void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::Octet value) {
+  d->ttl(value);
 }
 
-char* RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d) {
-    char* buffer = new char[1024];
+char *RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  char *buffer = new char[1024];
 
-    if (d->sedp_local_address().addr_to_string(buffer, 1024) < 0) {
-        return CORBA::string_dup("");
-    }
+  if (d->sedp_local_address().addr_to_string(buffer, 1024) < 0) {
+    return CORBA::string_dup("");
+  }
 
-	std::string ret = CORBA::string_dup(buffer);
-	delete[] buffer;
+  std::string ret = CORBA::string_dup(buffer);
+  delete[] buffer;
 
-	return CORBA::string_dup(ret.c_str());
+  return CORBA::string_dup(ret.c_str());
 }
 
-void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
-	d->sedp_local_address(addr);
+void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
+  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  d->sedp_local_address(addr);
 }
 
-char* RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d) {
-    char* buffer = new char[1024];
+char *RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  char *buffer = new char[1024];
 
-    if (d->spdp_local_address().addr_to_string(buffer, 1024) < 0) {
-        return CORBA::string_dup("");
-    }
+  if (d->spdp_local_address().addr_to_string(buffer, 1024) < 0) {
+    return CORBA::string_dup("");
+  }
 
-	std::string ret = CORBA::string_dup(buffer);
-	delete[] buffer;
+  std::string ret = CORBA::string_dup(buffer);
+  delete[] buffer;
 
-	return CORBA::string_dup(ret.c_str());
+  return CORBA::string_dup(ret.c_str());
 }
 
-void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
-	d->spdp_local_address(addr);
+void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
+  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  d->spdp_local_address(addr);
 }
 
-CORBA::Boolean RtpsDiscovery_GetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return d->sedp_multicast();
+CORBA::Boolean RtpsDiscovery_GetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return d->sedp_multicast();
 }
 
-void RtpsDiscovery_SetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery* d, CORBA::Boolean value) {
-	d->sedp_multicast(value);
+void RtpsDiscovery_SetSedpMulticast(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::Boolean value) {
+  d->sedp_multicast(value);
 }
 
-char* RtpsDiscovery_GetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return CORBA::string_dup(d->multicast_interface().c_str());
+char *RtpsDiscovery_GetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return CORBA::string_dup(d->multicast_interface().c_str());
 }
 
-void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	d->multicast_interface(value);
+void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
+  d->multicast_interface(value);
 }
 
-char* RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	char* buffer = new char[1024];
+char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  char *buffer = new char[1024];
 
-    if (d->default_multicast_group().addr_to_string(buffer, 1024) < 0) {
-        return CORBA::string_dup("");
-    }
+  if (d->default_multicast_group().addr_to_string(buffer, 1024) < 0) {
+    return CORBA::string_dup("");
+  }
 
-	std::string ret = CORBA::string_dup(buffer);
-	delete[] buffer;
+  std::string ret = CORBA::string_dup(buffer);
+  delete[] buffer;
 
-	return CORBA::string_dup(ret.c_str());
+  return CORBA::string_dup(ret.c_str());
 }
 
-void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
-	d->default_multicast_group(addr);
+void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
+  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  d->default_multicast_group(addr);
 }
 
-void* RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	std::vector<std::string> addrs = d->spdp_send_addrs();
+void *RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  std::vector<std::string> addrs = d->spdp_send_addrs();
 
-    size_t size = addrs.size();
-	TAO::unbounded_basic_string_sequence<char> seq(static_cast<CORBA::ULong>(size));
+  size_t size = addrs.size();
+  TAO::unbounded_basic_string_sequence<char> seq(static_cast<CORBA::ULong>(size));
 
-	int i = 0;
-	for (auto inst = addrs.begin(); inst != addrs.end(); ++inst) {
-		seq[i] = inst->c_str();
-		i++;
-	}
+  int i = 0;
+  for (auto inst = addrs.begin(); inst != addrs.end(); ++inst) {
+    seq[i] = inst->c_str();
+    i++;
+  }
 
-	void* ptr;
-	unbounded_basic_string_sequence_to_ptr(seq, ptr);
+  void *ptr;
+  unbounded_basic_string_sequence_to_ptr(seq, ptr);
 
-	return ptr;
+  return ptr;
 }
 
-char* RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery* d) {
-	return CORBA::string_dup(d->guid_interface().c_str());
+char *RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d) {
+  return CORBA::string_dup(d->guid_interface().c_str());
 }
 
-void RtpsDiscovery_SetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery* d, char* value) {
-	d->guid_interface(value);
+void RtpsDiscovery_SetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
+  d->guid_interface(value);
 }

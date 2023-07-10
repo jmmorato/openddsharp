@@ -28,14 +28,15 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr DataWriter_NarrowBase(::DDS::DataWriter_ptr dp);
 
-EXTERN_METHOD_EXPORT 
+EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_WaitForAcknowledgments(::DDS::DataWriter_ptr dw, ::DDS::Duration_t max_wait);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetPublicationMatchedStatus(::DDS::DataWriter_ptr dw, ::DDS::PublicationMatchedStatus_out status);
+::DDS::ReturnCode_t
+DataWriter_GetPublicationMatchedStatus(::DDS::DataWriter_ptr dw, ::DDS::PublicationMatchedStatus_out status);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t DataWriter_GetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_SetQos(::DDS::DataWriter_ptr dw, DataWriterQosWrapper qos_wrapper);
@@ -44,7 +45,9 @@ EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DataWriter_AssertLiveliness(::DDS::DataWriter_ptr dw);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_SetListener(::DDS::DataWriter_ptr dw, OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr listener, ::DDS::StatusMask mask);
+::DDS::ReturnCode_t
+DataWriter_SetListener(::DDS::DataWriter_ptr dw, OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr listener,
+                       ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
 ::DDS::Publisher_ptr DataWriter_GetPublisher(::DDS::DataWriter_ptr dw);
@@ -53,16 +56,21 @@ EXTERN_METHOD_EXPORT
 ::DDS::Topic_ptr DataWriter_GetTopic(::DDS::DataWriter_ptr dw);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetLivelinessLostStatus(::DDS::DataWriter_ptr dw, ::DDS::LivelinessLostStatus_out status);
+::DDS::ReturnCode_t
+DataWriter_GetLivelinessLostStatus(::DDS::DataWriter_ptr dw, ::DDS::LivelinessLostStatus_out status);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetOfferedDeadlineMissedStatus(::DDS::DataWriter_ptr dw, ::DDS::OfferedDeadlineMissedStatus_out status);
+::DDS::ReturnCode_t
+DataWriter_GetOfferedDeadlineMissedStatus(::DDS::DataWriter_ptr dw, ::DDS::OfferedDeadlineMissedStatus_out status);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetOfferedIncompatibleQosStatus(::DDS::DataWriter_ptr dw, OfferedIncompatibleQosStatusWrapper& status);
+::DDS::ReturnCode_t
+DataWriter_GetOfferedIncompatibleQosStatus(::DDS::DataWriter_ptr dw, OfferedIncompatibleQosStatusWrapper &status);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptions(::DDS::DataWriter_ptr dw, void*& ptr);
+::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptions(::DDS::DataWriter_ptr dw, void *&ptr);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DataWriter_GetMatchedSubscriptionData(::DDS::DataWriter_ptr dw, SubscriptionBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle);
+::DDS::ReturnCode_t
+DataWriter_GetMatchedSubscriptionData(::DDS::DataWriter_ptr dw, SubscriptionBuiltinTopicDataWrapper &data,
+                                      ::DDS::InstanceHandle_t handle);

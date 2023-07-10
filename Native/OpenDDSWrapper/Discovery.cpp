@@ -19,6 +19,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "Discovery.h"
 
-char* Discovery_GetKey(::OpenDDS::DCPS::Discovery* d) {
-	return CORBA::string_dup(d->key().c_str());
+char *Discovery_GetKey(::OpenDDS::DCPS::Discovery *d) {
+  return CORBA::string_dup(d->key().c_str());
 }

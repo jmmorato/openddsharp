@@ -27,25 +27,25 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/framework/TransportInst_rch.h>
 
 EXTERN_METHOD_EXPORT
-::OpenDDS::DCPS::ShmemInst* ShmemInst_new(::OpenDDS::DCPS::TransportInst* inst);
+::OpenDDS::DCPS::ShmemInst *ShmemInst_new(::OpenDDS::DCPS::TransportInst *inst);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean ShmemInst_GetIsReliable(::OpenDDS::DCPS::ShmemInst* si);
+CORBA::Boolean ShmemInst_GetIsReliable(::OpenDDS::DCPS::ShmemInst *si);
 
 EXTERN_METHOD_EXPORT
-size_t ShmemInst_GetPoolSize(::OpenDDS::DCPS::ShmemInst* si);
+size_t ShmemInst_GetPoolSize(::OpenDDS::DCPS::ShmemInst *si);
 
 EXTERN_METHOD_EXPORT
-void ShmemInst_SetPoolSize(::OpenDDS::DCPS::ShmemInst* si, size_t value);
+void ShmemInst_SetPoolSize(::OpenDDS::DCPS::ShmemInst *si, size_t value);
 
 EXTERN_METHOD_EXPORT
-size_t ShmemInst_GetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst* si);
+size_t ShmemInst_GetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst *si);
 
 EXTERN_METHOD_EXPORT
-void ShmemInst_SetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst* si, size_t value);
+void ShmemInst_SetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst *si, size_t value);
 
 EXTERN_METHOD_EXPORT
-char* ShmemInst_GetHostName(::OpenDDS::DCPS::ShmemInst* si);
+char *ShmemInst_GetHostName(::OpenDDS::DCPS::ShmemInst *si);
 
 EXTERN_METHOD_EXPORT
-char* ShmemInst_GetPoolName(::OpenDDS::DCPS::ShmemInst* si);
+char *ShmemInst_GetPoolName(::OpenDDS::DCPS::ShmemInst *si);

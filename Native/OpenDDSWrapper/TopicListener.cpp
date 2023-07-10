@@ -19,8 +19,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "TopicListener.h"
 
-OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr TopicListener_New(void* onInconsistentTopic) {
-	return new OpenDDSharp::OpenDDS::DDS::TopicListenerImpl(onInconsistentTopic);;
+OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr TopicListener_New(void *onInconsistentTopic) {
+  return new OpenDDSharp::OpenDDS::DDS::TopicListenerImpl(onInconsistentTopic);;
 }
 
 void TopicListener_Dispose(OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr ptr) {

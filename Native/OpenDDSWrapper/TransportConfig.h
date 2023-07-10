@@ -26,25 +26,25 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/framework/TransportInst.h>
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_Insert(::OpenDDS::DCPS::TransportConfig* cfg, ::OpenDDS::DCPS::TransportInst* inst);
+void TransportConfig_Insert(::OpenDDS::DCPS::TransportConfig *cfg, ::OpenDDS::DCPS::TransportInst *inst);
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_SortedInsert(::OpenDDS::DCPS::TransportConfig* cfg, ::OpenDDS::DCPS::TransportInst* inst);
+void TransportConfig_SortedInsert(::OpenDDS::DCPS::TransportConfig *cfg, ::OpenDDS::DCPS::TransportInst *inst);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean TransportConfig_GetSwapBytes(::OpenDDS::DCPS::TransportConfig* cfg);
+CORBA::Boolean TransportConfig_GetSwapBytes(::OpenDDS::DCPS::TransportConfig *cfg);
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_SetSwapBytes(::OpenDDS::DCPS::TransportConfig* cfg, CORBA::Boolean value);
+void TransportConfig_SetSwapBytes(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt32 TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig* cfg);
+CORBA::UInt32 TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg);
 
 EXTERN_METHOD_EXPORT
-void TransportConfig_SetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig* cfg, CORBA::UInt32 value);
+void TransportConfig_SetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::UInt32 value);
 
 EXTERN_METHOD_EXPORT
-char* TransportConfig_GetName(::OpenDDS::DCPS::TransportConfig* cfg);
+char *TransportConfig_GetName(::OpenDDS::DCPS::TransportConfig *cfg);
 
 EXTERN_METHOD_EXPORT
-void* TransportConfig_GetTransports(::OpenDDS::DCPS::TransportConfig* cfg);
+void *TransportConfig_GetTransports(::OpenDDS::DCPS::TransportConfig *cfg);

@@ -38,52 +38,58 @@ EXTERN_METHOD_EXPORT
 EXTERN_METHOD_EXPORT
 CORBA::Long DomainParticipant_GetDomainId(::DDS::DomainParticipant_ptr dp);
 
-EXTERN_METHOD_EXPORT 
-::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp, 
-                                                       PublisherQosWrapper qos, 
+EXTERN_METHOD_EXPORT
+::DDS::Publisher_ptr DomainParticipant_CreatePublisher(::DDS::DomainParticipant_ptr dp,
+                                                       PublisherQosWrapper qos,
                                                        OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr a_listener,
                                                        ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t
+DomainParticipant_GetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_SetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper qos_wrapper);
+::DDS::ReturnCode_t
+DomainParticipant_SetDefaultPublisherQos(::DDS::DomainParticipant_ptr dp, PublisherQosWrapper qos_wrapper);
 
-EXTERN_METHOD_EXPORT 
-::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(::DDS::DomainParticipant_ptr dp, 
-                                                         SubscriberQosWrapper qos, 
+EXTERN_METHOD_EXPORT
+::DDS::Subscriber_ptr DomainParticipant_CreateSubscriber(::DDS::DomainParticipant_ptr dp,
+                                                         SubscriberQosWrapper qos,
                                                          OpenDDSharp::OpenDDS::DDS::SubscriberListenerImpl_ptr a_listener,
                                                          ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t
+DomainParticipant_GetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_SetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper qos_wrapper);
+::DDS::ReturnCode_t
+DomainParticipant_SetDefaultSubscriberQos(::DDS::DomainParticipant_ptr dp, SubscriberQosWrapper qos_wrapper);
 
-EXTERN_METHOD_EXPORT 
+EXTERN_METHOD_EXPORT
 ::DDS::Topic_ptr DomainParticipant_CreateTopic(::DDS::DomainParticipant_ptr dp,
-                                               const char * topic_name,
-                                               const char * type_name,
+                                               const char *topic_name,
+                                               const char *type_name,
                                                TopicQosWrapper qos,
                                                OpenDDSharp::OpenDDS::DDS::TopicListenerImpl_ptr a_listener,
                                                ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t DomainParticipant_GetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_SetDefaultTopicQos(::DDS::DomainParticipant_ptr dp, TopicQosWrapper qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t DomainParticipant_GetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_SetQos(::DDS::DomainParticipant_ptr dp, DomainParticipantQosWrapper qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_SetListener(::DDS::DomainParticipant_ptr dp, OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr listener, ::DDS::StatusMask mask);
+::DDS::ReturnCode_t DomainParticipant_SetListener(::DDS::DomainParticipant_ptr dp,
+                                                  OpenDDSharp::OpenDDS::DDS::DomainParticipantListenerImpl_ptr listener,
+                                                  ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_DeleteContainedEntities(::DDS::DomainParticipant_ptr dp);
@@ -92,10 +98,11 @@ EXTERN_METHOD_EXPORT
 CORBA::Boolean DomainParticipant_ContainsEntity(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
-::DDS::Topic_ptr DomainParticipant_FindTopic(::DDS::DomainParticipant_ptr dp, char* topicName, ::DDS::Duration_t duration);
+::DDS::Topic_ptr
+DomainParticipant_FindTopic(::DDS::DomainParticipant_ptr dp, char *topicName, ::DDS::Duration_t duration);
 
 EXTERN_METHOD_EXPORT
-::DDS::TopicDescription_ptr DomainParticipant_LookupTopicDescription(::DDS::DomainParticipant_ptr dp, char* name);
+::DDS::TopicDescription_ptr DomainParticipant_LookupTopicDescription(::DDS::DomainParticipant_ptr dp, char *name);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_DeleteTopic(::DDS::DomainParticipant_ptr dp, ::DDS::Topic_ptr topic);
@@ -110,43 +117,55 @@ EXTERN_METHOD_EXPORT
 ::DDS::Subscriber_ptr DomainParticipant_GetBuiltinSubscriber(::DDS::DomainParticipant_ptr dp);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_IgnoreParticipant(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
+::DDS::ReturnCode_t
+DomainParticipant_IgnoreParticipant(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_IgnoreTopic(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_IgnorePublication(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
+::DDS::ReturnCode_t
+DomainParticipant_IgnorePublication(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_IgnoreSubscription(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
+::DDS::ReturnCode_t
+DomainParticipant_IgnoreSubscription(::DDS::DomainParticipant_ptr dp, ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_AssertLiveliness(::DDS::DomainParticipant_ptr dp);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetCurrentTimestamp(::DDS::DomainParticipant_ptr dp, ::DDS::Time_t& time);
+::DDS::ReturnCode_t DomainParticipant_GetCurrentTimestamp(::DDS::DomainParticipant_ptr dp, ::DDS::Time_t &time);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDiscoveredParticipants(::DDS::DomainParticipant_ptr dp, void*& ptr);
+::DDS::ReturnCode_t DomainParticipant_GetDiscoveredParticipants(::DDS::DomainParticipant_ptr dp, void *&ptr);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDiscoveredTopics(::DDS::DomainParticipant_ptr dp, void*& ptr);
+::DDS::ReturnCode_t DomainParticipant_GetDiscoveredTopics(::DDS::DomainParticipant_ptr dp, void *&ptr);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDiscoveredParticipantData(::DDS::DomainParticipant_ptr dp, ParticipantBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle);
+::DDS::ReturnCode_t DomainParticipant_GetDiscoveredParticipantData(::DDS::DomainParticipant_ptr dp,
+                                                                   ParticipantBuiltinTopicDataWrapper &data,
+                                                                   ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_GetDiscoveredTopicData(::DDS::DomainParticipant_ptr dp, TopicBuiltinTopicDataWrapper& data, ::DDS::InstanceHandle_t handle);
+::DDS::ReturnCode_t
+DomainParticipant_GetDiscoveredTopicData(::DDS::DomainParticipant_ptr dp, TopicBuiltinTopicDataWrapper &data,
+                                         ::DDS::InstanceHandle_t handle);
 
 EXTERN_METHOD_EXPORT
-::DDS::ContentFilteredTopic_ptr DomainParticipant_CreateContentFilteredTopic(::DDS::DomainParticipant_ptr dp, char* name, ::DDS::Topic_ptr relatedTopic, char* filterExpression, void* seq);
+::DDS::ContentFilteredTopic_ptr
+DomainParticipant_CreateContentFilteredTopic(::DDS::DomainParticipant_ptr dp, char *name, ::DDS::Topic_ptr relatedTopic,
+                                             char *filterExpression, void *seq);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t DomainParticipant_DeleteContentFilteredTopic(::DDS::DomainParticipant_ptr dp, ::DDS::ContentFilteredTopic_ptr cft);
+::DDS::ReturnCode_t
+DomainParticipant_DeleteContentFilteredTopic(::DDS::DomainParticipant_ptr dp, ::DDS::ContentFilteredTopic_ptr cft);
 
 EXTERN_METHOD_EXPORT
-::DDS::MultiTopic_ptr DomainParticipant_CreateMultiTopic(::DDS::DomainParticipant_ptr dp, char* name, char* type_name, char* expression, void* seq);
+::DDS::MultiTopic_ptr
+DomainParticipant_CreateMultiTopic(::DDS::DomainParticipant_ptr dp, char *name, char *type_name, char *expression,
+                                   void *seq);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t DomainParticipant_DeleteMultiTopic(::DDS::DomainParticipant_ptr dp, ::DDS::MultiTopic_ptr cft);

@@ -22,20 +22,20 @@ class AST_Generator;
 
 namespace be_util {
 
-  /// Special BE arg call factored out of DRV_args.
-  void prep_be_arg(char* s);
+    /// Special BE arg call factored out of DRV_args.
+    void prep_be_arg(char *s);
 
-  /// Checks made after parsing args.
-  void arg_post_proc();
+    /// Checks made after parsing args.
+    void arg_post_proc();
 
-  /// Display usage of BE-specific options.
-  void usage();
+    /// Display usage of BE-specific options.
+    void usage();
 
-  /// Create an AST node generator.
-  AST_Generator* generator_init();
+    /// Create an AST node generator.
+    AST_Generator *generator_init();
 
-  /// Get DDS_ROOT. It is a fatal error if it wasn't set.
-  const char* dds_root();
+    /// Get DDS_ROOT. It is a fatal error if it wasn't set.
+    const char *dds_root();
 };
 
 #endif // if !defined

@@ -19,43 +19,43 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "UdpInst.h"
 
-::OpenDDS::DCPS::UdpInst* UdpInst_new(::OpenDDS::DCPS::TransportInst* inst) {
-    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
-    ::OpenDDS::DCPS::UdpInst_rch udp = ::OpenDDS::DCPS::static_rchandle_cast< ::OpenDDS::DCPS::UdpInst>(rch);
-    ::OpenDDS::DCPS::UdpInst* pointer = udp.in();
-    pointer->_add_ref();
+::OpenDDS::DCPS::UdpInst *UdpInst_new(::OpenDDS::DCPS::TransportInst *inst) {
+  ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
+  ::OpenDDS::DCPS::UdpInst_rch udp = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::UdpInst>(rch);
+  ::OpenDDS::DCPS::UdpInst *pointer = udp.in();
+  pointer->_add_ref();
 
-    return pointer;
+  return pointer;
 }
 
-CORBA::Boolean UdpInst_GetIsReliable(::OpenDDS::DCPS::UdpInst* ui) {
-    return ui->is_reliable();
+CORBA::Boolean UdpInst_GetIsReliable(::OpenDDS::DCPS::UdpInst *ui) {
+  return ui->is_reliable();
 }
 
-CORBA::Int32 UdpInst_GetSendBufferSize(::OpenDDS::DCPS::UdpInst* ui) {
-    return ui->send_buffer_size_;
+CORBA::Int32 UdpInst_GetSendBufferSize(::OpenDDS::DCPS::UdpInst *ui) {
+  return ui->send_buffer_size_;
 }
 
-void UdpInst_SetSendBufferSize(::OpenDDS::DCPS::UdpInst* ui, CORBA::Int32 value) {
-    ui->send_buffer_size_ = value;
+void UdpInst_SetSendBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value) {
+  ui->send_buffer_size_ = value;
 }
 
-CORBA::Int32 UdpInst_GetRcvBufferSize(::OpenDDS::DCPS::UdpInst* ui) {
-    return ui->rcv_buffer_size_;
+CORBA::Int32 UdpInst_GetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui) {
+  return ui->rcv_buffer_size_;
 }
 
-void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst* ui, CORBA::Int32 value) {
-    ui->rcv_buffer_size_ = value;
+void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value) {
+  ui->rcv_buffer_size_ = value;
 }
 
-char* UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst* ui) {
-    char * buffer = new char[512];
-    ui->local_address().addr_to_string(buffer, 512);
-    
-    return CORBA::string_dup(buffer);
+char *UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst *ui) {
+  char *buffer = new char[512];
+  ui->local_address().addr_to_string(buffer, 512);
+
+  return CORBA::string_dup(buffer);
 }
 
-void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst* ui, char* value) {
-    const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
-    ui->local_address(addr);
+void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst *ui, char *value) {
+  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  ui->local_address(addr);
 }

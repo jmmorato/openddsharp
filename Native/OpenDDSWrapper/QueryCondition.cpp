@@ -20,30 +20,30 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "QueryCondition.h"
 
 ::DDS::ReadCondition_ptr QueryCondition_NarrowBase(::DDS::QueryCondition_ptr ptr) {
-	return static_cast< ::DDS::ReadCondition_ptr>(ptr);
+  return static_cast< ::DDS::ReadCondition_ptr>(ptr);
 }
 
-char* QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr) {
-	return ptr->get_query_expression();
+char *QueryCondition_GetQueryExpresion(::DDS::QueryCondition_ptr ptr) {
+  return ptr->get_query_expression();
 }
 
-::DDS::ReturnCode_t QueryCondition_GetQueryParameters(::DDS::QueryCondition_ptr ptr, void*& seq) {
-	::DDS::StringSeq parameters;
+::DDS::ReturnCode_t QueryCondition_GetQueryParameters(::DDS::QueryCondition_ptr ptr, void *&seq) {
+  ::DDS::StringSeq parameters;
 
-	::DDS::ReturnCode_t ret = ptr->get_query_parameters(parameters);
+  ::DDS::ReturnCode_t ret = ptr->get_query_parameters(parameters);
 
-	if (ret == ::DDS::RETCODE_OK) {
-		unbounded_basic_string_sequence_to_ptr(parameters, seq);
-	}
+  if (ret == ::DDS::RETCODE_OK) {
+    unbounded_basic_string_sequence_to_ptr(parameters, seq);
+  }
 
-	return ret;
+  return ret;
 }
 
-::DDS::ReturnCode_t QueryCondition_SetQueryParameters(::DDS::QueryCondition_ptr ptr, void* seq) {
-	::DDS::StringSeq parameters;
-	ptr_to_unbounded_basic_string_sequence(seq, parameters);
+::DDS::ReturnCode_t QueryCondition_SetQueryParameters(::DDS::QueryCondition_ptr ptr, void *seq) {
+  ::DDS::StringSeq parameters;
+  ptr_to_unbounded_basic_string_sequence(seq, parameters);
 
-	::DDS::ReturnCode_t ret = ptr->set_query_parameters(parameters);
+  ::DDS::ReturnCode_t ret = ptr->set_query_parameters(parameters);
 
-	return ret;
+  return ret;
 }
