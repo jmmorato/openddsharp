@@ -25,8 +25,8 @@ EXTERN_METHOD_EXPORT ::DDS::Condition_ptr ReadCondition_NarrowBase(::DDS::ReadCo
 
 EXTERN_METHOD_EXPORT void ReadCondition_Release(::DDS::ReadCondition_ptr ptr);
 
-EXTERN_METHOD_EXPORT::DDS::SampleStateMask ReadCondition_GetSampleStateMask(::DDS::ReadCondition_ptr ptr);
+EXTERN_METHOD_EXPORT ::DDS::SampleStateMask ReadCondition_GetSampleStateMask(::DDS::ReadCondition_ptr ptr);
 
 EXTERN_METHOD_EXPORT ::DDS::ViewStateMask ReadCondition_GetViewStateMask(::DDS::ReadCondition_ptr ptr);
 
-EXTERN_METHOD_EXPORT::DDS::InstanceStateMask ReadCondition_GetInstanceStateMask(::DDS::ReadCondition_ptr ptr);
+EXTERN_METHOD_EXPORT ::DDS::InstanceStateMask ReadCondition_GetInstanceStateMask(::DDS::ReadCondition_ptr ptr);

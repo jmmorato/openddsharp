@@ -18,23 +18,20 @@
 #include <iomanip>
 
 void
-BE_version()
-{
-    ACE_DEBUG((LM_DEBUG, ACE_TEXT("OpenDDS version ") ACE_TEXT(OPENDDS_VERSION)
-        ACE_TEXT("\n")));
+BE_version() {
+  ACE_DEBUG((LM_DEBUG, ACE_TEXT("OpenDDS version ") ACE_TEXT(OPENDDS_VERSION)
+                ACE_TEXT("\n")));
 }
 
 int
-BE_init(int&, ACE_TCHAR*[])
-{
+BE_init(int &, ACE_TCHAR *[]) {
   ACE_NEW_RETURN(be_global, BE_GlobalData, -1);
   idl_global->default_idl_version_ = IDL_VERSION_4;
   return 0;
 }
 
 void
-BE_post_init(char*[], long)
-{
+BE_post_init(char *[], long) {
   std::ostringstream version;
   version << "-D__OPENDDS_IDL=0x"
           << std::setw(2) << std::setfill('0') << DDS_MAJOR_VERSION

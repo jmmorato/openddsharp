@@ -20,5 +20,5 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Condition.h"
 
 CORBA::Boolean Condition_GetTriggerValue(::DDS::Condition_ptr condition) {
-	return condition->get_trigger_value();
+  return condition->get_trigger_value();
 }

@@ -41,30 +41,30 @@
     <DDS_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="ACE Home" Condition="'$(IsWindows)'=='true'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)\ACE_TAO\ACE</ACE_ROOT>
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)\ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)\ACE_TAO\TAO</TAO_ROOT>
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsOSX)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="ACE Home" Condition="'$(IsOSX)'=='true'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS/ACE_TAO/ACE</ACE_ROOT>
+    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS/ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsOSX)'=='true'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS/ACE_TAO/TAO</TAO_ROOT>
+    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS/ACE_wrappers/TAO</TAO_ROOT>
   </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_Linux</DDS_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="ACE Home" Condition="'$(IsLinux)'=='true'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_Linux/ACE_TAO/ACE</ACE_ROOT>
+    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_Linux/ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_Linux/ACE_TAO/TAO</TAO_ROOT>
+    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_Linux/ACE_wrappers/TAO</TAO_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Library Path" Condition="'$(IsLinux)'=='true'">
     <LD_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</LD_LIBRARY_PATH>

@@ -19,39 +19,39 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "ShmemInst.h"
 
-::OpenDDS::DCPS::ShmemInst* ShmemInst_new(::OpenDDS::DCPS::TransportInst* inst) {
-    ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from< ::OpenDDS::DCPS::TransportInst>(inst);
-    ::OpenDDS::DCPS::ShmemInst_rch shmem = ::OpenDDS::DCPS::static_rchandle_cast< ::OpenDDS::DCPS::ShmemInst>(rch);
-    ::OpenDDS::DCPS::ShmemInst* pointer = shmem.in();
-    pointer->_add_ref();
+::OpenDDS::DCPS::ShmemInst *ShmemInst_new(::OpenDDS::DCPS::TransportInst *inst) {
+  ::OpenDDS::DCPS::TransportInst_rch rch = ::OpenDDS::DCPS::rchandle_from<::OpenDDS::DCPS::TransportInst>(inst);
+  ::OpenDDS::DCPS::ShmemInst_rch shmem = ::OpenDDS::DCPS::static_rchandle_cast<::OpenDDS::DCPS::ShmemInst>(rch);
+  ::OpenDDS::DCPS::ShmemInst *pointer = shmem.in();
+  pointer->_add_ref();
 
-    return pointer;
+  return pointer;
 }
 
-CORBA::Boolean ShmemInst_GetIsReliable(::OpenDDS::DCPS::ShmemInst* si) {
-    return si->is_reliable();
+CORBA::Boolean ShmemInst_GetIsReliable(::OpenDDS::DCPS::ShmemInst *si) {
+  return si->is_reliable();
 }
 
-size_t ShmemInst_GetPoolSize(::OpenDDS::DCPS::ShmemInst* si) {
-    return si->pool_size_;
+size_t ShmemInst_GetPoolSize(::OpenDDS::DCPS::ShmemInst *si) {
+  return si->pool_size_;
 }
 
-void ShmemInst_SetPoolSize(::OpenDDS::DCPS::ShmemInst* si, size_t value) {
-    si->pool_size_ = value;
+void ShmemInst_SetPoolSize(::OpenDDS::DCPS::ShmemInst *si, size_t value) {
+  si->pool_size_ = value;
 }
 
-size_t ShmemInst_GetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst* si) {
-    return si->datalink_control_size_;
+size_t ShmemInst_GetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst *si) {
+  return si->datalink_control_size_;
 }
 
-void ShmemInst_SetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst* si, size_t value) {
-    si->datalink_control_size_ = value;
+void ShmemInst_SetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst *si, size_t value) {
+  si->datalink_control_size_ = value;
 }
 
-char* ShmemInst_GetHostName(::OpenDDS::DCPS::ShmemInst* si) {
-    return CORBA::string_dup(si->hostname().c_str());
+char *ShmemInst_GetHostName(::OpenDDS::DCPS::ShmemInst *si) {
+  return CORBA::string_dup(si->hostname().c_str());
 }
 
-char* ShmemInst_GetPoolName(::OpenDDS::DCPS::ShmemInst* si) {
-    return CORBA::string_dup(si->poolname().c_str());
+char *ShmemInst_GetPoolName(::OpenDDS::DCPS::ShmemInst *si) {
+  return CORBA::string_dup(si->poolname().c_str());
 }

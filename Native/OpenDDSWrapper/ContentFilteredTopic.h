@@ -26,22 +26,22 @@ EXTERN_METHOD_EXPORT
 ::DDS::TopicDescription_ptr ContentFilteredTopic_NarrowTopicDescription(::DDS::ContentFilteredTopic_ptr t);
 
 EXTERN_METHOD_EXPORT
-char* ContentFilteredTopic_GetTypeName(::DDS::ContentFilteredTopic_ptr t);
+char *ContentFilteredTopic_GetTypeName(::DDS::ContentFilteredTopic_ptr t);
 
 EXTERN_METHOD_EXPORT
-char* ContentFilteredTopic_GetName(::DDS::ContentFilteredTopic_ptr t);
+char *ContentFilteredTopic_GetName(::DDS::ContentFilteredTopic_ptr t);
 
 EXTERN_METHOD_EXPORT
 ::DDS::DomainParticipant_ptr ContentFilteredTopic_GetParticipant(::DDS::ContentFilteredTopic_ptr t);
 
 EXTERN_METHOD_EXPORT
-char* ContentFilteredTopic_GetFilterExpression(::DDS::ContentFilteredTopic_ptr t);
+char *ContentFilteredTopic_GetFilterExpression(::DDS::ContentFilteredTopic_ptr t);
 
 EXTERN_METHOD_EXPORT
 ::DDS::Topic_ptr ContentFilteredTopic_GetRelatedTopic(::DDS::ContentFilteredTopic_ptr t);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t ContentFilteredTopic_GetExpressionParameters(::DDS::ContentFilteredTopic_ptr t, void*& seq);
+::DDS::ReturnCode_t ContentFilteredTopic_GetExpressionParameters(::DDS::ContentFilteredTopic_ptr t, void *&seq);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t ContentFilteredTopic_SetExpressionParameters(::DDS::ContentFilteredTopic_ptr t, void* seq);
+::DDS::ReturnCode_t ContentFilteredTopic_SetExpressionParameters(::DDS::ContentFilteredTopic_ptr t, void *seq);

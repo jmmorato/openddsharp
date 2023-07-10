@@ -29,21 +29,21 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 EXTERN_METHOD_EXPORT
 ::DDS::Entity_ptr Publisher_NarrowBase(::DDS::Publisher_ptr pub);
 
-EXTERN_METHOD_EXPORT 
+EXTERN_METHOD_EXPORT
 ::DDS::DataWriter_ptr Publisher_CreateDataWriter(::DDS::Publisher_ptr pub,
-												 ::DDS::Topic_ptr topic,
-												 DataWriterQosWrapper qos,
-											     OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr a_listener,
-												 ::DDS::StatusMask mask);
+                                                 ::DDS::Topic_ptr topic,
+                                                 DataWriterQosWrapper qos,
+                                                 OpenDDSharp::OpenDDS::DDS::DataWriterListenerImpl_ptr a_listener,
+                                                 ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t Publisher_GetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_SetQos(::DDS::Publisher_ptr pub, PublisherQosWrapper qos_wrapper);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Publisher_GetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper& qos_wrapper);
+::DDS::ReturnCode_t Publisher_GetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper &qos_wrapper);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_SetDefaultDataWriterQos(::DDS::Publisher_ptr pub, DataWriterQosWrapper qos_wrapper);
@@ -52,13 +52,15 @@ EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_DeleteDataWriter(::DDS::Publisher_ptr pub, ::DDS::DataWriter_ptr dw);
 
 EXTERN_METHOD_EXPORT
-::DDS::ReturnCode_t Publisher_SetListener(::DDS::Publisher_ptr pub, OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr listener, ::DDS::StatusMask mask);
+::DDS::ReturnCode_t
+Publisher_SetListener(::DDS::Publisher_ptr pub, OpenDDSharp::OpenDDS::DDS::PublisherListenerImpl_ptr listener,
+                      ::DDS::StatusMask mask);
 
 EXTERN_METHOD_EXPORT
 ::DDS::DomainParticipant_ptr Publisher_GetParticipant(::DDS::Publisher_ptr pub);
 
 EXTERN_METHOD_EXPORT
-::DDS::DataWriter_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char* topicName);
+::DDS::DataWriter_ptr Publisher_LookupDataWriter(::DDS::Publisher_ptr pub, char *topicName);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t Publisher_DeleteContainedEntities(::DDS::Publisher_ptr pub);

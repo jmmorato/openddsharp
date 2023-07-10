@@ -20,17 +20,17 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Entity.h"
 
 ::DDS::ReturnCode_t Entity_Enable(::DDS::Entity_ptr entity) {
-	return entity->enable();
+  return entity->enable();
 }
 
 ::DDS::StatusCondition_ptr Entity_GetStatusCondition(::DDS::Entity_ptr entity) {
-	return entity->get_statuscondition();
+  return entity->get_statuscondition();
 }
 
 ::DDS::StatusMask Entity_GetStatusChanges(::DDS::Entity_ptr entity) {
-	return entity->get_status_changes();
+  return entity->get_status_changes();
 }
 
 ::DDS::InstanceHandle_t Entity_GetInstanceHandle(::DDS::Entity_ptr entity) {
-	return entity->get_instance_handle();
+  return entity->get_instance_handle();
 }

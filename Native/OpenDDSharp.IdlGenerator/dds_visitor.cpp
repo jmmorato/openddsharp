@@ -43,89 +43,81 @@
 using namespace std;
 
 namespace {
-	cli_generator cli_gen_;
-  csharp_json_generator csharp_json_gen_;
-	cwrapper_generator cwrapper_gen_;
-	dds_generator* cli_generators_[] = { &cli_gen_ };
-  dds_generator* csharp_json_generators_[] = { &csharp_json_gen_ };
-	dds_generator* cwrapper_generators_[] = { &cwrapper_gen_ };
-	const size_t N_MAP_CLI = sizeof(cli_generators_) / sizeof(cli_generators_[0]);
-  const size_t N_MAP_CSHARP_JSON = sizeof(csharp_json_generators_) / sizeof(csharp_json_generators_[0]);
-	const size_t N_MAP_CWRAPPER = sizeof(cwrapper_generators_) / sizeof(cwrapper_generators_[0]);
+    cli_generator cli_gen_;
+    csharp_json_generator csharp_json_gen_;
+    cwrapper_generator cwrapper_gen_;
+    dds_generator *cli_generators_[] = {&cli_gen_};
+    dds_generator *csharp_json_generators_[] = {&csharp_json_gen_};
+    dds_generator *cwrapper_generators_[] = {&cwrapper_gen_};
+    const size_t N_MAP_CLI = sizeof(cli_generators_) / sizeof(cli_generators_[0]);
+    const size_t N_MAP_CSHARP_JSON = sizeof(csharp_json_generators_) / sizeof(csharp_json_generators_[0]);
+    const size_t N_MAP_CWRAPPER = sizeof(cwrapper_generators_) / sizeof(cwrapper_generators_[0]);
 
-	composite_generator gen_target_(&cli_generators_[0], &cli_generators_[N_MAP_CLI]);
+    composite_generator gen_target_(&cli_generators_[0], &cli_generators_[N_MAP_CLI]);
 
-  template <typename T>
-  void scope2vector(vector<T*>& v, UTL_Scope* s, AST_Decl::NodeType nt)
-  {
-    UTL_ScopeActiveIterator it(s, UTL_Scope::IK_decls);
+    template<typename T>
+    void scope2vector(vector<T *> &v, UTL_Scope *s, AST_Decl::NodeType nt) {
+      UTL_ScopeActiveIterator it(s, UTL_Scope::IK_decls);
 
-    for (; !it.is_done(); it.next()) {
-      AST_Decl* item = it.item();
+      for (; !it.is_done(); it.next()) {
+        AST_Decl *item = it.item();
 
-      if (item->node_type() == nt) {
-        v.push_back(T::narrow_from_decl(item));
+        if (item->node_type() == nt) {
+          v.push_back(dynamic_cast<T*>(item));
+        }
       }
     }
-  }
 
-  bool field_check_anon(AST_Field* f)
-  {
-    AST_Decl::NodeType nt = f->field_type()->node_type();
-    if (nt == AST_Decl::NT_array || nt == AST_Decl::NT_sequence) {
-      idl_global->err()->misc_error("field has an anonymous type.", f);
-      return false;
+    bool field_check_anon(AST_Field *f) {
+      AST_Decl::NodeType nt = f->field_type()->node_type();
+      if (nt == AST_Decl::NT_array || nt == AST_Decl::NT_sequence) {
+        idl_global->err()->misc_error("field has an anonymous type.", f);
+        return false;
+      }
+      return true;
     }
-    return true;
-  }
 } // namespace
 
-dds_visitor::dds_visitor(AST_Decl* scope, bool java_ts_only, BE_GlobalData* be_global)
-	: scope_(scope), error_(false), java_ts_only_(java_ts_only)
-{
-	if (be_global->csharp_json()) {
-      gen_target_ = composite_generator(&csharp_json_generators_[0], &csharp_json_generators_[N_MAP_CSHARP_JSON]);
+dds_visitor::dds_visitor(AST_Decl *scope, bool java_ts_only, BE_GlobalData *be_global)
+    : scope_(scope), error_(false), java_ts_only_(java_ts_only) {
+  if (be_global->csharp_json()) {
+    gen_target_ = composite_generator(&csharp_json_generators_[0], &csharp_json_generators_[N_MAP_CSHARP_JSON]);
+  } else if (be_global->cwrapper()) {
+    gen_target_ = composite_generator(&cwrapper_generators_[0], &cwrapper_generators_[N_MAP_CWRAPPER]);
+  } else if (be_global->cppcli()) {
+    gen_target_ = composite_generator(&cli_generators_[0], &cli_generators_[N_MAP_CLI]);
   }
-	else if (be_global->cwrapper()) {
-		gen_target_ = composite_generator(&cwrapper_generators_[0], &cwrapper_generators_[N_MAP_CWRAPPER]);
-	}
-	else if (be_global->cppcli()) {
-		gen_target_ = composite_generator(&cli_generators_[0], &cli_generators_[N_MAP_CLI]);
-	}
 }
 
-dds_visitor::~dds_visitor()
-{
+dds_visitor::~dds_visitor() {
 }
 
-int dds_visitor::visit_root(AST_Root* node)
-{
+int dds_visitor::visit_root(AST_Root *node) {
   error_ = false;
 
   gen_target_.gen_prologue();
   if (this->visit_scope(node) == -1) {
     ACE_ERROR_RETURN((LM_ERROR,
-                      ACE_TEXT("(%N:%l) dds_visitor::visit_root -")
-                      ACE_TEXT(" visit_scope failed\n")), -1);
+        ACE_TEXT("(%N:%l) dds_visitor::visit_root -")
+                         ACE_TEXT(" visit_scope failed\n")), -1);
   }
   gen_target_.gen_epilogue();
 
   return (error_) ? -1 : 0;
 }
 
-int dds_visitor::visit_scope(UTL_Scope* node)
-{
+int dds_visitor::visit_scope(UTL_Scope *node) {
   if (node->nmembers() > 0) {
     UTL_ScopeActiveIterator si(node, UTL_Scope::IK_decls);
-    AST_Decl* d = 0;
+    AST_Decl *d = 0;
 
     while (!si.is_done()) {
       d = si.item();
 
       if (d == 0) {
         ACE_ERROR_RETURN((LM_ERROR,
-                          ACE_TEXT("(%N:%l) dds_visitor::visit_")
-                          ACE_TEXT("scope - bad node in this scope\n")), -1);
+            ACE_TEXT("(%N:%l) dds_visitor::visit_")
+                             ACE_TEXT("scope - bad node in this scope\n")), -1);
       }
 
       if (d->node_type() == AST_Decl::NT_pre_defined) {
@@ -135,8 +127,8 @@ int dds_visitor::visit_scope(UTL_Scope* node)
 
       if (d->ast_accept(this) == -1) {
         ACE_ERROR_RETURN((LM_ERROR,
-                          ACE_TEXT("(%N:%l) dds_visitor::visit_")
-                          ACE_TEXT("scope - failed to accept visitor\n")), -1);
+            ACE_TEXT("(%N:%l) dds_visitor::visit_")
+                             ACE_TEXT("scope - failed to accept visitor\n")), -1);
       }
 
       si.next();
@@ -146,9 +138,8 @@ int dds_visitor::visit_scope(UTL_Scope* node)
   return 0;
 }
 
-int dds_visitor::visit_module(AST_Module* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_module(AST_Module *node) {
+  const char *name = node->local_name()->get_string();
 
   /*BE_Comment_Guard g("MODULE", name);
 
@@ -156,41 +147,40 @@ int dds_visitor::visit_module(AST_Module* node)
 
   bool is_corba = std::string(node->local_name()->get_string()).compare("CORBA") == 0;
   if (node->nmembers() > 0 && !is_corba) {
-      error_ |= !gen_target_.gen_module(node);
+    error_ |= !gen_target_.gen_module(node);
 
-      if (this->visit_scope(node) == -1) {
-          ACE_ERROR_RETURN((LM_ERROR,
-              ACE_TEXT("(%N:%l) dds_visitor::visit_module -")
-              ACE_TEXT(" visit_scope failed\n")), -1);
-      }
+    if (this->visit_scope(node) == -1) {
+      ACE_ERROR_RETURN((LM_ERROR,
+          ACE_TEXT("(%N:%l) dds_visitor::visit_module -")
+                           ACE_TEXT(" visit_scope failed\n")), -1);
+    }
 
-      error_ |= !gen_target_.gen_module_end();
+    error_ |= !gen_target_.gen_module_end();
   }
   return 0;
 }
 
-int dds_visitor::visit_interface(AST_Interface* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_interface(AST_Interface *node) {
+  const char *name = node->local_name()->get_string();
 
   BE_Comment_Guard g("INTERFACE", name);
 
   ACE_UNUSED_ARG(g);
 
-  vector<AST_Interface*> inherits(node->n_inherits());
+  vector<AST_Interface *> inherits(node->n_inherits());
   for (int i = 0; i < node->n_inherits(); ++i) {
-    inherits[i] = dynamic_cast<AST_Interface*>(node->inherits()[i]);
+    inherits[i] = dynamic_cast<AST_Interface *>(node->inherits()[i]);
   }
 
-  vector<AST_Interface*> inherits_flat(node->inherits_flat(),
-                                       node->inherits_flat()
-                                       + node->n_inherits_flat());
+  vector<AST_Interface *> inherits_flat(node->inherits_flat(),
+                                        node->inherits_flat()
+                                        + node->n_inherits_flat());
 
-  vector<AST_Attribute*> attrs;
+  vector<AST_Attribute *> attrs;
 
   scope2vector(attrs, node, AST_Decl::NT_attr);
 
-  vector<AST_Operation*> ops;
+  vector<AST_Operation *> ops;
 
   scope2vector(ops, node, AST_Decl::NT_op);
 
@@ -202,16 +192,15 @@ int dds_visitor::visit_interface(AST_Interface* node)
 
   if (this->visit_scope(node) == -1) {
     ACE_ERROR_RETURN((LM_ERROR,
-                      ACE_TEXT("(%N:%l) dds_visitor::visit_interface ")
-                      ACE_TEXT("- visit_scope failed\n")), -1);
+        ACE_TEXT("(%N:%l) dds_visitor::visit_interface ")
+                         ACE_TEXT("- visit_scope failed\n")), -1);
   }
 
   return 0;
 }
 
-int dds_visitor::visit_structure(AST_Structure* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_structure(AST_Structure *node) {
+  const char *name = node->local_name()->get_string();
 
   /*BE_Comment_Guard g("STRUCT", name);
   ACE_UNUSED_ARG(g);*/
@@ -220,19 +209,19 @@ int dds_visitor::visit_structure(AST_Structure* node)
   TopicKeys topic_keys(node);
   try {
     topic_keys.count();
-  } catch (TopicKeys::Error& error) {
+  } catch (TopicKeys::Error &error) {
     idl_global->err()->misc_error(error.what(), error.node());
     return -1;
   }
 
-  IDL_GlobalData::DCPS_Data_Type_Info* info = idl_global->is_dcps_type(node->name());
+  IDL_GlobalData::DCPS_Data_Type_Info *info = idl_global->is_dcps_type(node->name());
   if (info) {
     if (be_global->warn_about_dcps_data_type()) {
       idl_global->err()->misc_warning("\n"
-        "  DCPS_DATA_TYPE and DCPS_DATA_KEY pragma statements are deprecated; please use\n"
-        "  topic type annotations instead.\n"
-        "  See docs/migrating_to_topic_type_annotations.md in the OpenDDS source code for\n"
-        "  more information.", node);
+                                      "  DCPS_DATA_TYPE and DCPS_DATA_KEY pragma statements are deprecated; please use\n"
+                                      "  topic type annotations instead.\n"
+                                      "  See docs/migrating_to_topic_type_annotations.md in the OpenDDS source code for\n"
+                                      "  more information.", node);
     }
 
     /*
@@ -248,22 +237,22 @@ int dds_visitor::visit_structure(AST_Structure* node)
       }
 
       IDL_GlobalData::DCPS_Data_Type_Info_Iter iter(info->key_list_);
-      for (ACE_TString* kp = 0; iter.next(kp) != 0; iter.advance()) {
+      for (ACE_TString *kp = 0; iter.next(kp) != 0; iter.advance()) {
         dcps_data_type_keys.insert(ACE_TEXT_ALWAYS_CHAR(kp->c_str()));
       }
 
       if (topic_type_keys != dcps_data_type_keys) {
         string message = "\n"
-          "  The keys are inconsistent on this struct declared to be a topic type using\n"
-          "  both a DCPS_DATA_TYPE pragma and the annotation-based system.";
+                         "  The keys are inconsistent on this struct declared to be a topic type using\n"
+                         "  both a DCPS_DATA_TYPE pragma and the annotation-based system.";
 
         bool header = false;
         for (set<string>::iterator i = topic_type_keys.begin();
-            i != topic_type_keys.end(); ++i) {
+             i != topic_type_keys.end(); ++i) {
           if (dcps_data_type_keys.find(*i) == dcps_data_type_keys.end()) {
             if (!header) {
               message += "\n\n"
-                "  The following keys were declared using @key, but not DCPS_DATA_KEY:";
+                         "  The following keys were declared using @key, but not DCPS_DATA_KEY:";
               header = true;
             }
             message += "\n    " + *i;
@@ -272,11 +261,11 @@ int dds_visitor::visit_structure(AST_Structure* node)
 
         header = false;
         for (set<string>::iterator i = dcps_data_type_keys.begin();
-            i != dcps_data_type_keys.end(); ++i) {
+             i != dcps_data_type_keys.end(); ++i) {
           if (topic_type_keys.find(*i) == topic_type_keys.end()) {
             if (!header) {
               message += "\n\n"
-                "  The following keys were declared using DCPS_DATA_KEY, but not @key:";
+                         "  The following keys were declared using DCPS_DATA_KEY, but not @key:";
               header = true;
             }
             message += "\n    " + *i;
@@ -284,15 +273,15 @@ int dds_visitor::visit_structure(AST_Structure* node)
         }
 
         message += "\n\n"
-          "  DCPS_DATA_TYPE and DCPS_DATA_KEY are deprecated, so the annotation-based keys\n"
-          "  will be used.";
+                   "  DCPS_DATA_TYPE and DCPS_DATA_KEY are deprecated, so the annotation-based keys\n"
+                   "  will be used.";
 
         idl_global->err()->misc_warning(message.c_str(), node);
       }
     }
   }
 
-  vector<AST_Field*> field_vec;
+  vector<AST_Field *> field_vec;
   field_vec.reserve(node->nfields());
   const Fields fields(node);
   const Fields::Iterator fields_end = fields.end();
@@ -316,13 +305,12 @@ int dds_visitor::visit_structure(AST_Structure* node)
   return 0;
 }
 
-int dds_visitor::visit_exception(AST_Exception* node)
-{
+int dds_visitor::visit_exception(AST_Exception *node) {
   if (node->imported()) {
     return 0;
   }
 
-  const char* name = node->local_name()->get_string();
+  const char *name = node->local_name()->get_string();
 
   BE_Comment_Guard g("EXCEPTION", name);
 
@@ -331,9 +319,8 @@ int dds_visitor::visit_exception(AST_Exception* node)
   return 0;
 }
 
-int dds_visitor::visit_typedef(AST_Typedef* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_typedef(AST_Typedef *node) {
+  const char *name = node->local_name()->get_string();
 
   /*BE_Comment_Guard g("TYPEDEF", name);
 
@@ -347,15 +334,14 @@ int dds_visitor::visit_typedef(AST_Typedef* node)
   return 0;
 }
 
-int dds_visitor::visit_enum(AST_Enum* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_enum(AST_Enum *node) {
+  const char *name = node->local_name()->get_string();
 
   /*BE_Comment_Guard g("ENUM", name);
 
   ACE_UNUSED_ARG(g);*/
 
-  vector<AST_EnumVal*> contents;
+  vector<AST_EnumVal *> contents;
 
   scope2vector(contents, node, AST_Decl::NT_enum_val);
 
@@ -366,9 +352,8 @@ int dds_visitor::visit_enum(AST_Enum* node)
   return 0;
 }
 
-int dds_visitor::visit_interface_fwd(AST_InterfaceFwd* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_interface_fwd(AST_InterfaceFwd *node) {
+  const char *name = node->local_name()->get_string();
   BE_Comment_Guard g("INTERFACE-FWD", name);
   ACE_UNUSED_ARG(g);
 
@@ -379,9 +364,8 @@ int dds_visitor::visit_interface_fwd(AST_InterfaceFwd* node)
   return 0;
 }
 
-int dds_visitor::visit_structure_fwd(AST_StructureFwd* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_structure_fwd(AST_StructureFwd *node) {
+  const char *name = node->local_name()->get_string();
   BE_Comment_Guard g("STRUCT-FWD", name);
 
   if (!java_ts_only_) {
@@ -391,15 +375,14 @@ int dds_visitor::visit_structure_fwd(AST_StructureFwd* node)
   return 0;
 }
 
-int dds_visitor::visit_constant(AST_Constant* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_constant(AST_Constant *node) {
+  const char *name = node->local_name()->get_string();
 
   /*BE_Comment_Guard g("CONST", name);
 
   ACE_UNUSED_ARG(g);*/
 
-  AST_Decl* d = ScopeAsDecl(node->defined_in());
+  AST_Decl *d = ScopeAsDecl(node->defined_in());
 
   bool nested = d && (d->node_type() == AST_Decl::NT_interface);
 
@@ -410,9 +393,8 @@ int dds_visitor::visit_constant(AST_Constant* node)
   return 0;
 }
 
-int dds_visitor::visit_native(AST_Native* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_native(AST_Native *node) {
+  const char *name = node->local_name()->get_string();
 
   BE_Comment_Guard g("NATIVE", name);
 
@@ -425,14 +407,13 @@ int dds_visitor::visit_native(AST_Native* node)
   return 0;
 }
 
-int dds_visitor::visit_union(AST_Union* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_union(AST_Union *node) {
+  const char *name = node->local_name()->get_string();
 
   BE_Comment_Guard g("UNION", name);
   ACE_UNUSED_ARG(g);
 
-  vector<AST_UnionBranch*> branches;
+  vector<AST_UnionBranch *> branches;
   branches.reserve(node->nfields());
   const Fields fields(node);
   const Fields::Iterator fields_end = fields.end();
@@ -442,7 +423,7 @@ int dds_visitor::visit_union(AST_Union* node)
       return -1;
     }
 
-    AST_UnionBranch* ub = dynamic_cast<AST_UnionBranch*>(*i);
+    AST_UnionBranch *ub = dynamic_cast<AST_UnionBranch *>(*i);
     if (!ub) {
       idl_global->err()->misc_error("expected union to only contain UnionBranches", ub);
       error_ = true;
@@ -462,93 +443,77 @@ int dds_visitor::visit_union(AST_Union* node)
 
 // *** All methods below here are unimplemented (or trivially implemented) ***
 
-int dds_visitor::visit_sequence(AST_Sequence*)
-{
+int dds_visitor::visit_sequence(AST_Sequence *) {
   //sequences always appear as typedefs, see visit_typedef ()
   return 0;
 }
 
-int dds_visitor::visit_operation(AST_Operation*)
-{
+int dds_visitor::visit_operation(AST_Operation *) {
   // operations are taken care of by visit_interface()
   return 0;
 }
 
-int dds_visitor::visit_field(AST_Field*)
-{
+int dds_visitor::visit_field(AST_Field *) {
   // fields are taken care of by visit_interface() for arguments and attributes
   return 0;
 }
 
-int dds_visitor::visit_attribute(AST_Attribute*)
-{
+int dds_visitor::visit_attribute(AST_Attribute *) {
   // attributes are taken care of by visit_interface ()
   return 0;
 }
 
-int dds_visitor::visit_array(AST_Array*)
-{
+int dds_visitor::visit_array(AST_Array *) {
   //arrays always appear as typedefs, see visit_typedef ()
   return 0;
 }
 
 // Begin IDL syntactic elements that are not currently supported
 
-int dds_visitor::visit_valuetype(AST_ValueType*)
-{
+int dds_visitor::visit_valuetype(AST_ValueType *) {
   return 0;
 }
 
-int dds_visitor::visit_valuetype_fwd(AST_ValueTypeFwd*)
-{
+int dds_visitor::visit_valuetype_fwd(AST_ValueTypeFwd *) {
   return 0;
 }
 
-int dds_visitor::visit_component(AST_Component*)
-{
+int dds_visitor::visit_component(AST_Component *) {
   return 0;
 }
 
-int dds_visitor::visit_component_fwd(AST_ComponentFwd*)
-{
+int dds_visitor::visit_component_fwd(AST_ComponentFwd *) {
   return 0;
 }
 
-int dds_visitor::visit_eventtype(AST_EventType*)
-{
+int dds_visitor::visit_eventtype(AST_EventType *) {
   return 0;
 }
 
-int dds_visitor::visit_eventtype_fwd(AST_EventTypeFwd*)
-{
+int dds_visitor::visit_eventtype_fwd(AST_EventTypeFwd *) {
   return 0;
 }
 
-int dds_visitor::visit_home(AST_Home*)
-{
+int dds_visitor::visit_home(AST_Home *) {
   return 0;
 }
 
-int dds_visitor::visit_factory(AST_Factory*)
-{
+int dds_visitor::visit_factory(AST_Factory *) {
   return 0;
 }
 
 // No need to implement these at this level
 
-int dds_visitor::visit_predefined_type(AST_PredefinedType*)
-{
+int dds_visitor::visit_predefined_type(AST_PredefinedType *) {
   return 0;
 }
 
-int dds_visitor::visit_string(AST_String*)
-{
+int dds_visitor::visit_string(AST_String *) {
   return 0;
 }
 
-int dds_visitor::visit_union_fwd(AST_UnionFwd* node)
-{
-  const char* name = node->local_name()->get_string();
+int dds_visitor::visit_union_fwd(AST_UnionFwd *node) {
+  const char *name = node->local_name()->get_string();
   BE_Comment_Guard g("UNION-FWD", name);
 
   if (!java_ts_only_) {
@@ -558,112 +523,90 @@ int dds_visitor::visit_union_fwd(AST_UnionFwd* node)
   return 0;
 }
 
-int dds_visitor::visit_union_branch(AST_UnionBranch*)
-{
+int dds_visitor::visit_union_branch(AST_UnionBranch *) {
   return 0;
 }
 
-int dds_visitor::visit_union_label(AST_UnionLabel*)
-{
+int dds_visitor::visit_union_label(AST_UnionLabel *) {
   return 0;
 }
 
-int dds_visitor::visit_enum_val(AST_EnumVal*)
-{
+int dds_visitor::visit_enum_val(AST_EnumVal *) {
   return 0;
 }
 
-int dds_visitor::visit_expression(AST_Expression*)
-{
+int dds_visitor::visit_expression(AST_Expression *) {
   return 0;
 }
 
-int dds_visitor::visit_type(AST_Type*)
-{
+int dds_visitor::visit_type(AST_Type *) {
   return 0;
 }
 
-int dds_visitor::visit_argument(AST_Argument*)
-{
+int dds_visitor::visit_argument(AST_Argument *) {
   return 0;
 }
 
-int dds_visitor::visit_decl(AST_Decl*)
-{
+int dds_visitor::visit_decl(AST_Decl *) {
   return 0;
 }
 
-int dds_visitor::visit_valuebox(AST_ValueBox*)
-{
+int dds_visitor::visit_valuebox(AST_ValueBox *) {
   return 0;
 }
 
-int dds_visitor::visit_template_module(AST_Template_Module*)
-{
+int dds_visitor::visit_template_module(AST_Template_Module *) {
   return 0;
 }
 
-int dds_visitor::visit_template_module_inst(AST_Template_Module_Inst*)
-{
+int dds_visitor::visit_template_module_inst(AST_Template_Module_Inst *) {
   return 0;
 }
 
-int dds_visitor::visit_template_module_ref(AST_Template_Module_Ref*)
-{
+int dds_visitor::visit_template_module_ref(AST_Template_Module_Ref *) {
   return 0;
 }
 
-int dds_visitor::visit_param_holder(AST_Param_Holder*)
-{
+int dds_visitor::visit_param_holder(AST_Param_Holder *) {
   return 0;
 }
 
-int dds_visitor::visit_porttype(AST_PortType*)
-{
+int dds_visitor::visit_porttype(AST_PortType *) {
   return 0;
 }
 
-int dds_visitor::visit_provides(AST_Provides*)
-{
+int dds_visitor::visit_provides(AST_Provides *) {
   return 0;
 }
 
-int dds_visitor::visit_uses(AST_Uses*)
-{
+int dds_visitor::visit_uses(AST_Uses *) {
   return 0;
 }
 
-int dds_visitor::visit_publishes(AST_Publishes*)
-{
+int dds_visitor::visit_publishes(AST_Publishes *) {
   return 0;
 }
 
-int dds_visitor::visit_emits(AST_Emits*)
-{
+int dds_visitor::visit_emits(AST_Emits *) {
   return 0;
 }
 
-int dds_visitor::visit_consumes(AST_Consumes*)
-{
+int dds_visitor::visit_consumes(AST_Consumes *) {
   return 0;
 }
 
-int dds_visitor::visit_extended_port(AST_Extended_Port*)
-{
+int dds_visitor::visit_extended_port(AST_Extended_Port *) {
   return 0;
 }
 
-int dds_visitor::visit_mirror_port(AST_Mirror_Port*)
-{
+int dds_visitor::visit_mirror_port(AST_Mirror_Port *) {
   return 0;
 }
 
-int dds_visitor::visit_connector(AST_Connector*)
-{
+int dds_visitor::visit_connector(AST_Connector *) {
   return 0;
 }
 
-int dds_visitor::visit_finder(AST_Finder*)
-{
+int dds_visitor::visit_finder(AST_Finder *) {
   return 0;
 }

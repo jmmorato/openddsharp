@@ -129,7 +129,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/bin/
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/bin/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
@@ -141,8 +141,8 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/tools/
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo          
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl          
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/ACE/apps/gperf/src/ace_gperf
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_TAO/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/TAO_IDL/tao_idl
         key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-cd
 
     - name: Build Native (No cached)
@@ -184,8 +184,8 @@ jobs:
         rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
         rsync -r -m -v --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' ./ $targetDir
@@ -228,7 +228,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
           ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/bin/
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappersbin/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
@@ -240,8 +240,8 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo          
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl          
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/ACE/apps/gperf/src/ace_gperf
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_TAO/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/TAO/TAO_IDL/tao_idl
         key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
 
     - name: Build Native (No cached)
@@ -249,7 +249,7 @@ jobs:
       if: steps.opendds-libraries-macos-cd.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
-      
+
     - name: Build Native (Cached)
       shell: pwsh
       if: steps.opendds-libraries-macos-cd.outputs.cache-hit == 'true'
@@ -283,8 +283,8 @@ jobs:
         rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_TAO/ACE/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_TAO/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
         rsync -r -m -v --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
@@ -323,7 +323,7 @@ jobs:
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture 'x64' -Channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-    
+
     - name: Get branch names
       id: branch-name
       uses: tj-actions/branch-names@v7
@@ -347,7 +347,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: opendds-osx-x64-${{ github.run_number }}
-        
+
     - name: Prepare OpenDDS Native
       shell: pwsh
       run: |
@@ -401,7 +401,7 @@ jobs:
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=AnyCPU
       working-directory: ${{ github.workspace }}
-      
+
     - name: Build OpenDDSharp.Marshaller x86
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj -property:Configuration=Release -property:Platform=x86
@@ -427,7 +427,7 @@ jobs:
       with:
         name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
         path:  ${{ github.workspace }}/Release/*.nupkg
-  
+
   test_artifacts:
     needs: build_artifacts
 
@@ -458,9 +458,9 @@ jobs:
         with:
           name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/nupkg
-          
+
       - name: Test .NET development
-        shell: pwsh     
+        shell: pwsh
         run: |
           $year = (Get-Date).ToString("yy")
           $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
@@ -529,12 +529,12 @@ jobs:
         with:
           name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Release
-          
+
       - name: Get branch names
         id: branch-name
         uses: tj-actions/branch-names@v7
 
-      - name: Publish NuGet packages        
+      - name: Publish NuGet packages
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         shell: pwsh

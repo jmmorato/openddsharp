@@ -30,22 +30,22 @@ namespace OpenDDSharp.Build.Tasks
     public class PrepareLinuxLibraries : FrostingTask<BuildContext>
     {
         private const string OPENDDS_VERSION = "3.25.0-dev";
-        private const string ACE_VERSION = "6.5.20";
-        private const string TAO_VERSION = "2.5.20";
+        private const string ACE_VERSION = "7.1.1";
+        private const string TAO_VERSION = "3.1.1";
 
         private readonly string[] _aceLibraries =
         {
-            @"ext\OpenDDS_Linux\ACE_TAO\ACE\ace\libACE.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\ACE\ace\libACE.so",
         };
 
         private readonly string[] _taoLibraries =
         {
-            @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\libTAO.so",
-            @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
-            @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so",
-            @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so",
-            @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PI\libTAO_PI.so",
-            @"ext\OpenDDS_Linux\ACE_TAO\TAO\tao\PortableServer\libTAO_PortableServer.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\libTAO.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PI\libTAO_PI.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.so",
         };
 
         private readonly string[] _openddsLibraries =

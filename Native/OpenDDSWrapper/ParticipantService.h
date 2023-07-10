@@ -30,16 +30,16 @@ EXTERN_METHOD_EXPORT
 ::DDS::DomainParticipantFactory_ptr ParticipantService_GetDomainParticipantFactoryParameters(int argc, char *argv[]);
 
 EXTERN_METHOD_EXPORT
-void ParticipantService_AddDiscovery(::OpenDDS::DCPS::Discovery* discovery);
+void ParticipantService_AddDiscovery(::OpenDDS::DCPS::Discovery *discovery);
 
 EXTERN_METHOD_EXPORT
-char * ParticipantService_GetDefaultDiscovery();
+char *ParticipantService_GetDefaultDiscovery();
 
 EXTERN_METHOD_EXPORT
-void ParticipantService_SetDefaultDiscovery(char * defaultDiscovery);
+void ParticipantService_SetDefaultDiscovery(char *defaultDiscovery);
 
 EXTERN_METHOD_EXPORT
-void ParticipantService_SetRepoDomain(int domain, char * repo, bool attach_participant);
+void ParticipantService_SetRepoDomain(int domain, char *repo, bool attach_participant);
 
 EXTERN_METHOD_EXPORT
 ::DDS::ReturnCode_t ParticipantService_Shutdown();

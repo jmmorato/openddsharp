@@ -24,43 +24,43 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/framework/TransportInst_rch.h>
 
 EXTERN_METHOD_EXPORT
-char* TransportInst_GetTransportType(::OpenDDS::DCPS::TransportInst* ti);
+char *TransportInst_GetTransportType(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-char* TransportInst_GetName(::OpenDDS::DCPS::TransportInst* ti);
+char *TransportInst_GetName(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-CORBA::ULong TransportInst_GetMaxPacketSize(::OpenDDS::DCPS::TransportInst* ti);
+CORBA::ULong TransportInst_GetMaxPacketSize(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetMaxPacketSize(::OpenDDS::DCPS::TransportInst* ti, CORBA::ULong value);
+void TransportInst_SetMaxPacketSize(::OpenDDS::DCPS::TransportInst *ti, CORBA::ULong value);
 
 EXTERN_METHOD_EXPORT
-size_t TransportInst_GetMaxSamplesPerPacket(::OpenDDS::DCPS::TransportInst* ti);
+size_t TransportInst_GetMaxSamplesPerPacket(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetMaxSamplesPerPacket(::OpenDDS::DCPS::TransportInst* ti, size_t value);
+void TransportInst_SetMaxSamplesPerPacket(::OpenDDS::DCPS::TransportInst *ti, size_t value);
 
 EXTERN_METHOD_EXPORT
-CORBA::ULong TransportInst_GetOptimumPacketSize(::OpenDDS::DCPS::TransportInst* ti);
+CORBA::ULong TransportInst_GetOptimumPacketSize(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetOptimumPacketSize(::OpenDDS::DCPS::TransportInst* ti, CORBA::ULong value);
+void TransportInst_SetOptimumPacketSize(::OpenDDS::DCPS::TransportInst *ti, CORBA::ULong value);
 
 EXTERN_METHOD_EXPORT
-CORBA::Boolean TransportInst_GetThreadPerConnection(::OpenDDS::DCPS::TransportInst* ti);
+CORBA::Boolean TransportInst_GetThreadPerConnection(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetThreadPerConnection(::OpenDDS::DCPS::TransportInst* ti, CORBA::Boolean value);
+void TransportInst_SetThreadPerConnection(::OpenDDS::DCPS::TransportInst *ti, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-long TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti);
+long TransportInst_GetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst* ti, long value);
+void TransportInst_SetDatalinkReleaseDelay(::OpenDDS::DCPS::TransportInst *ti, long value);
 
 EXTERN_METHOD_EXPORT
-size_t TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst* ti);
+size_t TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst *ti);
 
 EXTERN_METHOD_EXPORT
-void TransportInst_SetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst* ti, size_t value);
+void TransportInst_SetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst *ti, size_t value);
