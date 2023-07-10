@@ -40,7 +40,7 @@ jobs:
       with:
         path: |
           ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
@@ -125,7 +125,7 @@ jobs:
       with:
         path: |
           ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
@@ -224,7 +224,7 @@ jobs:
       with:
         path: |
           ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*.cmake
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
           ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
