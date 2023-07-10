@@ -70,7 +70,7 @@
     <file src="..\ext\OpenDDS_MacOS\VERSION.txt" target="tools\DDS_MacOS" />
     <file src="..\ext\OpenDDS_MacOS\cmake\*" target="tools\DDS_MacOS\cmake" />
     <file src="..\ext\OpenDDS_MacOS\dds\idl\opendds_idl*" target="tools\DDS_MacOS\bin" />
-    <file src="..\ext\OpenDDS_MacOS\AACE_wrappers\lib\libACE.dylib" target="tools\DDS_MacOS\bin" />
+    <file src="..\ext\OpenDDS_MacOS\ACE_wrappers\lib\libACE.dylib" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_wrappers\lib\libTAO_IDL_FE.dylib" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\ACE_wrappers\lib\libTAO_Valuetype.dylib" target="tools\DDS_MacOS\bin" />
     <file src="..\ext\OpenDDS_MacOS\lib\libOpenDDS_Util.dylib" target="tools\DDS_MacOS\bin" />
