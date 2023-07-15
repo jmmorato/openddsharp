@@ -79,6 +79,7 @@ jobs:
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\cmake\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\cmake" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
@@ -163,8 +164,7 @@ jobs:
         $sourceDir = "./ext/OpenDDS_Linux"
         $targetDir = "./opendds-native-linux-x64"
         mkdir "$targetDir"
-        
-        rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+
         rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -175,6 +175,7 @@ jobs:
         
         rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v -LKH --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
                 
@@ -262,8 +263,7 @@ jobs:
         $sourceDir = "./ext/OpenDDS_MacOS"
         $targetDir = "./opendds-native-osx-x64"
         mkdir "$targetDir"
-        
-        rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+
         rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -274,6 +274,7 @@ jobs:
         
         rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v -LKH --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
         
