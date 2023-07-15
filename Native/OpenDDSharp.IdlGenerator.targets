@@ -27,6 +27,9 @@
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x86\TAO</TAO_ROOT>
   </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x86\tools\rapidjson</RAPIDJSON_ROOT>
+  </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x64</DDS_ROOT>
@@ -37,6 +40,9 @@
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x64\TAO</TAO_ROOT>
   </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x64\tools\rapidjson</RAPIDJSON_ROOT>
+  </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux</DDS_ROOT>
@@ -46,6 +52,9 @@
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_Linux/TAO</TAO_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsLinux)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux/tools/rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Library Path" Condition="'$(IsLinux)'=='true'">
 	  <LD_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</LD_LIBRARY_PATH>
@@ -59,6 +68,9 @@
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsOSX)'=='true'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_MacOS/TAO</TAO_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsOSX)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_MacOS/tools/rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Library Path" Condition="'$(IsOSX)'=='true'">
 	  <DYLD_FALLBACK_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</DYLD_FALLBACK_LIBRARY_PATH>
