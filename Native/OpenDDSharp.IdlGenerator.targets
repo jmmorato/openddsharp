@@ -70,7 +70,7 @@
     <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_MacOS/TAO</TAO_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsOSX)'=='true'">
-    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_MacOS/tools/rapidjson</RAPIDJSON_ROOT>
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_MacOS/tools/rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Library Path" Condition="'$(IsOSX)'=='true'">
 	  <DYLD_FALLBACK_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</DYLD_FALLBACK_LIBRARY_PATH>
@@ -102,26 +102,28 @@
     <AddPathVC Platform="x86" />
   </Target>
 
-  <!--Set Windows environment variables-->
+  <!--Set environment variables-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Set OpenDDS environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
     <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />
+    <Message Text="RAPIDJSON_ROOT=$(RAPIDJSON_ROOT)" Importance="High" />
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
+    <SetEnvVar Variable="RAPIDJSON_ROOT" Value="$(RAPIDJSON_ROOT)" />
   </Target>
 
-  <!-- Set Linux environment variables -->
+  <!-- Set specific Linux environment variables -->
   <Target Name="SetEnvVarTargetLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'">
     <Message Text="Set Linux environment variables:" Importance="High" />
 	  <Message Text="LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)" Importance="High" />
 	  <SetEnvVar Variable="LD_LIBRARY_PATH" Value="$(LD_LIBRARY_PATH)" />
   </Target>
 
-  <!-- Set MacOS environment variables -->
+  <!-- Set specific MacOS environment variables -->
   <Target Name="SetEnvVarTargetMacOS" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'">
     <Message Text="Set MacOS environment variables:" Importance="High" />
 	  <Message Text="DYLD_FALLBACK_LIBRARY_PATH=$(DYLD_FALLBACK_LIBRARY_PATH)" Importance="High" />
