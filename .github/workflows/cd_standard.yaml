@@ -81,7 +81,7 @@ jobs:
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\cmake\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\cmake\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\tools\json\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
