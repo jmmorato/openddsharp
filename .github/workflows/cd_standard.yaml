@@ -479,7 +479,7 @@ jobs:
           Copy-Item "${{ github.workspace }}/Tests/TestIdlJson/IDL/Test.idl" -Destination "./IDL" -Force
           Copy-Item "${{ github.workspace }}/Tests/TestIdlJson/IDL/TestInclude.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build Test.csproj --configuration Release
+          dotnet build Test.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
           dotnet clean Test.csproj
           cd ..
           New-Item -Path "." -Name "TestConsole" -ItemType "directory"
