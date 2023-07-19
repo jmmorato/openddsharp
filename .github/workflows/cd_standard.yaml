@@ -233,7 +233,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
           ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappersbin/
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/bin/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
