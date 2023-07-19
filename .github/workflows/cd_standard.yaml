@@ -41,6 +41,7 @@ jobs:
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/tools/rapidjson/**/*
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
@@ -80,6 +81,7 @@ jobs:
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\cmake\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\cmake" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\tools\json\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
@@ -127,6 +129,7 @@ jobs:
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/rapidjson/**/*
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
@@ -226,6 +229,7 @@ jobs:
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/rapidjson/**/*
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
           ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
@@ -274,6 +278,7 @@ jobs:
         
         rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v -LKH --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
