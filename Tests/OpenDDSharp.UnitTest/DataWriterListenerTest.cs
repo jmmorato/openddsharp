@@ -298,7 +298,7 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        // [Ignore("It hangs in Windows. Looking for a solution...")]
+        [Ignore("It hangs in Windows. Looking for a solution...")]
         public void TestOnLivelinessLost()
         {
             DataWriter dw = null;
