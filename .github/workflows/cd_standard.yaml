@@ -41,6 +41,7 @@ jobs:
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/tools/rapidjson/**/*
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
@@ -79,6 +80,8 @@ jobs:
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\cmake\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\cmake\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
@@ -126,6 +129,7 @@ jobs:
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/rapidjson/**/*
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
           ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
@@ -163,8 +167,7 @@ jobs:
         $sourceDir = "./ext/OpenDDS_Linux"
         $targetDir = "./opendds-native-linux-x64"
         mkdir "$targetDir"
-        
-        rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+
         rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -175,6 +178,7 @@ jobs:
         
         rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v -LKH --include='*lib*.so*' --include='*/' --exclude='*' $sourceDir $targetDir
                 
@@ -225,10 +229,11 @@ jobs:
         path: |
           ${{ github.workspace }}/README.md
           ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/rapidjson/**/*
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
           ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappersbin/
+          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/bin/
           ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
           ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
@@ -262,8 +267,7 @@ jobs:
         $sourceDir = "./ext/OpenDDS_MacOS"
         $targetDir = "./opendds-native-osx-x64"
         mkdir "$targetDir"
-        
-        rsync -r -m -v --include='*.cmake' --include='*/' --exclude='*' $sourceDir $targetDir
+
         rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -274,6 +278,8 @@ jobs:
         
         rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v -LKH --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
         
@@ -473,7 +479,7 @@ jobs:
           Copy-Item "${{ github.workspace }}/Tests/TestIdlJson/IDL/Test.idl" -Destination "./IDL" -Force
           Copy-Item "${{ github.workspace }}/Tests/TestIdlJson/IDL/TestInclude.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build Test.csproj --configuration Release
+          dotnet build Test.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
           dotnet clean Test.csproj
           cd ..
           New-Item -Path "." -Name "TestConsole" -ItemType "directory"

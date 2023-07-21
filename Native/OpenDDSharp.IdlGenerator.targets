@@ -27,6 +27,9 @@
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x86\TAO</TAO_ROOT>
   </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x86\tools\rapidjson</RAPIDJSON_ROOT>
+  </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x64</DDS_ROOT>
@@ -37,6 +40,9 @@
   <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x64\TAO</TAO_ROOT>
   </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x64\tools\rapidjson</RAPIDJSON_ROOT>
+  </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
     <DDS_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux</DDS_ROOT>
@@ -46,6 +52,9 @@
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_Linux/TAO</TAO_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsLinux)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux/tools/rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Library Path" Condition="'$(IsLinux)'=='true'">
 	  <LD_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</LD_LIBRARY_PATH>
@@ -59,6 +68,9 @@
   </PropertyGroup>
   <PropertyGroup Label="TAO Home" Condition="'$(IsOSX)'=='true'">
     <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_MacOS/TAO</TAO_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsOSX)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_MacOS/tools/rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
   <PropertyGroup Label="Library Path" Condition="'$(IsOSX)'=='true'">
 	  <DYLD_FALLBACK_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</DYLD_FALLBACK_LIBRARY_PATH>
@@ -90,26 +102,28 @@
     <AddPathVC Platform="x86" />
   </Target>
 
-  <!--Set Windows environment variables-->
+  <!--Set environment variables-->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.SetEnvVar" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
   <Target Name="SetEnvVarTarget" BeforeTargets="PreBuildEvent">
     <Message Text="Set OpenDDS environment variables:" Importance="High" />
     <Message Text="DDS_ROOT=$(DDS_ROOT)" Importance="High" />
     <Message Text="ACE_ROOT=$(ACE_ROOT)" Importance="High" />
     <Message Text="TAO_ROOT=$(TAO_ROOT)" Importance="High" />
+    <Message Text="RAPIDJSON_ROOT=$(RAPIDJSON_ROOT)" Importance="High" />
     <SetEnvVar Variable="DDS_ROOT" Value="$(DDS_ROOT)" />
     <SetEnvVar Variable="ACE_ROOT" Value="$(ACE_ROOT)" />
     <SetEnvVar Variable="TAO_ROOT" Value="$(TAO_ROOT)" />
+    <SetEnvVar Variable="RAPIDJSON_ROOT" Value="$(RAPIDJSON_ROOT)" />
   </Target>
 
-  <!-- Set Linux environment variables -->
+  <!-- Set specific Linux environment variables -->
   <Target Name="SetEnvVarTargetLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'">
     <Message Text="Set Linux environment variables:" Importance="High" />
 	  <Message Text="LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)" Importance="High" />
 	  <SetEnvVar Variable="LD_LIBRARY_PATH" Value="$(LD_LIBRARY_PATH)" />
   </Target>
 
-  <!-- Set MacOS environment variables -->
+  <!-- Set specific MacOS environment variables -->
   <Target Name="SetEnvVarTargetMacOS" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'">
     <Message Text="Set MacOS environment variables:" Importance="High" />
 	  <Message Text="DYLD_FALLBACK_LIBRARY_PATH=$(DYLD_FALLBACK_LIBRARY_PATH)" Importance="High" />
@@ -144,19 +158,19 @@
   <!--Create cmake-->
   <Target Name="OpenDDSharpCmakeOpenddsx64" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='win-x64' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsx86" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='win-x86' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec ToolExe="sh" Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec ToolExe="sh" Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsOSX" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec ToolExe="sh" Command="arch -x86_64 cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec ToolExe="sh" Command="arch -x86_64 cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Build cmake-->
