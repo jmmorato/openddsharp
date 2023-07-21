@@ -35,6 +35,7 @@ namespace OpenDDSharp.Build.Tasks
             "OPENDDS_MPC",
             "OPENDDS_ACE",
             "OPENDDS_TAO",
+            "OPENDDS_RAPIDJSON",
         };
 
         /// <inheritdoc/>
@@ -49,7 +50,7 @@ namespace OpenDDSharp.Build.Tasks
                 var stringBuilder = new StringBuilder();
                 foreach (var line in lines)
                 {
-                    if (line.StartsWith("#") || _variablesToRemove.Any(line.Contains))
+                    if (line.StartsWith('#') || _variablesToRemove.Any(line.Contains))
                     {
                         continue;
                     }
