@@ -34,7 +34,7 @@ namespace OpenDDSharp.Build.Tasks
     [TaskName("SetupThirdParty")]
     public sealed class SetupThirdPartyTask : FrostingTask<BuildContext>
     {
-        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/jmmorato/OpenDDS.git";
+        private const string OPENDDS_GIT_REPOSITORY = "https://github.com/OpenDDS/OpenDDS.git";
         private DirectoryPath _clonePath;
         private string _versionTag;
 
@@ -85,8 +85,7 @@ namespace OpenDDSharp.Build.Tasks
             context.Log.Information("Checkout OpenDDS version v{0}", context.OpenDdsVersion);
             Git(context, "fetch");
             Git(context, "fetch --tags");
-            // Git(context, $"checkout tags/{_versionTag}");
-            // Git(context, $"checkout 27ea3728477342c43e71a618cf6476cf7c3e6728");
+            Git(context, $"checkout tags/{_versionTag}");
 
             context.Log.Information("Call OpenDDS configure script");
 
@@ -127,6 +126,10 @@ namespace OpenDDSharp.Build.Tasks
                 if (context.BuildConfiguration == "Release")
                 {
                     arguments += " --no-debug --optimize";
+                }
+                else
+                {
+                    arguments += " --debug --no-optimize";
                 }
                 context.Log.Information(configurePath + arguments);
 

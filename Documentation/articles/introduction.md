@@ -16,7 +16,7 @@ OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)
 OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)
 OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthedocs.io/en/latest/)
 
-OpenDDSharp has been compiled with OpenDDS v3.24.1
+OpenDDSharp has been compiled with OpenDDS v3.25
 
 | Package                                                   | NuGet                                                            |
 |-----------------------------------------------------------|------------------------------------------------------------------|
