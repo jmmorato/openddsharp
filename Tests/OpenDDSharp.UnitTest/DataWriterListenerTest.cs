@@ -164,6 +164,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnOfferedDeadlineMissed()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             DataWriter writer = null;
             var totalCount = 0;
             var totalCountChange = 0;
@@ -178,6 +180,8 @@ namespace OpenDDSharp.UnitTest
                 totalCountChange = s.TotalCountChange;
                 lastInstanceHandle = s.LastInstanceHandle;
                 count++;
+
+                evt.Set();
             };
 
             // Prepare QoS for the test
@@ -207,11 +211,11 @@ namespace OpenDDSharp.UnitTest
             _dataWriter.Write(instance, instanceHandle);
 
             // After half second deadline should not be lost yet
-            System.Threading.Thread.Sleep(500);
+            Assert.IsFalse(evt.Wait(500));
             Assert.AreEqual(0, count);
 
             // After one second and a half one deadline should be lost
-            System.Threading.Thread.Sleep(1000);
+            Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, writer);
             Assert.AreEqual(1, totalCount);
@@ -303,7 +307,6 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        // [Ignore("It hangs in Windows. Looking for a solution...")]
         public void TestOnLivelinessLost()
         {
             using var evt = new ManualResetEventSlim(false);
@@ -367,6 +370,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnPublicationMatched()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             DataWriter dw = null;
             var currentCount = 0;
             var currentCountChange = 0;
@@ -386,6 +391,8 @@ namespace OpenDDSharp.UnitTest
                 handle = s.LastSubscriptionHandle;
 
                 count++;
+
+                evt.Set();
             };
 
             // Enable entities
@@ -396,10 +403,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            var found = _writer.WaitForSubscriptions(1, 1000);
+            var found = _writer.WaitForSubscriptions(1, 1_000);
             Assert.IsTrue(found);
 
-            System.Threading.Thread.Sleep(100);
+            found = _reader.WaitForPublications(1, 1_000);
+            Assert.IsTrue(found);
+
+            Assert.IsTrue(evt.Wait(1_000));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, currentCount);
