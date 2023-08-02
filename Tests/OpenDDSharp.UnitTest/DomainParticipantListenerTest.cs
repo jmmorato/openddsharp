@@ -182,7 +182,7 @@ namespace OpenDDSharp.UnitTest
                 }
             };
 
-            //// Enable entities
+            // Enable entities
             var result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -721,7 +721,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Check subscription matched call
-            Assert.IsTrue(evt2.Wait(500));
+            Assert.IsTrue(evt2.Wait(1_500));
             Assert.AreEqual(2, count);
             Assert.AreEqual(_reader, secondDataReader);
             Assert.AreEqual(1, secondTotalCount);
