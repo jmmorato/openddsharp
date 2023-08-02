@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -298,54 +299,60 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("It hangs in Windows. Looking for a solution...")]
+        // [Ignore("It hangs in Windows. Looking for a solution...")]
         public void TestOnLivelinessLost()
         {
-            DataWriter dw = null;
-            var totalCount = 0;
-            var totalCountChange = 0;
-
-            // Attach to the event
-            var count = 0;
-            _listener.LivelinessLost += (w, s) =>
+            using (var evt = new ManualResetEventSlim(false))
             {
-                dw = w;
-                totalCount = s.TotalCount;
-                totalCountChange = s.TotalCountChange;
+                DataWriter dw = null;
+                var totalCount = 0;
+                var totalCountChange = 0;
 
-                count++;
-            };
-
-            // Prepare QoS for the test
-            var dwQos = new DataWriterQos
-            {
-                Liveliness =
+                // Attach to the event
+                var count = 0;
+                _listener.LivelinessLost += (w, s) =>
                 {
-                    Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
-                    LeaseDuration = new Duration { Seconds = 1 },
-                },
-            };
-            var result = _writer.SetQos(dwQos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                    dw = w;
+                    totalCount = s.TotalCount;
+                    totalCountChange = s.TotalCountChange;
 
-            // Enable entities
-            result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
+                    count++;
+                };
 
-            // After half second liveliness should not be lost yet
-            System.Threading.Thread.Sleep(500);
-            Assert.AreEqual(0, count);
+                // Prepare QoS for the test
+                var dwQos = new DataWriterQos
+                {
+                    Liveliness =
+                    {
+                        Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                        LeaseDuration = new Duration { Seconds = 1 },
+                    },
+                };
+                var result = _writer.SetQos(dwQos);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // After one second and a half one liveliness should be lost
-            System.Threading.Thread.Sleep(1000);
-            Assert.AreEqual(1, count);
-            Assert.AreEqual(_writer, dw);
-            Assert.AreEqual(1, totalCount);
-            Assert.AreEqual(1, totalCountChange);
+                result = _reader.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Remove the listener to avoid extra messages
-            result = _dataWriter.SetListener(null);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Enable entities
+                result = _writer.Enable();
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                // After half second liveliness should not be lost yet
+                Assert.IsFalse(evt.Wait(500));
+                Assert.AreEqual(0, count);
+
+                // After one second and a half one liveliness should be lost
+                Assert.IsTrue(evt.Wait(1_000));
+                Assert.AreEqual(1, count);
+                Assert.AreEqual(_writer, dw);
+                Assert.AreEqual(1, totalCount);
+                Assert.AreEqual(1, totalCountChange);
+
+                // Remove the listener to avoid extra messages
+                result = _dataWriter.SetListener(null);
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
         }
 
         /// <summary>
