@@ -18,12 +18,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
+using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.UnitTest.Helpers;
-using JsonWrapper;
 
 namespace OpenDDSharp.UnitTest
 {
@@ -94,24 +93,25 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.Read(List{SubscriptionBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestRead()
+        public async Task TestReadAsync()
         {
-            List<SubscriptionBuiltinTopicData> data = new List<SubscriptionBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
+            var data = new List<SubscriptionBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -120,15 +120,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.Read(data, infos);
                 count--;
             }
@@ -136,7 +137,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
+
+            ret = reader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(reader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -149,24 +162,25 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.Take(List{SubscriptionBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTake()
+        public async Task TestTakeAsync()
         {
-            List<SubscriptionBuiltinTopicData> data = new List<SubscriptionBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Take(data, infos);
+            var data = new List<SubscriptionBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -175,15 +189,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.Take(data, infos);
                 count--;
             }
@@ -191,7 +206,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -204,24 +231,25 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.ReadInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestReadInstance()
+        public async Task TestReadInstanceAsync()
         {
-            List<SubscriptionBuiltinTopicData> data = new List<SubscriptionBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
+            var data = new List<SubscriptionBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -230,15 +258,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -246,9 +275,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
 
-            var handle = infos.First().InstanceHandle;
+            var handle = infos[0].InstanceHandle;
             data = new List<SubscriptionBuiltinTopicData>();
             infos = new List<SampleInfo>();
 
@@ -256,7 +285,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -269,24 +310,25 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.TakeInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTakeInstance()
+        public async Task TestTakeInstanceAsync()
         {
-            List<SubscriptionBuiltinTopicData> data = new List<SubscriptionBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
+            var data = new List<SubscriptionBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -295,15 +337,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -312,7 +355,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
 
-            var handle = infos.First().InstanceHandle;
+            var handle = infos[0].InstanceHandle;
             data = new List<SubscriptionBuiltinTopicData>();
             infos = new List<SampleInfo>();
 
@@ -320,7 +363,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -333,24 +388,25 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.ReadNextInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestReadNextInstance()
+        public async Task TestReadNextInstanceAsync()
         {
-            List<SubscriptionBuiltinTopicData> data = new List<SubscriptionBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            var data = new List<SubscriptionBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -359,15 +415,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -375,7 +432,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -388,24 +457,25 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.TakeNextInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTakeNextInstance()
+        public async Task TestTakeNextInstanceAsync()
         {
-            List<SubscriptionBuiltinTopicData> data = new List<SubscriptionBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+            var data = new List<SubscriptionBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -414,15 +484,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -430,7 +501,19 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultSubscriptionData(data.First());
+            TestHelper.TestNonDefaultSubscriptionData(data[0]);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -443,22 +526,23 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.ReadNextSample(ref SubscriptionBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestReadNextSample()
+        public async Task TestReadNextSampleAsync()
         {
             SubscriptionBuiltinTopicData data = default;
-            SampleInfo infos = new SampleInfo();
-            ReturnCode ret = _dr.ReadNextSample(ref data, infos);
+            var infos = new SampleInfo();
+            var ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -467,21 +551,34 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextSample(ref data, infos);
                 count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -494,22 +591,23 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.TakeNextSample(ref SubscriptionBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTakeNextSample()
+        public async Task TestTakeNextSampleAsync()
         {
             SubscriptionBuiltinTopicData data = default;
-            SampleInfo infos = new SampleInfo();
-            ReturnCode ret = _dr.TakeNextSample(ref data, infos);
+            var infos = new SampleInfo();
+            var ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -518,21 +616,34 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.TakeNextSample(ref data, infos);
                 count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -545,23 +656,24 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.GetKeyValue(ref SubscriptionBuiltinTopicData, InstanceHandle)" />
         /// method.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestGetKeyValue()
+        public async Task TestGetKeyValueAsync()
         {
             // Call GetKeyValue with HandleNil
             SubscriptionBuiltinTopicData data = default;
-            SampleInfo info = new SampleInfo();
-            ReturnCode ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
+            var info = new SampleInfo();
+            var ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -570,15 +682,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
+            var count = 200;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 // Get the for an existing instance
                 ret = _dr.ReadNextSample(ref data, info);
                 count--;
@@ -590,10 +703,22 @@ namespace OpenDDSharp.UnitTest
             SubscriptionBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, ret);
-            for (int i = 0; i < 16; i++)
+            for (var i = 0; i < 16; i++)
             {
                 Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
             }
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -605,20 +730,21 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.LookupInstance(SubscriptionBuiltinTopicData)" /> method.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestLookupInstance()
+        public async Task TestLookupInstanceAsync()
         {
             SubscriptionBuiltinTopicData data = default;
-            SampleInfo info = new SampleInfo();
+            var info = new SampleInfo();
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -627,15 +753,16 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader dataReader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = TestHelper.CreateNonDefaultDataReaderQos();
+            var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            int count = 200;
-            ReturnCode ret = ReturnCode.NoData;
+            var count = 200;
+            var ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 // Get the for an existing instance
                 ret = _dr.ReadNextSample(ref data, info);
                 count--;
@@ -647,6 +774,18 @@ namespace OpenDDSharp.UnitTest
             // Lookup for an existing instance
             var handle = _dr.LookupInstance(data);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+
+            ret = dataReader.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
