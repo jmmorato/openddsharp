@@ -638,6 +638,11 @@ namespace OpenDDSharp.UnitTest
             // Remove the listener to avoid extra messages
             result = _participant.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            firstDataReader.DeleteContainedEntities();
+            secondDataReader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(firstDataReader);
+            _subscriber.DeleteDataReader(secondDataReader);
         }
 
         /// <summary>
@@ -733,6 +738,12 @@ namespace OpenDDSharp.UnitTest
             // Remove the listener to avoid extra messages
             result = _participant.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            firstDataReader.DeleteContainedEntities();
+            secondDataReader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(firstDataReader);
+            _subscriber.DeleteDataReader(secondDataReader);
+
         }
 
         /// <summary>
