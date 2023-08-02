@@ -555,6 +555,8 @@ namespace OpenDDSharp.UnitTest
                     firstNotAliveCountChange = s.NotAliveCountChange;
                     firstLastPublicationHandle = s.LastPublicationHandle;
 
+                    count++;
+
                     evt1.Set();
                 }
                 else
@@ -567,10 +569,10 @@ namespace OpenDDSharp.UnitTest
                     secondNotAliveCountChange = s.NotAliveCountChange;
                     secondLastPublicationHandle = s.LastPublicationHandle;
 
+                    count++;
+
                     evt2.Set();
                 }
-
-                count++;
             };
 
             // Prepare the QoS for the test
@@ -686,6 +688,8 @@ namespace OpenDDSharp.UnitTest
                     firstCurrentCountChange = s.CurrentCountChange;
                     firstHandle = s.LastPublicationHandle;
 
+                    count++;
+
                     evt1.Set();
                 }
                 else
@@ -698,10 +702,10 @@ namespace OpenDDSharp.UnitTest
                     secondCurrentCountChange = s.CurrentCountChange;
                     secondHandle = s.LastPublicationHandle;
 
+                    count++;
+
                     evt2.Set();
                 }
-
-                count++;
             };
 
             // Enable entities

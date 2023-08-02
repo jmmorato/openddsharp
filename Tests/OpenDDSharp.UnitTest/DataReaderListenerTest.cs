@@ -626,6 +626,8 @@ namespace OpenDDSharp.UnitTest
                     firstCurrentCountChange = s.CurrentCountChange;
                     firstHandle = s.LastPublicationHandle;
 
+                    count++;
+
                     evt1.Set();
                 }
                 else
@@ -638,10 +640,10 @@ namespace OpenDDSharp.UnitTest
                     secondCurrentCountChange = s.CurrentCountChange;
                     secondHandle = s.LastPublicationHandle;
 
+                    count++;
+
                     evt2.Set();
                 }
-
-                count++;
             };
 
             // Enable entities
