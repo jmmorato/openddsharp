@@ -302,57 +302,56 @@ namespace OpenDDSharp.UnitTest
         // [Ignore("It hangs in Windows. Looking for a solution...")]
         public void TestOnLivelinessLost()
         {
-            using (var evt = new ManualResetEventSlim(false))
+            using var evt = new ManualResetEventSlim(false);
+
+            DataWriter dw = null;
+            var totalCount = 0;
+            var totalCountChange = 0;
+
+            // Attach to the event
+            var count = 0;
+            _listener.LivelinessLost += (w, s) =>
             {
-                DataWriter dw = null;
-                var totalCount = 0;
-                var totalCountChange = 0;
+                dw = w;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
 
-                // Attach to the event
-                var count = 0;
-                _listener.LivelinessLost += (w, s) =>
+                count++;
+            };
+
+            // Prepare QoS for the test
+            var dwQos = new DataWriterQos
+            {
+                Liveliness =
                 {
-                    dw = w;
-                    totalCount = s.TotalCount;
-                    totalCountChange = s.TotalCountChange;
+                    Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
+                    LeaseDuration = new Duration { Seconds = 1 },
+                },
+            };
+            var result = _writer.SetQos(dwQos);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                    count++;
-                };
+            // Enable entities
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                // Prepare QoS for the test
-                var dwQos = new DataWriterQos
-                {
-                    Liveliness =
-                    {
-                        Kind = LivelinessQosPolicyKind.ManualByTopicLivelinessQos,
-                        LeaseDuration = new Duration { Seconds = 1 },
-                    },
-                };
-                var result = _writer.SetQos(dwQos);
-                Assert.AreEqual(ReturnCode.Ok, result);
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = _reader.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
+            // After half second liveliness should not be lost yet
+            Assert.IsFalse(evt.Wait(500));
+            Assert.AreEqual(0, count);
 
-                // Enable entities
-                result = _writer.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
+            // After one second and a half one liveliness should be lost
+            Assert.IsTrue(evt.Wait(1_000));
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(_writer, dw);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
 
-                // After half second liveliness should not be lost yet
-                Assert.IsFalse(evt.Wait(500));
-                Assert.AreEqual(0, count);
-
-                // After one second and a half one liveliness should be lost
-                Assert.IsTrue(evt.Wait(1_000));
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(_writer, dw);
-                Assert.AreEqual(1, totalCount);
-                Assert.AreEqual(1, totalCountChange);
-
-                // Remove the listener to avoid extra messages
-                result = _dataWriter.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            // Remove the listener to avoid extra messages
+            result = _dataWriter.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
