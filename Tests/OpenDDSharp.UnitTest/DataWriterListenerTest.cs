@@ -230,6 +230,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestOnOfferedIncompatibleQos()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             DataWriter dw = null;
             var totalCount = 0;
             var totalCountChange = 0;
@@ -247,6 +249,8 @@ namespace OpenDDSharp.UnitTest
                 policies = s.Policies;
 
                 count++;
+
+                evt.Set();
             };
 
             // Prepare QoS for the test
@@ -278,7 +282,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            System.Threading.Thread.Sleep(100);
+            Assert.IsTrue(evt.Wait(1_000));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, totalCount);
@@ -317,6 +321,8 @@ namespace OpenDDSharp.UnitTest
                 totalCountChange = s.TotalCountChange;
 
                 count++;
+
+                evt.Set();
             };
 
             // Prepare QoS for the test
