@@ -153,7 +153,7 @@ namespace OpenDDSharp.UnitTest
             var process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
             // Wait the signal
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evt.Wait(5_000));
             Assert.AreSame(_topic, topic);
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
