@@ -18,8 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -93,26 +92,28 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.Read(List{PublicationBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestRead()
+        public async Task TestReadAsync()
         {
-            List<PublicationBuiltinTopicData> data = new List<PublicationBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
+            var data = new List<PublicationBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -121,16 +122,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.Read(data, infos);
                 count--;
             }
@@ -138,7 +140,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -151,26 +162,28 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.Take(List{PublicationBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTake()
+        public async Task TestTakeAsync()
         {
-            List<PublicationBuiltinTopicData> data = new List<PublicationBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Take(data, infos);
+            var data = new List<PublicationBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -179,16 +192,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.Take(data, infos);
                 count--;
             }
@@ -196,7 +210,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -209,26 +232,28 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.ReadInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestReadInstance()
+        public async Task TestReadInstanceAsync()
         {
-            List<PublicationBuiltinTopicData> data = new List<PublicationBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
+            var data = new List<PublicationBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -237,16 +262,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -254,9 +280,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
 
-            var handle = infos.First().InstanceHandle;
+            var handle = infos[0].InstanceHandle;
             data = new List<PublicationBuiltinTopicData>();
             infos = new List<SampleInfo>();
 
@@ -264,7 +290,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -277,26 +312,28 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.TakeInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTakeInstance()
+        public async Task TestTakeInstanceAsync()
         {
-            List<PublicationBuiltinTopicData> data = new List<PublicationBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.Read(data, infos);
+            var data = new List<PublicationBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -305,16 +342,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -322,9 +360,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
 
-            var handle = infos.First().InstanceHandle;
+            var handle = infos[0].InstanceHandle;
             data = new List<PublicationBuiltinTopicData>();
             infos = new List<SampleInfo>();
 
@@ -332,7 +370,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -345,26 +392,28 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.ReadNextInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestReadNextInstance()
+        public async Task TestReadNextInstanceAsync()
         {
-            List<PublicationBuiltinTopicData> data = new List<PublicationBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
+            var data = new List<PublicationBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -373,16 +422,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -390,7 +440,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -403,26 +462,28 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.TakeNextInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTakeNextInstance()
+        public async Task TestTakeNextInstanceAsync()
         {
-            List<PublicationBuiltinTopicData> data = new List<PublicationBuiltinTopicData>();
-            List<SampleInfo> infos = new List<SampleInfo>();
-            ReturnCode ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
+            var data = new List<PublicationBuiltinTopicData>();
+            var infos = new List<SampleInfo>();
+            var ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.NoData, ret);
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, infos.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -431,16 +492,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
                 count--;
             }
@@ -448,7 +510,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
-            TestHelper.TestNonDefaultPublicationData(data.First());
+            TestHelper.TestNonDefaultPublicationData(data[0]);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -461,24 +532,26 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.ReadNextSample(ref PublicationBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestReadNextSample()
+        public async Task TestReadNextSampleAsync()
         {
             PublicationBuiltinTopicData data = default;
-            SampleInfo infos = new SampleInfo();
-            ReturnCode ret = _dr.ReadNextSample(ref data, infos);
+            var infos = new SampleInfo();
+            var ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -487,22 +560,32 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.ReadNextSample(ref data, infos);
                 count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -515,24 +598,26 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.TakeNextSample(ref PublicationBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestTakeNextSample()
+        public async Task TestTakeNextSampleAsync()
         {
             PublicationBuiltinTopicData data = default;
-            SampleInfo infos = new SampleInfo();
-            ReturnCode ret = _dr.TakeNextSample(ref data, infos);
+            var infos = new SampleInfo();
+            var ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.NoData, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -541,22 +626,32 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 ret = _dr.TakeNextSample(ref data, infos);
                 count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -569,25 +664,27 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.GetKeyValue(ref PublicationBuiltinTopicData, InstanceHandle)" />
         /// method.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestGetKeyValue()
+        public async Task TestGetKeyValueAsync()
         {
             // Call GetKeyValue with HandleNil
             PublicationBuiltinTopicData data = default;
-            SampleInfo info = new SampleInfo();
-            ReturnCode ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
+            var info = new SampleInfo();
+            var ret = _dr.GetKeyValue(ref data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, ret);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -596,16 +693,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
+            var count = 500;
             ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 // Get an existing instance
                 ret = _dr.ReadNextSample(ref data, info);
                 count--;
@@ -616,10 +714,19 @@ namespace OpenDDSharp.UnitTest
             PublicationBuiltinTopicData aux = default;
             ret = _dr.GetKeyValue(ref aux, info.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, ret);
-            for (int i = 0; i < 16; i++)
+            for (var i = 0; i < 16; i++)
             {
                 Assert.AreEqual(data.Key.Value[i], aux.Key.Value[i]);
             }
+
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -631,22 +738,24 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.LookupInstance(PublicationBuiltinTopicData)" /> method.
         /// </summary>
+        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestLookupInstance()
+        public async Task TestLookupInstanceAsync()
         {
             PublicationBuiltinTopicData data = default;
-            SampleInfo info = new SampleInfo();
+            var info = new SampleInfo();
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
+            Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(otherParticipant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
@@ -655,16 +764,17 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = TestHelper.CreateNonDefaultDataWriterQos();
+            var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
-            DataWriter dataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            int count = 200;
-            ReturnCode ret = ReturnCode.NoData;
+            var count = 500;
+            var ret = ReturnCode.NoData;
             while (ret != ReturnCode.Ok && count > 0)
             {
-                Thread.Sleep(100);
+                await Task.Delay(100);
+
                 // Get an existing instance
                 ret = _dr.ReadNextSample(ref data, info);
                 count--;
@@ -676,9 +786,17 @@ namespace OpenDDSharp.UnitTest
             var handle = _dr.LookupInstance(data);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
+            ret = publisher.DeleteDataWriter(dataWriter);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeletePublisher(publisher);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = otherParticipant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
             ret = otherParticipant.DeleteContainedEntities();
             Assert.AreEqual(ReturnCode.Ok, ret);
-            TestHelper.TestNonDefaultPublicationData(data);
 
             ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, ret);
