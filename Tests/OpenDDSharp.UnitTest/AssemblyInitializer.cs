@@ -57,12 +57,14 @@ namespace OpenDDSharp.UnitTest
         {
             Ace.Init();
 
-            RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
-            disc.ResendPeriod = new TimeValue
+            var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
-                Seconds = 2,
+                ResendPeriod = new TimeValue
+                {
+                    Seconds = 2,
+                },
+                SedpMulticast = false,
             };
-            disc.SedpMulticast = false;
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -70,7 +72,7 @@ namespace OpenDDSharp.UnitTest
             ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
             ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
-            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::localhost:12345/DCPSInfoRepo");
+            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::localhost:12345/DCPSInfoRepo");
             ParticipantService.Instance.AddDiscovery(infoRepo);
             infoRepo.BitTransportIp = "localhost";
             infoRepo.BitTransportPort = 0;

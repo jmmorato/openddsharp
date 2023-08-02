@@ -124,50 +124,48 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("It hangs in Windows Debug. Looking for a solution...")]
         public void TestOnInconsistentTopic()
         {
-            using (var evt = new ManualResetEventSlim(false))
+            using var evt = new ManualResetEventSlim(false);
+
+            Topic topic = null;
+            var totalCount = 0;
+            var totalCountChange = 0;
+
+            // Attach to the event
+            var count = 0;
+            _listener.InconsistentTopic += (t, s) =>
             {
-                Topic topic = null;
-                var totalCount = 0;
-                var totalCountChange = 0;
+                topic = t;
+                totalCount = s.TotalCount;
+                totalCountChange = s.TotalCountChange;
 
-                // Attach to the event
-                var count = 0;
-                _listener.InconsistentTopic += (t, s) =>
-                {
-                    topic = t;
-                    totalCount = s.TotalCount;
-                    totalCountChange = s.TotalCountChange;
+                count++;
 
-                    count++;
-                    evt.Set();
-                };
+                evt.Set();
+            };
 
-                // Enable entities
-                var result = _writer.Enable();
-                Assert.AreEqual(ReturnCode.Ok, result);
+            // Enable entities
+            var result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-                var supportProcess = new SupportProcessHelper(TestContext);
-                var process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
+            var supportProcess = new SupportProcessHelper(TestContext);
+            var process = supportProcess.SpawnSupportProcess(SupportTestKind.InconsistentTopicTest);
 
-                // Wait the signal
-                var wait = evt.Wait(20000);
-                Assert.IsTrue(wait);
-                Assert.AreSame(_topic, topic);
-                Assert.AreEqual(1, totalCount);
-                Assert.AreEqual(1, totalCountChange);
+            // Wait the signal
+            Assert.IsTrue(evt.Wait(5_000));
+            Assert.AreSame(_topic, topic);
+            Assert.AreEqual(1, totalCount);
+            Assert.AreEqual(1, totalCountChange);
 
-                // Kill the process
-                supportProcess.KillProcess(process);
+            // Kill the process
+            supportProcess.KillProcess(process);
 
-                Assert.AreEqual(1, count);
+            Assert.AreEqual(1, count);
 
-                // Remove listener to avoid extra messages
-                result = _topic.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            // Remove listener to avoid extra messages
+            result = _topic.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion
     }
