@@ -343,7 +343,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, count);
 
             // After one second and a half one liveliness should be lost
-            Assert.IsTrue(evt.Wait(1_000));
+            Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, totalCount);
