@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -48,6 +49,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets test context object.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -82,8 +84,13 @@ namespace OpenDDSharp.UnitTest
             _writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(_writer);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(_reader);
         }

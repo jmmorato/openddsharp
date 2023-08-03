@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -48,6 +49,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets the <see cref="TestContext"/> property.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
