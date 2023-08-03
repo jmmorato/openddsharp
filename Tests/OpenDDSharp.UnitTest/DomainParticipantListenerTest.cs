@@ -48,6 +48,7 @@ namespace OpenDDSharp.UnitTest
         private TestStructDataWriter _dataWriter;
         private MyParticipantListener _listener;
         private DataReader _reader;
+        private TestStructDataReader _dataReader;
         #endregion
 
         #region Properties
@@ -125,6 +126,7 @@ namespace OpenDDSharp.UnitTest
             };
             _reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(_reader);
+            _dataReader = new TestStructDataReader(_reader);
         }
 
         /// <summary>
@@ -167,6 +169,9 @@ namespace OpenDDSharp.UnitTest
         {
             using var evt = new ManualResetEventSlim(false);
 
+            var result = _participant.SetListener(_listener, StatusKind.DataOnReadersStatus);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             // Attach to the event
             var count = 0;
             const int total = 5;
@@ -176,69 +181,18 @@ namespace OpenDDSharp.UnitTest
                 subscriber = s;
                 count++;
 
-                if (count == total)
+                var readers = new List<DataReader>();
+                result = _subscriber.GetDataReaders(readers);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                foreach (var reader in readers)
                 {
-                    evt.Set();
+                    var sample = new List<TestStruct>();
+                    var info = new List<SampleInfo>();
+
+                    result = _dataReader.Take(sample, info);
+                    Assert.AreEqual(ReturnCode.Ok, result);
                 }
-            };
-
-            // Enable entities
-            var result = _writer.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            result = _reader.Enable();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Wait for discovery
-            var found = _writer.WaitForSubscriptions(1, 1000);
-            Assert.IsTrue(found);
-
-            found = _reader.WaitForPublications(1, 1000);
-            Assert.IsTrue(found);
-
-            // Write some instances
-            for (var i = 1; i <= total; i++)
-            {
-                result = _dataWriter.Write(new TestStruct
-                {
-                    Id = i,
-                });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
-
-            Assert.IsTrue(evt.Wait(1_500));
-
-            Assert.AreEqual(total, count);
-            Assert.IsNotNull(subscriber);
-            Assert.AreEqual(_subscriber, subscriber);
-        }
-
-        /// <summary>
-        /// Test the <see cref="DomainParticipantListener.OnDataAvailable(DataReader)" /> event.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestOnDataAvailable()
-        {
-            using var evt = new ManualResetEventSlim(false);
-
-            // Prepare status mask:
-            // If a ParticipantListener has both on_data_on_readers() and on_data_available() callbacks enabled
-            // (by turning on both status bits), only on_data_on_readers() is called.
-            var result = _participant.SetListener(_listener, StatusKind.DataAvailableStatus);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            // Attach to the event
-            var count = 0;
-            const int total = 5;
-            DataReader reader = null;
-            _listener.DataAvailable += (r) =>
-            {
-                reader = r;
-                count++;
 
                 if (count == total)
                 {
@@ -274,6 +228,82 @@ namespace OpenDDSharp.UnitTest
             }
 
             Assert.IsTrue(evt.Wait(1_500));
+
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(total, count);
+            Assert.IsNotNull(subscriber);
+            Assert.AreEqual(_subscriber, subscriber);
+        }
+
+        /// <summary>
+        /// Test the <see cref="DomainParticipantListener.OnDataAvailable(DataReader)" /> event.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestOnDataAvailable()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            // Prepare status mask:
+            // If a ParticipantListener has both on_data_on_readers() and on_data_available() callbacks enabled
+            // (by turning on both status bits), only on_data_on_readers() is called.
+            var result = _participant.SetListener(_listener, StatusKind.DataAvailableStatus);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Attach to the event
+            var count = 0;
+            const int total = 5;
+            DataReader reader = null;
+            _listener.DataAvailable += (r) =>
+            {
+                reader = r;
+                count++;
+
+                var sample = new List<TestStruct>();
+                var info = new List<SampleInfo>();
+
+                result = _dataReader.Take(sample, info);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                if (count == total)
+                {
+                    evt.Set();
+                }
+            };
+
+            // Enable entities
+            result = _writer.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _reader.Enable();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            // Wait for discovery
+            var found = _writer.WaitForSubscriptions(1, 1000);
+            Assert.IsTrue(found);
+
+            found = _reader.WaitForPublications(1, 1000);
+            Assert.IsTrue(found);
+
+            // Write some instances
+            for (var i = 1; i <= total; i++)
+            {
+                result = _dataWriter.Write(new TestStruct
+                {
+                    Id = i,
+                });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+            }
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.AreEqual(total, count);
             Assert.IsNotNull(reader);
@@ -359,6 +389,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, lastInstanceHandle);
+
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
@@ -427,6 +460,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, policies.Count);
             Assert.AreEqual(1, policies.First().Count);
             Assert.AreEqual(11, policies.First().PolicyId);
+
+            result = _participant.SetListener(null);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>

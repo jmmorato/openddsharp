@@ -48,6 +48,7 @@ namespace OpenDDSharp.UnitTest
         private TestStructDataWriter _dataWriter;
         private MyDataReaderListener _listener;
         private DataReader _reader;
+        private TestStructDataReader _dataReader;
         #endregion
 
         #region Properties
@@ -125,6 +126,7 @@ namespace OpenDDSharp.UnitTest
             _listener = new MyDataReaderListener();
             _reader = _subscriber.CreateDataReader(_topic, qos, _listener);
             Assert.IsNotNull(_reader);
+            _dataReader = new TestStructDataReader(_reader);
         }
 
         /// <summary>
@@ -167,6 +169,9 @@ namespace OpenDDSharp.UnitTest
         {
             using var evt = new ManualResetEventSlim(false);
 
+            var result = _reader.SetListener(_listener, StatusKind.DataAvailableStatus);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             // Attach to the event
             var count = 0;
             const int total = 5;
@@ -176,6 +181,12 @@ namespace OpenDDSharp.UnitTest
                 reader = r;
                 count++;
 
+                var sample = new List<TestStruct>();
+                var info = new List<SampleInfo>();
+
+                result = _dataReader.Take(sample, info);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
                 if (count == total)
                 {
                     evt.Set();
@@ -183,7 +194,7 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Enable entities
-            var result = _writer.Enable();
+            result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _reader.Enable();

@@ -48,6 +48,7 @@ namespace OpenDDSharp.UnitTest
         private TestStructDataWriter _dataWriter;
         private MySubscriberListener _listener;
         private DataReader _reader;
+        private TestStructDataReader _dataReader;
         #endregion
 
         #region Properties
@@ -125,6 +126,7 @@ namespace OpenDDSharp.UnitTest
             };
             _reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(_reader);
+            _dataReader = new TestStructDataReader(_reader);
         }
 
         /// <summary>
@@ -166,6 +168,9 @@ namespace OpenDDSharp.UnitTest
         {
             using var evt = new ManualResetEventSlim(false);
 
+            var result = _subscriber.SetListener(_listener, StatusKind.DataOnReadersStatus);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             Subscriber subscriber = null;
 
             // Attach to the event
@@ -176,6 +181,19 @@ namespace OpenDDSharp.UnitTest
                 subscriber = s;
                 count++;
 
+                var readers = new List<DataReader>();
+                result = _subscriber.GetDataReaders(readers);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                foreach (var reader in readers)
+                {
+                    var sample = new List<TestStruct>();
+                    var info = new List<SampleInfo>();
+
+                    result = _dataReader.Take(sample, info);
+                    Assert.AreEqual(ReturnCode.Ok, result);
+                }
+
                 if (count == total)
                 {
                     evt.Set();
@@ -183,7 +201,7 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Enable entities
-            var result = _writer.Enable();
+            result = _writer.Enable();
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = _reader.Enable();
@@ -243,6 +261,12 @@ namespace OpenDDSharp.UnitTest
             {
                 reader = r;
                 count++;
+
+                var sample = new List<TestStruct>();
+                var info = new List<SampleInfo>();
+
+                result = _dataReader.Take(sample, info);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
                 if (count == total)
                 {
