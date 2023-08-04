@@ -192,6 +192,11 @@ namespace OpenDDSharp.UnitTest
                     var sample = new List<TestStruct>();
                     var info = new List<SampleInfo>();
 
+                    if (!ReferenceEquals(reader, _reader))
+                    {
+                        continue;
+                    }
+
                     result = _dataReader.Take(sample, info);
                     Assert.AreEqual(ReturnCode.Ok, result);
                 }
