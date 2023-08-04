@@ -966,6 +966,7 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore("OpenDDS: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.")]
         public void TestBeginEndAccess()
         {
             // OpenDDS: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.

@@ -997,6 +997,34 @@ namespace OpenDDSharp.UnitTest.Helpers
                 NanoSeconds = (uint)span.Milliseconds / 1000000,
             };
         }
+
+        public static void CreateWaitSetThread(ManualResetEventSlim evt, StatusCondition condition)
+        {
+            var waitSet = new WaitSet();
+            waitSet.AttachCondition(condition);
+            var thread = new Thread(() =>
+            {
+                var isSet = false;
+                while (!isSet)
+                {
+                    ICollection<Condition> conditions = new List<Condition>();
+                    waitSet.Wait(conditions);
+
+                    if (!conditions.Any(cond => cond == condition && cond.TriggerValue))
+                    {
+                        continue;
+                    }
+
+                    evt.Set();
+
+                    isSet = true;
+                }
+            })
+            {
+                IsBackground = true,
+            };
+            thread.Start();
+        }
         #endregion
     }
 }

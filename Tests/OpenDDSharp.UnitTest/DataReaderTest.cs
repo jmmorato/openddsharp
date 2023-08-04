@@ -532,7 +532,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.SampleRejectedStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos();
@@ -606,7 +606,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.LivelinessChangedStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             LivelinessChangedStatus status = default;
             var result = reader.GetLivelinessChangedStatus(ref status);
@@ -647,7 +647,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(evt.Wait(1_500));
 
             evt.Reset();
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             status = default;
             result = reader.GetLivelinessChangedStatus(ref status);
@@ -712,7 +712,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.RequestedDeadlineMissedStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Wait for discovery and write an instance
             var found = writer.WaitForSubscriptions(1, 1000);
@@ -771,7 +771,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.RequestedIncompatibleQosStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // If not matched writers should return the default status
             RequestedIncompatibleQosStatus status = default;
@@ -839,7 +839,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.SubscriptionMatchedStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // If not DataWriters are created should return the default status
             SubscriptionMatchedStatus status = default;
@@ -930,7 +930,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.SampleLostStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos();
@@ -1037,7 +1037,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Wait for discovery
             var found = reader.WaitForPublications(1, 5000);
@@ -1102,7 +1102,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.SubscriptionMatchedStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Test matched publications without any match
             var list = new List<InstanceHandle> { InstanceHandle.HandleNil };
@@ -1265,7 +1265,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
@@ -1307,7 +1307,7 @@ namespace OpenDDSharp.UnitTest
 
             // Write another sample of the same instance
             evt.Reset();
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
             result = dataWriter.Write(new TestStruct { Id = 1, ShortField = 2 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -1398,7 +1398,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
@@ -1449,7 +1449,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 3; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = 2, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1486,7 +1486,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 3; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = 3, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1582,7 +1582,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 3; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1593,7 +1593,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
 
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1734,7 +1734,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 3; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1745,7 +1745,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
 
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1892,7 +1892,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 3; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -1903,7 +1903,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
 
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2023,7 +2023,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 3; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2034,7 +2034,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
 
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2154,7 +2154,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 2; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2165,7 +2165,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
 
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2272,7 +2272,7 @@ namespace OpenDDSharp.UnitTest
             for (short i = 1; i <= 2; i++)
             {
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2283,7 +2283,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
 
                 evt.Reset();
-                CreateWaitSetThread(evt, statusCondition);
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
                 result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
@@ -2359,7 +2359,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos
@@ -2437,7 +2437,7 @@ namespace OpenDDSharp.UnitTest
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            CreateWaitSetThread(evt, statusCondition);
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             var publisher = _participant.CreatePublisher();
             var writer = publisher.CreateDataWriter(_topic);
@@ -2473,34 +2473,6 @@ namespace OpenDDSharp.UnitTest
             publisher.DeleteDataWriter(writer);
             publisher.DeleteContainedEntities();
             _participant.DeletePublisher(publisher);
-        }
-
-        private static void CreateWaitSetThread(ManualResetEventSlim evt, StatusCondition condition)
-        {
-            var waitSet = new WaitSet();
-            waitSet.AttachCondition(condition);
-            var threadReader = new Thread(() =>
-            {
-                var isSet = false;
-                while (!isSet)
-                {
-                    ICollection<Condition> conditions = new List<Condition>();
-                    waitSet.Wait(conditions);
-
-                    foreach (var cond in conditions)
-                    {
-                        if (cond != condition || !cond.TriggerValue)
-                        {
-                            continue;
-                        }
-
-                        evt.Set();
-
-                        isSet = true;
-                    }
-                }
-            });
-            threadReader.Start();
         }
         #endregion
     }
