@@ -380,10 +380,9 @@ namespace OpenDDSharp.UnitTest
             var reader = subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(reader);
 
-            // TODO: OpenDDS issue: Uncomment when WaitSets is working and remove the Thread.Sleep
-            // var statusCondition = writer.StatusCondition;
-            // statusCondition.EnabledStatuses = StatusKind.LivelinessLostStatus;
-            // TestHelper.CreateWaitSetThread(evt, statusCondition);
+            var statusCondition = writer.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.LivelinessLostStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             Assert.IsTrue(reader.WaitForPublications(1, 1_500));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 1_500));
@@ -392,8 +391,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // After half second liveliness should not be lost yet
-            // Assert.IsFalse(evt.Wait(500));
-            Thread.Sleep(500);
+            Assert.IsFalse(evt.Wait(500));
 
             LivelinessLostStatus status = default;
             result = writer.GetLivelinessLostStatus(ref status);
@@ -402,8 +400,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.TotalCountChange);
 
             // After one second and a half one liveliness should be lost
-            // Assert.IsTrue(evt.Wait(1_500));
-            Thread.Sleep(1_500);
+            Assert.IsTrue(evt.Wait(1_500));
 
             result = writer.GetLivelinessLostStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
