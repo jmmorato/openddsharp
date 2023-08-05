@@ -19,7 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -94,11 +94,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.Read(List{PublicationBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadAsync()
+        public void TestRead()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<PublicationBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Read(data, infos);
@@ -118,6 +119,10 @@ namespace OpenDDSharp.UnitTest
             var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
@@ -129,16 +134,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.Read(data, infos);
-                count--;
-            }
-
+            ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -164,11 +162,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.Take(List{PublicationBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeAsync()
+        public void TestTake()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<PublicationBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Take(data, infos);
@@ -194,21 +193,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.Take(data, infos);
-                count--;
-            }
-
+            ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -234,11 +230,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.ReadInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadInstanceAsync()
+        public void TestReadInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<PublicationBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Read(data, infos);
@@ -264,21 +261,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -314,11 +308,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.TakeInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeInstanceAsync()
+        public void TestTakeInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<PublicationBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Read(data, infos);
@@ -344,21 +339,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -394,11 +386,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.ReadNextInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadNextInstanceAsync()
+        public void TestReadNextInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<PublicationBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
@@ -424,21 +417,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -464,11 +454,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.TakeNextInstance(List{PublicationBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeNextInstanceAsync()
+        public void TestTakeNextInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<PublicationBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
@@ -494,21 +485,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -534,11 +522,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.ReadNextSample(ref PublicationBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadNextSampleAsync()
+        public void TestReadNextSample()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             PublicationBuiltinTopicData data = default;
             var infos = new SampleInfo();
             var ret = _dr.ReadNextSample(ref data, infos);
@@ -562,21 +551,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.ReadNextSample(ref data, infos);
-                count--;
-            }
-
+            ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
 
@@ -600,11 +586,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.TakeNextSample(ref PublicationBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeNextSampleAsync()
+        public void TestTakeNextSample()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             PublicationBuiltinTopicData data = default;
             var infos = new SampleInfo();
             var ret = _dr.TakeNextSample(ref data, infos);
@@ -628,21 +615,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                ret = _dr.TakeNextSample(ref data, infos);
-                count--;
-            }
-
+            ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
 
@@ -666,11 +650,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.GetKeyValue(ref PublicationBuiltinTopicData, InstanceHandle)" />
         /// method.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestGetKeyValueAsync()
+        public void TestGetKeyValue()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             // Call GetKeyValue with HandleNil
             PublicationBuiltinTopicData data = default;
             var info = new SampleInfo();
@@ -692,6 +677,10 @@ namespace OpenDDSharp.UnitTest
             var topic = otherParticipant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(topic);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
@@ -700,16 +689,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                // Get an existing instance
-                ret = _dr.ReadNextSample(ref data, info);
-                count--;
-            }
+            ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultPublicationData(data);
 
@@ -740,11 +722,12 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Test the <see cref="PublicationBuiltinTopicDataDataReader.LookupInstance(PublicationBuiltinTopicData)" /> method.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestLookupInstanceAsync()
+        public void TestLookupInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             PublicationBuiltinTopicData data = default;
             var info = new SampleInfo();
 
@@ -766,22 +749,18 @@ namespace OpenDDSharp.UnitTest
             var publisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
+            var statusCondition = _dr.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dwQos = TestHelper.CreateNonDefaultDataWriterQos();
             dwQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var dataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(dataWriter);
 
-            var count = 500;
-            var ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-                // Get an existing instance
-                ret = _dr.ReadNextSample(ref data, info);
-                count--;
-            }
-
+            var ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             // Lookup for an existing instance

@@ -43,8 +43,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            MulticastInst mi = new MulticastInst(inst);
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var mi = new MulticastInst(inst);
             Assert.IsFalse(mi.DefaultToIpv6);
             Assert.AreEqual("224.0.0.128:49152", mi.GroupAddress);
             Assert.AreEqual(string.Empty, mi.LocalAddress);
@@ -98,8 +98,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            MulticastInst mi = new MulticastInst(inst)
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var mi = new MulticastInst(inst)
             {
                 DefaultToIpv6 = true,
                 GroupAddress = "224.0.0.64:49150",
