@@ -1480,8 +1480,8 @@ namespace OpenDDSharp.UnitTest
             var resultDataWriter = new ResultDataWriter(dwResult);
 
             // Wait for subscriptions
-            athleteDataWriter.WaitForSubscriptions(1, 5_000);
-            resultDataWriter.WaitForSubscriptions(1, 5_000);
+            Assert.IsTrue(athleteDataWriter.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(resultDataWriter.WaitForSubscriptions(1, 5_000));
 
             for (var i = 1; i <= 5; i++)
             {
@@ -1532,9 +1532,9 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(i + 1, receivedData[i].AthleteId);
                 Assert.AreEqual(i + 1, receivedData[i].Rank);
                 Assert.AreEqual(10f - (i + 1), receivedData[i].Score);
-                Assert.AreEqual("FirstName" + (i + 1).ToString(), receivedData[i].FirstName);
-                Assert.AreEqual("SecondName" + (i + 1).ToString(), receivedData[i].SecondName);
-                Assert.AreEqual("Country" + (i + 1).ToString(), receivedData[i].Country);
+                Assert.AreEqual("FirstName" + (i + 1), receivedData[i].FirstName);
+                Assert.AreEqual("SecondName" + (i + 1), receivedData[i].SecondName);
+                Assert.AreEqual("Country" + (i + 1), receivedData[i].Country);
             }
 
             // Test with null name
