@@ -24,7 +24,7 @@ module JsonWrapper {
 	const wchar TEST_WCHAR_CONST = 'S';
 	const octet TEST_OCTET_CONST = 0x42;
 	const boolean TEST_BOOLEAN_CONST = 1;
-	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";	
+	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";
 	const wstring TEST_WSTRING_CONST = L"Hello, I love you, won't you tell me your name?";
 
 	typedef string<32> BoundedStringType;
@@ -54,8 +54,8 @@ module JsonWrapper {
 	typedef sequence<float, 5> BoundedFloatSequenceType;
 	typedef sequence<double> UnboundedDoubleSequenceType;
 	typedef sequence<double, 5> BoundedDoubleSequenceType;
-//	typedef sequence<long double> UnboundedLongDoubleSequenceType;
-//	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
+	typedef sequence<long double> UnboundedLongDoubleSequenceType;
+	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
 	typedef sequence<int8> UnboundedInt8SequenceType;
     typedef sequence<int8, 5> BoundedInt8SequenceType;
     typedef sequence<uint8> UnboundedUInt8SequenceType;
@@ -71,7 +71,7 @@ module JsonWrapper {
 	typedef long LongArrayType[5];
 	typedef unsigned long UnsignedLongArrayType[5];
 	typedef long long LongLongArrayType[5];
-	typedef unsigned long long UnsignedLongLongArrayType[5];	
+	typedef unsigned long long UnsignedLongLongArrayType[5];
 
 	typedef char CharArrayType[5];
 	typedef wchar WCharArrayType[5];
@@ -79,7 +79,7 @@ module JsonWrapper {
 	typedef octet OctetArrayType[5];
 	typedef float FloatArrayType[5];
 	typedef double DoubleArrayType[5];
-//	typedef long double LongDoubleArrayType[5];
+	typedef long double LongDoubleArrayType[5];
 	typedef int8 Int8ArrayType[5];
 	typedef uint8 UInt8ArrayType[5];
 
@@ -98,7 +98,7 @@ module JsonWrapper {
 	typedef octet OctetMultiArrayType[3][4][2];
 	typedef float FloatMultiArrayType[3][4][2];
 	typedef double DoubleMultiArrayType[3][4][2];
-//	typedef long double LongDoubleMultiArrayType[3][4][2];
+	typedef long double LongDoubleMultiArrayType[3][4][2];
 	typedef int8 Int8MultiArrayType[3][4][2];
 	typedef uint8 UInt8MultiArrayType[3][4][2];
 
@@ -141,7 +141,7 @@ module JsonWrapper {
 	typedef TestEnum EnumArrayType[5];
 
     typedef TestEnum EnumMultiArrayType[3][4][2];
-	 
+
 	@topic
 	struct TestInclude {
 	    @key string Id;
@@ -256,15 +256,15 @@ module JsonWrapper {
 
 		StructMultiArrayType StructMultiArrayField;
 
-        // `long double` issues on MacOS ARM64? 
+        // `long double` issues on MacOS ARM64?
         // Or the compiler version used (clang14).
         // SEGV received. Reproducible with OpenDDS HelloWorld test.
         // TO BE REPORTED
-//        long double LongDoubleField;
-//        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-//        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
-//        LongDoubleArrayType LongDoubleArrayField;
-//		LongDoubleMultiArrayType LongDoubleMultiArrayField;
+        long double LongDoubleField;
+        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+        LongDoubleArrayType LongDoubleArrayField;
+		LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 
 	@topic

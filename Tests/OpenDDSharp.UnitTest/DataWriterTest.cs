@@ -964,6 +964,7 @@ namespace OpenDDSharp.UnitTest
             // Wait for discovery
             var found = writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
+
             found = dataReader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
 
@@ -1028,13 +1029,14 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
-            _publisher.DeleteDataWriter(writer);
-            dataReader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(dataReader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
-
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
             listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(dataReader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
         }
 
         /// <summary>
