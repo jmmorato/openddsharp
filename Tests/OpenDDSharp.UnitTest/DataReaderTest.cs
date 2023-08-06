@@ -269,8 +269,11 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
-            dataReader.DeleteContainedEntities();
-            _subscriber.DeleteDataReader(dataReader);
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _subscriber.DeleteDataReader(dataReader));
         }
 
         /// <summary>
@@ -284,24 +287,25 @@ namespace OpenDDSharp.UnitTest
             var dataReader = _subscriber.CreateDataReader(_topic);
             Assert.IsNotNull(dataReader);
 
-            var listener = (MyDataReaderListener)dataReader.Listener;
-            Assert.IsNull(listener);
+            Assert.IsNull((MyDataReaderListener)dataReader.Listener);
 
             // Create a listener, set it and check that is correctly set
-            listener = new MyDataReaderListener();
-            var result = dataReader.SetListener(listener, StatusMask.AllStatusMask);
-            Assert.AreEqual(ReturnCode.Ok, result);
+            using (var listener = new MyDataReaderListener())
+            {
+                var result = dataReader.SetListener(listener, StatusMask.AllStatusMask);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            var received = (MyDataReaderListener)dataReader.Listener;
-            Assert.IsNotNull(received);
-            Assert.AreEqual(listener, received);
+                var received = (MyDataReaderListener)dataReader.Listener;
+                Assert.IsNotNull(received);
+                Assert.AreEqual(listener, received);
 
-            // Remove the listener calling SetListener with null and check it
-            result = dataReader.SetListener(null, StatusMask.NoStatusMask);
-            Assert.AreEqual(ReturnCode.Ok, result);
+                // Remove the listener calling SetListener with null and check it
+                result = dataReader.SetListener(null, StatusMask.NoStatusMask);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            received = (MyDataReaderListener)dataReader.Listener;
-            Assert.IsNull(received);
+                received = (MyDataReaderListener)dataReader.Listener;
+                Assert.IsNull(received);
+            }
 
             dataReader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(dataReader);
@@ -328,8 +332,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(false, condition.TriggerValue);
 
             // Create a read condition with the full parameters overload
-            condition = reader.CreateReadCondition(SampleStateKind.ReadSampleState, ViewStateKind.NotNewViewState,
-                                                   InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState);
+            condition = reader.CreateReadCondition(
+                SampleStateKind.ReadSampleState,
+                ViewStateKind.NotNewViewState,
+                InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState);
+
             Assert.IsNotNull(condition);
             Assert.AreSame(reader, condition.DataReader);
             Assert.AreEqual(InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState, condition.InstanceStateMask);
@@ -374,9 +381,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(parameter2, parameters[1]);
 
             // Create a QueryCondition with the full parameters overload
-            condition = reader.CreateQueryCondition(SampleStateKind.ReadSampleState, ViewStateKind.NotNewViewState,
-                                                    InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState,
-                                                    expression, parameter1, parameter2);
+            condition = reader.CreateQueryCondition(
+                SampleStateKind.ReadSampleState,
+                ViewStateKind.NotNewViewState,
+                InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState,
+                expression, parameter1, parameter2);
+
             Assert.IsNotNull(condition);
             Assert.AreEqual(InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState, condition.InstanceStateMask);
             Assert.AreEqual(SampleStateKind.ReadSampleState, condition.SampleStateMask);

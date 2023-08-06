@@ -248,7 +248,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
             // Create a new Subscriber with a listener
-            using var listener = new MySubscriberListener();
+            var listener = new MySubscriberListener();
             var subscriber = _participant.CreateSubscriber(null, listener);
             Assert.IsNotNull(subscriber);
 
@@ -260,9 +260,12 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
-            _participant.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, subscriber.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteContainedEntities());
         }
 
         /// <summary>
@@ -276,11 +279,10 @@ namespace OpenDDSharp.UnitTest
             var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var listener = (MySubscriberListener)subscriber.Listener;
-            Assert.IsNull(listener);
+            Assert.IsNull((MySubscriberListener)subscriber.Listener);
 
             // Create a listener, set it and check that is correctly set
-            listener = new MySubscriberListener();
+            var listener = new MySubscriberListener();
             var result = subscriber.SetListener(listener, StatusMask.AllStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -295,10 +297,12 @@ namespace OpenDDSharp.UnitTest
             received = (MySubscriberListener)subscriber.Listener;
             Assert.IsNull(received);
 
+            Assert.AreEqual(ReturnCode.Ok, subscriber.SetListener(null));
             listener.Dispose();
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
-            _participant.DeleteContainedEntities();
+
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteContainedEntities());
         }
 
         /// <summary>

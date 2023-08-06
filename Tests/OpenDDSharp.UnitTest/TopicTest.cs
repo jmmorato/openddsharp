@@ -286,22 +286,25 @@ namespace OpenDDSharp.UnitTest
             var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            using var listener = new MyTopicListener();
+            var listener = new MyTopicListener();
             var topic = _participant.CreateTopic(nameof(TestGetQos), typeName, null, listener);
             Assert.IsNotNull(topic);
             Assert.AreEqual(nameof(TestGetQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
             Assert.AreEqual(_participant, topic.Participant);
 
-#pragma warning disable CS0618 // Type or member is obsolete
-
             // Call to GetListener and check the listener returned
+#pragma warning disable CS0618 // Type or member is obsolete
             var received = (MyTopicListener)topic.GetListener();
-
 #pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
+
+            Assert.AreEqual(ReturnCode.Ok, topic.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -323,25 +326,27 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeName, topic.TypeName);
             Assert.AreEqual(_participant, topic.Participant);
 
-            var listener = (MyTopicListener)topic.Listener;
-            Assert.IsNull(listener);
+            Assert.IsNull((MyTopicListener)topic.Listener);
 
             // Create a listener, set it and check that is correctly set
-            listener = new MyTopicListener();
-            result = topic.SetListener(listener);
-            Assert.AreEqual(ReturnCode.Ok, result);
+            using (var listener = new MyTopicListener())
+            {
+                result = topic.SetListener(listener);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            var received = (MyTopicListener)topic.Listener;
-            Assert.IsNotNull(received);
-            Assert.AreEqual(listener, received);
+                var received = (MyTopicListener)topic.Listener;
+                Assert.IsNotNull(received);
+                Assert.AreEqual(listener, received);
 
-            // Remove the listener calling SetListener with null and check it
-            result = topic.SetListener(null, StatusMask.NoStatusMask);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            listener.Dispose();
+                // Remove the listener calling SetListener with null and check it
+                result = topic.SetListener(null, StatusMask.NoStatusMask);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            received = (MyTopicListener)topic.Listener;
-            Assert.IsNull(received);
+                received = (MyTopicListener)topic.Listener;
+                Assert.IsNull(received);
+            }
+
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>

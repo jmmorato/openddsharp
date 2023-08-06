@@ -244,7 +244,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
             // Create a new Publisher with a listener
-            using var listener = new MyPublisherListener();
+            var listener = new MyPublisherListener();
             var publisher = _participant.CreatePublisher(null, listener);
             Assert.IsNotNull(publisher);
 
@@ -254,6 +254,12 @@ namespace OpenDDSharp.UnitTest
 #pragma warning restore CS0618 // Type or member is obsolete
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
         }
 
         /// <summary>
@@ -283,10 +289,10 @@ namespace OpenDDSharp.UnitTest
             result = publisher.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            listener.Dispose();
+
             received = (MyPublisherListener)publisher.Listener;
             Assert.IsNull(received);
-
-            listener.Dispose();
         }
 
         /// <summary>
