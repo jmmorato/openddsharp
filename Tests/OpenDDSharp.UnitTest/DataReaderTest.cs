@@ -646,9 +646,6 @@ namespace OpenDDSharp.UnitTest
             // Receive the first alive event
             Assert.IsTrue(evt.Wait(1_500));
 
-            evt.Reset();
-            TestHelper.CreateWaitSetThread(evt, statusCondition);
-
             status = default;
             result = reader.GetLivelinessChangedStatus(ref status);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -657,6 +654,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.NotAliveCount);
             Assert.AreEqual(0, status.NotAliveCountChange);
             Assert.AreEqual(writer.InstanceHandle, status.LastPublicationHandle);
+
+            evt.Reset();
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // After one second and a half one liveliness should be lost
             Assert.IsTrue(evt.Wait(1_500));
