@@ -261,9 +261,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
-            _publisher.DeleteDataWriter(dataWriter);
-
+            Assert.AreEqual(ReturnCode.Ok, dataWriter.SetListener(null));
             listener.Dispose();
+
+            _publisher.DeleteDataWriter(dataWriter);
         }
 
         /// <summary>
@@ -293,12 +294,12 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            listener.Dispose();
+
             received = (MyDataWriterListener)dataWriter.Listener;
             Assert.IsNull(received);
 
             _publisher.DeleteDataWriter(dataWriter);
-
-            listener.Dispose();
         }
 
         /// <summary>
@@ -1183,13 +1184,14 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
-            _publisher.DeleteDataWriter(writer);
-            dataReader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(dataReader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
-
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
             listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(dataReader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
         }
 
         /// <summary>
