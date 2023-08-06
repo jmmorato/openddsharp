@@ -33,9 +33,17 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region DomainParticipant QoS
         public static DomainParticipantQos CreateNonDefaultDomainParticipantQos()
         {
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
+            var qos = new DomainParticipantQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                UserData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+            };
 
             return qos;
         }
@@ -66,57 +74,98 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.UserData.Value);
             Assert.AreEqual(1, qos.UserData.Value.Count);
-            Assert.AreEqual(0x42, qos.UserData.Value.First());
+            Assert.AreEqual(0x42, qos.UserData.Value[0]);
         }
         #endregion
 
         #region Topic QoS
         public static TopicQos CreateNonDefaultTopicQos()
         {
-            TopicQos qos = new TopicQos();
-            qos.Deadline.Period = new Duration
+            var qos = new TopicQos
             {
-                Seconds = 5,
-                NanoSeconds = 0,
+                Deadline =
+                {
+                    Period = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 0,
+                    },
+                },
+                DestinationOrder =
+                {
+                    Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos,
+                },
+                Durability =
+                {
+                    Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
+                },
+                DurabilityService =
+                {
+                    HistoryDepth = 5,
+                    HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                    MaxInstances = 5,
+                    MaxSamples = 5,
+                    MaxSamplesPerInstance = 5,
+                    ServiceCleanupDelay = new Duration { Seconds = 5, NanoSeconds = 5 },
+                },
+                History =
+                {
+                    Depth = 5,
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+                LatencyBudget =
+                {
+                    Duration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Lifespan =
+                {
+                    Duration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos,
+                    LeaseDuration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Ownership =
+                {
+                    Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos,
+                },
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                    MaxBlockingTime = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                ResourceLimits =
+                {
+                    MaxInstances = 5,
+                    MaxSamples = 5,
+                    MaxSamplesPerInstance = 5,
+                },
+                TopicData =
+                {
+                    Value = new List<byte> { 0x5 },
+                },
+                TransportPriority =
+                {
+                    Value = 5,
+                },
             };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.DurabilityService.HistoryDepth = 5;
-            qos.DurabilityService.HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.DurabilityService.MaxInstances = 5;
-            qos.DurabilityService.MaxSamples = 5;
-            qos.DurabilityService.MaxSamplesPerInstance = 5;
-            qos.DurabilityService.ServiceCleanupDelay = new Duration { Seconds = 5, NanoSeconds = 5 };
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Lifespan.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.TopicData.Value = new List<byte> { 0x5 };
-            qos.TransportPriority.Value = 5;
 
             return qos;
         }
@@ -220,7 +269,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
             Assert.AreEqual(1, qos.TopicData.Value.Count);
-            Assert.AreEqual(0x5, qos.TopicData.Value.First());
+            Assert.AreEqual(0x5, qos.TopicData.Value[0]);
             Assert.AreEqual(5, qos.TransportPriority.Value);
         }
         #endregion
@@ -228,13 +277,27 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Publisher QoS
         public static PublisherQos CreateNonDefaultPublisherQos()
         {
-            PublisherQos qos = new PublisherQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            var qos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                GroupData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+                Partition =
+                {
+                    Name = new List<string> { "TestPartition" },
+                },
+                Presentation =
+                {
+                    AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos,
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                },
+            };
 
             return qos;
         }
@@ -274,10 +337,10 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
             Assert.AreEqual(1, qos.GroupData.Value.Count);
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
             Assert.AreEqual(1, qos.Partition.Name.Count);
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
@@ -287,13 +350,27 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Subscriber QoS
         public static SubscriberQos CreateNonDefaultSubscriberQos()
         {
-            SubscriberQos qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
+            var qos = new SubscriberQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                GroupData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+                Partition =
+                {
+                    Name = new List<string> { "TestPartition" },
+                },
+                Presentation =
+                {
+                    AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos,
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                },
+            };
 
             return qos;
         }
@@ -333,10 +410,10 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
             Assert.AreEqual(1, qos.GroupData.Value.Count);
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
             Assert.AreEqual(1, qos.Partition.Name.Count);
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
@@ -346,57 +423,106 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region DataWriter QoS
         public static DataWriterQos CreateNonDefaultDataWriterQos()
         {
-            DataWriterQos qos = new DataWriterQos();
-            qos.Deadline.Period = new Duration
+            var qos = new DataWriterQos
             {
-                Seconds = 5,
-                NanoSeconds = 0,
-            };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.DurabilityService.HistoryDepth = 5;
-            qos.DurabilityService.HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.DurabilityService.MaxInstances = 5;
-            qos.DurabilityService.MaxSamples = 5;
-            qos.DurabilityService.MaxSamplesPerInstance = 5;
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Lifespan.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.OwnershipStrength.Value = 5;
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.UserData.Value = new List<byte> { 0x5 };
-            qos.TransportPriority.Value = 5;
-            qos.WriterDataLifecycle.AutodisposeUnregisteredInstances = true;
-
-            qos.Representation.Value = new List<short>
-            {
-                DataRepresentationQosPolicy.XCDR_DATA_REPRESENTATION,
-                DataRepresentationQosPolicy.XCDR2_DATA_REPRESENTATION,
-                DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
+                Deadline =
+                {
+                    Period = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 0,
+                    },
+                },
+                DestinationOrder =
+                {
+                    Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos,
+                },
+                Durability =
+                {
+                    Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
+                },
+                DurabilityService =
+                {
+                    HistoryDepth = 5,
+                    HistoryKind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                    MaxInstances = 5,
+                    MaxSamples = 5,
+                    MaxSamplesPerInstance = 5,
+                },
+                History =
+                {
+                    Depth = 5,
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+                LatencyBudget =
+                {
+                    Duration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Lifespan =
+                {
+                    Duration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos,
+                    LeaseDuration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Ownership =
+                {
+                    Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos,
+                },
+                OwnershipStrength =
+                {
+                    Value = 5,
+                },
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
+                    MaxBlockingTime = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                ResourceLimits =
+                {
+                    MaxInstances = 5,
+                    MaxSamples = 5,
+                    MaxSamplesPerInstance = 5,
+                },
+                UserData =
+                {
+                    Value = new List<byte> { 0x5 },
+                },
+                TransportPriority =
+                {
+                    Value = 5,
+                },
+                WriterDataLifecycle =
+                {
+                    AutodisposeUnregisteredInstances = true,
+                },
+                Representation =
+                {
+                    Value = new List<short>
+                    {
+                        DataRepresentationQosPolicy.XCDR_DATA_REPRESENTATION,
+                        DataRepresentationQosPolicy.XCDR2_DATA_REPRESENTATION,
+                        DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
+                    },
+                },
             };
 
             return qos;
@@ -521,7 +647,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(5, qos.ResourceLimits.MaxSamplesPerInstance);
             Assert.AreEqual(1, qos.UserData.Value.Count);
-            Assert.AreEqual(0x5, qos.UserData.Value.First());
+            Assert.AreEqual(0x5, qos.UserData.Value[0]);
             Assert.AreEqual(5, qos.TransportPriority.Value);
             Assert.IsTrue(qos.WriterDataLifecycle.AutodisposeUnregisteredInstances);
             Assert.AreEqual(3, qos.Representation.Value.Count);
@@ -531,60 +657,99 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region DataReader QoS
         public static DataReaderQos CreateNonDefaultDataReaderQos()
         {
-            DataReaderQos qos = new DataReaderQos();
-
-            qos.Deadline.Period = new Duration
+            var qos = new DataReaderQos
             {
-                Seconds = 5,
-                NanoSeconds = 0,
-            };
-            qos.DestinationOrder.Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos;
-            qos.Durability.Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos;
-            qos.History.Depth = 5;
-            qos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            qos.LatencyBudget.Duration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Liveliness.Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos;
-            qos.Liveliness.LeaseDuration = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Ownership.Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos;
-            qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            qos.Reliability.MaxBlockingTime = new Duration
-            {
-                Seconds = 5,
-                NanoSeconds = 5,
-            };
-            qos.ResourceLimits.MaxInstances = 5;
-            qos.ResourceLimits.MaxSamples = 5;
-            qos.ResourceLimits.MaxSamplesPerInstance = 5;
-            qos.TimeBasedFilter.MinimumSeparation = new Duration
-            {
-                Seconds = 3,
-                NanoSeconds = 3,
-            };
-            qos.UserData.Value = new List<byte> { 0x5 };
-
-            qos.Representation.Value = new List<short>
-            {
-                DataRepresentationQosPolicy.XCDR_DATA_REPRESENTATION,
-                DataRepresentationQosPolicy.XCDR2_DATA_REPRESENTATION,
-                DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
+                Deadline =
+                {
+                    Period = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 0,
+                    },
+                },
+                DestinationOrder =
+                {
+                    Kind = DestinationOrderQosPolicyKind.BySourceTimestampDestinationOrderQos,
+                },
+                Durability =
+                {
+                    Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
+                },
+                History =
+                {
+                    Depth = 5,
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+                LatencyBudget =
+                {
+                    Duration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Liveliness =
+                {
+                    Kind = LivelinessQosPolicyKind.ManualByParticipantLivelinessQos,
+                    LeaseDuration = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Ownership =
+                {
+                    Kind = OwnershipQosPolicyKind.ExclusiveOwnershipQos,
+                },
+                ReaderDataLifecycle =
+                {
+                    AutopurgeDisposedSamplesDelay = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                    AutopurgeNowriterSamplesDelay = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                    MaxBlockingTime = new Duration
+                    {
+                        Seconds = 5,
+                        NanoSeconds = 5,
+                    },
+                },
+                ResourceLimits =
+                {
+                    MaxInstances = 5,
+                    MaxSamples = 5,
+                    MaxSamplesPerInstance = 5,
+                },
+                TimeBasedFilter =
+                {
+                    MinimumSeparation = new Duration
+                    {
+                        Seconds = 3,
+                        NanoSeconds = 3,
+                    },
+                },
+                UserData =
+                {
+                    Value = new List<byte> { 0x5 },
+                },
+                Representation =
+                {
+                    Value = new List<short>
+                    {
+                        DataRepresentationQosPolicy.XCDR_DATA_REPRESENTATION,
+                        DataRepresentationQosPolicy.XCDR2_DATA_REPRESENTATION,
+                        DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
+                    },
+                },
             };
 
             return qos;
@@ -701,7 +866,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsNotNull(qos.TimeBasedFilter.MinimumSeparation);
             Assert.AreEqual(3, qos.TimeBasedFilter.MinimumSeparation.Seconds);
             Assert.AreEqual(3U, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
-            Assert.AreEqual(0x5, qos.UserData.Value.First());
+            Assert.AreEqual(0x5, qos.UserData.Value[0]);
             Assert.AreEqual(3, qos.Representation.Value.Count);
         }
         #endregion
@@ -749,7 +914,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsNotNull(data.TimeBasedFilter.MinimumSeparation);
             Assert.AreEqual(3, data.TimeBasedFilter.MinimumSeparation.Seconds);
             Assert.AreEqual(3U, data.TimeBasedFilter.MinimumSeparation.NanoSeconds);
-            Assert.AreEqual(0x5, data.UserData.Value.First());
+            Assert.AreEqual(0x5, data.UserData.Value[0]);
         }
 
         public static void TestNonDefaultPublicationData(PublicationBuiltinTopicData data)
@@ -802,7 +967,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(5, data.Reliability.MaxBlockingTime.Seconds);
             Assert.AreEqual(5U, data.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(1, data.UserData.Value.Count);
-            Assert.AreEqual(0x5, data.UserData.Value.First());
+            Assert.AreEqual(0x5, data.UserData.Value[0]);
         }
 
         public static void TestNonDefaultTopicData(TopicBuiltinTopicData data)
@@ -850,7 +1015,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(5, data.ResourceLimits.MaxSamples);
             Assert.AreEqual(5, data.ResourceLimits.MaxSamplesPerInstance);
             Assert.AreEqual(1, data.TopicData.Value.Count);
-            Assert.AreEqual(0x5, data.TopicData.Value.First());
+            Assert.AreEqual(0x5, data.TopicData.Value[0]);
             Assert.AreEqual(5, data.TransportPriority.Value);
         }
         #endregion
@@ -873,12 +1038,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                 count--;
             }
 
-            if (count == 0 && status.CurrentCount != subscriptionsCount)
-            {
-                return false;
-            }
-
-            return true;
+            return count != 0 || status.CurrentCount == subscriptionsCount;
         }
 
         public static bool WaitForPublications(this DataReader reader, int publicationsCount, int milliseconds)
@@ -888,9 +1048,9 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new ArgumentNullException(nameof(reader));
             }
 
-            List<InstanceHandle> handles = new List<InstanceHandle>();
+            var handles = new List<InstanceHandle>();
             reader.GetMatchedPublications(handles);
-            int count = milliseconds / 100;
+            var count = milliseconds / 100;
             while (handles.Count != publicationsCount && count > 0)
             {
                 Thread.Sleep(100);
@@ -898,44 +1058,36 @@ namespace OpenDDSharp.UnitTest.Helpers
                 count--;
             }
 
-            if (count == 0 && handles.Count != publicationsCount)
-            {
-                return false;
-            }
-
-            return true;
+            return count != 0 || handles.Count == publicationsCount;
         }
 
         public static bool WaitForParticipants(this DomainParticipant participant, int participantCount, int milliseconds)
         {
-            List<InstanceHandle> handles = new List<InstanceHandle>();
+            var handles = new List<InstanceHandle>();
             participant.GetDiscoveredParticipants(handles);
-            int count = milliseconds / 100;
+            var count = milliseconds / 100;
             while (handles.Count != participantCount && count > 0)
             {
-                System.Threading.Thread.Sleep(100);
+                Thread.Sleep(100);
                 participant.GetDiscoveredParticipants(handles);
                 count--;
             }
 
-            if (count == 0 && handles.Count != participantCount)
-            {
-                return false;
-            }
-
-            return true;
+            return count != 0 || handles.Count == participantCount;
         }
 
         public static void BindRtpsUdpTransportConfig(this Entity entity)
         {
-            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-            string configName = "openddsharp_rtps_interop_" + guid;
-            string instName = "internal_openddsharp_rtps_transport_" + guid;
+            var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            var configName = "openddsharp_rtps_interop_" + guid;
+            var instName = "internal_openddsharp_rtps_transport_" + guid;
 
-            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
-            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-            RtpsUdpInst rui = new RtpsUdpInst(inst);
-            rui.UseMulticast = false;
+            var config = TransportRegistry.Instance.CreateConfig(configName);
+            var inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
+            var rui = new RtpsUdpInst(inst)
+            {
+                UseMulticast = false,
+            };
             config.Insert(rui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
@@ -943,13 +1095,13 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         public static void BindUdpTransportConfig(this Entity entity)
         {
-            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-            string configName = "openddsharp_udp_interop_" + guid;
-            string instName = "internal_openddsharp_udp_transport_" + guid;
+            var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            var configName = "openddsharp_udp_interop_" + guid;
+            var instName = "internal_openddsharp_udp_transport_" + guid;
 
-            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
-            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "udp");
-            UdpInst ui = new UdpInst(inst);
+            var config = TransportRegistry.Instance.CreateConfig(configName);
+            var inst = TransportRegistry.Instance.CreateInst(instName, "udp");
+            var ui = new UdpInst(inst);
             config.Insert(ui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
@@ -957,39 +1109,39 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         public static void BindTcpTransportConfig(this Entity entity)
         {
-            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-            string configName = "openddsharp_tcp_" + guid;
-            string instName = "internal_openddsharp_tcp_transport_" + guid;
+            var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            var configName = "openddsharp_tcp_" + guid;
+            var instName = "internal_openddsharp_tcp_transport_" + guid;
 
-            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
-            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
-            TcpInst tcpi = new TcpInst(inst)
+            var config = TransportRegistry.Instance.CreateConfig(configName);
+            var inst = TransportRegistry.Instance.CreateInst(instName, "tcp");
+            var tcpInst = new TcpInst(inst)
             {
                 LocalAddress = "localhost:0",
             };
-            config.Insert(tcpi);
+            config.Insert(tcpInst);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
 
         public static void BindShmemTransportConfig(this Entity entity)
         {
-            string guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-            string configName = "openddsharp_shmem_" + guid;
-            string instName = "internal_openddsharp_shmem_transport_" + guid;
+            var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            var configName = "openddsharp_shmem_" + guid;
+            var instName = "internal_openddsharp_shmem_transport_" + guid;
 
-            TransportConfig config = TransportRegistry.Instance.CreateConfig(configName);
-            TransportInst inst = TransportRegistry.Instance.CreateInst(instName, "shmem");
-            ShmemInst shmemi = new ShmemInst(inst);
-            config.Insert(shmemi);
+            var config = TransportRegistry.Instance.CreateConfig(configName);
+            var inst = TransportRegistry.Instance.CreateInst(instName, "shmem");
+            var shmemInst = new ShmemInst(inst);
+            config.Insert(shmemInst);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
 
         public static Timestamp ToTimestamp(this DateTime dateTime)
         {
-            DateTime epoc = new DateTime(1970, 1, 1);
-            TimeSpan span = dateTime - epoc;
+            var epoc = new DateTime(1970, 1, 1);
+            var span = dateTime - epoc;
 
             return new Timestamp
             {
