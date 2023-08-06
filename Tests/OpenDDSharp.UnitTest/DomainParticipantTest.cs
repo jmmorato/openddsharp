@@ -1408,6 +1408,12 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = _participant.DeleteContentFilteredTopic(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
@@ -1522,9 +1528,21 @@ namespace OpenDDSharp.UnitTest
             }
 
             var receivedData = new List<AthleteResult>();
-            var sampleInfos = new List<SampleInfo>();
-            result = dataReader.Read(receivedData, sampleInfos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+
+            while (receivedData.Count < 3)
+            {
+                var samples = new List<AthleteResult>();
+                var sampleInfos = new List<SampleInfo>();
+                result = dataReader.Take(samples, sampleInfos);
+                if (result == ReturnCode.Ok)
+                {
+                    receivedData.AddRange(samples);
+                }
+            }
+
+            var sample = new AthleteResult();
+            var sampleInfo = new SampleInfo();
+            Assert.AreEqual(ReturnCode.NoData, dataReader.ReadNextSample(sample, sampleInfo));
 
             Assert.AreEqual(3, receivedData.Count);
             for (var i = 0; i < 3; i++)
