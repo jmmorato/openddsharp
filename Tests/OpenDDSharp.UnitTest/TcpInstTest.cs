@@ -42,28 +42,28 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            TcpInst tcpi = new TcpInst(inst);
-            Assert.AreEqual(2000, tcpi.PassiveReconnectDuration);
-            Assert.AreEqual(-1, tcpi.MaxOutputPausePeriod);
-            Assert.AreEqual(3, tcpi.ConnRetryAttempts);
-            Assert.AreEqual(2.0, tcpi.ConnRetryBackoffMultiplier);
-            Assert.AreEqual(500, tcpi.ConnRetryInitialDelay);
-            Assert.IsFalse(tcpi.EnableNagleAlgorithm);
-            Assert.IsTrue(tcpi.IsReliable);
-            Assert.AreEqual(string.Empty, tcpi.PublicAddress);
-            Assert.AreEqual(string.Empty, tcpi.LocalAddress);
-            Assert.AreEqual(32U, tcpi.DatalinkControlChunks);
-            Assert.AreEqual(10000, tcpi.DatalinkReleaseDelay);
-            Assert.IsTrue(tcpi.IsReliable);
-            Assert.AreEqual(2147481599u, tcpi.MaxPacketSize);
-            Assert.AreEqual(10U, tcpi.MaxSamplesPerPacket);
-            Assert.AreEqual(INSTANCE_NAME, tcpi.Name);
-            Assert.AreEqual(4096u, tcpi.OptimumPacketSize);
-            Assert.AreEqual(TRANSPORT_TYPE, tcpi.TransportType);
-            Assert.IsFalse(tcpi.ThreadPerConnection);
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var tcpInst = new TcpInst(inst);
+            Assert.AreEqual(2000, tcpInst.PassiveReconnectDuration);
+            Assert.AreEqual(-1, tcpInst.MaxOutputPausePeriod);
+            Assert.AreEqual(3, tcpInst.ConnRetryAttempts);
+            Assert.AreEqual(2.0, tcpInst.ConnRetryBackoffMultiplier);
+            Assert.AreEqual(500, tcpInst.ConnRetryInitialDelay);
+            Assert.IsFalse(tcpInst.EnableNagleAlgorithm);
+            Assert.IsTrue(tcpInst.IsReliable);
+            Assert.AreEqual(string.Empty, tcpInst.PublicAddress);
+            Assert.AreEqual(string.Empty, tcpInst.LocalAddress);
+            Assert.AreEqual(32U, tcpInst.DatalinkControlChunks);
+            Assert.AreEqual(10000, tcpInst.DatalinkReleaseDelay);
+            Assert.IsTrue(tcpInst.IsReliable);
+            Assert.AreEqual(2147481599u, tcpInst.MaxPacketSize);
+            Assert.AreEqual(10U, tcpInst.MaxSamplesPerPacket);
+            Assert.AreEqual(INSTANCE_NAME, tcpInst.Name);
+            Assert.AreEqual(4096u, tcpInst.OptimumPacketSize);
+            Assert.AreEqual(TRANSPORT_TYPE, tcpInst.TransportType);
+            Assert.IsFalse(tcpInst.ThreadPerConnection);
 
-            TransportRegistry.Instance.RemoveInst(tcpi);
+            TransportRegistry.Instance.RemoveInst(tcpInst);
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            TcpInst tcpi = new TcpInst(inst)
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var tcpInst = new TcpInst(inst)
             {
                 PassiveReconnectDuration = 1000,
                 MaxOutputPausePeriod = 5000,
@@ -89,30 +89,26 @@ namespace OpenDDSharp.UnitTest
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
-                // QueueInitialPools = 10U,
-                // QueueMessagesPerPool = 20U,
                 ThreadPerConnection = true,
             };
 
-            Assert.AreEqual(1000, tcpi.PassiveReconnectDuration);
-            Assert.AreEqual(5000, tcpi.MaxOutputPausePeriod);
-            Assert.AreEqual(5, tcpi.ConnRetryAttempts);
-            Assert.AreEqual(1.5, tcpi.ConnRetryBackoffMultiplier);
-            Assert.AreEqual(1000, tcpi.ConnRetryInitialDelay);
-            Assert.IsTrue(tcpi.EnableNagleAlgorithm);
-            Assert.IsTrue(tcpi.IsReliable);
-            Assert.AreEqual("127.0.0.1:", tcpi.PublicAddress);
-            Assert.AreEqual("127.0.0.1:", tcpi.LocalAddress);
-            Assert.AreEqual(64U, tcpi.DatalinkControlChunks);
-            Assert.AreEqual(20000, tcpi.DatalinkReleaseDelay);
-            Assert.AreEqual(2147481500u, tcpi.MaxPacketSize);
-            Assert.AreEqual(20U, tcpi.MaxSamplesPerPacket);
-            Assert.AreEqual(2048u, tcpi.OptimumPacketSize);
-            // Assert.AreEqual(10U, tcpi.QueueInitialPools);
-            // Assert.AreEqual(20U, tcpi.QueueMessagesPerPool);
-            Assert.IsTrue(tcpi.ThreadPerConnection);
+            Assert.AreEqual(1000, tcpInst.PassiveReconnectDuration);
+            Assert.AreEqual(5000, tcpInst.MaxOutputPausePeriod);
+            Assert.AreEqual(5, tcpInst.ConnRetryAttempts);
+            Assert.AreEqual(1.5, tcpInst.ConnRetryBackoffMultiplier);
+            Assert.AreEqual(1000, tcpInst.ConnRetryInitialDelay);
+            Assert.IsTrue(tcpInst.EnableNagleAlgorithm);
+            Assert.IsTrue(tcpInst.IsReliable);
+            Assert.AreEqual("127.0.0.1:", tcpInst.PublicAddress);
+            Assert.AreEqual("127.0.0.1:", tcpInst.LocalAddress);
+            Assert.AreEqual(64U, tcpInst.DatalinkControlChunks);
+            Assert.AreEqual(20000, tcpInst.DatalinkReleaseDelay);
+            Assert.AreEqual(2147481500u, tcpInst.MaxPacketSize);
+            Assert.AreEqual(20U, tcpInst.MaxSamplesPerPacket);
+            Assert.AreEqual(2048u, tcpInst.OptimumPacketSize);
+            Assert.IsTrue(tcpInst.ThreadPerConnection);
 
-            TransportRegistry.Instance.RemoveInst(tcpi);
+            TransportRegistry.Instance.RemoveInst(tcpInst);
         }
         #endregion
     }

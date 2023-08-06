@@ -43,7 +43,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY);
+            var disc = new RtpsDiscovery(RTPS_DISCOVERY);
             Assert.IsNotNull(disc.ResendPeriod);
             Assert.AreEqual(30, disc.ResendPeriod.Seconds);
             Assert.AreEqual(0, disc.ResendPeriod.MicroSeconds);
@@ -72,7 +72,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            RtpsDiscovery disc = new RtpsDiscovery(RTPS_DISCOVERY)
+            var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
                 ResendPeriod = new TimeValue
                 {
@@ -120,7 +120,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNullOrEmptyName()
         {
-            bool exception = false;
+            var exception = false;
             try
             {
                 _ = new RtpsDiscovery(null);

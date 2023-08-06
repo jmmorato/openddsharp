@@ -187,7 +187,7 @@ namespace OpenDDSharp.UnitTest
                 result = _subscriber.GetDataReaders(readers);
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                foreach (var reader in readers)
+                foreach (var unused in readers)
                 {
                     var sample = new List<TestStruct>();
                     var info = new List<SampleInfo>();

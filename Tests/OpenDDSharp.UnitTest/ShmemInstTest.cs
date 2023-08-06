@@ -42,24 +42,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            ShmemInst shmemi = new ShmemInst(inst);
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var shmemInst = new ShmemInst(inst);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(shmemi.HostName));
-            Assert.AreEqual(16777216U, shmemi.PoolSize);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(shmemi.PoolName));
-            Assert.AreEqual(4096U, shmemi.DatalinkControlSize);
-            Assert.AreEqual(32U, shmemi.DatalinkControlChunks);
-            Assert.AreEqual(10000, shmemi.DatalinkReleaseDelay);
-            Assert.IsTrue(shmemi.IsReliable);
-            Assert.AreEqual(2147481599u, shmemi.MaxPacketSize);
-            Assert.AreEqual(10U, shmemi.MaxSamplesPerPacket);
-            Assert.AreEqual(INSTANCE_NAME, shmemi.Name);
-            Assert.AreEqual(4096u, shmemi.OptimumPacketSize);
-            Assert.AreEqual(TRANSPORT_TYPE, shmemi.TransportType);
-            Assert.IsFalse(shmemi.ThreadPerConnection);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(shmemInst.HostName));
+            Assert.AreEqual(16777216U, shmemInst.PoolSize);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(shmemInst.PoolName));
+            Assert.AreEqual(4096U, shmemInst.DatalinkControlSize);
+            Assert.AreEqual(32U, shmemInst.DatalinkControlChunks);
+            Assert.AreEqual(10000, shmemInst.DatalinkReleaseDelay);
+            Assert.IsTrue(shmemInst.IsReliable);
+            Assert.AreEqual(2147481599u, shmemInst.MaxPacketSize);
+            Assert.AreEqual(10U, shmemInst.MaxSamplesPerPacket);
+            Assert.AreEqual(INSTANCE_NAME, shmemInst.Name);
+            Assert.AreEqual(4096u, shmemInst.OptimumPacketSize);
+            Assert.AreEqual(TRANSPORT_TYPE, shmemInst.TransportType);
+            Assert.IsFalse(shmemInst.ThreadPerConnection);
 
-            TransportRegistry.Instance.RemoveInst(shmemi);
+            TransportRegistry.Instance.RemoveInst(shmemInst);
         }
 
         /// <summary>
@@ -69,8 +69,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            ShmemInst shmemi = new ShmemInst(inst)
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var shmemInst = new ShmemInst(inst)
             {
                 PoolSize = 16000000U,
                 DatalinkControlSize = 2048U,
@@ -79,24 +79,20 @@ namespace OpenDDSharp.UnitTest
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
-                // QueueInitialPools = 20U,
-                // QueueMessagesPerPool = 20U,
-                ThreadPerConnection = true
+                ThreadPerConnection = true,
             };
 
-            Assert.AreEqual(16000000U, shmemi.PoolSize);
-            Assert.AreEqual(2048U, shmemi.DatalinkControlSize);
-            Assert.AreEqual(64U, shmemi.DatalinkControlChunks);
-            Assert.AreEqual(20000, shmemi.DatalinkReleaseDelay);
-            Assert.AreEqual(2147481500u, shmemi.MaxPacketSize);
-            Assert.AreEqual(20U, shmemi.MaxSamplesPerPacket);
-            Assert.AreEqual(INSTANCE_NAME, shmemi.Name);
-            Assert.AreEqual(2048u, shmemi.OptimumPacketSize);
-            // Assert.AreEqual(20U, shmemi.QueueInitialPools);
-            // Assert.AreEqual(20U, shmemi.QueueMessagesPerPool);
-            Assert.IsTrue(shmemi.ThreadPerConnection);
+            Assert.AreEqual(16000000U, shmemInst.PoolSize);
+            Assert.AreEqual(2048U, shmemInst.DatalinkControlSize);
+            Assert.AreEqual(64U, shmemInst.DatalinkControlChunks);
+            Assert.AreEqual(20000, shmemInst.DatalinkReleaseDelay);
+            Assert.AreEqual(2147481500u, shmemInst.MaxPacketSize);
+            Assert.AreEqual(20U, shmemInst.MaxSamplesPerPacket);
+            Assert.AreEqual(INSTANCE_NAME, shmemInst.Name);
+            Assert.AreEqual(2048u, shmemInst.OptimumPacketSize);
+            Assert.IsTrue(shmemInst.ThreadPerConnection);
 
-            TransportRegistry.Instance.RemoveInst(shmemi);
+            TransportRegistry.Instance.RemoveInst(shmemInst);
         }
         #endregion
     }

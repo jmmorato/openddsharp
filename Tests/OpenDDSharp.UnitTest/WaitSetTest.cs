@@ -65,9 +65,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
@@ -85,8 +85,13 @@ namespace OpenDDSharp.UnitTest
             _writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(_writer);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(_reader);
         }
@@ -125,10 +130,12 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestWait()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             // Initialize
-            WaitSet waitSet = new WaitSet();
-            GuardCondition guardCondition = new GuardCondition();
-            ReturnCode result = waitSet.AttachCondition(guardCondition);
+            var waitSet = new WaitSet();
+            var guardCondition = new GuardCondition();
+            var result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Test with null conditions
@@ -139,7 +146,7 @@ namespace OpenDDSharp.UnitTest
             result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            List<Condition> conditions = new List<Condition>();
+            var conditions = new List<Condition>();
             result = waitSet.GetConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(conditions);
@@ -147,55 +154,57 @@ namespace OpenDDSharp.UnitTest
             Assert.AreSame(guardCondition, conditions[0]);
 
             // Test thread wait infinite
-            int count = 0;
-            Thread thread = new Thread(() =>
+            var thread = new Thread(() =>
             {
                 result = waitSet.Wait(conditions);
-                Assert.AreEqual(ReturnCode.Ok, result);
-                Assert.IsNotNull(conditions);
-                Assert.AreEqual(1, conditions.Count);
-                Assert.AreEqual(guardCondition, conditions[0]);
-                guardCondition.TriggerValue = false;
-                count++;
+
+                evt.Set();
             });
             thread.Start();
 
             guardCondition.TriggerValue = true;
-            thread.Join();
-            Assert.AreEqual(1, count);
+            Assert.IsTrue(evt.Wait(5_000));
+
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(conditions);
+            Assert.AreEqual(1, conditions.Count);
+            Assert.AreEqual(guardCondition, conditions[0]);
+
+            guardCondition.TriggerValue = false;
 
             // Test timeout
-            count = 0;
+            evt.Reset();
             thread = new Thread(() =>
             {
                 result = waitSet.Wait(conditions, new Duration { Seconds = 0, NanoSeconds = 100000000});
-                Assert.AreEqual(ReturnCode.Timeout, result);
-                Assert.IsNotNull(conditions);
-                Assert.AreEqual(0, conditions.Count);
-                count++;
+                evt.Set();
             });
             thread.Start();
-            thread.Join();
-            Assert.AreEqual(1, count);
+
+            Assert.IsTrue(evt.Wait(1_500));
+            Assert.AreEqual(ReturnCode.Timeout, result);
+            Assert.IsNotNull(conditions);
+            Assert.AreEqual(0, conditions.Count);
 
             // Test exit before timeout
-            count = 0;
+            evt.Reset();
             thread = new Thread(() =>
             {
                 result = waitSet.Wait(conditions, new Duration { Seconds = 5});
-                Assert.AreEqual(ReturnCode.Ok, result);
-                Assert.IsNotNull(conditions);
-                Assert.AreEqual(1, conditions.Count);
-                Assert.AreEqual(guardCondition, conditions[0]);
-                Assert.IsTrue(guardCondition.TriggerValue);
-                guardCondition.TriggerValue = false;
-                count++;
+
+                evt.Set();
             });
             thread.Start();
 
             guardCondition.TriggerValue = true;
-            thread.Join();
-            Assert.AreEqual(1, count);
+
+            Assert.IsTrue(evt.Wait(1_500));
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(conditions);
+            Assert.AreEqual(1, conditions.Count);
+            Assert.AreEqual(guardCondition, conditions[0]);
+            Assert.IsTrue(guardCondition.TriggerValue);
+            guardCondition.TriggerValue = false;
         }
 
         /// <summary>
@@ -206,11 +215,11 @@ namespace OpenDDSharp.UnitTest
         public void TestAttachCondition()
         {
             // Initialize
-            WaitSet waitSet = new WaitSet();
-            GuardCondition guardCondition = new GuardCondition();
+            var waitSet = new WaitSet();
+            var guardCondition = new GuardCondition();
 
             // Test with null parameter
-            ReturnCode result = waitSet.AttachCondition(null);
+            var result = waitSet.AttachCondition(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Test with correct parameter
@@ -221,7 +230,7 @@ namespace OpenDDSharp.UnitTest
             result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            List<Condition> conditions = new List<Condition>();
+            var conditions = new List<Condition>();
             result = waitSet.GetConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(conditions);
@@ -237,9 +246,9 @@ namespace OpenDDSharp.UnitTest
         public void TestDetachCondition()
         {
             // Initialize
-            WaitSet waitSet = new WaitSet();
-            GuardCondition guardCondition = new GuardCondition();
-            ReturnCode result = waitSet.AttachCondition(guardCondition);
+            var waitSet = new WaitSet();
+            var guardCondition = new GuardCondition();
+            var result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Test with null parameter
@@ -255,7 +264,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
 
             // Detach a not attached condition
-            GuardCondition notAttachedCondition = new GuardCondition();
+            var notAttachedCondition = new GuardCondition();
             result = waitSet.DetachCondition(notAttachedCondition);
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
         }
@@ -268,10 +277,10 @@ namespace OpenDDSharp.UnitTest
         public void TestGetConditions()
         {
             // Initialize
-            WaitSet waitSet = new WaitSet();
-            GuardCondition guardCondition = new GuardCondition();
-            GuardCondition otherGuardCondition = new GuardCondition();
-            ReturnCode result = waitSet.AttachCondition(guardCondition);
+            var waitSet = new WaitSet();
+            var guardCondition = new GuardCondition();
+            var otherGuardCondition = new GuardCondition();
+            var result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
             result = waitSet.AttachCondition(otherGuardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -281,7 +290,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Test with correct parameter
-            List<Condition> conditions = new List<Condition>() { null };
+            var conditions = new List<Condition> { null };
             result = waitSet.GetConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(conditions);
@@ -301,11 +310,11 @@ namespace OpenDDSharp.UnitTest
         public void TestDetachConditions()
         {
             // Initialize
-            WaitSet waitSet = new WaitSet();
-            GuardCondition guardCondition = new GuardCondition();
-            GuardCondition otherGuardCondition = new GuardCondition();
-            GuardCondition anotherGuardCondition = new GuardCondition();
-            ReturnCode result = waitSet.AttachCondition(guardCondition);
+            var waitSet = new WaitSet();
+            var guardCondition = new GuardCondition();
+            var otherGuardCondition = new GuardCondition();
+            var anotherGuardCondition = new GuardCondition();
+            var result = waitSet.AttachCondition(guardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
             result = waitSet.AttachCondition(otherGuardCondition);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -317,16 +326,16 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Test with empty list parameter
-            List<Condition> conditions = new List<Condition>();
+            var conditions = new List<Condition>();
             result = waitSet.DetachConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Test with single element list parameter
-            conditions = new List<Condition>() { guardCondition };
+            conditions = new List<Condition> { guardCondition };
             result = waitSet.DetachConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            conditions = new List<Condition>() { null };
+            conditions = new List<Condition> { null };
             result = waitSet.GetConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(conditions);
@@ -338,19 +347,19 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(otherGuardCondition == conditions[0] || otherGuardCondition == conditions[1]);
 
             // Detach the other conditions
-            conditions = new List<Condition>() { otherGuardCondition, anotherGuardCondition };
+            conditions = new List<Condition> { otherGuardCondition, anotherGuardCondition };
             result = waitSet.DetachConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            conditions = new List<Condition>() { null };
+            conditions = new List<Condition> { null };
             result = waitSet.GetConditions(conditions);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(conditions);
             Assert.AreEqual(0, conditions.Count);
 
             // Detach a not attached conditions
-            GuardCondition notAttachedCondition = new GuardCondition();
-            conditions = new List<Condition>() { notAttachedCondition };
+            var notAttachedCondition = new GuardCondition();
+            conditions = new List<Condition> { notAttachedCondition };
             result = waitSet.DetachConditions(conditions);
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
         }

@@ -43,30 +43,30 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            UdpInst udpi = new UdpInst(inst);
-            Assert.AreEqual("0.0.0.0:0", udpi.LocalAddress);
-            Assert.AreEqual(32U, udpi.DatalinkControlChunks);
-            Assert.AreEqual(10000, udpi.DatalinkReleaseDelay);
-            Assert.IsFalse(udpi.IsReliable);
-            Assert.AreEqual(2147481599u, udpi.MaxPacketSize);
-            Assert.AreEqual(10U, udpi.MaxSamplesPerPacket);
-            Assert.AreEqual(INSTANCE_NAME, udpi.Name);
-            Assert.AreEqual(4096u, udpi.OptimumPacketSize);
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var udpInst = new UdpInst(inst);
+            Assert.AreEqual("0.0.0.0:0", udpInst.LocalAddress);
+            Assert.AreEqual(32U, udpInst.DatalinkControlChunks);
+            Assert.AreEqual(10000, udpInst.DatalinkReleaseDelay);
+            Assert.IsFalse(udpInst.IsReliable);
+            Assert.AreEqual(2147481599u, udpInst.MaxPacketSize);
+            Assert.AreEqual(10U, udpInst.MaxSamplesPerPacket);
+            Assert.AreEqual(INSTANCE_NAME, udpInst.Name);
+            Assert.AreEqual(4096u, udpInst.OptimumPacketSize);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                Assert.AreEqual(65536, udpi.RcvBufferSize);
-                Assert.AreEqual(65536, udpi.SendBufferSize);
+                Assert.AreEqual(65536, udpInst.RcvBufferSize);
+                Assert.AreEqual(65536, udpInst.SendBufferSize);
             }
             else
             {
-                Assert.AreEqual(65535, udpi.RcvBufferSize);
-                Assert.AreEqual(65535, udpi.SendBufferSize);
+                Assert.AreEqual(65535, udpInst.RcvBufferSize);
+                Assert.AreEqual(65535, udpInst.SendBufferSize);
             }
-            Assert.AreEqual(TRANSPORT_TYPE, udpi.TransportType);
-            Assert.IsFalse(udpi.ThreadPerConnection);
+            Assert.AreEqual(TRANSPORT_TYPE, udpInst.TransportType);
+            Assert.IsFalse(udpInst.ThreadPerConnection);
 
-            TransportRegistry.Instance.RemoveInst(udpi);
+            TransportRegistry.Instance.RemoveInst(udpInst);
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            UdpInst udpi = new UdpInst(inst)
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var udpInst = new UdpInst(inst)
             {
                 LocalAddress = "127.0.0.1:",
                 DatalinkControlChunks = 64U,
@@ -90,19 +90,19 @@ namespace OpenDDSharp.UnitTest
                 ThreadPerConnection = true,
             };
 
-            Assert.AreEqual("127.0.0.1:0", udpi.LocalAddress);
-            Assert.AreEqual(64U, udpi.DatalinkControlChunks);
-            Assert.AreEqual(20000, udpi.DatalinkReleaseDelay);
-            Assert.AreEqual(2147481500u, udpi.MaxPacketSize);
-            Assert.AreEqual(20U, udpi.MaxSamplesPerPacket);
-            Assert.AreEqual(INSTANCE_NAME, udpi.Name);
-            Assert.AreEqual(2048u, udpi.OptimumPacketSize);
-            Assert.AreEqual(65530, udpi.RcvBufferSize);
-            Assert.AreEqual(65530, udpi.SendBufferSize);
-            Assert.AreEqual(TRANSPORT_TYPE, udpi.TransportType);
-            Assert.IsTrue(udpi.ThreadPerConnection);
+            Assert.AreEqual("127.0.0.1:0", udpInst.LocalAddress);
+            Assert.AreEqual(64U, udpInst.DatalinkControlChunks);
+            Assert.AreEqual(20000, udpInst.DatalinkReleaseDelay);
+            Assert.AreEqual(2147481500u, udpInst.MaxPacketSize);
+            Assert.AreEqual(20U, udpInst.MaxSamplesPerPacket);
+            Assert.AreEqual(INSTANCE_NAME, udpInst.Name);
+            Assert.AreEqual(2048u, udpInst.OptimumPacketSize);
+            Assert.AreEqual(65530, udpInst.RcvBufferSize);
+            Assert.AreEqual(65530, udpInst.SendBufferSize);
+            Assert.AreEqual(TRANSPORT_TYPE, udpInst.TransportType);
+            Assert.IsTrue(udpInst.ThreadPerConnection);
 
-            TransportRegistry.Instance.RemoveInst(udpi);
+            TransportRegistry.Instance.RemoveInst(udpInst);
         }
         #endregion
     }

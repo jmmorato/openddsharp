@@ -248,7 +248,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
             // Create a new Subscriber with a listener
-            var listener = new MySubscriberListener();
+            using var listener = new MySubscriberListener();
             var subscriber = _participant.CreateSubscriber(null, listener);
             Assert.IsNotNull(subscriber);
 
@@ -295,6 +295,7 @@ namespace OpenDDSharp.UnitTest
             received = (MySubscriberListener)subscriber.Listener;
             Assert.IsNull(received);
 
+            listener.Dispose();
             subscriber.DeleteContainedEntities();
             _participant.DeleteSubscriber(subscriber);
             _participant.DeleteContainedEntities();
@@ -411,7 +412,7 @@ namespace OpenDDSharp.UnitTest
             qos.TimeBasedFilter.MinimumSeparation = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             result = subscriber.SetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.InconsistentPolicy, result);
@@ -552,6 +553,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
 
+            Assert.AreEqual(ReturnCode.Ok, datareader3.SetListener(null));
+            listener.Dispose();
+
             // Test overload with listener and StatusMask parameters
             listener = new MyDataReaderListener();
             var datareader4 = subscriber.CreateDataReader(topic, null, listener, StatusMask.AllStatusMask);
@@ -565,6 +569,9 @@ namespace OpenDDSharp.UnitTest
             result = datareader4.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
+
+            Assert.AreEqual(ReturnCode.Ok, datareader4.SetListener(null));
+            listener.Dispose();
 
             // Test overload with QoS and listener parameters
             qos = TestHelper.CreateNonDefaultDataReaderQos();
@@ -581,6 +588,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataReaderQos(qos);
 
+            Assert.AreEqual(ReturnCode.Ok, datareader5.SetListener(null));
+            listener.Dispose();
+
             // Test full call overload
             qos = TestHelper.CreateNonDefaultDataReaderQos();
             listener = new MyDataReaderListener();
@@ -595,6 +605,9 @@ namespace OpenDDSharp.UnitTest
             result = datareader6.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataReaderQos(qos);
+
+            Assert.AreEqual(ReturnCode.Ok, datareader6.SetListener(null));
+            listener.Dispose();
 
             subscriber.DeleteDataReader(datareader1);
             subscriber.DeleteDataReader(datareader2);
@@ -760,7 +773,7 @@ namespace OpenDDSharp.UnitTest
             var readerReceived = 0;
 
             // Create the Subscriber and the DataReader with the corresponding listeners
-            var subListener = new MySubscriberListener();
+            using var subListener = new MySubscriberListener();
             subListener.DataOnReaders += (sub) =>
             {
                 subscriberReceived++;
@@ -769,7 +782,7 @@ namespace OpenDDSharp.UnitTest
             var subscriber = _participant.CreateSubscriber(null, subListener);
             Assert.IsNotNull(subscriber);
 
-            var readListener = new MyDataReaderListener();
+            using var readListener = new MyDataReaderListener();
             readListener.DataAvailable += (read) =>
             {
                 readerReceived++;
@@ -875,7 +888,7 @@ namespace OpenDDSharp.UnitTest
             var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            var listener = new MySubscriberListener();
+            using var listener = new MySubscriberListener();
             listener.DataOnReaders += (s) =>
             {
                 evt.Set();
@@ -924,7 +937,10 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(5_000));
 
-            result = subscriber.GetDataReaders(list, SampleStateKind.NotReadSampleState | SampleStateKind.ReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+            result = subscriber.GetDataReaders(list,
+                SampleStateKind.NotReadSampleState | SampleStateKind.ReadSampleState,
+                ViewStateMask.AnyViewState,
+                InstanceStateMask.AnyInstanceState);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(2, list.Count);
 
@@ -1020,7 +1036,7 @@ namespace OpenDDSharp.UnitTest
                     OrderedAccess = true,
                 },
             };
-            var listener = new MySubscriberListener();
+            using var listener = new MySubscriberListener();
             listener.DataOnReaders += (sub) =>
             {
                 result = sub.BeginAccess();
