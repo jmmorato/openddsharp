@@ -492,6 +492,11 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = publisher.DeleteDataWriter(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -544,6 +549,14 @@ namespace OpenDDSharp.UnitTest
 
             received = otherPublisher.LookupDataWriter(nameof(TestLookupDataWriter));
             Assert.IsNull(received);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(otherDatawriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, otherPublisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -619,6 +632,10 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter.
             result = publisher.GetDefaultDataWriterQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -682,6 +699,12 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter.
             result = publisher.SetDefaultDataWriterQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(otherWriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -756,6 +779,15 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsTrue(evt.Wait(5_000));
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -862,6 +894,12 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(sampleInfos[i].ValidData);
                 Assert.AreEqual(i + 1, data[i].ShortField);
             }
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
         }
 
         /// <summary>
