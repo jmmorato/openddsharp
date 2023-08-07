@@ -229,7 +229,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_reader, reader);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -312,7 +312,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreNotEqual(InstanceHandle.HandleNil, lastInstanceHandle);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -384,7 +384,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(11, policies.First().PolicyId);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _publisher.DeleteDataWriter(otherDataWriter);
@@ -470,7 +470,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(SampleRejectedStatusKind.RejectedBySamplesPerInstanceLimit, lastReason);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -591,7 +591,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_writer.InstanceHandle, secondLastPublicationHandle);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             firstDataReader.DeleteContainedEntities();
@@ -691,7 +691,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_writer.InstanceHandle, secondHandle);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             firstDataReader.DeleteContainedEntities();
@@ -778,7 +778,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, totalCountChange);
 
             // Remove the listener to avoid extra messages
-            result = _reader.SetListener(null);
+            result = _reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion

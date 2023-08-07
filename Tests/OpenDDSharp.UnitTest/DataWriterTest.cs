@@ -1034,7 +1034,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
-            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
             Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
@@ -1096,9 +1096,9 @@ namespace OpenDDSharp.UnitTest
                     {
                         timestamp = infos[0].SourceTimestamp;
                     }
-                }
 
-                evt.Set();
+                    evt.Set();
+                }
             };
 
             // Wait for discovery
@@ -1117,10 +1117,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
-            Assert.AreEqual(0, count);
-
-            evt.Reset();
+            Assert.IsFalse(evt.Wait(1_500));
 
             result = dataWriter.Dispose(instance1);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1144,10 +1141,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
-            Assert.AreEqual(1, count);
-
-            evt.Reset();
+            Assert.IsFalse(evt.Wait(1_000));
 
             result = dataWriter.Dispose(instance2, handle2);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1157,7 +1151,6 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(2, count);
-
             evt.Reset();
 
             // Call dispose with the handle parameter and specific timestamp
@@ -1172,10 +1165,8 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsFalse(evt.Wait(1_500));
             Assert.AreEqual(2, count);
-
-            evt.Reset();
 
             result = dataWriter.Dispose(instance3, handle3, now);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1183,12 +1174,12 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evt.Wait(1_000));
             Assert.AreEqual(3, count);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
-            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
             Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());

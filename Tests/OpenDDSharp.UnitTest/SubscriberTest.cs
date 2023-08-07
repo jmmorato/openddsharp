@@ -488,7 +488,7 @@ namespace OpenDDSharp.UnitTest
             var participantReader = bis.LookupDataReader("DCPSParticipant");
             Assert.IsNotNull(participantReader);
 
-            result = participantReader.SetListener(null);
+            result = participantReader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             subscriber.DeleteContainedEntities();
@@ -837,7 +837,7 @@ namespace OpenDDSharp.UnitTest
             result = writer.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = reader.SetListener(null);
+            result = reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             publisher.DeleteDataWriter(writer);

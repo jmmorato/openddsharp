@@ -269,7 +269,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
-            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
             Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
