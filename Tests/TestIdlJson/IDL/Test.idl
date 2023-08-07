@@ -54,8 +54,8 @@ module JsonWrapper {
 	typedef sequence<float, 5> BoundedFloatSequenceType;
 	typedef sequence<double> UnboundedDoubleSequenceType;
 	typedef sequence<double, 5> BoundedDoubleSequenceType;
-	typedef sequence<long double> UnboundedLongDoubleSequenceType;
-	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
+//	typedef sequence<long double> UnboundedLongDoubleSequenceType;
+//	typedef sequence<long double, 5> BoundedLongDoubleSequenceType;
 	typedef sequence<int8> UnboundedInt8SequenceType;
     typedef sequence<int8, 5> BoundedInt8SequenceType;
     typedef sequence<uint8> UnboundedUInt8SequenceType;
@@ -79,7 +79,7 @@ module JsonWrapper {
 	typedef octet OctetArrayType[5];
 	typedef float FloatArrayType[5];
 	typedef double DoubleArrayType[5];
-	typedef long double LongDoubleArrayType[5];
+//	typedef long double LongDoubleArrayType[5];
 	typedef int8 Int8ArrayType[5];
 	typedef uint8 UInt8ArrayType[5];
 
@@ -98,7 +98,7 @@ module JsonWrapper {
 	typedef octet OctetMultiArrayType[3][4][2];
 	typedef float FloatMultiArrayType[3][4][2];
 	typedef double DoubleMultiArrayType[3][4][2];
-	typedef long double LongDoubleMultiArrayType[3][4][2];
+//	typedef long double LongDoubleMultiArrayType[3][4][2];
 	typedef int8 Int8MultiArrayType[3][4][2];
 	typedef uint8 UInt8MultiArrayType[3][4][2];
 
@@ -260,11 +260,11 @@ module JsonWrapper {
         // Or the compiler version used (clang14).
         // SEGV received. Reproducible with OpenDDS HelloWorld test.
         // TO BE REPORTED
-        long double LongDoubleField;
-        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
-        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
-        LongDoubleArrayType LongDoubleArrayField;
-		LongDoubleMultiArrayType LongDoubleMultiArrayField;
+//        long double LongDoubleField;
+//        UnboundedLongDoubleSequenceType UnboundedLongDoubleSequenceField;
+//        BoundedLongDoubleSequenceType BoundedLongDoubleSequenceField;
+//        LongDoubleArrayType LongDoubleArrayField;
+//		LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
 
 	@topic

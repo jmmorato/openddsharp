@@ -237,8 +237,8 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
-            _publisher.DeleteDataWriter(dataWriter);
-            _publisher.DeleteDataWriter(otherDataWriter);
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(dataWriter));
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(otherDataWriter));
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace OpenDDSharp.UnitTest
 #pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.IsNotNull(received);
-            Assert.AreEqual(listener, received);
+            Assert.AreSame(listener, received);
 
             Assert.AreEqual(ReturnCode.Ok, dataWriter.SetListener(null));
             listener.Dispose();
@@ -309,6 +309,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestWaitForAcknowledgments()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             // Initialize entities
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
@@ -327,9 +329,15 @@ namespace OpenDDSharp.UnitTest
             var reader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
+            var statusCondition = reader.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+
             // Write some instances and wait for acknowledgments
             for (var i = 0; i < 10; i++)
             {
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
                 var result = dataWriter.Write(new TestStruct
                 {
                     Id = i,
@@ -338,13 +346,15 @@ namespace OpenDDSharp.UnitTest
 
                 result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
             }
 
-            _publisher.DeleteDataWriter(writer);
-            reader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(reader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
         }
 
         /// <summary>
@@ -408,11 +418,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.TotalCount);
             Assert.AreEqual(1, status.TotalCountChange);
 
-            _publisher.DeleteDataWriter(writer);
-            reader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(reader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
         }
 
         /// <summary>
@@ -480,11 +490,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
 
-            _publisher.DeleteDataWriter(writer);
-            reader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(reader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
         }
 
         /// <summary>
@@ -549,11 +559,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.Policies.First().Count);
             Assert.AreEqual(11, status.Policies.First().PolicyId);
 
-            _publisher.DeleteDataWriter(writer);
-            reader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(reader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
         }
 
         /// <summary>
@@ -630,13 +640,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, status.TotalCountChange);
             Assert.AreEqual(otherReader.InstanceHandle, status.LastSubscriptionHandle);
 
-            _publisher.DeleteDataWriter(writer);
-            reader.DeleteContainedEntities();
-            otherReader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(reader);
-            subscriber.DeleteDataReader(otherReader);
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, otherReader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(otherReader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
         }
 
         /// <summary>
@@ -675,8 +685,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.TotalCount);
             Assert.AreEqual(0, status.TotalCountChange);
 
-            writer.AssertLiveliness();
-            _publisher.DeleteDataWriter(writer);
+            Assert.AreEqual(ReturnCode.Ok, writer.AssertLiveliness());
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
         }
 
         /// <summary>
@@ -819,20 +829,14 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
-            // Destroy the other participant
-            result = otherParticipant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            _publisher.DeleteDataWriter(writer);
-            reader.DeleteContainedEntities();
-            subscriber.DeleteDataReader(reader);
-            subscriber.DeleteContainedEntities();
-            otherParticipant.DeleteSubscriber(subscriber);
-            otherParticipant.DeleteTopic(otherTopic);
-            AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+            // Destroy entities
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, otherParticipant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, otherParticipant.DeleteTopic(otherTopic));
+            Assert.AreEqual(ReturnCode.Ok, AssemblyInitializer.Factory.DeleteParticipant(otherParticipant));
         }
 
         /// <summary>
@@ -856,7 +860,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreNotEqual(InstanceHandle.HandleNil, otherHandle);
             Assert.AreNotEqual(handle, otherHandle);
 
-            _publisher.DeleteDataWriter(writer);
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
         }
 
         /// <summary>
@@ -902,7 +906,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.UnregisterInstance(new TestStruct { Id = 3 }, handle3, DateTime.Now.ToTimestamp());
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            _publisher.DeleteDataWriter(writer);
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
         }
 
         /// <summary>
@@ -1098,8 +1102,8 @@ namespace OpenDDSharp.UnitTest
             };
 
             // Wait for discovery
-            writer.WaitForSubscriptions(1, 1000);
-            dataReader.WaitForPublications(1, 1000);
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 1000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 1000));
 
             // Dispose an instance that does not exist
             var result = dataWriter.Dispose(new TestStruct { Id = 1 }, InstanceHandle.HandleNil);
@@ -1187,10 +1191,10 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null));
             listener.Dispose();
 
-            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
             Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(dataReader));
             Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
             Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
         }
 
