@@ -1097,6 +1097,10 @@ namespace OpenDDSharp.UnitTest
 
             TopicBuiltinTopicData data = default;
             result = participant.GetDiscoveredTopicData(ref data, handle);
+            while (result == ReturnCode.BadParameter)
+            {
+                result = participant.GetDiscoveredTopicData(ref data, handle);
+            }
 
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(nameof(TestGetDiscoveredTopicData), data.Name);
