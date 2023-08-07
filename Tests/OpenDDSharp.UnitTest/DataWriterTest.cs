@@ -1051,11 +1051,10 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDispose()
         {
-            using var evt = new ManualResetEventSlim(false);
+            using var evtDisposed = new ManualResetEventSlim(false);
+            using var evtAlive = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var duration = new Duration { Seconds = 5 };
-
             var qos = new DataWriterQos
             {
                 WriterDataLifecycle =
@@ -1089,15 +1088,23 @@ namespace OpenDDSharp.UnitTest
                     return;
                 }
 
-                foreach (var unused in infos.Where(info => info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState))
+                foreach (var sampleInfo in infos)
                 {
-                    count++;
-                    if (count == 3)
+                    if (sampleInfo.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
                     {
-                        timestamp = infos[0].SourceTimestamp;
+                        count++;
+                        if (count == 3)
+                        {
+                            timestamp = sampleInfo.SourceTimestamp;
+                        }
+
+                        evtDisposed.Set();
+                    }
+                    else if (sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState)
+                    {
+                        evtAlive.Set();
                     }
 
-                    evt.Set();
                 }
             };
 
@@ -1114,21 +1121,23 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.Write(instance1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            var duration = new Duration { Seconds = 5 };
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsFalse(evt.Wait(1_500));
+            Assert.IsTrue(evtAlive.Wait(1_500));
+            evtAlive.Reset();
 
             result = dataWriter.Dispose(instance1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            duration = new Duration { Seconds = 5 };
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evtDisposed.Wait(1_500));
             Assert.AreEqual(1, count);
-
-            evt.Reset();
+            evtDisposed.Reset();
 
             // Call dispose with the handle parameter
             var instance2 = new TestStruct { Id = 2 };
@@ -1138,20 +1147,23 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.Write(instance2, handle2);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            duration = new Duration { Seconds = 5 };
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsFalse(evt.Wait(1_000));
+            Assert.IsTrue(evtAlive.Wait(1_000));
+            evtAlive.Reset();
 
             result = dataWriter.Dispose(instance2, handle2);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            duration = new Duration { Seconds = 5 };
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evtDisposed.Wait(1_500));
             Assert.AreEqual(2, count);
-            evt.Reset();
+            evtDisposed.Reset();
 
             // Call dispose with the handle parameter and specific timestamp
             var now = DateTime.Now.ToTimestamp();
@@ -1162,23 +1174,27 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.Write(instance3, handle3);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            duration = new Duration { Seconds = 5 };
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsFalse(evt.Wait(1_500));
+            Assert.IsTrue(evtAlive.Wait(1_500));
             Assert.AreEqual(2, count);
+            evtAlive.Reset();
 
             result = dataWriter.Dispose(instance3, handle3, now);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            duration = new Duration { Seconds = 5 };
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_000));
+            Assert.IsTrue(evtDisposed.Wait(1_000));
             Assert.AreEqual(3, count);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
+            // Clean up entities
             Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
