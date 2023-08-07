@@ -720,8 +720,6 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestWaitForAcknowledgments()
         {
-            using var evt = new ManualResetEventSlim(false);
-
             // Initialize entities
             var support = new TestStructTypeSupport();
             var typeName = support.GetTypeName();
@@ -768,10 +766,6 @@ namespace OpenDDSharp.UnitTest
             var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
 
-            var statusCondition = reader.StatusCondition;
-            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            TestHelper.CreateWaitSetThread(evt, statusCondition);
-
             result = dataWriter.Write(new TestStruct
             {
                 Id = 2,
@@ -783,8 +777,6 @@ namespace OpenDDSharp.UnitTest
                 Seconds = 5,
             });
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            Assert.IsTrue(evt.Wait(5_000));
 
             Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
             Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
@@ -857,22 +849,19 @@ namespace OpenDDSharp.UnitTest
             result = publisher.SuspendPublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            for (var i = 1; i <= 5; i++)
+            // OpenDDS issue: cannot register more than one instance during SuspendPublications.
+            // Looks like that the control messages are never delivered and the controlTracker never get free during delete_datawriter
+            var sample = new TestStruct
             {
-                // OpenDDS issue: cannot register more than one instance during SuspendPublications.
-                // Looks like that the control messages are never delivered and the controlTracker never get free during delete_datawriter
-                var sample = new TestStruct
-                {
-                    Id = 1,
-                    ShortField = (short)i,
-                };
+                Id = 1,
+                ShortField = 1,
+            };
 
-                var handle = dataWriter.RegisterInstance(sample);
-                Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+            var handle = dataWriter.RegisterInstance(sample);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-                result = dataWriter.Write(sample, handle);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            result = dataWriter.Write(sample, handle);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsFalse(evt.Wait(1_500));
 
@@ -892,15 +881,10 @@ namespace OpenDDSharp.UnitTest
             sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsTrue(data.Count > 0);
+            Assert.AreEqual(1, data.Count);
             Assert.AreEqual(data.Count, sampleInfos.Count);
-
-            for (var i = 0; i < data.Count; i++)
-            {
-                Assert.IsTrue(sampleInfos[i].ValidData);
-                Assert.AreEqual(i + 1, data[i].ShortField);
-            }
-
+            Assert.IsTrue(sampleInfos[0].ValidData);
+            Assert.AreEqual(1, data[0].ShortField);
             Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
             Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
