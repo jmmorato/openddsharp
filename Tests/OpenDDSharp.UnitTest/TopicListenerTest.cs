@@ -17,6 +17,8 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using JsonWrapper;
@@ -165,6 +167,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Remove listener to avoid extra messages
+            foreach (var d in _listener.InconsistentTopic.GetInvocationList())
+            {
+                var del = (Action<Topic, InconsistentTopicStatus>)d;
+                _listener.InconsistentTopic -= del;
+            }
             result = _topic.SetListener(null);
             Assert.AreEqual(ReturnCode.Ok, result);
         }

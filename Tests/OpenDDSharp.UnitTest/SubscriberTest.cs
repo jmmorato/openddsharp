@@ -17,6 +17,8 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using JsonWrapper;
@@ -831,12 +833,22 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(5, readerReceived);
 
             // Remove the listener to avoid extra messages
-            result = subscriber.SetListener(null);
+            foreach (var d in subListener.DataOnReaders.GetInvocationList())
+            {
+                var del = (Action<Subscriber>)d;
+                subListener.DataOnReaders -= del;
+            }
+            result = subscriber.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = writer.SetListener(null);
+            result = writer.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            foreach (var d in readListener.DataAvailable.GetInvocationList())
+            {
+                var del = (Action<DataReader>)d;
+                readListener.DataAvailable -= del;
+            }
             result = reader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 

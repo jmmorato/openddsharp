@@ -236,7 +236,12 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
 
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.DataOnReaders.GetInvocationList())
+            {
+                var del = (Action<Subscriber>)d;
+                _listener.DataOnReaders -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.AreEqual(total, count);
@@ -309,7 +314,12 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
 
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.DataAvailable.GetInvocationList())
+            {
+                var del = (Action<DataReader>)d;
+                _listener.DataAvailable -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.AreEqual(total, count);
@@ -397,7 +407,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, totalCountChange);
             Assert.AreNotEqual(InstanceHandle.HandleNil, lastInstanceHandle);
 
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.RequestedDeadlineMissed.GetInvocationList())
+            {
+                var del = (Action<DataReader, RequestedDeadlineMissedStatus>)d;
+                _listener.RequestedDeadlineMissed -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -468,7 +483,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, policies.First().Count);
             Assert.AreEqual(11, policies.First().PolicyId);
 
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.RequestedIncompatibleQos.GetInvocationList())
+            {
+                var del = (Action<DataReader, RequestedIncompatibleQosStatus>)d;
+                _listener.RequestedIncompatibleQos -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -555,7 +575,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(SampleRejectedStatusKind.RejectedBySamplesPerInstanceLimit, lastReason);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.SampleRejected.GetInvocationList())
+            {
+                var del = (Action<DataReader, SampleRejectedStatus>)d;
+                _listener.SampleRejected -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -681,7 +706,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_writer.InstanceHandle, secondLastPublicationHandle);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.LivelinessChanged.GetInvocationList())
+            {
+                var del = (Action<DataReader, LivelinessChangedStatus>)d;
+                _listener.LivelinessChanged -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             firstDataReader.DeleteContainedEntities();
@@ -783,7 +813,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_writer.InstanceHandle, secondHandle);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.SubscriptionMatched.GetInvocationList())
+            {
+                var del = (Action<DataReader, SubscriptionMatchedStatus>)d;
+                _listener.SubscriptionMatched -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             firstDataReader.DeleteContainedEntities();
@@ -871,7 +906,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, totalCountChange);
 
             // Remove the listener to avoid extra messages.
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.SampleLost.GetInvocationList())
+            {
+                var del = (Action<DataReader, SampleLostStatus>)d;
+                _listener.SampleLost -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -945,7 +985,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(instanceHandle, lastInstanceHandle);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.OfferedDeadlineMissed.GetInvocationList())
+            {
+                var del = (Action<DataWriter, OfferedDeadlineMissedStatus>)d;
+                _listener.OfferedDeadlineMissed -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -1020,7 +1065,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(11, policies.First().PolicyId);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.OfferedIncompatibleQos.GetInvocationList())
+            {
+                var del = (Action<DataWriter, OfferedIncompatibleQosStatus>)d;
+                _listener.OfferedIncompatibleQos -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -1079,7 +1129,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_writer, dw);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.LivelinessLost.GetInvocationList())
+            {
+                var del = (Action<DataWriter, LivelinessLostStatus>)d;
+                _listener.LivelinessLost -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, totalCount);
             Assert.AreEqual(1, totalCountChange);
@@ -1138,7 +1193,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_reader.InstanceHandle, handle);
 
             // Remove the listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.PublicationMatched.GetInvocationList())
+            {
+                var del = (Action<DataWriter, PublicationMatchedStatus>)d;
+                _listener.PublicationMatched -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -1190,7 +1250,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, count);
 
             // Remove listener to avoid extra messages
-            result = _participant.SetListener(null);
+            foreach (var d in _listener.InconsistentTopic.GetInvocationList())
+            {
+                var del = (Action<Topic, InconsistentTopicStatus>)d;
+                _listener.InconsistentTopic -= del;
+            }
+            result = _participant.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion

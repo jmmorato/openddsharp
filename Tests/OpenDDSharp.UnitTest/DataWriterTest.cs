@@ -1032,6 +1032,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
+            foreach (var d in listener.DataAvailable.GetInvocationList())
+            {
+                var del = (Action<DataReader>)d;
+                listener.DataAvailable -= del;
+            }
             Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
@@ -1190,6 +1195,11 @@ namespace OpenDDSharp.UnitTest
             evtDisposed.Reset();
 
             // Clean up entities
+            foreach (var d in listener.DataAvailable.GetInvocationList())
+            {
+                var del = (Action<DataReader>)d;
+                listener.DataAvailable -= del;
+            }
             Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
