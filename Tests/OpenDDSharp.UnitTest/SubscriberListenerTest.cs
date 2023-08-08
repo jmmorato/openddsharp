@@ -196,10 +196,7 @@ namespace OpenDDSharp.UnitTest
                     Assert.AreEqual(ReturnCode.Ok, result);
                 }
 
-                if (count == total)
-                {
-                    evt.Set();
-                }
+                evt.Set();
             };
 
             // Enable entities
@@ -219,6 +216,8 @@ namespace OpenDDSharp.UnitTest
             // Write some instances
             for (var i = 1; i <= total; i++)
             {
+                evt.Reset();
+
                 result = _dataWriter.Write(new TestStruct
                 {
                     Id = i,
@@ -227,13 +226,9 @@ namespace OpenDDSharp.UnitTest
 
                 result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
             }
-
-            Assert.IsTrue(evt.Wait(1_500));
-
-            Assert.AreEqual(total, count);
-            Assert.IsNotNull(subscriber);
-            Assert.AreEqual(_subscriber, subscriber);
 
             // Remove the listener to avoid extra messages
             foreach (var d in _listener.DataOnReaders.GetInvocationList())
@@ -243,6 +238,10 @@ namespace OpenDDSharp.UnitTest
             }
             result = _subscriber.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(total, count);
+            Assert.IsNotNull(subscriber);
+            Assert.AreSame(_subscriber, subscriber);
         }
 
         /// <summary>
@@ -275,10 +274,7 @@ namespace OpenDDSharp.UnitTest
                 result = _dataReader.Take(sample, info);
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                if (count == total)
-                {
-                    evt.Set();
-                }
+                evt.Set();
             };
 
             // Enable entities
@@ -298,6 +294,8 @@ namespace OpenDDSharp.UnitTest
             // Write some instances
             for (var i = 1; i <= total; i++)
             {
+                evt.Reset();
+
                 result = _dataWriter.Write(new TestStruct
                 {
                     Id = i,
@@ -306,13 +304,9 @@ namespace OpenDDSharp.UnitTest
 
                 result = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
             }
-
-            Assert.IsTrue(evt.Wait(1_500));
-
-            Assert.AreEqual(total, count);
-            Assert.IsNotNull(reader);
-            Assert.AreEqual(_reader, reader);
 
             // Remove the listener to avoid extra messages
             foreach (var d in _listener.DataAvailable.GetInvocationList())
@@ -322,6 +316,10 @@ namespace OpenDDSharp.UnitTest
             }
             result = _subscriber.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(total, count);
+            Assert.IsNotNull(reader);
+            Assert.AreSame(_reader, reader);
         }
 
         /// <summary>
