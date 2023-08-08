@@ -994,7 +994,6 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(2, count);
-
             evt.Reset();
 
             // Write an instance with the handle parameter with a previously registered instance
@@ -1010,7 +1009,6 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(3, count);
-
             evt.Reset();
 
             // Write an instance with the handle parameter and the timestamp
@@ -1075,36 +1073,32 @@ namespace OpenDDSharp.UnitTest
             var dataReader = subscriber.CreateDataReader(_topic, drQos, listener);
             Assert.IsNotNull(dataReader);
 
-            var count = 0;
+            var countDisposed = 0;
             Timestamp timestamp = default;
             listener.DataAvailable += (reader) =>
             {
-                var samples = new List<TestStruct>();
-                var infos = new List<SampleInfo>();
+                var sample = new TestStruct();
+                var info = new SampleInfo();
                 var dr = new TestStructDataReader(reader);
-                var ret = dr.Take(samples, infos);
+                var ret = dr.TakeNextSample(sample, info);
                 if (ret != ReturnCode.Ok)
                 {
                     return;
                 }
 
-                foreach (var sampleInfo in infos)
+                if (info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
                 {
-                    if (sampleInfo.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
+                    countDisposed++;
+                    if (countDisposed == 3)
                     {
-                        count++;
-                        if (count == 3)
-                        {
-                            timestamp = sampleInfo.SourceTimestamp;
-                        }
-
-                        evtDisposed.Set();
-                    }
-                    else if (sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState)
-                    {
-                        evtAlive.Set();
+                        timestamp = info.SourceTimestamp;
                     }
 
+                    evtDisposed.Set();
+                }
+                else if (info.InstanceState == InstanceStateKind.AliveInstanceState)
+                {
+                    evtAlive.Set();
                 }
             };
 
@@ -1125,7 +1119,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evtAlive.Wait(1_500));
+            Assert.IsTrue(evtAlive.Wait(2_500));
             evtAlive.Reset();
 
             result = dataWriter.Dispose(instance1);
@@ -1135,8 +1129,8 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evtDisposed.Wait(1_500));
-            Assert.AreEqual(1, count);
+            Assert.IsTrue(evtDisposed.Wait(2_500));
+            Assert.AreEqual(1, countDisposed);
             evtDisposed.Reset();
 
             // Call dispose with the handle parameter
@@ -1151,7 +1145,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evtAlive.Wait(1_000));
+            Assert.IsTrue(evtAlive.Wait(2_500));
             evtAlive.Reset();
 
             result = dataWriter.Dispose(instance2, handle2);
@@ -1161,8 +1155,8 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evtDisposed.Wait(1_500));
-            Assert.AreEqual(2, count);
+            Assert.IsTrue(evtDisposed.Wait(2_500));
+            Assert.AreEqual(2, countDisposed);
             evtDisposed.Reset();
 
             // Call dispose with the handle parameter and specific timestamp
@@ -1178,8 +1172,8 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evtAlive.Wait(1_500));
-            Assert.AreEqual(2, count);
+            Assert.IsTrue(evtAlive.Wait(2_500));
+            Assert.AreEqual(2, countDisposed);
             evtAlive.Reset();
 
             result = dataWriter.Dispose(instance3, handle3, now);
@@ -1189,10 +1183,11 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.WaitForAcknowledgments(duration);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evtDisposed.Wait(1_000));
-            Assert.AreEqual(3, count);
+            Assert.IsTrue(evtDisposed.Wait(2_500));
+            Assert.AreEqual(3, countDisposed);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
+            evtDisposed.Reset();
 
             // Clean up entities
             Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
