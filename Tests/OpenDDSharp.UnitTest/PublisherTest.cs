@@ -20,7 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -76,9 +76,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetParticipant()
         {
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
-            Assert.AreEqual(_participant, publisher.Participant);
+            Assert.AreSame(_participant, publisher.Participant);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace OpenDDSharp.UnitTest
         [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestNewPublisherQos()
         {
-            PublisherQos qos = new PublisherQos();
+            var qos = new PublisherQos();
             TestHelper.TestDefaultPublisherQos(qos);
         }
 
@@ -101,14 +101,14 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQos()
         {
             // Create a non-default QoS and create a publisher with it
-            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
+            var qos = TestHelper.CreateNonDefaultPublisherQos();
 
-            Publisher publisher = _participant.CreatePublisher(qos);
+            var publisher = _participant.CreatePublisher(qos);
             Assert.IsNotNull(publisher);
 
             // Call GetQos and check the values received
             qos = new PublisherQos();
-            ReturnCode result = publisher.GetQos(qos);
+            var result = publisher.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultPublisherQos(qos);
 
@@ -125,11 +125,11 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQos()
         {
             // Create a new Publisher using the default QoS
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
 
             // Get the qos to ensure that is using the default properties
-            PublisherQos qos = new PublisherQos();
-            ReturnCode result = publisher.GetQos(qos);
+            var qos = new PublisherQos();
+            var result = publisher.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultPublisherQos(qos);
 
@@ -141,10 +141,21 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.ImmutablePolicy, result);
 
             // Change some mutable properties and check them
-            qos = new PublisherQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
+            qos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                GroupData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+                Partition =
+                {
+                    Name = new List<string> { "TestPartition" },
+                },
+            };
             result = publisher.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -158,28 +169,47 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
             Assert.AreEqual(1, qos.GroupData.Value.Count);
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
             Assert.AreEqual(1, qos.Partition.Name.Count);
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsFalse(qos.Presentation.CoherentAccess);
             Assert.IsFalse(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
 
             // Try to set immutable QoS properties before enable the publisher
-            DomainParticipantQos pQos = new DomainParticipantQos();
-            pQos.EntityFactory.AutoenableCreatedEntities = false;
+            var pQos = new DomainParticipantQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+            };
             result = _participant.SetQos(pQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Publisher otherPublisher = _participant.CreatePublisher();
-            qos = new PublisherQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
+            var otherPublisher = _participant.CreatePublisher();
+            qos = new PublisherQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                GroupData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+                Partition =
+                {
+                    Name = new List<string> { "TestPartition" },
+                },
+                Presentation =
+                {
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos,
+                },
+            };
             result = otherPublisher.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -193,10 +223,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
             Assert.AreEqual(1, qos.GroupData.Value.Count);
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
             Assert.AreEqual(1, qos.Partition.Name.Count);
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
@@ -214,16 +244,22 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
             // Create a new Publisher with a listener
-            MyPublisherListener listener = new MyPublisherListener();
-            Publisher publisher = _participant.CreatePublisher(null, listener);
+            var listener = new MyPublisherListener();
+            var publisher = _participant.CreatePublisher(null, listener);
             Assert.IsNotNull(publisher);
 
             // Call to GetListener and check the listener received
 #pragma warning disable CS0618 // Type or member is obsolete
-            MyPublisherListener received = (MyPublisherListener)publisher.GetListener();
+            var received = (MyPublisherListener)publisher.GetListener();
 #pragma warning restore CS0618 // Type or member is obsolete
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
         }
 
         /// <summary>
@@ -234,24 +270,26 @@ namespace OpenDDSharp.UnitTest
         public void TestSetListener()
         {
             // Create a new Publisher without listener
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            MyPublisherListener listener = (MyPublisherListener)publisher.Listener;
+            var listener = (MyPublisherListener)publisher.Listener;
             Assert.IsNull(listener);
 
-            // Create a listener, set it and check that is correctly setted
+            // Create a listener, set it and check that is correctly set
             listener = new MyPublisherListener();
-            ReturnCode result = publisher.SetListener(listener, StatusMask.AllStatusMask);
+            var result = publisher.SetListener(listener, StatusMask.AllStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            MyPublisherListener received = (MyPublisherListener)publisher.Listener;
+            var received = (MyPublisherListener)publisher.Listener;
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
             // Remove the listener calling SetListener with null and check it
             result = publisher.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            listener.Dispose();
 
             received = (MyPublisherListener)publisher.Listener;
             Assert.IsNull(received);
@@ -265,7 +303,7 @@ namespace OpenDDSharp.UnitTest
         [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestNewDataWriterQos()
         {
-            DataWriterQos qos = new DataWriterQos();
+            var qos = new DataWriterQos();
             TestHelper.TestDefaultDataWriterQos(qos);
         }
 
@@ -277,34 +315,34 @@ namespace OpenDDSharp.UnitTest
         public void TestCreateDataWriter()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestCreateDataWriter), typeName);
+            var topic = _participant.CreateTopic(nameof(TestCreateDataWriter), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestCreateDataWriter), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
             // Test simplest overload
-            DataWriter datawriter1 = publisher.CreateDataWriter(topic);
+            var datawriter1 = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(datawriter1);
             Assert.AreEqual(publisher, datawriter1.Publisher);
             Assert.IsNull(datawriter1.Listener);
 
-            DataWriterQos qos = new DataWriterQos();
+            var qos = new DataWriterQos();
             result = datawriter1.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
 
             // Test overload with QoS parameter
             qos = TestHelper.CreateNonDefaultDataWriterQos();
-            DataWriter datawriter2 = publisher.CreateDataWriter(topic, qos);
+            var datawriter2 = publisher.CreateDataWriter(topic, qos);
             Assert.IsNotNull(datawriter2);
             Assert.AreEqual(publisher, datawriter2.Publisher);
             Assert.IsNull(datawriter2.Listener);
@@ -315,11 +353,11 @@ namespace OpenDDSharp.UnitTest
             TestHelper.TestNonDefaultDataWriterQos(qos);
 
             // Test overload with listener parameter
-            MyDataWriterListener listener = new MyDataWriterListener();
-            DataWriter datawriter3 = publisher.CreateDataWriter(topic, null, listener);
+            var listener = new MyDataWriterListener();
+            var datawriter3 = publisher.CreateDataWriter(topic, null, listener);
             Assert.IsNotNull(datawriter3);
             Assert.AreEqual(publisher, datawriter3.Publisher);
-            MyDataWriterListener received = (MyDataWriterListener)datawriter3.Listener;
+            var received = (MyDataWriterListener)datawriter3.Listener;
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
@@ -328,9 +366,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
 
+            datawriter3.SetListener(null);
+            listener.Dispose();
+
             // Test overload with listener and StatusMask parameters
             listener = new MyDataWriterListener();
-            DataWriter datawriter4 = publisher.CreateDataWriter(topic, null, listener, StatusMask.AllStatusMask);
+            var datawriter4 = publisher.CreateDataWriter(topic, null, listener, StatusMask.AllStatusMask);
             Assert.IsNotNull(datawriter4);
             Assert.AreEqual(publisher, datawriter4.Publisher);
             received = (MyDataWriterListener)datawriter4.Listener;
@@ -342,10 +383,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
 
+            datawriter4.SetListener(null);
+            listener.Dispose();
+
             // Test overload with QoS and listener parameters
             qos = TestHelper.CreateNonDefaultDataWriterQos();
             listener = new MyDataWriterListener();
-            DataWriter datawriter5 = publisher.CreateDataWriter(topic, qos, listener);
+            var datawriter5 = publisher.CreateDataWriter(topic, qos, listener);
             Assert.IsNotNull(datawriter5);
             Assert.AreEqual(publisher, datawriter5.Publisher);
             received = (MyDataWriterListener)datawriter5.Listener;
@@ -357,10 +401,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataWriterQos(qos);
 
+            datawriter5.SetListener(null);
+            listener.Dispose();
+
             // Test full call overload
             qos = TestHelper.CreateNonDefaultDataWriterQos();
             listener = new MyDataWriterListener();
-            DataWriter datawriter6 = publisher.CreateDataWriter(topic, qos, listener, StatusMask.AllStatusMask);
+            var datawriter6 = publisher.CreateDataWriter(topic, qos, listener, StatusMask.AllStatusMask);
             Assert.IsNotNull(datawriter6);
             Assert.AreEqual(publisher, datawriter6.Publisher);
             received = (MyDataWriterListener)datawriter6.Listener;
@@ -372,15 +419,33 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataWriterQos(qos);
 
+            datawriter6.SetListener(null);
+            listener.Dispose();
+
             // Test with null parameter
             Assert.ThrowsException<ArgumentNullException>(() => publisher.CreateDataWriter(null));
 
             // Test with wrong qos
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.ResourceLimits.MaxSamples = 1;
-            dwQos.ResourceLimits.MaxSamplesPerInstance = 2;
-            DataWriter nullDataWriter = publisher.CreateDataWriter(topic, dwQos);
+            var dwQos = new DataWriterQos
+            {
+                ResourceLimits =
+                {
+                    MaxSamples = 1,
+                    MaxSamplesPerInstance = 2,
+                },
+            };
+            var nullDataWriter = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNull(nullDataWriter);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter1));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter2));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter3));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter4));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter5));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter6));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -391,30 +456,30 @@ namespace OpenDDSharp.UnitTest
         public void TestDeleteDataWriter()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteDataWriter), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteDataWriter), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestDeleteDataWriter), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            Publisher otherPublisher = _participant.CreatePublisher();
+            var otherPublisher = _participant.CreatePublisher();
             Assert.IsNotNull(otherPublisher);
 
             // Create a DataWriter and try to delete it with another publisher
-            DataWriter datawriter = publisher.CreateDataWriter(topic);
+            var datawriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(datawriter);
             Assert.AreEqual(publisher, datawriter.Publisher);
             Assert.IsNull(datawriter.Listener);
 
-            DataWriterQos qos = new DataWriterQos();
+            var qos = new DataWriterQos();
             result = datawriter.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
@@ -433,6 +498,11 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = publisher.DeleteDataWriter(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -443,30 +513,30 @@ namespace OpenDDSharp.UnitTest
         public void TestLookupDataWriter()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestLookupDataWriter), typeName);
+            var topic = _participant.CreateTopic(nameof(TestLookupDataWriter), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestLookupDataWriter), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            Publisher otherPublisher = _participant.CreatePublisher();
+            var otherPublisher = _participant.CreatePublisher();
             Assert.IsNotNull(otherPublisher);
 
             // Create a DataWriter and lookup in the publishers
-            DataWriter datawriter = publisher.CreateDataWriter(topic);
+            var datawriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(datawriter);
             Assert.AreEqual(publisher, datawriter.Publisher);
             Assert.IsNull(datawriter.Listener);
 
-            DataWriter received = publisher.LookupDataWriter(nameof(TestLookupDataWriter));
+            var received = publisher.LookupDataWriter(nameof(TestLookupDataWriter));
             Assert.IsNotNull(received);
             Assert.AreEqual(datawriter, received);
 
@@ -474,7 +544,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNull(received);
 
             // Create other DataWriter in the same topic and lookup again
-            DataWriter otherDatawriter = publisher.CreateDataWriter(topic);
+            var otherDatawriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(otherDatawriter);
             Assert.AreEqual(publisher, otherDatawriter.Publisher);
             Assert.IsNull(otherDatawriter.Listener);
@@ -485,6 +555,14 @@ namespace OpenDDSharp.UnitTest
 
             received = otherPublisher.LookupDataWriter(nameof(TestLookupDataWriter));
             Assert.IsNull(received);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(datawriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(otherDatawriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, otherPublisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -495,18 +573,18 @@ namespace OpenDDSharp.UnitTest
         public void TestDeleteContainedEntities()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestDeleteContainedEntities), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
             // Call DeleteContainedEntities in an empty publisher
@@ -514,7 +592,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Create a DataWriter in the publisher
-            DataWriter dataWriter = publisher.CreateDataWriter(topic);
+            var dataWriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(dataWriter);
 
             // Try to delete the publisher without delete the datawriter
@@ -537,22 +615,22 @@ namespace OpenDDSharp.UnitTest
         public void TestGetDefaultDataWriterQos()
         {
             // Initialize entities.
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestGetDefaultDataWriterQos), typeName);
+            var topic = _participant.CreateTopic(nameof(TestGetDefaultDataWriterQos), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestGetDefaultDataWriterQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
             // Create a non-default DataWriter Qos, call GetDefaultDataWriterQos and check the default values.
-            DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
+            var qos = TestHelper.CreateNonDefaultDataWriterQos();
             result = publisher.GetDefaultDataWriterQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
@@ -560,6 +638,10 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter.
             result = publisher.GetDefaultDataWriterQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -570,22 +652,22 @@ namespace OpenDDSharp.UnitTest
         public void TestSetDefaultDataWriterQos()
         {
             // Initialize entities.
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestSetDefaultDataWriterQos), typeName);
+            var topic = _participant.CreateTopic(nameof(TestSetDefaultDataWriterQos), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestSetDefaultDataWriterQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
             // Creates a non-default QoS, set it an check it
-            DataWriterQos qos = TestHelper.CreateNonDefaultDataWriterQos();
+            var qos = TestHelper.CreateNonDefaultDataWriterQos();
             result = publisher.SetDefaultDataWriterQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -594,7 +676,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataWriterQos(qos);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
 
             qos = new DataWriterQos();
@@ -612,7 +694,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataWriterQos(qos);
 
-            DataWriter otherWriter = publisher.CreateDataWriter(topic);
+            var otherWriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(otherWriter);
 
             qos = TestHelper.CreateNonDefaultDataWriterQos();
@@ -623,6 +705,12 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter.
             result = publisher.SetDefaultDataWriterQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(otherWriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -633,26 +721,26 @@ namespace OpenDDSharp.UnitTest
         public void TestWaitForAcknowledgments()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestWaitForAcknowledgments), typeName);
+            var topic = _participant.CreateTopic(nameof(TestWaitForAcknowledgments), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestWaitForAcknowledgments), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
             // Call WaitForAcknowledgments without DataReaders
             result = dataWriter.Write(new TestStruct
@@ -668,12 +756,15 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Create a Reliable DataReader, write a new sample and Call WaitForAcknowledgments
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
-
-            System.Threading.Thread.Sleep(500);
 
             result = dataWriter.Write(new TestStruct
             {
@@ -686,6 +777,15 @@ namespace OpenDDSharp.UnitTest
                 Seconds = 5,
             });
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
         }
 
         /// <summary>
@@ -695,34 +795,48 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSuspendResumePublications()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestSuspendResumePublications), typeName);
+            var topic = _participant.CreateTopic(nameof(TestSuspendResumePublications), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestSuspendResumePublications), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            drQos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
-            TestStructDataReader dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestStructDataReader(reader);
+
+            var statusCondition = dataReader.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
@@ -735,28 +849,25 @@ namespace OpenDDSharp.UnitTest
             result = publisher.SuspendPublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            for (int i = 1; i <= 5; i++)
+            // OpenDDS issue: cannot register more than one instance during SuspendPublications.
+            // Looks like that the control messages are never delivered and the controlTracker never get free during delete_datawriter
+            var sample = new TestStruct
             {
-                // OpenDDS issue: cannot register more than one instance during SuspendPublications.
-                // Looks like that the control messages are never delivered and the controlTracker never get free during delete_datawriter
-                TestStruct sample = new TestStruct
-                {
-                    Id = 1,
-                    ShortField = (short)i,
-                };
+                Id = 1,
+                ShortField = 1,
+            };
 
-                InstanceHandle handle = dataWriter.RegisterInstance(sample);
-                Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+            var handle = dataWriter.RegisterInstance(sample);
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-                result = dataWriter.Write(sample, handle);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            result = dataWriter.Write(sample, handle);
+            Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(2_000);
+            Assert.IsFalse(evt.Wait(1_500));
 
             // Check that not samples arrived
-            List<TestStruct> data = new List<TestStruct>();
-            List<SampleInfo> sampleInfos = new List<SampleInfo>();
+            var data = new List<TestStruct>();
+            var sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos);
             Assert.AreEqual(ReturnCode.NoData, result);
 
@@ -764,20 +875,21 @@ namespace OpenDDSharp.UnitTest
             result = publisher.ResumePublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(2_000);
+            Assert.IsTrue(evt.Wait(5_000));
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsTrue(data.Count > 0);
+            Assert.AreEqual(1, data.Count);
             Assert.AreEqual(data.Count, sampleInfos.Count);
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                Assert.IsTrue(sampleInfos[i].ValidData);
-                Assert.AreEqual(i + 1, data[i].ShortField);
-            }
+            Assert.IsTrue(sampleInfos[0].ValidData);
+            Assert.AreEqual(1, data[0].ShortField);
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
         }
 
         /// <summary>
@@ -785,48 +897,84 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore("OpenDDS Issue: Coherent sets for PRESENTATION QoS not currently implemented")]
         public void TestBeginEndCoherentChanges()
         {
-            // Initialize entities
-            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
-            Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
+            using var evt = new ManualResetEventSlim(false);
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(participant, typeName);
+            // Initialize entities
+            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            Assert.IsNotNull(participant);
+            participant.BindTcpTransportConfig();
+
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = participant.CreateTopic(nameof(TestBeginEndCoherentChanges), typeName);
+            var topic = participant.CreateTopic(nameof(TestBeginEndCoherentChanges), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestBeginEndCoherentChanges), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            PublisherQos pQos = new PublisherQos();
-            pQos.Presentation.CoherentAccess = true;
-            pQos.Presentation.OrderedAccess = true;
-            pQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.TopicPresentationQos;
-            Publisher publisher = participant.CreatePublisher(pQos);
+            var pQos = new PublisherQos
+            {
+                Presentation =
+                {
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.TopicPresentationQos,
+                },
+            };
+            var publisher = participant.CreatePublisher(pQos);
             Assert.IsNotNull(publisher);
 
-            SubscriberQos sQos = new SubscriberQos();
-            sQos.Presentation.CoherentAccess = true;
-            sQos.Presentation.OrderedAccess = true;
-            sQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.TopicPresentationQos;
-            Subscriber subscriber = participant.CreateSubscriber(sQos);
+            var sQos = new SubscriberQos
+            {
+                Presentation =
+                {
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.TopicPresentationQos,
+                },
+            };
+            var subscriber = participant.CreateSubscriber(sQos);
             Assert.IsNotNull(subscriber);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var dwQos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+            };
+            var writer = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            drQos.History.Kind = HistoryQosPolicyKind.KeepAllHistoryQos;
-            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
-            TestStructDataReader dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestStructDataReader(reader);
+
+            var statusCondition = subscriber.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataOnReadersStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
@@ -839,37 +987,35 @@ namespace OpenDDSharp.UnitTest
             result = publisher.BeginCoherentChanges();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            for (int i = 1; i <= 5; i++)
+            for (var i = 1; i <= 5; i++)
             {
-                TestStruct sample = new TestStruct
+                var sample = new TestStruct
                 {
                     Id = i,
                     ShortField = (short)i,
                 };
 
-                InstanceHandle handle = dataWriter.RegisterInstance(sample);
+                var handle = dataWriter.RegisterInstance(sample);
                 Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
                 result = dataWriter.Write(sample, handle);
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            System.Threading.Thread.Sleep(1_000);
+            Assert.IsFalse(evt.Wait(1_500));
 
             // Check that not samples arrived
-            List<TestStruct> data = new List<TestStruct>();
-            List<SampleInfo> sampleInfos = new List<SampleInfo>();
+            var data = new List<TestStruct>();
+            var sampleInfos = new List<SampleInfo>();
 
-            // TODO - OpenDDS Issue:
-            // Coherent sets for PRESENTATION QoS not Currently implemented on RTPS
-            // result = dataReader.Read(data, sampleInfos);
-            // Assert.AreEqual(ReturnCode.NoData, result);
+            result = dataReader.Read(data, sampleInfos);
+            Assert.AreEqual(ReturnCode.NoData, result);
 
             // End coherent access and check the samples
             result = publisher.EndCoherentChanges();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(1_000);
+            Assert.IsTrue(evt.Wait(1_500));
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();
@@ -878,21 +1024,23 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.Count > 0);
             Assert.AreEqual(data.Count, sampleInfos.Count);
 
-            for (int i = 0; i < data.Count; i++)
+            for (var i = 0; i < data.Count; i++)
             {
                 Assert.IsTrue(sampleInfos[i].ValidData);
                 Assert.AreEqual(i + 1, data[i].Id);
                 Assert.AreEqual(i + 1, data[i].ShortField);
             }
 
-            result = participant.DeleteContainedEntities();
-            Assert.AreEqual(ReturnCode.Ok, result);
-
-            if (AssemblyInitializer.Factory != null)
-            {
-                result = AssemblyInitializer.Factory.DeleteParticipant(participant);
-                Assert.AreEqual(ReturnCode.Ok, result);
-            }
+            Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(reader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(writer));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, participant.DeleteTopic(topic));
+            Assert.AreEqual(ReturnCode.Ok, participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, participant.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, AssemblyInitializer.Factory.DeleteParticipant(participant));
         }
         #endregion
     }

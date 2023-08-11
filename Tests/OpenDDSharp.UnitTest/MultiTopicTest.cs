@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -52,6 +53,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets test context object.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -104,8 +106,13 @@ namespace OpenDDSharp.UnitTest
             _resultDataWriter = new ResultDataWriter(_resultWriter);
             Assert.IsNotNull(_resultDataWriter);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _reader = _subscriber.CreateDataReader(_athleteTopic, qos);
             Assert.IsNotNull(_reader);
         }
@@ -147,15 +154,15 @@ namespace OpenDDSharp.UnitTest
         public void TestProperties()
         {
             // Initialize
-            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
-            string athleteResultTypeName = athleteResultSupport.GetTypeName();
-            ReturnCode result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
+            var athleteResultSupport = new AthleteResultTypeSupport();
+            var athleteResultTypeName = athleteResultSupport.GetTypeName();
+            var result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Create a multitopic and check the properties
-            string query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic";
-            string topicName = "AthleteResultTopic";
-            MultiTopic multiTopic = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query);
+            // Create a MultiTopic and check the properties
+            const string query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic";
+            const string topicName = "AthleteResultTopic";
+            var multiTopic = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query);
             Assert.IsNotNull(multiTopic);
             Assert.AreEqual(topicName, multiTopic.Name);
             Assert.AreEqual(athleteResultTypeName, multiTopic.TypeName);
@@ -171,15 +178,15 @@ namespace OpenDDSharp.UnitTest
         public void TestGetExpressionParameters()
         {
             // Initialize
-            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
-            string athleteResultTypeName = athleteResultSupport.GetTypeName();
-            ReturnCode result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
+            var athleteResultSupport = new AthleteResultTypeSupport();
+            var athleteResultTypeName = athleteResultSupport.GetTypeName();
+            var result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Create a multitopic without expression parameters
-            string query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic";
-            string topicName = "AthleteResultTopic";
-            MultiTopic multiTopic = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query);
+            // Create a MultiTopic without expression parameters
+            var query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic";
+            var topicName = "AthleteResultTopic";
+            var multiTopic = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query);
             Assert.IsNotNull(multiTopic);
 
             // Test null parameter
@@ -187,18 +194,18 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Test empty expression parameters
-            List<string> parameters = new List<string>();
+            var parameters = new List<string>();
             result = multiTopic.GetExpressionParameters(parameters);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(parameters);
             Assert.AreEqual(0, parameters.Count);
 
-            // Test with two expresion parameters
+            // Test with two expression parameters
             query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic WHERE Id >= %0 AND Id <= %1";
             topicName = "AthleteResultTopic1";
-            string parameter1 = "0";
-            string parameter2 = "10";
-            MultiTopic multiTopic1 = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query, parameter1, parameter2);
+            const string parameter1 = "0";
+            const string parameter2 = "10";
+            var multiTopic1 = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query, parameter1, parameter2);
             Assert.IsNotNull(multiTopic1);
 
             result = multiTopic1.GetExpressionParameters(parameters);
@@ -219,20 +226,20 @@ namespace OpenDDSharp.UnitTest
             // TODO: OpenDDS Issue: The correct number of expression parameters are not checked
 
             // Initialize
-            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
-            string athleteResultTypeName = athleteResultSupport.GetTypeName();
-            ReturnCode result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
+            var athleteResultSupport = new AthleteResultTypeSupport();
+            var athleteResultTypeName = athleteResultSupport.GetTypeName();
+            var result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            // Create a multitopic with two expresion parameters
-            string query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic WHERE Id >= %0 AND Id <= %1";
-            string topicName = "AthleteResultTopic";
-            string parameter1 = "0";
-            string parameter2 = "10";
-            MultiTopic multiTopic = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query, parameter1, parameter2);
+            // Create a MultiTopic with two expression parameters
+            const string query = "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic WHERE Id >= %0 AND Id <= %1";
+            const string topicName = "AthleteResultTopic";
+            const string parameter1 = "0";
+            const string parameter2 = "10";
+            var multiTopic = _participant.CreateMultiTopic(topicName, athleteResultTypeName, query, parameter1, parameter2);
             Assert.IsNotNull(multiTopic);
 
-            List<string> parameters = new List<string>();
+            var parameters = new List<string>();
             result = multiTopic.GetExpressionParameters(parameters);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(parameters);

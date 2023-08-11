@@ -18,7 +18,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -47,6 +48,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets access to the <see cref="TestContext"/>.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -93,11 +95,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.Read(List{SubscriptionBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadAsync()
+        public void TestRead()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<SubscriptionBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Read(data, infos);
@@ -120,20 +123,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.Read(data, infos);
-                count--;
-            }
-
+            ret = _dr.Read(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -162,11 +163,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.Take(List{SubscriptionBuiltinTopicData}, List{SampleInfo})" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeAsync()
+        public void TestTake()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<SubscriptionBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Take(data, infos);
@@ -189,20 +191,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.Take(data, infos);
-                count--;
-            }
-
+            ret = _dr.Take(data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -231,11 +231,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.ReadInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadInstanceAsync()
+        public void TestReadInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<SubscriptionBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Read(data, infos);
@@ -258,20 +259,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -310,11 +309,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.TakeInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeInstanceAsync()
+        public void TestTakeInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<SubscriptionBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.Read(data, infos);
@@ -337,20 +337,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -388,11 +386,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.ReadNextInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadNextInstanceAsync()
+        public void TestReadNextInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<SubscriptionBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
@@ -415,20 +414,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.ReadNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -457,11 +454,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.TakeNextInstance(List{SubscriptionBuiltinTopicData}, List{SampleInfo}, InstanceHandle)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeNextInstanceAsync()
+        public void TestTakeNextInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var data = new List<SubscriptionBuiltinTopicData>();
             var infos = new List<SampleInfo>();
             var ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
@@ -484,20 +482,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
-                count--;
-            }
-
+            ret = _dr.TakeNextInstance(data, infos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, infos.Count);
@@ -526,11 +522,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.ReadNextSample(ref SubscriptionBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestReadNextSampleAsync()
+        public void TestReadNextSample()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             SubscriptionBuiltinTopicData data = default;
             var infos = new SampleInfo();
             var ret = _dr.ReadNextSample(ref data, infos);
@@ -551,20 +548,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.ReadNextSample(ref data, infos);
-                count--;
-            }
-
+            ret = _dr.ReadNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
@@ -591,11 +586,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.TakeNextSample(ref SubscriptionBuiltinTopicData, SampleInfo)" />
         /// method and its overloads.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestTakeNextSampleAsync()
+        public void TestTakeNextSample()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             SubscriptionBuiltinTopicData data = default;
             var infos = new SampleInfo();
             var ret = _dr.TakeNextSample(ref data, infos);
@@ -616,20 +612,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                ret = _dr.TakeNextSample(ref data, infos);
-                count--;
-            }
-
+            ret = _dr.TakeNextSample(ref data, infos);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
@@ -656,11 +650,12 @@ namespace OpenDDSharp.UnitTest
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.GetKeyValue(ref SubscriptionBuiltinTopicData, InstanceHandle)" />
         /// method.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestGetKeyValueAsync()
+        public void TestGetKeyValue()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             // Call GetKeyValue with HandleNil
             SubscriptionBuiltinTopicData data = default;
             var info = new SampleInfo();
@@ -682,21 +677,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                // Get the for an existing instance
-                ret = _dr.ReadNextSample(ref data, info);
-                count--;
-            }
-
+            ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 
@@ -730,11 +722,12 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Test the <see cref="SubscriptionBuiltinTopicDataDataReader.LookupInstance(SubscriptionBuiltinTopicData)" /> method.
         /// </summary>
-        /// <returns>The async task.</returns>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public async Task TestLookupInstanceAsync()
+        public void TestLookupInstance()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             SubscriptionBuiltinTopicData data = default;
             var info = new SampleInfo();
 
@@ -753,21 +746,18 @@ namespace OpenDDSharp.UnitTest
             var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var drQos = TestHelper.CreateNonDefaultDataReaderQos();
             var dataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(dataReader);
 
-            var count = 200;
-            var ret = ReturnCode.NoData;
-            while (ret != ReturnCode.Ok && count > 0)
-            {
-                await Task.Delay(100);
+            Assert.IsTrue(evt.Wait(1_500));
 
-                // Get the for an existing instance
-                ret = _dr.ReadNextSample(ref data, info);
-                count--;
-            }
-
+            var ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
             TestHelper.TestNonDefaultSubscriptionData(data);
 

@@ -39,7 +39,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewParticipantFactoryQos()
         {
-            DomainParticipantFactoryQos qos = new DomainParticipantFactoryQos();
+            var qos = new DomainParticipantFactoryQos();
 
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
@@ -52,10 +52,15 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
-            DomainParticipantFactoryQos qos = new DomainParticipantFactoryQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
+            var qos = new DomainParticipantFactoryQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+            };
 
-            ReturnCode result = AssemblyInitializer.Factory.GetQos(qos);
+            var result = AssemblyInitializer.Factory.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(qos.EntityFactory);
             Assert.IsTrue(qos.EntityFactory.AutoenableCreatedEntities);
@@ -73,10 +78,15 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQos()
         {
             // Creates a non-default QoS, set it an check it
-            DomainParticipantFactoryQos qos = new DomainParticipantFactoryQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
+            var qos = new DomainParticipantFactoryQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+            };
 
-            ReturnCode result = AssemblyInitializer.Factory.SetQos(qos);
+            var result = AssemblyInitializer.Factory.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new DomainParticipantFactoryQos();
@@ -107,9 +117,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultDomainParticipantQos()
         {
-            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
+            var qos = TestHelper.CreateNonDefaultDomainParticipantQos();
 
-            ReturnCode result = AssemblyInitializer.Factory.GetDefaultDomainParticipantQos(qos);
+            var result = AssemblyInitializer.Factory.GetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
 
@@ -126,8 +136,8 @@ namespace OpenDDSharp.UnitTest
         public void TestSetDefaultDomainParticipantQos()
         {
             // Creates a non-default QoS, set it an check it
-            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
-            ReturnCode result = AssemblyInitializer.Factory.SetDefaultDomainParticipantQos(qos);
+            var qos = TestHelper.CreateNonDefaultDomainParticipantQos();
+            var result = AssemblyInitializer.Factory.SetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new DomainParticipantQos();
@@ -157,19 +167,19 @@ namespace OpenDDSharp.UnitTest
         public void TestCreateParticipant()
         {
             // Test simplest overload
-            DomainParticipant domainParticipant0 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var domainParticipant0 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(domainParticipant0);
             Assert.AreEqual(AssemblyInitializer.RTPS_DOMAIN, domainParticipant0.DomainId);
             Assert.IsNull(domainParticipant0.Listener);
 
-            DomainParticipantQos qos = new DomainParticipantQos();
-            ReturnCode result = domainParticipant0.GetQos(qos);
+            var qos = new DomainParticipantQos();
+            var result = domainParticipant0.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
 
             // Test overload with QoS parameter
             qos = TestHelper.CreateNonDefaultDomainParticipantQos();
-            DomainParticipant domainParticipant1 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
+            var domainParticipant1 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(domainParticipant1);
             Assert.AreEqual(AssemblyInitializer.RTPS_DOMAIN, domainParticipant1.DomainId);
             Assert.IsNull(domainParticipant1.Listener);
@@ -180,11 +190,19 @@ namespace OpenDDSharp.UnitTest
             TestHelper.TestNonDefaultDomainParticipantQos(qos);
 
             // Test overload with QoS and listener parameters
-            MyParticipantListener listener = new MyParticipantListener();
-            qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
-            DomainParticipant domainParticipant2 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos, listener);
+            using var listener = new MyParticipantListener();
+            qos = new DomainParticipantQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                UserData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+            };
+            var domainParticipant2 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos, listener);
             Assert.IsNotNull(domainParticipant2);
             Assert.AreEqual(AssemblyInitializer.RTPS_DOMAIN, domainParticipant2.DomainId);
 
@@ -193,10 +211,18 @@ namespace OpenDDSharp.UnitTest
             TestHelper.TestNonDefaultDomainParticipantQos(qos);
 
             // Test full call overload
-            qos = new DomainParticipantQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.UserData.Value = new List<byte> { 0x42 };
-            DomainParticipant domainParticipant3 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos, listener, StatusMask.NoStatusMask);
+            qos = new DomainParticipantQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                UserData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+            };
+            var domainParticipant3 = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos, listener, StatusMask.NoStatusMask);
             Assert.IsNotNull(domainParticipant3);
             Assert.AreEqual(AssemblyInitializer.RTPS_DOMAIN, domainParticipant3.DomainId);
 
@@ -225,15 +251,15 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestLookupParticipant()
         {
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(participant);
             participant.BindRtpsUdpTransportConfig();
 
-            DomainParticipant lookupParticipant = AssemblyInitializer.Factory.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var lookupParticipant = AssemblyInitializer.Factory.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(lookupParticipant);
             Assert.AreEqual(participant, lookupParticipant);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -244,7 +270,7 @@ namespace OpenDDSharp.UnitTest
             lookupParticipant = AssemblyInitializer.Factory.LookupParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNull(lookupParticipant);
 
-            ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(participant);
+            var result = AssemblyInitializer.Factory.DeleteParticipant(participant);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
@@ -258,14 +284,14 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeleteParticipant()
         {
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(participant);
             participant.BindRtpsUdpTransportConfig();
 
-            Subscriber subscriber = participant.CreateSubscriber();
+            var subscriber = participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(participant);
+            var result = AssemblyInitializer.Factory.DeleteParticipant(participant);
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
 
             result = participant.DeleteContainedEntities();

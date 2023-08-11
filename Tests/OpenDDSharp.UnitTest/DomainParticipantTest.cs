@@ -19,6 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using JsonWrapper;
@@ -47,6 +48,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets test context object.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -57,12 +59,15 @@ namespace OpenDDSharp.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            if (TestContext.TestName != nameof(TestGetDiscoveredTopicData) && TestContext.TestName != nameof(TestGetDiscoveredTopics))
+            if (TestContext.TestName == nameof(TestGetDiscoveredTopicData) ||
+                TestContext.TestName == nameof(TestGetDiscoveredTopics))
             {
-                _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
-                Assert.IsNotNull(_participant);
-                _participant.BindRtpsUdpTransportConfig();
+                return;
             }
+
+            _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            Assert.IsNotNull(_participant);
+            _participant.BindRtpsUdpTransportConfig();
         }
 
         /// <summary>
@@ -97,7 +102,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewParticipantQos()
         {
-            DomainParticipantQos qos = new DomainParticipantQos();
+            var qos = new DomainParticipantQos();
             Assert.IsNotNull(qos.UserData);
             TestHelper.TestDefaultDomainParticipantQos(qos);
         }
@@ -109,9 +114,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetQos()
         {
-            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
+            var qos = TestHelper.CreateNonDefaultDomainParticipantQos();
 
-            ReturnCode result = _participant.GetQos(qos);
+            var result = _participant.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDomainParticipantQos(qos);
 
@@ -128,9 +133,9 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQos()
         {
             // Creates a non-default QoS, set it an check it.
-            DomainParticipantQos qos = TestHelper.CreateNonDefaultDomainParticipantQos();
+            var qos = TestHelper.CreateNonDefaultDomainParticipantQos();
 
-            ReturnCode result = _participant.SetQos(qos);
+            var result = _participant.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new DomainParticipantQos();
@@ -160,11 +165,11 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
 #pragma warning disable CS0618 // Type or member is obsolete
-            DomainParticipantListener listener = _participant.GetListener();
+            var listener = _participant.GetListener();
             Assert.IsNull(listener);
 
-            MyParticipantListener otherListener = new MyParticipantListener();
-            DomainParticipant other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN, null, otherListener);
+            using var otherListener = new MyParticipantListener();
+            var other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN, null, otherListener);
             Assert.IsNotNull(other);
             other.BindRtpsUdpTransportConfig();
 
@@ -172,7 +177,7 @@ namespace OpenDDSharp.UnitTest
 #pragma warning restore CS0618 // Type or member is obsolete
             Assert.IsNotNull(listener);
 
-            ReturnCode result = AssemblyInitializer.Factory.DeleteParticipant(other);
+            var result = AssemblyInitializer.Factory.DeleteParticipant(other);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -183,11 +188,11 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSetListener()
         {
-            DomainParticipantListener listener = _participant.Listener;
+            var listener = _participant.Listener;
             Assert.IsNull(listener);
 
-            MyParticipantListener myListener = new MyParticipantListener();
-            ReturnCode result = _participant.SetListener(myListener);
+            using var myListener = new MyParticipantListener();
+            var result = _participant.SetListener(myListener);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             listener = _participant.Listener;
@@ -207,28 +212,28 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContainedEntities()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
             Assert.IsNotNull(topic);
             Assert.IsTrue(_participant.ContainsEntity(topic.InstanceHandle));
 
-            Publisher pub = _participant.CreatePublisher();
+            var pub = _participant.CreatePublisher();
             Assert.IsNotNull(pub);
             Assert.IsTrue(_participant.ContainsEntity(pub.InstanceHandle));
 
-            Subscriber sub = _participant.CreateSubscriber();
+            var sub = _participant.CreateSubscriber();
             Assert.IsNotNull(sub);
             Assert.IsTrue(_participant.ContainsEntity(sub.InstanceHandle));
 
-            DataWriter dataWriter = pub.CreateDataWriter(topic);
+            var dataWriter = pub.CreateDataWriter(topic);
             Assert.IsNotNull(dataWriter);
             Assert.IsTrue(_participant.ContainsEntity(dataWriter.InstanceHandle));
 
-            DataReader dataReader = sub.CreateDataReader(topic);
+            var dataReader = sub.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
             Assert.IsTrue(_participant.ContainsEntity(dataReader.InstanceHandle));
 
@@ -243,7 +248,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewTopicQos()
         {
-            TopicQos qos = new TopicQos();
+            var qos = new TopicQos();
             Assert.IsNotNull(qos.TopicData);
             TestHelper.TestDefaultTopicQos(qos);
         }
@@ -255,9 +260,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultTopicQos()
         {
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var qos = TestHelper.CreateNonDefaultTopicQos();
 
-            ReturnCode result = _participant.GetDefaultTopicQos(qos);
+            var result = _participant.GetDefaultTopicQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultTopicQos(qos);
 
@@ -273,9 +278,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultTopicQos()
         {
-            TopicQos qos = TestHelper.CreateNonDefaultTopicQos();
+            var qos = TestHelper.CreateNonDefaultTopicQos();
 
-            ReturnCode result = _participant.SetDefaultTopicQos(qos);
+            var result = _participant.SetDefaultTopicQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new TopicQos();
@@ -295,51 +300,56 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestCreateTopic()
         {
-            TopicQos qos = new TopicQos();
-            qos.Durability.Kind = DurabilityQosPolicyKind.PersistentDurabilityQos;
+            var qos = new TopicQos
+            {
+                Durability =
+                {
+                    Kind = DurabilityQosPolicyKind.PersistentDurabilityQos,
+                },
+            };
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Test with full parameters
-            MyTopicListener listener = new MyTopicListener();
-            Topic topic = _participant.CreateTopic(nameof(TestCreateTopic), typeName, qos, listener, StatusMask.DefaultStatusMask);
+            using var listener = new MyTopicListener();
+            var topic = _participant.CreateTopic(nameof(TestCreateTopic), typeName, qos, listener, StatusMask.DefaultStatusMask);
             Assert.IsNotNull(topic);
             Assert.IsNotNull(topic.Listener);
             Assert.AreEqual(nameof(TestCreateTopic), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            TopicQos getQos = new TopicQos();
+            var getQos = new TopicQos();
             result = topic.GetQos(getQos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(DurabilityQosPolicyKind.PersistentDurabilityQos, getQos.Durability.Kind);
 
             // Test with only listener and status mask
-            Topic topic1 = _participant.CreateTopic(nameof(TestCreateTopic) + "1", typeName, qos, listener);
+            var topic1 = _participant.CreateTopic(nameof(TestCreateTopic) + "1", typeName, qos, listener);
             Assert.IsNotNull(topic1);
             Assert.IsNotNull(topic1.Listener);
             Assert.AreEqual(nameof(TestCreateTopic) + "1", topic1.Name);
             Assert.AreEqual(typeName, topic1.TypeName);
 
             // Test with only listener and status mask
-            Topic topic2 = _participant.CreateTopic(nameof(TestCreateTopic) + "2", typeName, null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            var topic2 = _participant.CreateTopic(nameof(TestCreateTopic) + "2", typeName, null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
             Assert.IsNotNull(topic2);
             Assert.IsNotNull(topic2.Listener);
             Assert.AreEqual(nameof(TestCreateTopic) + "2", topic2.Name);
             Assert.AreEqual(typeName, topic2.TypeName);
 
             // Test with null topic name
-            Topic topic3 = _participant.CreateTopic(null, typeName, null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            var topic3 = _participant.CreateTopic(null, typeName, null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
             Assert.IsNull(topic3);
 
             // Test with null type name
-            Topic topic4 = _participant.CreateTopic(nameof(TestCreateTopic) + "3", null, null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            var topic4 = _participant.CreateTopic(nameof(TestCreateTopic) + "3", null, null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
             Assert.IsNull(topic4);
 
             // Test with wrong configuration
-            Topic topic5 = _participant.CreateTopic(nameof(TestCreateTopic), "OtherName", null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
+            var topic5 = _participant.CreateTopic(nameof(TestCreateTopic), "OtherName", null, listener, StatusKind.DataAvailableStatus | StatusKind.InconsistentTopicStatus);
             Assert.IsNull(topic5);
         }
 
@@ -350,15 +360,15 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestFindTopic()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestFindTopic), typeName);
+            var topic = _participant.CreateTopic(nameof(TestFindTopic), typeName);
             Assert.IsNotNull(topic);
 
-            Topic foundTopic = _participant.FindTopic(nameof(TestFindTopic), new Duration
+            var foundTopic = _participant.FindTopic(nameof(TestFindTopic), new Duration
             {
                 Seconds = 60,
                 NanoSeconds = 0,
@@ -376,18 +386,18 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestLookupTopicDescription()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestLookupTopicDescription), typeName);
+            var topic = _participant.CreateTopic(nameof(TestLookupTopicDescription), typeName);
             Assert.IsNotNull(topic);
 
-            ITopicDescription foundTopic = _participant.LookupTopicDescription(nameof(TestLookupTopicDescription));
+            var foundTopic = _participant.LookupTopicDescription(nameof(TestLookupTopicDescription));
             Assert.IsNotNull(foundTopic);
 
-            ITopicDescription notFoundTopic = _participant.LookupTopicDescription("NoFoundTopic");
+            var notFoundTopic = _participant.LookupTopicDescription("NoFoundTopic");
             Assert.IsNull(notFoundTopic);
         }
 
@@ -398,24 +408,24 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeleteTopic()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteTopic), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteTopic), typeName);
             Assert.IsNotNull(topic);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(topic);
+            var reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
 
             result = _participant.DeleteTopic(topic);
@@ -442,7 +452,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewPublisherQos()
         {
-            PublisherQos qos = new PublisherQos();
+            var qos = new PublisherQos();
             Assert.IsNotNull(qos.GroupData);
             TestHelper.TestDefaultPublisherQos(qos);
         }
@@ -454,9 +464,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultPublisherQos()
         {
-            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
+            var qos = TestHelper.CreateNonDefaultPublisherQos();
 
-            ReturnCode result = _participant.GetDefaultPublisherQos(qos);
+            var result = _participant.GetDefaultPublisherQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultPublisherQos(qos);
 
@@ -470,11 +480,11 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        public void TestSetDefaultPulisherQos()
+        public void TestSetDefaultPublisherQos()
         {
-            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
+            var qos = TestHelper.CreateNonDefaultPublisherQos();
 
-            ReturnCode result = _participant.SetDefaultPublisherQos(qos);
+            var result = _participant.SetDefaultPublisherQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new PublisherQos();
@@ -494,23 +504,22 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestCreatePublisher()
         {
-            PublisherQos qos = TestHelper.CreateNonDefaultPublisherQos();
+            var qos = TestHelper.CreateNonDefaultPublisherQos();
 
-            MyPublisherListener listener = new MyPublisherListener();
-            Publisher publisher = _participant.CreatePublisher(qos, listener, StatusMask.DefaultStatusMask);
+            using var listener = new MyPublisherListener();
+            var publisher = _participant.CreatePublisher(qos, listener, StatusMask.DefaultStatusMask);
             Assert.IsNotNull(publisher);
             Assert.IsNotNull(publisher.Listener);
 
-            PublisherQos getPublisherQos = new PublisherQos();
-            ReturnCode result = publisher.GetQos(getPublisherQos);
+            var getPublisherQos = new PublisherQos();
+            var result = publisher.GetQos(getPublisherQos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultPublisherQos(getPublisherQos);
 
             // Test with listener and status mask
-            Publisher publisher1 = _participant.CreatePublisher(null, listener, StatusMask.DefaultStatusMask);
+            var publisher1 = _participant.CreatePublisher(null, listener, StatusMask.DefaultStatusMask);
             Assert.IsNotNull(publisher1);
             Assert.IsNotNull(publisher.Listener);
-
         }
 
         /// <summary>
@@ -520,21 +529,21 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeletePublisher()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeletePublisher), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeletePublisher), typeName);
             Assert.IsNotNull(topic);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
 
-            // Cannot be deleted if have active datawriters
+            // Cannot be deleted if have active DataWriters
             result = _participant.DeletePublisher(publisher);
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
 
@@ -556,7 +565,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewSubscriberQos()
         {
-            SubscriberQos qos = new SubscriberQos();
+            var qos = new SubscriberQos();
             Assert.IsNotNull(qos.GroupData);
             TestHelper.TestDefaultSubscriberQos(qos);
         }
@@ -568,9 +577,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDefaultSubscriberQos()
         {
-            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
+            var qos = TestHelper.CreateNonDefaultSubscriberQos();
 
-            ReturnCode result = _participant.GetDefaultSubscriberQos(qos);
+            var result = _participant.GetDefaultSubscriberQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultSubscriberQos(qos);
 
@@ -585,9 +594,9 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultSubscriberQos()
         {
-            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
+            var qos = TestHelper.CreateNonDefaultSubscriberQos();
 
-            ReturnCode result = _participant.SetDefaultSubscriberQos(qos);
+            var result = _participant.SetDefaultSubscriberQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             qos = new SubscriberQos();
@@ -607,15 +616,15 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestCreateSubscriber()
         {
-            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
+            var qos = TestHelper.CreateNonDefaultSubscriberQos();
 
-            MySubscriberListener listener = new MySubscriberListener();
-            Subscriber subscriber = _participant.CreateSubscriber(qos, listener, StatusMask.DefaultStatusMask);
+            using var listener = new MySubscriberListener();
+            var subscriber = _participant.CreateSubscriber(qos, listener, StatusMask.DefaultStatusMask);
             Assert.IsNotNull(subscriber);
             Assert.IsNotNull(subscriber.Listener);
 
-            SubscriberQos getSubscriberQos = new SubscriberQos();
-            ReturnCode result = subscriber.GetQos(getSubscriberQos);
+            var getSubscriberQos = new SubscriberQos();
+            var result = subscriber.GetQos(getSubscriberQos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriberQos(qos);
 
@@ -632,18 +641,18 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeleteSubscriber()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteSubscriber), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteSubscriber), typeName);
             Assert.IsNotNull(topic);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(topic);
+            var reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
 
             result = _participant.DeleteSubscriber(subscriber);
@@ -667,10 +676,10 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetBuiltinSubscriber()
         {
-            Subscriber subscriber = _participant.GetBuiltinSubscriber();
+            var subscriber = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(subscriber);
 
-            Subscriber other = _participant.GetBuiltinSubscriber();
+            var other = _participant.GetBuiltinSubscriber();
             Assert.AreSame(subscriber, other);
 
             Assert.IsNull(subscriber.Listener);
@@ -684,30 +693,30 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestContainsEntity()
         {
-            Subscriber builtin = _participant.GetBuiltinSubscriber();
+            var builtin = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(builtin);
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestContainsEntity), typeName);
+            var topic = _participant.CreateTopic(nameof(TestContainsEntity), typeName);
             Assert.IsNotNull(topic);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataWriter dataWriter = publisher.CreateDataWriter(topic);
+            var dataWriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(dataWriter);
 
-            DataReader dataReader = subscriber.CreateDataReader(topic);
+            var dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
             Assert.AreNotSame(otherParticipant, _participant);
@@ -717,22 +726,22 @@ namespace OpenDDSharp.UnitTest
             result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestContainsEntity), typeName);
+            var otherTopic = otherParticipant.CreateTopic("Other" + nameof(TestContainsEntity), typeName);
             Assert.IsNotNull(otherTopic);
 
-            Subscriber otherBuiltin = otherParticipant.GetBuiltinSubscriber();
+            var otherBuiltin = otherParticipant.GetBuiltinSubscriber();
             Assert.IsNotNull(otherBuiltin);
 
-            Subscriber otherSubscriber = otherParticipant.CreateSubscriber();
+            var otherSubscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(otherSubscriber);
 
-            Publisher otherPublisher = otherParticipant.CreatePublisher();
+            var otherPublisher = otherParticipant.CreatePublisher();
             Assert.IsNotNull(otherPublisher);
 
-            DataReader otherDataReader = otherSubscriber.CreateDataReader(otherTopic);
+            var otherDataReader = otherSubscriber.CreateDataReader(otherTopic);
             Assert.IsNotNull(otherDataReader);
 
-            DataWriter otherDataWriter = otherPublisher.CreateDataWriter(otherTopic);
+            var otherDataWriter = otherPublisher.CreateDataWriter(otherTopic);
             Assert.IsNotNull(otherDataWriter);
 
             Assert.IsTrue(_participant.ContainsEntity(builtin.InstanceHandle));
@@ -753,6 +762,7 @@ namespace OpenDDSharp.UnitTest
             // ISSUE: Instance handle overlap between participants.
             // Possible solution: Move the InstanceHandleGenerator to the Service_Participant.
 #pragma warning disable S125  // Sections of code should not be commented out
+
             // Assert.IsFalse(_participant.ContainsEntity(otherBuiltin.InstanceHandle));
             // Assert.IsFalse(_participant.ContainsEntity(otherTopic.InstanceHandle));
             // Assert.IsFalse(_participant.ContainsEntity(otherSubscriber.InstanceHandle));
@@ -766,7 +776,6 @@ namespace OpenDDSharp.UnitTest
             // Assert.IsFalse(otherParticipant.ContainsEntity(subscriber.InstanceHandle));
             // Assert.IsFalse(otherParticipant.ContainsEntity(dataWriter.InstanceHandle));
             // Assert.IsFalse(otherParticipant.ContainsEntity(dataReader.InstanceHandle));
-
             result = otherParticipant.DeleteContainedEntities();
 #pragma warning restore S125 // Sections of code should not be commented out
 
@@ -782,14 +791,12 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestIgnoreParticipant()
         {
-            DomainParticipant other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var other = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(other);
             other.BindRtpsUdpTransportConfig();
 
-            ReturnCode result = _participant.IgnoreParticipant(other.InstanceHandle);
+            var result = _participant.IgnoreParticipant(other.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            // TODO: Test that actually is ignored
 
             result = AssemblyInitializer.Factory.DeleteParticipant(other);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -802,18 +809,16 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestIgnoreTopic()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestIgnoreTopic), support.GetTypeName());
+            var topic = _participant.CreateTopic(nameof(TestIgnoreTopic), support.GetTypeName());
             Assert.IsNotNull(topic);
 
             result = _participant.IgnoreTopic(topic.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            // TODO: Test that actually is ignored
         }
 
         /// <summary>
@@ -823,24 +828,22 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestIgnorePublication()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestIgnorePublication), support.GetTypeName());
+            var topic = _participant.CreateTopic(nameof(TestIgnorePublication), support.GetTypeName());
             Assert.IsNotNull(topic);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriter dataWriter = publisher.CreateDataWriter(topic);
+            var dataWriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(dataWriter);
 
             result = _participant.IgnorePublication(dataWriter.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            // TODO: Test that actually is ignored
         }
 
         /// <summary>
@@ -850,24 +853,22 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestIgnoreSubscription()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestIgnoreSubscription), support.GetTypeName());
+            var topic = _participant.CreateTopic(nameof(TestIgnoreSubscription), support.GetTypeName());
             Assert.IsNotNull(topic);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader dataReader = subscriber.CreateDataReader(topic);
+            var dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
 
             result = _participant.IgnoreSubscription(dataReader.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
-
-            // TODO: Test that actually is ignored
         }
 
         /// <summary>
@@ -877,7 +878,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestAssertLiveliness()
         {
-            ReturnCode result = _participant.AssertLiveliness();
+            var result = _participant.AssertLiveliness();
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -888,21 +889,21 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetCurrentTimestamp()
         {
-            Timestamp ts = new Timestamp()
+            var ts = new Timestamp()
             {
                 Seconds = 0,
                 NanoSeconds = 0,
             };
 
-            DateTime now = DateTime.Now;
-            ReturnCode result = _participant.GetCurrentTimestamp(ref ts);
+            var now = DateTime.Now;
+            var result = _participant.GetCurrentTimestamp(ref ts);
 
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsTrue(ts.Seconds > 0);
 
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(ts.Seconds);
-            dtDateTime.AddMilliseconds(ts.NanoSeconds / 100000d);
+            dtDateTime = dtDateTime.AddMilliseconds(ts.NanoSeconds / 100000d);
 
             Assert.AreEqual(dtDateTime.Year, now.Year);
             Assert.AreEqual(dtDateTime.Month, now.Month);
@@ -918,12 +919,12 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredParticipants()
         {
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = _participant.GetDiscoveredParticipants(handles);
+            var handles = new List<InstanceHandle>();
+            var result = _participant.GetDiscoveredParticipants(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, handles.Count);
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
@@ -954,25 +955,30 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredParticipantData()
         {
-            DomainParticipantQos qos = new DomainParticipantQos();
-            qos.UserData.Value = new List<byte> { 0x42 };
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
+            var qos = new DomainParticipantQos
+            {
+                UserData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+            };
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, qos);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
             Assert.IsTrue(_participant.WaitForParticipants(1, 5_000));
             Assert.IsTrue(otherParticipant.WaitForParticipants(1, 5_000));
 
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = _participant.GetDiscoveredParticipants(handles);
+            var handles = new List<InstanceHandle>();
+            var result = _participant.GetDiscoveredParticipants(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
 
             ParticipantBuiltinTopicData data = default;
-            result = _participant.GetDiscoveredParticipantData(ref data, handles.First());
+            result = _participant.GetDiscoveredParticipantData(ref data, handles[0]);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.UserData.Value.Count);
-            Assert.AreEqual(0x42, data.UserData.Value.First());
+            Assert.AreEqual(0x42, data.UserData.Value[0]);
             Assert.IsNotNull(data.Key);
             Assert.IsNotNull(data.Key.Value);
 
@@ -991,29 +997,29 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopics()
         {
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
             participant.BindTcpTransportConfig();
 
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = participant.GetDiscoveredTopics(handles);
+            var handles = new List<InstanceHandle>();
+            var result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, handles.Count);
 
             // Create a new topic and check that is discovered
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
             result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
+            var topic = participant.CreateTopic(nameof(TestGetDiscoveredTopics), typeName);
             Assert.IsNotNull(topic);
-            InstanceHandle handle = topic.InstanceHandle;
+            var handle = topic.InstanceHandle;
 
             result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, handles.Count);
-            Assert.AreEqual(handle, handles.First());
+            Assert.AreEqual(handle, handles[0]);
 
             // Test with null parameter
             result = participant.GetDiscoveredTopics(null);
@@ -1031,52 +1037,57 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDiscoveredTopicData()
         {
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
             participant.BindTcpTransportConfig();
 
-            DomainParticipant otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
+            var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindTcpTransportConfig();
 
-            List<InstanceHandle> handles = new List<InstanceHandle>();
-            ReturnCode result = participant.GetDiscoveredTopics(handles);
+            var handles = new List<InstanceHandle>();
+            var result = participant.GetDiscoveredTopics(handles);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, handles.Count);
 
             // Create a new topic and check that is discovered
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
             result = support.RegisterType(participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            TopicQos qos = new TopicQos();
-            qos.TopicData.Value = new byte[] { 0x42 };
-            Topic topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+            var qos = new TopicQos
+            {
+                TopicData =
+                {
+                    Value = new byte[] { 0x42 },
+                },
+            };
+            var topic = participant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(topic);
 
-            Topic otherTopic = otherParticipant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
+            var otherTopic = otherParticipant.CreateTopic(nameof(TestGetDiscoveredTopicData), typeName, qos);
             Assert.IsNotNull(otherTopic);
 
-            Publisher publisher = participant.CreatePublisher();
+            var publisher = participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
 
-            Subscriber subscriber = otherParticipant.CreateSubscriber();
+            var subscriber = otherParticipant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(otherTopic);
+            var reader = subscriber.CreateDataReader(otherTopic);
             Assert.IsNotNull(reader);
 
             Assert.IsTrue(reader.WaitForPublications(1, 50_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 50_000));
 
-            InstanceHandle handle = topic.InstanceHandle;
+            var handle = topic.InstanceHandle;
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = participant.GetDiscoveredTopics(handles);
@@ -1084,15 +1095,11 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(handles.Count > 0);
             Assert.IsTrue(handles.Contains(handle));
 
-            // OpenDDS ISSUE: Need to wait for the topic data if not it returns bad parameter
             TopicBuiltinTopicData data = default;
-            var count = 200;
-            result = ReturnCode.NoData;
-            while (result != ReturnCode.Ok && count > 0)
+            result = participant.GetDiscoveredTopicData(ref data, handle);
+            while (result == ReturnCode.BadParameter)
             {
-                Thread.Sleep(500);
                 result = participant.GetDiscoveredTopicData(ref data, handle);
-                count--;
             }
 
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1102,8 +1109,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(data.Key);
             Assert.IsNotNull(data.TopicData);
             Assert.IsNotNull(data.TopicData.Value);
-            Assert.AreEqual(1, data.TopicData.Value.Count());
-            Assert.AreEqual(0x42, data.TopicData.Value.First());
+            Assert.AreEqual(1, data.TopicData.Value.Count);
+            Assert.AreEqual(0x42, data.TopicData.Value[0]);
 
             // Remove the participants
             participant.DeleteContainedEntities();
@@ -1120,135 +1127,136 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestCreateContentFilteredTopic()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestCreateContentFilteredTopic), typeName);
+            var topic = _participant.CreateTopic(nameof(TestCreateContentFilteredTopic), typeName);
             Assert.IsNotNull(topic);
 
-            int totalInstances = 10;
-            int filterCount = 5;
-            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, "(Id <= %0)", filterCount.ToString());
+            const int totalInstances = 10;
+            const int filterCount = 5;
+            var filteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, "(Id <= %0)", filterCount.ToString());
             Assert.IsNotNull(filteredTopic);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader reader = subscriber.CreateDataReader(topic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var reader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNotNull(reader);
 
-            DataReader filteredReader = subscriber.CreateDataReader(filteredTopic, drQos);
+            var filteredReader = subscriber.CreateDataReader(filteredTopic, drQos);
             Assert.IsNotNull(filteredReader);
 
-            TestStructDataReader dataReader = new TestStructDataReader(reader);
-            TestStructDataReader filteredDataReader = new TestStructDataReader(filteredReader);
+            var dataReader = new TestStructDataReader(reader);
+            var filteredDataReader = new TestStructDataReader(filteredReader);
 
-            WaitSet waitSet = new WaitSet();
-            GuardCondition cancelConditionReader = new GuardCondition();
-            StatusCondition statusConditionReader = reader.StatusCondition;
+            var waitSet = new WaitSet();
+            var cancelConditionReader = new GuardCondition();
+            var statusConditionReader = reader.StatusCondition;
             waitSet.AttachCondition(cancelConditionReader);
             waitSet.AttachCondition(statusConditionReader);
             statusConditionReader.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            int countReader = 0;
-            Thread threadReader = new Thread(() =>
+            var countReader = 0;
+            var threadReader = new Thread(() =>
             {
                 while (true)
                 {
                     ICollection<Condition> conditions = new List<Condition>();
-                    Duration duration = new Duration
+                    var duration = new Duration
                     {
                         Seconds = 60,
                     };
                     waitSet.Wait(conditions, duration);
 
-                    foreach (Condition cond in conditions)
+                    foreach (var cond in conditions)
                     {
                         if (cond == statusConditionReader && cond.TriggerValue)
                         {
-                            StatusCondition sCond = (StatusCondition)cond;
-                            StatusMask mask = sCond.EnabledStatuses;
+                            var sCond = (StatusCondition)cond;
+                            var mask = sCond.EnabledStatuses;
                             if ((mask & StatusKind.DataAvailableStatus) != 0)
                             {
-                                List<TestStruct> receivedData = new List<TestStruct>();
-                                List<SampleInfo> sampleInfos = new List<SampleInfo>();
+                                var receivedData = new List<TestStruct>();
+                                var sampleInfos = new List<SampleInfo>();
                                 dataReader.Take(receivedData, sampleInfos);
 
-                                foreach (var sampleInfo in sampleInfos)
-                                {
-                                    if (sampleInfo.ValidData && sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState)
-                                    {
-                                        countReader++;
-                                    }
-                                }
+                                countReader += sampleInfos.Count(sampleInfo =>
+                                        sampleInfo.ValidData &&
+                                        sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState);
                             }
                         }
 
-                        if (cond == cancelConditionReader && cond.TriggerValue)
+                        if (cond != cancelConditionReader || !cond.TriggerValue)
                         {
-                            // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
-                            cancelConditionReader.TriggerValue = false;
-
-                            // The thread activity has been canceled.
-                            return;
+                            continue;
                         }
+
+                        // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
+                        cancelConditionReader.TriggerValue = false;
+
+                        // The thread activity has been canceled.
+                        return;
                     }
                 }
             });
 
-            WaitSet waitSetFiltered = new WaitSet();
-            GuardCondition cancelConditionFilteredReader = new GuardCondition();
-            StatusCondition statusConditionFilteredReader = filteredReader.StatusCondition;
+            var waitSetFiltered = new WaitSet();
+            var cancelConditionFilteredReader = new GuardCondition();
+            var statusConditionFilteredReader = filteredReader.StatusCondition;
             waitSetFiltered.AttachCondition(cancelConditionFilteredReader);
             waitSetFiltered.AttachCondition(statusConditionFilteredReader);
             statusConditionFilteredReader.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            int countFilteredReader = 0;
-            Thread threadFilteredReader = new Thread(() =>
+            var countFilteredReader = 0;
+            var threadFilteredReader = new Thread(() =>
             {
                 while (true)
                 {
                     ICollection<Condition> conditions = new List<Condition>();
-                    Duration duration = new Duration
+                    var duration = new Duration
                     {
                         Seconds = 60,
                     };
                     waitSetFiltered.Wait(conditions, duration);
 
-                    foreach (Condition cond in conditions)
+                    foreach (var cond in conditions)
                     {
                         if (cond == statusConditionFilteredReader && cond.TriggerValue)
                         {
-                            StatusCondition sCond = (StatusCondition)cond;
-                            StatusMask mask = sCond.EnabledStatuses;
+                            var sCond = (StatusCondition)cond;
+                            var mask = sCond.EnabledStatuses;
                             if ((mask & StatusKind.DataAvailableStatus) != 0)
                             {
-                                List<TestStruct> receivedData = new List<TestStruct>();
-                                List<SampleInfo> sampleInfos = new List<SampleInfo>();
+                                var receivedData = new List<TestStruct>();
+                                var sampleInfos = new List<SampleInfo>();
                                 filteredDataReader.Take(receivedData, sampleInfos);
 
-                                foreach (var sampleInfo in sampleInfos)
-                                {
-                                    if (sampleInfo.ValidData && sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState)
-                                    {
-                                        countFilteredReader++;
-                                    }
-                                }
+                                countFilteredReader += sampleInfos.Count(sampleInfo =>
+                                    sampleInfo.ValidData &&
+                                    sampleInfo.InstanceState == InstanceStateKind.AliveInstanceState);
                             }
                         }
 
-                        if (cond == cancelConditionFilteredReader && cond.TriggerValue)
+                        if (cond != cancelConditionFilteredReader || !cond.TriggerValue)
                         {
-                            // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
-                            cancelConditionFilteredReader.TriggerValue = false;
-
-                            // The thread activity has been canceled.
-                            return;
+                            continue;
                         }
+
+                        // We reset the cancellation condition because it is a good practice, but in this implementation it probably doesn't change anything.
+                        cancelConditionFilteredReader.TriggerValue = false;
+
+                        // The thread activity has been canceled.
+                        return;
                     }
                 }
             });
@@ -1261,26 +1269,25 @@ namespace OpenDDSharp.UnitTest
             threadFilteredReader.Priority = ThreadPriority.Highest;
             threadFilteredReader.Start();
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataWriter writer = publisher.CreateDataWriter(topic, dwQos);
+            var dwQos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var writer = publisher.CreateDataWriter(topic, dwQos);
             Assert.IsNotNull(writer);
 
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
             // Wait for subscriptions
-            PublicationMatchedStatus status = default;
-            do
-            {
-                dataWriter.GetPublicationMatchedStatus(ref status);
-                Thread.Sleep(100);
-            }
-            while (status.CurrentCount < 2);
+            dataWriter.WaitForSubscriptions(2, 5_000);
 
-            for (int i = 1; i <= totalInstances; i++)
+            for (var i = 1; i <= totalInstances; i++)
             {
                 result = dataWriter.Write(new TestStruct
                 {
@@ -1334,30 +1341,34 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(filterCount, countFilteredReader);
 
             // Test with null name
-            ContentFilteredTopic nullFilteredTopic = _participant.CreateContentFilteredTopic(null, topic, "(Id <= %0)", filterCount.ToString());
+            var nullFilteredTopic = _participant.CreateContentFilteredTopic(null, topic,
+                "(Id <= %0)", filterCount.ToString());
             Assert.IsNull(nullFilteredTopic);
 
             // Test with null related topic
-            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %0)", filterCount.ToString());
+            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", null,
+                "(Id <= %0)", filterCount.ToString());
             Assert.IsNull(nullFilteredTopic);
 
             // Test with null expression
-            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, null, filterCount.ToString());
+            nullFilteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic,
+                null, filterCount.ToString());
             Assert.IsNull(nullFilteredTopic);
 
             // Test wrong topic creation (same name than other topic is not allowed)
-            nullFilteredTopic = _participant.CreateContentFilteredTopic(nameof(TestCreateContentFilteredTopic), topic, "(Id <= %0)", filterCount.ToString());
+            nullFilteredTopic = _participant.CreateContentFilteredTopic(nameof(TestCreateContentFilteredTopic), topic,
+                "(Id <= %0)", filterCount.ToString());
             Assert.IsNull(nullFilteredTopic);
 
             // Test without expression parameters
-            ContentFilteredTopic filteredTopic1 = _participant.CreateContentFilteredTopic("FilteredTopic1", topic, "(Id <= 1)");
+            var filteredTopic1 = _participant.CreateContentFilteredTopic("FilteredTopic1", topic, "(Id <= 1)");
             Assert.IsNotNull(filteredTopic1);
 
             // Test with null expression parameters
-            ContentFilteredTopic filteredTopic2 = _participant.CreateContentFilteredTopic("FilteredTopic2", topic, "(Id <= 1)", null);
+            var filteredTopic2 = _participant.CreateContentFilteredTopic("FilteredTopic2", topic, "(Id <= 1)", null);
             Assert.IsNotNull(filteredTopic2);
 
-            ContentFilteredTopic filteredTopic3 = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %1 AND Id <= %2)", filterCount.ToString(), "2");
+            var filteredTopic3 = _participant.CreateContentFilteredTopic("FilteredTopic", null, "(Id <= %1 AND Id <= %2)", filterCount.ToString(), "2");
             Assert.IsNull(filteredTopic3);
 
             result = _participant.DeleteTopic(topic);
@@ -1371,22 +1382,22 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeleteContentFilteredTopic()
         {
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteContentFilteredTopic), support.GetTypeName());
+            var topic = _participant.CreateTopic(nameof(TestDeleteContentFilteredTopic), support.GetTypeName());
             Assert.IsNotNull(topic);
 
-            int filterCount = 5;
-            ContentFilteredTopic filteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, "(Id < %0)", filterCount.ToString());
+            const int filterCount = 5;
+            var filteredTopic = _participant.CreateContentFilteredTopic("FilteredTopic", topic, "(Id < %0)", filterCount.ToString());
             Assert.IsNotNull(filteredTopic);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(filteredTopic);
+            var reader = subscriber.CreateDataReader(filteredTopic);
             Assert.IsNotNull(reader);
 
             result = _participant.DeleteContentFilteredTopic(filteredTopic);
@@ -1401,6 +1412,12 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = _participant.DeleteContentFilteredTopic(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteTopic(topic);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = _participant.DeleteSubscriber(subscriber);
+            Assert.AreEqual(ReturnCode.Ok, result);
         }
 
         /// <summary>
@@ -1410,119 +1427,140 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestCreateMultiTopic()
         {
-            AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
-            string athleteTypeName = athleteSupport.GetTypeName();
-            ReturnCode result = athleteSupport.RegisterType(_participant, athleteTypeName);
+            using var evt = new ManualResetEventSlim(false);
+
+            var athleteSupport = new AthleteTypeSupport();
+            var athleteTypeName = athleteSupport.GetTypeName();
+            var result = athleteSupport.RegisterType(_participant, athleteTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic athleteTopic = _participant.CreateTopic("AthleteTopic", athleteTypeName);
+            var athleteTopic = _participant.CreateTopic("AthleteTopic", athleteTypeName);
             Assert.IsNotNull(athleteTopic);
 
-            ResultTypeSupport resultSupport = new ResultTypeSupport();
-            string resultTypeName = resultSupport.GetTypeName();
+            var resultSupport = new ResultTypeSupport();
+            var resultTypeName = resultSupport.GetTypeName();
             result = resultSupport.RegisterType(_participant, resultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic resultTopic = _participant.CreateTopic("ResultTopic", resultTypeName);
+            var resultTopic = _participant.CreateTopic("ResultTopic", resultTypeName);
             Assert.IsNotNull(resultTopic);
 
-            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
-            string athleteResultTypeName = athleteResultSupport.GetTypeName();
+            var athleteResultSupport = new AthleteResultTypeSupport();
+            var athleteResultTypeName = athleteResultSupport.GetTypeName();
             result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            MultiTopic multiTopic = _participant.CreateMultiTopic("AthleteResultTopic", athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            var multiTopic = _participant.CreateMultiTopic("AthleteResultTopic", athleteResultTypeName,
+                "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
             Assert.IsNotNull(multiTopic);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataReader dr = subscriber.CreateDataReader(multiTopic, drQos);
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = subscriber.CreateDataReader(multiTopic, drQos);
             Assert.IsNotNull(dr);
-            AthleteResultDataReader dataReader = new AthleteResultDataReader(dr);
+            var dataReader = new AthleteResultDataReader(dr);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var statusCondition = dataReader.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriterQos dwQos = new DataWriterQos();
-            dwQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            DataWriter dwAthlete = publisher.CreateDataWriter(athleteTopic, dwQos);
+            var dwQos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dwAthlete = publisher.CreateDataWriter(athleteTopic, dwQos);
             Assert.IsNotNull(dwAthlete);
-            AthleteDataWriter athleteDataWriter = new AthleteDataWriter(dwAthlete);
+            var athleteDataWriter = new AthleteDataWriter(dwAthlete);
 
-            DataWriter dwResult = publisher.CreateDataWriter(resultTopic, dwQos);
+            var dwResult = publisher.CreateDataWriter(resultTopic, dwQos);
             Assert.IsNotNull(dwResult);
-            ResultDataWriter resultDataWriter = new ResultDataWriter(dwResult);
+            var resultDataWriter = new ResultDataWriter(dwResult);
 
             // Wait for subscriptions
-            var statusAthlete = default(PublicationMatchedStatus);
-            var statusResult = default(PublicationMatchedStatus);
-            do
-            {
-                result = athleteDataWriter.GetPublicationMatchedStatus(ref statusAthlete);
-                Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsTrue(athleteDataWriter.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(resultDataWriter.WaitForSubscriptions(1, 5_000));
 
-                result = resultDataWriter.GetPublicationMatchedStatus(ref statusResult);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Thread.Sleep(100);
-            }
-            while (statusAthlete.CurrentCount < 1 && statusResult.CurrentCount < 1);
-
-            for (int i = 1; i <= 5; i++)
+            for (var i = 1; i <= 5; i++)
             {
                 athleteDataWriter.Write(new Athlete
                 {
                     AthleteId = i,
-                    FirstName = "FirstName" + i.ToString(),
-                    SecondName = "SecondName" + i.ToString(),
-                    Country = "Country" + i.ToString(),
+                    FirstName = "FirstName" + i,
+                    SecondName = "SecondName" + i,
+                    Country = "Country" + i,
                 });
 
                 result = athleteDataWriter.WaitForAcknowledgments(new Duration
                 {
-                    Seconds = 5
+                    Seconds = 5,
                 });
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            for (int i = 1; i <= 3; i++)
+            for (var i = 1; i <= 3; i++)
             {
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
                 resultDataWriter.Write(new Result
                 {
                     AthleteId = i,
                     Rank = i,
-                    Score = 10f - i
+                    Score = 10f - i,
                 });
 
                 result = resultDataWriter.WaitForAcknowledgments(new Duration
                 {
-                    Seconds = 5
+                    Seconds = 5,
                 });
                 Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(5_000));
             }
 
-            Thread.Sleep(500);
-            List<AthleteResult> receivedData = new List<AthleteResult>();
-            List<SampleInfo> sampleInfos = new List<SampleInfo>();
-            result = dataReader.Read(receivedData, sampleInfos);
-            Assert.AreEqual(ReturnCode.Ok, result);
+            var receivedData = new List<AthleteResult>();
+
+            while (receivedData.Count < 3)
+            {
+                var samples = new List<AthleteResult>();
+                var sampleInfos = new List<SampleInfo>();
+                result = dataReader.Take(samples, sampleInfos);
+                if (result == ReturnCode.Ok)
+                {
+                    receivedData.AddRange(samples);
+                }
+            }
+
+            var sample = new AthleteResult();
+            var sampleInfo = new SampleInfo();
+            Assert.AreEqual(ReturnCode.NoData, dataReader.ReadNextSample(sample, sampleInfo));
 
             Assert.AreEqual(3, receivedData.Count);
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 Assert.AreEqual(i + 1, receivedData[i].AthleteId);
                 Assert.AreEqual(i + 1, receivedData[i].Rank);
                 Assert.AreEqual(10f - (i + 1), receivedData[i].Score);
-                Assert.AreEqual("FirstName" + (i + 1).ToString(), receivedData[i].FirstName);
-                Assert.AreEqual("SecondName" + (i + 1).ToString(), receivedData[i].SecondName);
-                Assert.AreEqual("Country" + (i + 1).ToString(), receivedData[i].Country);
+                Assert.AreEqual("FirstName" + (i + 1), receivedData[i].FirstName);
+                Assert.AreEqual("SecondName" + (i + 1), receivedData[i].SecondName);
+                Assert.AreEqual("Country" + (i + 1), receivedData[i].Country);
             }
 
             // Test with null name
-            MultiTopic nullMultiTopic = _participant.CreateMultiTopic(null, athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
+            var nullMultiTopic = _participant.CreateMultiTopic(null, athleteResultTypeName, "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
             Assert.IsNull(nullMultiTopic);
 
             // Test with null type name
@@ -1538,13 +1576,13 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNull(nullMultiTopic);
 
             // Test with null expression parameters
-            MultiTopic multiTopic1 = _participant.CreateMultiTopic("AthleteResultTopic1",
+            var multiTopic1 = _participant.CreateMultiTopic("AthleteResultTopic1",
                 athleteResultTypeName,
                 "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic", null);
             Assert.IsNotNull(multiTopic1);
 
             // Test with expression parameters
-            MultiTopic multiTopic2 = _participant.CreateMultiTopic("AthleteResultTopic2",
+            var multiTopic2 = _participant.CreateMultiTopic("AthleteResultTopic2",
                 athleteResultTypeName,
                 "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic WHERE Id >= %0 AND Id <= %1", "0", "10");
             Assert.IsNotNull(multiTopic2);
@@ -1557,36 +1595,36 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDeleteMultiTopic()
         {
-            AthleteTypeSupport athleteSupport = new AthleteTypeSupport();
-            string athleteTypeName = athleteSupport.GetTypeName();
-            ReturnCode result = athleteSupport.RegisterType(_participant, athleteTypeName);
+            var athleteSupport = new AthleteTypeSupport();
+            var athleteTypeName = athleteSupport.GetTypeName();
+            var result = athleteSupport.RegisterType(_participant, athleteTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic athleteTopic = _participant.CreateTopic("AthleteTopic", athleteTypeName);
+            var athleteTopic = _participant.CreateTopic("AthleteTopic", athleteTypeName);
             Assert.IsNotNull(athleteTopic);
 
-            ResultTypeSupport resultSupport = new ResultTypeSupport();
-            string resultTypeName = resultSupport.GetTypeName();
+            var resultSupport = new ResultTypeSupport();
+            var resultTypeName = resultSupport.GetTypeName();
             result = resultSupport.RegisterType(_participant, resultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic resultTopic = _participant.CreateTopic("ResultTopic", resultTypeName);
+            var resultTopic = _participant.CreateTopic("ResultTopic", resultTypeName);
             Assert.IsNotNull(resultTopic);
 
-            AthleteResultTypeSupport athleteResultSupport = new AthleteResultTypeSupport();
-            string athleteResultTypeName = athleteResultSupport.GetTypeName();
+            var athleteResultSupport = new AthleteResultTypeSupport();
+            var athleteResultTypeName = athleteResultSupport.GetTypeName();
             result = athleteResultSupport.RegisterType(_participant, athleteResultTypeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            MultiTopic multiTopic = _participant.CreateMultiTopic(nameof(TestDeleteMultiTopic),
+            var multiTopic = _participant.CreateMultiTopic(nameof(TestDeleteMultiTopic),
                 athleteResultTypeName,
                 "SELECT * FROM AthleteTopic NATURAL JOIN ResultTopic");
             Assert.IsNotNull(multiTopic);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(multiTopic);
+            var reader = subscriber.CreateDataReader(multiTopic);
             Assert.IsNotNull(reader);
 
             result = _participant.DeleteMultiTopic(multiTopic);

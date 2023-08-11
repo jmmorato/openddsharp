@@ -17,7 +17,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using JsonWrapper;
@@ -53,6 +56,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets test context object.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -223,7 +227,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(instanceHandle, lastInstanceHandle);
 
             // Remove the listener to avoid extra messages
-            result = _dataWriter.SetListener(null);
+            foreach (var d in _listener.OfferedDeadlineMissed.GetInvocationList())
+            {
+                var del = (Action<DataWriter, OfferedDeadlineMissedStatus>)d;
+                _listener.OfferedDeadlineMissed -= del;
+            }
+            result = _dataWriter.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -298,7 +307,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(11, policies.First().PolicyId);
 
             // Remove the listener to avoid extra messages
-            result = _dataWriter.SetListener(null);
+            foreach (var d in _listener.OfferedIncompatibleQos.GetInvocationList())
+            {
+                var del = (Action<DataWriter, OfferedIncompatibleQosStatus>)d;
+                _listener.OfferedIncompatibleQos -= del;
+            }
+            result = _dataWriter.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -359,7 +373,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(1, totalCountChange);
 
             // Remove the listener to avoid extra messages
-            result = _dataWriter.SetListener(null);
+            foreach (var d in _listener.LivelinessLost.GetInvocationList())
+            {
+                var del = (Action<DataWriter, LivelinessLostStatus>)d;
+                _listener.LivelinessLost -= del;
+            }
+            result = _dataWriter.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
 
@@ -419,7 +438,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(_reader.InstanceHandle, handle);
 
             // Remove the listener to avoid extra messages
-            result = _dataWriter.SetListener(null);
+            foreach (var d in _listener.PublicationMatched.GetInvocationList())
+            {
+                var del = (Action<DataWriter, PublicationMatchedStatus>)d;
+                _listener.PublicationMatched -= del;
+            }
+            result = _dataWriter.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
         #endregion

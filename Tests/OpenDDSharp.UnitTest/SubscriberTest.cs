@@ -17,8 +17,9 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -75,7 +76,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetParticipant()
         {
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.AreEqual(_participant, subscriber.Participant);
         }
 
@@ -86,7 +87,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewSubscriberQos()
         {
-            SubscriberQos qos = new SubscriberQos();
+            var qos = new SubscriberQos();
             TestHelper.TestDefaultSubscriberQos(qos);
         }
 
@@ -98,14 +99,14 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQos()
         {
             // Create a non-default QoS and create a subscriber with it.
-            SubscriberQos qos = TestHelper.CreateNonDefaultSubscriberQos();
+            var qos = TestHelper.CreateNonDefaultSubscriberQos();
 
-            Subscriber subscriber = _participant.CreateSubscriber(qos);
+            var subscriber = _participant.CreateSubscriber(qos);
             Assert.IsNotNull(subscriber);
 
             // Call GetQos and check the values received.
             qos = new SubscriberQos();
-            ReturnCode result = subscriber.GetQos(qos);
+            var result = subscriber.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultSubscriberQos(qos);
 
@@ -126,11 +127,11 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQos()
         {
             // Create a new Subscriber using the default QoS.
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
 
             // Get the qos to ensure that is using the default properties.
-            SubscriberQos qos = new SubscriberQos();
-            ReturnCode result = subscriber.GetQos(qos);
+            var qos = new SubscriberQos();
+            var result = subscriber.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultSubscriberQos(qos);
 
@@ -142,10 +143,21 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.ImmutablePolicy, result);
 
             // Change some mutable properties and check them.
-            qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
+            qos = new SubscriberQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                GroupData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+                Partition =
+                {
+                    Name = new List<string> { "TestPartition" },
+                },
+            };
             result = subscriber.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -159,28 +171,47 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
             Assert.AreEqual(1, qos.GroupData.Value.Count);
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
             Assert.AreEqual(1, qos.Partition.Name.Count);
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsFalse(qos.Presentation.CoherentAccess);
             Assert.IsFalse(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.InstancePresentationQos, qos.Presentation.AccessScope);
 
             // Try to set immutable QoS properties before enable the publisher
-            DomainParticipantQos pQos = new DomainParticipantQos();
-            pQos.EntityFactory.AutoenableCreatedEntities = false;
+            var pQos = new DomainParticipantQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+            };
             result = _participant.SetQos(pQos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Subscriber otherSubscriber = _participant.CreateSubscriber();
-            qos = new SubscriberQos();
-            qos.EntityFactory.AutoenableCreatedEntities = false;
-            qos.GroupData.Value = new List<byte> { 0x42 };
-            qos.Partition.Name = new List<string> { "TestPartition" };
-            qos.Presentation.CoherentAccess = true;
-            qos.Presentation.OrderedAccess = true;
-            qos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
+            var otherSubscriber = _participant.CreateSubscriber();
+            qos = new SubscriberQos
+            {
+                EntityFactory =
+                {
+                    AutoenableCreatedEntities = false,
+                },
+                GroupData =
+                {
+                    Value = new List<byte> { 0x42 },
+                },
+                Partition =
+                {
+                    Name = new List<string> { "TestPartition" },
+                },
+                Presentation =
+                {
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                    AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos,
+                },
+            };
             result = otherSubscriber.SetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -194,10 +225,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
             Assert.AreEqual(1, qos.GroupData.Value.Count);
-            Assert.AreEqual(0x42, qos.GroupData.Value.First());
+            Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
             Assert.AreEqual(1, qos.Partition.Name.Count);
-            Assert.AreEqual("TestPartition", qos.Partition.Name.First());
+            Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsTrue(qos.Presentation.CoherentAccess);
             Assert.IsTrue(qos.Presentation.OrderedAccess);
             Assert.AreEqual(PresentationQosPolicyAccessScopeKind.GroupPresentationQos, qos.Presentation.AccessScope);
@@ -219,21 +250,24 @@ namespace OpenDDSharp.UnitTest
         public void TestGetListener()
         {
             // Create a new Subscriber with a listener
-            MySubscriberListener listener = new MySubscriberListener();
-            Subscriber subscriber = _participant.CreateSubscriber(null, listener);
+            var listener = new MySubscriberListener();
+            var subscriber = _participant.CreateSubscriber(null, listener);
             Assert.IsNotNull(subscriber);
 
             // Call to GetListener and check the listener received
 #pragma warning disable CS0618 // Type or member is obsolete
-            MySubscriberListener received = (MySubscriberListener)subscriber.GetListener();
+            var received = (MySubscriberListener)subscriber.GetListener();
 #pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
-            _participant.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, subscriber.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteContainedEntities());
         }
 
         /// <summary>
@@ -244,18 +278,17 @@ namespace OpenDDSharp.UnitTest
         public void TestSetListener()
         {
             // Create a new Subscriber without listener
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            MySubscriberListener listener = (MySubscriberListener)subscriber.Listener;
-            Assert.IsNull(listener);
+            Assert.IsNull((MySubscriberListener)subscriber.Listener);
 
-            // Create a listener, set it and check that is correctly setted
-            listener = new MySubscriberListener();
-            ReturnCode result = subscriber.SetListener(listener, StatusMask.AllStatusMask);
+            // Create a listener, set it and check that is correctly set
+            var listener = new MySubscriberListener();
+            var result = subscriber.SetListener(listener, StatusMask.AllStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            MySubscriberListener received = (MySubscriberListener)subscriber.Listener;
+            var received = (MySubscriberListener)subscriber.Listener;
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
@@ -265,10 +298,13 @@ namespace OpenDDSharp.UnitTest
 
             received = (MySubscriberListener)subscriber.Listener;
             Assert.IsNull(received);
-            
-            subscriber.DeleteContainedEntities();
-            _participant.DeleteSubscriber(subscriber);
-            _participant.DeleteContainedEntities();
+
+            Assert.AreEqual(ReturnCode.Ok, subscriber.SetListener(null));
+            listener.Dispose();
+
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteContainedEntities());
         }
 
         /// <summary>
@@ -278,7 +314,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNewDataReaderQos()
         {
-            DataReaderQos qos = new DataReaderQos();
+            var qos = new DataReaderQos();
             TestHelper.TestDefaultDataReaderQos(qos);
         }
 
@@ -290,22 +326,22 @@ namespace OpenDDSharp.UnitTest
         public void TestGetDefaultDataReaderQos()
         {
             // Initialize entities.
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestGetDefaultDataReaderQos), typeName);
+            var topic = _participant.CreateTopic(nameof(TestGetDefaultDataReaderQos), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestGetDefaultDataReaderQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
             // Create a non-default DataReader Qos, call GetDefaultDataReaderQos and check the default values.
-            DataReaderQos qos = TestHelper.CreateNonDefaultDataReaderQos();
+            var qos = TestHelper.CreateNonDefaultDataReaderQos();
             result = subscriber.GetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
@@ -327,22 +363,22 @@ namespace OpenDDSharp.UnitTest
         public void TestSetDefaultDataReaderQos()
         {
             // Initialize entities.
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestSetDefaultDataReaderQos), typeName);
+            var topic = _participant.CreateTopic(nameof(TestSetDefaultDataReaderQos), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestSetDefaultDataReaderQos), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
             // Creates a non-default QoS, set it an check it.
-            DataReaderQos qos = TestHelper.CreateNonDefaultDataReaderQos();
+            var qos = TestHelper.CreateNonDefaultDataReaderQos();
             result = subscriber.SetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -351,7 +387,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataReaderQos(qos);
 
-            DataReader reader = subscriber.CreateDataReader(topic);
+            var reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
 
             qos = new DataReaderQos();
@@ -369,7 +405,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
 
-            DataReader otherReader = subscriber.CreateDataReader(topic);
+            var otherReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(otherReader);
 
             qos = TestHelper.CreateNonDefaultDataReaderQos();
@@ -382,7 +418,7 @@ namespace OpenDDSharp.UnitTest
             qos.TimeBasedFilter.MinimumSeparation = new Duration
             {
                 Seconds = 5,
-                NanoSeconds = 5
+                NanoSeconds = 5,
             };
             result = subscriber.SetDefaultDataReaderQos(qos);
             Assert.AreEqual(ReturnCode.InconsistentPolicy, result);
@@ -406,30 +442,30 @@ namespace OpenDDSharp.UnitTest
         public void TestLookupDataReader()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestLookupDataReader), typeName);
+            var topic = _participant.CreateTopic(nameof(TestLookupDataReader), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestLookupDataReader), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            Subscriber otherSubscriber = _participant.CreateSubscriber();
+            var otherSubscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(otherSubscriber);
 
             // Create a DataReader and lookup in the subscribers
-            DataReader datareader = subscriber.CreateDataReader(topic);
+            var datareader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(datareader);
             Assert.AreEqual(subscriber, datareader.Subscriber);
             Assert.IsNull(datareader.Listener);
 
-            DataReader received = subscriber.LookupDataReader(nameof(TestLookupDataReader));
+            var received = subscriber.LookupDataReader(nameof(TestLookupDataReader));
             Assert.IsNotNull(received);
             Assert.AreEqual(datareader, received);
 
@@ -437,7 +473,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNull(received);
 
             // Create other DataReader in the same topic and lookup again
-            DataReader otherDatareader = subscriber.CreateDataReader(topic);
+            var otherDatareader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(otherDatareader);
             Assert.AreEqual(subscriber, otherDatareader.Subscriber);
             Assert.IsNull(otherDatareader.Listener);
@@ -454,7 +490,7 @@ namespace OpenDDSharp.UnitTest
             var participantReader = bis.LookupDataReader("DCPSParticipant");
             Assert.IsNotNull(participantReader);
 
-            result = participantReader.SetListener(null);
+            result = participantReader.SetListener(null, StatusMask.NoStatusMask);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             subscriber.DeleteContainedEntities();
@@ -472,34 +508,34 @@ namespace OpenDDSharp.UnitTest
         public void TestCreateDataReader()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestCreateDataReader), typeName);
+            var topic = _participant.CreateTopic(nameof(TestCreateDataReader), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestCreateDataReader), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
             // Test simplest overload
-            DataReader datareader1 = subscriber.CreateDataReader(topic);
+            var datareader1 = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(datareader1);
             Assert.AreEqual(subscriber, datareader1.Subscriber);
             Assert.IsNull(datareader1.Listener);
 
-            DataReaderQos qos = new DataReaderQos();
+            var qos = new DataReaderQos();
             result = datareader1.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
 
             // Test overload with QoS parameter
             qos = TestHelper.CreateNonDefaultDataReaderQos();
-            DataReader datareader2 = subscriber.CreateDataReader(topic, qos);
+            var datareader2 = subscriber.CreateDataReader(topic, qos);
             Assert.IsNotNull(datareader2);
             Assert.AreEqual(subscriber, datareader2.Subscriber);
             Assert.IsNull(datareader2.Listener);
@@ -510,11 +546,11 @@ namespace OpenDDSharp.UnitTest
             TestHelper.TestNonDefaultDataReaderQos(qos);
 
             // Test overload with listener parameter
-            MyDataReaderListener listener = new MyDataReaderListener();
-            DataReader datareader3 = subscriber.CreateDataReader(topic, null, listener);
+            var listener = new MyDataReaderListener();
+            var datareader3 = subscriber.CreateDataReader(topic, null, listener);
             Assert.IsNotNull(datareader3);
             Assert.AreEqual(subscriber, datareader3.Subscriber);
-            MyDataReaderListener received = (MyDataReaderListener)datareader3.Listener;
+            var received = (MyDataReaderListener)datareader3.Listener;
             Assert.IsNotNull(received);
             Assert.AreEqual(listener, received);
 
@@ -523,9 +559,12 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
 
+            Assert.AreEqual(ReturnCode.Ok, datareader3.SetListener(null));
+            listener.Dispose();
+
             // Test overload with listener and StatusMask parameters
             listener = new MyDataReaderListener();
-            DataReader datareader4 = subscriber.CreateDataReader(topic, null, listener, StatusMask.AllStatusMask);
+            var datareader4 = subscriber.CreateDataReader(topic, null, listener, StatusMask.AllStatusMask);
             Assert.IsNotNull(datareader4);
             Assert.AreEqual(subscriber, datareader4.Subscriber);
             received = (MyDataReaderListener)datareader4.Listener;
@@ -537,10 +576,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
 
+            Assert.AreEqual(ReturnCode.Ok, datareader4.SetListener(null));
+            listener.Dispose();
+
             // Test overload with QoS and listener parameters
             qos = TestHelper.CreateNonDefaultDataReaderQos();
             listener = new MyDataReaderListener();
-            DataReader datareader5 = subscriber.CreateDataReader(topic, qos, listener);
+            var datareader5 = subscriber.CreateDataReader(topic, qos, listener);
             Assert.IsNotNull(datareader5);
             Assert.AreEqual(subscriber, datareader5.Subscriber);
             received = (MyDataReaderListener)datareader5.Listener;
@@ -552,10 +594,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataReaderQos(qos);
 
+            Assert.AreEqual(ReturnCode.Ok, datareader5.SetListener(null));
+            listener.Dispose();
+
             // Test full call overload
             qos = TestHelper.CreateNonDefaultDataReaderQos();
             listener = new MyDataReaderListener();
-            DataReader datareader6 = subscriber.CreateDataReader(topic, qos, listener, StatusMask.AllStatusMask);
+            var datareader6 = subscriber.CreateDataReader(topic, qos, listener, StatusMask.AllStatusMask);
             Assert.IsNotNull(datareader6);
             Assert.AreEqual(subscriber, datareader6.Subscriber);
             received = (MyDataReaderListener)datareader6.Listener;
@@ -566,6 +611,9 @@ namespace OpenDDSharp.UnitTest
             result = datareader6.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestNonDefaultDataReaderQos(qos);
+
+            Assert.AreEqual(ReturnCode.Ok, datareader6.SetListener(null));
+            listener.Dispose();
 
             subscriber.DeleteDataReader(datareader1);
             subscriber.DeleteDataReader(datareader2);
@@ -587,30 +635,30 @@ namespace OpenDDSharp.UnitTest
         public void TestDeleteDataReader()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteDataReader), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteDataReader), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestDeleteDataReader), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            Subscriber otherSubscriber = _participant.CreateSubscriber();
+            var otherSubscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(otherSubscriber);
 
             // Create a DataReader and try to delete it with another subscriber
-            DataReader datareader = subscriber.CreateDataReader(topic);
+            var datareader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(datareader);
             Assert.AreEqual(subscriber, datareader.Subscriber);
             Assert.IsNull(datareader.Listener);
 
-            DataReaderQos qos = new DataReaderQos();
+            var qos = new DataReaderQos();
             result = datareader.GetQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
             TestHelper.TestDefaultDataReaderQos(qos);
@@ -630,9 +678,10 @@ namespace OpenDDSharp.UnitTest
             result = subscriber.DeleteDataReader(null);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            subscriber.DeleteDataReader(datareader);
             subscriber.DeleteContainedEntities();
+            otherSubscriber.DeleteContainedEntities();
             _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteSubscriber(otherSubscriber);
             _participant.DeleteTopic(topic);
             _participant.DeleteContainedEntities();
         }
@@ -645,18 +694,18 @@ namespace OpenDDSharp.UnitTest
         public void TestDeleteContainedEntities()
         {
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
+            var topic = _participant.CreateTopic(nameof(TestDeleteContainedEntities), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestDeleteContainedEntities), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
             // Call DeleteContainedEntities in an empty subscriber
@@ -664,7 +713,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Create a DataReader in the subscriber
-            DataReader dataReader = subscriber.CreateDataReader(topic);
+            var dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
 
             // Try to delete the publisher without delete the datareader
@@ -682,12 +731,18 @@ namespace OpenDDSharp.UnitTest
             Assert.ThrowsException<System.ArgumentNullException>(() => subscriber.CreateDataReader(null));
 
             // Create DataReader with incorrect qos
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.ResourceLimits.MaxSamples = 1;
-            drQos.ResourceLimits.MaxSamplesPerInstance = 2;
+            var drQos = new DataReaderQos
+            {
+                ResourceLimits =
+                {
+                    MaxSamples = 1,
+                    MaxSamplesPerInstance = 2,
+                },
+            };
             var nullDataReader = subscriber.CreateDataReader(topic, drQos);
             Assert.IsNull(nullDataReader);
 
+            _participant.DeleteTopic(topic);
             _participant.DeleteContainedEntities();
         }
 
@@ -698,104 +753,114 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNotifyDataReaders()
         {
-            using (var evtReader = new ManualResetEventSlim(false))
-            using (var evtSubscriber = new ManualResetEventSlim(false))
+            using var evtReader = new ManualResetEventSlim(false);
+            using var evtSubscriber = new ManualResetEventSlim(false);
+
+            // Initialize entities
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            var topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+            Assert.IsNotNull(topic);
+            Assert.IsNull(topic.Listener);
+            Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
+            Assert.AreEqual(typeName, topic.TypeName);
+
+            var publisher = _participant.CreatePublisher();
+            Assert.IsNotNull(publisher);
+
+            var writer = publisher.CreateDataWriter(topic);
+            Assert.IsNotNull(writer);
+            var dataWriter = new TestStructDataWriter(writer);
+
+            var subscriberReceived = 0;
+            var readerReceived = 0;
+
+            // Create the Subscriber and the DataReader with the corresponding listeners
+            using var subListener = new MySubscriberListener();
+            subListener.DataOnReaders += (sub) =>
             {
-                // Initialize entities
-                TestStructTypeSupport support = new TestStructTypeSupport();
-                string typeName = support.GetTypeName();
-                ReturnCode result = support.RegisterType(_participant, typeName);
-                Assert.AreEqual(ReturnCode.Ok, result);
+                subscriberReceived++;
+                evtSubscriber.Set();
+            };
+            var subscriber = _participant.CreateSubscriber(null, subListener);
+            Assert.IsNotNull(subscriber);
 
-                Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
-                Assert.IsNotNull(topic);
-                Assert.IsNull(topic.Listener);
-                Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
-                Assert.AreEqual(typeName, topic.TypeName);
-
-                Publisher publisher = _participant.CreatePublisher();
-                Assert.IsNotNull(publisher);
-
-                DataWriter writer = publisher.CreateDataWriter(topic);
-                Assert.IsNotNull(writer);
-                TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
-
-                int subscriberReceived = 0;
-                int readerReceived = 0;
-
-                // Create the Subscriber and the DataReader with the corresponding listeners
-                MySubscriberListener subListener = new MySubscriberListener();
-                subListener.DataOnReaders += (sub) =>
+            using var readListener = new MyDataReaderListener();
+            readListener.DataAvailable += (read) =>
+            {
+                readerReceived++;
+                if (readerReceived == 5)
                 {
-                    subscriberReceived++;
-                    evtSubscriber?.Set();
-                };
-                Subscriber subscriber = _participant.CreateSubscriber(null, subListener);
-                Assert.IsNotNull(subscriber);
-
-                MyDataReaderListener readListener = new MyDataReaderListener();
-                readListener.DataAvailable += (read) =>
-                {
-                    readerReceived++;
-                    if (readerReceived == 5)
-                    {
-                        evtReader.Set();
-                    }
-                };
-                DataReader reader = subscriber.CreateDataReader(topic, null, readListener);
-                Assert.IsNotNull(reader);
-
-                Assert.IsTrue(writer.WaitForSubscriptions(1, 5000));
-                Assert.IsTrue(reader.WaitForPublications(1, 5000));
-
-                // Publish instances
-                for (int i = 0; i < 10; i++)
-                {
-                    dataWriter.Write(new TestStruct
-                    {
-                        Id = i,
-                        ShortField = (short)i,
-                    });
-
-                    var ret = dataWriter.WaitForAcknowledgments(new Duration
-                    {
-                        Seconds = 5,
-                    });
-                    Assert.AreEqual(ReturnCode.Ok, ret);
-
-                    Assert.IsTrue(evtSubscriber.Wait(5_000));
-                    evtSubscriber.Reset();
-                    if (subscriberReceived % 2 == 0)
-                    {
-                        subscriber?.NotifyDataReaders();
-                    }
+                    evtReader.Set();
                 }
+            };
+            var reader = subscriber.CreateDataReader(topic, null, readListener);
+            Assert.IsNotNull(reader);
 
-                Assert.IsTrue(evtReader.Wait(5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(reader.WaitForPublications(1, 5000));
 
-                // Check the received instances
-                Assert.AreEqual(10, subscriberReceived);
-                Assert.AreEqual(5, readerReceived);
+            // Publish instances
+            for (var i = 0; i < 10; i++)
+            {
+                dataWriter.Write(new TestStruct
+                {
+                    Id = i,
+                    ShortField = (short)i,
+                });
 
-                // Remove the listener to avoid extra messages
-                result = subscriber.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
+                var ret = dataWriter.WaitForAcknowledgments(new Duration
+                {
+                    Seconds = 5,
+                });
+                Assert.AreEqual(ReturnCode.Ok, ret);
 
-                result = writer.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = reader.SetListener(null);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                publisher.DeleteDataWriter(writer);
-                publisher.DeleteContainedEntities();
-                reader.DeleteContainedEntities();
-                subscriber.DeleteContainedEntities();
-                _participant.DeletePublisher(publisher);
-                _participant.DeleteSubscriber(subscriber);
-                _participant.DeleteTopic(topic);
-                _participant.DeleteContainedEntities();
+                Assert.IsTrue(evtSubscriber.Wait(5_000));
+                evtSubscriber.Reset();
+                if (subscriberReceived % 2 == 0)
+                {
+                    subscriber.NotifyDataReaders();
+                }
             }
+
+            Assert.IsTrue(evtReader.Wait(5_000));
+
+            // Check the received instances
+            Assert.AreEqual(10, subscriberReceived);
+            Assert.AreEqual(5, readerReceived);
+
+            // Remove the listener to avoid extra messages
+            foreach (var d in subListener.DataOnReaders.GetInvocationList())
+            {
+                var del = (Action<Subscriber>)d;
+                subListener.DataOnReaders -= del;
+            }
+            result = subscriber.SetListener(null, StatusMask.NoStatusMask);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            result = writer.SetListener(null, StatusMask.NoStatusMask);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            foreach (var d in readListener.DataAvailable.GetInvocationList())
+            {
+                var del = (Action<DataReader>)d;
+                readListener.DataAvailable -= del;
+            }
+            result = reader.SetListener(null, StatusMask.NoStatusMask);
+            Assert.AreEqual(ReturnCode.Ok, result);
+
+            publisher.DeleteDataWriter(writer);
+            publisher.DeleteContainedEntities();
+            reader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteContainedEntities();
+            _participant.DeletePublisher(publisher);
+            _participant.DeleteSubscriber(subscriber);
+            _participant.DeleteTopic(topic);
+            _participant.DeleteContainedEntities();
         }
 
         /// <summary>
@@ -805,45 +870,54 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetDataReaders()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+            var topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Topic otherTopic = _participant.CreateTopic("Other" + nameof(TestNotifyDataReaders), typeName);
+            var otherTopic = _participant.CreateTopic("Other" + nameof(TestNotifyDataReaders), typeName);
             Assert.IsNotNull(otherTopic);
             Assert.IsNull(otherTopic.Listener);
             Assert.AreEqual("Other" + nameof(TestNotifyDataReaders), otherTopic.Name);
             Assert.AreEqual(typeName, otherTopic.TypeName);
 
-            Publisher publisher = _participant.CreatePublisher();
+            var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            DataWriter otherWriter = publisher.CreateDataWriter(otherTopic);
+            var otherWriter = publisher.CreateDataWriter(otherTopic);
             Assert.IsNotNull(otherWriter);
-            TestStructDataWriter otherDataWriter = new TestStructDataWriter(otherWriter);
+            var otherDataWriter = new TestStructDataWriter(otherWriter);
 
-            Subscriber subscriber = _participant.CreateSubscriber();
+            var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(topic);
-            Assert.IsNotNull(reader);
-            TestStructDataReader dataReader = new TestStructDataReader(reader);
+            using var listener = new MySubscriberListener();
+            listener.DataOnReaders += (s) =>
+            {
+                evt.Set();
+            };
+            subscriber.SetListener(listener, StatusKind.DataOnReadersStatus);
 
-            DataReader otherReader = subscriber.CreateDataReader(otherTopic);
+            var reader = subscriber.CreateDataReader(topic);
+            Assert.IsNotNull(reader);
+            var dataReader = new TestStructDataReader(reader);
+
+            var otherReader = subscriber.CreateDataReader(otherTopic);
             Assert.IsNotNull(otherReader);
-            TestStructDataReader otherDataReader = new TestStructDataReader(otherReader);
+            var otherDataReader = new TestStructDataReader(otherReader);
 
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
@@ -851,7 +925,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(otherWriter.WaitForSubscriptions(1, 5_000));
 
             // Check that the GetDataReaders without sending any sample
-            List<DataReader> list = new List<DataReader>();
+            var list = new List<DataReader>();
             result = subscriber.GetDataReaders(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(0, list.Count);
@@ -863,28 +937,32 @@ namespace OpenDDSharp.UnitTest
             });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
             result = subscriber.GetDataReaders(list);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, list.Count);
 
             // Publish in the otherTopic and check again
+            evt.Reset();
             result = otherDataWriter.Write(new TestStruct
             {
                 Id = 1,
             });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            System.Threading.Thread.Sleep(100);
+            Assert.IsTrue(evt.Wait(5_000));
 
-            result = subscriber.GetDataReaders(list, SampleStateKind.NotReadSampleState | SampleStateKind.ReadSampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+            result = subscriber.GetDataReaders(list,
+                SampleStateKind.NotReadSampleState | SampleStateKind.ReadSampleState,
+                ViewStateMask.AnyViewState,
+                InstanceStateMask.AnyInstanceState);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(2, list.Count);
 
             // Take from both DataReaders and check again
-            List<TestStruct> received = new List<TestStruct>();
-            List<SampleInfo> sampleInfos = new List<SampleInfo>();
+            var received = new List<TestStruct>();
+            var sampleInfos = new List<SampleInfo>();
 
             result = dataReader.Take(received, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -901,12 +979,17 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             publisher.DeleteDataWriter(writer);
+            publisher.DeleteDataWriter(otherWriter);
             publisher.DeleteContainedEntities();
             reader.DeleteContainedEntities();
+            otherReader.DeleteContainedEntities();
+            subscriber.DeleteDataReader(reader);
+            subscriber.DeleteDataReader(otherReader);
             subscriber.DeleteContainedEntities();
             _participant.DeletePublisher(publisher);
             _participant.DeleteSubscriber(subscriber);
             _participant.DeleteTopic(topic);
+            _participant.DeleteTopic(otherTopic);
             _participant.DeleteContainedEntities();
         }
 
@@ -915,76 +998,89 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [Ignore("OpenDDS: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.")]
         public void TestBeginEndAccess()
         {
-            // OpenDDS Issue: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.
+            // OpenDDS: Coherent sets for PRESENTATION QoS not Currently implemented on RTPS.
             // Just prepare the unit test for the moment.
+            using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Topic topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
+            var topic = _participant.CreateTopic(nameof(TestNotifyDataReaders), typeName);
             Assert.IsNotNull(topic);
             Assert.IsNull(topic.Listener);
             Assert.AreEqual(nameof(TestNotifyDataReaders), topic.Name);
             Assert.AreEqual(typeName, topic.TypeName);
 
-            Topic otherTopic = _participant.CreateTopic("Other" + nameof(TestNotifyDataReaders), typeName);
+            var otherTopic = _participant.CreateTopic("Other" + nameof(TestNotifyDataReaders), typeName);
             Assert.IsNotNull(otherTopic);
             Assert.IsNull(otherTopic.Listener);
             Assert.AreEqual("Other" + nameof(TestNotifyDataReaders), otherTopic.Name);
             Assert.AreEqual(typeName, otherTopic.TypeName);
 
-            PublisherQos pubQos = new PublisherQos();
-            pubQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            pubQos.Presentation.CoherentAccess = true;
-            pubQos.Presentation.OrderedAccess = true;
-            Publisher publisher = _participant.CreatePublisher(pubQos);
+            var pubQos = new PublisherQos
+            {
+                Presentation =
+                {
+                    AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos,
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                },
+            };
+            var publisher = _participant.CreatePublisher(pubQos);
             Assert.IsNotNull(publisher);
 
-            DataWriter writer = publisher.CreateDataWriter(topic);
+            var writer = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(writer);
-            TestStructDataWriter dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestStructDataWriter(writer);
 
-            DataWriter otherWriter = publisher.CreateDataWriter(otherTopic);
+            var otherWriter = publisher.CreateDataWriter(otherTopic);
             Assert.IsNotNull(otherWriter);
-            TestStructDataWriter otherDataWriter = new TestStructDataWriter(otherWriter);
+            var otherDataWriter = new TestStructDataWriter(otherWriter);
 
-            SubscriberQos subQos = new SubscriberQos();
-            subQos.Presentation.AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos;
-            subQos.Presentation.CoherentAccess = true;
-            subQos.Presentation.OrderedAccess = true;
-            MySubscriberListener listener = new MySubscriberListener();
+            var subQos = new SubscriberQos
+            {
+                Presentation =
+                {
+                    AccessScope = PresentationQosPolicyAccessScopeKind.GroupPresentationQos,
+                    CoherentAccess = true,
+                    OrderedAccess = true,
+                },
+            };
+            using var listener = new MySubscriberListener();
             listener.DataOnReaders += (sub) =>
             {
                 result = sub.BeginAccess();
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                List<DataReader> list = new List<DataReader>();
+                var list = new List<DataReader>();
                 result = sub.GetDataReaders(list);
 
                 // Here we should check that we received two DataReader
                 // read the data of each one and confirm tha the group coherent access
                 // is working as expected.
+                evt.Set();
 
                 result = sub.EndAccess();
                 Assert.AreEqual(ReturnCode.Ok, result);
             };
 
-            Subscriber subscriber = _participant.CreateSubscriber(subQos, listener);
+            var subscriber = _participant.CreateSubscriber(subQos, listener);
             Assert.IsNotNull(subscriber);
 
-            DataReader reader = subscriber.CreateDataReader(topic);
+            var reader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(reader);
-            TestStructDataReader dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestStructDataReader(reader);
             Assert.IsNotNull(dataReader);
 
-            DataReader otherReader = subscriber.CreateDataReader(otherTopic);
+            var otherReader = subscriber.CreateDataReader(otherTopic);
             Assert.IsNotNull(otherReader);
-            TestStructDataReader otherDataReader = new TestStructDataReader(otherReader);
+            var otherDataReader = new TestStructDataReader(otherReader);
             Assert.IsNotNull(otherDataReader);
 
             // Call EndAccess without calling first BeginAccess
@@ -1011,11 +1107,13 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Give some time to the subscriber to process the messages
-            Thread.Sleep(500);
+            Assert.IsTrue(evt.Wait(5_000));
 
             publisher.DeleteDataWriter(writer);
             publisher.DeleteDataWriter(otherWriter);
             publisher.DeleteContainedEntities();
+            reader.DeleteContainedEntities();
+            otherReader.DeleteContainedEntities();
             subscriber.DeleteDataReader(reader);
             subscriber.DeleteDataReader(otherReader);
             subscriber.DeleteContainedEntities();
