@@ -43,8 +43,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            RtpsUdpInst rui = new RtpsUdpInst(inst);
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var rui = new RtpsUdpInst(inst);
             Assert.IsTrue(rui.UseMulticast);
             Assert.AreEqual("239.255.0.2:7401", rui.MulticastGroupAddress);
             Assert.AreEqual(string.Empty, rui.MulticastInterface);
@@ -90,8 +90,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            TransportInst inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
-            RtpsUdpInst rui = new RtpsUdpInst(inst)
+            var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
+            var rui = new RtpsUdpInst(inst)
             {
                 UseMulticast = false,
                 MulticastGroupAddress = "239.255.0.1:7402",

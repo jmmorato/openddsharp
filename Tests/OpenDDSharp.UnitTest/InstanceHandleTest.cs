@@ -17,6 +17,8 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 
@@ -38,6 +40,7 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global", Justification = "It is part of the test.")]
         public void TestEquality()
         {
             // Initialize
@@ -45,7 +48,7 @@ namespace OpenDDSharp.UnitTest
             InstanceHandle equalHandle = 1;
 
             // Test with null parameter
-            bool result = handle.Equals(null);
+            var result = handle.Equals(null);
             Assert.IsFalse(result);
 
             // Test with other object type

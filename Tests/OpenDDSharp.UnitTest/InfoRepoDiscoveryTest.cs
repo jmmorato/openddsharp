@@ -42,7 +42,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDefaultValues()
         {
-            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://repo.ior");
+            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://repo.ior");
             Assert.AreEqual(INFOREPO_DISCOVERY, infoRepo.Key);
             Assert.AreEqual(string.Empty, infoRepo.BitTransportIp);
             Assert.AreEqual(0, infoRepo.BitTransportPort);
@@ -55,7 +55,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNonDefaultValues()
         {
-            InfoRepoDiscovery infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://repo.ior")
+            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "file://repo.ior")
             {
                 BitTransportIp = "127.0.0.1",
                 BitTransportPort = 42,
@@ -73,7 +73,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestNullOrEmptyParameters()
         {
-            bool exception = false;
+            var exception = false;
             try
             {
                 _ = new InfoRepoDiscovery(null, "file://repo.ior");

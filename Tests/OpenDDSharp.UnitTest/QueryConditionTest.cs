@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
@@ -48,6 +49,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets test context object.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -62,9 +64,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            TestStructTypeSupport support = new TestStructTypeSupport();
-            string typeName = support.GetTypeName();
-            ReturnCode result = support.RegisterType(_participant, typeName);
+            var support = new TestStructTypeSupport();
+            var typeName = support.GetTypeName();
+            var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
@@ -82,8 +84,13 @@ namespace OpenDDSharp.UnitTest
             _writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(_writer);
 
-            DataReaderQos qos = new DataReaderQos();
-            qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var qos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(_reader);
         }
@@ -123,10 +130,10 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQueryExpression()
         {
             // Create a QueryCondition and check the expression
-            string expression = "Id >= %0 AND Id <= %1";
-            string parameter1 = "0";
-            string parameter2 = "10";
-            QueryCondition condition = _reader.CreateQueryCondition(expression, parameter1, parameter2);
+            const string expression = "Id >= %0 AND Id <= %1";
+            const string parameter1 = "0";
+            const string parameter2 = "10";
+            var condition = _reader.CreateQueryCondition(expression, parameter1, parameter2);
             Assert.IsNotNull(condition);
             Assert.AreEqual(expression, condition.QueryExpression);
         }
@@ -139,18 +146,18 @@ namespace OpenDDSharp.UnitTest
         public void TestGetQueryParameters()
         {
             // Create a QueryCondition
-            string expression = "Id >= %0 AND Id <= %1";
-            string parameter1 = "0";
-            string parameter2 = "10";
-            QueryCondition condition = _reader.CreateQueryCondition(expression, parameter1, parameter2);
+            var expression = "Id >= %0 AND Id <= %1";
+            const string parameter1 = "0";
+            const string parameter2 = "10";
+            var condition = _reader.CreateQueryCondition(expression, parameter1, parameter2);
             Assert.IsNotNull(condition);
 
             // Test with null parameter
-            ReturnCode result = condition.GetQueryParameters(null);
+            var result = condition.GetQueryParameters(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Test with correct parameter
-            List<string> parameters = new List<string>();
+            var parameters = new List<string>();
             result = condition.GetQueryParameters(parameters);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(parameters);
@@ -160,7 +167,7 @@ namespace OpenDDSharp.UnitTest
 
             // Test without query parameters
             expression = "Id >= 0 AND Id <= 10";
-            QueryCondition otherCondition = _reader.CreateQueryCondition(expression);
+            var otherCondition = _reader.CreateQueryCondition(expression);
             Assert.IsNotNull(otherCondition);
 
             result = otherCondition.GetQueryParameters(parameters);
@@ -177,14 +184,14 @@ namespace OpenDDSharp.UnitTest
         public void TestSetQueryParameters()
         {
             // Initialize
-            string expression = "Id >= %0 AND Id <= %1";
-            string parameter1 = "0";
-            string parameter2 = "10";
-            QueryCondition condition = _reader.CreateQueryCondition(expression, parameter1, parameter2);
+            const string expression = "Id >= %0 AND Id <= %1";
+            var parameter1 = "0";
+            var parameter2 = "10";
+            var condition = _reader.CreateQueryCondition(expression, parameter1, parameter2);
             Assert.IsNotNull(condition);
 
             // Test with null parameter
-            ReturnCode result = condition.SetQueryParameters(null);
+            var result = condition.SetQueryParameters(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Test with incorrect number of parameters
@@ -197,7 +204,7 @@ namespace OpenDDSharp.UnitTest
             result = condition.SetQueryParameters(parameter1, parameter2);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            List<string> parameters = new List<string>();
+            var parameters = new List<string>();
             result = condition.GetQueryParameters(parameters);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(parameters);

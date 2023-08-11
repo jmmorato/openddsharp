@@ -44,7 +44,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGlobalConfig()
         {
             // By default returns the OpenDDS default config
-            TransportConfig config = TransportRegistry.Instance.GlobalConfig;
+            var config = TransportRegistry.Instance.GlobalConfig;
             Assert.IsNotNull(config);
             Assert.AreEqual("_OPENDDS_DEFAULT_CONFIG", config.Name);
 
@@ -59,7 +59,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(nameof(TestGlobalConfig), TransportRegistry.Instance.GlobalConfig.Name);
 
             // Null config throws an ArgumentNullException
-            bool exception = false;
+            var exception = false;
             try
             {
                 TransportRegistry.Instance.GlobalConfig = null;
@@ -80,11 +80,11 @@ namespace OpenDDSharp.UnitTest
         public void TestCreateInst()
         {
             // Create a RTPS UDP transport instance
-            TransportInst inst = TransportRegistry.Instance.CreateInst(nameof(TestCreateInst), "rtps_udp");
+            var inst = TransportRegistry.Instance.CreateInst(nameof(TestCreateInst), "rtps_udp");
             Assert.IsNotNull(inst);
             Assert.AreEqual(nameof(TestCreateInst), inst.Name);
             Assert.AreEqual("rtps_udp", inst.TransportType);
-            RtpsUdpInst rui = new RtpsUdpInst(inst);
+            var rui = new RtpsUdpInst(inst);
             Assert.IsNotNull(rui);
             TransportRegistry.Instance.RemoveInst(inst);
 
@@ -93,8 +93,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(inst);
             Assert.AreEqual(nameof(TestCreateInst), inst.Name);
             Assert.AreEqual("udp", inst.TransportType);
-            UdpInst udpi = new UdpInst(inst);
-            Assert.IsNotNull(udpi);
+            var udpInst = new UdpInst(inst);
+            Assert.IsNotNull(udpInst);
             TransportRegistry.Instance.RemoveInst(inst);
 
             // Create a Multicast transport instance
@@ -102,17 +102,17 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(inst);
             Assert.AreEqual(nameof(TestCreateInst), inst.Name);
             Assert.AreEqual("multicast", inst.TransportType);
-            MulticastInst multicasti = new MulticastInst(inst);
-            Assert.IsNotNull(multicasti);
+            var multicastInst = new MulticastInst(inst);
+            Assert.IsNotNull(multicastInst);
             TransportRegistry.Instance.RemoveInst(inst);
 
-            // Create a Multicast transport instance
+            // Create a TCP transport instance
             inst = TransportRegistry.Instance.CreateInst(nameof(TestCreateInst), "tcp");
             Assert.IsNotNull(inst);
             Assert.AreEqual(nameof(TestCreateInst), inst.Name);
             Assert.AreEqual("tcp", inst.TransportType);
-            MulticastInst tcpi = new MulticastInst(inst);
-            Assert.IsNotNull(tcpi);
+            var tcpInst = new TcpInst(inst);
+            Assert.IsNotNull(tcpInst);
             TransportRegistry.Instance.RemoveInst(inst);
 
             // Create a SharedMemory transport instance
@@ -120,19 +120,19 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(inst);
             Assert.AreEqual(nameof(TestCreateInst), inst.Name);
             Assert.AreEqual("shmem", inst.TransportType);
-            ShmemInst shmemi = new ShmemInst(inst);
-            Assert.IsNotNull(shmemi);
+            var shmemInst = new ShmemInst(inst);
+            Assert.IsNotNull(shmemInst);
             TransportRegistry.Instance.RemoveInst(inst);
 
             // Create a instance with an invalid transport type
-            inst = TransportRegistry.Instance.CreateInst(nameof(TestCreateInst), "quantic_teletransport");
+            inst = TransportRegistry.Instance.CreateInst(nameof(TestCreateInst), "quantic_teletransportation");
             Assert.IsNull(inst);
 
             // Try to create a transport instance with empty name
-            bool exception = false;
+            var exception = false;
             try
             {
-                inst = TransportRegistry.Instance.CreateInst(null, "shmem");
+                TransportRegistry.Instance.CreateInst(null, "shmem");
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@ namespace OpenDDSharp.UnitTest
             exception = false;
             try
             {
-                inst = TransportRegistry.Instance.CreateInst(string.Empty, "shmem");
+                TransportRegistry.Instance.CreateInst(string.Empty, "shmem");
             }
             catch (Exception ex)
             {
@@ -156,7 +156,7 @@ namespace OpenDDSharp.UnitTest
             exception = false;
             try
             {
-                inst = TransportRegistry.Instance.CreateInst("  ", "shmem");
+                TransportRegistry.Instance.CreateInst("  ", "shmem");
             }
             catch (Exception ex)
             {
@@ -174,11 +174,11 @@ namespace OpenDDSharp.UnitTest
         public void TestGetInst()
         {
             // Get a not existing transport instance
-            TransportInst inst = TransportRegistry.Instance.GetInst(nameof(TestGetInst));
+            var inst = TransportRegistry.Instance.GetInst(nameof(TestGetInst));
             Assert.IsNull(inst);
 
             // Create a new transport instance an try to get it
-            TransportInst created = TransportRegistry.Instance.CreateInst(nameof(TestGetInst), "shmem");
+            var created = TransportRegistry.Instance.CreateInst(nameof(TestGetInst), "shmem");
             Assert.IsNotNull(created);
 
             inst = TransportRegistry.Instance.GetInst(nameof(TestGetInst));
@@ -204,10 +204,10 @@ namespace OpenDDSharp.UnitTest
         public void TestRemoveInst()
         {
             // Create a transport instance and remove it later
-            TransportInst created = TransportRegistry.Instance.CreateInst(nameof(TestRemoveInst), "shmem");
+            var created = TransportRegistry.Instance.CreateInst(nameof(TestRemoveInst), "shmem");
             Assert.IsNotNull(created);
 
-            TransportInst inst = TransportRegistry.Instance.GetInst(nameof(TestRemoveInst));
+            var inst = TransportRegistry.Instance.GetInst(nameof(TestRemoveInst));
             Assert.IsNotNull(inst);
             Assert.AreEqual(created, inst);
 
@@ -217,7 +217,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNull(created);
 
             // Remove a null instance should not throw exception
-            bool exception = false;
+            var exception = false;
             try
             {
                 TransportRegistry.Instance.RemoveInst(null);
@@ -237,12 +237,12 @@ namespace OpenDDSharp.UnitTest
         public void TestCreateConfig()
         {
             // Create a new config
-            TransportConfig config = TransportRegistry.Instance.CreateConfig(nameof(TestCreateConfig));
+            var config = TransportRegistry.Instance.CreateConfig(nameof(TestCreateConfig));
             Assert.IsNotNull(config);
             Assert.AreEqual(nameof(TestCreateConfig), config.Name);
 
             // Try to create a config with the same name
-            TransportConfig other = TransportRegistry.Instance.CreateConfig(nameof(TestCreateConfig));
+            var other = TransportRegistry.Instance.CreateConfig(nameof(TestCreateConfig));
             Assert.IsNull(other);
 
             // Remove the config and create it again with the same name
@@ -251,10 +251,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(other);
 
             // Try to create a transport instance with empty name
-            bool exception = false;
+            var exception = false;
             try
             {
-                config = TransportRegistry.Instance.CreateConfig(null);
+                TransportRegistry.Instance.CreateConfig(null);
             }
             catch (Exception ex)
             {
@@ -266,7 +266,7 @@ namespace OpenDDSharp.UnitTest
             exception = false;
             try
             {
-                config = TransportRegistry.Instance.CreateConfig("");
+                TransportRegistry.Instance.CreateConfig(string.Empty);
             }
             catch (Exception ex)
             {
@@ -278,7 +278,7 @@ namespace OpenDDSharp.UnitTest
             exception = false;
             try
             {
-                config = TransportRegistry.Instance.CreateConfig("   ");
+                TransportRegistry.Instance.CreateConfig("   ");
             }
             catch (Exception ex)
             {
@@ -296,7 +296,7 @@ namespace OpenDDSharp.UnitTest
         public void TestGetConfig()
         {
             // Get a not existing transport config
-            TransportConfig config = TransportRegistry.Instance.GetConfig(nameof(TestGetConfig));
+            var config = TransportRegistry.Instance.GetConfig(nameof(TestGetConfig));
             Assert.IsNull(config);
 
             // Get the default OpenDDS config
@@ -305,7 +305,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual("_OPENDDS_DEFAULT_CONFIG", config.Name);
 
             // Create a new transport config an try to get it
-            TransportConfig created = TransportRegistry.Instance.CreateConfig(nameof(TestGetConfig));
+            var created = TransportRegistry.Instance.CreateConfig(nameof(TestGetConfig));
             Assert.IsNotNull(created);
 
             config = TransportRegistry.Instance.GetConfig(nameof(TestGetConfig));
@@ -331,10 +331,10 @@ namespace OpenDDSharp.UnitTest
         public void TestRemoveConfig()
         {
             // Create a transport config and remove it later
-            TransportConfig created = TransportRegistry.Instance.CreateConfig(nameof(TestRemoveConfig));
+            var created = TransportRegistry.Instance.CreateConfig(nameof(TestRemoveConfig));
             Assert.IsNotNull(created);
 
-            TransportConfig config = TransportRegistry.Instance.GetConfig(nameof(TestRemoveConfig));
+            var config = TransportRegistry.Instance.GetConfig(nameof(TestRemoveConfig));
             Assert.IsNotNull(config);
             Assert.AreEqual(created, config);
 
@@ -344,7 +344,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNull(created);
 
             // Remove a null config should not throw exception
-            bool exception = false;
+            var exception = false;
             try
             {
                 TransportRegistry.Instance.RemoveConfig(null);
@@ -364,11 +364,11 @@ namespace OpenDDSharp.UnitTest
         public void TestGetDomainDefaultConfig()
         {
             // Get default config from a domain that is not set
-            TransportConfig config = TransportRegistry.Instance.GetDomainDefaultConfig(69);
+            var config = TransportRegistry.Instance.GetDomainDefaultConfig(69);
             Assert.IsNull(config);
 
             // Create a config and assign it to a domain
-            TransportConfig created = TransportRegistry.Instance.CreateConfig(nameof(TestGetDomainDefaultConfig));
+            var created = TransportRegistry.Instance.CreateConfig(nameof(TestGetDomainDefaultConfig));
             TransportRegistry.Instance.SetDomainDefaultConfig(69, created);
 
             // Get the default config and check it
@@ -390,20 +390,20 @@ namespace OpenDDSharp.UnitTest
         public void TestSetDomainDefaultConfig()
         {
             // Create a new config
-            TransportConfig created = TransportRegistry.Instance.CreateConfig(nameof(TestSetDomainDefaultConfig));
+            var created = TransportRegistry.Instance.CreateConfig(nameof(TestSetDomainDefaultConfig));
             Assert.IsNotNull(created);
 
             // Set the created config to a domain
             TransportRegistry.Instance.SetDomainDefaultConfig(69, created);
 
             // Get the config and check it
-            TransportConfig config = TransportRegistry.Instance.GetDomainDefaultConfig(69);
+            var config = TransportRegistry.Instance.GetDomainDefaultConfig(69);
             Assert.IsNotNull(config);
             Assert.AreEqual(created, config);
             Assert.AreEqual(nameof(TestSetDomainDefaultConfig), config.Name);
 
             // Test parameters guards
-            bool exception = false;
+            var exception = false;
             try
             {
                 TransportRegistry.Instance.SetDomainDefaultConfig(-1, created);
@@ -436,16 +436,16 @@ namespace OpenDDSharp.UnitTest
         public void TestBindConfig()
         {
             // Create a domain participant
-            DomainParticipant participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
+            var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_OTHER_DOMAIN);
             Assert.IsNotNull(participant);
             participant.BindRtpsUdpTransportConfig();
 
             // Create a transport config
-            TransportConfig config = TransportRegistry.Instance.CreateConfig(nameof(TestBindConfig));
+            var config = TransportRegistry.Instance.CreateConfig(nameof(TestBindConfig));
             Assert.IsNotNull(config);
 
             // Bind the participant using the name
-            bool exception = false;
+            var exception = false;
             try
             {
                 TransportRegistry.Instance.BindConfig(nameof(TestBindConfig), participant);
@@ -457,7 +457,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(exception);
 
             // Bind the participant using the transport config
-            exception = false;
             try
             {
                 TransportRegistry.Instance.BindConfig(config, participant);
@@ -469,7 +468,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(exception);
 
             // Test parameters guards
-            exception = false;
             try
             {
                 TransportRegistry.Instance.BindConfig((string)null, participant);
@@ -541,7 +539,7 @@ namespace OpenDDSharp.UnitTest
             }
             Assert.IsTrue(exception);
 
-            ReturnCode ret = AssemblyInitializer.Factory.DeleteParticipant(participant);
+            var ret = AssemblyInitializer.Factory.DeleteParticipant(participant);
             Assert.AreEqual(ReturnCode.Ok, ret);
         }
         #endregion

@@ -18,7 +18,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using JsonWrapper;
 using JsonWrapperInclude;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -52,6 +54,7 @@ namespace OpenDDSharp.UnitTest
         /// <summary>
         /// Gets or sets test context object.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest")]
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -72,16 +75,21 @@ namespace OpenDDSharp.UnitTest
             _subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(_subscriber);
 
-            TestStructTypeSupport typeSupport = new TestStructTypeSupport();
-            string typeName = typeSupport.GetTypeName();
-            ReturnCode ret = typeSupport.RegisterType(_participant, typeName);
+            var typeSupport = new TestStructTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             _topic = _participant.CreateTopic(TestContext.TestName, typeName);
             Assert.IsNotNull(_topic);
 
-            DataReaderQos drQos = new DataReaderQos();
-            drQos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
             _dr = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(_dr);
             _dataReader = new TestStructDataReader(_dr);
@@ -128,6 +136,8 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestInclude()
         {
+            using var evt = new ManualResetEventSlim(false);
+
             var test = new TestInclude();
             Assert.AreEqual(typeof(IncludeStruct), test.IncludeField.GetType());
             Assert.IsNotNull(test.IncludeField);
@@ -152,6 +162,11 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(dr);
             var dataReader = new TestIncludeDataReader(dr);
 
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var dw = _publisher.CreateDataWriter(topic);
             Assert.IsNotNull(dw);
             var dataWriter = new TestIncludeDataWriter(dw);
@@ -173,8 +188,7 @@ namespace OpenDDSharp.UnitTest
             ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestInclude();
             var sampleInfo = new SampleInfo();
@@ -200,6 +214,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypes()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -226,8 +247,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -286,6 +306,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeSequences()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             // TODO: Bounded lists that exceed the bound throws an exception.
             // As per documentation: Bounds checking on bounded sequences may raise an exception if necessary.
             // Check bound before toNative and throw a user friendly exception.
@@ -317,7 +344,7 @@ namespace OpenDDSharp.UnitTest
                 BoundedFloatSequenceField = { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
                 UnboundedFloatSequenceField = { 1f, -2.6f, 3.7f, -100.8f, 200.9f, -300.1f, 1000.1f },
                 BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
-                UnboundedDoubleSequenceField = { 1d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
+                UnboundedDoubleSequenceField = { 1.0d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
                 // BoundedLongDoubleSequenceField = { -1.0m, 2.1m, -3.2m, 100.3m, -200.4m },
                 // UnboundedLongDoubleSequenceField = { 1.5m, -2.6m, 3.7m, -100.8m, 200.9m, -300.0m, 1000.1m },
                 BoundedInt8SequenceField = { -1, 2, -3 },
@@ -331,8 +358,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -370,36 +396,36 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.BoundedUInt8SequenceField.SequenceEqual(received.BoundedUInt8SequenceField));
             Assert.IsTrue(data.UnboundedUInt8SequenceField.SequenceEqual(received.UnboundedUInt8SequenceField));
 
-            Assert.IsTrue(data.BoundedBooleanSequenceField is IList<bool>);
-            Assert.IsTrue(data.UnboundedBooleanSequenceField is IList<bool>);
-            Assert.IsTrue(data.BoundedCharSequenceField is IList<char>);
-            Assert.IsTrue(data.UnboundedCharSequenceField is IList<char>);
-            Assert.IsTrue(data.BoundedWCharSequenceField is IList<char>);
-            Assert.IsTrue(data.UnboundedWCharSequenceField is IList<char>);
-            Assert.IsTrue(data.BoundedOctetSequenceField is IList<byte>);
-            Assert.IsTrue(data.UnboundedOctetSequenceField is IList<byte>);
-            Assert.IsTrue(data.BoundedShortSequenceField is IList<short>);
-            Assert.IsTrue(data.UnboundedShortSequenceField is IList<short>);
-            Assert.IsTrue(data.BoundedUShortSequenceField is IList<ushort>);
-            Assert.IsTrue(data.UnboundedUShortSequenceField is IList<ushort>);
-            Assert.IsTrue(data.BoundedLongSequenceField is IList<int>);
-            Assert.IsTrue(data.UnboundedLongSequenceField is IList<int>);
-            Assert.IsTrue(data.BoundedULongSequenceField is IList<uint>);
-            Assert.IsTrue(data.UnboundedULongSequenceField is IList<uint>);
-            Assert.IsTrue(data.BoundedLongLongSequenceField is IList<long>);
-            Assert.IsTrue(data.UnboundedLongLongSequenceField is IList<long>);
-            Assert.IsTrue(data.BoundedULongLongSequenceField is IList<ulong>);
-            Assert.IsTrue(data.UnboundedULongLongSequenceField is IList<ulong>);
-            Assert.IsTrue(data.BoundedFloatSequenceField is IList<float>);
-            Assert.IsTrue(data.UnboundedFloatSequenceField is IList<float>);
-            Assert.IsTrue(data.BoundedDoubleSequenceField is IList<double>);
-            Assert.IsTrue(data.UnboundedDoubleSequenceField is IList<double>);
-            // Assert.IsTrue(data.BoundedLongDoubleSequenceField is IList<decimal>);
-            // Assert.IsTrue(data.UnboundedLongDoubleSequenceField is IList<decimal>);
-            Assert.IsTrue(data.BoundedInt8SequenceField is IList<sbyte>);
-            Assert.IsTrue(data.UnboundedInt8SequenceField is IList<sbyte>);
-            Assert.IsTrue(data.BoundedUInt8SequenceField is IList<byte>);
-            Assert.IsTrue(data.UnboundedUInt8SequenceField is IList<byte>);
+            Assert.AreEqual(data.BoundedBooleanSequenceField.GetType(), typeof(List<bool>));
+            Assert.AreEqual(data.UnboundedBooleanSequenceField.GetType(), typeof(List<bool>));
+            Assert.AreEqual(data.BoundedCharSequenceField.GetType(), typeof(List<char>));
+            Assert.AreEqual(data.UnboundedCharSequenceField.GetType(), typeof(List<char>));
+            Assert.AreEqual(data.BoundedWCharSequenceField.GetType(), typeof(List<char>));
+            Assert.AreEqual(data.UnboundedWCharSequenceField.GetType(), typeof(List<char>));
+            Assert.AreEqual(data.BoundedOctetSequenceField.GetType(), typeof(List<byte>));
+            Assert.AreEqual(data.UnboundedOctetSequenceField.GetType(), typeof(List<byte>));
+            Assert.AreEqual(data.BoundedShortSequenceField.GetType(), typeof(List<short>));
+            Assert.AreEqual(data.UnboundedShortSequenceField.GetType(), typeof(List<short>));
+            Assert.AreEqual(data.BoundedUShortSequenceField.GetType(), typeof(List<ushort>));
+            Assert.AreEqual(data.UnboundedUShortSequenceField.GetType(), typeof(List<ushort>));
+            Assert.AreEqual(data.BoundedLongSequenceField.GetType(), typeof(List<int>));
+            Assert.AreEqual(data.UnboundedLongSequenceField.GetType(), typeof(List<int>));
+            Assert.AreEqual(data.BoundedULongSequenceField.GetType(), typeof(List<uint>));
+            Assert.AreEqual(data.UnboundedULongSequenceField.GetType(), typeof(List<uint>));
+            Assert.AreEqual(data.BoundedLongLongSequenceField.GetType(), typeof(List<long>));
+            Assert.AreEqual(data.UnboundedLongLongSequenceField.GetType(), typeof(List<long>));
+            Assert.AreEqual(data.BoundedULongLongSequenceField.GetType(), typeof(List<ulong>));
+            Assert.AreEqual(data.UnboundedULongLongSequenceField.GetType(), typeof(List<ulong>));
+            Assert.AreEqual(data.BoundedFloatSequenceField.GetType(), typeof(List<float>));
+            Assert.AreEqual(data.UnboundedFloatSequenceField.GetType(), typeof(List<float>));
+            Assert.AreEqual(data.BoundedDoubleSequenceField.GetType(), typeof(List<double>));
+            Assert.AreEqual(data.UnboundedDoubleSequenceField.GetType(), typeof(List<double>));
+            // Assert.AreEqual(data.BoundedLongDoubleSequenceField.GetType(), typeof(List<decimal>));
+            // Assert.AreEqual(data.UnboundedLongDoubleSequenceField.GetType(), typeof(List<decimal>));
+            Assert.AreEqual(data.BoundedInt8SequenceField.GetType(), typeof(List<sbyte>));
+            Assert.AreEqual(data.UnboundedInt8SequenceField.GetType(), typeof(List<sbyte>));
+            Assert.AreEqual(data.BoundedUInt8SequenceField.GetType(), typeof(List<byte>));
+            Assert.AreEqual(data.UnboundedUInt8SequenceField.GetType(), typeof(List<byte>));
 
             Assert.IsNotNull(defaultStruct.BoundedBooleanSequenceField);
             Assert.AreEqual(0, defaultStruct.BoundedBooleanSequenceField.Count);
@@ -466,6 +492,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -492,8 +525,8 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
+
             var sampleInfo = new SampleInfo();
             var received = new TestStruct();
             ret = _dataReader.ReadNextSample(received, sampleInfo);
@@ -644,6 +677,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedBasicTypeMultiArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1016,8 +1056,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1089,6 +1128,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringTypes()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1105,8 +1151,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1139,6 +1184,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringSequences()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1188,11 +1240,10 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
-            TestStruct received = new TestStruct();
-            SampleInfo sampleInfo = new SampleInfo();
+            var received = new TestStruct();
+            var sampleInfo = new SampleInfo();
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
@@ -1201,10 +1252,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
             Assert.IsTrue(data.UnboundedWStringSequenceField.SequenceEqual(received.UnboundedWStringSequenceField));
 
-            Assert.IsTrue(data.BoundedStringSequenceField is IList<string>);
-            Assert.IsTrue(data.UnboundedStringSequenceField is IList<string>);
-            Assert.IsTrue(data.BoundedWStringSequenceField is IList<string>);
-            Assert.IsTrue(data.UnboundedWStringSequenceField is IList<string>);
+            Assert.AreEqual(data.BoundedStringSequenceField.GetType(), typeof(List<string>));
+            Assert.AreEqual(data.UnboundedStringSequenceField.GetType(), typeof(List<string>));
+            Assert.AreEqual(data.BoundedWStringSequenceField.GetType(), typeof(List<string>));
+            Assert.AreEqual(data.UnboundedWStringSequenceField.GetType(), typeof(List<string>));
 
             Assert.IsNotNull(defaultStruct.BoundedStringSequenceField);
             Assert.AreEqual(0, defaultStruct.BoundedStringSequenceField.Count);
@@ -1223,6 +1274,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1250,8 +1308,7 @@ namespace OpenDDSharp.UnitTest
             var ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1286,6 +1343,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStringMultiArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1340,14 +1404,13 @@ namespace OpenDDSharp.UnitTest
                 },
             };
 
-            var ret =_dataWriter.Write(data);
+            var ret = _dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1360,28 +1423,28 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(string[][][]), data.StringMultiArrayField.GetType());
             Assert.AreEqual(typeof(string[][][]), data.WStringMultiArrayField.GetType());
 
-            var defaultArray = new string[3][][]
+            var defaultArray = new[]
             {
-                new string[4][]
+                new[]
                 {
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
                 },
-                new string[4][]
+                new[]
                 {
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
                 },
-                new string[4][]
+                new[]
                 {
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
-                    new string[2] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
                 },
             };
 
@@ -1396,6 +1459,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructuresTypes()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1409,8 +1479,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1435,6 +1504,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureSequences()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1464,8 +1540,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1483,8 +1558,8 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(data.UnboundedStructSequenceField[i].Message, received.UnboundedStructSequenceField[i].Message);
             }
 
-            Assert.IsTrue(data.BoundedStructSequenceField is IList<NestedStruct>);
-            Assert.IsTrue(data.UnboundedStructSequenceField is IList<NestedStruct>);
+            Assert.AreEqual(data.BoundedStructSequenceField.GetType(), typeof(List<NestedStruct>));
+            Assert.AreEqual(data.UnboundedStructSequenceField.GetType(), typeof(List<NestedStruct>));
 
             Assert.IsNotNull(defaultStruct.BoundedStructSequenceField);
             Assert.AreEqual(0, defaultStruct.BoundedStructSequenceField.Count);
@@ -1499,11 +1574,18 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
             {
-                StructArrayField = new NestedStruct[]
+                StructArrayField = new[]
                 {
                     new NestedStruct { Message = "Pressure pushing down on me", Id = 1 },
                     new NestedStruct { Message = "Pressing down on you, no man ask for", Id = 2 },
@@ -1519,15 +1601,14 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 Assert.AreEqual(data.StructArrayField[i].Id, received.StructArrayField[i].Id);
                 Assert.AreEqual(data.StructArrayField[i].Message, received.StructArrayField[i].Message);
@@ -1550,6 +1631,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedStructureMultiArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1634,8 +1722,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1677,6 +1764,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumType()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1690,8 +1784,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1712,6 +1805,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumSequences()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1741,8 +1841,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1752,8 +1851,8 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
             Assert.IsTrue(data.UnboundedEnumSequenceField.SequenceEqual(received.UnboundedEnumSequenceField));
 
-            Assert.IsTrue(data.BoundedEnumSequenceField is IList<TestEnum>);
-            Assert.IsTrue(data.UnboundedEnumSequenceField is IList<TestEnum>);
+            Assert.AreEqual(data.BoundedEnumSequenceField.GetType(), typeof(List<TestEnum>));
+            Assert.AreEqual(data.UnboundedEnumSequenceField.GetType(), typeof(List<TestEnum>));
 
             Assert.IsNotNull(defaultStruct.BoundedEnumSequenceField);
             Assert.AreEqual(0, defaultStruct.BoundedEnumSequenceField.Count);
@@ -1768,11 +1867,18 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
             {
-                EnumArrayField = new TestEnum[]
+                EnumArrayField = new[]
                 {
                     TestEnum.ENUM1,
                     TestEnum.ENUM3,
@@ -1788,8 +1894,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1815,6 +1920,13 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGeneratedEnumMultiArrays()
         {
+            using var evt = new ManualResetEventSlim(false);
+
+            var statusCondition = _dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
             var defaultStruct = new TestStruct();
 
             var data = new TestStruct
@@ -1851,8 +1963,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            // To allow to change the thread context.
-            System.Threading.Thread.Sleep(10);
+            Assert.IsTrue(evt.Wait(1_500));
 
             var received = new TestStruct();
             var sampleInfo = new SampleInfo();
@@ -1863,28 +1974,28 @@ namespace OpenDDSharp.UnitTest
 
             Assert.AreEqual(typeof(TestEnum[][][]), data.EnumMultiArrayField.GetType());
 
-            var defaultArray = new TestEnum[3][][]
+            var defaultArray = new[]
             {
-                new TestEnum[4][]
+                new[]
                 {
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
                 },
-                new TestEnum[4][]
+                new[]
                 {
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
                 },
-                new TestEnum[4][]
+                new[]
                 {
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
-                    new TestEnum[2] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
                 },
             };
 

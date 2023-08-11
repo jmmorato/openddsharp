@@ -35,10 +35,11 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    # Downgrade due to: https://github.com/microsoft/vstest/issues/4549
     - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.x'
+        dotnet-version: '7.0.306'
 
 #    - name: Setup dotnet 6.0
 #      shell: pwsh
@@ -129,10 +130,11 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    # Downgrade due to: https://github.com/microsoft/vstest/issues/4549
     - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.x'
+        dotnet-version: '7.0.306'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -258,10 +260,11 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    # Downgrade due to: https://github.com/microsoft/vstest/issues/4549
     - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.x'
+        dotnet-version: '7.0.306'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos

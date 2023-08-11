@@ -24,7 +24,7 @@ module JsonWrapper {
 	const wchar TEST_WCHAR_CONST = 'S';
 	const octet TEST_OCTET_CONST = 0x42;
 	const boolean TEST_BOOLEAN_CONST = 1;
-	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";	
+	const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";
 	const wstring TEST_WSTRING_CONST = L"Hello, I love you, won't you tell me your name?";
 
 	typedef string<32> BoundedStringType;
@@ -71,7 +71,7 @@ module JsonWrapper {
 	typedef long LongArrayType[5];
 	typedef unsigned long UnsignedLongArrayType[5];
 	typedef long long LongLongArrayType[5];
-	typedef unsigned long long UnsignedLongLongArrayType[5];	
+	typedef unsigned long long UnsignedLongLongArrayType[5];
 
 	typedef char CharArrayType[5];
 	typedef wchar WCharArrayType[5];
@@ -141,7 +141,7 @@ module JsonWrapper {
 	typedef TestEnum EnumArrayType[5];
 
     typedef TestEnum EnumMultiArrayType[3][4][2];
-	 
+
 	@topic
 	struct TestInclude {
 	    @key string Id;
@@ -256,7 +256,7 @@ module JsonWrapper {
 
 		StructMultiArrayType StructMultiArrayField;
 
-        // `long double` issues on MacOS ARM64? 
+        // `long double` issues on MacOS ARM64?
         // Or the compiler version used (clang14).
         // SEGV received. Reproducible with OpenDDS HelloWorld test.
         // TO BE REPORTED
