@@ -41,6 +41,11 @@ jobs:
       with:
         dotnet-version: '7.0.307'
 
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '[17.6,17.7)'
+
 #    - name: Setup dotnet 6.0
 #      shell: pwsh
 #      run: |
@@ -135,6 +140,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.0.307'
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '[17.6,17.7)'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -265,6 +275,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.0.307'
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '[17.6,17.7)'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos
