@@ -28,7 +28,7 @@ jobs:
       OpenDdsVersion: "3.25"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
@@ -123,7 +123,7 @@ jobs:
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
@@ -253,7 +253,7 @@ jobs:
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3

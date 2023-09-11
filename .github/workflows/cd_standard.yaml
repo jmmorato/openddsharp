@@ -28,7 +28,7 @@ jobs:
         BuildConfiguration: [Release]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -116,7 +116,7 @@ jobs:
       LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -216,7 +216,7 @@ jobs:
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -314,7 +314,7 @@ jobs:
     needs: [build_windows_native, build_linux_native, build_macos_native]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup dotnet 6.0
       shell: pwsh
@@ -453,7 +453,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-dotnet@v3
         with:
@@ -529,7 +529,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
