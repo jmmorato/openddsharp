@@ -39,7 +39,7 @@ jobs:
     - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.111'
+        dotnet-version: '7.0.401'
 
 #    - name: Setup dotnet 6.0
 #      shell: pwsh
@@ -131,7 +131,7 @@ jobs:
     - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.111'
+        dotnet-version: '7.0.401'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -258,7 +258,7 @@ jobs:
     - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.111'
+        dotnet-version: '7.0.401'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos
@@ -332,7 +332,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --blame-hang --blame-hang-timeout 2m --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
