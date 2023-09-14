@@ -220,7 +220,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -345,7 +345,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
-        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
