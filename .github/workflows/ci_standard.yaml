@@ -101,14 +101,14 @@ jobs:
       run: |
         printf 'lcov_path=%s\n' "${{ github.workspace }}\TestResults\net6.0\*\coverage.info" >> $GITHUB_OUTPUT
 
-#    - name: Coveralls
-#      uses: coverallsapp/github-action@v2
-#      with:
-#        github-token: ${{ secrets.GITHUB_TOKEN }}
-#        file: "${{ steps.get_lcov_path.outputs.lcov_path }}"
-#        format: lcov
-#        parallel: true
-#        flag-name: coverage-windows-${{ join(matrix.*, '-') }}
+    - name: Coveralls
+      uses: coverallsapp/github-action@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        file: "${{ steps.get_lcov_path.outputs.lcov_path }}"
+        format: lcov
+        parallel: true
+        flag-name: coverage-windows-${{ join(matrix.*, '-') }}
 
   build_linux:
     runs-on: ubuntu-latest
