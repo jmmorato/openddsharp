@@ -98,7 +98,7 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: cmd
-      run: echo '::set-output name=lcov_path::%s\n' ${{ github.workspace }}\TestResults\net6.0\*\coverage.info
+      run: echo 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
       uses: coverallsapp/github-action@v2
