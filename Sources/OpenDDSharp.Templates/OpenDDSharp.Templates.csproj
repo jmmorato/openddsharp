@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>IDL, OpenDDS, OpenDDSharp, DDS</PackageTags>
     <Company>OpenDDSharp</Company>
-    <Copyright>Copyright © Jose Morato 2018-2021. All rights reserved.</Copyright>
+    <Copyright>Copyright © Jose Morato 2018. All rights reserved.</Copyright>
     <PackageProjectUrl>https://www.openddsharp.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>

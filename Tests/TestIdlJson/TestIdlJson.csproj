@@ -217,8 +217,4 @@
 		<TargetPath>libTestIdlJsonWrapper.dylib</TargetPath>
 	</ContentWithTargetPath>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="obj\ARM64\" />
-  </ItemGroup>
 </Project>
