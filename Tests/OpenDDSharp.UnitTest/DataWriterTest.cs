@@ -1082,34 +1082,37 @@ namespace OpenDDSharp.UnitTest
             Timestamp timestamp = default;
             listener.DataAvailable += (reader) =>
             {
-                var sample = new TestStruct();
-                var info = new SampleInfo();
+                var samples = new List<TestStruct>();
+                var infos = new List<SampleInfo>();
                 var dr = new TestStructDataReader(reader);
-                var ret = dr.TakeNextSample(sample, info);
+                var ret = dr.Take(samples, infos);
                 if (ret != ReturnCode.Ok)
                 {
                     return;
                 }
 
-                if (info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
+                foreach (var info in infos)
                 {
-                    countDisposed++;
-                    if (countDisposed == 3)
+                    if (info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
                     {
-                        timestamp = info.SourceTimestamp;
-                    }
+                        countDisposed++;
+                        if (countDisposed == 3)
+                        {
+                            timestamp = info.SourceTimestamp;
+                        }
 
-                    evtDisposed.Set();
-                }
-                else if (info.InstanceState == InstanceStateKind.AliveInstanceState)
-                {
-                    evtAlive.Set();
+                        evtDisposed.Set();
+                    }
+                    else if (info.InstanceState == InstanceStateKind.AliveInstanceState)
+                    {
+                        evtAlive.Set();
+                    }
                 }
             };
 
             // Wait for discovery
-            Assert.IsTrue(writer.WaitForSubscriptions(1, 1000));
-            Assert.IsTrue(dataReader.WaitForPublications(1, 1000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 10_000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 10_000));
 
             // Dispose an instance that does not exist
             var result = dataWriter.Dispose(new TestStruct { Id = 1 }, InstanceHandle.HandleNil);
