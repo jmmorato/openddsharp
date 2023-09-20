@@ -29,6 +29,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -117,6 +119,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -217,6 +221,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -315,6 +321,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup dotnet 6.0
       shell: pwsh
@@ -454,6 +462,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-dotnet@v3
         with:
@@ -530,6 +540,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3

@@ -29,6 +29,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
@@ -120,6 +122,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
@@ -247,6 +251,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup dotnet 6.0
       uses: actions/setup-dotnet@v3
