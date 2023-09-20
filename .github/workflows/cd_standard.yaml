@@ -406,7 +406,7 @@ jobs:
 
     - name: Set release version
       shell: pwsh
-      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ env.WeightedPreReleaseNumber }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ env.GitVersion_WeightedPreReleaseNumber }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
