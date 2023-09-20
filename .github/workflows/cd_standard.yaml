@@ -36,16 +36,6 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: '5.5.0'
-
-    - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v0
-      with:
-        useConfigFile: true
-
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
       uses: actions/cache@v3
@@ -135,16 +125,6 @@ jobs:
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
-
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: '5.5.0'
-
-    - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v0
-      with:
-        useConfigFile: true
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -248,16 +228,6 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: '5.5.0'
-
-    - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v0
-      with:
-        useConfigFile: true
-
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos-cd
       uses: actions/cache@v3
@@ -354,6 +324,13 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup dotnet 3.1
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture 'x64' -Channel 3.1;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
     - name: Setup dotnet 6.0
       shell: pwsh
       run: |
@@ -371,7 +348,7 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
-        versionSpec: '5.5.0'
+        versionSpec: '5.12.0'
 
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0
@@ -424,7 +401,7 @@ jobs:
 
     - name: Set release version
       shell: pwsh
-      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ env.WeightedPreReleaseNumber }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
@@ -515,16 +492,6 @@ jobs:
           name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/nupkg
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.5.0'
-
-      - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v0
-        with:
-          useConfigFile: true
-
       - name: Test .NET development
         shell: pwsh
         run: |
@@ -596,7 +563,7 @@ jobs:
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
         with:
-          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ env.WeightedPreReleaseNumber }}
           path: ${{ github.workspace }}/Release
 
       - name: Get branch names
