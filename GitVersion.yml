@@ -1,0 +1,35 @@
+next-version: 3.25
+mode: ContinuousDeployment
+update-build-number: true
+tag-prefix: '(release-)?[vV]'
+
+assembly-versioning-format: '{Major}.{Minor}.{WeightedPreReleaseNumber ?? 0}'
+assembly-file-versioning-format: '{Major}.{Minor}.{WeightedPreReleaseNumber ?? 0}'
+assembly-informational-format: '{Major}.{Minor}.{WeightedPreReleaseNumber ?? 0}{PreReleaseTagWithDash}+{FullBuildMetaData}'
+
+branches:
+  main:
+    regex: ^master$|^main$
+    mode: ContinuousDelivery
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    source-branches: [ 'develop', 'release' ]
+    tracks-release-branches: false
+    is-release-branch: false
+    is-mainline: true
+    pre-release-weight: 55000
+  develop:
+    regex: ^dev(elop)?(ment)?$
+    mode: ContinuousDeployment
+    tag: alpha
+    increment: Patch
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: true
+    source-branches: [ ]
+    tracks-release-branches: true
+    is-release-branch: false
+    is-mainline: false
+    pre-release-weight: 0
+
