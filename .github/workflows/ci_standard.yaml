@@ -32,6 +32,16 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup dotnet 6.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Setup dotnet 7.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.401'
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
@@ -41,17 +51,6 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0
       with:
         useConfigFile: true
-
-    - name: Setup dotnet 6.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
-
-    # Downgrade due to: https://github.com/microsoft/vstest/issues/4549
-    - name: Setup dotnet 7.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.401'
 
 #    - name: Setup dotnet 6.0
 #      shell: pwsh
@@ -135,6 +134,16 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup dotnet 6.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Setup dotnet 7.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.401'
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
@@ -144,17 +153,6 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0
       with:
         useConfigFile: true
-
-    - name: Setup dotnet 6.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
-
-    # Downgrade due to: https://github.com/microsoft/vstest/issues/4549
-    - name: Setup dotnet 7.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.401'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -274,6 +272,16 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup dotnet 6.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Setup dotnet 7.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.401'
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
@@ -283,17 +291,6 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0
       with:
         useConfigFile: true
-
-    - name: Setup dotnet 6.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
-
-    # Downgrade due to: https://github.com/microsoft/vstest/issues/4549
-    - name: Setup dotnet 7.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.401'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos

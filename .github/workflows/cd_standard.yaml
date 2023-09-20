@@ -32,6 +32,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
@@ -41,10 +45,6 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0
       with:
         useConfigFile: true
-
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
@@ -132,6 +132,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
@@ -141,10 +145,6 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0
       with:
         useConfigFile: true
-
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -244,6 +244,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
@@ -253,10 +257,6 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0
       with:
         useConfigFile: true
-
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos-cd
@@ -354,16 +354,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: '5.5.0'
-
-    - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v0
-      with:
-        useConfigFile: true
-
     - name: Setup dotnet 6.0
       shell: pwsh
       run: |
@@ -377,6 +367,16 @@ jobs:
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture 'x64' -Channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.5.0'
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v0
+      with:
+        useConfigFile: true
 
     - name: Get branch names
       id: branch-name
@@ -505,16 +505,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.5.0'
-
-      - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v0
-        with:
-          useConfigFile: true
-
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
@@ -524,6 +514,16 @@ jobs:
         with:
           name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/nupkg
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.5.0'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
 
       - name: Test .NET development
         shell: pwsh
@@ -592,21 +592,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.5.0'
-
-      - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v0
-        with:
-          useConfigFile: true
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.5.0'
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
