@@ -39,10 +39,6 @@ namespace OpenDDSharp.Build.Tasks
         public override void Run(BuildContext context)
         {
             var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}";
-            if (context.IsDevelop)
-            {
-                version += $"-beta";
-            }
 
             var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
             var path = Path.Combine(solutionPath, "Sources", "OpenDDSharp", "OpenDDSharp.csproj");
