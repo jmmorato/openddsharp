@@ -15,8 +15,8 @@ concurrency:
 
 env:
   OpenDdsVersion: "3.25"
-  MajorVersion: "0"
-  MinorVersion: "8"
+  MajorVersion: "3"
+  MinorVersion: "25"
 
 jobs:
   build_windows_native:
@@ -455,7 +455,7 @@ jobs:
 
     - name: Create release packages
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ env.GitVersion_WeightedPreReleaseNumber }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
