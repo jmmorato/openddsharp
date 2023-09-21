@@ -504,10 +504,8 @@ jobs:
       - name: Test .NET development
         shell: pwsh
         run: |
-          $year = (Get-Date).ToString("yy")
-          $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
-          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.$year$dayOfYear.${{ github.run_number }}-beta.nupkg"
+          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.${{ env.GitVersion_WeightedPreReleaseNumber }}-beta.nupkg"
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project
@@ -572,7 +570,7 @@ jobs:
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
         with:
-          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ env.WeightedPreReleaseNumber }}
+          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Release
 
       - name: Get branch names
