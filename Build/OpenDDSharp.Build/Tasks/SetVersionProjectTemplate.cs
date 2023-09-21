@@ -20,7 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using Cake.Common.IO;
 using Cake.Common.Xml;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Tasks
@@ -36,13 +35,13 @@ namespace OpenDDSharp.Build.Tasks
         {
             context.Log.Information("Set version in ProjectTemplate...");
 
-            string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
+            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.RunNumber}";
             if (context.IsDevelop)
             {
                 version += $"-beta";
             }
 
-            DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
+            var path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
             foreach (var file in context.GetFiles($"{path}/**/OpenDDSharp.IdlProject.csproj"))
             {
