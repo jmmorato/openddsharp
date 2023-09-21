@@ -68,6 +68,16 @@ namespace OpenDDSharp.Build
         public string PatchVersion { get; internal set; }
 
         /// <summary>
+        /// Gets the current build number.
+        /// </summary>
+        public string BuildNumber { get; internal set; }
+
+        /// <summary>
+        /// Gets the current pre release tag.
+        /// </summary>
+        public string PreReleaseTag { get; internal set; }
+
+        /// <summary>
         /// Gets the OpenDDS version to use during the build.
         /// </summary>
         public string OpenDdsVersion { get; internal set; }
@@ -236,7 +246,25 @@ namespace OpenDDSharp.Build
             }
             else
             {
-                PatchVersion = "1";
+                PatchVersion = "0";
+            }
+
+            if (context.Arguments.HasArgument(nameof(BuildNumber)))
+            {
+                BuildNumber = context.Arguments.GetArgument(nameof(BuildNumber));
+            }
+            else
+            {
+                BuildNumber = "0";
+            }
+
+            if (context.Arguments.HasArgument(nameof(PreReleaseTag)))
+            {
+                PreReleaseTag = context.Arguments.GetArgument(nameof(PreReleaseTag));
+            }
+            else
+            {
+                PreReleaseTag = string.Empty;
             }
 
             if (context.Arguments.HasArgument(nameof(OpenDdsVersion)))

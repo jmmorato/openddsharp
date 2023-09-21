@@ -1,11 +1,11 @@
-next-version: 3.25
+next-version: 3.25.0
 mode: ContinuousDelivery
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
 
-assembly-versioning-format: '{Major}.{Minor}.{WeightedPreReleaseNumber ?? 0}'
-assembly-file-versioning-format: '{Major}.{Minor}.{WeightedPreReleaseNumber ?? 0}'
-assembly-informational-format: '{Major}.{Minor}.{WeightedPreReleaseNumber ?? 0}{PreReleaseTagWithDash}+{FullBuildMetaData}'
+assembly-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
+assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
+assembly-informational-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}{PreReleaseTagWithDash}+{FullBuildMetaData}'
 
 branches:
   main:
@@ -48,7 +48,7 @@ branches:
     regex: ^(pull|pull\-requests|pr)[/-]
     mode: ContinuousDelivery
     tag: beta
-    increment: Inherit
+    increment: None
     prevent-increment-of-merged-branch-version: false
     tag-number-pattern: '[/-](?<number>\d+)[-/]'
     track-merge-target: false

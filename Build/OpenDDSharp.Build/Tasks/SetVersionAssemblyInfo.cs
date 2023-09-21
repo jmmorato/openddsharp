@@ -35,7 +35,7 @@ namespace OpenDDSharp.Build.Tasks
         {
             context.Log.Information("Set version in AssemblyInfo...");
 
-            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}";
+            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}.{context.BuildNumber}";
             var path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
             context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyVersion\\(\")(.+?)(?=\"\\))", version);
