@@ -495,6 +495,16 @@ jobs:
         with:
           dotnet-version: '7.0.x'
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.12.0'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
+
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
         with:
