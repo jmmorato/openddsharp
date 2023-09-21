@@ -35,10 +35,10 @@ namespace OpenDDSharp.Build.Tasks
         {
             context.Log.Information("Set version in ProjectTemplate...");
 
-            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.RunNumber}";
+            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}";
             if (context.IsDevelop)
             {
-                version += $"-beta";
+                version += "-beta";
             }
 
             var path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));

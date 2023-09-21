@@ -36,7 +36,7 @@ namespace OpenDDSharp.Build.Tasks
         {
             context.Log.Information("Set version in NuSpec...");
 
-            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.RunNumber}";
+            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}";
             if (context.IsDevelop)
             {
                 version += $"-beta";
