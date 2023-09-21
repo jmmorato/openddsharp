@@ -406,7 +406,7 @@ jobs:
 
     - name: Set release version
       shell: pwsh
-      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --PatchVersion=${{ env.GitVersion_WeightedPreReleaseNumber }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --PatchVersion=${{ env.GitVersion_CommitsSinceVersionSource }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
@@ -455,7 +455,7 @@ jobs:
 
     - name: Create release packages
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --PatchVersion=${{ env.GitVersion_WeightedPreReleaseNumber }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --PatchVersion=${{ env.GitVersion_CommitsSinceVersionSource }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
@@ -515,7 +515,7 @@ jobs:
         shell: pwsh
         run: |
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
-          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.${{ env.GitVersion_WeightedPreReleaseNumber }}-beta.nupkg"
+          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.${{ env.GitVersion_CommitsSinceVersionSource }}.nupkg"
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project
