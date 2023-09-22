@@ -65,7 +65,17 @@ namespace OpenDDSharp.Build
         /// <summary>
         /// Gets the current run number.
         /// </summary>
-        public string RunNumber { get; internal set; }
+        public string PatchVersion { get; internal set; }
+
+        /// <summary>
+        /// Gets the current build number.
+        /// </summary>
+        public string BuildNumber { get; internal set; }
+
+        /// <summary>
+        /// Gets the current pre release tag.
+        /// </summary>
+        public string PreReleaseTag { get; internal set; }
 
         /// <summary>
         /// Gets the OpenDDS version to use during the build.
@@ -133,10 +143,7 @@ namespace OpenDDSharp.Build
 
         internal string OpenDdsSolutionFile { get; private set; }
 
-        internal bool IsDevelop
-        {
-            get { return BranchName != "main"; }
-        }
+        internal bool IsDevelop => BranchName != "main";
 
         internal string RunTime
         {
@@ -233,13 +240,31 @@ namespace OpenDDSharp.Build
                 MinorVersion = "0";
             }
 
-            if (context.Arguments.HasArgument(nameof(RunNumber)))
+            if (context.Arguments.HasArgument(nameof(PatchVersion)))
             {
-                RunNumber = context.Arguments.GetArgument(nameof(RunNumber));
+                PatchVersion = context.Arguments.GetArgument(nameof(PatchVersion));
             }
             else
             {
-                RunNumber = "1";
+                PatchVersion = "0";
+            }
+
+            if (context.Arguments.HasArgument(nameof(BuildNumber)))
+            {
+                BuildNumber = context.Arguments.GetArgument(nameof(BuildNumber));
+            }
+            else
+            {
+                BuildNumber = "0";
+            }
+
+            if (context.Arguments.HasArgument(nameof(PreReleaseTag)))
+            {
+                PreReleaseTag = context.Arguments.GetArgument(nameof(PreReleaseTag));
+            }
+            else
+            {
+                PreReleaseTag = string.Empty;
             }
 
             if (context.Arguments.HasArgument(nameof(OpenDdsVersion)))
@@ -314,24 +339,14 @@ namespace OpenDDSharp.Build
 
             var ddsPath = Path.GetFullPath(DdsRoot).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(AceRoot).TrimEnd(Path.DirectorySeparatorChar);
-            var ddsBin = Path.Combine(ddsPath, $"bin");
-            var ddsLib = Path.Combine(ddsPath, $"lib");
-            var aceBin = Path.Combine(acePath, $"bin");
-            var aceLib = Path.Combine(acePath, $"lib");
+            var ddsBin = Path.Combine(ddsPath, "bin");
+            var ddsLib = Path.Combine(ddsPath, "lib");
+            var aceBin = Path.Combine(acePath, "bin");
+            var aceLib = Path.Combine(acePath, "lib");
             var perlPath = Path.GetFullPath(PerlPath);
-            string path = $"{perlPath};{ddsBin};{ddsLib};{aceBin};{aceLib};";
+            var path = $"{perlPath};{ddsBin};{ddsLib};{aceBin};{aceLib};";
             System.Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             System.Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);
-        }
-        #endregion
-
-        #region Methods
-        internal string GetBuildRevisionVersion()
-        {
-            string year = DateTime.Now.ToString("yy");
-            string dayOfYear = DateTime.Now.DayOfYear.ToString("000");
-            int runNumber = int.Parse(RunNumber) % 65534;
-            return $"{year}{dayOfYear}.{runNumber}";
         }
         #endregion
     }
