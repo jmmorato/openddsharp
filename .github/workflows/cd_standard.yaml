@@ -15,8 +15,8 @@ concurrency:
 
 env:
   OpenDdsVersion: "3.25"
-  MajorVersion: "0"
-  MinorVersion: "8"
+  MajorVersion: "3"
+  MinorVersion: "25"
 
 jobs:
   build_windows_native:
@@ -29,10 +29,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
@@ -117,10 +123,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -217,10 +229,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos-cd
@@ -315,6 +333,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup dotnet 6.0
       shell: pwsh
@@ -329,6 +349,16 @@ jobs:
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture 'x64' -Channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.12.0'
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v0
+      with:
+        useConfigFile: true
 
     - name: Get branch names
       id: branch-name
@@ -376,7 +406,7 @@ jobs:
 
     - name: Set release version
       shell: pwsh
-      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --PatchVersion=${{ env.GitVersion_Patch }} --BuildNumber=${{ env.GitVersion_CommitsSinceVersionSource }} --PreReleaseTag=${{ env.GitVersion_PreReleaseLabelWithDash }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
@@ -425,7 +455,7 @@ jobs:
 
     - name: Create release packages
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --RunNumber=${{ github.run_number }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.MajorVersion }} --MinorVersion=${{ env.MinorVersion }} --PatchVersion=${{ env.GitVersion_Patch }} --BuildNumber=${{ env.GitVersion_CommitsSinceVersionSource }} --PreReleaseTag=${{ env.GitVersion_PreReleaseLabelWithDash }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
@@ -454,10 +484,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
+
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.12.0'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
@@ -468,10 +514,8 @@ jobs:
       - name: Test .NET development
         shell: pwsh
         run: |
-          $year = (Get-Date).ToString("yy")
-          $dayOfYear = $(Get-Date).DayOfYear.ToString("000")
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
-          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.$year$dayOfYear.${{ github.run_number }}-beta.nupkg"
+          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.MajorVersion }}.${{ env.MinorVersion }}.${{ env.GitVersion_Patch }}.${{ env.GitVersion_CommitsSinceVersionSource }}${{ env.GitVersion_PreReleaseLabelWithDash }}.nupkg"
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project
@@ -530,6 +574,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3

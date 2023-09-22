@@ -38,14 +38,10 @@ namespace OpenDDSharp.Build.Tasks
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
-            string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
-            if (context.IsDevelop)
-            {
-                version += $"-beta";
-            }
+            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}.{context.BuildNumber}{context.PreReleaseTag}";
 
-            string solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-            string path = Path.Combine(solutionPath, "Sources", "OpenDDSharp", "OpenDDSharp.csproj");
+            var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+            var path = Path.Combine(solutionPath, "Sources", "OpenDDSharp", "OpenDDSharp.csproj");
             context.DotNetPack(path, new DotNetPackSettings
             {
                 Configuration = "Release",
@@ -88,7 +84,7 @@ namespace OpenDDSharp.Build.Tasks
                 Verbosity = NuGetVerbosity.Detailed,
             });
 
-            string releaseFolder = Path.Combine(solutionPath, "Release");
+            var releaseFolder = Path.Combine(solutionPath, "Release");
             if (!Directory.Exists(releaseFolder))
             {
                 Directory.CreateDirectory(releaseFolder);
@@ -101,7 +97,7 @@ namespace OpenDDSharp.Build.Tasks
 
             foreach (var file in Directory.GetFiles(".", "*.nupkg"))
             {
-                FileInfo fi = new FileInfo(file);
+                var fi = new FileInfo(file);
                 File.Move(file, Path.Combine(releaseFolder, fi.Name));
             }
         }

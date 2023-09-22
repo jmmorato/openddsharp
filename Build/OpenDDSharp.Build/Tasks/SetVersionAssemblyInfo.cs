@@ -17,12 +17,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-using Cake.Frosting;
-using Cake.FileHelpers;
 using Cake.Common.IO;
-using Cake.Core.IO;
-using System;
 using Cake.Core.Diagnostics;
+using Cake.FileHelpers;
+using Cake.Frosting;
 
 namespace OpenDDSharp.Build.Tasks
 {
@@ -37,13 +35,13 @@ namespace OpenDDSharp.Build.Tasks
         {
             context.Log.Information("Set version in AssemblyInfo...");
 
-            string version = $"{context.MajorVersion}.{context.MinorVersion}.{context.GetBuildRevisionVersion()}";
-            DirectoryPath path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
+            var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}.{context.BuildNumber}";
+            var path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
 
             context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyVersion\\(\")(.+?)(?=\"\\))", version);
             context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.cs", "(?<=AssemblyFileVersion\\(\")(.+?)(?=\"\\))", version);
 
-            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=File_Version\\s)(.+?)(?=\\s)", version.Replace('.', ','));
+            context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", @"(?<=File_Version\s)(.+?)(?=\s)", version.Replace('.', ','));
             context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=File_Version_Str\\s\")(.+?)(?=\")", version);
             context.ReplaceRegexInFiles($"{path}/**/AssemblyInfo.h", "(?<=Assembly_Version\\sL\")(.+?)(?=\")", version);
         }
