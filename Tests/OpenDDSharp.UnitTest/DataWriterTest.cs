@@ -941,31 +941,16 @@ namespace OpenDDSharp.UnitTest
 
             var count = 0;
             Timestamp timestamp = default;
-            var retReadInstance = ReturnCode.Error;
-            var lookupHandle = InstanceHandle.HandleNil;
             var samples = new List<TestStruct>();
             var infos = new List<SampleInfo>();
+            DataReader receivedReader = null;
 
-            var evtRef = evt;
             listener.DataAvailable += (reader) =>
             {
                 count++;
+                receivedReader = reader;
 
-                // if (count != 4)
-                // {
-                //     evtRef.Set();
-                //     return;
-                // }
-                // var dr = new TestStructDataReader(reader);
-                //
-                // lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
-                // retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
-                // if (retReadInstance == ReturnCode.Ok && infos.Count == 1)
-                // {
-                //     timestamp = infos[0].SourceTimestamp;
-                // }
-
-                evtRef.Set();
+                evt.Set();
             };
 
             // Wait for discovery
@@ -1027,12 +1012,23 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(4, count);
-            // Assert.AreNotEqual(InstanceHandle.HandleNil, lookupHandle);
-            // Assert.AreEqual(ReturnCode.Ok, retReadInstance);
-            // Assert.IsNotNull(infos);
-            // Assert.AreEqual(1, infos.Count);
-            // Assert.AreEqual(now.Seconds, timestamp.Seconds);
-            // Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
+            Assert.IsNotNull(receivedReader);
+
+            var dr = new TestStructDataReader(receivedReader);
+
+            var lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
+            var retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
+            if (retReadInstance == ReturnCode.Ok && infos.Count > 0)
+            {
+                timestamp = infos[0].SourceTimestamp;
+            }
+
+            Assert.AreNotEqual(InstanceHandle.HandleNil, lookupHandle);
+            Assert.AreEqual(ReturnCode.Ok, retReadInstance);
+            Assert.IsNotNull(infos);
+            Assert.AreEqual(1, infos.Count);
+            Assert.AreEqual(now.Seconds, timestamp.Seconds);
+            Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
 
             foreach (var d in listener.DataAvailable.GetInvocationList())
             {
