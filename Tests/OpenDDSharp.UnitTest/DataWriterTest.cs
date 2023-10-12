@@ -916,7 +916,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestWrite()
         {
-            using var evt = new ManualResetEventSlim(false);
+            var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
             var duration = new Duration { Seconds = 5 };
@@ -941,27 +941,14 @@ namespace OpenDDSharp.UnitTest
 
             var count = 0;
             Timestamp timestamp = default;
-            var retReadInstance = ReturnCode.Error;
-            var lookupHandle = InstanceHandle.HandleNil;
             var samples = new List<TestStruct>();
             var infos = new List<SampleInfo>();
+            DataReader receivedReader = null;
+
             listener.DataAvailable += (reader) =>
             {
                 count++;
-
-                if (count != 4)
-                {
-                    evt.Set();
-                    return;
-                }
-                var dr = new TestStructDataReader(reader);
-
-                lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
-                retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
-                if (retReadInstance == ReturnCode.Ok && infos.Count == 1)
-                {
-                    timestamp = infos[0].SourceTimestamp;
-                }
+                receivedReader = reader;
 
                 evt.Set();
             };
@@ -1025,6 +1012,17 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(evt.Wait(1_500));
             Assert.AreEqual(4, count);
+            Assert.IsNotNull(receivedReader);
+
+            var dr = new TestStructDataReader(receivedReader);
+
+            var lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
+            var retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
+            if (retReadInstance == ReturnCode.Ok && infos.Count > 0)
+            {
+                timestamp = infos[0].SourceTimestamp;
+            }
+
             Assert.AreNotEqual(InstanceHandle.HandleNil, lookupHandle);
             Assert.AreEqual(ReturnCode.Ok, retReadInstance);
             Assert.IsNotNull(infos);
@@ -1040,6 +1038,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
             listener.Dispose();
 
+            evt.Dispose();
+
             Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
             Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(dataReader));
@@ -1054,9 +1054,6 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestDispose()
         {
-            using var evtDisposed = new ManualResetEventSlim(false);
-            using var evtAlive = new ManualResetEventSlim(false);
-
             // Initialize entities
             var qos = new DataWriterQos
             {
@@ -1078,15 +1075,20 @@ namespace OpenDDSharp.UnitTest
             var dataReader = subscriber.CreateDataReader(_topic, drQos, listener);
             Assert.IsNotNull(dataReader);
 
+            var evtDisposed = new ManualResetEventSlim(false);
+            var evtAlive = new ManualResetEventSlim(false);
+
             var countDisposed = 0;
             Timestamp timestamp = default;
+            var disposed = evtDisposed;
+            var alive = evtAlive;
             listener.DataAvailable += (reader) =>
             {
                 var samples = new List<TestStruct>();
                 var infos = new List<SampleInfo>();
                 var dr = new TestStructDataReader(reader);
                 var ret = dr.Take(samples, infos);
-                if (ret != ReturnCode.Ok)
+                if (ret != ReturnCode.Ok || !infos.Any())
                 {
                     return;
                 }
@@ -1101,11 +1103,11 @@ namespace OpenDDSharp.UnitTest
                             timestamp = info.SourceTimestamp;
                         }
 
-                        evtDisposed.Set();
+                        disposed.Set();
                     }
                     else if (info.InstanceState == InstanceStateKind.AliveInstanceState)
                     {
-                        evtAlive.Set();
+                        alive.Set();
                     }
                 }
             };
@@ -1195,7 +1197,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(3, countDisposed);
             Assert.AreEqual(now.Seconds, timestamp.Seconds);
             Assert.AreEqual(now.NanoSeconds, timestamp.NanoSeconds);
-            evtDisposed.Reset();
+
+            evtDisposed.Dispose();
+            evtAlive.Dispose();
+            evtDisposed = null;
+            evtAlive = null;
 
             // Clean up entities
             foreach (var d in listener.DataAvailable.GetInvocationList())
@@ -1211,6 +1217,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
             Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            
+            
         }
 
         /// <summary>

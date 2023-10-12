@@ -13,7 +13,7 @@ volume, robustness, failure tolerant data distribution utilizing a
 publish and subscribe model.
 
 OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)  
-OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)
+OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)  
 OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthedocs.io/en/latest/)
 
 OpenDDSharp has been compiled with OpenDDS v3.25
