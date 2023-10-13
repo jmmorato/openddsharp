@@ -15,10 +15,10 @@ branches:
     increment: None
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
-    source-branches: [ 'develop' ]
+    source-branches: [ ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: true
+    is-mainline: false
     pre-release-weight: 23000
   develop:
     regex: ^dev(elop)?(ment)?$
@@ -33,7 +33,7 @@ branches:
     is-mainline: false
     pre-release-weight: 10000
   feature:
-    regex: ^feature(s)?[/-]
+    regex: ^(feature|features|fix|fixes)[/-]
     mode: ContinuousDelivery
     tag: beta
     increment: None
