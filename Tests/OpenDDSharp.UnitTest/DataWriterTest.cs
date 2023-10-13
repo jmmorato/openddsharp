@@ -1205,7 +1205,7 @@ namespace OpenDDSharp.UnitTest
                 var del = (Action<DataReader>)d;
                 listener.DataAvailable -= del;
             }
-            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.NoStatusMask));
+            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.AllStatusMask));
             listener.Dispose();
 
             Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
