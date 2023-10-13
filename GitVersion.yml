@@ -1,5 +1,5 @@
-next-version: 3.25.0
-mode: ContinuousDelivery
+next-version: "3.250.1"
+mode: Mainline
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
 
@@ -12,18 +12,17 @@ branches:
     regex: ^master$|^main$
     mode: ContinuousDelivery
     tag: ''
-    increment: None
+    increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
     source-branches: [ ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
-    pre-release-weight: 23000
+    is-mainline: true
   develop:
     regex: ^dev(elop)?(ment)?$
-    mode: ContinuousDelivery
-    tag: alpha
+    mode: ContinuousDeployment
+    tag: beta
     increment: None
     prevent-increment-of-merged-branch-version: false
     track-merge-target: true
@@ -31,11 +30,11 @@ branches:
     tracks-release-branches: true
     is-release-branch: false
     is-mainline: false
-    pre-release-weight: 10000
+    pre-release-weight: 20000
   feature:
     regex: ^(feature|features|fix|fixes)[/-]
-    mode: ContinuousDelivery
-    tag: beta
+    mode: ContinuousDeployment
+    tag: alpha
     increment: None
     prevent-increment-of-merged-branch-version: false
     track-merge-target: false
@@ -46,8 +45,8 @@ branches:
     pre-release-weight: 10000
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/-]
-    mode: ContinuousDelivery
-    tag: beta
+    mode: ContinuousDeployment
+    tag: alpha
     increment: None
     prevent-increment-of-merged-branch-version: false
     tag-number-pattern: '[/-](?<number>\d+)[-/]'
