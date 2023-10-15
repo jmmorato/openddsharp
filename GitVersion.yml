@@ -1,5 +1,5 @@
 next-version: "3.250.1"
-mode: Mainline
+mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
 
@@ -10,7 +10,7 @@ assembly-informational-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumbe
 branches:
   main:
     regex: ^master$|^main$
-    mode: ContinuousDelivery
+    mode: ContinuousDeployment
     tag: ''
     increment: Patch
     prevent-increment-of-merged-branch-version: true
@@ -18,7 +18,8 @@ branches:
     source-branches: [ ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: true
+    is-mainline: false
+    pre-release-weight: 23000
   develop:
     regex: ^dev(elop)?(ment)?$
     mode: ContinuousDeployment
