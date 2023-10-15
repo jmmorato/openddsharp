@@ -237,7 +237,7 @@ jobs:
         flag-name: coverage-linux-x64-Release
 
   build_macos:
-    runs-on: macos-13
+    runs-on: macos-13-xlarge
 
     env:
       OpenDdsVersion: "3.25"
