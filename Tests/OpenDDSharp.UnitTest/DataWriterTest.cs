@@ -1075,6 +1075,8 @@ namespace OpenDDSharp.UnitTest
             var dataReader = subscriber.CreateDataReader(_topic, drQos, listener);
             Assert.IsNotNull(dataReader);
 
+            var dr = new TestStructDataReader(dataReader);
+
             var evtDisposed = new ManualResetEventSlim(false);
             var evtAlive = new ManualResetEventSlim(false);
 
@@ -1084,7 +1086,6 @@ namespace OpenDDSharp.UnitTest
             {
                 var samples = new List<TestStruct>();
                 var infos = new List<SampleInfo>();
-                var dr = new TestStructDataReader(reader);
                 var ret = dr.Take(samples, infos);
                 if (ret != ReturnCode.Ok || !infos.Any())
                 {
