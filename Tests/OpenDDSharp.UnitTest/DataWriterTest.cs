@@ -1071,9 +1071,10 @@ namespace OpenDDSharp.UnitTest
 
             var drQos = new DataReaderQos();
             qos.Reliability.Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos;
-            var listener = new MyDataReaderListener();
-            var dataReader = subscriber.CreateDataReader(_topic, drQos, listener);
+            var dataReader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(dataReader);
+            var statusCondition = dataReader.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
             var dr = new TestStructDataReader(dataReader);
 
@@ -1082,34 +1083,53 @@ namespace OpenDDSharp.UnitTest
 
             var countDisposed = 0;
             Timestamp timestamp = default;
-            listener.DataAvailable += (reader) =>
+            var waitSet = new WaitSet();
+            waitSet.AttachCondition(statusCondition);
+            var thread = new Thread(() =>
             {
-                var samples = new List<TestStruct>();
-                var infos = new List<SampleInfo>();
-                var ret = dr.Take(samples, infos);
-                if (ret != ReturnCode.Ok || !infos.Any())
+                var isSet = false;
+                while (!isSet)
                 {
-                    return;
-                }
+                    ICollection<Condition> conditions = new List<Condition>();
+                    waitSet.Wait(conditions);
 
-                foreach (var info in infos)
-                {
-                    if (info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
+                    if (!conditions.Any(cond => cond == statusCondition && cond.TriggerValue))
                     {
-                        countDisposed++;
-                        if (countDisposed == 3)
+                        continue;
+                    }
+
+                    var samples = new List<TestStruct>();
+                    var infos = new List<SampleInfo>();
+                    var ret = dr.Take(samples, infos);
+                    if (ret != ReturnCode.Ok || !infos.Any())
+                    {
+                        continue;
+                    }
+
+                    foreach (var info in infos)
+                    {
+                        if (info.InstanceState == InstanceStateKind.NotAliveDisposedInstanceState)
                         {
-                            timestamp = info.SourceTimestamp;
-                        }
+                            countDisposed++;
+                            if (countDisposed == 3)
+                            {
+                                timestamp = info.SourceTimestamp;
+                                isSet = true;
+                            }
 
-                        evtDisposed.Set();
-                    }
-                    else if (info.InstanceState == InstanceStateKind.AliveInstanceState)
-                    {
-                        evtAlive.Set();
+                            evtDisposed.Set();
+                        }
+                        else if (info.InstanceState == InstanceStateKind.AliveInstanceState)
+                        {
+                            evtAlive.Set();
+                        }
                     }
                 }
+            })
+            {
+                IsBackground = true,
             };
+            thread.Start();
 
             // Wait for discovery
             Assert.IsTrue(writer.WaitForSubscriptions(1, 10_000));
@@ -1199,15 +1219,6 @@ namespace OpenDDSharp.UnitTest
 
             evtDisposed.Dispose();
             evtAlive.Dispose();
-
-            // Clean up entities
-            foreach (var d in listener.DataAvailable.GetInvocationList())
-            {
-                var del = (Action<DataReader>)d;
-                listener.DataAvailable -= del;
-            }
-            Assert.AreEqual(ReturnCode.Ok, dataReader.SetListener(null, StatusMask.AllStatusMask));
-            listener.Dispose();
 
             Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(dataReader));
