@@ -459,7 +459,7 @@ jobs:
     - name: NuGet Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+        name: openddsharp-nuget-${{ github.run_number }}
         path:  ${{ github.workspace }}/Release/*.nupkg
 
   test_artifacts:
@@ -506,7 +506,7 @@ jobs:
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v3
         with:
-          name: openddsharp-nuget-${{ env.MajorVersion }}-${{ env.MinorVersion }}-${{ github.run_number }}
+          name: openddsharp-nuget-${{ github.run_number }}
           path: ${{ github.workspace }}/nupkg
 
       - name: Test .NET development
