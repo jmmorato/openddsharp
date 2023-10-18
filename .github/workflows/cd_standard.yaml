@@ -513,7 +513,13 @@ jobs:
         shell: pwsh
         run: |
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
-          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.${{ env.GitVersion_Major }}.${{ env.GitVersion_Minor }}.${{ env.GitVersion_Patch }}.${{ env.GitVersion_WeightedPreReleaseNumber }}${{ env.GitVersion_PreReleaseLabelWithDash }}.nupkg"
+          
+          $version = ${{ env.GitVersion_Major }}.${{ env.GitVersion_Minor }}.${{ env.GitVersion_Patch }}
+          if (-Not ([string]::IsNullOrEmpty(${{ env.GitVersion_PreReleaseLabelWithDash }}))) {
+            $version = $version + "${{ env.GitVersion_PreReleaseLabelWithDash }}${{ env.GitVersion_WeightedPreReleaseNumber }}"
+          }
+
+          dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.$version.nupkg"
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project

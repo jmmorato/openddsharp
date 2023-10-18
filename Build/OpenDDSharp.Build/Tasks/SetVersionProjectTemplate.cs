@@ -38,7 +38,7 @@ namespace OpenDDSharp.Build.Tasks
             var version = $"{context.MajorVersion}.{context.MinorVersion}.{context.PatchVersion}";
             if (!string.IsNullOrWhiteSpace(context.PreReleaseTag))
             {
-                version += $"-{context.PreReleaseTag}{context.BuildNumber}";
+                version += $"{context.PreReleaseTag}{context.BuildNumber}";
             }
 
             var path = context.MakeAbsolute(context.Directory(BuildContext.OPENDDSHARP_SOLUTION_FOLDER));
