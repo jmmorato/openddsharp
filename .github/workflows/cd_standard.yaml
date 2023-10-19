@@ -514,9 +514,9 @@ jobs:
         run: |
           dotnet nuget add source "${{ github.workspace }}/nupkg" --name LocalVersion
           
-          $version = ${{ env.GitVersion_Major }}.${{ env.GitVersion_Minor }}.${{ env.GitVersion_Patch }}
+          $version = "${{ env.GitVersion_Major }}.${{ env.GitVersion_Minor }}.${{ env.GitVersion_Patch }}"
           if (-Not ([string]::IsNullOrEmpty("${{ env.GitVersion_PreReleaseLabelWithDash }}"))) {
-            $version = $version + "${{ env.GitVersion_PreReleaseLabelWithDash }}${{ env.GitVersion_WeightedPreReleaseNumber }}"
+            $version = "$version${{ env.GitVersion_PreReleaseLabelWithDash }}${{ env.GitVersion_WeightedPreReleaseNumber }}"
           }
 
           dotnet new --install "${{ github.workspace }}/nupkg/OpenDDSharp.Templates.$version.nupkg"
