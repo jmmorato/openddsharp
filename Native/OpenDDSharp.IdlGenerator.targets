@@ -7,6 +7,14 @@
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
+    <PlatformFolder>x64</PlatformFolder>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x86' Or '$(Platform)'=='x86'">
+    <PlatformFolder>x86</PlatformFolder>
+  </PropertyGroup>
+
   <PropertyGroup>
 	  <DefineConstants Condition="'$(IsWindows)'=='true'">$(DefineConstants);Windows</DefineConstants>
   </PropertyGroup>
@@ -18,30 +26,17 @@
   </PropertyGroup>
 
   <!--Custom OpenDDS and ACE/TAO variables-->
-  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x86</DDS_ROOT>
+  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true'">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_$(PlatformFolder)</DDS_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="ACE Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x86</ACE_ROOT>
+  <PropertyGroup Label="ACE Home" Condition="'$(IsWindows)'=='true'">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_$(PlatformFolder)</ACE_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x86\TAO</TAO_ROOT>
+  <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true'">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_$(PlatformFolder)\TAO</TAO_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
-    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x86\tools\rapidjson</RAPIDJSON_ROOT>
-  </PropertyGroup>
-
-  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x64</DDS_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Label="ACE Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x64</ACE_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Label="TAO Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)..\tools\ACE_x64\TAO</TAO_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
-    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_x64\tools\rapidjson</RAPIDJSON_ROOT>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsWindows)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_$(PlatformFolder)\tools\rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
