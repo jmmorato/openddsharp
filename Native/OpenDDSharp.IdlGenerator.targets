@@ -88,13 +88,9 @@
 
   <!-- Add VC++ to the PATH -->
   <UsingTask TaskName="OpenDDSharp.BuildTasks.AddPathVC" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\OpenDDSharp.BuildTasks.dll" />
-  <Target Name="AddPathVCTargetX64" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+  <Target Name="AddPathVCTargetX64" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true'">
     <Message Text="Add Visual C++ to the PATH..." Importance="High" />
-    <AddPathVC Platform="x64" />
-  </Target>
-  <Target Name="AddPathVCTargetX86" BeforeTargets="PreBuildEvent" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
-    <Message Text="Add Visual C++ to the PATH..." Importance="High" />
-    <AddPathVC Platform="x86" />
+    <AddPathVC Platform="$(PlatformFolder)" />
   </Target>
 
   <!--Set environment variables-->
@@ -133,11 +129,11 @@
   </Target>
 
   <!--Generate OpenDDSharp Wrapper files-->
-  <Target Name="OpenDDSharpIdlWrapperWindowsX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+  <Target Name="OpenDDSharpIdlWrapperWindowsX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsWindows)'=='true' And '$(PlatformFolder)'=='x64'">
 	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
 	  <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x64/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlWrapperWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
+  <Target Name="OpenDDSharpIdlWrapperWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsWindows)'=='true' And '$(PlatformFolder)'=='x86'">
 	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
 	  <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
@@ -151,11 +147,11 @@
   </Target>
 
   <!--Create cmake-->
-  <Target Name="OpenDDSharpCmakeOpenddsx64" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='win-x64' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
+  <Target Name="OpenDDSharpCmakeOpenddsx64" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x64' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
 	  <Exec Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpCmakeOpenddsx86" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)'=='win-x86' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
+  <Target Name="OpenDDSharpCmakeOpenddsx86" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x86' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
 	  <Exec Command="cmake -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
@@ -183,11 +179,11 @@
   </Target>
 
   <!--Generate OpenDDSharp IDL files-->
-  <Target Name="OpenDDSharpIdlCSharpWindowsX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x64'">
+  <Target Name="OpenDDSharpIdlCSharpWindowsX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(PlatformFolder)'=='x64'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x64/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" IgnoreExitCode="false" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlCSharpWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(RuntimeIdentifier)'=='win-x86'">
+  <Target Name="OpenDDSharpIdlCSharpWindowsX86" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true' And '$(PlatformFolder)'=='x86'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
