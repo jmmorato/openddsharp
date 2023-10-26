@@ -2,6 +2,7 @@ next-version: "3.250.2"
 mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
+continuous-delivery-fallback-tag: ''
 
 assembly-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
 assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
@@ -12,10 +13,10 @@ branches:
     regex: ^master$|^main$
     mode: ContinuousDeployment
     tag: ''
-    increment: Patch
+    increment: None
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
-    source-branches: [ ]
+    source-branches: [ develop ]
     tracks-release-branches: false
     is-release-branch: false
     is-mainline: false
