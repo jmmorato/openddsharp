@@ -404,7 +404,7 @@ jobs:
 
     - name: Set release version
       shell: pwsh
-      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.GitVersion_Major }} --MinorVersion=${{ env.GitVersion_Minor }} --PatchVersion=${{ env.GitVersion_Patch }} --BuildNumber=${{ env.GitVersion_WeightedPreReleaseNumber }} --PreReleaseTag=${{ env.GitVersion_PreReleaseLabelWithDash }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}\Build\OpenDDSharp.Build.ps1 --target=SetVersion --MajorVersion=${{ env.GitVersion_Major }} --MinorVersion=${{ env.GitVersion_Minor }} --PatchVersion=${{ env.GitVersion_Patch }} --BuildNumber=${{ env.GitVersion_WeightedPreReleaseNumber }} --PreReleaseTag="${{ env.GitVersion_PreReleaseLabelWithDash }}" --BranchName="${{ steps.branch-name.outputs.current_branch }}"
       working-directory: ${{ github.workspace }}\Build
 
     - name: Dotnet restore
@@ -453,7 +453,7 @@ jobs:
 
     - name: Create release packages
       shell: pwsh
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.GitVersion_Major }} --MinorVersion=${{ env.GitVersion_Minor }} --PatchVersion=${{ env.GitVersion_Patch }} --BuildNumber=${{ env.GitVersion_WeightedPreReleaseNumber }} --PreReleaseTag=${{ env.GitVersion_PreReleaseLabelWithDash }} --BranchName=${{ steps.branch-name.outputs.current_branch }}
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=Pack --MajorVersion=${{ env.GitVersion_Major }} --MinorVersion=${{ env.GitVersion_Minor }} --PatchVersion=${{ env.GitVersion_Patch }} --BuildNumber=${{ env.GitVersion_WeightedPreReleaseNumber }} --PreReleaseTag="${{ env.GitVersion_PreReleaseLabelWithDash }}" --BranchName="${{ steps.branch-name.outputs.current_branch }}"
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
