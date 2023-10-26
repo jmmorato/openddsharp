@@ -2,7 +2,7 @@ next-version: "3.250.2"
 mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
-continuous-delivery-fallback-tag: ''
+continuous-delivery-fallback-tag: ' '
 
 assembly-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
 assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
