@@ -8,17 +8,21 @@
       href: dds_core_concepts.md
 #    - name: OpenDDSharp Requirements
 #      href: openddsharp_requirements.md
-#    - name: Domain Module
-#      href: domain_module.md
+    - name: Domain Module
+      href: domain_module.md
 #    - name: Topic Definition Module
 #      href: topic_definition_module.md
 #    - name: Publication Module
-#      href: publication_modulemd
+#      href: publication_module.md
 #    - name: Subscription Module
 #      href: subscription_module.md
 #    - name: Quality of Service
 #      href: subscription_module.md
 #    - name: Listeners, Conditions and WaitSets
 #      href: listeners_conditions_waitsets.md
+#    - name: Transports
+#      href: transports.md
+#    - name: Built-in Topics
+#      href: built_in_topics.md
 - name: IDL to C# Mapping
   href: idl.md
