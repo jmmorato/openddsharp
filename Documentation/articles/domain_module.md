@@ -1,6 +1,6 @@
 # OpenDDSharp Domain Module
 
-## Participant Service Class
+## ParticipantService Class
 
 The `ParticipantService` is singleton class in OpenDDSharp that provides the primary interface for managing
 the DDS participants in your application. It allows you to obtain the `DomainParticipantFactory`, set up discovery,
@@ -71,9 +71,9 @@ ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
 ```
 
 For a detailed description of the methods and properties implemented in the `ParticipantService`, please refer
-to the [ParticipantService API Reference](xref:OpenDDSharp.DDS.ParticipantService) documentation.
+to the [ParticipantService API Reference](xref:OpenDDSharp.OpenDDS.DCPS.ParticipantService) documentation.
 
-## Domain Participant Factory Class
+## DomainParticipantFactory Class
 
 The `DomainParticipantFactory` is the class responsible for creating and managing `DomainParticipant` objects.
 It serves as a central point for configuring and customizing the behavior of `DomainParticipants` and their
@@ -113,7 +113,7 @@ dpf.DeleteParticipant(participant);
 For a detailed description of the methods and properties implemented in the `DomainParticipantFactory`, please refer
 to the [DomainParticipantFactory API Reference](xref:OpenDDSharp.DDS.DomainParticipantFactory) documentation.
 
-### Domain Participant Factory QoS
+### DomainParticipantFactoryQoS Class
 
 In DDS, Quality of Service (QoS) refers to a set of configurable parameters that affect various aspects of
 communication, such as reliability, durability, resource usage, etc... 
@@ -165,7 +165,7 @@ dpf.SetDefaultDomainParticipantQos(qos);
 For a detailed description of the QoS policies implemented for the `DomainParticipant`, please refer
 to the [DomainParticipantQos API Reference](xref:OpenDDSharp.DDS.DomainParticipantFactoryQos) documentation.
 
-## Domain Participant Class
+## DomainParticipant Class
 
 The `DomainParticipant` class is a fundamental component in the DDS (Data Distribution Service) middleware.
 It represents a participant in the DDS domain, which is a logical grouping of DDS entities such as publishers,
@@ -306,7 +306,7 @@ participant.IgnorePublication(dataWriterInstanceHandle);
 For a detailed description of the methods and properties implemented in the `DomainParticipant`, please refer
 to the [DomainParticipant API Reference](xref:OpenDDSharp.DDS.DomainParticipant) documentation.
 
-### Domain Participant QoS
+### DomainParticipantQoS Class
 
 The `DomainParticipantQos` class holds all properties that allows you to customize the behavior of the
 `DomainParticipant` and its associated resources to suit your specific needs. These properties are referred to as
@@ -341,19 +341,25 @@ return `ReturnCode.ImmutablePolicy` and the changes won't be applied.
 For a detailed description of the QoS policies implemented for the `DomainParticipant`, please refer
 to the [DomainParticipantQos API Reference](xref:OpenDDSharp.DDS.DomainParticipantQos) documentation.
 
+### DomainParticipantListener Class
+
 ## Domain Module Diagram
 
-Here is a diagram illustrating the relationships between the main classes of the Domain Module and Participant Service, Domain Participant Factory,
-and Domain Participant class, along with the modules related to them:
+Here is a diagram illustrating the relationships between the main classes of the Domain Module
+along with the modules related to them:
 
 ```mermaid
 graph TB
     subgraph A[Domain Module]
-        AA[ParticipantService] --> AB[DomainParticipantFactory]
-        AB --> AD[DomainParticipant]
+        direction TB
+        AA[ParticipantService] -->|retrieve| AB[DomainParticipantFactory]
+        AB o-.-o|1| DomainParticipantFactoryQos
+        AB --->|create| AD[DomainParticipant]
+        AD o-.-o|1| DomainParticipantQos
+        AD o-.-o|0..1| DomainParticipantListener
     end     
-    A ==> C[Topic Definition Module]
-    A ==> D[Publication Module]
-    A ==> E[Subscription Module]
+    A ==> C[/\nTopic-Definition\nModule\]
+    A ==> D[/\nPublication\nModule\]
+    A ==> E[/\nSubscription\nModule\]
 ```
 

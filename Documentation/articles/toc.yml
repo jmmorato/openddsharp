@@ -10,13 +10,11 @@
 #      href: openddsharp_requirements.md
     - name: Domain Module
       href: domain_module.md
-#    - name: Topic Definition Module
-#      href: topic_definition_module.md
+    - name: Topic Definition Module
+      href: topic_definition_module.md
 #    - name: Publication Module
 #      href: publication_module.md
 #    - name: Subscription Module
-#      href: subscription_module.md
-#    - name: Quality of Service
 #      href: subscription_module.md
 #    - name: Listeners, Conditions and WaitSets
 #      href: listeners_conditions_waitsets.md
