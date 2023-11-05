@@ -10,10 +10,8 @@ The following sections describe the interfaces and classes that are part of the 
 
 The `ITopicDescription` interface is the contract between publications and subscriptions that ensures both are linked
 to the same data-type. It allows applications to discover the type associated with a topic, enabling them to work
-with data in a generic way.
-
-The `ITopicDescription` interface is the base interface for the `Topic`, `ContentFilteredTopic` and `MultiTopic`
-classes.
+with data in a generic way. The `ITopicDescription` is the base interface for the `Topic`, `ContentFilteredTopic`
+and `MultiTopic` classes.
 
 Before a type can be used in a DDS system, it must be registered within the middleware. This is done by creating
 a specific `TypeSupport` object for the type and registering it to the `DomainParticipant`. You will learn more

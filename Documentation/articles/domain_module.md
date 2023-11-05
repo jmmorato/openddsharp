@@ -1,5 +1,48 @@
 # OpenDDSharp Domain Module
 
+The Domain module is a fundamental component of the Data Distribution Service (DDS) standard, it contains the entity
+(`DomaintParticipant`) that represent a participation the DDS domain, and the related classes for the creation, 
+configuration and management of a participant in the DDS system.
+
+A DDS domain is a logical communication channel where data is exchanged between different DDS entities.
+A domain can be thought of as a virtual network within which DDS participants communicate. It provides a boundary
+within which participants can discover and communicate directly with each other, share common resources, and have their
+own specific QoS and security settings. `DomainParticipants` in different DDS domains will never exchange messages with
+each other, even those running on the same application, computer or sharing the same physical network.
+This isolation is important for managing and scaling complex real-time systems where different groups of participants
+may have distinct communication requirements and security concerns.
+
+An application participates in a DDS domain by creating a `DomainParticipant` for that domain ID. A domain ID is
+represented by an integer required during the `DomainParticipant` creation. A application could also to participate
+in several domains by creating one `DomainParticipant` for each domain ID. The following diagram represents an
+application (`Application A`) that is used as a bridge between two different domains. That way, the application can be
+used, for example, to solve transport communication issues between different physical networks, to restrict data
+sensitive topics between different applications or to merge the data of two different group of applications:
+share
+
+```mermaid
+graph TB
+    subgraph D1[Domain 1]
+        AB[Application B]
+    end
+    
+    subgraph D12[Domain 1 & 2]
+        AA[Application A]
+    end
+    
+    subgraph D2[Domain 2]
+        AC[Application C]
+    end
+    
+    AB <==> AA
+    AC <==> AA
+```
+
+In summary, the Domain module serves as a central coordination point for the various elements involved in data
+communication within a DDS domain. The Domain module is responsible for managing the configuration and communication
+within a DDS system. It provides the foundation for creating participants, which can then create publishers and
+subscribers, and it also facilitates the management of QoS policies and transport configurations.
+
 ## ParticipantService Class
 
 The `ParticipantService` is singleton class in OpenDDSharp that provides the primary interface for managing
@@ -342,6 +385,83 @@ For a detailed description of the QoS policies implemented for the `DomainPartic
 to the [DomainParticipantQos API Reference](xref:OpenDDSharp.DDS.DomainParticipantQos) documentation.
 
 ### DomainParticipantListener Class
+
+In the Data Distribution Service (DDS) middleware, the `DomainParticipantListener` is an abstract class that provides a way to receive notifications about events related to a domain participant. A domain participant represents a logical entity within the DDS system that can publish or subscribe to data.
+
+To use the `DomainParticipantListener`, you need to create a class that extends it and override the methods that you're interested in. Here are the methods that can be overridden:
+
+1. `on_inconsistent_topic`: This method is called when a topic is discovered with the same name but different type or with incompatible QoS settings. This can be important in cases where you have multiple applications or components running in the same DDS domain and there is a topic name collision.
+
+```cpp
+virtual void on_inconsistent_topic(
+        dds::topic::Topic<BUILTIN_TOPIC_TYPE>& topic,
+        const dds::core::status::InconsistentTopicStatus& status)
+```
+
+2. `on_offered_deadline_missed`: This method is called when an offered deadline is missed. It provides information about the deadline and which instances missed the deadline.
+
+```cpp
+virtual void on_offered_deadline_missed(
+        dds::pub::AnyDataWriter& writer,
+        const dds::core::status::OfferedDeadlineMissedStatus& status)
+```
+
+3. `on_offered_incompatible_qos`: This method is called when there is a change in the offered Quality of Service (QoS) settings that results in incompatibility with the corresponding DataReader's QoS settings.
+
+```cpp
+virtual void on_offered_incompatible_qos(
+        dds::pub::AnyDataWriter& writer,
+        const dds::core::status::OfferedIncompatibleQosStatus& status)
+```
+
+4. `on_liveliness_lost`: This method is called when the participant's liveliness is lost. Liveliness is a concept in DDS that helps detect when a participant has become unresponsive.
+
+```cpp
+virtual void on_liveliness_lost(
+        dds::pub::AnyDataWriter& writer,
+        const dds::core::status::LivelinessLostStatus& status)
+```
+
+5. `on_subscription_matched`: This method is called when a DataReader becomes matched with a DataWriter.
+
+```cpp
+virtual void on_subscription_matched(
+        dds::sub::AnyDataReader& reader,
+        const dds::core::status::SubscriptionMatchedStatus& status)
+```
+
+6. `on_sample_lost`: This method is called when a sample is lost. Sample loss can occur due to resource limitations or network issues.
+
+```cpp
+virtual void on_sample_lost(
+        dds::sub::AnyDataReader& reader,
+        const dds::core::status::SampleLostStatus& status)
+```
+
+7. `on_data_available`: This method is called when data is available for reading on a DataReader.
+
+```cpp
+virtual void on_data_available(
+        dds::sub::AnyDataReader& reader)
+```
+
+8. `on_data_on_readers`: This method is called when data becomes available on any of the DataReaders associated with the participant.
+
+```cpp
+virtual void on_data_on_readers(
+        dds::sub::Subscriber& subscriber)
+```
+
+9. `on_data_on_writers`: This method is called when data becomes available on any of the DataWriters associated with the participant.
+
+```cpp
+virtual void on_data_on_writers(
+        dds::pub::Publisher& publisher)
+```
+
+These methods allow you to respond to various events related to the participant, such as missed deadlines, incompatible QoS, liveliness loss, and more.
+
+Remember to implement only the methods that are relevant to your use case, as you may not need to handle every possible event. This provides a way to customize the behavior of your DDS application based on the specific events that are important to you.
 
 ## Domain Module Diagram
 
