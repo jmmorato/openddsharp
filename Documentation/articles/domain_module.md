@@ -386,82 +386,125 @@ to the [DomainParticipantQos API Reference](xref:OpenDDSharp.DDS.DomainParticipa
 
 ### DomainParticipantListener Class
 
-In the Data Distribution Service (DDS) middleware, the `DomainParticipantListener` is an abstract class that provides a way to receive notifications about events related to a domain participant. A domain participant represents a logical entity within the DDS system that can publish or subscribe to data.
+The `DomainParticipantListener` is an abstract class that provides a way to receive notifications about status
+changes related to the `DomainParticipant` entities. `DomainParticipantListener` inherits the callbacks
+from `TopicListener`, `PublisherListener`, and `SubscriberListener`, therefore it can be used to receive notifications
+about topics, publishers and subscribers created by the `DomainParticipant`.
 
-To use the `DomainParticipantListener`, you need to create a class that extends it and override the methods that you're interested in. Here are the methods that can be overridden:
+To use the `DomainParticipantListener`, you need to create a class that extends it and override the callback methods.
+These methods allow you to respond to various events related to the participant entities, such as missed deadlines,
+incompatible QoS, liveliness loss, and more. Here's an example of how to create a class that extends the
+`DomainParticipantListener` and overrides the callback methods:
 
-1. `on_inconsistent_topic`: This method is called when a topic is discovered with the same name but different type or with incompatible QoS settings. This can be important in cases where you have multiple applications or components running in the same DDS domain and there is a topic name collision.
+```csharp
+public class MyParticipantListener : DomainParticipantListener
+{
+    public override void OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnInconsistentTopic called");
+    }
 
-```cpp
-virtual void on_inconsistent_topic(
-        dds::topic::Topic<BUILTIN_TOPIC_TYPE>& topic,
-        const dds::core::status::InconsistentTopicStatus& status)
+    public override void OnDataAvailable(DataReader reader)
+    {
+        Console.WriteLine($"DomainParticipant OnDataAvailable called");
+    }
+
+    public override void OnDataOnReaders(Subscriber subscriber)
+    {
+        Conosole.WriteLine($"DomainParticipant OnDataOnReaders called");
+    }
+
+    public override void OnLivelinessChanged(DataReader reader, LivelinessChangedStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnLivelinessChanged called");
+    }
+
+    public override void OnRequestedDeadlineMissed(DataReader reader, RequestedDeadlineMissedStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnRequestedDeadlineMissed called");
+    }
+
+    public override void OnRequestedIncompatibleQos(DataReader reader, RequestedIncompatibleQosStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnRequestedIncompatibleQos called");
+    }
+
+    public override void OnSampleLost(DataReader reader, SampleLostStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnSampleLost called");
+    }
+
+    public override void OnSampleRejected(DataReader reader, SampleRejectedStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnSampleRejected called");
+    }
+
+    public override void OnSubscriptionMatched(DataReader reader, SubscriptionMatchedStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnSubscriptionMatched called");
+    }
+
+    public override void OnLivelinessLost(DataWriter writer, LivelinessLostStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnLivelinessLost called");
+    }
+
+    public override void OnOfferedDeadlineMissed(DataWriter writer, OfferedDeadlineMissedStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnOfferedDeadlineMissed called");
+    }
+
+    public override void OnOfferedIncompatibleQos(DataWriter writer, OfferedIncompatibleQosStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnOfferedIncompatibleQos called");
+    }
+
+    public override void OnPublicationMatched(DataWriter writer, PublicationMatchedStatus status)
+    {
+        Console.WriteLine($"DomainParticipant OnPublicationMatched called");
+    }
+}
 ```
 
-2. `on_offered_deadline_missed`: This method is called when an offered deadline is missed. It provides information about the deadline and which instances missed the deadline.
+Once you have created your `DomainParticipantListener` implementation class, you can register it during the creation of
+the `DomainParticipant` object. Here's an example of how to register the listener during the `DomainParticipant`
+creation:
 
-```cpp
-virtual void on_offered_deadline_missed(
-        dds::pub::AnyDataWriter& writer,
-        const dds::core::status::OfferedDeadlineMissedStatus& status)
+```csharp
+var dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
+var listener = new MyParticipantListener();
+var participant = dpf.CreateParticipant(42, null, listener);
 ```
 
-3. `on_offered_incompatible_qos`: This method is called when there is a change in the offered Quality of Service (QoS) settings that results in incompatibility with the corresponding DataReader's QoS settings.
+The events received by the `DomainParticipantListener` can be masked by setting the `StatusMask` parameter. This
+parameter allows you to specify which events you want to receive notifications for. For example, if you only want to
+receive notifications about liveliness loss and incompatible QoS, you can set the `StatusMask` property to
+`StatusMask.LivelinessLost | StatusMask.OfferedIncompatibleQos`. This will ensure that you only receive notifications
+for these two events and ignore all others. Here's an example of how to set the `StatusMask` property:
 
-```cpp
-virtual void on_offered_incompatible_qos(
-        dds::pub::AnyDataWriter& writer,
-        const dds::core::status::OfferedIncompatibleQosStatus& status)
+```csharp
+```csharp
+var dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
+var listener = new MyParticipantListener();
+var participant = dpf.CreateParticipant(42, null, listener, StatusMask.LivelinessLost | StatusMask.OfferedIncompatibleQos);
 ```
 
-4. `on_liveliness_lost`: This method is called when the participant's liveliness is lost. Liveliness is a concept in DDS that helps detect when a participant has become unresponsive.
+The `DomainParticipantListener` also provides a `SetListener()` method that allows you to register a listener
+after the `DomainParticipant` has been created. This can be useful if you want to change the listener at runtime
+without having to recreate the `DomainParticipant`. Here's an example of how to register a listener after the
+`DomainParticipant` has been created:
 
-```cpp
-virtual void on_liveliness_lost(
-        dds::pub::AnyDataWriter& writer,
-        const dds::core::status::LivelinessLostStatus& status)
+```csharp
+var listener = new MyParticipantListener();
+participant.SetListener(listener, StatusMask.LivelinessLost | StatusMask.OfferedIncompatibleQos);
 ```
 
-5. `on_subscription_matched`: This method is called when a DataReader becomes matched with a DataWriter.
+In order to remove the listener, you can call the `SetListener()` method with a `null` listener. Here's an example
+of how to remove the listener:
 
-```cpp
-virtual void on_subscription_matched(
-        dds::sub::AnyDataReader& reader,
-        const dds::core::status::SubscriptionMatchedStatus& status)
+```csharp
+participant.SetListener(null);
 ```
-
-6. `on_sample_lost`: This method is called when a sample is lost. Sample loss can occur due to resource limitations or network issues.
-
-```cpp
-virtual void on_sample_lost(
-        dds::sub::AnyDataReader& reader,
-        const dds::core::status::SampleLostStatus& status)
-```
-
-7. `on_data_available`: This method is called when data is available for reading on a DataReader.
-
-```cpp
-virtual void on_data_available(
-        dds::sub::AnyDataReader& reader)
-```
-
-8. `on_data_on_readers`: This method is called when data becomes available on any of the DataReaders associated with the participant.
-
-```cpp
-virtual void on_data_on_readers(
-        dds::sub::Subscriber& subscriber)
-```
-
-9. `on_data_on_writers`: This method is called when data becomes available on any of the DataWriters associated with the participant.
-
-```cpp
-virtual void on_data_on_writers(
-        dds::pub::Publisher& publisher)
-```
-
-These methods allow you to respond to various events related to the participant, such as missed deadlines, incompatible QoS, liveliness loss, and more.
-
-Remember to implement only the methods that are relevant to your use case, as you may not need to handle every possible event. This provides a way to customize the behavior of your DDS application based on the specific events that are important to you.
 
 ## Domain Module Diagram
 
