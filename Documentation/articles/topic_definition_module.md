@@ -6,6 +6,13 @@ within the DDS system.
 
 The following sections describe the interfaces and classes that are part of the Topic-Definition module.
 
+## Auto-Generated TypeSupport Classes
+
+TODO
+
+`TypeSupport` is a class that provides the necessary operations for working with the data types associated with topics.
+It includes functions for serializing and deserializing data, as well as for managing the type information.
+
 ## ITopicDescription Interface
 
 The `ITopicDescription` interface is the contract between publications and subscriptions that ensures both are linked
@@ -70,33 +77,45 @@ Console.WriteLine($"Topic type name: {topicDescription.TypeName}");
 The `LookupTopicDescription` method returns a `ITopicDescription` object that matches the name provided as a parameter.
 If no `ITopicDescription` is found, the method returns `null`.
 
-## TypeSupport Classes
-
-`TypeSupport` is a class that provides the necessary operations for working with the data types associated with topics.
-It includes functions for serializing and deserializing data, as well as for managing the type information.
-
 ## Topic Class
+
+TODO
 
 `Topic` is a class that defines a specific data type that will be exchanged between DDS participants.
 It associates a data type (e.g., a structure or a class) with a name that identifies the topic.
 It also encapsulates information about the data type, including its name and a unique identifier.
 
+### TopicQos Class
+
+TODO
+
+### TopicListener Class
+
+TODO
+
+`TopicListener` is an interface that allows applications to define callback methods that are triggered when certain
+events related to a topic occur. For example, a listener can be notified when a new topic is discovered or when
+a topic is removed.
+
 ## ContentFilteredTopic Class
+
+TODO
 
 `ContentFilteredTopic` is a specialized type of topic that allows a subscriber to filter the data it receives
 based on specific criteria. It provides a way to subscribe to a subset of the data that a publisher is offering,
 based on a defined filter expression.
 
 ## MultiTopic Class
+
+TODO
+
 `MultiTopic` is a class that enables a subscriber to express interest in multiple related topics with a single
 subscription. It allows a subscriber to consolidate its subscriptions to various related topics, reducing the overhead
 associated with managing multiple subscriptions.
 
-## TopicListener Class
+## Topic-Definition Module Diagram
 
-`TopicListener` is an interface that allows applications to define callback methods that are triggered when certain
-events related to a topic occur. For example, a listener can be notified when a new topic is discovered or when
-a topic is removed.
+TODO
 
 Now, let's visualize the relationships between these classes in a diagram:
 
