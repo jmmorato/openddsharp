@@ -152,7 +152,7 @@ namespace OpenDDSharp.OpenDDS.DCPS
         }
 
         /// <summary>
-        /// Set the discovery repository for a specifi domain id.
+        /// Set the discovery repository for a specific domain id.
         /// </summary>
         /// <param name="domain">The domain id.</param>
         /// <param name="repo">The repository key.</param>
