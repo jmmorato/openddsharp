@@ -24,11 +24,13 @@ namespace OpenDDSharp.DDS
 {
     /// <summary>
     /// ITopicDescription represents the fact that both publications and subscriptions are tied to a single data-type.
-    /// The interface is implemented on <see cref="Topic" />, <see cref="ContentFilteredTopic" />, and <see cref="MultiTopic" />.
+    /// The interface is implemented on <see cref="Topic" />, <see cref="ContentFilteredTopic" />,
+    /// and <see cref="MultiTopic" />.
     /// </summary>
     /// <remarks>
-    /// Its property TypeName defines a unique resulting type for the publication or the subscription and therefore creates an implicit association
-    /// with a TypeSupport. ITopicDescription has also a Name property that allows it to be retrieved locally.
+    /// Its property TypeName defines a unique resulting type for the publication or the subscription and therefore
+    /// creates an implicit association with a TypeSupport.
+    /// ITopicDescription has also a Name property that allows it to be retrieved locally.
     /// </remarks>
     public interface ITopicDescription
     {
