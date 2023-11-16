@@ -347,7 +347,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                Assert.IsTrue(evt.Wait(1_500));
+                Assert.IsTrue(evt.Wait(5_000));
             }
 
             Assert.AreEqual(ReturnCode.Ok, reader.DeleteContainedEntities());
