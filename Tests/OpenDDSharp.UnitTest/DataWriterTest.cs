@@ -329,6 +329,9 @@ namespace OpenDDSharp.UnitTest
             var reader = subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
 
+            Assert.IsTrue(reader.WaitForPublications(1, 5_000));
+            Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
+
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
