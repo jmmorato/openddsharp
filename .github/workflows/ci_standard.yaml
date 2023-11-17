@@ -109,6 +109,7 @@ jobs:
         format: lcov
         parallel: true
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
+        fail-on-error: false
 
   build_linux:
     runs-on: ubuntu-latest
@@ -235,6 +236,7 @@ jobs:
         format: lcov
         parallel: true
         flag-name: coverage-linux-x64-Release
+        fail-on-error: false
 
   build_macos:
     runs-on: macos-13
@@ -361,6 +363,7 @@ jobs:
         format: lcov
         parallel: true
         flag-name: coverage-macos-x64-Release
+        fail-on-error: false
 
   publish_coveralls:
     runs-on: ubuntu-latest
@@ -372,4 +375,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
           carryforward: coverage-windows-x64-Release,coverage-windows-x64-Debug,coverage-windows-x86-Release,coverage-windows-x86-Debug,coverage-linux-x64-Release,coverage-macos-x64-Release
+          fail-on-error: false
 
