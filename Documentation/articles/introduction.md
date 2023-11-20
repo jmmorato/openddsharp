@@ -73,6 +73,9 @@ The following table shows the Target Frameworks that are already implemented and
 | net7.0            | :white_check_mark: |
 | net7.0-android    | :x:                |
 | net7.0-ios        | :x:                |
+| net8.0            | :white_check_mark: |
+| net8.0-android    | :x:                |
+| net8.0-ios        | :x:                |
 
 The following table shows the Runtimes Identifiers that are already implemented and tested ( :white_check_mark: ) and the ones that are planned for next versions ( :x: ):
 

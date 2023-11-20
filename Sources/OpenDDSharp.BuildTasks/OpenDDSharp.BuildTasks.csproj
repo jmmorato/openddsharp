@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;net7.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0;</TargetFrameworks>
     <Nullable>disable</Nullable>
 	<LangVersion>latest</LangVersion>
 	<CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.7.2" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.7.2" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.8.3" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.8.3" />
 
 	  <!-- Analyzer API for our custom checks. -->
 	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0">
