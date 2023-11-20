@@ -1,8 +1,8 @@
 ﻿<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;net7.0;</TargetFrameworks>
-    <LangVersion>7.3</LangVersion>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0;</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <Platforms>x64;x86;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
     <!--  VS doesn't call MSBuild to check if projects are up-to-date and it doesn't check the inputs of custom target.
@@ -14,6 +14,7 @@
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
     <RootNamespace>TestIdlJson</RootNamespace>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
