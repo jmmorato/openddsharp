@@ -14,6 +14,7 @@
             OpenDDSharp IDL code generator support classes.
         </Description>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <!-- NuGet properties -->
@@ -39,12 +40,12 @@
 
     <ItemGroup>
         <!-- Analyzer API for our custom checks. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
         <!-- Third-party analyzers included. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">

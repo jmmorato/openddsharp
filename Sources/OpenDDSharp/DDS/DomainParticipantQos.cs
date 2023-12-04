@@ -21,162 +21,161 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace OpenDDSharp.DDS
+namespace OpenDDSharp.DDS;
+
+/// <summary>
+/// Holds the <see cref="DomainParticipant" /> Quality of Service policies.
+/// </summary>
+public sealed class DomainParticipantQos : IEquatable<DomainParticipantQos>
 {
+    #region Properties
     /// <summary>
-    /// Holds the <see cref="DomainParticipant" /> Quality of Service policies.
+    /// Gets the <see cref="UserDataQosPolicy"/>.
     /// </summary>
-    public sealed class DomainParticipantQos : IEquatable<DomainParticipantQos>
+    public UserDataQosPolicy UserData { get; internal set; }
+
+    /// <summary>
+    /// Gets the <see cref="EntityFactoryQosPolicy"/>.
+    /// </summary>
+    public EntityFactoryQosPolicy EntityFactory { get; internal set; }
+    #endregion
+
+    #region Constructors
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DomainParticipantQos"/> class.
+    /// </summary>
+    public DomainParticipantQos()
     {
-        #region Properties
-        /// <summary>
-        /// Gets the <see cref="UserDataQosPolicy"/>.
-        /// </summary>
-        public UserDataQosPolicy UserData { get; internal set; }
+        UserData = new UserDataQosPolicy();
+        EntityFactory = new EntityFactoryQosPolicy();
+    }
+    #endregion
 
-        /// <summary>
-        /// Gets the <see cref="EntityFactoryQosPolicy"/>.
-        /// </summary>
-        public EntityFactoryQosPolicy EntityFactory { get; internal set; }
-        #endregion
+    #region Methods
+    internal DomainParticipantQosWrapper ToNative()
+    {
+        var data = new DomainParticipantQosWrapper
+        {
+            EntityFactory = EntityFactory,
+        };
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DomainParticipantQos"/> class.
-        /// </summary>
-        public DomainParticipantQos()
+        if (UserData != null)
+        {
+            data.UserData = UserData.ToNative();
+        }
+
+        return data;
+    }
+
+    internal void FromNative(DomainParticipantQosWrapper wrapper)
+    {
+        EntityFactory = wrapper.EntityFactory;
+
+        if (UserData == null)
         {
             UserData = new UserDataQosPolicy();
-            EntityFactory = new EntityFactoryQosPolicy();
         }
-        #endregion
-
-        #region Methods
-        internal DomainParticipantQosWrapper ToNative()
-        {
-            var data = new DomainParticipantQosWrapper
-            {
-                EntityFactory = EntityFactory,
-            };
-
-            if (UserData != null)
-            {
-                data.UserData = UserData.ToNative();
-            }
-
-            return data;
-        }
-
-        internal void FromNative(DomainParticipantQosWrapper wrapper)
-        {
-            EntityFactory = wrapper.EntityFactory;
-
-            if (UserData == null)
-            {
-                UserData = new UserDataQosPolicy();
-            }
-            UserData.FromNative(wrapper.UserData);
-        }
-
-        internal void Release()
-        {
-            UserData?.Release();
-        }
-        #endregion
-
-        #region IEquatable<DomainParticipantQos> Members
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-        public bool Equals(DomainParticipantQos other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return EntityFactory == other.EntityFactory &&
-                   UserData == other.UserData;
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(object obj)
-        {
-            return (obj is DomainParticipantQos other) && Equals(other);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            var hashCode = 1476352029;
-            hashCode = (hashCode * -1521134295) + EqualityComparer<UserDataQosPolicy>.Default.GetHashCode(UserData);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<EntityFactoryQosPolicy>.Default.GetHashCode(EntityFactory);
-            return hashCode;
-        }
-        #endregion
-
-        #region Operators
-        /// <summary>
-        /// Equals comparison operator.
-        /// </summary>
-        /// <param name="left">The left value for the comparison.</param>
-        /// <param name="right">The right value for the comparison.</param>
-        /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(DomainParticipantQos left, DomainParticipantQos right)
-        {
-            if (left is null && right is null)
-            {
-                return true;
-            }
-
-            if (left is null || right is null)
-            {
-                return false;
-            }
-
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Not equals comparison operator.
-        /// </summary>
-        /// <param name="left">The left value for the comparison.</param>
-        /// <param name="right">The right value for the comparison.</param>
-        /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-        public static bool operator !=(DomainParticipantQos left, DomainParticipantQos right)
-        {
-            if (left is null && right is null)
-            {
-                return false;
-            }
-
-            if (left is null || right is null)
-            {
-                return true;
-            }
-
-            return !left.Equals(right);
-        }
-        #endregion
+        UserData.FromNative(wrapper.UserData);
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct DomainParticipantQosWrapper
+    internal void Release()
     {
-        #region Fields
-        [MarshalAs(UnmanagedType.Struct)]
-        public UserDataQosPolicyWrapper UserData;
-        [MarshalAs(UnmanagedType.Struct)]
-        public EntityFactoryQosPolicyWrapper EntityFactory;
-        #endregion
+        UserData?.Release();
     }
+    #endregion
+
+    #region IEquatable<DomainParticipantQos> Members
+    /// <summary>
+    /// Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this object.</param>
+    /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+    public bool Equals(DomainParticipantQos other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+
+        return EntityFactory == other.EntityFactory &&
+               UserData == other.UserData;
+    }
+
+    /// <summary>
+    /// Determines whether the specified object is equal to the current object.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+    public override bool Equals(object obj)
+    {
+        return (obj is DomainParticipantQos other) && Equals(other);
+    }
+
+    /// <summary>
+    /// Serves as the default hash function.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    public override int GetHashCode()
+    {
+        var hashCode = 1476352029;
+        hashCode = (hashCode * -1521134295) + EqualityComparer<UserDataQosPolicy>.Default.GetHashCode(UserData);
+        hashCode = (hashCode * -1521134295) + EqualityComparer<EntityFactoryQosPolicy>.Default.GetHashCode(EntityFactory);
+        return hashCode;
+    }
+    #endregion
+
+    #region Operators
+    /// <summary>
+    /// Equals comparison operator.
+    /// </summary>
+    /// <param name="left">The left value for the comparison.</param>
+    /// <param name="right">The right value for the comparison.</param>
+    /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+    public static bool operator ==(DomainParticipantQos left, DomainParticipantQos right)
+    {
+        if (left is null && right is null)
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    /// <summary>
+    /// Not equals comparison operator.
+    /// </summary>
+    /// <param name="left">The left value for the comparison.</param>
+    /// <param name="right">The right value for the comparison.</param>
+    /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+    public static bool operator !=(DomainParticipantQos left, DomainParticipantQos right)
+    {
+        if (left is null && right is null)
+        {
+            return false;
+        }
+
+        if (left is null || right is null)
+        {
+            return true;
+        }
+
+        return !left.Equals(right);
+    }
+    #endregion
+}
+
+[StructLayout(LayoutKind.Sequential)]
+internal struct DomainParticipantQosWrapper
+{
+    #region Fields
+    [MarshalAs(UnmanagedType.Struct)]
+    public UserDataQosPolicyWrapper UserData;
+    [MarshalAs(UnmanagedType.Struct)]
+    public EntityFactoryQosPolicyWrapper EntityFactory;
+    #endregion
 }

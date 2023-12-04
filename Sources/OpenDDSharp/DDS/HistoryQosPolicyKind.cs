@@ -18,24 +18,25 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 
-namespace OpenDDSharp.DDS
+namespace OpenDDSharp.DDS;
+
+/// <summary>
+/// This enumeration defines the valid kinds of the <see cref="HistoryQosPolicy" /> Kind.
+/// </summary>
+public enum HistoryQosPolicyKind
 {
     /// <summary>
-    /// This enumeration defines the valid kinds of the <see cref="HistoryQosPolicy" /> Kind.
+    /// Specifies that only the last depth values should be kept. When a data writer contains depth samples of
+    /// a given instance, a write of new samples for that instance are queued for delivery and the oldest unsent
+    /// samples are discarded. When a data reader contains depth samples of a given instance, any incoming samples
+    /// for that instance are kept and the oldest samples are discarded.
     /// </summary>
-    public enum HistoryQosPolicyKind
-    {
-        /// <summary>
-        /// Specifies that only the last depth values should be kept. When a data writer contains depth samples of a given instance, a write of
-        /// new samples for that instance are queued for delivery and the oldest unsent samples are discarded. When a data reader contains depth samples of a given instance,
-        /// any incoming samples for that instance are kept and the oldest samples are discarded.
-        /// </summary>
-        KeepLastHistoryQos = 0,
+    KeepLastHistoryQos = 0,
 
-        /// <summary>
-        /// specifies that all possible samples for that instance should be kept. When "keep all" is specified and the number of unread samples is
-        /// equal to the "resource limits" property of MaxSamplesPerInstance then any incoming samples are rejected.
-        /// </summary>
-        KeepAllHistoryQos = 1,
-    }
+    /// <summary>
+    /// specifies that all possible samples for that instance should be kept. When "keep all" is specified and
+    /// the number of unread samples is equal to the "resource limits" property of MaxSamplesPerInstance then
+    /// any incoming samples are rejected.
+    /// </summary>
+    KeepAllHistoryQos = 1,
 }

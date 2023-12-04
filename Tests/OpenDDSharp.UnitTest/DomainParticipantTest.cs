@@ -798,6 +798,9 @@ namespace OpenDDSharp.UnitTest
             var result = _participant.IgnoreParticipant(other.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
 
+            result = other.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             result = AssemblyInitializer.Factory.DeleteParticipant(other);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
@@ -816,6 +819,8 @@ namespace OpenDDSharp.UnitTest
 
             var topic = _participant.CreateTopic(nameof(TestIgnoreTopic), support.GetTypeName());
             Assert.IsNotNull(topic);
+
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
 
             result = _participant.IgnoreTopic(topic.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -842,6 +847,11 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(dataWriter);
 
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteDataWriter(dataWriter));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
+
             result = _participant.IgnorePublication(dataWriter.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
@@ -866,6 +876,12 @@ namespace OpenDDSharp.UnitTest
 
             var dataReader = subscriber.CreateDataReader(topic);
             Assert.IsNotNull(dataReader);
+
+            Assert.AreEqual(ReturnCode.Ok, dataReader.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteDataReader(dataReader));
+            Assert.AreEqual(ReturnCode.Ok, subscriber.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteSubscriber(subscriber));
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
 
             result = _participant.IgnoreSubscription(dataReader.InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -944,6 +960,9 @@ namespace OpenDDSharp.UnitTest
             result = _participant.GetDiscoveredParticipants(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
+            result = otherParticipant.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
+
             result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
         }
@@ -981,6 +1000,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0x42, data.UserData.Value[0]);
             Assert.IsNotNull(data.Key);
             Assert.IsNotNull(data.Key.Value);
+
+            result = otherParticipant.DeleteContainedEntities();
+            Assert.AreEqual(ReturnCode.Ok, result);
 
             result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
