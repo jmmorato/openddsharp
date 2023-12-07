@@ -16,59 +16,48 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Concurrent;
 
-namespace OpenDDSharp.OpenDDS.DCPS
+namespace OpenDDSharp.OpenDDS.DCPS;
+
+internal class TransportConfigManager
 {
-    internal class TransportConfigManager
+    #region Fields
+    private static readonly object _lock = new ();
+    private static TransportConfigManager _instance;
+    private readonly ConcurrentDictionary<IntPtr, TransportConfig> _configs = new ();
+    #endregion
+
+    #region Singleton
+    public static TransportConfigManager Instance
     {
-        #region Fields
-        private static readonly object _lock = new object();
-        private static TransportConfigManager _instance;
-        private readonly ConcurrentDictionary<IntPtr, TransportConfig> _configs = new ConcurrentDictionary<IntPtr, TransportConfig>();
-        #endregion
-
-        #region Singleton
-        public static TransportConfigManager Instance
+        get
         {
-            get
+            lock (_lock)
             {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new TransportConfigManager();
-                    }
-
-                    return _instance;
-                }
+                return _instance ??= new TransportConfigManager();
             }
         }
-        #endregion
-
-        #region Methods
-        public void Add(IntPtr ptr, TransportConfig config)
-        {
-            _configs.AddOrUpdate(ptr, config, (p, t) => config);
-        }
-
-        public void Remove(IntPtr ptr)
-        {
-            _configs.TryRemove(ptr, out _);
-        }
-
-        public TransportConfig Find(IntPtr ptr)
-        {
-            if (_configs.TryGetValue(ptr, out var found))
-            {
-                return found;
-            }
-
-            return null;
-        }
-
-        public void Clear()
-        {
-            _configs.Clear();
-        }
-        #endregion
     }
+    #endregion
+
+    #region Methods
+    public void Add(IntPtr ptr, TransportConfig config)
+    {
+        _configs.AddOrUpdate(ptr, config, (_, _) => config);
+    }
+
+    public void Remove(IntPtr ptr)
+    {
+        _configs.TryRemove(ptr, out _);
+    }
+
+    public TransportConfig Find(IntPtr ptr)
+    {
+        return _configs.TryGetValue(ptr, out var found) ? found : null;
+    }
+
+    public void Clear()
+    {
+        _configs.Clear();
+    }
+    #endregion
 }

@@ -18,79 +18,93 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
 
-namespace OpenDDSharp.OpenDDS.DCPS
+#if NET7_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
+
+namespace OpenDDSharp.OpenDDS.DCPS;
+
+/// <summary>
+/// This class is an abstract class that acts as an interface for both
+/// InfoRepo-based discovery and RTPS Discovery.
+/// </summary>
+public abstract class Discovery
 {
+    #region Constants
     /// <summary>
-    /// This class is an abstract class that acts as an interface for both
-    /// InfoRepo-based discovery and RTPS Discovery.
+    /// The InfoRepo discovery default key.
     /// </summary>
-    public abstract class Discovery
+    public const string DEFAULT_REPO = "DEFAULT_REPO";
+    /// <summary>
+    /// The RTPS discovery default key.
+    /// </summary>
+    public const string DEFAULT_RTPS = "DEFAULT_RTPS";
+    /// <summary>
+    /// The static discovery default key.
+    /// </summary>
+    public const string DEFAULT_STATIC = "DEFAULT_STATIC";
+    #endregion
+
+    #region Fields
+    private IntPtr _native;
+    #endregion
+
+    #region Properties
+    /// <summary>
+    /// Gets the discovery unique key.
+    /// </summary>
+    public string Key => GetKey();
+    #endregion
+
+    #region Methods
+    private string GetKey()
     {
-        #region Constants
-        /// <summary>
-        /// The InfoRepo discovery default key.
-        /// </summary>
-        public const string DEFAULT_REPO = "DEFAULT_REPO";
-        /// <summary>
-        /// The RTPS discovery default key.
-        /// </summary>
-        public const string DEFAULT_RTPS = "DEFAULT_RTPS";
-        /// <summary>
-        /// The static discovery default key.
-        /// </summary>
-        public const string DEFAULT_STATIC = "DEFAULT_STATIC";
-        #endregion
+        var ptr = UnsafeNativeMethods.GetKey(_native);
 
-        #region Fields
-        private IntPtr _native;
-        #endregion
+        var key = Marshal.PtrToStringAnsi(ptr);
+        ptr.ReleaseNativePointer();
 
-        #region Properties
-        /// <summary>
-        /// Gets the discovery unique key.
-        /// </summary>
-        public string Key => GetKey();
-        #endregion
-
-        #region Methods
-        private string GetKey()
-        {
-            var ptr = UnsafeNativeMethods.GetKey(_native);
-
-            var key = Marshal.PtrToStringAnsi(ptr);
-            ptr.ReleaseNativePointer();
-
-            return key;
-        }
-
-        internal IntPtr ToNative()
-        {
-            return _native;
-        }
-
-        internal void FromNative(IntPtr native)
-        {
-            _native = native;
-        }
-        #endregion
-
-        #region UnsafeNativeMethods
-        /// <summary>
-        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
-        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
-        /// is secure because no stack walk will be performed.
-        /// </summary>
-        [SuppressUnmanagedCodeSecurity]
-        private static class UnsafeNativeMethods
-        {
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Discovery_GetKey", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-            public static extern IntPtr GetKey(IntPtr d);
-        }
-        #endregion
+        return key;
     }
+
+    internal IntPtr ToNative()
+    {
+        return _native;
+    }
+
+    internal void FromNative(IntPtr native)
+    {
+        _native = native;
+    }
+    #endregion
+}
+
+/// <summary>
+/// This class suppresses stack walks for unmanaged code permission.
+/// (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+/// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full
+/// security review to make sure that the usage
+/// is secure because no stack walk will be performed.
+/// </summary>
+[SuppressUnmanagedCodeSecurity]
+[ExcludeFromCodeCoverage]
+[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleType", Justification = "Native p/invoke calls.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1601:PartialElementsMustBeDocumented", Justification = "Partial required for the source generator.")]
+internal static partial class UnsafeNativeMethods
+{
+#if NET7_0_OR_GREATER
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Discovery_GetKey")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial IntPtr GetKey(IntPtr d);
+#else
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Discovery_GetKey", CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr GetKey(IntPtr d);
+#endif
 }

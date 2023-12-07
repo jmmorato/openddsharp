@@ -21,54 +21,43 @@ using System;
 using System.Collections.Concurrent;
 using OpenDDSharp.OpenDDS.DCPS;
 
-namespace OpenDDSharp.Helpers
+namespace OpenDDSharp.Helpers;
+
+internal sealed class TransportInstManager
 {
-    internal sealed class TransportInstManager
+    #region Fields
+    private static readonly object _lock = new object();
+    private static TransportInstManager _instance;
+    private readonly ConcurrentDictionary<IntPtr, TransportInst> _insts = new ();
+    #endregion
+
+    #region Singleton
+    public static TransportInstManager Instance
     {
-        #region Fields
-        private static readonly object _lock = new object();
-        private static TransportInstManager _instance;
-        private readonly ConcurrentDictionary<IntPtr, TransportInst> _insts = new ConcurrentDictionary<IntPtr, TransportInst>();
-        #endregion
-
-        #region Singleton
-        public static TransportInstManager Instance
+        get
         {
-            get
+            lock (_lock)
             {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new TransportInstManager();
-                    }
-
-                    return _instance;
-                }
+                return _instance ??= new TransportInstManager();
             }
         }
-        #endregion
-
-        #region Methods
-        public void Add(IntPtr ptr, TransportInst inst)
-        {
-            _insts.AddOrUpdate(ptr, inst, (p, t) => inst);
-        }
-
-        public void Remove(IntPtr ptr)
-        {
-            _insts.TryRemove(ptr, out _);
-        }
-
-        public TransportInst Find(IntPtr ptr)
-        {
-            if (_insts.TryGetValue(ptr, out var found))
-            {
-                return found;
-            }
-
-            return null;
-        }
-        #endregion
     }
+    #endregion
+
+    #region Methods
+    public void Add(IntPtr ptr, TransportInst inst)
+    {
+        _insts.AddOrUpdate(ptr, inst, (_, _) => inst);
+    }
+
+    public void Remove(IntPtr ptr)
+    {
+        _insts.TryRemove(ptr, out _);
+    }
+
+    public TransportInst Find(IntPtr ptr)
+    {
+        return _insts.TryGetValue(ptr, out var found) ? found : null;
+    }
+    #endregion
 }
