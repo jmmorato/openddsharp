@@ -18,36 +18,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 
-namespace OpenDDSharp.DDS
+namespace OpenDDSharp.DDS;
+
+/// <summary>
+/// This enumeration defines the valid kinds of the <see cref="DurabilityQosPolicy.Kind" />.
+/// </summary>
+public enum DurabilityQosPolicyKind
 {
     /// <summary>
-    /// This enumeration defines the valid kinds of the <see cref="DurabilityQosPolicy.Kind" />.
+    /// Samples are discarded after being sent to all known subscribers.
+    /// As a side effect, subscribers cannot recover samples sent before they connect.
     /// </summary>
-    public enum DurabilityQosPolicyKind
-    {
-        /// <summary>
-        /// Samples are discarded after being sent to all known subscribers.
-        /// As a side effect, subscribers cannot recover samples sent before they connect.
-        /// </summary>
-        VolatileDurabilityQos = 0,
+    VolatileDurabilityQos = 0,
 
-        /// <summary>
-        /// Data readers that are associated/connected with a data writer will be sent all of the samples
-        /// in the data writer's history.
-        /// </summary>
-        TransientLocalDurabilityQos = 1,
+    /// <summary>
+    /// Data readers that are associated/connected with a data writer will be sent all of the samples
+    /// in the data writer's history.
+    /// </summary>
+    TransientLocalDurabilityQos = 1,
 
-        /// <summary>
-        /// Samples outlive a data writer and last as long as the process is alive. The samples are kept in memory, but are not
-        /// persisted to permanent storage. A data reader subscribed to the same topic and partition
-        /// within the same domain will be sent all of the cached samples that belong to the same topic/partition.
-        /// </summary>
-        TransientDurabilityQos = 2,
+    /// <summary>
+    /// Samples outlive a data writer and last as long as the process is alive. The samples are kept in memory, but are not
+    /// persisted to permanent storage. A data reader subscribed to the same topic and partition
+    /// within the same domain will be sent all of the cached samples that belong to the same topic/partition.
+    /// </summary>
+    TransientDurabilityQos = 2,
 
-        /// <summary>
-        /// Provides basically the same functionality as transient durability except the cached samples are persisted and
-        /// will survive process destruction.
-        /// </summary>
-        PersistentDurabilityQos,
-    }
+    /// <summary>
+    /// Provides basically the same functionality as transient durability except the cached samples are persisted and
+    /// will survive process destruction.
+    /// </summary>
+    PersistentDurabilityQos,
 }

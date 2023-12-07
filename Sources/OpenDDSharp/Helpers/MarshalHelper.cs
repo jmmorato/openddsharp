@@ -19,6 +19,9 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Collections.Generic;
+#if NETCOREAPP3_1_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -27,11 +30,11 @@ namespace OpenDDSharp.Helpers
     internal static class MarshalHelper
     {
         #region Constants
-        internal const string API_DLL = @"OpenDDSWrapper";
+        internal const string API_DLL = "OpenDDSWrapper";
         #endregion
 
         #region Methods
-        public static void PtrToSequence<T>(this IntPtr ptr, ref ICollection<T> sequence, int capacity = 0)
+        public static unsafe void PtrToSequence<T>(this IntPtr ptr, ref ICollection<T> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
@@ -56,19 +59,44 @@ namespace OpenDDSharp.Helpers
             }
 
             // Start by reading the size of the array
-            int length = Marshal.ReadInt32(ptr);
+            var length = Marshal.ReadInt32(ptr);
 
+#if NETCOREAPP3_1_OR_GREATER
+            const int sizeInt = sizeof(int);
+            if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+            {
+                var span = new ReadOnlySpan<T>((ptr + sizeInt).ToPointer(), length);
+
+                // Populate the list
+                for (var i = 0; i < length; i++)
+                {
+                    sequence.Add(span[i]);
+                }
+            }
+            else
+            {
+                // For efficiency, only compute the element size once
+                var elSiz = Marshal.SizeOf<T>();
+
+                // Populate the list
+                for (var i = 0; i < length; i++)
+                {
+                    sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
+                }
+            }
+#else
             // For efficiency, only compute the element size once
-            int elSiz = Marshal.SizeOf<T>();
+            var elSiz = Marshal.SizeOf<T>();
 
             // Populate the list
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
             }
+#endif
         }
 
-        public static void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
+        public static unsafe void PtrToSequence<T>(this IntPtr ptr, ref IList<T> sequence, int capacity = 0)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
@@ -93,16 +121,41 @@ namespace OpenDDSharp.Helpers
             }
 
             // Start by reading the size of the array
-            int length = Marshal.ReadInt32(ptr);
+            var length = Marshal.ReadInt32(ptr);
 
+#if NETCOREAPP3_1_OR_GREATER
+            if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+            {
+                const int sizeInt = sizeof(int);
+                var span = new ReadOnlySpan<T>((ptr + sizeInt).ToPointer(), length);
+
+                // Populate the list
+                for (var i = 0; i < length; i++)
+                {
+                    sequence.Add(span[i]);
+                }
+            }
+            else
+            {
+                // For efficiency, only compute the element size once
+                var elSiz = Marshal.SizeOf<T>();
+
+                // Populate the list
+                for (var i = 0; i < length; i++)
+                {
+                    sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
+                }
+            }
+#else
             // For efficiency, only compute the element size once
-            int elSiz = Marshal.SizeOf<T>();
+            var elSiz = Marshal.SizeOf<T>();
 
             // Populate the list
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 sequence.Add(Marshal.PtrToStructure<T>(ptr + sizeof(int) + (elSiz * i)));
             }
+#endif
         }
 
         public static void SequenceToPtr<T>(this ICollection<T> sequence, ref IntPtr ptr)
@@ -115,10 +168,10 @@ namespace OpenDDSharp.Helpers
                 return;
             }
 
-            int elSiz = Marshal.SizeOf<T>();
+            var elSiz = Marshal.SizeOf<T>();
 
             // Get the total size of unmanaged memory that is needed (length + elements)
-            int size = sizeof(int) + (elSiz * sequence.Count);
+            var size = sizeof(int) + (elSiz * sequence.Count);
 
             // Allocate unmanaged space.
             ptr = Marshal.AllocHGlobal(size);
@@ -127,7 +180,7 @@ namespace OpenDDSharp.Helpers
             Marshal.WriteInt32(ptr, sequence.Count);
 
             // Write the list data
-            int i = 0;
+            var i = 0;
             foreach (var element in sequence)
             {
                 // Newly-allocated space has no existing object, so the last param is false
@@ -160,12 +213,12 @@ namespace OpenDDSharp.Helpers
             // Write the list data
             for (int i = 0; i < sequence.Count; i++)
             {
-                // Newly-allocated space has no existing object, so the last param is false 
+                // Newly-allocated space has no existing object, so the last param is false
                 Marshal.StructureToPtr(sequence[i], ptr + sizeof(int) + (elSiz * i), false);
             }
         }
 
-        public static void PtrToStringSequence(this IntPtr ptr, ref IList<string> sequence, bool isUnicode, int capacity = 0)
+        public static unsafe void PtrToStringSequence(this IntPtr ptr, ref IList<string> sequence, bool isUnicode, int capacity = 0)
         {
             // Ensure a not null empty list to populate
             if (sequence == null)
@@ -190,13 +243,16 @@ namespace OpenDDSharp.Helpers
             }
 
             // Start by reading the size of the array
-            int length = Marshal.ReadInt32(ptr);
+            var length = Marshal.ReadInt32(ptr);
+
+            const int sizeInt = sizeof(int);
+            var span = new ReadOnlySpan<IntPtr>((ptr + sizeInt).ToPointer(), length);
 
             // Populate the array
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 // Get the unmanaged pointer
-                IntPtr pointer = Marshal.PtrToStructure<IntPtr>(ptr + sizeof(int) + (IntPtr.Size * i));
+                var pointer = span[i];
 
                 // Convert the pointer in a string
                 if (isUnicode)

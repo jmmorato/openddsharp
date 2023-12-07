@@ -23,183 +23,184 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using OpenDDSharp.Helpers;
 
-namespace OpenDDSharp.DDS
+namespace OpenDDSharp.DDS;
+
+/// <summary>
+/// The OfferedIncompatibleQos status indicates that an offered QoS was incompatible with the requested
+/// QoS of a <see cref="DataReader" />.
+/// </summary>
+public struct OfferedIncompatibleQosStatus : IEquatable<OfferedIncompatibleQosStatus>
 {
+    #region Fields
+    private List<IntPtr> toRelease;
+    #endregion
+
+    #region Properties
     /// <summary>
-    /// The OfferedIncompatibleQos status indicates that an offered QoS was incompatible with the requested QoS of a <see cref="DataReader" />.
+    /// Gets the cumulative count of times that data readers with incompatible QoS have been found.
     /// </summary>
-    public struct OfferedIncompatibleQosStatus : IEquatable<OfferedIncompatibleQosStatus>
+    public int TotalCount { get; internal set; }
+
+    /// <summary>
+    /// Gets the incremental change in the total count since the last time this status was accessed.
+    /// </summary>
+    public int TotalCountChange { get; internal set; }
+
+    /// <summary>
+    /// Gets one of the QoS policies that was incompatible in the last incompatibility detected.
+    /// </summary>
+    public int LastPolicyId { get; internal set; }
+
+    /// <summary>
+    /// Gets the sequence of values that indicates the total number of incompatibilities that have been
+    /// detected for each QoS policy.
+    /// </summary>
+    public ICollection<QosPolicyCount> Policies { get; internal set; }
+    #endregion
+
+    #region Methods
+    internal OfferedIncompatibleQosStatusWrapper ToNative()
     {
-        #region Fields
-        private List<IntPtr> toRelease;
-        #endregion
+        IntPtr ptr = IntPtr.Zero;
 
-        #region Properties
-        /// <summary>
-        /// Gets the cumulative count of times that data readers with incompatible QoS have been found.
-        /// </summary>
-        public int TotalCount { get; internal set; }
-
-        /// <summary>
-        /// Gets the incremental change in the total count since the last time this status was accessed.
-        /// </summary>
-        public int TotalCountChange { get; internal set; }
-
-        /// <summary>
-        /// Gets one of the QoS policies that was incompatible in the last incompatibility detected.
-        /// </summary>
-        public int LastPolicyId { get; internal set; }
-
-        /// <summary>
-        /// Gets the sequence of values that indicates the total number of incompatibilities that have been detected for each QoS policy.
-        /// </summary>
-        public ICollection<QosPolicyCount> Policies { get; internal set; }
-        #endregion
-
-        #region Methods
-        internal OfferedIncompatibleQosStatusWrapper ToNative()
+        if (toRelease == null)
         {
-            IntPtr ptr = IntPtr.Zero;
-
-            if (toRelease == null)
-            {
-                toRelease = new List<IntPtr>();
-            }
-
-            if (Policies != null)
-            {
-                Policies.SequenceToPtr(ref ptr);
-                toRelease.Add(ptr);
-            }
-
-            return new OfferedIncompatibleQosStatusWrapper
-            {
-                TotalCount = TotalCount,
-                TotalCountChange = TotalCountChange,
-                LastPolicyId = LastPolicyId,
-                Policies = ptr,
-            };
+            toRelease = new List<IntPtr>();
         }
 
-        internal void FromNative(OfferedIncompatibleQosStatusWrapper wrapper)
+        if (Policies != null)
         {
-            IList<QosPolicyCount> list = new List<QosPolicyCount>();
-
-            if (wrapper.Policies != IntPtr.Zero)
-            {
-                wrapper.Policies.PtrToSequence(ref list);
-            }
-
-            TotalCount = wrapper.TotalCount;
-            TotalCountChange = wrapper.TotalCountChange;
-            LastPolicyId = wrapper.LastPolicyId;
-            Policies = list;
+            Policies.SequenceToPtr(ref ptr);
+            toRelease.Add(ptr);
         }
 
-        internal void Release()
+        return new OfferedIncompatibleQosStatusWrapper
         {
-            if (toRelease == null)
-            {
-                return;
-            }
-
-            foreach (IntPtr ptr in toRelease)
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
-
-            toRelease.Clear();
-        }
-        #endregion
-
-        #region IEquatable<OfferedIncompatibleQosStatus> Members
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-        public bool Equals(OfferedIncompatibleQosStatus other)
-        {
-            return TotalCount == other.TotalCount &&
-                   TotalCountChange == other.TotalCountChange &&
-                   LastPolicyId == other.LastPolicyId &&
-                   Policies.SequenceEqual(other.Policies);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return Equals((OfferedIncompatibleQosStatus)obj);
-        }
-
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            var hashCode = 751819449;
-
-            hashCode = (hashCode * -1521134295) + TotalCount.GetHashCode();
-            hashCode = (hashCode * -1521134295) + TotalCountChange.GetHashCode();
-            hashCode = (hashCode * -1521134295) + LastPolicyId.GetHashCode();
-
-            foreach (var p in Policies)
-            {
-                hashCode = (hashCode * -1521134295) + p.GetHashCode();
-            }
-
-            return hashCode;
-        }
-        #endregion
-
-        #region Operators
-        /// <summary>
-        /// Equals comparison operator.
-        /// </summary>
-        /// <param name="left">The left value for the comparison.</param>
-        /// <param name="right">The right value for the comparison.</param>
-        /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-        public static bool operator ==(OfferedIncompatibleQosStatus left, OfferedIncompatibleQosStatus right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Not equals comparison operator.
-        /// </summary>
-        /// <param name="left">The left value for the comparison.</param>
-        /// <param name="right">The right value for the comparison.</param>
-        /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-        public static bool operator !=(OfferedIncompatibleQosStatus left, OfferedIncompatibleQosStatus right)
-        {
-            return !left.Equals(right);
-        }
-        #endregion
+            TotalCount = TotalCount,
+            TotalCountChange = TotalCountChange,
+            LastPolicyId = LastPolicyId,
+            Policies = ptr,
+        };
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct OfferedIncompatibleQosStatusWrapper
+    internal void FromNative(OfferedIncompatibleQosStatusWrapper wrapper)
     {
-        #region Fields
-        public int TotalCount;
-        public int TotalCountChange;
-        public int LastPolicyId;
-        public IntPtr Policies;
-        #endregion
+        IList<QosPolicyCount> list = new List<QosPolicyCount>();
+
+        if (wrapper.Policies != IntPtr.Zero)
+        {
+            wrapper.Policies.PtrToSequence(ref list);
+        }
+
+        TotalCount = wrapper.TotalCount;
+        TotalCountChange = wrapper.TotalCountChange;
+        LastPolicyId = wrapper.LastPolicyId;
+        Policies = list;
     }
+
+    internal void Release()
+    {
+        if (toRelease == null)
+        {
+            return;
+        }
+
+        foreach (IntPtr ptr in toRelease)
+        {
+            Marshal.FreeHGlobal(ptr);
+        }
+
+        toRelease.Clear();
+    }
+    #endregion
+
+    #region IEquatable<OfferedIncompatibleQosStatus> Members
+    /// <summary>
+    /// Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this object.</param>
+    /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+    public bool Equals(OfferedIncompatibleQosStatus other)
+    {
+        return TotalCount == other.TotalCount &&
+               TotalCountChange == other.TotalCountChange &&
+               LastPolicyId == other.LastPolicyId &&
+               Policies.SequenceEqual(other.Policies);
+    }
+
+    /// <summary>
+    /// Determines whether the specified object is equal to the current object.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+    public override bool Equals(object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        return Equals((OfferedIncompatibleQosStatus)obj);
+    }
+
+    /// <summary>
+    /// Serves as the default hash function.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    public override int GetHashCode()
+    {
+        var hashCode = 751819449;
+
+        hashCode = (hashCode * -1521134295) + TotalCount.GetHashCode();
+        hashCode = (hashCode * -1521134295) + TotalCountChange.GetHashCode();
+        hashCode = (hashCode * -1521134295) + LastPolicyId.GetHashCode();
+
+        foreach (var p in Policies)
+        {
+            hashCode = (hashCode * -1521134295) + p.GetHashCode();
+        }
+
+        return hashCode;
+    }
+    #endregion
+
+    #region Operators
+    /// <summary>
+    /// Equals comparison operator.
+    /// </summary>
+    /// <param name="left">The left value for the comparison.</param>
+    /// <param name="right">The right value for the comparison.</param>
+    /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+    public static bool operator ==(OfferedIncompatibleQosStatus left, OfferedIncompatibleQosStatus right)
+    {
+        return left.Equals(right);
+    }
+
+    /// <summary>
+    /// Not equals comparison operator.
+    /// </summary>
+    /// <param name="left">The left value for the comparison.</param>
+    /// <param name="right">The right value for the comparison.</param>
+    /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+    public static bool operator !=(OfferedIncompatibleQosStatus left, OfferedIncompatibleQosStatus right)
+    {
+        return !left.Equals(right);
+    }
+    #endregion
+}
+
+[StructLayout(LayoutKind.Sequential)]
+internal struct OfferedIncompatibleQosStatusWrapper
+{
+    #region Fields
+    public int TotalCount;
+    public int TotalCountChange;
+    public int LastPolicyId;
+    public IntPtr Policies;
+    #endregion
 }

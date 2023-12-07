@@ -65,7 +65,7 @@
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
