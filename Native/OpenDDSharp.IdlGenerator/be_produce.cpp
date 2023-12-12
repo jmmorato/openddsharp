@@ -211,7 +211,7 @@ namespace {
           }
           break;
         case BE_GlobalData::STREAM_CPP:
-          if (!be_global->csharp() && !be_global->csharp_json()) {
+          if (!be_global->csharp() && !be_global->csharp_json() && !be_global->csharp_cdr()) {
             out << "#include \"" << be_global->header_name_.c_str() << "\"\n\n";
           } else {
             out << "using System;\n"
@@ -220,7 +220,7 @@ namespace {
                 << "using System.Collections.Generic;\n"
                 << "using System.Runtime.InteropServices;\n";
 
-            if (be_global->csharp_json()) {
+            if (be_global->csharp_json() || be_global->csharp_cdr()) {
               out << "using System.Text.Json;\n"
                   << "using System.Text.Json.Serialization;\n"
                   << "using OpenDDSharp.Marshaller.Json;\n";
@@ -337,7 +337,7 @@ void BE_produce() {
     BE_abort();
   }
 
-  if (!java_ts_only && !be_global->csharp() && !be_global->csharp_json()) {
+  if (!java_ts_only && !be_global->csharp() && !be_global->csharp_json() && !be_global->csharp_cdr()) {
     postprocess(be_global->header_name_.c_str(),
                 be_global->header_, BE_GlobalData::STREAM_H);
   }

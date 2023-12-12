@@ -30,7 +30,7 @@ using OpenDDSharp.UnitTest.Helpers;
 namespace OpenDDSharp.UnitTest
 {
     /// <summary>
-    /// Code generator unit test class.
+    /// Code generator JSON unit test class.
     /// </summary>
     [TestClass]
     public class CodeGeneratorJsonWrapperTest
