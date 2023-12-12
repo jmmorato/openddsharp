@@ -17,6 +17,8 @@ EXTERN_METHOD_EXPORT <%SCOPED%>DataWriter_ptr <%SCOPED_METHOD%>DataWriter_Narrow
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Write_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Write_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data);
@@ -41,6 +43,8 @@ EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>
 EXTERN_METHOD_EXPORT <%SCOPED%>DataReader_ptr <%SCOPED_METHOD%>DataReader_Narrow(DDS::DataReader_ptr dr);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_ReadNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo);
+
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, ::DDS::SampleInfo* sampleInfo);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_TakeNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo);
 
@@ -122,5 +126,33 @@ char* <%SCOPED_METHOD%>_EncodeJsonSample(<%SCOPED%> sample)
     CORBA::String_var buffer;
     ts->encode_to_string(sample, buffer, format);
     return CORBA::string_dup(buffer);
+}
+
+void <%SCOPED_METHOD%>_serialize_to_string(const <%SCOPED%>& idl_value, char* &data, size_t &size)
+{
+  const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
+
+  const size_t xcdr_size = OpenDDS::DCPS::serialized_size(encoding, idl_value);
+  ACE_Message_Block mb(xcdr_size);
+  OpenDDS::DCPS::Serializer serializer(&mb, encoding);
+  if (!(serializer << idl_value)) {
+    throw std::runtime_error("failed to serialize");
+  }
+  data = (char*)malloc(xcdr_size);
+  memcpy(data, mb.base(), xcdr_size);
+  size = xcdr_size;
+}
+
+<%SCOPED%> <%SCOPED_METHOD%>_deserialize_from_string(const char* xcdr, size_t size)
+{
+  const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
+  ACE_Message_Block mb(size);
+  mb.copy(xcdr, size);
+  OpenDDS::DCPS::Serializer serializer(&mb, encoding);
+  <%SCOPED%> idl_value;
+  if (!(serializer >> idl_value)) {
+    throw std::runtime_error("failed to deserialize");
+  }
+  return idl_value;
 }
 

@@ -15,7 +15,9 @@ public class CdrWriter
     /// <summary>
     /// Initializes a new instance of the <see cref="CdrWriter"/> class.
     /// </summary>
-    public CdrWriter() : this(new MemoryStream()) { }
+    public CdrWriter() : this(new MemoryStream())
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CdrWriter"/> class.
@@ -31,21 +33,6 @@ public class CdrWriter
     {
         _stream = stream;
         _writer = new BinaryWriter(_stream);
-
-        if (BitConverter.IsLittleEndian)
-        {
-            _writer.Write((byte)0x00);
-            _writer.Write((byte)0x01);
-            _writer.Write((byte)0x00);
-            _writer.Write((byte)0x00);
-        }
-        else
-        {
-            _writer.Write((byte)0x00);
-            _writer.Write((byte)0x00);
-            _writer.Write((byte)0x00);
-            _writer.Write((byte)0x00);
-        }
     }
 
     /// <summary>
@@ -191,9 +178,18 @@ public class CdrWriter
     /// <param name="length">The sequence length value to be written.</param>
     public void WriteSequenceLength(uint length) => WriteUInt32(length);
 
+    /// <summary>
+    /// Convert the stream to a string.
+    /// </summary>
+    /// <returns>The converted string.</returns>
+    public override string ToString()
+    {
+        return Encoding.UTF8.GetString(GetBuffer().ToArray());
+    }
+
     private void Align(int alignment)
     {
-        var modulo = (_writer.BaseStream.Position + 4) % alignment;
+        var modulo = _writer.BaseStream.Position % alignment;
         if (modulo <= 0)
         {
             return;
