@@ -13,8 +13,7 @@
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
-    <RootNamespace>TestIdlJson</RootNamespace>
-    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <RootNamespace>TestIdlCdr</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -84,7 +83,7 @@
       <Visible>false</Visible>
       <Link>Native\CSharpCDRImplTemplate.txt</Link>
     </IdlTemplates>
-    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpJsonImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
+    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpCdrImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
   </ItemGroup>
 
   <!-- Ensure templates are copied for code generation-->
@@ -185,15 +184,15 @@
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharpWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpMacOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
 	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <ItemGroup>
     <CsFiles Include="@(IdlFiles->'$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.cs')" />
@@ -202,25 +201,25 @@
 
   <ItemGroup>
 	<!-- OpenDDS native Libraries -->
-	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlJsonWrapper.dll" Visible="false" />
+	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlCdrWrapper.dll" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		<TargetPath>TestIdlJsonWrapper.dll</TargetPath>
+		<TargetPath>TestIdlCdrWrapper.dll</TargetPath>
 	</ContentWithTargetPath>
 
-	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlJsonWrapper.so" Visible="false" />
+	<NativeWrapperLinux Include="$(IntermediateOutputPath)NativeProject\libTestIdlCdrWrapper.so" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperLinux)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		<TargetPath>libTestIdlJsonWrapper.so</TargetPath>
+		<TargetPath>libTestIdlCdrWrapper.so</TargetPath>
 	</ContentWithTargetPath>
 
-	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlJsonWrapper.dylib" Visible="false" />
+	<NativeWrapperOSX Include="$(IntermediateOutputPath)NativeProject\libTestIdlCdrWrapper.dylib" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperOSX)" Visible="false" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		<TargetPath>libTestIdlJsonWrapper.dylib</TargetPath>
+		<TargetPath>libTestIdlCdrWrapper.dylib</TargetPath>
 	</ContentWithTargetPath>
   </ItemGroup>
 </Project>
