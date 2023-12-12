@@ -399,7 +399,7 @@ jobs:
 
     - name: Get branch names
       id: branch-name
-      uses: tj-actions/branch-names@v7
+      uses: tj-actions/branch-names@v8
 
     - name: Download OpenDDS Native win-x86
       uses: actions/download-artifact@v3
@@ -632,7 +632,7 @@ jobs:
 
       - name: Get branch names
         id: branch-name
-        uses: tj-actions/branch-names@v7
+        uses: tj-actions/branch-names@v8
 
       - name: Publish NuGet packages
         env:
