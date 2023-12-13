@@ -41,7 +41,7 @@
 
         public byte[] EncodeToBytes(<%TYPE%> sample)
         {
-            return sample.ToCDR();
+            return sample.ToCDR().ToArray();
         }
 
         public <%TYPE%> DecodeFromBytes(byte[] data)
@@ -1109,13 +1109,11 @@
 
             if (ret == ReturnCode.Ok)
             {
-                 byte[] managedArray = new byte[(int)size];
-                 for (int i = 0; i < (int)size; i++)
-                 {
-                     managedArray[i] = Marshal.ReadByte(ptr, i);
-                 }
-                 var sample = _typeSupport.DecodeFromBytes(managedArray);
-                 data.MemberwiseCopy(sample);
+                byte[] managedArray = new byte[(int)size];
+                Marshal.Copy(ptr, managedArray, 0, (int)size);
+
+                var sample = _typeSupport.DecodeFromBytes(managedArray);
+                data.MemberwiseCopy(sample);
 
                 sampleInfo.FromNative(infoWrapper);
             }
@@ -1133,19 +1131,15 @@
             ReturnCode ret = ReturnCode.Error;
             var ptr = IntPtr.Zero;
             var infoWrapper = new SampleInfoWrapper();
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref infoWrapper);
+            UIntPtr size = UIntPtr.Zero;
+            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref size, ref infoWrapper);
             if (ret == ReturnCode.Ok)
             {
-                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
+                byte[] managedArray = new byte[(int)size];
+                Marshal.Copy(ptr, managedArray, 0, (int)size);
 
-                if (!string.IsNullOrWhiteSpace(json_data))
-                {
-                    var sample = _typeSupport.DecodeFromString(json_data);
-
-                    data.MemberwiseCopy(sample);
-                }
-
-                MarshalHelper.ReleaseNativeStringPointer(ptr);
+                var sample = _typeSupport.DecodeFromBytes(managedArray);
+                data.MemberwiseCopy(sample);
 
                 sampleInfo.FromNative(infoWrapper);
             }
@@ -1273,8 +1267,8 @@
         internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
@@ -1343,8 +1337,8 @@
         internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
