@@ -246,7 +246,7 @@ jobs:
         fail-on-error: false
 
   build_macos:
-    runs-on: macos-13
+    runs-on: macos-latest
 
     env:
       OpenDdsVersion: "3.25"

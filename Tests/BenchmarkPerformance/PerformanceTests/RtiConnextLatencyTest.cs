@@ -64,7 +64,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
                 _evt.Wait();
 
-                var receptionTime = DateTime.Now.Ticks;
+                var receptionTime = DateTime.UtcNow.Ticks;
                 var latency = TimeSpan.FromTicks(receptionTime - publicationTime);
                 latencyHistory.Add(latency);
 
