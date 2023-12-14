@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -174,10 +175,206 @@ public class CdrReader
     public uint ReadEnum() => ReadUInt32();
 
     /// <summary>
-    /// Reads a sequence length from the stream.
+    /// Reads a sequence of boolean values from the stream.
     /// </summary>
-    /// <returns>The sequence length value.</returns>
-    public uint ReadSequenceLength() => ReadUInt32();
+    /// <returns>The sequence of booleans from the stream.</returns>
+    public IList<bool> ReadBoolSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new bool[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadBool();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of bytes from the stream.
+    /// </summary>
+    /// <returns>The sequence of bytes from the stream.</returns>
+    public IList<byte> ReadByteSequence()
+    {
+        var len = ReadSequenceLength();
+        return ReadBytes((int)len).ToArray();
+    }
+
+    /// <summary>
+    /// Reads a sequence of signed short values from the stream.
+    /// </summary>
+    /// <returns>The sequence of signed short values from the stream.</returns>
+    public IList<short> ReadInt16Sequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new short[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadInt16();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of unsigned short values from the stream.
+    /// </summary>
+    /// <returns>The sequence of unsigned short values from the stream.</returns>
+    public IList<ushort> ReadUInt16Sequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new ushort[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadUInt16();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of signed integer values from the stream.
+    /// </summary>
+    /// <returns>The sequence of signed integer values from the stream.</returns>
+    public IList<int> ReadInt32Sequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new int[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadInt32();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of unsigned integer values from the stream.
+    /// </summary>
+    /// <returns>The sequence of unsigned integer values from the stream.</returns>
+    public IList<uint> ReadUInt32Sequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new uint[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadUInt32();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of signed long values from the stream.
+    /// </summary>
+    /// <returns>The sequence of signed long values from the stream.</returns>
+    public IList<long> ReadInt64Sequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new long[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadInt64();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of unsigned long values from the stream.
+    /// </summary>
+    /// <returns>The sequence of unsigned long values from the stream.</returns>
+    public IList<ulong> ReadUInt64Sequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new ulong[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadUInt64();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of float values from the stream.
+    /// </summary>
+    /// <returns>The sequence of float values from the stream.</returns>
+    public IList<float> ReadSingleSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new float[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadSingle();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of double values from the stream.
+    /// </summary>
+    /// <returns>The sequence of double values from the stream.</returns>
+    public IList<double> ReadDoubleSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new double[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadDouble();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of character values from the stream.
+    /// </summary>
+    /// <returns>The sequence of character values from the stream.</returns>
+    public IList<char> ReadCharSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new char[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadChar();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of string values from the stream.
+    /// </summary>
+    /// <returns>The sequence of string values from the stream.</returns>
+    public IList<string> ReadStringSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new string[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadString();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a sequence of enumeration values from the stream.
+    /// </summary>
+    /// <returns>The sequence of enumeration values from the stream.</returns>
+    public IList<uint> ReadEnumSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new uint[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadEnum();
+        }
+
+        return result;
+    }
 
     private void Align(int alignment)
     {
@@ -187,6 +384,8 @@ public class CdrReader
             ReadBytes(alignment - modulo);
         }
     }
+
+    private uint ReadSequenceLength() => ReadUInt32();
 
     /// <summary>
     /// Converts the specified 32-bit signed integer to a single-precision floating point number.

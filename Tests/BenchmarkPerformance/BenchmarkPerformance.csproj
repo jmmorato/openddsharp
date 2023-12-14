@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -7,6 +7,7 @@
         <Nullable>disable</Nullable>
         <RootNamespace>OpenDDSharp.BenchmarkPerformance</RootNamespace>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+        <Platforms>x64;x86;ARM64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,7 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Sources\OpenDDSharp\OpenDDSharp.csproj" />
-      <ProjectReference Include="..\TestIdlJson\TestIdlJson.csproj" />
+      <ProjectReference Include="..\TestIdlCdr\TestIdlCdr.csproj" />
     </ItemGroup>
 
 </Project>
