@@ -78,7 +78,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     private void InitializeDDSEntities()
     {
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSInfoRepo", "file://repo.ior");
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
 
         var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
         var configName = "openddsharp_rtps_interop_" + guid;
@@ -89,7 +89,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         var rui = new RtpsUdpInst(inst)
         {
             UseMulticast = false,
-            LocalAddress = "localhost",
+            LocalAddress = "127.0.0.1",
             NakResponseDelay = new TimeValue
             {
                 Seconds = 0,

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -7,6 +7,8 @@
         <Nullable>disable</Nullable>
         <RootNamespace>OpenDDSharp.BenchmarkPerformance</RootNamespace>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+        <Platforms>x64</Platforms>
+		<Platform>x64</Platform>
     </PropertyGroup>
 
     <ItemGroup>

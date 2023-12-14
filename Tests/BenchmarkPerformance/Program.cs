@@ -16,12 +16,12 @@ Ace.Init();
 var disc = new RtpsDiscovery(RTPS_DISCOVERY)
 {
     SedpMulticast = false,
-    SedpLocalAddress = "localhost",
-    SpdpLocalAddress = "localhost",
+    SedpLocalAddress = "127.0.0.1",
+    SpdpLocalAddress = "127.0.0.1",
     ResendPeriod = new TimeValue
     {
-        Seconds = 1,
-        MicroSeconds = 0,
+        Seconds = 0,
+        MicroSeconds = 50_000,
     },
 };
 
@@ -29,9 +29,9 @@ ParticipantService.Instance.AddDiscovery(disc);
 ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
 ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
 
-// var test = new OpenDDSharpLatencyTest(1000, 100, 512);
-// test.Run();
-// test.Dispose();
+//var test = new OpenDDSharpLatencyTest(1000, 100, 512);
+//test.Run();
+//test.Dispose();
 
 Console.WriteLine("Menu: ");
 Console.WriteLine("[1] Latency Performance Test");
@@ -44,12 +44,12 @@ switch (input)
 {
     case "1":
     {
-         var config = new LatencyTestConfiguration
-         {
-             ArtifactsPath = artifactsPath,
-         };
-         _ = BenchmarkRunner.Run<LatencyTest>(config);
-         break;
+        var config = new LatencyTestConfiguration
+        {
+            ArtifactsPath = artifactsPath,
+        };
+        _ = BenchmarkRunner.Run<LatencyTest>(config);
+        break;
     }
 }
 
