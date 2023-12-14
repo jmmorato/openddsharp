@@ -7,8 +7,7 @@
         <Nullable>disable</Nullable>
         <RootNamespace>OpenDDSharp.BenchmarkPerformance</RootNamespace>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-        <Platforms>x64</Platforms>
-		<Platform>x64</Platform>
+        <Platforms>x64;x86;ARM64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
