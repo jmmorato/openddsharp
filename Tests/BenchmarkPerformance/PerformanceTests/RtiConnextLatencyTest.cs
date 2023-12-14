@@ -64,7 +64,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
                 _evt.Wait();
 
-                var receptionTime = DateTime.Now.Ticks;
+                var receptionTime = DateTime.UtcNow.Ticks;
                 var latency = TimeSpan.FromTicks(receptionTime - publicationTime);
                 latencyHistory.Add(latency);
 
@@ -101,6 +101,9 @@ internal sealed class RtiConnextLatencyTest : IDisposable
         var pQos = DomainParticipantFactory.Instance.DefaultParticipantQos
             .WithDiscovery(d => d.EnabledTransports.Clear())
             .WithDiscovery(d => d.EnabledTransports.Add(TransportBuiltinAlias.Udpv4))
+            .WithDiscovery(d => d.AcceptUnknownPeers = false)
+            .WithDiscovery(d => d.InitialPeers.Clear())
+            .WithDiscovery(d => d.InitialPeers.Add("builtin.udpv4://127.0.0.1"))
             .WithTransportBuiltin(t => t.Mask = TransportBuiltinMask.Udpv4);
 
         _participant = DomainParticipantFactory.Instance.CreateParticipant(DOMAIN_ID, pQos);
@@ -109,8 +112,14 @@ internal sealed class RtiConnextLatencyTest : IDisposable
         _publisher = _participant.CreatePublisher();
         _subscriber = _participant.CreateSubscriber();
 
-        var dwQos = _publisher.DefaultDataWriterQos.WithReliability(c => c.Kind = ReliabilityKind.Reliable);
-        var drQos = _subscriber.DefaultDataReaderQos.WithReliability(c => c.Kind = ReliabilityKind.Reliable);
+        var dwQos = _publisher.DefaultDataWriterQos
+            .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
+            .WithHistory(c => c.Kind = HistoryKind.KeepLast)
+            .WithHistory(c => c.Depth = 1);
+        var drQos = _subscriber.DefaultDataReaderQos
+            .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
+            .WithHistory(c => c.Kind = HistoryKind.KeepLast)
+            .WithHistory(c => c.Depth = 1);
 
         _dataWriter = _publisher.CreateDataWriter(_topic, dwQos);
         _dataReader = _subscriber.CreateDataReader(_topic, drQos);
