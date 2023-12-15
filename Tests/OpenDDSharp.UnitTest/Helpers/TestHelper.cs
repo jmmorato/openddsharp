@@ -1178,5 +1178,24 @@ namespace OpenDDSharp.UnitTest.Helpers
             thread.Start();
         }
         #endregion
+
+        internal static bool CompareMultiArray<T>(T[][][] data1, T[][][] data2)
+        {
+            for (var i0 = 0; i0 < data1.Length; ++i0)
+            {
+                for (var i1 = 0; i1 < data1[i0].Length; ++i1)
+                {
+                    for (var i2 = 0; i2 < data1[i0][i1].Length; ++i2)
+                    {
+                        if (!data1[i0][i1][i2].Equals(data2[i0][i1][i2]))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }
