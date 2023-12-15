@@ -63,6 +63,10 @@ private:
     std::string implement_from_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
 
     std::string implement_from_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
+
+    std::string read_cdr_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent);
+
+    std::string write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
 };
 
 #endif

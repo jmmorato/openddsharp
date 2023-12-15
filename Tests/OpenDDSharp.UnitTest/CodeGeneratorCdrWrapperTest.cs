@@ -24,10 +24,6 @@ namespace OpenDDSharp.UnitTest
         private Publisher _publisher;
         private Subscriber _subscriber;
         private Topic _topic;
-        // private DataReader _dr;
-        // private TestPrimitiveDataReader _dataReader;
-        // private DataWriter _dw;
-        // private TestPrimitiveDataWriter _dataWriter;
         #endregion
 
         #region Properties
@@ -529,6 +525,375 @@ namespace OpenDDSharp.UnitTest
             foreach (var i in defaultStruct.DoubleArrayField)
             {
                 Assert.AreEqual(default, i);
+            }
+        }
+
+        /// <summary>
+        /// Test the code generated for the primitives multi-array types.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedPrimitivesMultiArrayTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestPrimitiveMultiArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestPrimitiveMultiArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestPrimitiveMultiArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5_000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestPrimitiveMultiArray();
+
+            var data = new TestPrimitiveMultiArray()
+            {
+                BooleanMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                    },
+                    new[]
+                    {
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                    },
+                    new[]
+                    {
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                        new[] { true, false },
+                    },
+                },
+                CharMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                        new[] { '5', '6' },
+                        new[] { '7', '8' },
+                    },
+                    new[]
+                    {
+                        new[] { '9', '0' },
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                        new[] { '5', '6' },
+                    },
+                    new[]
+                    {
+                        new[] { '7', '8' },
+                        new[] { '9', '0' },
+                        new[] { '1', '2' },
+                        new[] { '3', '4' },
+                    },
+                },
+                OctetMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new byte[] { 01, 02 },
+                        new byte[] { 03, 04 },
+                        new byte[] { 05, 06 },
+                        new byte[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new byte[] { 09, 10 },
+                        new byte[] { 11, 12 },
+                        new byte[] { 13, 14 },
+                        new byte[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new byte[] { 17, 18 },
+                        new byte[] { 19, 20 },
+                        new byte[] { 21, 22 },
+                        new byte[] { 23, 24 },
+                    },
+                },
+                Int16MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new short[] { 01, 02 },
+                        new short[] { 03, 04 },
+                        new short[] { 05, 06 },
+                        new short[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new short[] { 09, 10 },
+                        new short[] { 11, 12 },
+                        new short[] { 13, 14 },
+                        new short[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new short[] { 17, 18 },
+                        new short[] { 19, 20 },
+                        new short[] { 21, 22 },
+                        new short[] { 23, 24 },
+                    },
+                },
+                UInt16MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new ushort[] { 01, 02 },
+                        new ushort[] { 03, 04 },
+                        new ushort[] { 05, 06 },
+                        new ushort[] { 07, 08 },
+                    },
+                    new[]
+                    {
+                        new ushort[] { 09, 10 },
+                        new ushort[] { 11, 12 },
+                        new ushort[] { 13, 14 },
+                        new ushort[] { 15, 16 },
+                    },
+                    new[]
+                    {
+                        new ushort[] { 17, 18 },
+                        new ushort[] { 19, 20 },
+                        new ushort[] { 21, 22 },
+                        new ushort[] { 23, 24 },
+                    },
+                },
+                Int32MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { -01, 02 },
+                        new[] { -03, 04 },
+                        new[] { -05, 06 },
+                        new[] { -07, 08 },
+                    },
+                    new[]
+                    {
+                        new[] { -09, 10 },
+                        new[] { -11, 12 },
+                        new[] { -13, 14 },
+                        new[] { -15, 16 },
+                    },
+                    new[]
+                    {
+                        new[] { -17, 18 },
+                        new[] { -19, 20 },
+                        new[] { -21, 22 },
+                        new[] { -23, 24 },
+                    },
+                },
+                UInt32MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 25U, 26U },
+                        new[] { 27U, 28U },
+                        new[] { 29U, 30U },
+                        new[] { 31U, 32U },
+                    },
+                    new[]
+                    {
+                        new[] { 33U, 34U },
+                        new[] { 35U, 36U },
+                        new[] { 37U, 38U },
+                        new[] { 39U, 40U },
+                    },
+                    new[]
+                    {
+                        new[] { 41U, 42U },
+                        new[] { 43U, 44U },
+                        new[] { 45U, 46U },
+                        new[] { 47U, 48U },
+                    },
+                },
+                Int64MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { -25L, -26L },
+                        new[] { -27L, -28L },
+                        new[] { -29L, -30L },
+                        new[] { -31L, -32L },
+                    },
+                    new[]
+                    {
+                        new[] { -33L, -34L },
+                        new[] { -35L, -36L },
+                        new[] { -37L, -38L },
+                        new[] { -39L, -40L },
+                    },
+                    new[]
+                    {
+                        new[] { -41L, -42L },
+                        new[] { -43L, -44L },
+                        new[] { -45L, -46L },
+                        new[] { -47L, -48L },
+                    },
+                },
+                UInt64MultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 49UL, 50UL },
+                        new[] { 51UL, 52UL },
+                        new[] { 53UL, 54UL },
+                        new[] { 55UL, 56UL },
+                    },
+                    new[]
+                    {
+                        new[] { 57UL, 58UL },
+                        new[] { 59UL, 60UL },
+                        new[] { 61UL, 62UL },
+                        new[] { 63UL, 64UL },
+                    },
+                    new[]
+                    {
+                        new[] { 65UL, 66UL },
+                        new[] { 67UL, 68UL },
+                        new[] { 69UL, 70UL },
+                        new[] { 71UL, 72UL },
+                    },
+                },
+                FloatMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 01.01f, 02.02f },
+                        new[] { 03.03f, 04.04f },
+                        new[] { 05.05f, 06.06f },
+                        new[] { 07.07f, 08.08f },
+                    },
+                    new[]
+                    {
+                        new[] { 09.09f, 10.10f },
+                        new[] { 11.11f, 12.12f },
+                        new[] { 13.13f, 14.14f },
+                        new[] { 15.15f, 16.16f },
+                    },
+                    new[]
+                    {
+                        new[] { 17.17f, 18.18f },
+                        new[] { 19.19f, 20.20f },
+                        new[] { 21.21f, 22.22f },
+                        new[] { 23.23f, 24.24f },
+                    },
+                },
+                DoubleMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { 01.01, 02.02 },
+                        new[] { 03.03, 04.04 },
+                        new[] { 05.05, 06.06 },
+                        new[] { 07.07, 08.08 },
+                    },
+                    new[]
+                    {
+                        new[] { 09.09, 10.10 },
+                        new[] { 11.11, 12.12 },
+                        new[] { 13.13, 14.14 },
+                        new[] { 15.15, 16.16 },
+                    },
+                    new[]
+                    {
+                        new[] { 17.17, 18.18 },
+                        new[] { 19.19, 20.20 },
+                        new[] { 21.21, 22.22 },
+                        new[] { 23.23, 24.24 },
+                    },
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestPrimitiveMultiArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.CharMultiArrayField, received.CharMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.OctetMultiArrayField, received.OctetMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.Int16MultiArrayField, received.Int16MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt16MultiArrayField, received.UInt16MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.Int32MultiArrayField, received.Int32MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt32MultiArrayField, received.UInt32MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.Int64MultiArrayField, received.Int64MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt64MultiArrayField, received.UInt64MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.FloatMultiArrayField, received.FloatMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.DoubleMultiArrayField, received.DoubleMultiArrayField));
+
+            Assert.AreEqual(typeof(bool[][][]), data.BooleanMultiArrayField.GetType());
+            Assert.AreEqual(typeof(char[][][]), data.CharMultiArrayField.GetType());
+            Assert.AreEqual(typeof(byte[][][]), data.OctetMultiArrayField.GetType());
+            Assert.AreEqual(typeof(short[][][]), data.Int16MultiArrayField.GetType());
+            Assert.AreEqual(typeof(ushort[][][]), data.UInt16MultiArrayField.GetType());
+            Assert.AreEqual(typeof(int[][][]), data.Int32MultiArrayField.GetType());
+            Assert.AreEqual(typeof(uint[][][]), data.UInt32MultiArrayField.GetType());
+            Assert.AreEqual(typeof(long[][][]), data.Int64MultiArrayField.GetType());
+            Assert.AreEqual(typeof(ulong[][][]), data.UInt64MultiArrayField.GetType());
+            Assert.AreEqual(typeof(float[][][]), data.FloatMultiArrayField.GetType());
+            Assert.AreEqual(typeof(double[][][]), data.DoubleMultiArrayField.GetType());
+
+            for (var i0 = 0; i0 < 3; i0++)
+            {
+                for (var i1 = 0; i1 < 4; i1++)
+                {
+                    for (var i2 = 0; i2 < 2; i2++)
+                    {
+                        Assert.AreEqual(default, defaultStruct.BooleanMultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.CharMultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.OctetMultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.Int16MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.UInt16MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.Int32MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.UInt32MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.Int64MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.UInt64MultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.FloatMultiArrayField[i0][i1][i2]);
+                        Assert.AreEqual(default, defaultStruct.DoubleMultiArrayField[i0][i1][i2]);
+                    }
+                }
             }
         }
         #endregion

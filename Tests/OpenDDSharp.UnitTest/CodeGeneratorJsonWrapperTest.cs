@@ -1063,21 +1063,21 @@ namespace OpenDDSharp.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.IsTrue(CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.CharMultiArrayField, received.CharMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.WCharMultiArrayField, received.WCharMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.OctetMultiArrayField, received.OctetMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.ShortMultiArrayField, received.ShortMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.UnsignedShortMultiArrayField, received.UnsignedShortMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.LongMultiArrayField, received.LongMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.UnsignedLongMultiArrayField, received.UnsignedLongMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.LongLongMultiArrayField, received.LongLongMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.UnsignedLongLongMultiArrayField, received.UnsignedLongLongMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.FloatMultiArrayField, received.FloatMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.DoubleMultiArrayField, received.DoubleMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.CharMultiArrayField, received.CharMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.WCharMultiArrayField, received.WCharMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.OctetMultiArrayField, received.OctetMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.ShortMultiArrayField, received.ShortMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UnsignedShortMultiArrayField, received.UnsignedShortMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.LongMultiArrayField, received.LongMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UnsignedLongMultiArrayField, received.UnsignedLongMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.LongLongMultiArrayField, received.LongLongMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UnsignedLongLongMultiArrayField, received.UnsignedLongLongMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.FloatMultiArrayField, received.FloatMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.DoubleMultiArrayField, received.DoubleMultiArrayField));
             // Assert.IsTrue(CompareMultiArray(data.LongDoubleMultiArrayField, received.LongDoubleMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.Int8MultiArrayField, received.Int8MultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.UInt8MultiArrayField, received.UInt8MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.Int8MultiArrayField, received.Int8MultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt8MultiArrayField, received.UInt8MultiArrayField));
 
             Assert.AreEqual(typeof(bool[][][]), data.BooleanMultiArrayField.GetType());
             Assert.AreEqual(typeof(char[][][]), data.CharMultiArrayField.GetType());
@@ -1417,8 +1417,8 @@ namespace OpenDDSharp.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.IsTrue(CompareMultiArray(data.StringMultiArrayField, received.StringMultiArrayField));
-            Assert.IsTrue(CompareMultiArray(data.WStringMultiArrayField, received.WStringMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.StringMultiArrayField, received.StringMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.WStringMultiArrayField, received.WStringMultiArrayField));
 
             Assert.AreEqual(typeof(string[][][]), data.StringMultiArrayField.GetType());
             Assert.AreEqual(typeof(string[][][]), data.WStringMultiArrayField.GetType());
@@ -1448,8 +1448,8 @@ namespace OpenDDSharp.UnitTest
                 },
             };
 
-            Assert.IsTrue(CompareMultiArray(defaultStruct.StringMultiArrayField, defaultArray));
-            Assert.IsTrue(CompareMultiArray(defaultStruct.WStringMultiArrayField, defaultArray));
+            Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.StringMultiArrayField, defaultArray));
+            Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.WStringMultiArrayField, defaultArray));
         }
 
         /// <summary>
@@ -1970,7 +1970,7 @@ namespace OpenDDSharp.UnitTest
             ret = _dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.IsTrue(CompareMultiArray(data.EnumMultiArrayField, received.EnumMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.EnumMultiArrayField, received.EnumMultiArrayField));
 
             Assert.AreEqual(typeof(TestEnum[][][]), data.EnumMultiArrayField.GetType());
 
@@ -2000,7 +2000,7 @@ namespace OpenDDSharp.UnitTest
             };
 
             Assert.IsNotNull(defaultStruct.EnumMultiArrayField);
-            Assert.IsTrue(CompareMultiArray(defaultStruct.EnumMultiArrayField, defaultArray));
+            Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.EnumMultiArrayField, defaultArray));
         }
 
         /// <summary>
@@ -2039,27 +2039,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_STRING_CONST.Value);
             Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_WSTRING_CONST.Value);
             Assert.AreEqual(TestEnum.ENUM6, TEST_ENUM_CONST.Value);
-        }
-        #endregion
-
-        #region Methods
-        private static bool CompareMultiArray<T>(T[][][] data1, T[][][] data2)
-        {
-            for (var i0 = 0; i0 < data1.Length; ++i0)
-            {
-                for (var i1 = 0; i1 < data1[i0].Length; ++i1)
-                {
-                    for (var i2 = 0; i2 < data1[i0][i1].Length; ++i2)
-                    {
-                        if (!data1[i0][i1][i2].Equals(data2[i0][i1][i2]))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
         }
         #endregion
     }
