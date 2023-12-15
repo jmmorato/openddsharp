@@ -24,6 +24,18 @@ module CdrWrapper {
     typedef sequence<float, 5> BoundedFloatSeqType;
     typedef sequence<double, 5> BoundedDoubleSeqType;
 
+    typedef char CharArrayType[5];
+    typedef boolean BooleanArrayType[5];
+    typedef octet OctetArrayType[5];
+    typedef short Int16ArrayType[5];
+    typedef unsigned short UInt16ArrayType[5];
+    typedef long Int32ArrayType[5];
+    typedef unsigned long UInt32ArrayType[5];
+    typedef long long Int64ArrayType[5];
+    typedef unsigned long long UInt64ArrayType[5];
+    typedef float FloatArrayType[5];
+    typedef double DoubleArrayType[5];
+
     typedef sequence<octet, 2048> OctetSequenceType;
 
     @topic
@@ -66,6 +78,21 @@ module CdrWrapper {
         BoundedFloatSeqType BoundedFloatSequenceField;
         BoundedDoubleSeqType BoundedDoubleSequenceField;
         BoundedCharSeqType BoundedCharSequenceField;
+    };
+
+    @topic
+    struct TestPrimitiveArray {
+        BooleanArrayType BooleanArrayField;
+        OctetArrayType ByteArrayField;
+        Int16ArrayType Int16ArrayField;
+        Int32ArrayType Int32ArrayField;
+        Int64ArrayType Int64ArrayField;
+        UInt16ArrayType UInt16ArrayField;
+        UInt32ArrayType UInt32ArrayField;
+        UInt64ArrayType UInt64ArrayField;
+        FloatArrayType FloatArrayField;
+        DoubleArrayType DoubleArrayField;
+        CharArrayType CharArrayField;
     };
 
     @topic

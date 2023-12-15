@@ -360,6 +360,177 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(defaultStruct.UnboundedDoubleSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedDoubleSequenceField.Count);
         }
+
+        /// <summary>
+        /// Test the code generated for the primitives array types.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedPrimitivesArrayTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestPrimitiveArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestPrimitiveArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestPrimitiveArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5_000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5_000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestPrimitiveArray();
+
+            var data = new TestPrimitiveArray
+            {
+                BooleanArrayField = new[] { true, true, false, false, true },
+                CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
+                ByteArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
+                Int16ArrayField = new short[] { 4, -5, 6, -7, 8 },
+                UInt16ArrayField = new ushort[] { 4, 5, 6, 7, 8 },
+                Int32ArrayField = new[] { -1, 2, -3, 100, -200 },
+                UInt32ArrayField = new[] { 1u, 2u, 3u, 100u, 200u },
+                Int64ArrayField = new[] { -1L, 2L, -3L, 100L, -200L },
+                UInt64ArrayField = new[] { 1UL, 2UL, 3UL, 100UL, 200UL },
+                FloatArrayField = new[] { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
+                DoubleArrayField = new[] { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
+            };
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var sampleInfo = new SampleInfo();
+            var received = new TestPrimitiveArray();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsTrue(data.BooleanArrayField.SequenceEqual(received.BooleanArrayField));
+            Assert.IsTrue(data.CharArrayField.SequenceEqual(received.CharArrayField));
+            Assert.IsTrue(data.ByteArrayField.SequenceEqual(received.ByteArrayField));
+            Assert.IsTrue(data.Int16ArrayField.SequenceEqual(received.Int16ArrayField));
+            Assert.IsTrue(data.UInt16ArrayField.SequenceEqual(received.UInt16ArrayField));
+            Assert.IsTrue(data.Int32ArrayField.SequenceEqual(received.Int32ArrayField));
+            Assert.IsTrue(data.UInt32ArrayField.SequenceEqual(received.UInt32ArrayField));
+            Assert.IsTrue(data.Int64ArrayField.SequenceEqual(received.Int64ArrayField));
+            Assert.IsTrue(data.UInt64ArrayField.SequenceEqual(received.UInt64ArrayField));
+            Assert.IsTrue(data.FloatArrayField.SequenceEqual(received.FloatArrayField));
+            Assert.IsTrue(data.DoubleArrayField.SequenceEqual(received.DoubleArrayField));
+
+            Assert.AreEqual(typeof(bool[]), data.BooleanArrayField.GetType());
+            Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
+            Assert.AreEqual(typeof(byte[]), data.ByteArrayField.GetType());
+            Assert.AreEqual(typeof(short[]), data.Int16ArrayField.GetType());
+            Assert.AreEqual(typeof(ushort[]), data.UInt16ArrayField.GetType());
+            Assert.AreEqual(typeof(int[]), data.Int32ArrayField.GetType());
+            Assert.AreEqual(typeof(uint[]), data.UInt32ArrayField.GetType());
+            Assert.AreEqual(typeof(long[]), data.Int64ArrayField.GetType());
+            Assert.AreEqual(typeof(ulong[]), data.UInt64ArrayField.GetType());
+            Assert.AreEqual(typeof(float[]), data.FloatArrayField.GetType());
+            Assert.AreEqual(typeof(double[]), data.DoubleArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.BooleanArrayField);
+            Assert.AreEqual(5, defaultStruct.BooleanArrayField.Length);
+            foreach (var i in defaultStruct.BooleanArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.CharArrayField);
+            Assert.AreEqual(5, defaultStruct.CharArrayField.Length);
+            foreach (var i in defaultStruct.CharArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.ByteArrayField);
+            Assert.AreEqual(5, defaultStruct.ByteArrayField.Length);
+            foreach (var i in defaultStruct.ByteArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.Int16ArrayField);
+            Assert.AreEqual(5, defaultStruct.Int16ArrayField.Length);
+            foreach (var i in defaultStruct.Int16ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UInt16ArrayField);
+            Assert.AreEqual(5, defaultStruct.UInt16ArrayField.Length);
+            foreach (var i in defaultStruct.UInt16ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.Int32ArrayField);
+            Assert.AreEqual(5, defaultStruct.Int32ArrayField.Length);
+            foreach (var i in defaultStruct.Int32ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UInt32ArrayField);
+            Assert.AreEqual(5, defaultStruct.UInt32ArrayField.Length);
+            foreach (var i in defaultStruct.UInt32ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.Int64ArrayField);
+            Assert.AreEqual(5, defaultStruct.Int64ArrayField.Length);
+            foreach (var i in defaultStruct.Int64ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.UInt64ArrayField);
+            Assert.AreEqual(5, defaultStruct.UInt64ArrayField.Length);
+            foreach (var i in defaultStruct.UInt64ArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.FloatArrayField);
+            Assert.AreEqual(5, defaultStruct.FloatArrayField.Length);
+            foreach (var i in defaultStruct.FloatArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+
+            Assert.IsNotNull(defaultStruct.DoubleArrayField);
+            Assert.AreEqual(5, defaultStruct.DoubleArrayField.Length);
+            foreach (var i in defaultStruct.DoubleArrayField)
+            {
+                Assert.AreEqual(default, i);
+            }
+        }
         #endregion
     }
 }
