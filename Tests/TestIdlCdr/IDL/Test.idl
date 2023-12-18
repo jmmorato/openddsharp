@@ -2,6 +2,7 @@ module CdrWrapper {
 
     typedef sequence<octet> UnboundedOctetSeqType;
     typedef sequence<char> UnboundedCharSeqType;
+    typedef sequence<wchar> UnboundedWCharSeqType;
     typedef sequence<boolean> UnboundedBooleanSeqType;
     typedef sequence<int16> UnboundedInt16SeqType;
     typedef sequence<int32> UnboundedInt32SeqType;
@@ -14,6 +15,7 @@ module CdrWrapper {
 
     typedef sequence<octet, 5> BoundedOctetSeqType;
     typedef sequence<char, 5> BoundedCharSeqType;
+    typedef sequence<wchar, 5> BoundedWCharSeqType;
     typedef sequence<boolean, 5> BoundedBooleanSeqType;
     typedef sequence<int16, 5> BoundedInt16SeqType;
     typedef sequence<int32, 5> BoundedInt32SeqType;
@@ -25,6 +27,7 @@ module CdrWrapper {
     typedef sequence<double, 5> BoundedDoubleSeqType;
 
     typedef char CharArrayType[5];
+    typedef wchar WCharArrayType[5];
     typedef boolean BooleanArrayType[5];
     typedef octet OctetArrayType[5];
     typedef short Int16ArrayType[5];
@@ -45,6 +48,7 @@ module CdrWrapper {
     typedef float FloatMultiArrayType[3][4][2];
     typedef double DoubleMultiArrayType[3][4][2];
     typedef char CharMultiArrayType[3][4][2];
+    typedef wchar WCharMultiArrayType[3][4][2];
     typedef boolean BooleanMultiArrayType[3][4][2];
     typedef octet OctetMultiArrayType[3][4][2];
 
@@ -63,6 +67,7 @@ module CdrWrapper {
         float FloatField;
         double DoubleField;
         char CharField;
+        wchar WCharField;
     };
 
     @topic
@@ -78,6 +83,7 @@ module CdrWrapper {
         UnboundedFloatSeqType UnboundedFloatSequenceField;
         UnboundedDoubleSeqType UnboundedDoubleSequenceField;
         UnboundedCharSeqType UnboundedCharSequenceField;
+        UnboundedWCharSeqType UnboundedWCharSequenceField;
 
         BoundedBooleanSeqType BoundedBooleanSequenceField;
         BoundedOctetSeqType BoundedByteSequenceField;
@@ -90,6 +96,7 @@ module CdrWrapper {
         BoundedFloatSeqType BoundedFloatSequenceField;
         BoundedDoubleSeqType BoundedDoubleSequenceField;
         BoundedCharSeqType BoundedCharSequenceField;
+        BoundedWCharSeqType BoundedWCharSequenceField;
     };
 
     @topic
@@ -105,6 +112,7 @@ module CdrWrapper {
         FloatArrayType FloatArrayField;
         DoubleArrayType DoubleArrayField;
         CharArrayType CharArrayField;
+        WCharArrayType WCharArrayField;
     };
 
     @topic
@@ -118,6 +126,7 @@ module CdrWrapper {
         FloatMultiArrayType FloatMultiArrayField;
         DoubleMultiArrayType DoubleMultiArrayField;
         CharMultiArrayType CharMultiArrayField;
+        WCharMultiArrayType WCharMultiArrayField;
         BooleanMultiArrayType BooleanMultiArrayField;
         OctetMultiArrayType OctetMultiArrayField;
     };
