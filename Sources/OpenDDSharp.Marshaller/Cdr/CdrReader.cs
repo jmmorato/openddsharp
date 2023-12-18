@@ -151,6 +151,17 @@ public class CdrReader
     public char ReadChar() => Convert.ToChar(ReadByte());
 
     /// <summary>
+    /// Reads a wide character from the stream.
+    /// </summary>
+    /// <returns>The wide character value.</returns>
+    public char ReadWChar()
+    {
+        Align(2);
+        var c = ReadBytes(2);
+        return Encoding.Unicode.GetString(c.ToArray())[0];
+    }
+
+    /// <summary>
     /// Reads an string from the stream.
     /// </summary>
     /// <returns>The string value.</returns>
@@ -499,16 +510,48 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a sequence of character values from the stream.
+    /// Reads a sequence of wide character values from the stream.
+    /// </summary>
+    /// <returns>The sequence of wide character values from the stream.</returns>
+    public IList<char> ReadWCharSequence()
+    {
+        var len = ReadSequenceLength();
+        var result = new char[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadWChar();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads an array of character values from the stream.
     /// </summary>
     /// <param name="len">The length of the array.</param>
-    /// <returns>The sequence of character values from the stream.</returns>
+    /// <returns>The array of character values from the stream.</returns>
     public char[] ReadCharArray(int len)
     {
         var result = new char[len];
         for (var i = 0; i < len; i++)
         {
             result[i] = ReadChar();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Reads an array of wide character values from the stream.
+    /// </summary>
+    /// <param name="len">The length of the array.</param>
+    /// <returns>The array of wide character values from the stream.</returns>
+    public char[] ReadWCharArray(int len)
+    {
+        var result = new char[len];
+        for (var i = 0; i < len; i++)
+        {
+            result[i] = ReadWChar();
         }
 
         return result;
