@@ -426,13 +426,13 @@ jobs:
 
       - name: Build Native (No cached)
         shell: pwsh
-        if: steps.opendds-libraries-macos-arm64-cd.outputs.cache-hit != 'true'
+        if: steps.opendds-libraries-macos-ARM64-cd.outputs.cache-hit != 'true'
         run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
         working-directory: ${{ github.workspace }}/Build
 
       - name: Build Native (Cached)
         shell: pwsh
-        if: steps.opendds-libraries-macos-arm64-cd.outputs.cache-hit == 'true'
+        if: steps.opendds-libraries-macos-ARM64-cd.outputs.cache-hit == 'true'
         run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
         working-directory: ${{ github.workspace }}/Build
 
@@ -480,7 +480,7 @@ jobs:
       - name: Artifacts OpenDDS libraries
         uses: actions/upload-artifact@v4
         with:
-          name: opendds-osx-arm64-${{ github.run_number }}
+          name: opendds-osx-ARM64-${{ github.run_number }}
           path: ${{ github.workspace }}/opendds-native-osx-arm64.zip
 
   build_artifacts:
@@ -544,7 +544,7 @@ jobs:
     - name: Download OpenDDS Native osx-arm64
       uses: actions/download-artifact@v4
       with:
-        name: opendds-osx-arm64-${{ github.run_number }}
+        name: opendds-osx-ARM64-${{ github.run_number }}
 
     - name: Prepare OpenDDS Native
       shell: pwsh
@@ -567,8 +567,8 @@ jobs:
         XCOPY ".\opendds-native-osx-x64\OpenDDS_osx-x64\*" "${{ github.workspace }}\ext\OpenDDS_osx-x64\" /D /S /Y /M
         XCOPY ".\opendds-native-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-native-osx-arm64\OpenDDS_osx-arm64\*" "${{ github.workspace }}\ext\OpenDDS_osx-arm64\" /D /S /Y /M
-        XCOPY ".\opendds-native-osx-arm64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-ARM64\OpenDDS_osx-arm64\*" "${{ github.workspace }}\ext\OpenDDS_osx-arm64\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-ARM64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
 
     - name: Set release version
       shell: pwsh
