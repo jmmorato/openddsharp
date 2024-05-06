@@ -423,13 +423,13 @@ jobs:
 
       - name: Build Native (No cached)
         shell: pwsh
-        if: steps.opendds-libraries-macos-arm64.outputs.cache-hit != 'true'
+        if: steps.opendds-libraries-macos-ARM64.outputs.cache-hit != 'true'
         run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
         working-directory: ${{ github.workspace }}/Build
 
       - name: Build Native (Cached)
         shell: pwsh
-        if: steps.opendds-libraries-macos-arm64.outputs.cache-hit == 'true'
+        if: steps.opendds-libraries-macos-ARM64.outputs.cache-hit == 'true'
         run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
         working-directory: ${{ github.workspace }}/Build
 
@@ -450,7 +450,7 @@ jobs:
 
       - name: Build OpenDDSharp TestSupportProcessCore Project
         shell: bash
-        run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+        run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-arm64
         working-directory: ${{ github.workspace }}
         env:
           DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
@@ -459,7 +459,7 @@ jobs:
 
       - name: Build OpenDDSharp UnitTest Project
         shell: bash
-        run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+        run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-arm64
         working-directory: ${{ github.workspace }}
         env:
           DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
@@ -468,13 +468,13 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: bash
-        run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
+        run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-arm64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
         working-directory: ${{ github.workspace }}
         env:
           DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
           ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers"
           TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
-          DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
+          DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
 
       - name: Test Report
         uses: dorny/test-reporter@v1
