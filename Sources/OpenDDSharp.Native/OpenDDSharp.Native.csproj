@@ -18,6 +18,8 @@
     </Description>
     <Platforms>x64;x86;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
+      <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
+      <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
   </PropertyGroup>
 
   <!-- NuGet properties -->
@@ -192,71 +194,137 @@
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
     </Content>
 
-	<!-- OpenDDS MacOS/Release native Libraries -->
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\ace\libACE.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<!-- OpenDDS MacOS/Release x64 native Libraries -->
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\ace\libACE.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\libTAO.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\libTAO.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\PI\libTAO_PI.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\PI\libTAO_PI.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-  <Content Include="..\..\ext\OpenDDS_MacOS\ACE_wrappers\TAO\tao\Valuetype\libTAO_Valuetype.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+  <Content Include="..\..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\tao\Valuetype\libTAO_Valuetype.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\libOpenDDS_Dcps.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\libOpenDDS_Dcps.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\RTPS\libOpenDDS_Rtps.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\RTPS\libOpenDDS_Rtps.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\transport\shmem\libOpenDDS_Shmem.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\transport\shmem\libOpenDDS_Shmem.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\transport\tcp\libOpenDDS_Tcp.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\transport\tcp\libOpenDDS_Tcp.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\transport\multicast\libOpenDDS_Multicast.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\transport\multicast\libOpenDDS_Multicast.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
-	<Content Include="..\..\ext\OpenDDS_MacOS\dds\DCPS\transport\udp\libOpenDDS_Udp.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<Content Include="..\..\ext\OpenDDS_osx-x64\dds\DCPS\transport\udp\libOpenDDS_Udp.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+		<CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</Content>
+
+      <!-- OpenDDS MacOS/Release arm64 native Libraries -->
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\ace\libACE.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\libTAO.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\PI\libTAO_PI.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\tao\Valuetype\libTAO_Valuetype.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\libOpenDDS_Dcps.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\RTPS\libOpenDDS_Rtps.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\transport\shmem\libOpenDDS_Shmem.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\transport\tcp\libOpenDDS_Tcp.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\transport\multicast\libOpenDDS_Multicast.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Include="..\..\ext\OpenDDS_osx-arm64\dds\DCPS\transport\udp\libOpenDDS_Udp.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+          <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+      </Content>
 
     <!-- Native dependency from this project. -->
     <ProjectNativeDepsReleasex64 Include="..\..\Native\build_x64\OpenDDSWrapper\Release\OpenDDSWrapper.dll" Visible="false" />
@@ -288,10 +356,14 @@
       <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
 	</None>
 
-	<None Include="..\..\Native\build_MacOS\OpenDDSWrapper\libOpenDDSWrapper.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
-	  <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToOutputDirectory>
-	  <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX'))">PreserveNewest</CopyToPublishDirectory>
+	<None Include="..\..\Native\build_osx-x64\OpenDDSWrapper\libOpenDDSWrapper.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" Visible="false">
+	  <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+	  <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
 	</None>
+    <None Include="..\..\Native\build_osx-arm64\OpenDDSWrapper\libOpenDDSWrapper.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" Visible="false">
+      <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -133,6 +133,8 @@ namespace OpenDDSharp.Build
 
         internal static bool IsOSX => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
+        internal static bool IsARM64 => RuntimeInformation.OSArchitecture == Architecture.Arm64;
+
         internal string DdsRoot { get; private set; }
 
         internal string AceRoot { get; private set; }
@@ -327,9 +329,13 @@ namespace OpenDDSharp.Build
                 DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";
             }
 
-            if (IsOSX)
+            if (IsOSX && IsARM64)
             {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_MacOS/";
+                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_osx-arm64/";
+            }
+            else if (IsOSX && !IsARM64)
+            {
+                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_osx-x64/";
             }
 
             AceRoot = DdsRoot + "ACE_wrappers/";

@@ -270,39 +270,39 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-macos
+      id: opendds-libraries-macos-x64
       uses: actions/cache@v4
       with:
         path: |
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/bin
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/apps/gperf/src/ace_gperf
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/lib*.dylib
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/bin/
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/bin
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/tools/
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
         key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-macos.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-macos-x64.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build Native (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-macos.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-macos-x64.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
@@ -326,28 +326,28 @@ jobs:
       run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/TAO"
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO"
 
     - name: Build OpenDDSharp UnitTest Project
       shell: bash
       run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/TAO"
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO"
 
     - name: Test OpenDDSharp
       shell: bash
       run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/TAO"
-        DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_MacOS/lib:${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/lib:."
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO"
+        DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
 
     - name: Test Report
       uses: dorny/test-reporter@v1
@@ -372,15 +372,142 @@ jobs:
         flag-name: coverage-macos-x64-Release
         fail-on-error: false
 
+  build_macos_arm64:
+    runs-on: macos-14
+
+    env:
+      OpenDdsVersion: "3.25"
+      BuildPlatform: "arm64"
+      BuildConfiguration: "Release"
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet 6.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Setup dotnet 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache OpenDDS libraries
+        id: opendds-libraries-macos-arm64
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/cmake/**/*
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.pl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/lib*.dylib
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/bin/
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/bin
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/IDLTemplate.txt
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.h
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.hpp
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.cpp
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.inl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.idl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.pidl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/VERSION.txt
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/tools/
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/InfoRepo/DCPSInfoRepo
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/opendds_idl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/apps/gperf/src/ace_gperf
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
+
+      - name: Build Native (No cached)
+        shell: pwsh
+        if: steps.opendds-libraries-macos-arm64.outputs.cache-hit != 'true'
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+        working-directory: ${{ github.workspace }}/Build
+
+      - name: Build Native (Cached)
+        shell: pwsh
+        if: steps.opendds-libraries-macos-arm64.outputs.cache-hit == 'true'
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+        working-directory: ${{ github.workspace }}/Build
+
+      - name: Dotnet restore
+        shell: bash
+        run: |
+          dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        working-directory: ${{ github.workspace }}
+
+      - name: Build OpenDDSharp.BuildTasks project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
+        working-directory: ${{ github.workspace }}
+
+      - name: Build OpenDDSharp TestSupportProcessCore Project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
+
+      - name: Build OpenDDSharp UnitTest Project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
+
+      - name: Test OpenDDSharp
+        shell: bash
+        run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
+          DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: "Test Report: osx-arm64"
+          path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+          reporter: dotnet-trx
+
+      - name: Get path to lcov file
+        id: get_lcov_path
+        shell: bash
+        run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ steps.get_lcov_path.outputs.lcov_path }}
+          format: lcov
+          parallel: true
+          flag-name: coverage-macos-arm64-Release
+          fail-on-error: false
+
   publish_coveralls:
     runs-on: ubuntu-latest
-    needs: [build_windows, build_linux, build_macos_x64]
+    needs: [build_windows, build_linux, build_macos_x64, build_macos_arm64]
     steps:
       - name: Publish coverage on Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-          carryforward: coverage-windows-x64-Release,coverage-windows-x64-Debug,coverage-windows-x86-Release,coverage-windows-x86-Debug,coverage-linux-x64-Release,coverage-macos-x64-Release
+          carryforward: coverage-windows-x64-Release,coverage-windows-x64-Debug,coverage-windows-x86-Release,coverage-windows-x86-Debug,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release
           fail-on-error: false
 

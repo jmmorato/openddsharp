@@ -244,7 +244,7 @@ jobs:
         path: ${{ github.workspace }}/opendds-native-linux-x64.zip
 
   build_macos_x64_native:
-    runs-on: macos-latest
+    runs-on: macos-13
 
     env:
       BuildPlatform: "x64"
@@ -278,48 +278,48 @@ jobs:
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Cache OpenDDS libraries
-      id: opendds-libraries-macos-cd
+      id: opendds-libraries-macos-x64-cd
       uses: actions/cache@v4
       with:
         path: |
           ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/cmake/**/*
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/rapidjson/**/*
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/lib*.dylib
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/bin/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/bin/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/**/*.pidl
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/tools/
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/InfoRepo/DCPSInfoRepo          
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/dds/idl/opendds_idl          
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/apps/gperf/src/ace_gperf
-          ${{ github.workspace }}/ext/OpenDDS_MacOS/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/tools/rapidjson/**/*
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/lib*.dylib
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/bin/
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/bin/
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/tools/
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/InfoRepo/DCPSInfoRepo          
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/opendds_idl          
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
         key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
 
     - name: Build Native (No cached)
       shell: pwsh
-      if: steps.opendds-libraries-macos-cd.outputs.cache-hit != 'true'
+      if: steps.opendds-libraries-macos-x64-cd.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build Native (Cached)
       shell: pwsh
-      if: steps.opendds-libraries-macos-cd.outputs.cache-hit == 'true'
+      if: steps.opendds-libraries-macos-x64-cd.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
     - name: Stage Native
       shell: pwsh
       run: |
-        $sourceDir = "./ext/OpenDDS_MacOS"
+        $sourceDir = "./ext/OpenDDS_ox-x64"
         $targetDir = "./opendds-native-osx-x64"
         mkdir "$targetDir"
 
@@ -348,11 +348,11 @@ jobs:
         rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_MacOS/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_osx-x64/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
+        rsync -r -m -v --include='Native/build_osx-x64/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
                 
         ls -la ./opendds-native-osx-x64
-        ls -la ./opendds-native-osx-x64/OpenDDS_MacOS
+        ls -la ./opendds-native-osx-x64/OpenDDS_osx-x64
         ls -la ./opendds-native-osx-x64/Native
 
         zip -r "opendds-native-osx-x64.zip" "./opendds-native-osx-x64"
@@ -363,10 +363,130 @@ jobs:
         name: opendds-osx-x64-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-osx-x64.zip
 
+  build_macos_arm64_native:
+    runs-on: macos-14
+
+    env:
+      BuildPlatform: "arm64"
+      BuildConfiguration: "Release"
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet 6.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 6.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Setup dotnet 7.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Setup dotnet 8.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 8.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Cache OpenDDS libraries
+        id: opendds-libraries-macos-arm64-cd
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/README.md
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/cmake/**/*
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/tools/rapidjson/**/*
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.pl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/lib*.dylib
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/bin/
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/bin/
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/IDLTemplate.txt
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.h
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.hpp
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.cpp
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.inl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.idl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.pidl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/VERSION.txt
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/tools/
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/InfoRepo/DCPSInfoRepo          
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/opendds_idl          
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/apps/gperf/src/ace_gperf
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
+
+      - name: Build Native (No cached)
+        shell: pwsh
+        if: steps.opendds-libraries-macos-arm64-cd.outputs.cache-hit != 'true'
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+        working-directory: ${{ github.workspace }}/Build
+
+      - name: Build Native (Cached)
+        shell: pwsh
+        if: steps.opendds-libraries-macos-arm64-cd.outputs.cache-hit == 'true'
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+        working-directory: ${{ github.workspace }}/Build
+
+      - name: Stage Native
+        shell: pwsh
+        run: |
+          $sourceDir = "./ext/OpenDDS_ox-arm64"
+          $targetDir = "./opendds-native-osx-arm64"
+          mkdir "$targetDir"
+          
+          rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
+          
+          rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
+          
+          rsync -r -m -v -LKH --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
+          
+          rsync -r -m -v --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir       
+          rsync -r -m -v -L --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
+          rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
+          
+          rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
+          rsync -r -m -v --include='Native/build_osx-arm64/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
+          rsync -r -m -v --include='Native/build_osx-arm64/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
+          
+          ls -la ./opendds-native-osx-arm64
+          ls -la ./opendds-native-osx-arm64/OpenDDS_osx-arm64
+          ls -la ./opendds-native-osx-arm64/Native
+          
+          zip -r "opendds-native-osx-arm64.zip" "./opendds-native-osx-arm64"
+
+      - name: Artifacts OpenDDS libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: opendds-osx-arm64-${{ github.run_number }}
+          path: ${{ github.workspace }}/opendds-native-osx-arm64.zip
+
   build_artifacts:
     runs-on: windows-latest
 
-    needs: [build_windows_native, build_linux_native, build_macos_x64_native]
+    needs: [build_windows_native, build_linux_native, build_macos_x64_native, build_macos_arm64_native]
 
     steps:
     - uses: actions/checkout@v4
@@ -421,6 +541,11 @@ jobs:
       with:
         name: opendds-osx-x64-${{ github.run_number }}
 
+    - name: Download OpenDDS Native osx-arm64
+      uses: actions/download-artifact@v4
+      with:
+        name: opendds-osx-arm64-${{ github.run_number }}
+
     - name: Prepare OpenDDS Native
       shell: pwsh
       run: |
@@ -428,6 +553,7 @@ jobs:
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x86.zip" -DestinationPath "."
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-linux-x64.zip" -DestinationPath "."
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-osx-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-osx-arm64.zip" -DestinationPath "."
         
         XCOPY ".\opendds-native-win-x64\OpenDDS_x64\*" "${{ github.workspace }}\ext\OpenDDS_x64\" /D /S /Y /M
         XCOPY ".\opendds-native-win-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
@@ -438,8 +564,11 @@ jobs:
         XCOPY ".\opendds-native-linux-x64\OpenDDS_Linux\*" "${{ github.workspace }}\ext\OpenDDS_Linux\" /D /S /Y /M
         XCOPY ".\opendds-native-linux-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-native-osx-x64\OpenDDS_MacOS\*" "${{ github.workspace }}\ext\OpenDDS_MacOS\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-x64\OpenDDS_osx-x64\*" "${{ github.workspace }}\ext\OpenDDS_osx-x64\" /D /S /Y /M
         XCOPY ".\opendds-native-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        
+        XCOPY ".\opendds-native-osx-arm64\OpenDDS_osx-arm64\*" "${{ github.workspace }}\ext\OpenDDS_osx-arm64\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-arm64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
 
     - name: Set release version
       shell: pwsh
@@ -514,8 +643,10 @@ jobs:
             runtime: win-x64
           - os: ubuntu-latest
             runtime: linux-x64
-          - os: macos-latest
+          - os: macos-13
             runtime: osx-x64
+          - os: macos-14
+            runtime: osx-arm64
 
     runs-on: ${{ matrix.os }}
 
