@@ -73,7 +73,7 @@ namespace OpenDDSharp.Build
         public string BuildNumber { get; internal set; }
 
         /// <summary>
-        /// Gets the current pre release tag.
+        /// Gets the current pre-release tag.
         /// </summary>
         public string PreReleaseTag { get; internal set; }
 
@@ -170,7 +170,7 @@ namespace OpenDDSharp.Build
                 else if (IsOSX)
                 {
                     runtime = "osx-x64";
-                    if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+                    if (BuildPlatform == PlatformTarget.ARM64)
                     {
                         runtime = "osx-arm64";
                     }

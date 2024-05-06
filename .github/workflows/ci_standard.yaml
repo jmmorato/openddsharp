@@ -377,7 +377,7 @@ jobs:
 
     env:
       OpenDdsVersion: "3.25"
-      BuildPlatform: "arm64"
+      BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 

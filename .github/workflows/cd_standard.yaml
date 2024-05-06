@@ -367,7 +367,7 @@ jobs:
     runs-on: macos-14
 
     env:
-      BuildPlatform: "arm64"
+      BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
 
