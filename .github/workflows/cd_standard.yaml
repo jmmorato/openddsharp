@@ -140,23 +140,23 @@ jobs:
     - name: Setup dotnet 6.0
       shell: sh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
-        ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 6.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 6.0
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
     - name: Setup dotnet 7.0
       shell: sh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
-        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 7.0
+         echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+         echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
     - name: Setup dotnet 8.0
       shell: sh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
-        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 8.0
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
