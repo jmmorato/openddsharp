@@ -138,21 +138,21 @@ jobs:
         fetch-depth: 0
 
     - name: Setup dotnet 6.0
-      shell: pwsh
+      shell: sh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
         ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 6.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 7.0
-      shell: pwsh
+      shell: sh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
         ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 8.0
-      shell: pwsh
+      shell: sh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
         ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
@@ -257,21 +257,21 @@ jobs:
         fetch-depth: 0
 
     - name: Setup dotnet 6.0
-      shell: pwsh
+      shell: sh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
         ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 6.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 7.0
-      shell: pwsh
+      shell: sh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
         ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 8.0
-      shell: pwsh
+      shell: sh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
         ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
@@ -377,21 +377,21 @@ jobs:
           fetch-depth: 0
 
       - name: Setup dotnet 6.0
-        shell: pwsh
+        shell: sh
         run: |
           Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
           ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 6.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup dotnet 7.0
-        shell: pwsh
+        shell: sh
         run: |
           Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
           ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 7.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup dotnet 8.0
-        shell: pwsh
+        shell: sh
         run: |
           Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.sh';
           ./dotnet-install.sh --architecture '${{ env.BuildPlatform }}' --channel 8.0;
