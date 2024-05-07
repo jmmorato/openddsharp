@@ -140,22 +140,22 @@ jobs:
     - name: Setup dotnet 6.0
       shell: pwsh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 6.0;
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 6.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 7.0
       shell: pwsh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 8.0
       shell: pwsh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Cache OpenDDS libraries
@@ -259,22 +259,22 @@ jobs:
     - name: Setup dotnet 6.0
       shell: pwsh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 6.0;
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 6.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 7.0
       shell: pwsh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 8.0
       shell: pwsh
       run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Cache OpenDDS libraries
@@ -379,22 +379,22 @@ jobs:
       - name: Setup dotnet 6.0
         shell: pwsh
         run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 6.0;
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 6.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup dotnet 7.0
         shell: pwsh
         run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 7.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup dotnet 8.0
         shell: pwsh
         run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.sh' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.sh -Architecture '${{ env.BuildPlatform }}' -Channel 8.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Cache OpenDDS libraries
