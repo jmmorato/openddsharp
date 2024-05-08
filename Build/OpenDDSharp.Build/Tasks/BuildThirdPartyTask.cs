@@ -74,6 +74,7 @@ namespace OpenDDSharp.Build.Tasks
                         { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd(Path.DirectorySeparatorChar) },
                     },
                     ToolVersion = context.VisualStudioVersion,
+                    ToolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
                 });
             }
             else

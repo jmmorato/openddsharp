@@ -51,6 +51,11 @@ jobs:
         ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 8.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: ${{ matrix.BuildPlatform }}
+
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
       uses: actions/cache@v4
