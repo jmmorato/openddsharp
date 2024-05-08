@@ -324,7 +324,7 @@ jobs:
     - name: Stage Native
       shell: pwsh
       run: |
-        $sourceDir = "./ext/OpenDDS_ox-x64"
+        $sourceDir = "./ext/OpenDDS_osx-x64"
         $targetDir = "./opendds-native-osx-x64"
         mkdir "$targetDir"
 
@@ -444,7 +444,7 @@ jobs:
       - name: Stage Native
         shell: pwsh
         run: |
-          $sourceDir = "./ext/OpenDDS_ox-arm64"
+          $sourceDir = "./ext/OpenDDS_osx-arm64"
           $targetDir = "./opendds-native-osx-arm64"
           mkdir "$targetDir"
           
