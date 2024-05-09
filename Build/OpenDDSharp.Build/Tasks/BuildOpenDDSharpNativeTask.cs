@@ -51,9 +51,14 @@ namespace OpenDDSharp.Build.Tasks
                 buildFoder += "_Linux";
                 arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
             }
-            else if (BuildContext.IsOSX)
+            else if (BuildContext.IsOSX && BuildContext.IsARM64)
             {
-                buildFoder += "_MacOS";
+                buildFoder += "_osx-arm64";
+                arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
+            }
+            else if (BuildContext.IsOSX && !BuildContext.IsARM64)
+            {
+                buildFoder += "_osx-x64";
                 arguments = $"--no-warn-unused-cli -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
             }
 
