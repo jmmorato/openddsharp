@@ -145,7 +145,17 @@ namespace OpenDDSharp.Build.Tasks
             }
 
             context.Log.Information("Apply required OpenDDSharp patches to OpenDDS...");
-            foreach (var patchPath in Directory.GetFiles(BuildContext.PATCHES_FOLDER, "*.patch"))
+            if (!Directory.Exists(BuildContext.PATCHES_FOLDER))
+            {
+                return;
+            }
+            var patches = Directory.EnumerateFiles(BuildContext.PATCHES_FOLDER, "*.patch");
+            var patchPaths = patches as string[] ?? patches.ToArray();
+            if (!patchPaths.Any())
+            {
+                return;
+            }
+            foreach (var patchPath in patchPaths)
             {
                 var patchDirectory = new DirectoryPath(patchPath);
                 if (BuildContext.IsLinux)
