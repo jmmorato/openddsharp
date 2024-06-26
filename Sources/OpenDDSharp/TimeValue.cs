@@ -19,24 +19,27 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace OpenDDSharp;
 
 /// <summary>
 /// Structure for time value representation.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 public struct TimeValue : IEquatable<TimeValue>
 {
     #region Properties
     /// <summary>
     /// Gets or sets the seconds.
     /// </summary>
+    [field: FieldOffset(0)]
     public long Seconds { get; set; }
 
     /// <summary>
     /// Gets or sets the microseconds.
     /// </summary>
+    [field: FieldOffset(8)]
     public int MicroSeconds { get; set; }
     #endregion
 

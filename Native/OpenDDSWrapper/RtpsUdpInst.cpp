@@ -76,11 +76,10 @@ void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Octet value) {
   ri->ttl_ = value;
 }
 
-char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  char *buffer = new char[512];
-  ri->multicast_group_address().to_addr().addr_to_string(buffer, 512);
+char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, int domain_id) {
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(ri->multicast_group_address(domain_id)).c_str();
 
-  return CORBA::string_dup(buffer);
+  return CORBA::string_dup(addr_str);
 }
 
 void RtpsUdpInst_SetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) {
@@ -89,7 +88,7 @@ void RtpsUdpInst_SetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char
 }
 
 char *RtpsUdpInst_GetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return CORBA::string_dup(ri->multicast_interface_.c_str());
+  return CORBA::string_dup(ri->multicast_interface().c_str());
 }
 
 void RtpsUdpInst_SetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) {
@@ -109,7 +108,7 @@ void RtpsUdpInst_SetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) 
 }
 
 TimeValueWrapper RtpsUdpInst_GetNakResponseDelay(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->nak_response_delay_;
+  return ri->nak_response_delay_.get();
 }
 
 void RtpsUdpInst_SetNakResponseDelay(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueWrapper value) {
@@ -117,7 +116,7 @@ void RtpsUdpInst_SetNakResponseDelay(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValue
 }
 
 TimeValueWrapper RtpsUdpInst_GetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->heartbeat_period_;
+  return ri->heartbeat_period_.get();
 }
 
 void RtpsUdpInst_SetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueWrapper value) {
@@ -125,7 +124,7 @@ void RtpsUdpInst_SetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueW
 }
 
 TimeValueWrapper RtpsUdpInst_GetReceiveAddressDuration(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->receive_address_duration_;
+  return ri->receive_address_duration_.get();
 }
 
 void RtpsUdpInst_SetReceiveAddressDuration(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueWrapper value) {

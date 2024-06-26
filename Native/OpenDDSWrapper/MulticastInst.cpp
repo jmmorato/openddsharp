@@ -57,18 +57,19 @@ void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst *mi, CORBA::USho
 }
 
 char *MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi) {
-  char *buffer = new char[512];
-  mi->group_address_.addr_to_string(buffer, 512);
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(mi->group_address_).c_str();
 
-  return CORBA::string_dup(buffer);
+  return CORBA::string_dup(addr_str);
 }
 
 void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value) {
-  mi->group_address_.set(value);
+  const ::OpenDDS::DCPS::NetworkAddress * addr_obj = new ::OpenDDS::DCPS::NetworkAddress(value);
+  mi->group_address(*addr_obj);
 }
 
 char *MulticastInst_GetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi) {
-  return CORBA::string_dup(mi->local_address_.c_str());
+  const char * addr = CORBA::string_dup(mi->local_address().c_str());
+  return CORBA::string_dup(addr);
 }
 
 void MulticastInst_SetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value) {
@@ -84,7 +85,7 @@ void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Doub
 }
 
 TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->syn_interval_;
+  return mi->syn_interval_.get();
 }
 
 void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -92,7 +93,7 @@ void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueW
 }
 
 TimeValueWrapper MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->syn_timeout_;
+  return mi->syn_timeout_.get();
 }
 
 void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -108,7 +109,7 @@ void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst *mi, size_t value)
 }
 
 TimeValueWrapper MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_interval_;
+  return mi->nak_interval_.get();
 }
 
 void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -132,7 +133,7 @@ void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst *mi, size_t value) {
 }
 
 TimeValueWrapper MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_timeout_;
+  return mi->nak_timeout_.get();
 }
 
 void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {

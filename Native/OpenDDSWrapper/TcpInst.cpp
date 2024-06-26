@@ -81,7 +81,7 @@ void TcpInst_SetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti, CORBA::Lo
 }
 
 char *TcpInst_GetPublicAddress(::OpenDDS::DCPS::TcpInst *ti) {
-  return CORBA::string_dup(ti->get_public_address().c_str());
+  return CORBA::string_dup(ti->pub_address_str().c_str());
 }
 
 void TcpInst_SetPublicAddress(::OpenDDS::DCPS::TcpInst *ti, char *value) {
@@ -89,7 +89,7 @@ void TcpInst_SetPublicAddress(::OpenDDS::DCPS::TcpInst *ti, char *value) {
 }
 
 char *TcpInst_GetLocalAddress(::OpenDDS::DCPS::TcpInst *ti) {
-  return CORBA::string_dup(ti->local_address_string().c_str());
+  return CORBA::string_dup(ti->local_address().c_str());
 }
 
 void TcpInst_SetLocalAddress(::OpenDDS::DCPS::TcpInst *ti, char *value) {

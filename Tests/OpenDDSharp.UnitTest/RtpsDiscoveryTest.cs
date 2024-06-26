@@ -58,7 +58,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual("0.0.0.0:0", disc.SpdpLocalAddress);
             Assert.IsNotNull(disc.SpdpSendAddrs);
             Assert.AreEqual(0, disc.SpdpSendAddrs.Count());
-            Assert.AreEqual("239.255.0.1:0", disc.DefaultMulticastGroup);
+            Assert.AreEqual("239.255.0.1:0", disc.GetDefaultMulticastGroup(0));
             Assert.AreEqual(1, disc.Ttl);
             Assert.AreEqual(string.Empty, disc.MulticastInterface);
             Assert.AreEqual(string.Empty, disc.GuidInterface);
@@ -76,7 +76,7 @@ namespace OpenDDSharp.UnitTest
             {
                 ResendPeriod = new TimeValue
                 {
-                    Seconds = 1,
+                    Seconds = 2,
                     MicroSeconds = 500000,
                 },
                 PB = 8400,
@@ -89,14 +89,15 @@ namespace OpenDDSharp.UnitTest
                 SedpMulticast = false,
                 SedpLocalAddress = "127.0.0.1",
                 SpdpLocalAddress = "127.0.0.1",
-                DefaultMulticastGroup = "239.255.42.1",
                 MulticastInterface = "eth0",
                 GuidInterface = "eth0",
             };
 
+            disc.SetDefaultMulticastGroup("239.255.42.1");
+
             Assert.IsNotNull(disc.ResendPeriod);
-            Assert.AreEqual(1, disc.ResendPeriod.Seconds);
-            Assert.AreEqual(500000, disc.ResendPeriod.MicroSeconds);
+            Assert.AreEqual(2, disc.ResendPeriod.Seconds);
+            Assert.AreEqual(50_0000, disc.ResendPeriod.MicroSeconds);
             Assert.AreEqual(8400, disc.PB);
             Assert.AreEqual(500, disc.DG);
             Assert.AreEqual(4, disc.PG);
@@ -106,7 +107,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(false, disc.SedpMulticast);
             Assert.AreEqual("127.0.0.1:0", disc.SedpLocalAddress);
             Assert.AreEqual("127.0.0.1:0", disc.SpdpLocalAddress);
-            Assert.AreEqual("239.255.42.1:0", disc.DefaultMulticastGroup);
+            Assert.AreEqual("239.255.42.1:0", disc.GetDefaultMulticastGroup(0));
             Assert.AreEqual(2, disc.Ttl);
             Assert.AreEqual("eth0", disc.MulticastInterface);
             Assert.AreEqual("eth0", disc.GuidInterface);

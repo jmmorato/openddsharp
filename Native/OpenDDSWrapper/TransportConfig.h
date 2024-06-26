@@ -24,6 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/framework/TransportConfig_rch.h>
 #include <dds/DCPS/transport/framework/TransportConfig.h>
 #include <dds/DCPS/transport/framework/TransportInst.h>
+#include "TimeValueWrapper.h"
 
 EXTERN_METHOD_EXPORT
 void TransportConfig_Insert(::OpenDDS::DCPS::TransportConfig *cfg, ::OpenDDS::DCPS::TransportInst *inst);
@@ -38,7 +39,7 @@ EXTERN_METHOD_EXPORT
 void TransportConfig_SetSwapBytes(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-CORBA::UInt32 TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg);
+TimeValueWrapper TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg);
 
 EXTERN_METHOD_EXPORT
 void TransportConfig_SetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::UInt32 value);

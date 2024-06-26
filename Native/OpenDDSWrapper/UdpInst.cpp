@@ -49,10 +49,9 @@ void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value) 
 }
 
 char *UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst *ui) {
-  char *buffer = new char[512];
-  ui->local_address().addr_to_string(buffer, 512);
+  const char* addr_str = CORBA::string_dup(ui->local_address().c_str());
 
-  return CORBA::string_dup(buffer);
+  return CORBA::string_dup(addr_str);
 }
 
 void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst *ui, char *value) {

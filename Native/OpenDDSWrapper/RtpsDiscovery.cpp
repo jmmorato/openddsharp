@@ -92,38 +92,30 @@ void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::Octet value)
 }
 
 char *RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  char *buffer = new char[1024];
-
-  if (d->sedp_local_address().addr_to_string(buffer, 1024) < 0) {
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(d->sedp_local_address()).c_str();
+  if (addr_str == NULL) {
     return CORBA::string_dup("");
   }
 
-  std::string ret = CORBA::string_dup(buffer);
-  delete[] buffer;
-
-  return CORBA::string_dup(ret.c_str());
+  return CORBA::string_dup(addr_str);
 }
 
 void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  const ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const ::OpenDDS::DCPS::NetworkAddress>(value);
   d->sedp_local_address(addr);
 }
 
 char *RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  char *buffer = new char[1024];
-
-  if (d->spdp_local_address().addr_to_string(buffer, 1024) < 0) {
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(d->spdp_local_address()).c_str();
+  if (addr_str == NULL) {
     return CORBA::string_dup("");
   }
 
-  std::string ret = CORBA::string_dup(buffer);
-  delete[] buffer;
-
-  return CORBA::string_dup(ret.c_str());
+  return CORBA::string_dup(addr_str);
 }
 
 void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  const ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const ::OpenDDS::DCPS::NetworkAddress>(value);
   d->spdp_local_address(addr);
 }
 
@@ -143,33 +135,29 @@ void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char
   d->multicast_interface(value);
 }
 
-char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  char *buffer = new char[1024];
-
-  if (d->default_multicast_group().addr_to_string(buffer, 1024) < 0) {
+char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, int domain_id) {
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(d->default_multicast_group(domain_id)).c_str();
+  if (addr_str == NULL) {
     return CORBA::string_dup("");
   }
 
-  std::string ret = CORBA::string_dup(buffer);
-  delete[] buffer;
-
-  return CORBA::string_dup(ret.c_str());
+  return CORBA::string_dup(addr_str);
 }
 
 void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const ACE_INET_Addr addr = static_cast<const ACE_INET_Addr>(value);
+  const  ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const  ::OpenDDS::DCPS::NetworkAddress>(value);
   d->default_multicast_group(addr);
 }
 
 void *RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  std::vector<std::string> addrs = d->spdp_send_addrs();
+  ::OpenDDS::DCPS::NetworkAddressSet addrs = d->spdp_send_addrs();
 
   size_t size = addrs.size();
   TAO::unbounded_basic_string_sequence<char> seq(static_cast<CORBA::ULong>(size));
 
   int i = 0;
   for (auto inst = addrs.begin(); inst != addrs.end(); ++inst) {
-    seq[i] = inst->c_str();
+    seq[i] = ::OpenDDS::DCPS::LogAddr(inst->to_addr()).c_str();
     i++;
   }
 
