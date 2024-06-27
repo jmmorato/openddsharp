@@ -28,8 +28,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 TimeValueWrapper RtpsDiscovery_GetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  ::OpenDDS::DCPS::TimeDuration td = d->resend_period();
-  return td;
+  return d->resend_period();
 }
 
 void RtpsDiscovery_SetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d, TimeValueWrapper value) {
@@ -102,7 +101,7 @@ char *RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
 }
 
 void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const ::OpenDDS::DCPS::NetworkAddress>(value);
+  const ::OpenDDS::DCPS::NetworkAddress addr(value);
   d->sedp_local_address(addr);
 }
 
@@ -116,7 +115,7 @@ char *RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
 }
 
 void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const ::OpenDDS::DCPS::NetworkAddress>(value);
+  const ::OpenDDS::DCPS::NetworkAddress addr(value);
   d->spdp_local_address(addr);
 }
 
@@ -146,7 +145,7 @@ char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, 
 }
 
 void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const  ::OpenDDS::DCPS::NetworkAddress>(value);
+  const ::OpenDDS::DCPS::NetworkAddress addr(value);
   d->default_multicast_group(addr);
 }
 
