@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.8.2)
 
 project(OpenDDSWrapper CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+
 if (APPLE)
-    set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
 elseif (UNIX)

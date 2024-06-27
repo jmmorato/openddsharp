@@ -33,7 +33,7 @@ CORBA::Boolean TcpInst_GetIsReliable(::OpenDDS::DCPS::TcpInst *ti) {
 }
 
 CORBA::Boolean TcpInst_GetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->enable_nagle_algorithm_;
+  return ti->enable_nagle_algorithm_.get();
 }
 
 void TcpInst_SetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti, CORBA::Boolean value) {
@@ -41,7 +41,7 @@ void TcpInst_SetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti, CORBA::Boolea
 }
 
 CORBA::Long TcpInst_GetConnRetryInitialDelay(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->conn_retry_initial_delay_;
+  return ti->conn_retry_initial_delay_.get();
 }
 
 void TcpInst_SetConnRetryInitialDelay(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
@@ -49,7 +49,7 @@ void TcpInst_SetConnRetryInitialDelay(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long 
 }
 
 CORBA::Double TcpInst_GetConnRetryBackoffMultiplier(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->conn_retry_backoff_multiplier_;
+  return ti->conn_retry_backoff_multiplier_.get();
 }
 
 void TcpInst_SetConnRetryBackoffMultiplier(::OpenDDS::DCPS::TcpInst *ti, CORBA::Double value) {
@@ -57,7 +57,7 @@ void TcpInst_SetConnRetryBackoffMultiplier(::OpenDDS::DCPS::TcpInst *ti, CORBA::
 }
 
 CORBA::Long TcpInst_GetConnRetryAttempts(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->conn_retry_attempts_;
+  return ti->conn_retry_attempts_.get();
 }
 
 void TcpInst_SetConnRetryAttempts(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
@@ -65,7 +65,7 @@ void TcpInst_SetConnRetryAttempts(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long valu
 }
 
 CORBA::Long TcpInst_GetMaxOutputPausePeriod(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->max_output_pause_period_;
+  return ti->max_output_pause_period_.get();
 }
 
 void TcpInst_SetMaxOutputPausePeriod(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
@@ -73,7 +73,7 @@ void TcpInst_SetMaxOutputPausePeriod(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long v
 }
 
 CORBA::Long TcpInst_GetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->passive_reconnect_duration_;
+  return ti->passive_reconnect_duration_.get();
 }
 
 void TcpInst_SetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {

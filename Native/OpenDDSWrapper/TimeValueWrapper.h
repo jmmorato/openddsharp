@@ -22,23 +22,23 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "dds/DCPS/TimeDuration.h"
 
-EXTERN_STRUCT_EXPORT __attribute__ ((__packed__)) TimeValueWrapper {
-    long seconds;
-    int microseconds;
+EXTERN_STRUCT_EXPORT TimeValueWrapper {
+    CORBA::LongLong sec;
+    CORBA::Long microsec;
 
 public:
 
     TimeValueWrapper() {
-      seconds = 0;
-      microseconds = 0;
+      sec = 0;
+      microsec = 0;
     }
 
     TimeValueWrapper(const ::OpenDDS::DCPS::TimeDuration td) {
-      seconds = td.value().sec();
-      microseconds = td.value().usec();
+      sec = td.value().sec();
+      microsec = td.value().usec();
     }
 
     operator ::OpenDDS::DCPS::TimeDuration() const {
-      return ::OpenDDS::DCPS::TimeDuration(seconds, microseconds);
+      return ::OpenDDS::DCPS::TimeDuration(sec, microsec);
     }
 };

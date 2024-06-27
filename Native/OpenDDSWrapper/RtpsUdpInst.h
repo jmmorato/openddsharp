@@ -68,7 +68,7 @@ EXTERN_METHOD_EXPORT
 void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Octet value);
 
 EXTERN_METHOD_EXPORT
-char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri);
+char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, int domain_id);
 
 EXTERN_METHOD_EXPORT
 void RtpsUdpInst_SetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value);

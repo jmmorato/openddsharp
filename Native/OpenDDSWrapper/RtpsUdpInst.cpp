@@ -37,7 +37,7 @@ CORBA::Boolean RtpsUdpInst_GetRequiresCdr(::OpenDDS::DCPS::RtpsUdpInst *ri) {
 }
 
 CORBA::Int32 RtpsUdpInst_GetSendBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->send_buffer_size_;
+  return ri->send_buffer_size_.get();
 }
 
 void RtpsUdpInst_SetSendBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Int32 value) {
@@ -45,7 +45,7 @@ void RtpsUdpInst_SetSendBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Int3
 }
 
 CORBA::Int32 RtpsUdpInst_GetRcvBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->rcv_buffer_size_;
+  return ri->rcv_buffer_size_.get();
 }
 
 void RtpsUdpInst_SetRcvBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Int32 value) {
@@ -53,7 +53,7 @@ void RtpsUdpInst_SetRcvBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Int32
 }
 
 size_t RtpsUdpInst_GetNakDepth(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->nak_depth_;
+  return ri->nak_depth_.get();
 }
 
 void RtpsUdpInst_SetNakDepth(::OpenDDS::DCPS::RtpsUdpInst *ri, size_t value) {
@@ -61,7 +61,7 @@ void RtpsUdpInst_SetNakDepth(::OpenDDS::DCPS::RtpsUdpInst *ri, size_t value) {
 }
 
 CORBA::Boolean RtpsUdpInst_GetUseMulticast(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->use_multicast_;
+  return ri->use_multicast_.get();
 }
 
 void RtpsUdpInst_SetUseMulticast(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Boolean value) {
@@ -69,7 +69,7 @@ void RtpsUdpInst_SetUseMulticast(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Boolea
 }
 
 CORBA::Octet RtpsUdpInst_GetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->ttl_;
+  return ri->ttl_.get();
 }
 
 void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Octet value) {
@@ -96,10 +96,9 @@ void RtpsUdpInst_SetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst *ri, char *v
 }
 
 char *RtpsUdpInst_GetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  char *buffer = new char[512];
-  ri->local_address().to_addr().addr_to_string(buffer, 512);
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(ri->local_address()).c_str();
 
-  return CORBA::string_dup(buffer);
+  return CORBA::string_dup(addr_str);
 }
 
 void RtpsUdpInst_SetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) {
