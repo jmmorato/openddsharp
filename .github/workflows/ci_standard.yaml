@@ -81,6 +81,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-ci
 
     - name: Build & Test with Cake (No cached)
@@ -165,6 +166,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
@@ -292,6 +294,7 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/opendds_idl
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
@@ -419,6 +422,7 @@ jobs:
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/opendds_idl
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/apps/gperf/src/ace_gperf
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/TAO_IDL/tao_idl
+            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/VERSION.txt
           key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
       - name: Build Native (No cached)
