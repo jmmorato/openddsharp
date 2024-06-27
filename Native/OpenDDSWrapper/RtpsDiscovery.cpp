@@ -28,7 +28,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 TimeValueWrapper RtpsDiscovery_GetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  return d->resend_period();
+  ::OpenDDS::DCPS::TimeDuration td = d->resend_period();
+  return td;
 }
 
 void RtpsDiscovery_SetResendPeriod(::OpenDDS::RTPS::RtpsDiscovery *d, TimeValueWrapper value) {
@@ -145,7 +146,7 @@ char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, 
 }
 
 void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
-  const  ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const  ::OpenDDS::DCPS::NetworkAddress>(value);
+  const ::OpenDDS::DCPS::NetworkAddress addr = static_cast<const  ::OpenDDS::DCPS::NetworkAddress>(value);
   d->default_multicast_group(addr);
 }
 

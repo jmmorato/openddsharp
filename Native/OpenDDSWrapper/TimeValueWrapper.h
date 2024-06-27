@@ -21,11 +21,12 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include <dds/DCPS/TimeDuration.h>
 
-#pragma pack(push, 1)
-EXTERN_STRUCT_EXPORT
-TimeValueWrapper {
-    ::CORBA::LongLong sec;
-    ::CORBA::Long microsec;
+static_assert(true);
+#pragma pack(push)
+#pragma pack(1)
+extern "C" struct TimeValueWrapper {
+    ::CORBA::LongLong sec = 0;
+    ::CORBA::Long microsec = 0;
 
 public:
 
