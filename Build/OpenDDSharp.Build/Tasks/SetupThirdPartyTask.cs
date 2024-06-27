@@ -122,7 +122,7 @@ namespace OpenDDSharp.Build.Tasks
                 var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib";
                 if (BuildContext.IsOSX)
                 {
-                    arguments += " --std=c++11";
+                    arguments += " --std=c++17";
                 }
                 context.Log.Information(arguments);
 

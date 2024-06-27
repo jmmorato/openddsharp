@@ -1,0 +1,31 @@
+From 476821173b736c5d3c99f87f92e78979389229e8 Mon Sep 17 00:00:00 2001
+From: jose_morato <jmmorato@enxarxats.com>
+Date: Thu, 27 Jun 2024 15:51:29 +0200
+Subject: [PATCH] [fix] RtpsDiscoveryConfig RESEND_PERIOD
+
+---
+ dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp b/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
+index cb31a6e9b4..2d9f9e25dc 100644
+--- a/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
++++ b/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
+@@ -32,7 +32,7 @@ RtpsDiscoveryConfig::resend_period() const
+   // see RTPS v2.1 9.6.1.4.2
+   return TheServiceParticipant->config_store()->get(config_key("RESEND_PERIOD").c_str(),
+                                                     TimeDuration(30 /*seconds*/),
+-                                                    DCPS::ConfigStoreImpl::Format_IntegerSeconds);
++                                                    DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
+ }
+ 
+ void
+@@ -40,7 +40,7 @@ RtpsDiscoveryConfig::resend_period(const DCPS::TimeDuration& period)
+ {
+   TheServiceParticipant->config_store()->set(config_key("RESEND_PERIOD").c_str(),
+                                              period,
+-                                             DCPS::ConfigStoreImpl::Format_IntegerSeconds);
++                                             DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
+ }
+ 
+ double
