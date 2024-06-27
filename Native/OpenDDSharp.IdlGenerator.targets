@@ -188,11 +188,11 @@
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsOSX64" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/CMakeFiles/CMakeOutput.log')">
     <Message Text="Create native project with cmake..." Importance="High" />
-    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsOSARM64" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/CMakeFiles/CMakeOutput.log')">
     <Message Text="Create native project with cmake..." Importance="High" />
-    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT)&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT)&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT)&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT)&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Build cmake-->
