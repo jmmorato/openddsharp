@@ -39,7 +39,7 @@ EXTERN_METHOD_EXPORT
 void TransportConfig_SetSwapBytes(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::Boolean value);
 
 EXTERN_METHOD_EXPORT
-TimeValueWrapper TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg);
+CORBA::UInt32 TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg);
 
 EXTERN_METHOD_EXPORT
 void TransportConfig_SetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::UInt32 value);

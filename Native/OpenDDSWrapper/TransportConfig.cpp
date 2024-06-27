@@ -37,8 +37,8 @@ void TransportConfig_SetSwapBytes(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::
   cfg->swap_bytes_ = value;
 }
 
-TimeValueWrapper TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg) {
-  return cfg->passive_connect_duration_.get();
+CORBA::UInt32 TransportConfig_GetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg) {
+  return cfg->passive_connect_duration_.get().value().msec();
 }
 
 void TransportConfig_SetPassiveConnectDuration(::OpenDDS::DCPS::TransportConfig *cfg, CORBA::UInt32 value) {
