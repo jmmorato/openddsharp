@@ -16,16 +16,16 @@ index cb31a6e9b4..2d9f9e25dc 100644
    return TheServiceParticipant->config_store()->get(config_key("RESEND_PERIOD").c_str(),
                                                      TimeDuration(30 /*seconds*/),
 -                                                    DCPS::ConfigStoreImpl::Format_IntegerSeconds);
-+                                                    DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
++                                                    DCPS::ConfigStoreImpl::Format_FractionalSeconds);
  }
- 
+
  void
 @@ -40,7 +40,7 @@ RtpsDiscoveryConfig::resend_period(const DCPS::TimeDuration& period)
  {
    TheServiceParticipant->config_store()->set(config_key("RESEND_PERIOD").c_str(),
                                               period,
 -                                             DCPS::ConfigStoreImpl::Format_IntegerSeconds);
-+                                             DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
++                                             DCPS::ConfigStoreImpl::Format_FractionalSeconds);
  }
- 
+
  double
