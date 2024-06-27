@@ -1,7 +1,42 @@
+From 476821173b736c5d3c99f87f92e78979389229e8 Mon Sep 17 00:00:00 2001
+From: jose_morato <jmmorato@enxarxats.com>
+Date: Thu, 27 Jun 2024 15:51:29 +0200
+Subject: [PATCH 1/2] [fix] RtpsDiscoveryConfig RESEND_PERIOD
+
+---
+ dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp b/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
+index cb31a6e9b..2d9f9e25d 100644
+--- a/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
++++ b/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
+@@ -32,7 +32,7 @@ RtpsDiscoveryConfig::resend_period() const
+   // see RTPS v2.1 9.6.1.4.2
+   return TheServiceParticipant->config_store()->get(config_key("RESEND_PERIOD").c_str(),
+                                                     TimeDuration(30 /*seconds*/),
+-                                                    DCPS::ConfigStoreImpl::Format_IntegerSeconds);
++                                                    DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
+ }
+ 
+ void
+@@ -40,7 +40,7 @@ RtpsDiscoveryConfig::resend_period(const DCPS::TimeDuration& period)
+ {
+   TheServiceParticipant->config_store()->set(config_key("RESEND_PERIOD").c_str(),
+                                              period,
+-                                             DCPS::ConfigStoreImpl::Format_IntegerSeconds);
++                                             DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
+ }
+ 
+ double
+-- 
+2.39.3 (Apple Git-146)
+
+
 From a9f90c6bb57372210b7ccc1d7672ffe85b729f7a Mon Sep 17 00:00:00 2001
 From: jose_morato <jmmorato@enxarxats.com>
 Date: Thu, 27 Jun 2024 17:42:33 +0200
-Subject: [PATCH] Use Format_FractionalSeconds instead of
+Subject: [PATCH 2/2] Use Format_FractionalSeconds instead of
  Format_IntegerMilliseconds
 
 ---
@@ -9,24 +44,27 @@ Subject: [PATCH] Use Format_FractionalSeconds instead of
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp b/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
-index 2d9f9e25dc..b3b142ff23 100644
+index 2d9f9e25d..b3b142ff2 100644
 --- a/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
 +++ b/dds/DCPS/RTPS/RtpsDiscoveryConfig.cpp
 @@ -32,7 +32,7 @@ RtpsDiscoveryConfig::resend_period() const
    // see RTPS v2.1 9.6.1.4.2
    return TheServiceParticipant->config_store()->get(config_key("RESEND_PERIOD").c_str(),
                                                      TimeDuration(30 /*seconds*/),
--                                                    DCPS::ConfigStoreImpl::Format_Seconds);
+-                                                    DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
 +                                                    DCPS::ConfigStoreImpl::Format_FractionalSeconds);
  }
-
+ 
  void
 @@ -40,7 +40,7 @@ RtpsDiscoveryConfig::resend_period(const DCPS::TimeDuration& period)
  {
    TheServiceParticipant->config_store()->set(config_key("RESEND_PERIOD").c_str(),
                                               period,
--                                             DCPS::ConfigStoreImpl::Format_Seconds);
+-                                             DCPS::ConfigStoreImpl::Format_IntegerMilliseconds);
 +                                             DCPS::ConfigStoreImpl::Format_FractionalSeconds);
  }
-
+ 
  double
+-- 
+2.39.3 (Apple Git-146)
+
