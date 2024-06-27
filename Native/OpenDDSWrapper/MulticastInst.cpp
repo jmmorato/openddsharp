@@ -71,6 +71,9 @@ void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi, char *val
 
 char *MulticastInst_GetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi) {
   const char * addr = CORBA::string_dup(mi->local_address().c_str());
+  if (addr == NULL) {
+    return CORBA::string_dup("");
+  }
   return CORBA::string_dup(addr);
 }
 
