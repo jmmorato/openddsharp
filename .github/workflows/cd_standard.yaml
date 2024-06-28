@@ -134,7 +134,7 @@ jobs:
         path: ${{ github.workspace }}/opendds-native-win-${{ matrix.BuildPlatform }}.zip
 
   build_linux_native:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     env:
       BuildPlatform: "x64"

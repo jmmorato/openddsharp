@@ -121,7 +121,7 @@ jobs:
         fail-on-error: false
 
   build_linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     env:
       OpenDdsVersion: "3.28.1"
