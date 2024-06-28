@@ -33,31 +33,31 @@ CORBA::Boolean MulticastInst_GetIsReliable(::OpenDDS::DCPS::MulticastInst *mi) {
 }
 
 CORBA::Boolean MulticastInst_GetReliable(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->reliable_.get();
+  return mi->reliable();
 }
 
 void MulticastInst_SetReliable(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value) {
-  mi->reliable_ = value;
+  mi->reliable(value);
 }
 
 CORBA::Boolean MulticastInst_GetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->default_to_ipv6_.get();
+  return mi->default_to_ipv6();
 }
 
 void MulticastInst_SetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value) {
-  mi->default_to_ipv6_ = value;
+  mi->default_to_ipv6(value);
 }
 
 CORBA::UShort MulticastInst_GetPortOffset(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->port_offset_.get();
+  return mi->port_offset();
 }
 
 void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst *mi, CORBA::UShort value) {
-  mi->port_offset_ = value;
+  mi->port_offset(value);
 }
 
 char *MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(mi->group_address_.get()).c_str();
+  const char* addr_str = ::OpenDDS::DCPS::LogAddr(mi->group_address()).c_str();
   if (addr_str == NULL) {
     return CORBA::string_dup("");
   }
@@ -78,15 +78,15 @@ char *MulticastInst_GetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi) {
 }
 
 void MulticastInst_SetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value) {
-  mi->local_address_ = value;
+  mi->local_address(value);
 }
 
 CORBA::Double MulticastInst_GetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->syn_backoff_.get();
+  return mi->syn_backoff();
 }
 
 void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Double value) {
-  mi->syn_backoff_ = value;
+  mi->syn_backoff(value);
 }
 
 TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst *mi) {

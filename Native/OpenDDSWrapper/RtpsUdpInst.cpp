@@ -41,39 +41,39 @@ CORBA::Int32 RtpsUdpInst_GetSendBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri) {
 }
 
 void RtpsUdpInst_SetSendBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Int32 value) {
-  ri->send_buffer_size_ = value;
+  ri->send_buffer_size(value);
 }
 
 CORBA::Int32 RtpsUdpInst_GetRcvBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->rcv_buffer_size_.get();
+  return ri->rcv_buffer_size();
 }
 
 void RtpsUdpInst_SetRcvBufferSize(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Int32 value) {
-  ri->rcv_buffer_size_ = value;
+  ri->rcv_buffer_size(value);
 }
 
 size_t RtpsUdpInst_GetNakDepth(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->nak_depth_.get();
+  return ri->nak_depth();
 }
 
 void RtpsUdpInst_SetNakDepth(::OpenDDS::DCPS::RtpsUdpInst *ri, size_t value) {
-  ri->nak_depth_ = value;
+  ri->nak_depth(value);
 }
 
 CORBA::Boolean RtpsUdpInst_GetUseMulticast(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->use_multicast_.get();
+  return ri->use_multicast();
 }
 
 void RtpsUdpInst_SetUseMulticast(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Boolean value) {
-  ri->use_multicast_ = value;
+  ri->use_multicast(value);
 }
 
 CORBA::Octet RtpsUdpInst_GetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->ttl_.get();
+  return ri->ttl();
 }
 
 void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Octet value) {
-  ri->ttl_ = value;
+  ri->ttl(value);
 }
 
 char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, int domain_id) {
@@ -95,7 +95,7 @@ char *RtpsUdpInst_GetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst *ri) {
 }
 
 void RtpsUdpInst_SetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) {
-  ri->multicast_interface_ = value;
+  ri->multicast_interface(value);
 }
 
 char *RtpsUdpInst_GetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri) {
@@ -112,25 +112,25 @@ void RtpsUdpInst_SetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) 
 }
 
 TimeValueWrapper RtpsUdpInst_GetNakResponseDelay(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->nak_response_delay_.get();
+  return ri->nak_response_delay();
 }
 
 void RtpsUdpInst_SetNakResponseDelay(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueWrapper value) {
-  ri->nak_response_delay_ = value;
+  ri->nak_response_delay(value);
 }
 
 TimeValueWrapper RtpsUdpInst_GetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->heartbeat_period_.get();
+  return ri->heartbeat_period();
 }
 
 void RtpsUdpInst_SetHeartbeatPeriod(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueWrapper value) {
-  ri->heartbeat_period_ = value;
+  ri->heartbeat_period(value);
 }
 
 TimeValueWrapper RtpsUdpInst_GetReceiveAddressDuration(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  return ri->receive_address_duration_.get();
+  return ri->receive_address_duration();
 }
 
 void RtpsUdpInst_SetReceiveAddressDuration(::OpenDDS::DCPS::RtpsUdpInst *ri, TimeValueWrapper value) {
-  ri->receive_address_duration_ = value;
+  ri->receive_address_duration(value);
 }
