@@ -30,7 +30,7 @@
     <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
     <PackageIcon>icon_128.png</PackageIcon>
-    <PackageTags>OpenDDSharp DDS OpenDDS</PackageTags>
+    <PackageTags>OpenDDSharp;DDS;OpenDDS</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <!-- Create a ref assembly to include in the ref NuGet dir.
      It makes a warning: https://github.com/NuGet/Home/issues/4184 -->
