@@ -3,8 +3,8 @@
   <PropertyGroup>
     <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
     <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
-    <TargetFrameworks Condition="'$(IsARM64)'!='true' And '$(Configuration)'=='Release'">net462;net47;net471;net472;net48;net6.0;net7.0;net8.0;</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsARM64)'=='true' And '$(Configuration)'=='Release'">net6.0;net7.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsARM64)'!='true' And '$(Configuration)'!='Debug'">net462;net47;net471;net472;net48;net6.0;net7.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsARM64)'=='true' And '$(Configuration)'!='Debug'">net6.0;net7.0;net8.0;</TargetFrameworks>
     <TargetFrameworks Condition="'$(Configuration)'=='Debug'">net6.0;net8.0;</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
