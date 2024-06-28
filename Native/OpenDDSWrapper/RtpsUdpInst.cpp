@@ -77,12 +77,12 @@ void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Octet value) {
 }
 
 char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, int domain_id) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(ri->multicast_group_address(domain_id)).c_str();
-  if (addr_str == NULL) {
+  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(ri->multicast_group_address(domain_id)).str();
+  if (addr_str.empty()) {
     return CORBA::string_dup("");
   }
 
-  return CORBA::string_dup(addr_str);
+  return CORBA::string_dup(addr_str.c_str());
 }
 
 void RtpsUdpInst_SetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) {
@@ -99,11 +99,11 @@ void RtpsUdpInst_SetMulticastInterface(::OpenDDS::DCPS::RtpsUdpInst *ri, char *v
 }
 
 char *RtpsUdpInst_GetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(ri->local_address()).c_str();
-  if (addr_str == NULL) {
+  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(ri->local_address()).str();
+  if (addr_str.empty()) {
     return CORBA::string_dup("");
   }
-  return CORBA::string_dup(addr_str);
+  return CORBA::string_dup(addr_str.c_str());
 }
 
 void RtpsUdpInst_SetLocalAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value) {

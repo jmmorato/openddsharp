@@ -57,11 +57,11 @@ void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst *mi, CORBA::USho
 }
 
 char *MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(mi->group_address()).c_str();
-  if (addr_str == NULL) {
+  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(mi->group_address()).str();
+  if (addr_str.empty()) {
     return CORBA::string_dup("");
   }
-  return CORBA::string_dup(addr_str);
+  return CORBA::string_dup(addr_str.c_str());
 }
 
 void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value) {

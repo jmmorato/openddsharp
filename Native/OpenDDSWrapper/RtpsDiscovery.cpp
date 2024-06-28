@@ -92,12 +92,12 @@ void RtpsDiscovery_SetTtl(::OpenDDS::RTPS::RtpsDiscovery *d, CORBA::Octet value)
 }
 
 char *RtpsDiscovery_GetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(d->sedp_local_address()).c_str();
-  if (addr_str == NULL) {
+  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(d->sedp_local_address()).str();
+  if (addr_str.empty()) {
     return CORBA::string_dup("");
   }
 
-  return CORBA::string_dup(addr_str);
+  return CORBA::string_dup(addr_str.c_str());
 }
 
 void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
@@ -106,12 +106,12 @@ void RtpsDiscovery_SetSedpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *
 }
 
 char *RtpsDiscovery_GetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(d->spdp_local_address()).c_str();
-  if (addr_str == NULL) {
+  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(d->spdp_local_address()).str();
+  if (addr_str.empty()) {
     return CORBA::string_dup("");
   }
 
-  return CORBA::string_dup(addr_str);
+  return CORBA::string_dup(addr_str.c_str());
 }
 
 void RtpsDiscovery_SetSpdpLocalAddress(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
@@ -136,12 +136,12 @@ void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char
 }
 
 char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, int domain_id) {
-  const char* addr_str = ::OpenDDS::DCPS::LogAddr(d->default_multicast_group(domain_id)).c_str();
-  if (addr_str == NULL) {
+  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(d->default_multicast_group(domain_id)).str();
+  if (addr_str.empty()) {
     return CORBA::string_dup("");
   }
 
-  return CORBA::string_dup(addr_str);
+  return CORBA::string_dup(addr_str.c_str());
 }
 
 void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
