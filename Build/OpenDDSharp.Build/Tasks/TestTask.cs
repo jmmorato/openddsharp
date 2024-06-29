@@ -20,7 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
-using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using Path = System.IO.Path;
@@ -33,6 +32,13 @@ namespace OpenDDSharp.Build.Tasks
     [TaskName("TestTask")]
     public class TestTask : FrostingTask<BuildContext>
     {
+        /// <inheritdoc/>
+        public override bool ShouldRun(BuildContext context)
+        {
+            // Only run in Release configuration because the Debug configuration is taking too long to execute.
+            return context.BuildConfiguration == "Release";
+        }
+
         /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
@@ -47,6 +53,7 @@ namespace OpenDDSharp.Build.Tasks
 
             var dotnetTestSettings = new DotNetTestSettings
             {
+                TestAdapterPath = Path.GetFullPath(testAdapterPath),
                 WorkingDirectory = path,
                 EnvironmentVariables =
                 {
@@ -55,6 +62,7 @@ namespace OpenDDSharp.Build.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
+                Settings = settingsFile,
                 Runtime = context.RunTime,
                 NoBuild = true,
                 NoRestore = true,
@@ -62,12 +70,6 @@ namespace OpenDDSharp.Build.Tasks
                 Configuration = context.BuildConfiguration,
                 Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
             };
-
-            if (context.BuildConfiguration == "Release")
-            {
-                dotnetTestSettings.TestAdapterPath = testAdapterPath;
-                dotnetTestSettings.Settings = settingsFile;
-            }
 
             context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
         }
