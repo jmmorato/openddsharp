@@ -63,8 +63,6 @@ namespace OpenDDSharp.Build.Tasks
                 Verbosity = DotNetVerbosity.Detailed,
                 Configuration = context.BuildConfiguration,
                 Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
-                Blame = true,
-                ArgumentCustomization = arg => arg.Append("--blame-hang --blame-hang-timeout 2m"),
             };
 
             context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
