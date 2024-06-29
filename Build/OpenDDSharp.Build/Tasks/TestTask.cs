@@ -47,7 +47,6 @@ namespace OpenDDSharp.Build.Tasks
 
             var dotnetTestSettings = new DotNetTestSettings
             {
-                TestAdapterPath = Path.GetFullPath(testAdapterPath),
                 WorkingDirectory = path,
                 EnvironmentVariables =
                 {
@@ -56,7 +55,6 @@ namespace OpenDDSharp.Build.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
-                Settings = settingsFile,
                 Runtime = context.RunTime,
                 NoBuild = true,
                 NoRestore = true,
@@ -64,6 +62,12 @@ namespace OpenDDSharp.Build.Tasks
                 Configuration = context.BuildConfiguration,
                 Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
             };
+
+            if (context.BuildConfiguration == "Release")
+            {
+                dotnetTestSettings.TestAdapterPath = testAdapterPath;
+                dotnetTestSettings.Settings = settingsFile;
+            }
 
             context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
         }
