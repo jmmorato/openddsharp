@@ -33,13 +33,6 @@ namespace OpenDDSharp.Build.Tasks
     public class TestTask : FrostingTask<BuildContext>
     {
         /// <inheritdoc/>
-        public override bool ShouldRun(BuildContext context)
-        {
-            // Only run in Release configuration because the Debug configuration is taking too long to execute.
-            return context.BuildConfiguration == "Release";
-        }
-
-        /// <inheritdoc/>
         public override void Run(BuildContext context)
         {
             context.Log.Information("Starting test task...");
