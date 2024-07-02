@@ -53,7 +53,7 @@ public class RtpsUdpInst : TransportInst
     public bool RequiresCdr => GetRequiresCdr();
 
     /// <summary>
-    /// Gets or sets the total send bufer size in bytes for UDP payload.
+    /// Gets or sets the total send buffer size in bytes for UDP payload.
     /// The default value is the platform value of
     /// ACE_DEFAULT_MAX_SOCKET_BUFSIZ.
     /// </summary>
@@ -64,7 +64,7 @@ public class RtpsUdpInst : TransportInst
     }
 
     /// <summary>
-    /// Gets or sets the total receive bufer size in bytes for UDP payload.
+    /// Gets or sets the total receive buffer size in bytes for UDP payload.
     /// The default value is the platform value of
     /// ACE_DEFAULT_MAX_SOCKET_BUFSIZ.
     /// </summary>
@@ -99,7 +99,7 @@ public class RtpsUdpInst : TransportInst
 
     /// <summary>
     /// Gets or sets the value of the time-to-live (ttl) field of any
-    /// multicast datagrams sent. This value specifes the
+    /// multicast datagrams sent. This value specifies the
     /// number of hops the datagram will traverse before
     /// being discarded by the network. The default value
     /// of 1 means that all data is restricted to the local
@@ -109,19 +109,6 @@ public class RtpsUdpInst : TransportInst
     {
         get => GetTtl();
         set => SetTtl(value);
-    }
-
-    /// <summary>
-    /// Gets or sets the multicast group address.
-    /// When the transport is set to multicast, this is the
-    /// multicast network address that should be used. If
-    /// no port is specified for the network address, port
-    /// 7401 will be used. The default value is 239.255.0.2:7401.
-    /// </summary>
-    public string MulticastGroupAddress
-    {
-        get => GetMulticastGroupAddress();
-        set => SetMulticastGroupAddress(value);
     }
 
     /// <summary>
@@ -169,7 +156,7 @@ public class RtpsUdpInst : TransportInst
     }
 
     /// <summary>
-    /// Gets or sets the receive address timeout.
+    /// Gets or sets the reception address timeout.
     /// The default value is 5 seconds.
     /// </summary>
     public TimeValue ReceiveAddressDuration
@@ -198,6 +185,39 @@ public class RtpsUdpInst : TransportInst
     #endregion
 
     #region Methods
+    /// <summary>
+    /// Gets or sets the multicast group address.
+    /// When the transport is set to multicast, this is the
+    /// multicast network address that should be used. If
+    /// no port is specified for the network address, port
+    /// 7401 will be used. The default value is 239.255.0.2:7401.
+    /// </summary>
+    /// <param name="domainId">The domain ID.</param>
+    /// <returns>The string representation of the address.</returns>
+    public string GetMulticastGroupAddress(int domainId)
+    {
+        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetMulticastGroupAddress(_native, domainId));
+    }
+
+    /// <summary>
+    /// Sets the multicast group address.
+    /// When the transport is set to multicast, this is the
+    /// multicast network address that should be used. If
+    /// no port is specified for the network address, port
+    /// 7401 will be used. The default value is 239.255.0.2:7401.
+    /// </summary>
+    /// <param name="value">The string representation of the address.</param>
+    public void SetMulticastGroupAddress(string value)
+    {
+        var full = value;
+        if (!full.Contains(":"))
+        {
+            full += ":0";
+        }
+
+        UnsafeNativeMethods.SetMulticastGroupAddress(_native, full);
+    }
+
     private bool GetIsReliable()
     {
         return UnsafeNativeMethods.RtpsUdpInstGetIsReliable(_native);
@@ -256,22 +276,6 @@ public class RtpsUdpInst : TransportInst
     private void SetTtl(byte value)
     {
         UnsafeNativeMethods.RtpsUdpInstSetTtl(_native, value);
-    }
-
-    private string GetMulticastGroupAddress()
-    {
-        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetMulticastGroupAddress(_native));
-    }
-
-    private void SetMulticastGroupAddress(string value)
-    {
-        string full = value;
-        if (!full.Contains(":"))
-        {
-            full += ":0";
-        }
-
-        UnsafeNativeMethods.SetMulticastGroupAddress(_native, full);
     }
 
     private string GetMulticastInterface()
@@ -408,7 +412,7 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_GetMulticastGroupAddress")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr GetMulticastGroupAddress(IntPtr ird);
+    public static partial IntPtr GetMulticastGroupAddress(IntPtr ird, int domainId);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_SetMulticastGroupAddress", StringMarshalling = StringMarshalling.Utf8)]
@@ -519,7 +523,7 @@ internal static partial class UnsafeNativeMethods
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_GetMulticastGroupAddress", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-    public static extern IntPtr GetMulticastGroupAddress(IntPtr ird);
+    public static extern IntPtr GetMulticastGroupAddress(IntPtr ird, int domainId);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsUdpInst_SetMulticastGroupAddress", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

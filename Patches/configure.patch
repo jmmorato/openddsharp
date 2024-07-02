@@ -1,0 +1,22 @@
+From df9e1b8a7b69a2a577ad7342d722c46acce02ae5 Mon Sep 17 00:00:00 2001
+From: Adam Mitz <mitza@objectcomputing.com>
+Date: Thu, 6 Jun 2024 21:27:47 +0000
+Subject: [PATCH] configure: updated for Visual Studio 2022 17.10 version of cl
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 619d7ae87f..7b7732633b 100755
+--- a/configure
++++ b/configure
+@@ -62,7 +62,7 @@ my %platforminfo =
+                'cl_versions' => {13.1 => 'vc71', 14 => 'vc8', 15 => 'vc9',
+                                  16 => 'vc10', 17 => 'vc11', 18 => 'vc12',
+                                  19 => 'vc14', 19.1 => 'vs2017',
+-                                 19.2 => 'vs2019', 19.3 => 'vs2022'},
++                                 19.2 => 'vs2019', 19.3 => 'vs2022', 19.4 => 'vs2022'},
+                'cl_archs' => {'x64' => 1, 'Win32' => 1, 'ARM64' => 0, 'ARM' => 0}, # 1 if supported
+               },
+    'macos' => {

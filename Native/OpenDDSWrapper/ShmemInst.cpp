@@ -33,19 +33,19 @@ CORBA::Boolean ShmemInst_GetIsReliable(::OpenDDS::DCPS::ShmemInst *si) {
 }
 
 size_t ShmemInst_GetPoolSize(::OpenDDS::DCPS::ShmemInst *si) {
-  return si->pool_size_;
+  return si->pool_size();
 }
 
 void ShmemInst_SetPoolSize(::OpenDDS::DCPS::ShmemInst *si, size_t value) {
-  si->pool_size_ = value;
+  si->pool_size(value);
 }
 
 size_t ShmemInst_GetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst *si) {
-  return si->datalink_control_size_;
+  return si->datalink_control_size();
 }
 
 void ShmemInst_SetDatalinkControlSize(::OpenDDS::DCPS::ShmemInst *si, size_t value) {
-  si->datalink_control_size_ = value;
+  si->datalink_control_size(value);
 }
 
 char *ShmemInst_GetHostName(::OpenDDS::DCPS::ShmemInst *si) {

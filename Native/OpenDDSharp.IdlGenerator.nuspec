@@ -13,7 +13,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenDDSharp IDL Generator</description>
     <copyright>Jose Morato</copyright>
-    <tags>OpenDDSharp OpenDDS DDS IDL CodeGenerator</tags>
+    <tags>OpenDDSharp;OpenDDS;DDS;IDL;CodeGenerator</tags>
     <references />
   </metadata>
   <files>
@@ -30,6 +30,7 @@
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_IDL_FE.dll" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_Valuetype.dll" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.dll" target="tools\DDS_x86\bin" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\VERSION.txt" target="tools\ACE_x86\" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\bin\tao_idl.exe" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\bin\ace_gperf.exe" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\ACE.dll" target="tools\ACE_x86\bin" />
@@ -37,6 +38,7 @@
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_IDL_BE.dll" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_Valuetype.dll" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\bin\generate_export_file.pl" target="tools\ACE_x86\bin" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\TAO\VERSION.txt" target="tools\ACE_x86\TAO" />
 
     <!-- Required tools x64 -->
     <file src=".\build_x64\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" target="tools\DDS_x64\bin" />
@@ -48,6 +50,7 @@
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_IDL_FE.dll" target="tools\DDS_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_Valuetype.dll" target="tools\DDS_x64\bin" />
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Util.dll" target="tools\DDS_x64\bin" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\VERSION.txt" target="tools\ACE_x64" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\bin\tao_idl.exe" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\bin\ace_gperf.exe" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\ACE.dll" target="tools\ACE_x64\bin" />
@@ -55,15 +58,18 @@
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_IDL_BE.dll" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_Valuetype.dll" target="tools\ACE_x64\bin" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\bin\generate_export_file.pl" target="tools\ACE_x64\bin" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\TAO\VERSION.txt" target="tools\ACE_x64\TAO" />
 
     <!-- Required tools Linux -->
     <file src=".\build_Linux\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\VERSION.txt" target="tools\DDS_Linux" />
     <file src="..\ext\OpenDDS_Linux\cmake\*" target="tools\DDS_Linux\cmake" />
     <file src="..\ext\OpenDDS_Linux\dds\idl\opendds_idl*" target="tools\DDS_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\ACE_wrappers\VERSION.txt" target="tools\ACE_Linux" />
     <file src="..\ext\OpenDDS_Linux\ACE_wrappers\TAO\TAO_IDL\tao_idl*" target="tools\ACE_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\ACE_wrappers\apps\gperf\src\ace_gperf*" target="tools\ACE_Linux\bin" />
     <file src="..\ext\OpenDDS_Linux\ACE_wrappers\bin\generate_export_file.pl" target="tools\ACE_Linux\bin" />
+    <file src="..\ext\OpenDDS_Linux\ACE_wrappers\TAO\VERSION.txt" target="tools\ACE_Linux\TAO" />
 
     <!-- Required tools MacOS x64 -->
     <file src=".\build_osx-x64\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_osx-x64\bin" />
@@ -74,6 +80,7 @@
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\lib\libTAO_IDL_FE.dylib" target="tools\DDS_osx-x64\bin" />
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\lib\libTAO_Valuetype.dylib" target="tools\DDS_osx-x64\bin" />
     <file src="..\ext\OpenDDS_osx-x64\lib\libOpenDDS_Util.dylib" target="tools\DDS_osx-x64\bin" />
+    <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\VERSION.txt" target="tools\ACE_osx-x64" />
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\TAO_IDL\tao_idl*" target="tools\ACE_osx-x64\bin" />
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\apps\gperf\src\ace_gperf*" target="tools\ACE_osx-x64\bin" />
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\lib\libACE.dylib" target="tools\ACE_osx-x64\bin" />
@@ -81,6 +88,7 @@
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\lib\libTAO_IDL_BE.dylib" target="tools\ACE_osx-x64\bin" />
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\lib\libTAO_Valuetype.dylib" target="tools\ACE_osx-x64\bin" />
     <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\bin\generate_export_file.pl" target="tools\ACE_osx-x64\bin" />
+    <file src="..\ext\OpenDDS_osx-x64\ACE_wrappers\TAO\VERSION.txt" target="tools\ACE_osx-x64\TAO" />
 
     <!-- Required tools MacOS arm64 -->
     <file src=".\build_osx-arm64\OpenDDSharp.IdlGenerator\openddsharp_idl*" target="tools\DDS_osx-arm64\bin" />
@@ -91,6 +99,7 @@
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\lib\libTAO_IDL_FE.dylib" target="tools\DDS_osx-arm64\bin" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\lib\libTAO_Valuetype.dylib" target="tools\DDS_osx-arm64\bin" />
     <file src="..\ext\OpenDDS_osx-arm64\lib\libOpenDDS_Util.dylib" target="tools\DDS_osx-arm64\bin" />
+    <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\VERSION.txt" target="tools\ACE_osx-arm64" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\TAO_IDL\tao_idl*" target="tools\ACE_osx-arm64\bin" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\apps\gperf\src\ace_gperf*" target="tools\ACE_osx-arm64\bin" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\lib\libACE.dylib" target="tools\ACE_osx-arm64\bin" />
@@ -98,6 +107,7 @@
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\lib\libTAO_IDL_BE.dylib" target="tools\ACE_osx-arm64\bin" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\lib\libTAO_Valuetype.dylib" target="tools\ACE_osx-arm64\bin" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\bin\generate_export_file.pl" target="tools\ACE_osx-arm64\bin" />
+    <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\VERSION.txt" target="tools\ACE_osx-arm64\TAO" />
 
     <!--Code generation templates x86-->
     <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x86\dds\idl" />

@@ -33,26 +33,25 @@ CORBA::Boolean UdpInst_GetIsReliable(::OpenDDS::DCPS::UdpInst *ui) {
 }
 
 CORBA::Int32 UdpInst_GetSendBufferSize(::OpenDDS::DCPS::UdpInst *ui) {
-  return ui->send_buffer_size_;
+  return ui->send_buffer_size();
 }
 
 void UdpInst_SetSendBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value) {
-  ui->send_buffer_size_ = value;
+  ui->send_buffer_size(value);
 }
 
 CORBA::Int32 UdpInst_GetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui) {
-  return ui->rcv_buffer_size_;
+  return ui->rcv_buffer_size();
 }
 
 void UdpInst_SetRcvBufferSize(::OpenDDS::DCPS::UdpInst *ui, CORBA::Int32 value) {
-  ui->rcv_buffer_size_ = value;
+  ui->rcv_buffer_size(value);
 }
 
 char *UdpInst_GetLocalAddress(::OpenDDS::DCPS::UdpInst *ui) {
-  char *buffer = new char[512];
-  ui->local_address().addr_to_string(buffer, 512);
+  const char* addr_str = CORBA::string_dup(ui->local_address().c_str());
 
-  return CORBA::string_dup(buffer);
+  return CORBA::string_dup(addr_str);
 }
 
 void UdpInst_SetLocalAddress(::OpenDDS::DCPS::UdpInst *ui, char *value) {

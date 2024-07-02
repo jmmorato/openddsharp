@@ -9,7 +9,7 @@
     <Authors>Jose Morato</Authors>
     <Description>Project templates for OpenDDSharp</Description>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>IDL, OpenDDS, OpenDDSharp, DDS</PackageTags>
+    <PackageTags>IDL;OpenDDS;OpenDDSharp;DDS</PackageTags>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018. All rights reserved.</Copyright>
     <PackageProjectUrl>https://www.openddsharp.com</PackageProjectUrl>

@@ -45,7 +45,7 @@ namespace OpenDDSharp.UnitTest
         {
             var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
             var udpInst = new UdpInst(inst);
-            Assert.AreEqual("0.0.0.0:0", udpInst.LocalAddress);
+            Assert.AreEqual(string.Empty, udpInst.LocalAddress);
             Assert.AreEqual(32U, udpInst.DatalinkControlChunks);
             Assert.AreEqual(10000, udpInst.DatalinkReleaseDelay);
             Assert.IsFalse(udpInst.IsReliable);

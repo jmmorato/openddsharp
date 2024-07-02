@@ -28,7 +28,7 @@
     <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
     <PackageIcon>icon_128.png</PackageIcon>
-    <PackageTags>OpenDDSharp DDS OpenDDS</PackageTags>
+    <PackageTags>OpenDDSharp;DDS;OpenDDS</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Version>1.0.0</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
