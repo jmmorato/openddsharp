@@ -181,8 +181,22 @@ public class CdrWriter
     /// <param name="s">The string to be written.</param>
     public void WriteString(string s)
     {
-        WriteUInt32((uint)s.Length + 1);
-        WriteBytes(Encoding.UTF8.GetBytes(s));
+        var bytes = Encoding.UTF8.GetBytes(s);
+        WriteUInt32((uint)bytes.Length + 1);
+        WriteBytes(bytes);
+        WriteByte(0x00);
+    }
+
+    /// <summary>
+    /// Writes a string to the stream.
+    /// </summary>
+    /// <param name="s">The string to be written.</param>
+    public void WriteWString(string s)
+    {
+        var bytes = Encoding.Unicode.GetBytes(s);
+        WriteUInt32((uint)bytes.Length + 2);
+        WriteBytes(bytes);
+        WriteByte(0x00);
         WriteByte(0x00);
     }
 
@@ -728,9 +742,30 @@ public class CdrWriter
             return;
         }
 
-        var bytes = Encoding.UTF8.GetBytes(string.Join(string.Empty, sequence));
-        WriteSequenceLength((uint)bytes.Length);
-        WriteBytes(bytes);
+        WriteSequenceLength((uint)sequence.Count);
+        foreach (var str in sequence)
+        {
+            WriteString(str);
+        }
+    }
+
+    /// <summary>
+    /// Write a sequence of wide strings to the stream.
+    /// </summary>
+    /// <param name="sequence">The sequence of strings to be written.</param>
+    public void WriteWStringSequence(IList<string> sequence)
+    {
+        if (sequence == null)
+        {
+            WriteSequenceLength(0);
+            return;
+        }
+
+        WriteSequenceLength((uint)sequence.Count);
+        foreach (var str in sequence)
+        {
+            WriteWString(str);
+        }
     }
 
     /// <summary>
@@ -750,8 +785,33 @@ public class CdrWriter
             return;
         }
 
-        var bytes = Encoding.UTF8.GetBytes(string.Join(string.Empty, array));
-        WriteBytes(bytes);
+        foreach (var str in array)
+        {
+            WriteString(str);
+        }
+    }
+
+    /// <summary>
+    /// Write an array of strings to the stream.
+    /// </summary>
+    /// <param name="array">The array of strings to be written.</param>
+    /// <param name="len">The length of the array.</param>
+    public void WriteWStringArray(string[] array, int len)
+    {
+        if (array == null)
+        {
+            for (var i = 0; i < len; i++)
+            {
+                WriteString(string.Empty);
+            }
+
+            return;
+        }
+
+        foreach (var str in array)
+        {
+            WriteWString(str);
+        }
     }
 
     /// <summary>
