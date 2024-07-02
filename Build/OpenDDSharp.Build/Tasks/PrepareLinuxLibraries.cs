@@ -29,9 +29,9 @@ namespace OpenDDSharp.Build.Tasks
     [TaskName("PrepareLinuxLibraries")]
     public class PrepareLinuxLibraries : FrostingTask<BuildContext>
     {
-        private const string OPENDDS_VERSION = "3.25.0";
-        private const string ACE_VERSION = "7.1.1";
-        private const string TAO_VERSION = "3.1.1";
+        private const string OPENDDS_VERSION = "3.28.1";
+        private const string ACE_VERSION = "7.1.3";
+        private const string TAO_VERSION = "3.1.3";
 
         private readonly string[] _aceLibraries =
         {
