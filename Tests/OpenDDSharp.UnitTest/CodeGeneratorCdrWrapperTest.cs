@@ -179,7 +179,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, defaultStruct.Int16Field);
             Assert.AreEqual(0, defaultStruct.Int32Field);
             Assert.AreEqual(0, defaultStruct.Int64Field);
-            Assert.AreEqual(false, defaultStruct.BoolField);
+            Assert.IsFalse(defaultStruct.BoolField);
             Assert.AreEqual(0, defaultStruct.ByteField);
             Assert.AreEqual(0, defaultStruct.UInt8Field);
             Assert.AreEqual(0, defaultStruct.UInt16Field);
@@ -1045,6 +1045,438 @@ namespace OpenDDSharp.UnitTest
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Test the code generated for the string types.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStringsTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStringsDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStringsDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStrings();
+
+            var data = new TestStrings
+            {
+                UnboundedStringField = "Hello, I love you, won't you tell me your name?",
+                UnboundedWStringField = "君たちの基地はすべて我々のもの",
+                BoundedStringField = "Hello, I love you, won't you te",
+                BoundedWStringField = "你好",
+            };
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dw.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStrings();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.AreEqual(data.UnboundedStringField, received.UnboundedStringField);
+            Assert.AreEqual(data.UnboundedWStringField, received.UnboundedWStringField);
+
+            Assert.AreEqual(data.BoundedStringField, received.BoundedStringField);
+            Assert.AreEqual(data.BoundedWStringField, received.BoundedWStringField);
+
+            Assert.AreEqual(typeof(string), data.UnboundedStringField.GetType());
+            Assert.AreEqual(typeof(string), data.UnboundedWStringField.GetType());
+            Assert.AreEqual(typeof(string), data.BoundedStringField.GetType());
+            Assert.AreEqual(typeof(string), data.BoundedWStringField.GetType());
+
+            Assert.AreEqual(defaultStruct.UnboundedStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.UnboundedWStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.BoundedStringField, string.Empty);
+            Assert.AreEqual(defaultStruct.BoundedWStringField, string.Empty);
+        }
+
+        /// <summary>
+        /// Test the code generated for the sequences of strings.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringSequencesTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStringsSequenceTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStringsSequenceDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStringsSequenceDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStringsSequence();
+
+            var data = new TestStringsSequence
+            {
+                BoundedStringSequenceField =
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets",
+                },
+                UnboundedStringSequenceField =
+                {
+                    "You've got your mother in a whirl",
+                    "She's not sure if you're a boy or a girl",
+                    "Hey babe! your hair's alright",
+                    "Hey babe! let's go out tonight",
+                    "You like me, and I like it all",
+                    "We like dancing and we look divine",
+                    "You love bands when they're playing hard",
+                    "You want more and you want it fast",
+                    "They put you down, they say I'm wrong",
+                    "You tacky thing, you put them on",
+                },
+                BoundedWStringSequenceField =
+                {
+                    "Hot tramp, I love you so!",
+                    "你好",
+                    "Rebel Rebel, how could they know?",
+                    "你好",
+                },
+                UnboundedWStringSequenceField =
+                {
+                    "你好",
+                    "君たちの基地はすべて我々のもの",
+                    "你好",
+                    "君たちの基地はすべて我々のもの",
+                    "你好,",
+                    "君たちの基地はすべて我々のもの",
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStringsSequence();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(data.BoundedStringSequenceField.SequenceEqual(received.BoundedStringSequenceField));
+            Assert.IsTrue(data.UnboundedStringSequenceField.SequenceEqual(received.UnboundedStringSequenceField));
+            Assert.IsTrue(data.BoundedWStringSequenceField.SequenceEqual(received.BoundedWStringSequenceField));
+            Assert.IsTrue(data.UnboundedWStringSequenceField.SequenceEqual(received.UnboundedWStringSequenceField));
+
+            Assert.AreEqual(data.BoundedStringSequenceField.GetType(), typeof(List<string>));
+            Assert.AreEqual(data.UnboundedStringSequenceField.GetType(), typeof(List<string>));
+            Assert.AreEqual(data.BoundedWStringSequenceField.GetType(), typeof(List<string>));
+            Assert.AreEqual(data.UnboundedWStringSequenceField.GetType(), typeof(List<string>));
+
+            Assert.IsNotNull(defaultStruct.BoundedStringSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedStringSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedStringSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedStringSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.BoundedWStringSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedWStringSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedWStringSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedWStringSequenceField.Count);
+        }
+
+         /// <summary>
+        /// Test the code generated for the array of strings.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringArraysTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStringsArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStringsArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStringsArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStringsArray();
+
+            var data = new TestStringsArray
+            {
+                StringArrayField = new[]
+                {
+                    "Pressure pushing down on me",
+                    "Pressing down on you, no man ask for",
+                    "Under pressure that burns a building down",
+                    "Splits a family in two",
+                    "Puts people on streets",
+                },
+                WStringArrayField = new[]
+                {
+                    "君たちの基地はすべて我々のもの",
+                    "你好",
+                    "君たちの基地はすべて我々のもの",
+                    "你好",
+                    "君たちの基地はすべて我々のもの",
+                },
+            };
+
+            dataWriter.Write(data);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStringsArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(data.StringArrayField.SequenceEqual(received.StringArrayField));
+            Assert.IsTrue(data.WStringArrayField.SequenceEqual(received.WStringArrayField));
+
+            Assert.AreEqual(typeof(string[]), data.StringArrayField.GetType());
+            Assert.AreEqual(typeof(string[]), data.WStringArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StringArrayField);
+            Assert.AreEqual(5, defaultStruct.StringArrayField.Length);
+            foreach (var s in defaultStruct.StringArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+
+            Assert.IsNotNull(defaultStruct.WStringArrayField);
+            Assert.AreEqual(5, defaultStruct.WStringArrayField.Length);
+            foreach (var s in defaultStruct.WStringArrayField)
+            {
+                Assert.AreEqual(string.Empty, s);
+            }
+        }
+
+        /// <summary>
+        /// Test the code generated for the multi-array of strings.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStringMultiArraysTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStringsMultiArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStringsMultiArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStringsMultiArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStringsMultiArray();
+
+            var data = new TestStringsMultiArray
+            {
+                StringMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { "01", "02" },
+                        new[] { "03", "04" },
+                        new[] { "05", "06" },
+                        new[] { "07", "08" },
+                    },
+                    new[]
+                    {
+                        new[] { "09", "10" },
+                        new[] { "11", "12" },
+                        new[] { "13", "14" },
+                        new[] { "15", "16" },
+                    },
+                    new[]
+                    {
+                        new[] { "17", "18" },
+                        new[] { "19", "20" },
+                        new[] { "21", "22" },
+                        new[] { "23", "24" },
+                    },
+                },
+                WStringMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { "君たちの基地はすべて我々のもの", "你好" },
+                        new[] { "你好", "君たちの基地はすべて我々のもの" },
+                        new[] { "君たちの基地はすべて我々のもの", "你好" },
+                        new[] { "你好", "君たちの基地はすべて我々のもの" },
+                    },
+                    new[]
+                    {
+                        new[] { "09", "10" },
+                        new[] { "11", "12" },
+                        new[] { "13", "14" },
+                        new[] { "15", "16" },
+                    },
+                    new[]
+                    {
+                        new[] { "17", "18" },
+                        new[] { "19", "20" },
+                        new[] { "21", "22" },
+                        new[] { "23", "24" },
+                    },
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStringsMultiArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.StringMultiArrayField, received.StringMultiArrayField));
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.WStringMultiArrayField, received.WStringMultiArrayField));
+
+            Assert.AreEqual(typeof(string[][][]), data.StringMultiArrayField.GetType());
+            Assert.AreEqual(typeof(string[][][]), data.WStringMultiArrayField.GetType());
+
+            var defaultArray = new[]
+            {
+                new[]
+                {
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                },
+                new[]
+                {
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                },
+                new[]
+                {
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                    new[] { string.Empty, string.Empty },
+                },
+            };
+
+            Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.StringMultiArrayField, defaultArray));
+            Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.WStringMultiArrayField, defaultArray));
         }
         #endregion
     }

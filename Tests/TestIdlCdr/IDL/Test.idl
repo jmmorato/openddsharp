@@ -62,6 +62,20 @@ module CdrWrapper {
 
     typedef sequence<octet, 2048> OctetSequenceType;
 
+    typedef string<32> BoundedStringType;
+    typedef wstring<32> BoundedWStringType;
+
+    typedef sequence<string> UnboundedStringSequenceType;
+    typedef sequence<string, 5> BoundedStringSequenceType;
+    typedef sequence<wstring> UnboundedWStringSequenceType;
+    typedef sequence<wstring, 5> BoundedWStringSequenceType;
+
+    typedef string StringArrayType[5];
+    typedef wstring WStringArrayType[5];
+
+    typedef string StringMultiArrayType[3][4][2];
+    typedef wstring WStringMultiArrayType[3][4][2];
+
     @topic
     struct TestPrimitive {
         boolean BoolField;
@@ -147,6 +161,34 @@ module CdrWrapper {
         WCharMultiArrayType WCharMultiArrayField;
         BooleanMultiArrayType BooleanMultiArrayField;
         OctetMultiArrayType OctetMultiArrayField;
+    };
+
+    @topic
+    struct TestStrings {
+        string UnboundedStringField;
+        wstring UnboundedWStringField;
+        BoundedStringType BoundedStringField;
+        BoundedWStringType BoundedWStringField;
+    };
+
+    @topic
+    struct TestStringsSequence {
+        UnboundedStringSequenceType UnboundedStringSequenceField;
+        UnboundedWStringSequenceType UnboundedWStringSequenceField;
+        BoundedStringSequenceType BoundedStringSequenceField;
+        BoundedWStringSequenceType BoundedWStringSequenceField;
+    };
+
+    @topic
+    struct TestStringsArray {
+        StringArrayType StringArrayField;
+        WStringArrayType WStringArrayField;
+    };
+
+    @topic
+    struct TestStringsMultiArray {
+        StringMultiArrayType StringMultiArrayField;
+        WStringMultiArrayType WStringMultiArrayField;
     };
 
     @topic
