@@ -1478,6 +1478,395 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.StringMultiArrayField, defaultArray));
             Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.WStringMultiArrayField, defaultArray));
         }
+
+        /// <summary>
+        /// Test the code generated for the enumerations.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestEnumsTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestEnumsDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestEnumsDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestEnums();
+
+            var data = new TestEnums
+            {
+                TestEnumField = TestEnum.ENUM5,
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestEnums();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.AreEqual(data.TestEnumField, received.TestEnumField);
+
+            Assert.AreEqual(typeof(TestEnum), data.TestEnumField.GetType());
+
+            Assert.AreEqual(TestEnum.ENUM1, defaultStruct.TestEnumField);
+        }
+
+        /// <summary>
+        /// Test the code generated for the sequence of enumerations.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumSequencesTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestEnumsSequenceTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestEnumsSequenceDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestEnumsSequenceDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestEnumsSequence();
+
+            var data = new TestEnumsSequence
+            {
+                UnboundedEnumSequenceField =
+                {
+                    TestEnum.ENUM10,
+                    TestEnum.ENUM9,
+                    TestEnum.ENUM8,
+                    TestEnum.ENUM7,
+                    TestEnum.ENUM6,
+                    TestEnum.ENUM5,
+                },
+                BoundedEnumSequenceField =
+                {
+                    TestEnum.ENUM1,
+                    TestEnum.ENUM2,
+                    TestEnum.ENUM3,
+                    TestEnum.ENUM4,
+                    TestEnum.ENUM5,
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestEnumsSequence();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(data.BoundedEnumSequenceField.SequenceEqual(received.BoundedEnumSequenceField));
+            Assert.IsTrue(data.UnboundedEnumSequenceField.SequenceEqual(received.UnboundedEnumSequenceField));
+
+            Assert.AreEqual(data.BoundedEnumSequenceField.GetType(), typeof(List<TestEnum>));
+            Assert.AreEqual(data.UnboundedEnumSequenceField.GetType(), typeof(List<TestEnum>));
+
+            Assert.IsNotNull(defaultStruct.BoundedEnumSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedEnumSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedEnumSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedEnumSequenceField.Count);
+        }
+
+        /// <summary>
+        /// Test the code generated for the array of enumerations.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumsArrayTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestEnumsArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestEnumsArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestEnumsArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+
+            var defaultStruct = new TestEnumsArray();
+
+            var data = new TestEnumsArray
+            {
+                EnumArrayField = new[]
+                {
+                    TestEnum.ENUM1,
+                    TestEnum.ENUM3,
+                    TestEnum.ENUM5,
+                    TestEnum.ENUM7,
+                    TestEnum.ENUM11,
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestEnumsArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(data.EnumArrayField.SequenceEqual(received.EnumArrayField));
+
+            Assert.AreEqual(typeof(TestEnum[]), data.EnumArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.EnumArrayField);
+            Assert.AreEqual(5, defaultStruct.EnumArrayField.Length);
+            foreach (var s in defaultStruct.EnumArrayField)
+            {
+                Assert.AreEqual(default, s);
+            }
+        }
+
+        /// <summary>
+        /// Test the code generated for the multi-array of enumerations.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedEnumsMultiArrayTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestEnumsMultiArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestEnumsMultiArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestEnumsMultiArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestEnumsMultiArray();
+
+            var data = new TestEnumsMultiArray
+            {
+                EnumMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[] { TestEnum.ENUM1, TestEnum.ENUM2 },
+                        new[] { TestEnum.ENUM3, TestEnum.ENUM4 },
+                        new[] { TestEnum.ENUM5, TestEnum.ENUM6 },
+                        new[] { TestEnum.ENUM7, TestEnum.ENUM8 },
+                    },
+                    new[]
+                    {
+                        new[] { TestEnum.ENUM9, TestEnum.ENUM10 },
+                        new[] { TestEnum.ENUM11, TestEnum.ENUM12 },
+                        new[] { TestEnum.ENUM1, TestEnum.ENUM2 },
+                        new[] { TestEnum.ENUM3, TestEnum.ENUM4 },
+                    },
+                    new[]
+                    {
+                        new[] { TestEnum.ENUM5, TestEnum.ENUM6 },
+                        new[] { TestEnum.ENUM7, TestEnum.ENUM8 },
+                        new[] { TestEnum.ENUM9, TestEnum.ENUM10 },
+                        new[] { TestEnum.ENUM11, TestEnum.ENUM12 },
+                    },
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestEnumsMultiArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(TestHelper.CompareMultiArray(data.EnumMultiArrayField, received.EnumMultiArrayField));
+
+            Assert.AreEqual(typeof(TestEnum[][][]), data.EnumMultiArrayField.GetType());
+
+            var defaultArray = new[]
+            {
+                new[]
+                {
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                },
+                new[]
+                {
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                },
+                new[]
+                {
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                    new TestEnum[] { default, default },
+                },
+            };
+
+            Assert.IsNotNull(defaultStruct.EnumMultiArrayField);
+            Assert.IsTrue(TestHelper.CompareMultiArray(defaultStruct.EnumMultiArrayField, defaultArray));
+        }
+
+        /// <summary>
+        /// Test the code generated for the constants.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedConstants()
+        {
+            Assert.AreEqual(typeof(short), TEST_SHORT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(int), TEST_LONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(long), TEST_LONGLONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(ushort), TEST_USHORT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(uint), TEST_ULONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(ulong), TEST_ULONGLONG_CONST.Value.GetType());
+            Assert.AreEqual(typeof(char), TEST_CHAR_CONST.Value.GetType());
+            Assert.AreEqual(typeof(char), TEST_WCHAR_CONST.Value.GetType());
+            Assert.AreEqual(typeof(bool), TEST_BOOLEAN_CONST.Value.GetType());
+            Assert.AreEqual(typeof(byte), TEST_OCTET_CONST.Value.GetType());
+            Assert.AreEqual(typeof(float), TEST_FLOAT_CONST.Value.GetType());
+            Assert.AreEqual(typeof(double), TEST_DOUBLE_CONST.Value.GetType());
+            Assert.AreEqual(typeof(TestEnum), TEST_ENUM_CONST.Value.GetType());
+
+            Assert.AreEqual(-1, TEST_SHORT_CONST.Value);
+            Assert.AreEqual((ushort)1, TEST_USHORT_CONST.Value);
+            Assert.AreEqual(-2, TEST_LONG_CONST.Value);
+            Assert.AreEqual(2U, TEST_ULONG_CONST.Value);
+            Assert.AreEqual(-3L, TEST_LONGLONG_CONST.Value);
+            Assert.AreEqual(3UL, TEST_ULONGLONG_CONST.Value);
+            Assert.AreEqual(4.1f, TEST_FLOAT_CONST.Value);
+            Assert.AreEqual(5.1, TEST_DOUBLE_CONST.Value);
+            Assert.AreEqual('X', TEST_CHAR_CONST.Value);
+            Assert.AreEqual('S', TEST_WCHAR_CONST.Value);
+            Assert.AreEqual(0x42, TEST_OCTET_CONST.Value);
+            Assert.IsTrue(TEST_BOOLEAN_CONST.Value);
+            Assert.AreEqual("Hello, I love you, won't you tell me your name?", TEST_STRING_CONST.Value);
+            Assert.AreEqual("君たちの基地はすべて我々のもの", TEST_WSTRING_CONST.Value);
+            Assert.AreEqual(TestEnum.ENUM6, TEST_ENUM_CONST.Value);
+        }
         #endregion
     }
 }
