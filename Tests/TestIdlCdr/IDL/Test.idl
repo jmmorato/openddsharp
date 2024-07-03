@@ -1,5 +1,20 @@
 module CdrWrapper {
 
+    const short TEST_SHORT_CONST = -1;
+    const unsigned short TEST_USHORT_CONST = 1;
+    const long TEST_LONG_CONST = -2;
+    const unsigned long TEST_ULONG_CONST = 2;
+    const long long TEST_LONGLONG_CONST = -3;
+    const unsigned long long TEST_ULONGLONG_CONST = 3;
+    const float TEST_FLOAT_CONST = 4.1;
+    const double TEST_DOUBLE_CONST = 5.1;
+    const char TEST_CHAR_CONST = 'X';
+    const wchar TEST_WCHAR_CONST = 'S';
+    const octet TEST_OCTET_CONST = 0x42;
+    const boolean TEST_BOOLEAN_CONST = 1;
+    const string TEST_STRING_CONST = "Hello, I love you, won't you tell me your name?";
+    const wstring TEST_WSTRING_CONST = L"君たちの基地はすべて我々のもの";
+
     typedef sequence<octet> UnboundedOctetSeqType;
     typedef sequence<char> UnboundedCharSeqType;
     typedef sequence<wchar> UnboundedWCharSeqType;
@@ -75,6 +90,30 @@ module CdrWrapper {
 
     typedef string StringMultiArrayType[3][4][2];
     typedef wstring WStringMultiArrayType[3][4][2];
+
+    enum TestEnum {
+        ENUM1,
+        ENUM2,
+        ENUM3,
+        ENUM4,
+        ENUM5,
+        ENUM6,
+        ENUM7,
+        ENUM8,
+        ENUM9,
+        ENUM10,
+        ENUM11,
+        ENUM12
+    };
+
+    typedef sequence<TestEnum> UnboundedEnumSequenceType;
+    typedef sequence<TestEnum, 5> BoundedEnumSequenceType;
+
+    const TestEnum TEST_ENUM_CONST = TestEnum::ENUM6;
+
+    typedef TestEnum EnumArrayType[5];
+
+    typedef TestEnum EnumMultiArrayType[3][4][2];
 
     @topic
     struct TestPrimitive {
@@ -189,6 +228,27 @@ module CdrWrapper {
     struct TestStringsMultiArray {
         StringMultiArrayType StringMultiArrayField;
         WStringMultiArrayType WStringMultiArrayField;
+    };
+
+    @topic
+    struct TestEnums {
+        TestEnum TestEnumField;
+    };
+
+    @topic
+    struct TestEnumsSequence {
+        UnboundedEnumSequenceType UnboundedEnumSequenceField;
+        BoundedEnumSequenceType BoundedEnumSequenceField;
+    };
+
+    @topic
+    struct TestEnumsArray {
+        EnumArrayType EnumArrayField;
+    };
+
+    @topic
+    struct TestEnumsMultiArray {
+        EnumMultiArrayType EnumMultiArrayField;
     };
 
     @topic
