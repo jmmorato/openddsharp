@@ -150,7 +150,7 @@ namespace OpenDDSharp.Build.Tasks
                     Version = version,
                 });
 
-                var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform} -vcvars_ver=14.36.32532";
+                var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}";
                 var vsdev = "\\Common7\\Tools\\VsDevCmd.bat\"";
                 var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test";
                 if (context.BuildConfiguration == "Release")
