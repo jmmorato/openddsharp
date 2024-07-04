@@ -26,14 +26,14 @@
           <ExcludeAssembliesWithoutSources>MissingAll,MissingAny,None</ExcludeAssembliesWithoutSources>
         </Configuration>
       </DataCollector>
-      <InProcDataCollectionRunSettings>
-          <InProcDataCollectors>
-            <InProcDataCollector assemblyQualifiedName="Coverlet.Collector.DataCollection.CoverletInProcDataCollector, coverlet.collector, Version=6.0.2, Culture=neutral, PublicKeyToken=null"
+    </DataCollectors>
+  </DataCollectionRunSettings>
+  <InProcDataCollectionRunSettings>
+    <InProcDataCollectors>
+      <InProcDataCollector assemblyQualifiedName="Coverlet.Collector.DataCollection.CoverletInProcDataCollector, coverlet.collector, Version=6.0.2, Culture=neutral, PublicKeyToken=null"
                            friendlyName="XPlat Code Coverage"
                            enabled="True"
                            codebase="coverlet.collector.dll" />
-          </InProcDataCollectors>
-        </InProcDataCollectionRunSettings>
-    </DataCollectors>
-  </DataCollectionRunSettings>
+      </InProcDataCollectors>
+  </InProcDataCollectionRunSettings>
 </RunSettings>
