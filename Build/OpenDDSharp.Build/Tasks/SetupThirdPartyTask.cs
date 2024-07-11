@@ -92,7 +92,7 @@ namespace OpenDDSharp.Build.Tasks
             {
                 var patches = Directory.EnumerateFiles(BuildContext.PATCHES_FOLDER, "*.patch");
                 var patchPaths = patches as string[] ?? patches.ToArray();
-                if (!patchPaths.Any())
+                if (patchPaths.Any())
                 {
                     foreach (var patchPath in patchPaths)
                     {
