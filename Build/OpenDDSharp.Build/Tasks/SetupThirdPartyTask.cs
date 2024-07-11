@@ -88,29 +88,27 @@ namespace OpenDDSharp.Build.Tasks
             Git(context, $"checkout tags/{_versionTag}");
 
             context.Log.Information("Apply required OpenDDSharp patches to OpenDDS...");
-            if (!Directory.Exists(BuildContext.PATCHES_FOLDER))
+            if (Directory.Exists(BuildContext.PATCHES_FOLDER))
             {
-                return;
-            }
-            var patches = Directory.EnumerateFiles(BuildContext.PATCHES_FOLDER, "*.patch");
-            var patchPaths = patches as string[] ?? patches.ToArray();
-            if (!patchPaths.Any())
-            {
-                return;
-            }
-            foreach (var patchPath in patchPaths)
-            {
-                var patchDirectory = new DirectoryPath(patchPath);
-                if (BuildContext.IsLinux)
+                var patches = Directory.EnumerateFiles(BuildContext.PATCHES_FOLDER, "*.patch");
+                var patchPaths = patches as string[] ?? patches.ToArray();
+                if (!patchPaths.Any())
                 {
-                    var linuxPath = System.IO.Path.GetFullPath(patchDirectory.FullPath);
+                    foreach (var patchPath in patchPaths)
+                    {
+                        var patchDirectory = new DirectoryPath(patchPath);
+                        if (BuildContext.IsLinux)
+                        {
+                            var linuxPath = System.IO.Path.GetFullPath(patchDirectory.FullPath);
 
-                    context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
-                    Git(context, "apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath);
-                }
-                else
-                {
-                    Git(context, "apply " + patchDirectory.FullPath);
+                            context.Log.Information($"Apply {linuxPath} in {context.DdsRoot}...");
+                            Git(context, "apply --whitespace=fix --ignore-space-change --ignore-whitespace " + linuxPath);
+                        }
+                        else
+                        {
+                            Git(context, "apply " + patchDirectory.FullPath);
+                        }
+                    }
                 }
             }
 
