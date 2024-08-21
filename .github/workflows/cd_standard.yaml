@@ -529,12 +529,12 @@ jobs:
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v1
+      uses: gittools/actions/gitversion/setup@v2
       with:
         versionSpec: '5.12.0'
 
     - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v1
+      uses: gittools/actions/gitversion/execute@v2
       with:
         useConfigFile: true
 
@@ -687,12 +687,12 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v1
+        uses: gittools/actions/gitversion/setup@v2
         with:
           versionSpec: '5.12.0'
 
       - name: Determine Version
-        uses: gittools/actions/gitversion/execute@v1
+        uses: gittools/actions/gitversion/execute@v2
         with:
           useConfigFile: true
 
