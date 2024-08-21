@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         BuildPlatform: [x64, x86]
-        BuildConfiguration: [Release, Debug]
+        BuildConfiguration: [Release]
 
     env:
       OpenDdsVersion: "3.29.1"
