@@ -59,10 +59,9 @@ namespace OpenDDSharp.Build.Tasks
                 Runtime = context.RunTime,
                 NoBuild = true,
                 NoRestore = true,
-                Verbosity = DotNetVerbosity.Detailed,
+                Verbosity = DotNetVerbosity.Normal,
                 Configuration = context.BuildConfiguration,
-                Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=detailed" },
-                Collectors = { "XPlat Code Coverage" },
+                Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
             };
 
             context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);

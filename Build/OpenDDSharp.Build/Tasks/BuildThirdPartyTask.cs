@@ -57,6 +57,11 @@ namespace OpenDDSharp.Build.Tasks
                 platform = PlatformTarget.Win32;
             }
 
+            var toolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
+            if (platform == PlatformTarget.x64)
+            {
+                toolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe";
+            }
             if (BuildContext.IsWindows)
             {
                 context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
@@ -64,7 +69,7 @@ namespace OpenDDSharp.Build.Tasks
                     Configuration = context.BuildConfiguration,
                     PlatformTarget = platform,
                     Targets = { "Build" },
-                    MaxCpuCount = 1,
+                    MaxCpuCount = 0,
                     WorkingDirectory = Path.GetFullPath(context.DdsRoot),
                     EnvironmentVariables =
                     {
@@ -74,7 +79,8 @@ namespace OpenDDSharp.Build.Tasks
                         { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd(Path.DirectorySeparatorChar) },
                     },
                     ToolVersion = context.VisualStudioVersion,
-                    ToolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
+                    ToolPath = toolPath,
+                    MSBuildPlatform = platform == PlatformTarget.Win32 ? MSBuildPlatform.x86 : MSBuildPlatform.x64,
                 });
             }
             else
