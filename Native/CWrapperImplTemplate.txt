@@ -202,10 +202,11 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Json(<%SCOPED%>DataReader_ptr dr,
     return (int)ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, ::DDS::SampleInfo* sampleInfo)
+int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, void* & sampleInfo)
 {
     <%SCOPED%> sample;
-    ::DDS::ReturnCode_t ret = dr->take_next_sample(sample, *sampleInfo);
+    ::DDS::SampleInfo* info = new ::DDS::SampleInfo();
+    ::DDS::ReturnCode_t ret = dr->take_next_sample(sample, *info);
 
     if (ret == ::DDS::RETCODE_OK)
     {
