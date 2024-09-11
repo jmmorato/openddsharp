@@ -14,7 +14,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
     private readonly int _totalInstances;
     private readonly int _totalSamples;
     private readonly byte[] _payload;
-    private Dictionary<int, InstanceHandle> _instanceHandles = new();
+    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
 
     private int _count;
 
@@ -64,7 +64,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
                     instanceHandle = _dataWriter.RegisterInstance(sample);
                     _instanceHandles.Add(j, instanceHandle);
                 }
-                
+
                 var publicationTime = DateTime.UtcNow.Ticks;
 
                 _dataWriter.Write(sample, instanceHandle);

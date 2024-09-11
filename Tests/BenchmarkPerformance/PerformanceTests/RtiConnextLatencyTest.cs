@@ -19,6 +19,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
     private readonly int _totalInstances;
     private readonly int _totalSamples;
     private readonly byte[] _payload;
+    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
 
     private int _count;
 
@@ -58,6 +59,12 @@ internal sealed class RtiConnextLatencyTest : IDisposable
             for (var j = 1; j <= _totalInstances; j++)
             {
                 sample.Key = j.ToString(CultureInfo.InvariantCulture);
+
+                if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
+                {
+                    instanceHandle = _dataWriter.RegisterInstance(sample);
+                    _instanceHandles.Add(j, instanceHandle);
+                }
 
                 var publicationTime = DateTime.UtcNow.Ticks;
                 _dataWriter.Write(sample);
