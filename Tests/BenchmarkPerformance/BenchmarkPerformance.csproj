@@ -20,10 +20,4 @@
       <ProjectReference Include="..\TestIdlCdr\TestIdlCdr.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="rtps.ini">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>

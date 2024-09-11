@@ -12,7 +12,7 @@ internal class LatencyTestConfiguration : ManualConfig
 {
     public LatencyTestConfiguration()
     {
-        AddJob(Job.Dry.WithIterationCount(1).WithToolchain(InProcessEmitToolchain.Instance));
+        AddJob(Job.Default.WithIterationCount(1).WithToolchain(InProcessEmitToolchain.Instance));
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new LatencyAverageColumn());
         AddColumn(new LatencyDeviationColumn());

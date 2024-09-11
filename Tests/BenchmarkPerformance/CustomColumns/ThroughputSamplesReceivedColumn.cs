@@ -38,7 +38,7 @@ internal class ThroughputSamplesReceivedColumn : IColumn
     public string GetValue(Summary summary, BenchmarkCase benchmarkCase)
     {
         var name = benchmarkCase.Descriptor.WorkloadMethod.Name.
-            Replace("TestLatency", string.Empty, StringComparison.InvariantCultureIgnoreCase).
+            Replace("ThroughputTest", string.Empty, StringComparison.InvariantCultureIgnoreCase).
             ToLowerInvariant();
 
         var numInstancesParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalInstances");
