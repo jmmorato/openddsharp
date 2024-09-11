@@ -1132,12 +1132,7 @@
             var ptr = IntPtr.Zero;
             var infoWrapper = new SampleInfoWrapper();
             UIntPtr size = UIntPtr.Zero;
-            #if NET7_0_OR_GREATER
-            var ptrInfo = IntPtr.Zero;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref size, ref ptrInfo);
-            #else
             ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref size, ref infoWrapper);
-            #endif
             if (ret == ReturnCode.Ok)
             {
                 byte[] managedArray = new byte[(int)size];
@@ -1146,7 +1141,7 @@
                 var sample = _typeSupport.DecodeFromBytes(managedArray);
                 data.MemberwiseCopy(sample);
 
-                //sampleInfo.FromNative(infoWrapper);
+                sampleInfo.FromNative(infoWrapper);
             }
 
             return ret;
@@ -1272,10 +1267,8 @@
         internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        //[DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeNextSample(IntPtr dr, ref IntPtr cdr_data, ref UIntPtr size, ref IntPtr sampleInfo);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
