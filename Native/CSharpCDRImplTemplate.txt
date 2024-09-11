@@ -117,10 +117,9 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var str = _typeSupport.EncodeToString(instance);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(instance);
 
-            ret = <%TYPE%>DataWriterNative.RegisterInstance(_native, json_data);
+            ret = <%TYPE%>DataWriterNative.RegisterInstance(_native, bytes, (UIntPtr)bytes.Length);
 
             return ret;
         }
@@ -317,6 +316,11 @@
         internal static partial int RegisterInstance(IntPtr dw, IntPtr jsonData);
 
         [SuppressUnmanagedCodeSecurity]
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        internal static partial int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
+
+        [SuppressUnmanagedCodeSecurity]
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
@@ -366,6 +370,10 @@
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int RegisterInstance(IntPtr dw, [In] IntPtr jsonData);
+
+        [SuppressUnmanagedCodeSecurity]
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
