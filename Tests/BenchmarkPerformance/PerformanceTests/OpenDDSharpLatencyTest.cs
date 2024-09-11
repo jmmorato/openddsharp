@@ -78,7 +78,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     private void InitializeDDSEntities()
     {
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini", "-DCPSPendingTimeout", "3");
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
 
         // var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
         // var configName = "openddsharp_rtps_interop_" + guid;
@@ -116,12 +116,12 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         var dwQos = new DataWriterQos
         {
-            // Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
-            // History =
-            // {
-            //     Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-            //     Depth = 1,
-            // },
+            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            History =
+             {
+                 Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+                 Depth = 1,
+             },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         // TransportRegistry.Instance.BindConfig(configName, dw);
@@ -130,12 +130,12 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _subscriber = _participant.CreateSubscriber();
         var drQos = new DataReaderQos
         {
-            // Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
-            // History =
-            // {
-            //     Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-            //     Depth = 1,
-            // },
+            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            History =
+             {
+                 Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+                 Depth = 1,
+             },
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         // TransportRegistry.Instance.BindConfig(configName, dr);

@@ -30,7 +30,7 @@ Ace.Init();
 // ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
 // ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
 
-var test = new OpenDDSharpLatencyTest(1000, 100, 512);
+var test = new OpenDDSharpLatencyTest(1000, 100, 2048);
 Stopwatch stopwatch = new();
 stopwatch.Start();
 test.Run();
@@ -39,7 +39,7 @@ test.Dispose();
 
 Console.WriteLine($"OpenDDSharp Latency Test {stopwatch.Elapsed.TotalSeconds}");
 
-var test1 = new RtiConnextLatencyTest(1000, 100, 512);
+var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
 stopwatch.Reset();
 stopwatch.Start();
 test1.Run();
