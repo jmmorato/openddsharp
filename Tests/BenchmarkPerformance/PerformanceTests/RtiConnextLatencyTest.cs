@@ -59,7 +59,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
             {
                 sample.Key = j.ToString(CultureInfo.InvariantCulture);
 
-                var publicationTime = DateTime.Now.Ticks;
+                var publicationTime = DateTime.UtcNow.Ticks;
                 _dataWriter.Write(sample);
 
                 _evt.Wait();
@@ -107,7 +107,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
             .WithTransportBuiltin(t => t.Mask = TransportBuiltinMask.Udpv4);
 
         _participant = DomainParticipantFactory.Instance.CreateParticipant(DOMAIN_ID, pQos);
-        _topic = _participant.CreateTopic<KeyedOctetsTopicType>("KeyedOctetsTopic");
+        _topic = _participant.CreateTopic<KeyedOctetsTopicType>("LatencyTestRtiConnext");
 
         _publisher = _participant.CreatePublisher();
         _subscriber = _participant.CreateSubscriber();

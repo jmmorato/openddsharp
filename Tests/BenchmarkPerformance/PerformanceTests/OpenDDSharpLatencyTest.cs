@@ -58,7 +58,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             {
                 sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
 
-                var publicationTime = DateTime.Now.Ticks;
+                var publicationTime = DateTime.UtcNow.Ticks;
                 _dataWriter.Write(sample);
 
                 _evt.Wait();
@@ -78,33 +78,33 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     private void InitializeDDSEntities()
     {
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini", "-DCPSPendingTimeout", "3");
 
-        var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configName = "openddsharp_rtps_interop_" + guid;
-        var instName = "internal_openddsharp_rtps_transport_" + guid;
+        // var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        // var configName = "openddsharp_rtps_interop_" + guid;
+        // var instName = "internal_openddsharp_rtps_transport_" + guid;
 
-        var config = TransportRegistry.Instance.CreateConfig(configName);
-        var inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-        var rui = new RtpsUdpInst(inst)
-        {
-            UseMulticast = false,
-            LocalAddress = "127.0.0.1",
-            NakResponseDelay = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 50_000,
-            },
-            HeartbeatPeriod = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 50_000,
-            },
-        };
-        config.Insert(rui);
+        // var config = TransportRegistry.Instance.CreateConfig(configName);
+        // var inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
+        // var rui = new ShmemInst(inst)
+        // {
+        //     // UseMulticast = false,
+        //     // LocalAddress = "127.0.0.1",
+        //     // NakResponseDelay = new TimeValue
+        //     // {
+        //     //     Seconds = 0,
+        //     //     MicroSeconds = 50_000,
+        //     // },
+        //     // HeartbeatPeriod = new TimeValue
+        //     // {
+        //     //     Seconds = 0,
+        //     //     MicroSeconds = 50_000,
+        //     // },
+        // };
+        // config.Insert(rui);
 
         _participant = _dpf.CreateParticipant(DOMAIN_ID);
-        TransportRegistry.Instance.BindConfig(configName, _participant);
+        // TransportRegistry.Instance.BindConfig(configName, _participant);
 
         var typeSupport = new KeyedOctetsTypeSupport();
         var typeName = typeSupport.GetTypeName();
@@ -116,29 +116,29 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         var dwQos = new DataWriterQos
         {
-            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
-            History =
-            {
-                Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                Depth = 1,
-            },
+            // Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            // History =
+            // {
+            //     Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+            //     Depth = 1,
+            // },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
-        TransportRegistry.Instance.BindConfig(configName, dw);
+        // TransportRegistry.Instance.BindConfig(configName, dw);
         _dataWriter = new KeyedOctetsDataWriter(dw);
 
         _subscriber = _participant.CreateSubscriber();
         var drQos = new DataReaderQos
         {
-            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
-            History =
-            {
-                Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                Depth = 1,
-            },
+            // Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            // History =
+            // {
+            //     Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+            //     Depth = 1,
+            // },
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
-        TransportRegistry.Instance.BindConfig(configName, dr);
+        // TransportRegistry.Instance.BindConfig(configName, dr);
         _dataReader = new KeyedOctetsDataReader(dr);
 
         _waitSet = new WaitSet();
@@ -162,7 +162,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         while (true)
         {
             var conditions = new List<Condition>();
-            _waitSet.Wait(conditions, duration);
+            _waitSet.Wait(conditions);
 
             var sample = new KeyedOctets();
             var sampleInfo = new SampleInfo();

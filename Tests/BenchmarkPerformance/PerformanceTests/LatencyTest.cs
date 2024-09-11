@@ -25,7 +25,7 @@ public class LatencyTest
     /// <summary>
     /// Gets or sets the payload size for the test.
     /// </summary>
-    [Params(512)]
+    [Params(2048)]
     public ulong TotalPayload { get; set; }
 
     [IterationSetup(Target = nameof(OpenDDSharpLatencyTest))]

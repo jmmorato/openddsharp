@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -438,12 +439,16 @@ namespace OpenDDSharp.UnitTest
 
             var defaultStruct = new TestPrimitiveArray();
 
+            var random = new Random();
+            var payload = new byte[2048];
+            random.NextBytes(payload);
+
             var data = new TestPrimitiveArray
             {
                 BooleanArrayField = new[] { true, true, false, false, true },
                 CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
                 WCharArrayField = new[] { 'あ', 'な', 'た', 'の', '基' },
-                ByteArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
+                ByteArrayField = payload,
                 Int16ArrayField = new short[] { 4, -5, 6, -7, 8 },
                 UInt16ArrayField = new ushort[] { 4, 5, 6, 7, 8 },
                 Int32ArrayField = new[] { -1, 2, -3, 100, -200 },
@@ -520,7 +525,7 @@ namespace OpenDDSharp.UnitTest
             }
 
             Assert.IsNotNull(defaultStruct.ByteArrayField);
-            Assert.AreEqual(5, defaultStruct.ByteArrayField.Length);
+            Assert.AreEqual(2048, defaultStruct.ByteArrayField.Length);
             foreach (var i in defaultStruct.ByteArrayField)
             {
                 Assert.AreEqual(default, i);

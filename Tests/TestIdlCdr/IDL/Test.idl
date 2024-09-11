@@ -48,7 +48,7 @@ module CdrWrapper {
     typedef char CharArrayType[5];
     typedef wchar WCharArrayType[5];
     typedef boolean BooleanArrayType[5];
-    typedef octet OctetArrayType[5];
+    typedef octet OctetArrayType[2048];
     typedef int8 Int8ArrayType[5];
     typedef uint8 UInt8ArrayType[5];
     typedef short Int16ArrayType[5];
