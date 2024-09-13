@@ -301,6 +301,7 @@
         internal static partial IntPtr Narrow(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
+        [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Cdr")]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         internal static partial int Write(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
@@ -316,6 +317,7 @@
         internal static partial int RegisterInstance(IntPtr dw, IntPtr jsonData);
 
         [SuppressUnmanagedCodeSecurity]
+        [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr")]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         internal static partial int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
@@ -1271,10 +1273,12 @@
         internal static partial int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
+        [SuppressGCTransition]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
+        [SuppressGCTransition]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
