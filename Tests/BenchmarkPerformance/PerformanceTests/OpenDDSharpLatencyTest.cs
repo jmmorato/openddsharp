@@ -161,15 +161,10 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     private void ReaderThreadProc()
     {
-        var duration = new Duration
-        {
-            Seconds = 1,
-            NanoSeconds = 0,
-        };
         while (true)
         {
             var conditions = new List<Condition>();
-            _waitSet.Wait(conditions, duration);
+            _waitSet.Wait(conditions);
 
             var sample = new KeyedOctets();
             var sampleInfo = new SampleInfo();

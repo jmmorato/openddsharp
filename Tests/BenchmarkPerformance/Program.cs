@@ -31,43 +31,43 @@ ParticipantService.Instance.AddDiscovery(disc);
 ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
 ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
 
-//var test = new OpenDDSharpLatencyTest(1000, 100, 2048);
-//Stopwatch stopwatch = new();
-//stopwatch.Start();
-//test.Run();
-//stopwatch.Stop();
-//test.Dispose();
+var test = new OpenDDSharpLatencyTest(1000, 100, 2048);
+Stopwatch stopwatch = new();
+stopwatch.Start();
+test.Run();
+stopwatch.Stop();
+test.Dispose();
 
-//Console.WriteLine($"OpenDDSharp Latency Test {stopwatch.Elapsed.TotalSeconds}");
+Console.WriteLine($"OpenDDSharp Latency Test {stopwatch.Elapsed.TotalSeconds}");
 
-//var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
-//stopwatch.Reset();
-//stopwatch.Start();
-//test1.Run();
-//stopwatch.Stop();
-//test1.Dispose();
+var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
+stopwatch.Reset();
+stopwatch.Start();
+test1.Run();
+stopwatch.Stop();
+test1.Dispose();
 
-//Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
+Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
 
-Console.WriteLine("Menu: ");
-Console.WriteLine("[1] Latency Performance Test");
-Console.WriteLine("[2] Throughput Performance Test");
-Console.WriteLine("Anything else will stop the program.");
-Console.Write("> ");
-var input = Console.ReadLine();
-Console.WriteLine();
-switch (input)
-{
-    case "1":
-        {
-            var config = new LatencyTestConfiguration
-            {
-                ArtifactsPath = artifactsPath,
-            };
-            _ = BenchmarkRunner.Run<LatencyTest>(config);
-            break;
-        }
-}
+//Console.WriteLine("Menu: ");
+//Console.WriteLine("[1] Latency Performance Test");
+//Console.WriteLine("[2] Throughput Performance Test");
+//Console.WriteLine("Anything else will stop the program.");
+//Console.Write("> ");
+//var input = Console.ReadLine();
+//Console.WriteLine();
+//switch (input)
+//{
+//    case "1":
+//        {
+//            var config = new LatencyTestConfiguration
+//            {
+//                ArtifactsPath = artifactsPath,
+//            };
+//            _ = BenchmarkRunner.Run<LatencyTest>(config);
+//            break;
+//        }
+//}
 
 Ace.Fini();
 

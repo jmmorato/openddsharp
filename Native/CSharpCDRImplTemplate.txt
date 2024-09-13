@@ -1139,7 +1139,7 @@
             ReturnCode ret = ReturnCode.Error;
             var ptr = IntPtr.Zero;
             var infoWrapper = new SampleInfoWrapper();
-            UIntPtr size = UIntPtr.Zero;
+            var size = UIntPtr.Zero;
             ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref size, ref infoWrapper);
             if (ret == ReturnCode.Ok)
             {
