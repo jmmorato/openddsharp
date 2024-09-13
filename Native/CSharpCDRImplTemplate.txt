@@ -303,7 +303,7 @@
         [SuppressUnmanagedCodeSecurity]
         [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Cdr")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial int Write(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
@@ -319,7 +319,7 @@
         [SuppressUnmanagedCodeSecurity]
         [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
