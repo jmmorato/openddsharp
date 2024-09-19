@@ -106,7 +106,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             HeartbeatPeriod = new TimeValue
             {
                 Seconds = 0,
-                MicroSeconds = 50_000,
+                MicroSeconds = 500_000,
             },
             Ttl = 1,
         };
@@ -129,7 +129,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             History =
              {
                  Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                 Depth = 1,
+                 Depth = _totalSamples,
              },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
@@ -142,7 +142,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             History =
              {
                  Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                 Depth = 1,
+                 Depth = _totalSamples,
              },
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
@@ -188,6 +188,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _publisher.DeleteContainedEntities();
         _participant.DeletePublisher(_publisher);
 
+        _waitSet.DetachCondition(_statusCondition);
         _dataReader.DeleteContainedEntities();
         _subscriber.DeleteDataReader(_dataReader);
         _subscriber.DeleteContainedEntities();
