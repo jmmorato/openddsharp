@@ -3,6 +3,10 @@ project(${PROJECT_NAME} CXX)
 
 find_package(OpenDDS REQUIRED)
 
+set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpointer-arith")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+
 if(MSVC)
     add_compile_options(/bigobj)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -10,7 +14,7 @@ if(MSVC)
 endif()
 
 if(APPLE)
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
 elseif(UNIX)

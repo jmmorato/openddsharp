@@ -64,6 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenDDSharp.Marshaller\OpenDDSharp.Marshaller.csproj" />
     <ProjectReference Include="..\OpenDDSharp.Native\OpenDDSharp.Native.csproj" />
   </ItemGroup>
 

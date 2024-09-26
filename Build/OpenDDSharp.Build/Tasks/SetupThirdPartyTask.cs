@@ -117,11 +117,7 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib";
-                if (BuildContext.IsOSX)
-                {
-                    arguments += " --std=c++11";
-                }
+                var arguments = " -v --ace-tao=ace8tao4 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib --std=c++17";
                 context.Log.Information(arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings
@@ -149,7 +145,7 @@ namespace OpenDDSharp.Build.Tasks
                 });
 
                 var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}"; // -vcvars_ver=14.36.32532
-                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test";
+                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v -ace-tao=ace8tao4 --no-test --std=c++17";
                 if (context.BuildConfiguration == "Release")
                 {
                     arguments += " --no-debug --optimize";
