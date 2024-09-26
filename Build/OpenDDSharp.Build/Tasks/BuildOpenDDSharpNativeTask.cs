@@ -94,6 +94,10 @@ namespace OpenDDSharp.Build.Tasks
             {
                 buildSettings.Configuration = context.BuildConfiguration;
             }
+            else
+            {
+                buildSettings.Configuration = "Release";
+            }
             context.CMakeBuild(buildSettings);
         }
     }
