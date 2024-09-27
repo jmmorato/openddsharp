@@ -176,11 +176,11 @@
   <!--Create cmake-->
   <Target Name="OpenDDSharpCmakeOpenddsx64" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x64' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec Command="cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake -DCMAKE_BUILD_TYPE=$(Configuration) -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsx86" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x86' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec Command="cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake -DCMAKE_BUILD_TYPE=$(Configuration) -DCMAKE_PREFIX_PATH=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
@@ -198,7 +198,7 @@
   <!--Build cmake-->
   <Target Name="OpenDDSharpConfigureBuildCmakeWindowsX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\NativeProject\$(ProjectName).dll')" Condition="'$(IsWindows)'=='true'">
 	  <Message Text="Configuring cmake project..." Importance="High" />
-	  <Exec Command="cmake --build . --config Release" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpConfigureBuildCmakeLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\NativeProject\lib$(ProjectName).so')" Condition="'$(IsLinux)'=='true'">
 	  <Message Text="Configuring cmake project..." Importance="High" />
@@ -206,7 +206,7 @@
   </Target>
   <Target Name="OpenDDSharpConfigureBuildCmakeOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\lib$(ProjectName).dylib')" Condition="'$(IsOSX)'=='true'">
     <Message Text="Configure cmake project..." Importance="High" />
-    <Exec ToolExe="sh" Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="cmake --build . --config Release" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Generate OpenDDSharp IDL files-->
