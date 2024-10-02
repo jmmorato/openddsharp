@@ -117,7 +117,7 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = " -v --ace-tao=ace8tao4 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib --std=c++17";
+                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib --std=c++14";
                 context.Log.Information(arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings
@@ -144,8 +144,8 @@ namespace OpenDDSharp.Build.Tasks
                     Version = version,
                 });
 
-                var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}"; // -vcvars_ver=14.36.32532
-                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v -ace-tao=ace8tao4 --no-test --std=c++17";
+                var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}";
+                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test --std=c++14";
                 if (context.BuildConfiguration == "Release")
                 {
                     arguments += " --no-debug --optimize";
@@ -161,6 +161,7 @@ namespace OpenDDSharp.Build.Tasks
                     Arguments = arguments,
                     WorkingDirectory = context.DdsRoot,
                 });
+
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
@@ -224,10 +225,10 @@ namespace OpenDDSharp.Build.Tasks
             {
                 try
                 {
-                    var output = process.GetStandardOutput();
+                    var output = process.GetStandardOutput().ToList();
                     if (output.Any())
                     {
-                        return output.First();
+                        return output[0];
                     }
                 }
                 catch
