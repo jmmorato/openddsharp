@@ -2,19 +2,21 @@ using System.Globalization;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using CdrWrapper;
+using OpenDDSharp.OpenDDS.RTPS;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
 internal sealed class OpenDDSharpLatencyTest : IDisposable
 {
     private const int DOMAIN_ID = 42;
+    private const string RTPS_DISCOVERY = "RtpsDiscovery";
 
     private readonly ManualResetEventSlim _evt;
     private readonly Random _random = new ();
     private readonly int _totalInstances;
     private readonly int _totalSamples;
-    private readonly byte[] _payload;
     private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
+    private readonly KeyedOctets _sample;
 
     private int _count;
 
@@ -35,39 +37,39 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _totalSamples = totalSamples;
         _evt = new ManualResetEventSlim(false);
 
-        _payload = new byte[totalPayload];
-        _random.NextBytes(_payload);
+        var payload = new byte[totalPayload];
+        _random.NextBytes(payload);
 
         InitializeDDSEntities();
+
+        _count = 0;
+
+        _readerThread.Start();
+        _sample = new KeyedOctets
+        {
+            ValueField = payload,
+        };
     }
 
     public IList<TimeSpan> Run()
     {
-        _count = 0;
-
         var latencyHistory = new List<TimeSpan>();
-
-        _readerThread.Start();
-        var sample = new KeyedOctets
-        {
-            ValueField = _payload,
-        };
 
         for (var i = 1; i <= _totalSamples; i++)
         {
             for (var j = 1; j <= _totalInstances; j++)
             {
-                sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
+                _sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
 
                 if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
                 {
-                    instanceHandle = _dataWriter.RegisterInstance(sample);
+                    instanceHandle = _dataWriter.RegisterInstance(_sample);
                     _instanceHandles.Add(j, instanceHandle);
                 }
 
                 var publicationTime = DateTime.UtcNow.Ticks;
 
-                _dataWriter.Write(sample, instanceHandle);
+                _dataWriter.Write(_sample, instanceHandle);
 
                 _evt.Wait();
 
@@ -76,7 +78,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
                 latencyHistory.Add(latency);
 
                 _evt.Reset();
-            };
+            }
         }
 
         _readerThread.Join();
@@ -86,6 +88,25 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     private void InitializeDDSEntities()
     {
+        Ace.Init();
+
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            SedpMulticast = false,
+            SedpLocalAddress = "127.0.0.1:0",
+            SpdpLocalAddress = "127.0.0.1:0",
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 1,
+                MicroSeconds = 0,
+            },
+        };
+
+        ParticipantService.Instance.AddDiscovery(disc);
+        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
+
+
         _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
 
         var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
@@ -108,8 +129,6 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
                 Seconds = 0,
                 MicroSeconds = 500_000,
             },
-            SendBufferSize = 1048576,
-            RcvBufferSize = 4194304,
         };
         config.Insert(transport);
 
@@ -134,12 +153,11 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             History =
              {
                  Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                 Depth = 10,
+                 Depth = 1,
              },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
-        // TransportRegistry.Instance.BindConfig(configName, _dataWriter);
 
         var subQos = new SubscriberQos
         {
@@ -153,12 +171,11 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             History =
              {
                  Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                 Depth = 10,
+                 Depth = 1,
              },
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);
-        // TransportRegistry.Instance.BindConfig(configName1, _dataReader);
 
         _dataWriter.Enable();
         _dataReader.Enable();
@@ -214,5 +231,10 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         _participant.DeleteContainedEntities();
         _dpf.DeleteParticipant(_participant);
+
+        ParticipantService.Instance.Shutdown();
+
+        Ace.Fini();
+
     }
 }

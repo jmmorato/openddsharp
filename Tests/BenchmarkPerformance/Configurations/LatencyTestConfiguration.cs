@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BenchmarkDotNet.Configs;
+﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
@@ -12,7 +11,11 @@ internal class LatencyTestConfiguration : ManualConfig
 {
     public LatencyTestConfiguration()
     {
-        AddJob(Job.Default.WithIterationCount(1).WithToolchain(InProcessEmitToolchain.Instance));
+        AddJob(Job.Default
+            .WithIterationCount(10)
+            .WithUnrollFactor(1)
+            .WithInvocationCount(1)
+            .WithToolchain(InProcessEmitToolchain.Instance));
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new LatencyAverageColumn());
         AddColumn(new LatencyDeviationColumn());

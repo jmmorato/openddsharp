@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using BenchmarkDotNet.Attributes;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by BenchmarkDotNet.")]
 public class LatencyTest
 {
     private OpenDDSharpLatencyTest _openDDSharpLatencyTest;

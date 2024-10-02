@@ -114,6 +114,13 @@ jobs:
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
         fail-on-error: false
 
+    - name: Performance Test
+      shell: pwsh
+      run: |                
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
+        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
+      working-directory: ${{ github.workspace }}
+
   build_linux:
     runs-on: ubuntu-20.04
 
@@ -242,6 +249,13 @@ jobs:
         parallel: true
         flag-name: coverage-linux-x64-Release
         fail-on-error: false
+
+    - name: Performance Test
+      shell: pwsh
+      run: |
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
+        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance.exe 1
+      working-directory: ${{ github.workspace }}
 
   build_macos_x64:
     runs-on: macos-13
@@ -512,4 +526,6 @@ jobs:
           parallel-finished: true
           carryforward: coverage-windows-x64-Release,coverage-windows-x86-Release,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release
           fail-on-error: false
+
+
 
