@@ -68,7 +68,7 @@ public class LatencyTest
         _latencyHistory = _openDDSharpLatencyTest.Run();
     }
 
-    [Benchmark]
+    // [Benchmark]
     public void RtiConnextLatencyTest()
     {
         _latencyHistory= _rtiConnextLatencyTest.Run();
