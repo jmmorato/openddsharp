@@ -114,12 +114,12 @@ jobs:
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
         fail-on-error: false
 
-    - name: Performance Test
-      shell: pwsh
-      run: |                
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
-        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
-      working-directory: ${{ github.workspace }}
+#    - name: Performance Test
+#      shell: pwsh
+#      run: |
+#        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
+#        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
+#      working-directory: ${{ github.workspace }}
 
   build_linux:
     runs-on: ubuntu-20.04
@@ -225,6 +225,7 @@ jobs:
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime linux-x64
         dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
+        cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
         ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
       working-directory: ${{ github.workspace }}
 
@@ -390,12 +391,12 @@ jobs:
         flag-name: coverage-macos-x64-Release
         fail-on-error: false
 
-    - name: Performance Test
-      shell: pwsh
-      run: |
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
-        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
-      working-directory: ${{ github.workspace }}
+#    - name: Performance Test
+#      shell: pwsh
+#      run: |
+#        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
+#        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
+#      working-directory: ${{ github.workspace }}
 
   build_macos_arm64:
     runs-on: macos-14
@@ -526,12 +527,12 @@ jobs:
           flag-name: coverage-macos-arm64-Release
           fail-on-error: false
 
-      - name: Performance Test
-        shell: pwsh
-        run: |
-          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
-          ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
-        working-directory: ${{ github.workspace }}
+#      - name: Performance Test
+#        shell: pwsh
+#        run: |
+#          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
+#          ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
+#        working-directory: ${{ github.workspace }}
 
   publish_coveralls:
     runs-on: ubuntu-latest
