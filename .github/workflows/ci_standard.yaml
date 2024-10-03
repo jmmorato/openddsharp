@@ -220,7 +220,7 @@ jobs:
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
 
     - name: Performance Test
-      shell: pwsh
+      shell: bash
       run: |        
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime linux-x64
         dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
