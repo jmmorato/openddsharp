@@ -117,11 +117,11 @@ jobs:
     - name: Latency Performance Test
       shell: cmd
       run: |
-        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
-        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish
-        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance 1
+        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
       working-directory: ${{ github.workspace }}
 
   build_linux:
@@ -225,13 +225,13 @@ jobs:
     - name: Latency Performance Test
       shell: bash
       run: |        
-        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime linux-x64
-        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime linux-x64
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
         export LD_LIBRARY_PATH="./:$LD_LIBRARY_PATH"
         export LD_FALLBACK_LIBRARY_PATH="./:$LD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
-        sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
+        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
       working-directory: ${{ github.workspace }}
 
     - name: Test OpenDDSharp
@@ -399,13 +399,13 @@ jobs:
     - name: Latency Performance Test
       shell: bash
       run: |
-        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime osx-x64
-        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-x64
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64
         export DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
         export DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
-        sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
+        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
       working-directory: ${{ github.workspace }}
 
   build_macos_arm64:
@@ -540,13 +540,13 @@ jobs:
       - name: Latency Performance Test
         shell: bash
         run: |
-          dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime osx-arm64
-          dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
-          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
+          dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-arm64
+          dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64
+          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64
           export DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
           export DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
-          sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
+          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
         working-directory: ${{ github.workspace }}
 
   publish_coveralls:

@@ -103,6 +103,7 @@ public class LatencyTest
         _latencyHistory = _openDDSharpLatencyTest.Run();
     }
 
+    // Cannot run without a valid RTI Connext license.
     // [Benchmark]
     public void RtiConnextLatencyTest()
     {
