@@ -144,6 +144,8 @@ internal sealed class RtiConnextLatencyTest : IDisposable
         {
             IsBackground = true,
         };
+
+        Thread.Sleep(2_000);
     }
 
     private void ReaderThread()
