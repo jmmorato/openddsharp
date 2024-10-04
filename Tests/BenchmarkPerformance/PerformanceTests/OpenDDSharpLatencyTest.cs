@@ -2,14 +2,12 @@ using System.Globalization;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using CdrWrapper;
-using OpenDDSharp.OpenDDS.RTPS;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
 internal sealed class OpenDDSharpLatencyTest : IDisposable
 {
     private const int DOMAIN_ID = 42;
-    private const string RTPS_DISCOVERY = "RtpsDiscovery";
 
     private readonly ManualResetEventSlim _evt;
     private readonly Random _random = new ();
@@ -88,25 +86,6 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     private void InitializeDDSEntities()
     {
-        Ace.Init();
-
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
-        {
-            SedpMulticast = false,
-            SedpLocalAddress = "127.0.0.1:0",
-            SpdpLocalAddress = "127.0.0.1:0",
-            ResendPeriod = new TimeValue
-            {
-                Seconds = 1,
-                MicroSeconds = 0,
-            },
-        };
-
-        ParticipantService.Instance.AddDiscovery(disc);
-        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
-
-
         _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
 
         var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
@@ -231,10 +210,5 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         _participant.DeleteContainedEntities();
         _dpf.DeleteParticipant(_participant);
-
-        ParticipantService.Instance.Shutdown();
-
-        Ace.Fini();
-
     }
 }

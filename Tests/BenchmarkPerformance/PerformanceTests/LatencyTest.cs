@@ -2,12 +2,17 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using BenchmarkDotNet.Attributes;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
+using OpenDDSharp.OpenDDS.DCPS;
+using OpenDDSharp.OpenDDS.RTPS;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by BenchmarkDotNet.")]
 public class LatencyTest
 {
+    private const int DOMAIN_ID = 42;
+    private const string RTPS_DISCOVERY = "RtpsDiscovery";
+
     private OpenDDSharpLatencyTest _openDDSharpLatencyTest;
     private RtiConnextLatencyTest _rtiConnextLatencyTest;
     private IList<TimeSpan> _latencyHistory;
@@ -29,6 +34,36 @@ public class LatencyTest
     /// </summary>
     [Params(512, 1024, 2048)]
     public ulong TotalPayload { get; set; }
+
+    [GlobalSetup(Target = nameof(OpenDDSharpLatencyTest))]
+    public void OpenDDSharpGlobalSetup()
+    {
+        Ace.Init();
+
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            SedpMulticast = false,
+            SedpLocalAddress = "127.0.0.1:0",
+            SpdpLocalAddress = "127.0.0.1:0",
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 1,
+                MicroSeconds = 0,
+            },
+        };
+
+        ParticipantService.Instance.AddDiscovery(disc);
+        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
+    }
+
+    [GlobalCleanup(Target = nameof(OpenDDSharpLatencyTest))]
+    public void OpenDDSharpGlobalCleanup()
+    {
+        ParticipantService.Instance.Shutdown();
+
+        Ace.Fini();
+    }
 
     [IterationSetup(Target = nameof(OpenDDSharpLatencyTest))]
     public void OpenDDSharpIterationSetup()

@@ -114,12 +114,15 @@ jobs:
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
         fail-on-error: false
 
-#    - name: Performance Test
-#      shell: pwsh
-#      run: |
-#        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
-#        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
-#      working-directory: ${{ github.workspace }}
+    - name: Latency Performance Test
+      shell: cmd
+      run: |
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime win-${{ matrix.BuildPlatform }}
+        cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish
+        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance 1
+      working-directory: ${{ github.workspace }}
 
   build_linux:
     runs-on: ubuntu-20.04
@@ -219,17 +222,16 @@ jobs:
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
 
-    - name: Performance Test
+    - name: Latency Performance Test
       shell: bash
       run: |        
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime linux-x64
         dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime linux-x64
-        sudo su
         export LD_LIBRARY_PATH="./:$LD_LIBRARY_PATH"
         export LD_FALLBACK_LIBRARY_PATH="./:$LD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
-        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
+        sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
       working-directory: ${{ github.workspace }}
 
     - name: Test OpenDDSharp
@@ -394,12 +396,17 @@ jobs:
         flag-name: coverage-macos-x64-Release
         fail-on-error: false
 
-#    - name: Performance Test
-#      shell: pwsh
-#      run: |
-#        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
-#        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
-#      working-directory: ${{ github.workspace }}
+    - name: Latency Performance Test
+      shell: bash
+      run: |
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime osx-x64
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-x64
+        export DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
+        export DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
+        cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
+        sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
+      working-directory: ${{ github.workspace }}
 
   build_macos_arm64:
     runs-on: macos-14
@@ -530,12 +537,17 @@ jobs:
           flag-name: coverage-macos-arm64-Release
           fail-on-error: false
 
-#      - name: Performance Test
-#        shell: pwsh
-#        run: |
-#          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
-#          ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
-#        working-directory: ${{ github.workspace }}
+      - name: Latency Performance Test
+        shell: bash
+        run: |
+          dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --framework net8.0 --runtime osx-arm64
+          dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
+          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --framework net8.0 --runtime osx-arm64
+          export DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
+          export DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
+          cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
+          sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
+        working-directory: ${{ github.workspace }}
 
   publish_coveralls:
     runs-on: ubuntu-latest
@@ -548,6 +560,3 @@ jobs:
           parallel-finished: true
           carryforward: coverage-windows-x64-Release,coverage-windows-x86-Release,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release
           fail-on-error: false
-
-
-
