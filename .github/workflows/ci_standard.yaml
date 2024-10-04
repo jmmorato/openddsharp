@@ -119,12 +119,11 @@ jobs:
       run: |
         dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj
         dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj
-        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build -m:1 ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build -m:1 ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish
         ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
-      working-directory: ${{ github.workspace }}
 
   build_linux:
     runs-on: ubuntu-20.04
