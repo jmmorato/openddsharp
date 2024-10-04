@@ -70,10 +70,11 @@ add_library(OpenDDSWrapper SHARED
         MultiTopic.h MultiTopic.cpp)
 
 if (MSVC)
-    add_compile_options(/bigobj /O2 /wd4190)
-    add_compile_definitions(NDEBUG)
+    add_compile_options(/bigobj /wd4190)
+    add_compile_definitions(NOMINMAX)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
     add_compile_definitions(_WINSOCK_DEPRECATED_NO_WARNINGS)
+    set(CMAKE_CXX_FLAGS_RELEASE "/O2 /Oi /D NDEBUG /MT")
 elseif (APPLE)
     target_compile_options(OpenDDSWrapper PUBLIC -Wpointer-arith -Wno-switch -Wno-return-type-c-linkage -Wno-tautological-pointer-compare -pthread)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG")

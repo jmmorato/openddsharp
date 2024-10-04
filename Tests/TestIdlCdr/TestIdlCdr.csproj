@@ -162,7 +162,7 @@
   <!--Generate OpenDDSharp Wrapper files-->
   <Target Name="OpenDDSharpIdlWrapperWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl.exe&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlWrapperLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.h')" Condition="'$(IsLinux)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
@@ -216,7 +216,7 @@
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharpWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl.exe&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />

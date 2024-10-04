@@ -117,6 +117,8 @@ jobs:
     - name: Latency Performance Test
       shell: pwsh
       run: |
+        dotnet clean ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj
+        dotnet clean ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj
         dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj
         dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj
         dotnet build -m:1 ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
@@ -124,6 +126,10 @@ jobs:
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish
         ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
+      env:
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/TAO"
 
   build_linux:
     runs-on: ubuntu-20.04

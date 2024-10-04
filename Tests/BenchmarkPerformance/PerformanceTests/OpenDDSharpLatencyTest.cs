@@ -98,16 +98,6 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         {
             UseMulticast = false,
             LocalAddress = "127.0.0.1:0",
-            NakResponseDelay = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 10_000,
-            },
-            HeartbeatPeriod = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 500_000,
-            },
         };
         config.Insert(transport);
 
@@ -130,10 +120,10 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         {
             Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
             History =
-             {
-                 Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                 Depth = 1,
-             },
+            {
+                Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+                Depth = 1,
+            },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
@@ -148,10 +138,10 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         {
             Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
             History =
-             {
-                 Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                 Depth = 1,
-             },
+            {
+                Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
+                Depth = 1,
+            },
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);
@@ -169,6 +159,8 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             IsBackground = true,
             Priority = ThreadPriority.Highest,
         };
+
+        Thread.Sleep(2_000);
     }
 
     private void ReaderThreadProc()
