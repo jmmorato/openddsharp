@@ -228,8 +228,8 @@ jobs:
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime linux-x64
         dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
-        export LD_LIBRARY_PATH="./:$LD_LIBRARY_PATH"
-        export LD_FALLBACK_LIBRARY_PATH="./:$LD_FALLBACK_LIBRARY_PATH"
+        sudo env LD_LIBRARY_PATH="./:$LD_LIBRARY_PATH"
+        sudo env LD_FALLBACK_LIBRARY_PATH="./:$LD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
         sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
       working-directory: ${{ github.workspace }}
@@ -402,8 +402,8 @@ jobs:
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-x64
         dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64
-        export DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
-        export DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
+        sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
+        sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
         sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
       working-directory: ${{ github.workspace }}
@@ -543,8 +543,8 @@ jobs:
           dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-arm64
           dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64
           dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64
-          export DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
-          export DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
+          sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
+          sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
           sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
         working-directory: ${{ github.workspace }}
