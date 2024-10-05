@@ -115,20 +115,20 @@ jobs:
         fail-on-error: false
 
     - name: Latency Performance Test
-      shell: pwsh
+      shell: cmd
       run: |
-        dotnet clean ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj
-        dotnet clean ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj
-        dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj
-        dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj
-        dotnet build -m:1 ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        dotnet build -m:1 ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        dotnet run ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj 1 --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet clean ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
+        dotnet clean ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
+        dotnet restore ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
+        dotnet restore ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
+        dotnet build -m:1 ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build -m:1 ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet run ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj 1 --configuration Release --runtime win-${{ matrix.BuildPlatform }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/TAO"
-        PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/lib;${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/lib;%PATH%"
+        DDS_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}"
+        ACE_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\TAO"
+        PATH: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;%PATH%"
 
   build_linux:
     runs-on: ubuntu-20.04

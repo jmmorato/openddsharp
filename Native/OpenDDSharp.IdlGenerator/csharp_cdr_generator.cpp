@@ -839,6 +839,15 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       ret = implement_to_cdr_field(typedef_type->base_type(), field_name, indent);
       break;
     }
+    case AST_Decl::NT_struct: {
+      ret.append("    var cdr = ");
+      ret.append(field_name);
+      ret.append(".ToCDR();\n");
+
+      ret.append(indent);
+      ret.append("    writer.WriteBytes(cdr);\n");
+      break;
+    }
     case AST_Decl::NT_string: {
       ret.append("    writer.WriteString(");
       ret.append(field_name);
@@ -1322,6 +1331,22 @@ csharp_cdr_generator::implement_from_cdr(const std::vector<AST_Field *> &fields,
   }
 
   ret.append(indent);
+  ret.append("}\n\n");
+
+  ret.append(indent);
+  ret.append("public void FromCDR(OpenDDSharp.Marshaller.Cdr.CdrReader reader)\n");
+  ret.append(indent);
+  ret.append("{\n");
+
+  for (unsigned int i = 0; i < fields.size(); i++) {
+    AST_Field *field = fields[i];
+    AST_Type *field_type = field->field_type();
+    const char *field_name = field->local_name()->get_string();
+
+    ret.append(implement_from_cdr_field(field_type, field_name, indent));
+  }
+
+  ret.append(indent);
   ret.append("}\n");
 
   return ret;
@@ -1337,6 +1362,19 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
     case AST_Decl::NT_typedef: {
       AST_Typedef *typedef_type = dynamic_cast<AST_Typedef *>(field_type);
       ret = implement_from_cdr_field(typedef_type->base_type(), field_name, indent);
+      break;
+    }
+    case AST_Decl::NT_struct: {
+      ret.append("    ");
+      ret.append(field_name);
+      ret.append(" = new ");
+      ret.append(replaceString(std::string(field_type->full_name()), std::string("::"), std::string(".")));
+      ret.append("();\n");
+
+      ret.append(indent);
+      ret.append("    ");
+      ret.append(field_name);
+      ret.append(".FromCDR(reader);\n");
       break;
     }
     case AST_Decl::NT_string:  {

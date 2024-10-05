@@ -116,6 +116,24 @@ module CdrWrapper {
     typedef TestEnum EnumMultiArrayType[3][4][2];
 
     @topic
+    struct NestedStruct {
+        long Id;
+        string Message;
+    };
+
+    typedef sequence<NestedStruct> UnboundedStructSequenceType;
+    typedef sequence<NestedStruct, 5> BoundedStructSequenceType;
+
+    typedef NestedStruct StructArrayType[5];
+
+    typedef NestedStruct StructMultiArrayType[3][4][2];
+
+    @topic
+    struct TestStruct {
+        NestedStruct NestedStructField;
+    };
+
+    @topic
     struct TestPrimitive {
         boolean BoolField;
         octet ByteField;

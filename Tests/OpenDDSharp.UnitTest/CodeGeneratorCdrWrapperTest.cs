@@ -1836,6 +1836,77 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
+        /// Test the code generated for the structures types.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructuresTypes()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStructTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStructDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStructDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStruct();
+
+            var data = new TestStruct
+            {
+                NestedStructField = new NestedStruct { Id = 1, Message = "Do androids dream of electric sheep?" },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStruct();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+
+            Assert.AreEqual(ReturnCode.Ok, ret);
+            Assert.IsNotNull(received.NestedStructField);
+            Assert.AreEqual(data.NestedStructField.Id, received.NestedStructField.Id);
+            Assert.AreEqual(data.NestedStructField.Message, received.NestedStructField.Message);
+
+            Assert.AreEqual(typeof(NestedStruct), data.NestedStructField.GetType());
+
+            Assert.IsNotNull(defaultStruct.NestedStructField);
+            Assert.AreEqual(0, defaultStruct.NestedStructField.Id);
+            Assert.AreEqual(string.Empty, defaultStruct.NestedStructField.Message);
+        }
+
+        /// <summary>
         /// Test the code generated for the constants.
         /// </summary>
         [TestMethod]
