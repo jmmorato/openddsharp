@@ -123,13 +123,12 @@ jobs:
         dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj
         dotnet build -m:1 ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         dotnet build -m:1 ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish
-        ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/win-${{ matrix.BuildPlatform }}/publish/BenchmarkPerformance.exe 1
+        dotnet run ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj 1 --configuration Release --runtime win-${{ matrix.BuildPlatform }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/TAO"
+        PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/lib;${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/lib;%PATH%"
 
   build_linux:
     runs-on: ubuntu-20.04
