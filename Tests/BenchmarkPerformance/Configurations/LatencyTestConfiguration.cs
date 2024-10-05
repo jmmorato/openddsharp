@@ -14,7 +14,10 @@ internal class LatencyTestConfiguration : ManualConfig
         AddJob(Job.Default
             .WithIterationCount(10)
             .WithUnrollFactor(1)
-            .WithInvocationCount(1));
+            .WithInvocationCount(1)
+            .WithToolchain(InProcessEmitToolchain.Instance));
+
+        WithOption(ConfigOptions.DisableOptimizationsValidator, true);
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new LatencyAverageColumn());
         AddColumn(new LatencyDeviationColumn());
