@@ -117,6 +117,7 @@ jobs:
     - name: Latency Performance Test
       shell: cmd
       run: |
+        set PATH="${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;%PATH%"
         dotnet clean ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
         dotnet clean ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
         dotnet restore ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
@@ -128,7 +129,6 @@ jobs:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers\\TAO"
-        PATH: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\lib;${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers\\lib;%PATH%"
 
   build_linux:
     runs-on: ubuntu-20.04

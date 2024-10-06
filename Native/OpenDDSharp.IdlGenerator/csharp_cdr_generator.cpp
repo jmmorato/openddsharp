@@ -840,12 +840,10 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       break;
     }
     case AST_Decl::NT_struct: {
-      ret.append("    var cdr = ");
-      ret.append(field_name);
-      ret.append(".ToCDR();\n");
-
       ret.append(indent);
-      ret.append("    writer.WriteBytes(cdr);\n");
+      ret.append("    writer.WriteBytes(");
+      ret.append(field_name);
+      ret.append(".ToCDR());\n");
       break;
     }
     case AST_Decl::NT_string: {
@@ -1579,6 +1577,12 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           ret.append(" = (reader.ReadEnumSequence().Select(e => (");
           ret.append(replaceString(std::string(base_type->full_name()), std::string("::"), std::string(".")));
           ret.append(")e)).ToList();\n");
+          break;
+        }
+        case AST_Decl::NT_struct: {
+          ret.append("    ");
+          ret.append(field_name);
+          ret.append(" = reader.ReadStructSequence();\n");
           break;
         }
       }
