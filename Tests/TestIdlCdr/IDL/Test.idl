@@ -134,6 +134,12 @@ module CdrWrapper {
     };
 
     @topic
+    struct TestStructSequence {
+        UnboundedStructSequenceType UnboundedStructSequenceField;
+        BoundedStructSequenceType BoundedStructSequenceField;
+    };
+
+    @topic
     struct TestPrimitive {
         boolean BoolField;
         octet ByteField;

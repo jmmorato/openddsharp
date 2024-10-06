@@ -824,6 +824,24 @@ csharp_cdr_generator::implement_to_cdr(const std::vector<AST_Field *> &fields, c
   ret.append(indent);
   ret.append("}\n\n");
 
+  ret.append(indent);
+  ret.append("public ReadOnlySpan<byte> ToCDR(OpenDDSharp.Marshaller.Cdr.CdrWriter writer)\n");
+  ret.append(indent);
+  ret.append("{\n");
+
+  for (unsigned int i = 0; i < fields.size(); i++) {
+    AST_Field *field = fields[i];
+    AST_Type *field_type = field->field_type();
+    const char *field_name = field->local_name()->get_string();
+
+    ret.append(implement_to_cdr_field(field_type, field_name, indent));
+  }
+
+  ret.append(indent);
+  ret.append("    return writer.GetBuffer();\n");
+  ret.append(indent);
+  ret.append("}\n\n");
+
   return ret;
 }
 
@@ -1051,6 +1069,51 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           ret.append("    writer.WriteEnumSequence((");
           ret.append(field_name);
           ret.append(".Select(e => (uint)e)).ToList());\n");
+          break;
+        }
+        case AST_Decl::NT_struct: {
+          ret.append("    if (");
+          ret.append(field_name);
+          ret.append(" != null && ");
+          ret.append(field_name);
+          ret.append(".Count > 0)\n");
+
+          ret.append(indent);
+          ret.append("    {\n");
+
+          ret.append(indent);
+          ret.append("        writer.WriteUInt32((uint)");
+          ret.append(field_name);
+          ret.append(".Count);\n");
+
+          ret.append(indent);
+          ret.append("        foreach (var s in ");
+          ret.append(field_name);
+          ret.append(")\n");
+
+          ret.append(indent);
+          ret.append("        {\n");
+
+          ret.append(indent);
+          ret.append("            s.ToCDR(writer);\n");
+
+          ret.append(indent);
+          ret.append("        }\n");
+
+          ret.append(indent);
+          ret.append("    }\n");
+
+          ret.append(indent);
+          ret.append("    else\n");
+
+          ret.append(indent);
+          ret.append("    {\n");
+
+          ret.append(indent);
+          ret.append("        writer.WriteUInt32(0);\n");
+
+          ret.append(indent);
+          ret.append("    }\n");
           break;
         }
         default:
@@ -1582,7 +1645,39 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
         case AST_Decl::NT_struct: {
           ret.append("    ");
           ret.append(field_name);
-          ret.append(" = reader.ReadStructSequence();\n");
+          ret.append(" = new List<");
+          ret.append(replaceString(std::string(base_type->full_name()), std::string("::"), std::string(".")));
+          ret.append(">();\n");
+
+          ret.append(indent);
+          ret.append("    var count");
+          ret.append(field_name);
+          ret.append(" = reader.ReadUInt32();\n");
+
+          ret.append(indent);
+          ret.append("    for (int i = 0; i < count");
+          ret.append(field_name);
+          ret.append("; i++)\n");
+
+          ret.append(indent);
+          ret.append("    {\n");
+
+          ret.append(indent);
+          ret.append("        var aux = new ");
+          ret.append(replaceString(std::string(base_type->full_name()), std::string("::"), std::string(".")));
+          ret.append("();\n");
+
+          ret.append(indent);
+          ret.append("        aux.FromCDR(reader);\n");
+
+          ret.append(indent);
+          ret.append("        ");
+          ret.append(field_name);
+          ret.append(".Add(aux);\n");
+
+          ret.append(indent);
+          ret.append("    }\n");
+
           break;
         }
       }

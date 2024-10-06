@@ -1907,6 +1907,102 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
+        /// Test the code generated for the sequence of structures.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructureSequences()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStructSequenceTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStructSequenceDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStructSequenceDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStructSequence();
+
+            var data = new TestStructSequence
+            {
+                UnboundedStructSequenceField =
+                {
+                    new NestedStruct { Id = 1, Message = "With your feet in the air and your head on the ground" },
+                    new NestedStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
+                    new NestedStruct { Id = 3, Message = "Your head will collapse" },
+                    new NestedStruct { Id = 4, Message = "But there's nothing in it" },
+                    new NestedStruct { Id = 5, Message = "And you'll ask yourself" },
+                    new NestedStruct { Id = 6, Message = "Where is my mind?" },
+                },
+                BoundedStructSequenceField =
+                {
+                    new NestedStruct { Id = 1, Message = "With your feet in the air and your head on the ground" },
+                    new NestedStruct { Id = 2, Message = "Try this trick and spin it, yeah" },
+                    new NestedStruct { Id = 3, Message = "Your head will collapse" },
+                    new NestedStruct { Id = 4, Message = "But there's nothing in it" },
+                    new NestedStruct { Id = 5, Message = "And you'll ask yourself" },
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStructSequence();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            for (var i = 1; i < data.BoundedStructSequenceField.Count; i++)
+            {
+                Assert.AreEqual(data.BoundedStructSequenceField[i].Id, received.BoundedStructSequenceField[i].Id);
+                Assert.AreEqual(data.BoundedStructSequenceField[i].Message, received.BoundedStructSequenceField[i].Message);
+            }
+            for (var i = 1; i < data.BoundedStructSequenceField.Count; i++)
+            {
+                Assert.AreEqual(data.UnboundedStructSequenceField[i].Id, received.UnboundedStructSequenceField[i].Id);
+                Assert.AreEqual(data.UnboundedStructSequenceField[i].Message, received.UnboundedStructSequenceField[i].Message);
+            }
+
+            Assert.AreEqual(data.BoundedStructSequenceField.GetType(), typeof(List<NestedStruct>));
+            Assert.AreEqual(data.UnboundedStructSequenceField.GetType(), typeof(List<NestedStruct>));
+
+            Assert.IsNotNull(defaultStruct.BoundedStructSequenceField);
+            Assert.AreEqual(0, defaultStruct.BoundedStructSequenceField.Count);
+            Assert.IsNotNull(defaultStruct.UnboundedStructSequenceField);
+            Assert.AreEqual(0, defaultStruct.UnboundedStructSequenceField.Count);
+        }
+
+        /// <summary>
         /// Test the code generated for the constants.
         /// </summary>
         [TestMethod]
