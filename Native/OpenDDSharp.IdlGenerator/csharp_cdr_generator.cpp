@@ -81,8 +81,8 @@ bool csharp_cdr_generator::gen_module_end() {
 }
 
 bool csharp_cdr_generator::gen_const(UTL_ScopedName *name, bool nestedInInteface, AST_Constant *constant) {
-  std::string csharp_type("");
-  std::string str_value("");
+  std::string csharp_type;
+  std::string str_value;
 
   switch (constant->et()) {
     case AST_Expression::EV_short:
@@ -269,7 +269,7 @@ csharp_cdr_generator::gen_union(AST_Union *, UTL_ScopedName *name, const std::ve
 
 std::string
 csharp_cdr_generator::declare_struct_fields(const std::vector<AST_Field *> &fields, const std::string indent) {
-  std::string ret("");
+  std::string ret;
 
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
@@ -321,7 +321,7 @@ csharp_cdr_generator::implement_struct_constructor(const std::vector<AST_Field *
 
 std::string
 csharp_cdr_generator::implement_struct_properties(const std::vector<AST_Field *> &fields, const std::string indent) {
-  std::string ret("");
+  std::string ret;
 
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
@@ -387,16 +387,13 @@ csharp_cdr_generator::get_csharp_type(AST_Type *type) {
 
   switch (node_type) {
     case AST_Decl::NT_union:
-    case AST_Decl::NT_struct: {
-      ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
-      break;
-    }
+    case AST_Decl::NT_struct:
     case AST_Decl::NT_enum: {
       ret = replaceString(std::string(type->full_name()), std::string("::"), std::string("."));
       break;
     }
     case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(type);
+      auto *typedef_type = dynamic_cast<AST_Typedef*>(type);
       ret = get_csharp_type(typedef_type->base_type());
       break;
     }
@@ -410,7 +407,7 @@ csharp_cdr_generator::get_csharp_type(AST_Type *type) {
       break;
     }
     case AST_Decl::NT_pre_defined: {
-      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType*>(type);
+      auto *predefined_type = dynamic_cast<AST_PredefinedType*>(type);
 
       switch (predefined_type->pt()) {
         case AST_PredefinedType::PT_int8:
@@ -460,7 +457,7 @@ csharp_cdr_generator::get_csharp_type(AST_Type *type) {
       break;
     }
     case AST_Decl::NT_array: {
-      AST_Array *arr_type = dynamic_cast<AST_Array*>(type);
+      auto *arr_type = dynamic_cast<AST_Array*>(type);
       std::string base_type = get_csharp_type(arr_type->base_type());
 
       ret = base_type;
@@ -472,7 +469,7 @@ csharp_cdr_generator::get_csharp_type(AST_Type *type) {
       break;
     }
     case AST_Decl::NT_sequence: {
-      AST_Sequence *seq_type = dynamic_cast<AST_Sequence*>(type);
+      auto *seq_type = dynamic_cast<AST_Sequence*>(type);
       std::string base_type = get_csharp_type(seq_type->base_type());
 
       ret = "IList<";
@@ -501,7 +498,7 @@ csharp_cdr_generator::get_csharp_default_value(AST_Type *type, const char *field
       break;
     }
     case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(type);
+      auto *typedef_type = dynamic_cast<AST_Typedef*>(type);
       ret = get_csharp_default_value(typedef_type->base_type(), field_name);
       break;
     }
@@ -515,7 +512,7 @@ csharp_cdr_generator::get_csharp_default_value(AST_Type *type, const char *field
       break;
     }
     case AST_Decl::NT_pre_defined: {
-      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType*>(type);
+      auto *predefined_type = dynamic_cast<AST_PredefinedType*>(type);
       switch (predefined_type->pt()) {
         case AST_PredefinedType::PT_int8:
         case AST_PredefinedType::PT_uint8:
@@ -542,7 +539,7 @@ csharp_cdr_generator::get_csharp_default_value(AST_Type *type, const char *field
       break;
     }
     case AST_Decl::NT_array: {
-      AST_Array *arr_type = dynamic_cast<AST_Array*>(type);
+      auto *arr_type = dynamic_cast<AST_Array*>(type);
       std::string base_type = get_csharp_type(arr_type->base_type());
       AST_Expression **dims = arr_type->dims();
       AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
@@ -592,7 +589,7 @@ csharp_cdr_generator::get_csharp_default_value(AST_Type *type, const char *field
       break;
     }
     case AST_Decl::NT_sequence: {
-      AST_Sequence *seq_type = dynamic_cast<AST_Sequence*>(type);
+      auto *seq_type = dynamic_cast<AST_Sequence*>(type);
       std::string base_type = get_csharp_type(seq_type->base_type());
 
       ret = "new List<";
@@ -615,16 +612,16 @@ csharp_cdr_generator::get_csharp_default_value(AST_Type *type, const char *field
 std::string
 csharp_cdr_generator::get_csharp_constructor_initialization(AST_Type *type, const char *name) {
   AST_Decl::NodeType node_type = type->node_type();
-  std::string ret("");
+  std::string ret;
 
   switch (node_type) {
     case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(type);
+      auto *typedef_type = dynamic_cast<AST_Typedef*>(type);
       ret = get_csharp_constructor_initialization(typedef_type->base_type(), name);
       break;
     }
     case AST_Decl::NT_array: {
-      AST_Array *arr_type = dynamic_cast<AST_Array*>(type);
+      auto *arr_type = dynamic_cast<AST_Array*>(type);
       std::string base_type = get_csharp_type(arr_type->base_type());
       AST_Expression **dims = arr_type->dims();
       AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
@@ -927,7 +924,7 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
   AST_Decl::NodeType node_type = field_type->node_type();
   switch (node_type) {
     case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(field_type);
+      auto *typedef_type = dynamic_cast<AST_Typedef*>(field_type);
       ret = implement_to_cdr_field(typedef_type->base_type(), field_name, indent);
       break;
     }
@@ -951,7 +948,7 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       break;
     }
     case AST_Decl::NT_pre_defined: {
-      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
+      auto *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
       switch (predefined_type->pt()) {
         case AST_PredefinedType::PT_int8:
           ret.append("    writer.WriteSByte(");
@@ -1037,13 +1034,13 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       break;
     }
     case AST_Decl::NT_sequence: {
-      AST_Sequence *seq_type = dynamic_cast<AST_Sequence*>(field_type);
+      auto *seq_type = dynamic_cast<AST_Sequence*>(field_type);
       AST_Type *base_type = seq_type->base_type();
       AST_Decl::NodeType base_node_type = base_type->node_type();
 
       switch (base_node_type) {
         case AST_Decl::NT_pre_defined: {
-          AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
+          auto *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
               ret.append("    writer.WriteSByteSequence(");
@@ -1565,7 +1562,7 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
   AST_Decl::NodeType node_type = field_type->node_type();
   switch (node_type) {
     case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef *>(field_type);
+      auto *typedef_type = dynamic_cast<AST_Typedef *>(field_type);
       ret = implement_from_cdr_field(typedef_type->base_type(), field_name, indent);
       break;
     }
@@ -1595,7 +1592,7 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
       break;
     }
     case AST_Decl::NT_pre_defined: {
-      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
+      auto *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
       switch (predefined_type->pt()) {
         case AST_PredefinedType::PT_int8:
           ret.append("    ");
@@ -1676,13 +1673,13 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
       break;
     }
     case AST_Decl::NT_sequence: {
-      AST_Sequence *seq_type = dynamic_cast<AST_Sequence *>(field_type);
+      auto *seq_type = dynamic_cast<AST_Sequence *>(field_type);
       AST_Type *base_type = seq_type->base_type();
       AST_Decl::NodeType base_node_type = base_type->node_type();
 
       switch (base_node_type) {
         case AST_Decl::NT_pre_defined: {
-          AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
+          auto *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
               ret.append("    ");
@@ -1828,14 +1825,14 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
       break;
     }
     case AST_Decl::NT_array: {
-      AST_Array *arr_type = dynamic_cast<AST_Array *>(field_type);
+      auto *arr_type = dynamic_cast<AST_Array *>(field_type);
       AST_Type *base_type = arr_type->base_type();
       AST_Expression **dims = arr_type->dims();
       AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
       unsigned int total_dim = arr_type->n_dims();
       switch (base_node_type) {
         case AST_Decl::NT_pre_defined: {
-          AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
+          auto *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
               if (total_dim == 1) {
@@ -2351,7 +2348,7 @@ csharp_cdr_generator::read_cdr_struct_multi_array(std::string name, std::string 
 std::string
 csharp_cdr_generator::write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent)
 {
-  std::string ret("");
+  std::string ret;
 
   indent.append("    ");
   std::string loop_indent(indent);
@@ -2397,7 +2394,7 @@ csharp_cdr_generator::write_cdr_multi_array(std::string name, std::string csharp
 std::string
 csharp_cdr_generator::write_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent)
 {
-  std::string ret("");
+  std::string ret;
 
   indent.append("    ");
   std::string loop_indent(indent);

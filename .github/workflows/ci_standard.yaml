@@ -114,7 +114,7 @@ jobs:
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
         fail-on-error: false
 
-    - name: Add lib folders to path
+    - name: Add OpenDDS lib folders to path
       shell: pwsh
       run: |
         $env:PATH = "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;$env:PATH"
@@ -129,7 +129,7 @@ jobs:
         dotnet restore ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
         dotnet build -m:1 ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         dotnet build -m:1 ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        dotnet run ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj -1 --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet run ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj 1 --configuration Release --runtime win-${{ matrix.BuildPlatform }}
       env:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
