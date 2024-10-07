@@ -2003,6 +2003,89 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
+        /// Test the code generated for the array of structures.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructureArrays()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStructArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStructArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStructArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStructArray();
+
+            var data = new TestStructArray
+            {
+                StructArrayField = new[]
+                {
+                    new NestedStruct { Message = "Pressure pushing down on me", Id = 1 },
+                    new NestedStruct { Message = "Pressing down on you, no man ask for", Id = 2 },
+                    new NestedStruct { Message = "Under pressure that burns a building down", Id = 3 },
+                    new NestedStruct { Message = "Splits a family in two", Id = 4 },
+                    new NestedStruct { Message = "Puts people on streets", Id = 5 },
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStructArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            for (var i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(data.StructArrayField[i].Id, received.StructArrayField[i].Id);
+                Assert.AreEqual(data.StructArrayField[i].Message, received.StructArrayField[i].Message);
+            }
+
+            Assert.AreEqual(typeof(NestedStruct[]), data.StructArrayField.GetType());
+
+            Assert.IsNotNull(defaultStruct.StructArrayField);
+            Assert.AreEqual(5, defaultStruct.StructArrayField.Length);
+            foreach (var s in defaultStruct.StructArrayField)
+            {
+                Assert.IsNotNull(s);
+            }
+        }
+
+        /// <summary>
         /// Test the code generated for the constants.
         /// </summary>
         [TestMethod]
