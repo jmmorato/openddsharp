@@ -117,8 +117,8 @@ jobs:
     - name: Add lib folders to path
       shell: pwsh
       run: |
-          $env:PATH = "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;$env:PATH"
-          echo "PATH=$env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        $env:PATH = "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;$env:PATH"
+        echo "PATH=$env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Latency Performance Test
       shell: cmd
