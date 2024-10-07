@@ -145,6 +145,11 @@ module CdrWrapper {
     };
 
     @topic
+    struct TestStructMultiArray {
+        StructMultiArrayType StructMultiArrayField;
+    };
+
+    @topic
     struct TestPrimitive {
         boolean BoolField;
         octet ByteField;

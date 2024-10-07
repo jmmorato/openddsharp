@@ -1196,7 +1196,7 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       break;
     }
     case AST_Decl::NT_array: {
-      AST_Array *arr_type = dynamic_cast<AST_Array *>(field_type);
+      auto *arr_type = dynamic_cast<AST_Array *>(field_type);
       AST_Type *base_type = arr_type->base_type();
       AST_Expression **dims = arr_type->dims();
       AST_Decl::NodeType base_node_type = arr_type->base_type()->node_type();
@@ -1497,6 +1497,8 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
             ret.append(indent);
             ret.append("    }\n");
 
+          } else {
+            ret.append(write_cdr_struct_multi_array(field_name, struct_type, dims, total_dim, indent));
           }
           break;
         }
@@ -2079,7 +2081,7 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
             ret.append(indent);
             ret.append("    }\n");
           } else {
-            ret.append(read_cdr_multi_array(field_name, replaceString(std::string(base_type->full_name()), std::string("::"), std::string(".")), "FromCDR", dims, total_dim, indent));
+            ret.append(read_cdr_struct_multi_array(field_name, replaceString(std::string(base_type->full_name()), std::string("::"), std::string(".")), dims, total_dim, indent));
           }
           break;
         }
@@ -2162,9 +2164,13 @@ csharp_cdr_generator::read_cdr_multi_array(std::string name, std::string csharp_
       ret.append("][");
     }
   }
-  ret.append("] = reader.");
-  ret.append(read_method);
-  ret.append("();\n");
+  if (read_method == "FromCDR") {
+    ret.append("].FromCDR(reader);\n");
+  } else {
+    ret.append("] = reader.");
+    ret.append(read_method);
+    ret.append("();\n");
+  }
 
   for (ACE_UINT32 i = 0; i < total_dim; i++) {
     loop_indent.erase(0, 4);
@@ -2243,6 +2249,95 @@ csharp_cdr_generator::read_cdr_enum_multi_array(std::string name, std::string cs
   ret.append(")reader.");
   ret.append(read_method);
   ret.append("();\n");
+
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    loop_indent.erase(0, 4);
+    ret.append(loop_indent);
+    ret.append("}\n");
+  }
+
+  return ret;
+}
+
+std::string
+csharp_cdr_generator::read_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent)
+{
+  std::string ret("    ");
+
+  ret.append(name);
+  ret.append(" = new ");
+  ret.append(csharp_base_type);
+  ret.append("[");
+  ret.append(std::to_string(dims[0]->ev()->u.ulval));
+  ret.append("]");
+  for (unsigned int i = 1; i < total_dim; ++i) {
+    ret.append("[]");
+  }
+  ret.append(";\n");
+
+  indent.append("    ");
+  std::string loop_indent(indent);
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append(loop_indent);
+    ret.append("for (int i");
+    ret.append(std::to_string(i));
+    ret.append(" = 0; i");
+    ret.append(std::to_string(i));
+    ret.append(" < ");
+    ret.append(std::to_string(dims[i]->ev()->u.ulval));
+    ret.append("; ++i");
+    ret.append(std::to_string(i));
+    ret.append(") {\n");
+
+    loop_indent.append("    ");
+
+    if (i + 1 < total_dim) {
+      ret.append(loop_indent);
+      ret.append(name);
+      for (unsigned int j = 0; j < i + 1; ++j) {
+
+        ret.append("[i");
+        ret.append(std::to_string(j));
+        ret.append("]");
+      }
+      ret.append(" = new ");
+      ret.append(csharp_base_type);
+      ret.append("[");
+      ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
+      ret.append("]");
+      for (unsigned int j = i + 2; j < total_dim; ++j) {
+        ret.append("[]");
+      }
+      ret.append(";\n");
+    }
+  }
+
+  ret.append(loop_indent);
+  ret.append(name);
+  ret.append("[");
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append("i");
+    ret.append(std::to_string(i));
+    if (i + 1 < total_dim) {
+      ret.append("][");
+    }
+  }
+  ret.append("] = new ");
+  ret.append(csharp_base_type);
+  ret.append("();\n");
+
+
+  ret.append(loop_indent);
+  ret.append(name);
+  ret.append("[");
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append("i");
+    ret.append(std::to_string(i));
+    if (i + 1 < total_dim) {
+      ret.append("][");
+    }
+  }
+  ret.append("].FromCDR(reader);\n");
 
   for (ACE_UINT32 i = 0; i < total_dim; i++) {
     loop_indent.erase(0, 4);
@@ -2335,6 +2430,80 @@ csharp_cdr_generator::write_cdr_enum_multi_array(std::string name, std::string c
     }
   }
   ret.append("]);\n");
+
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    loop_indent.erase(0, 4);
+    ret.append(loop_indent);
+    ret.append("}\n");
+  }
+
+  return ret;
+}
+
+std::string
+csharp_cdr_generator::write_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent)
+{
+  std::string ret;
+
+  indent.append("    ");
+  std::string loop_indent(indent);
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append(loop_indent);
+    ret.append("for (int i");
+    ret.append(std::to_string(i));
+    ret.append(" = 0; i");
+    ret.append(std::to_string(i));
+    ret.append(" < ");
+    ret.append(std::to_string(dims[i]->ev()->u.ulval));
+    ret.append("; ++i");
+    ret.append(std::to_string(i));
+    ret.append(") {\n");
+
+    loop_indent.append("    ");
+  }
+
+  ret.append(loop_indent);
+  ret.append("if (");
+  ret.append(name);
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append("[i");
+    ret.append(std::to_string(i));
+    ret.append("]");
+  }
+  ret.append(" == null)\n");
+
+  ret.append(loop_indent);
+  ret.append("{\n");
+
+  loop_indent.append("    ");
+
+  ret.append(loop_indent);
+  ret.append(name);
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append("[i");
+    ret.append(std::to_string(i));
+    ret.append("]");
+  }
+  ret.append(" = new ");
+  ret.append(csharp_base_type);
+  ret.append("();\n");
+
+  loop_indent.erase(0, 4);
+
+  ret.append(loop_indent);
+  ret.append("}\n");
+
+  ret.append(loop_indent);
+  ret.append(name);
+  ret.append("[");
+  for (ACE_UINT32 i = 0; i < total_dim; i++) {
+    ret.append("i");
+    ret.append(std::to_string(i));
+    if (i + 1 < total_dim) {
+      ret.append("][");
+    }
+  }
+  ret.append("].ToCDR(writer);\n");
 
   for (ACE_UINT32 i = 0; i < total_dim; i++) {
     loop_indent.erase(0, 4);

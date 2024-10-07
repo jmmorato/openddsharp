@@ -2086,6 +2086,165 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
+        /// Test the code generated for the multi-array of structures.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestGeneratedStructureMultiArrays()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            var typeSupport = new TestStructMultiArrayTypeSupport();
+            var typeName = typeSupport.GetTypeName();
+            var ret = typeSupport.RegisterType(_participant, typeName);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            _topic = _participant.CreateTopic(TestContext.TestName, typeName);
+            Assert.IsNotNull(_topic);
+
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var dr = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(dr);
+            var dataReader = new TestStructMultiArrayDataReader(dr);
+
+            var dw = _publisher.CreateDataWriter(_topic);
+            Assert.IsNotNull(dw);
+            var dataWriter = new TestStructMultiArrayDataWriter(dw);
+
+            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
+            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
+
+            var statusCondition = dr.StatusCondition;
+            Assert.IsNotNull(statusCondition);
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+            TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+            var defaultStruct = new TestStructMultiArray();
+
+            var data = new TestStructMultiArray
+            {
+                StructMultiArrayField = new[]
+                {
+                    new[]
+                    {
+                        new[]
+                        {
+                            new NestedStruct{ Id = 1, Message = "01" },
+                            new NestedStruct{ Id = 2, Message = "02" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 3, Message = "03" },
+                            new NestedStruct { Id = 4, Message = "04" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 5, Message = "05" },
+                            new NestedStruct { Id = 6, Message = "06" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 7, Message = "07" },
+                            new NestedStruct { Id = 8, Message = "08" },
+                        },
+                    },
+                    new[]
+                    {
+                        new[]
+                        {
+                            new NestedStruct { Id = 9, Message = "09" },
+                            new NestedStruct { Id = 10, Message = "10" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 11, Message = "11" },
+                            new NestedStruct { Id = 12, Message = "12" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 13, Message = "13" },
+                            new NestedStruct { Id = 14, Message = "14" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct { Id = 15, Message = "15" },
+                            new NestedStruct{ Id = 16, Message = "16" },
+                        },
+                    },
+                    new[]
+                    {
+                        new[]
+                        {
+                            new NestedStruct{ Id = 17, Message = "17" },
+                            new NestedStruct{ Id = 18, Message = "18" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct{ Id = 19, Message = "19" },
+                            new NestedStruct{ Id = 20, Message = "20" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct{ Id = 21, Message = "21" },
+                            new NestedStruct{ Id = 22, Message = "22" },
+                        },
+                        new[]
+                        {
+                            new NestedStruct{ Id = 23, Message = "23" },
+                            new NestedStruct{ Id = 24, Message = "24" },
+                        },
+                    },
+                },
+            };
+
+            ret = dataWriter.Write(data);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            Assert.IsTrue(evt.Wait(1_500));
+
+            var received = new TestStructMultiArray();
+            var sampleInfo = new SampleInfo();
+            ret = dataReader.ReadNextSample(received, sampleInfo);
+            Assert.AreEqual(ReturnCode.Ok, ret);
+
+            for (var i0 = 0; i0 < 3; i0++)
+            {
+                for (var i1 = 0; i1 < 4; i1++)
+                {
+                    for (var i2 = 0; i2 < 2; i2++)
+                    {
+                        Assert.AreEqual(data.StructMultiArrayField[i0][i1][i2].Id,
+                            received.StructMultiArrayField[i0][i1][i2].Id);
+                        Assert.AreEqual(data.StructMultiArrayField[i0][i1][i2].Message,
+                            received.StructMultiArrayField[i0][i1][i2].Message);
+                    }
+                }
+            }
+
+            Assert.AreEqual(typeof(NestedStruct[][][]), data.StructMultiArrayField.GetType());
+
+            for (var i0 = 0; i0 < 3; i0++)
+            {
+                for (var i1 = 0; i1 < 4; i1++)
+                {
+                    for (var i2 = 0; i2 < 2; i2++)
+                    {
+                        Assert.IsNotNull(defaultStruct.StructMultiArrayField[i0][i1][i2]);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Test the code generated for the constants.
         /// </summary>
         [TestMethod]

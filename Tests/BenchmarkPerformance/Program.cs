@@ -61,14 +61,15 @@ switch (input)
 
         Ace.Fini();
 
-        var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
-        stopwatch.Reset();
-        stopwatch.Start();
-        test1.Run();
-        stopwatch.Stop();
-        test1.Dispose();
-
-        Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
+         // // Requires RTI Connext DDS valid license.
+         // var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
+         // stopwatch.Reset();
+         // stopwatch.Start();
+         // test1.Run();
+         // stopwatch.Stop();
+         // test1.Dispose();
+         //
+         // Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
         break;
     case "1":
         {
