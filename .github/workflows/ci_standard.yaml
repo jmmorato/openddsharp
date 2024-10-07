@@ -129,7 +129,7 @@ jobs:
         dotnet restore ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
         dotnet build -m:1 ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         dotnet build -m:1 ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
-        dotnet run --project ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj 1 --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet run --project ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj "-1" --configuration Release --runtime win-${{ matrix.BuildPlatform }}
       env:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
