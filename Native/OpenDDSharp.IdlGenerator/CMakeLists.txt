@@ -1,11 +1,10 @@
-project(openddsharp_idl CXX)
-cmake_minimum_required(VERSION 3.8.2)
+cmake_minimum_required(VERSION 3.19.2)
 
-if (APPLE)
-    set(CMAKE_CXX_STANDARD 14)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-endif ()
+project(openddsharp_idl CXX)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(OpenDDS REQUIRED)
 
