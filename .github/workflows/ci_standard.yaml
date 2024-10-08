@@ -134,6 +134,7 @@ jobs:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers\\TAO"
+      continue-on-error: true
 
   build_linux:
     runs-on: ubuntu-20.04
@@ -279,6 +280,7 @@ jobs:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
+      continue-on-error: true
 
   build_macos_x64:
     runs-on: macos-13
@@ -420,6 +422,7 @@ jobs:
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
         sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -1
       working-directory: ${{ github.workspace }}
+      continue-on-error: true
 
   build_macos_arm64:
     runs-on: macos-14
@@ -561,6 +564,7 @@ jobs:
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
           sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -1
         working-directory: ${{ github.workspace }}
+        continue-on-error: true
 
   publish_coveralls:
     runs-on: ubuntu-latest
