@@ -71,6 +71,13 @@ int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr d
     return dw->register_instance(sample);
 }
 
+int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+
+    return dw->register_instance(sample);
+}
+
 int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::Time_t time)
 {
     <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);

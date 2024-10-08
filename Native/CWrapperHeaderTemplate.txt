@@ -23,6 +23,8 @@ EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%S
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::Time_t time);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_LookupInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data);

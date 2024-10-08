@@ -56,6 +56,8 @@ private:
 
     std::string get_csharp_constructor_initialization(AST_Type *type, const char *name);
 
+    std::string get_csharp_struct_array_constructor_initialization(AST_Type *type, const char *name, std::string loop_indent);
+
     std::string implement_to_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
 
     std::string implement_to_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
@@ -68,9 +70,13 @@ private:
 
     std::string read_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent);
 
+    std::string read_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent);
+
     std::string write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
 
     std::string write_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
+
+    std::string write_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent);
 };
 
 #endif
