@@ -16,6 +16,7 @@
     <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
     <RootNamespace>TestIdlCdr</RootNamespace>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 

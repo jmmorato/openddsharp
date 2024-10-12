@@ -53,6 +53,16 @@
         {
             return JsonSerializer.Deserialize(str, typeof(<%TYPE%>), _serializerContext) as <%TYPE%>;
         }
+
+        public byte[] EncodeToBytes(<%TYPE%> sample)
+        {
+            throw new NotImplementedException();
+        }
+
+        public <%TYPE%> DecodeFromBytes(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 

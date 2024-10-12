@@ -59,6 +59,13 @@ int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%SCOPED%>DataWriter_ptr
     return dw->write_w_timestamp(sample, handle, time);
 }
 
+int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, ::DDS::Time_t time)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+
+    return dw->write_w_timestamp(sample, handle, time);
+}
+
 int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data)
 {
     <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
@@ -90,6 +97,13 @@ int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWri
     return dw->register_instance_w_timestamp(sample, time);
 }
 
+int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::Time_t time)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+
+    return dw->register_instance_w_timestamp(sample, time);
+}
+
 int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle)
 {
     <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
@@ -98,6 +112,13 @@ int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json(<%SCOPED%>DataWriter_ptr
         return ::DDS::RETCODE_ERROR;
     }
     <%SCOPED%> sample = samplev.in();
+
+    return dw->unregister_instance(sample, handle);
+}
+
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::InstanceHandle_t handle)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
 
     return dw->unregister_instance(sample, handle);
 }
@@ -114,6 +135,13 @@ int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json(<%SCOPED%>DataW
     return dw->unregister_instance_w_timestamp(sample, handle, time);
 }
 
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+
+    return dw->unregister_instance_w_timestamp(sample, handle, time);
+}
+
 int <%SCOPED_METHOD%>DataWriter_LookupInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data)
 {
     <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
@@ -122,6 +150,13 @@ int <%SCOPED_METHOD%>DataWriter_LookupInstance_Json(<%SCOPED%>DataWriter_ptr dw,
         return ::DDS::RETCODE_ERROR;
     }
     <%SCOPED%> sample = samplev.in();
+
+    return dw->lookup_instance(sample);
+}
+
+int <%SCOPED_METHOD%>DataWriter_LookupInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
 
     return dw->lookup_instance(sample);
 }
@@ -138,6 +173,13 @@ int <%SCOPED_METHOD%>DataWriter_Dispose_Json(<%SCOPED%>DataWriter_ptr dw, const 
     return dw->dispose(sample, handle);
 }
 
+int <%SCOPED_METHOD%>DataWriter_Dispose_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+
+    return dw->dispose(sample, handle);
+}
+
 int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time)
 {
     <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
@@ -146,6 +188,13 @@ int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json(<%SCOPED%>DataWriter_ptr d
         return ::DDS::RETCODE_ERROR;
     }
     <%SCOPED%> sample = samplev.in();
+
+    return dw->dispose_w_timestamp(sample, handle, time);
+}
+
+int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, ::DDS::Time_t time)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
 
     return dw->dispose_w_timestamp(sample, handle, time);
 }
@@ -160,6 +209,21 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>DataWriter_ptr dw, ch
         <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
         <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
         json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
+    }
+
+    return ret;
+}
+
+int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr(<%SCOPED%>DataWriter_ptr dw, char* & cdr_data, size_t & size, int handle)
+{
+    <%SCOPED%> sample_key;
+    ::DDS::ReturnCode_t ret = dw->get_key_value(sample_key, handle);
+
+    if (ret == ::DDS::RETCODE_OK)
+    {
+        <%SCOPED%> sample;
+        <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
+        <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size);
     }
 
     return ret;
