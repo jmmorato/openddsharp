@@ -1,6 +1,23 @@
 	public class <%TYPE%>TypeSupport : ITypeSupport<<%TYPE%>>
     {
         #region Fields
+        private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = false,
+            AllowTrailingCommas = true,
+            Converters =
+            {
+                new JsonStringEnumConverter(),
+                new OctetArrayConverter(),
+                new FloatJsonConverter(),
+                new DoubleJsonConverter(),
+                new DecimalJsonConverter(),
+            },
+        };
+
+        private static readonly <%TYPE%>SerializerContext _serializerContext = new <%TYPE%>SerializerContext(_serializerOptions);
+
         private IntPtr _native;
         #endregion
 
@@ -29,14 +46,12 @@
 
         public string EncodeToString(<%TYPE%> sample)
         {
-            return string.Empty; // sample.ToCDR();
+            return JsonSerializer.Serialize(sample, typeof(<%TYPE%>), _serializerContext);
         }
 
-        public <%TYPE%> DecodeFromString(string data)
+        public <%TYPE%> DecodeFromString(string str)
         {
-            var sample = new <%TYPE%>();
-            //sample.FromCDR(data);
-            return sample;
+            return JsonSerializer.Deserialize(str, typeof(<%TYPE%>), _serializerContext) as <%TYPE%>;
         }
 
         public byte[] EncodeToBytes(<%TYPE%> sample)
@@ -59,22 +74,22 @@
 #if NET7_0_OR_GREATER
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial IntPtr <%TYPE%>TypeSupportNew();
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_GetTypeName", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial IntPtr GetTypeName(IntPtr native);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_RegisterType", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial int RegisterType(IntPtr native, IntPtr dp, string typeName);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial int UnregisterType(IntPtr native, IntPtr dp, string typeName);
 #else
         [SuppressUnmanagedCodeSecurity]
@@ -93,6 +108,12 @@
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         internal static extern int UnregisterType(IntPtr native, IntPtr dp, string typeName);
 #endif
+    }
+
+    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default)]
+    [JsonSerializable(typeof(<%TYPE%>))]
+    public partial class <%TYPE%>SerializerContext : JsonSerializerContext
+    {
     }
 
     public class <%TYPE%>DataWriter : DataWriter
@@ -128,10 +149,9 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var str = _typeSupport.EncodeToString(instance);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(instance);
 
-            ret = <%TYPE%>DataWriterNative.RegisterInstanceTimestamp(_native, json_data, timestamp);
+            ret = <%TYPE%>DataWriterNative.RegisterInstanceTimestamp(_native, bytes, (UIntPtr)bytes.Length, timestamp);
 
             return ret;
         }
@@ -144,26 +164,23 @@
                 return ReturnCode.PreconditionNotMet;
             }
 
-            var str = _typeSupport.EncodeToString(data);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(data);
 
-	        return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstance(_native, json_data, handle);
+	        return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstance(_native, bytes, (UIntPtr)bytes.Length, handle);
         }
 
 		public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle)
         {
-            var str = _typeSupport.EncodeToString(data);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(data);
 
-            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstance(_native, json_data, handle);
+            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstance(_native, bytes, (UIntPtr)bytes.Length, handle);
         }
 
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
         {
-            var str = _typeSupport.EncodeToString(data);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(data);
 
-            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstanceTimestamp(_native, json_data, handle, timestamp);
+            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstanceTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, timestamp);
         }
 
         public ReturnCode Write(<%TYPE%> data)
@@ -196,10 +213,9 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(data);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.WriteWithTimestamp(_native, json_data, handle, timestamp);
+            ret = (ReturnCode)<%TYPE%>DataWriterNative.WriteWithTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, timestamp);
 
             return ret;
         }
@@ -218,10 +234,9 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(data);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.Dispose(_native, json_data, handle);
+            ret = (ReturnCode)<%TYPE%>DataWriterNative.Dispose(_native, bytes, (UIntPtr)bytes.Length, handle);
 
             return ret;
         }
@@ -235,10 +250,9 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(data);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.DisposeTimestamp(_native, json_data, handle, timestamp);
+            ret = (ReturnCode)<%TYPE%>DataWriterNative.DisposeTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, timestamp);
 
             return ret;
         }
@@ -257,22 +271,18 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
-            var ptr = MarshalHelper.NativeUtf8FromString(str);
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.GetKeyValue(_native, ref ptr, handle);
+            var size = UIntPtr.Zero;
+            var ptr = IntPtr.Zero;
+
+            ret = (ReturnCode)<%TYPE%>DataWriterNative.GetKeyValue(_native, ref ptr, ref size, handle);
 
             if (ret == ReturnCode.Ok)
             {
-                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
+                byte[] managedArray = new byte[(int)size];
+                Marshal.Copy(ptr, managedArray, 0, (int)size);
 
-                if (!string.IsNullOrWhiteSpace(json_data))
-                {
-                    var sample = _typeSupport.DecodeFromString(json_data);
-
-                    data.MemberwiseCopy(sample);
-                }
-
-                MarshalHelper.ReleaseNativeStringPointer(ptr);
+                var sample = _typeSupport.DecodeFromBytes(managedArray);
+                data.MemberwiseCopy(sample);
             }
 
             return ret;
@@ -282,10 +292,9 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var str = _typeSupport.EncodeToString(instance);
-            var json_data = MarshalHelper.NativeUtf8FromString(str);
+            var bytes = _typeSupport.EncodeToBytes(instance);
 
-            ret = <%TYPE%>DataWriterNative.LookupInstance(_native, json_data);
+            ret = <%TYPE%>DataWriterNative.LookupInstance(_native, bytes, (UIntPtr)bytes.Length);
 
             return ret;
         }
@@ -297,65 +306,54 @@
 #if NET7_0_OR_GREATER
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial IntPtr Narrow(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Cdr")]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial int Write(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int WriteWithTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int WriteWithTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int RegisterInstance(IntPtr dw, IntPtr jsonData);
-
-        [SuppressUnmanagedCodeSecurity]
-        [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr")]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
         internal static partial int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int RegisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int UnregisterInstance(IntPtr dw, IntPtr jsonData, int handle);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int UnregisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int LookupInstance(IntPtr dw, IntPtr jsonData);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int LookupInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int Dispose(IntPtr dw, IntPtr jsonData, int handle);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int Dispose(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DisposeTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int DisposeTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int GetKeyValue(IntPtr dw, ref IntPtr json_data, int handle);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int GetKeyValue(IntPtr dw, ref IntPtr cdrData, ref UIntPtr size, int handle);
 #else
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
@@ -366,44 +364,40 @@
         internal static extern int Write(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int WriteWithTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstance(IntPtr dw, [In] IntPtr jsonData);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int WriteWithTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int RegisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstance(IntPtr dw, [In] IntPtr jsonData, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int UnregisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int LookupInstance(IntPtr dw, [In] IntPtr jsonData);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int LookupInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Dispose(IntPtr dw, [In] IntPtr jsonData, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Dispose(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DisposeTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int DisposeTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetKeyValue(IntPtr dw, [In, Out] ref IntPtr json_data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetKeyValue(IntPtr dw, [In, Out] ref IntPtr cdrData, [In, Out] ref UIntPtr size, int handle);
 #endif
     }
 

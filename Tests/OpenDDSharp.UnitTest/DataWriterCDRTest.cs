@@ -22,7 +22,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
-using JsonWrapper;
+using CdrWrapper;
+using CdrWrapperInclude;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.UnitTest.Helpers;
@@ -34,10 +35,10 @@ namespace OpenDDSharp.UnitTest
     /// <see cref="DataWriter"/> unit test class.
     /// </summary>
     [TestClass]
-    public class DataWriterTest
+    public class DataWriterCDRTest
     {
         #region Constants
-        private const string TEST_CATEGORY = "DataWriter";
+        private const string TEST_CATEGORY = "DataWriterCDR";
         #endregion
 
         #region Fields
@@ -65,7 +66,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(_participant);
             _participant.BindRtpsUdpTransportConfig();
 
-            var support = new TestStructTypeSupport();
+            var support = new TestIncludeTypeSupport();
             var typeName = support.GetTypeName();
             var result = support.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -314,7 +315,7 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
@@ -341,9 +342,9 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                var result = dataWriter.Write(new TestStruct
+                var result = dataWriter.Write(new TestInclude
                 {
-                    Id = i,
+                    Id = i.ToString(),
                 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -381,7 +382,7 @@ namespace OpenDDSharp.UnitTest
 
             var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
             Assert.IsNotNull(dataWriter);
 
             var result = writer.AssertLiveliness();
@@ -450,7 +451,7 @@ namespace OpenDDSharp.UnitTest
             };
             var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             var statusCondition = writer.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.OfferedDeadlineMissedStatus;
@@ -469,9 +470,9 @@ namespace OpenDDSharp.UnitTest
             found = reader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
 
-            dataWriter.Write(new TestStruct
+            dataWriter.Write(new TestInclude
             {
-                Id = 1,
+                Id = "1",
             });
 
             // After half second deadline should not be lost yet
@@ -799,7 +800,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            var support = new TestStructTypeSupport();
+            var support = new TestIncludeTypeSupport();
             var typeName = support.GetTypeName();
             var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -843,7 +844,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataWriter.RegisterInstance(TestStruct, Timestamp)" /> method.
+        /// Test the <see cref="TestIncludeDataWriter.RegisterInstance(TestInclude, Timestamp)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -852,14 +853,14 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Register an instance
-            var handle = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle = dataWriter.RegisterInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             // Register an instance with timestamp
-            var otherHandle = dataWriter.RegisterInstance(new TestStruct { Id = 2 }, DateTime.Now.ToTimestamp());
+            var otherHandle = dataWriter.RegisterInstance(new TestInclude { Id = "2" }, DateTime.Now.ToTimestamp());
             Assert.AreNotEqual(InstanceHandle.HandleNil, otherHandle);
             Assert.AreNotEqual(handle, otherHandle);
 
@@ -867,7 +868,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataWriter.UnregisterInstance(TestStruct, InstanceHandle, Timestamp)" /> method.
+        /// Test the <see cref="TestIncludeDataWriter.UnregisterInstance(TestInclude, InstanceHandle, Timestamp)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -876,44 +877,44 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Unregister not registered instance
-            var result = dataWriter.UnregisterInstance(new TestStruct { Id = 1 });
+            var result = dataWriter.UnregisterInstance(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.PreconditionNotMet, result);
 
             // Register an instance
-            var instance1 = new TestStruct { Id = 1 };
+            var instance1 = new TestInclude { Id = "1" };
             var handle1 = dataWriter.RegisterInstance(instance1);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
             // Unregister the previous registered instance with the simplest overload
-            result = dataWriter.UnregisterInstance(new TestStruct { Id = 1 });
+            result = dataWriter.UnregisterInstance(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Register a new instance
-            var instance2 = new TestStruct { Id = 2 };
+            var instance2 = new TestInclude { Id = "2" };
             var handle2 = dataWriter.RegisterInstance(instance2);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle2);
 
             // Unregister the previous registered instance with the handle
-            result = dataWriter.UnregisterInstance(new TestStruct { Id = 2 }, handle2);
+            result = dataWriter.UnregisterInstance(new TestInclude { Id = "2" }, handle2);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Register a new instance
-            var instance3 = new TestStruct { Id = 3 };
+            var instance3 = new TestInclude { Id = "3" };
             var handle3 = dataWriter.RegisterInstance(instance3);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle3);
 
             // Unregister the previous registered instance with the handle and the timestamp
-            result = dataWriter.UnregisterInstance(new TestStruct { Id = 3 }, handle3, DateTime.Now.ToTimestamp());
+            result = dataWriter.UnregisterInstance(new TestInclude { Id = "3" }, handle3, DateTime.Now.ToTimestamp());
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(writer));
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataWriter.Write(TestStruct, InstanceHandle, Timestamp)" /> method.
+        /// Test the <see cref="TestIncludeDataWriter.Write(TestInclude, InstanceHandle, Timestamp)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -926,7 +927,7 @@ namespace OpenDDSharp.UnitTest
 
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
@@ -944,7 +945,7 @@ namespace OpenDDSharp.UnitTest
 
             var count = 0;
             Timestamp timestamp = default;
-            var samples = new List<TestStruct>();
+            var samples = new List<TestInclude>();
             var infos = new List<SampleInfo>();
             DataReader receivedReader = null;
 
@@ -964,7 +965,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(found);
 
             // Write an instance with the simplest overload
-            var result = dataWriter.Write(new TestStruct { Id = 1 });
+            var result = dataWriter.Write(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(duration);
@@ -976,7 +977,7 @@ namespace OpenDDSharp.UnitTest
             evt.Reset();
 
             // Write an instance with the handle parameter as HandleNil
-            result = dataWriter.Write(new TestStruct { Id = 2 }, InstanceHandle.HandleNil);
+            result = dataWriter.Write(new TestInclude { Id = "2" }, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(duration);
@@ -987,7 +988,7 @@ namespace OpenDDSharp.UnitTest
             evt.Reset();
 
             // Write an instance with the handle parameter with a previously registered instance
-            var instance = new TestStruct { Id = 3 };
+            var instance = new TestInclude { Id = "3" };
             var handle = dataWriter.RegisterInstance(instance);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
@@ -1003,7 +1004,7 @@ namespace OpenDDSharp.UnitTest
 
             // Write an instance with the handle parameter and the timestamp
             var now = DateTime.Now.ToTimestamp();
-            var instance1 = new TestStruct { Id = 4 };
+            var instance1 = new TestInclude { Id = "4" };
             var handle1 = dataWriter.RegisterInstance(instance1);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
@@ -1017,9 +1018,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(4, count);
             Assert.IsNotNull(receivedReader);
 
-            var dr = new TestStructDataReader(receivedReader);
+            var dr = new TestIncludeDataReader(receivedReader);
 
-            var lookupHandle = dr.LookupInstance(new TestStruct { Id = count });
+            var lookupHandle = dr.LookupInstance(new TestInclude { Id = count.ToString() });
             var retReadInstance = dr.ReadInstance(samples, infos, lookupHandle);
             if (retReadInstance == ReturnCode.Ok && infos.Count > 0)
             {
@@ -1051,7 +1052,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataWriter.Dispose(TestStruct, InstanceHandle, Timestamp)" /> method.
+        /// Test the <see cref="TestIncludeDataWriter.Dispose(TestInclude, InstanceHandle, Timestamp)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1067,7 +1068,7 @@ namespace OpenDDSharp.UnitTest
             };
             var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
@@ -1079,7 +1080,7 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = dataReader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var dr = new TestStructDataReader(dataReader);
+            var dr = new TestIncludeDataReader(dataReader);
 
             var evtDisposed = new ManualResetEventSlim(false);
             var evtAlive = new ManualResetEventSlim(false);
@@ -1101,7 +1102,7 @@ namespace OpenDDSharp.UnitTest
                         continue;
                     }
 
-                    var samples = new List<TestStruct>();
+                    var samples = new List<TestInclude>();
                     var infos = new List<SampleInfo>();
                     var ret = dr.Take(samples, infos);
                     if (ret != ReturnCode.Ok || !infos.Any())
@@ -1139,11 +1140,11 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(dataReader.WaitForPublications(1, 10_000));
 
             // Dispose an instance that does not exist
-            var result = dataWriter.Dispose(new TestStruct { Id = 1 }, InstanceHandle.HandleNil);
+            var result = dataWriter.Dispose(new TestInclude { Id = "1" }, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Error, result);
 
             // Call dispose with the simplest overload
-            var instance1 = new TestStruct { Id = 1 };
+            var instance1 = new TestInclude { Id = "1" };
             result = dataWriter.Write(instance1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -1166,7 +1167,7 @@ namespace OpenDDSharp.UnitTest
             evtDisposed.Reset();
 
             // Call dispose with the handle parameter
-            var instance2 = new TestStruct { Id = 2 };
+            var instance2 = new TestInclude { Id = "2" };
             var handle2 = dataWriter.RegisterInstance(instance2);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle2);
 
@@ -1193,7 +1194,7 @@ namespace OpenDDSharp.UnitTest
 
             // Call dispose with the handle parameter and specific timestamp
             var now = DateTime.Now.ToTimestamp();
-            var instance3 = new TestStruct { Id = 3 };
+            var instance3 = new TestInclude { Id = "3" };
             var handle3 = dataWriter.RegisterInstance(instance3);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle3);
 
@@ -1231,7 +1232,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataWriter.GetKeyValue(TestStruct, InstanceHandle)" /> method.
+        /// Test the <see cref="TestIncludeDataWriter.GetKeyValue(TestInclude, InstanceHandle)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1240,29 +1241,29 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Call GetKeyValue with HandleNil
-            var data = new TestStruct();
+            var data = new TestInclude();
             var result = dataWriter.GetKeyValue(data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Register an instance
-            var instance = new TestStruct { Id = 1 };
+            var instance = new TestInclude { Id = "1" };
             var handle = dataWriter.RegisterInstance(instance);
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             // Call GetKeyValue
-            data = new TestStruct();
+            data = new TestInclude();
             result = dataWriter.GetKeyValue(data, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, data.Id);
+            Assert.AreEqual("1", data.Id);
 
             _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataWriter.LookupInstance(TestStruct)" /> method.
+        /// Test the <see cref="TestIncludeDataWriter.LookupInstance(TestInclude)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1271,18 +1272,18 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Lookup for a non-existing instance
-            var handle = dataWriter.LookupInstance(new TestStruct { Id = 1 });
+            var handle = dataWriter.LookupInstance(new TestInclude { Id = "1" });
             Assert.AreEqual(InstanceHandle.HandleNil, handle);
 
             // Register an instance
-            var handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle1 = dataWriter.RegisterInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
             // Lookup for an existing instance
-            handle = dataWriter.LookupInstance(new TestStruct { Id = 1 });
+            handle = dataWriter.LookupInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
             Assert.AreEqual(handle1, handle);
 

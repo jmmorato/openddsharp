@@ -21,23 +21,39 @@ EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Write_Cdr(<%SCOPED%>DataWri
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, ::DDS::Time_t time);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::Time_t time);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::Time_t time);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_LookupInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data);
+
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_LookupInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_UnregisterInstance_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::InstanceHandle_t handle);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time);
+
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Dispose_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_Dispose_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json(<%SCOPED%>DataWriter_ptr dw, const char* json_data, int handle, ::DDS::Time_t time);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, ::DDS::Time_t time);
+
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Json(<%SCOPED%>DataWriter_ptr dw, char* & json_data, int handle);
+
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr(<%SCOPED%>DataWriter_ptr dw, char* & cdr_data, size_t & size, int handle);
 
 /////////////////////////////////////////////////
 // <%TYPE%> DataReader Methods
