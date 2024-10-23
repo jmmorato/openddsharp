@@ -59,9 +59,10 @@ int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json(<%SCOPED%>DataWriter_ptr
     return dw->write_w_timestamp(sample, handle, time);
 }
 
-int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, ::DDS::Time_t time)
+int <%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, const char* time_data, size_t time_size)
 {
     <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+    ::DDS::Time_t time = marshal::dds_time_deserialize_from_bytes(time_data, time_size);
 
     return dw->write_w_timestamp(sample, handle, time);
 }
@@ -97,9 +98,10 @@ int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json(<%SCOPED%>DataWri
     return dw->register_instance_w_timestamp(sample, time);
 }
 
-int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::Time_t time)
+int <%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, const char* time_data, size_t time_size)
 {
     <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+    ::DDS::Time_t time = marshal::dds_time_deserialize_from_bytes(time_data, time_size);
 
     return dw->register_instance_w_timestamp(sample, time);
 }
@@ -135,9 +137,10 @@ int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json(<%SCOPED%>DataW
     return dw->unregister_instance_w_timestamp(sample, handle, time);
 }
 
-int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::InstanceHandle_t handle, ::DDS::Time_t time)
+int <%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, ::DDS::InstanceHandle_t handle, const char* time_data, size_t time_size)
 {
     <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+    ::DDS::Time_t time = marshal::dds_time_deserialize_from_bytes(time_data, time_size);
 
     return dw->unregister_instance_w_timestamp(sample, handle, time);
 }
@@ -192,9 +195,10 @@ int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json(<%SCOPED%>DataWriter_ptr d
     return dw->dispose_w_timestamp(sample, handle, time);
 }
 
-int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, ::DDS::Time_t time)
+int <%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle, const char* time_data, size_t time_size)
 {
     <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+    ::DDS::Time_t time = marshal::dds_time_deserialize_from_bytes(time_data, time_size);
 
     return dw->dispose_w_timestamp(sample, handle, time);
 }

@@ -150,8 +150,9 @@
             InstanceHandle ret = InstanceHandle.HandleNil;
 
             var bytes = _typeSupport.EncodeToBytes(instance);
+            var tsBytes = timestamp.ToCDR().ToArray();
 
-            ret = <%TYPE%>DataWriterNative.RegisterInstanceTimestamp(_native, bytes, (UIntPtr)bytes.Length, timestamp);
+            ret = <%TYPE%>DataWriterNative.RegisterInstanceTimestamp(_native, bytes, (UIntPtr)bytes.Length, tsBytes, (UIntPtr)tsBytes.Length);
 
             return ret;
         }
@@ -179,8 +180,9 @@
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
         {
             var bytes = _typeSupport.EncodeToBytes(data);
+            var tsBytes = timestamp.ToCDR().ToArray();
 
-            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstanceTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, timestamp);
+            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstanceTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, tsBytes, (UIntPtr)tsBytes.Length);
         }
 
         public ReturnCode Write(<%TYPE%> data)
@@ -214,8 +216,9 @@
             ReturnCode ret = ReturnCode.Error;
 
             var bytes = _typeSupport.EncodeToBytes(data);
+            var tsBytes = timestamp.ToCDR().ToArray();
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.WriteWithTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, timestamp);
+            ret = (ReturnCode)<%TYPE%>DataWriterNative.WriteWithTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, tsBytes, (UIntPtr)tsBytes.Length);
 
             return ret;
         }
@@ -251,8 +254,9 @@
             ReturnCode ret = ReturnCode.Error;
 
             var bytes = _typeSupport.EncodeToBytes(data);
+            var tsBytes = timestamp.ToCDR().ToArray();
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.DisposeTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, timestamp);
+            ret = (ReturnCode)<%TYPE%>DataWriterNative.DisposeTimestamp(_native, bytes, (UIntPtr)bytes.Length, handle, tsBytes, (UIntPtr)tsBytes.Length);
 
             return ret;
         }
@@ -315,8 +319,9 @@
         internal static partial int Write(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int WriteWithTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int WriteWithTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr")]
@@ -324,8 +329,9 @@
         internal static partial int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int RegisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Cdr")]
@@ -333,8 +339,9 @@
         internal static partial int UnregisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int UnregisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Cdr")]
@@ -347,8 +354,9 @@
         internal static partial int Dispose(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DisposeTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int DisposeTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr")]
@@ -365,7 +373,7 @@
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int WriteWithTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        internal static extern int WriteWithTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
@@ -373,7 +381,7 @@
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        internal static extern int RegisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
@@ -381,7 +389,7 @@
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
@@ -393,7 +401,7 @@
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DisposeTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        internal static extern int DisposeTimestamp(IntPtr dw, byte[] cdrData, UIntPtr size, int handle, byte[] tsCdr, UIntPtr tsSize);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr", CallingConvention = CallingConvention.Cdecl)]
