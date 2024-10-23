@@ -124,7 +124,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(shmemInst);
             TransportRegistry.Instance.RemoveInst(inst);
 
-            // Create a instance with an invalid transport type
+            // Create an instance with an invalid transport type
             inst = TransportRegistry.Instance.CreateInst(nameof(TestCreateInst), "quantic_teletransportation");
             Assert.IsNull(inst);
 
@@ -173,11 +173,11 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetInst()
         {
-            // Get a not existing transport instance
+            // Get not existing transport instance
             var inst = TransportRegistry.Instance.GetInst(nameof(TestGetInst));
             Assert.IsNull(inst);
 
-            // Create a new transport instance an try to get it
+            // Create a new transport instance and try to get it
             var created = TransportRegistry.Instance.CreateInst(nameof(TestGetInst), "shmem");
             Assert.IsNotNull(created);
 
@@ -189,7 +189,7 @@ namespace OpenDDSharp.UnitTest
             inst = TransportRegistry.Instance.GetInst(null);
             Assert.IsNull(inst);
 
-            inst = TransportRegistry.Instance.GetInst("");
+            inst = TransportRegistry.Instance.GetInst(string.Empty);
             Assert.IsNull(inst);
 
             inst = TransportRegistry.Instance.GetInst("   ");
@@ -295,7 +295,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestGetConfig()
         {
-            // Get a not existing transport config
+            // Get not existing transport config
             var config = TransportRegistry.Instance.GetConfig(nameof(TestGetConfig));
             Assert.IsNull(config);
 
@@ -304,7 +304,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(config);
             Assert.AreEqual("_OPENDDS_DEFAULT_CONFIG", config.Name);
 
-            // Create a new transport config an try to get it
+            // Create a new transport config and try to get it
             var created = TransportRegistry.Instance.CreateConfig(nameof(TestGetConfig));
             Assert.IsNotNull(created);
 
