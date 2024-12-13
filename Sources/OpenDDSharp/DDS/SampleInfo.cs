@@ -151,7 +151,7 @@ public sealed class SampleInfo : IEquatable<SampleInfo>
     /// Converts the time value to a CDR representation.
     /// </summary>
     /// <returns>The byte span serialized.</returns>
-    internal ReadOnlySpan<byte> ToCDR()
+    public ReadOnlySpan<byte> ToCDR()
     {
         var writer = new Marshaller.Cdr.CdrWriter();
         writer.WriteBool(ValidData);
@@ -174,9 +174,29 @@ public sealed class SampleInfo : IEquatable<SampleInfo>
     /// Updates the time value from a CDR representation.
     /// </summary>
     /// <param name="data">The byte span serialized.</param>
-    internal void FromCDR(ReadOnlySpan<byte> data)
+    public void FromCDR(ReadOnlySpan<byte> data)
     {
         var reader = new Marshaller.Cdr.CdrReader(data.ToArray());
+        ValidData = reader.ReadBool();
+        SampleState = reader.ReadUInt32();
+        ViewState = reader.ReadUInt32();
+        InstanceState = reader.ReadUInt32();
+        SourceTimestamp = new Timestamp
+        {
+            Seconds = reader.ReadInt32(),
+            NanoSeconds = reader.ReadUInt32(),
+        };
+        InstanceHandle = reader.ReadInt32();
+        PublicationHandle = reader.ReadInt32();
+        DisposedGenerationCount = reader.ReadInt32();
+        NoWritersGenerationCount = reader.ReadInt32();
+        SampleRank = reader.ReadInt32();
+        GenerationRank = reader.ReadInt32();
+        AbsoluteGenerationRank = reader.ReadInt32();
+    }
+
+    public void FromCDR(Marshaller.Cdr.CdrReader reader)
+    {
         ValidData = reader.ReadBool();
         SampleState = reader.ReadUInt32();
         ViewState = reader.ReadUInt32();

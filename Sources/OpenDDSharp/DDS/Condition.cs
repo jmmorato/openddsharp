@@ -85,7 +85,7 @@ internal static partial class UnsafeNativeMethods
 #if NET7_0_OR_GREATER
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Condition_GetTriggerValue")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvSuppressGCTransition) })]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool GetTriggerValue(IntPtr c);
 #else
