@@ -904,40 +904,40 @@
             receivedData.Clear();
             receivedInfo.Clear();
 
-            IntPtr rd = IntPtr.Zero;
-            IntPtr ri = IntPtr.Zero;
+            IntPtr ptrData = IntPtr.Zero;
+            IntPtr ptrInfo = IntPtr.Zero;
+            UIntPtr sizeData = UIntPtr.Zero;
+            UIntPtr sizeInfo = UIntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
+            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextInstanceWithCondition(_native, ref ptrData, ref sizeData, ref ptrInfo, ref sizeInfo, previousHandle, maxSamples, condition.ToNative());
 
-            if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
+            if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
-                IList<string> data = new List<string>();
-                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
+                byte[] dataArray = new byte[(int)sizeData];
+                Marshal.Copy(ptrData, dataArray, 0, (int)sizeData);
 
-                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
-                MarshalHelper.PtrToSequence(ri, ref info);
+                OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
+                var total = reader.ReadUInt32();
 
-                if (data != null)
+                for (int i = 0; i < total; i++)
                 {
-                    foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
-                    }
+                    var sample = new <%TYPE%>();
+                    sample.FromCDR(reader);
+                    receivedData.Add(sample);
                 }
 
-                if (info != null && info.Count > 0)
-                {
-                    foreach (var i in info)
-                    {
-                        SampleInfo aux = new SampleInfo();
-                        aux.FromNative(i);
-                        receivedInfo.Add(aux);
-                    }
-                }
+                byte[] infoArray = new byte[(int)sizeInfo];
+                Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
+                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
+                total = reader.ReadUInt32();
 
-                MarshalHelper.ReleaseNativeStringSequence(rd);
-                MarshalHelper.ReleaseNativePointer(ri);
+                for (int i = 0; i < total; i++)
+                {
+                    var sampleInfo = new SampleInfo();
+                    sampleInfo.FromCDR(reader);
+                    receivedInfo.Add(sampleInfo);
+                }
             }
 
             return ret;
@@ -953,40 +953,40 @@
             receivedData.Clear();
             receivedInfo.Clear();
 
-            IntPtr rd = IntPtr.Zero;
-            IntPtr ri = IntPtr.Zero;
+            IntPtr ptrData = IntPtr.Zero;
+            IntPtr ptrInfo = IntPtr.Zero;
+            UIntPtr sizeData = UIntPtr.Zero;
+            UIntPtr sizeInfo = UIntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextInstance(_native, ref ptrData, ref sizeData, ref ptrInfo, ref sizeInfo, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
 
-            if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
+            if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
-                IList<string> data = new List<string>();
-                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
+                byte[] dataArray = new byte[(int)sizeData];
+                Marshal.Copy(ptrData, dataArray, 0, (int)sizeData);
 
-                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
-                MarshalHelper.PtrToSequence(ri, ref info);
+                OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
+                var total = reader.ReadUInt32();
 
-                if (data != null)
+                for (int i = 0; i < total; i++)
                 {
-                    foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
-                    }
+                    var sample = new <%TYPE%>();
+                    sample.FromCDR(reader);
+                    receivedData.Add(sample);
                 }
 
-                if (info != null && info.Count > 0)
-                {
-                    foreach (var i in info)
-                    {
-                        SampleInfo aux = new SampleInfo();
-                        aux.FromNative(i);
-                        receivedInfo.Add(aux);
-                    }
-                }
+                byte[] infoArray = new byte[(int)sizeInfo];
+                Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
+                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
+                total = reader.ReadUInt32();
 
-                MarshalHelper.ReleaseNativeStringSequence(rd);
-                MarshalHelper.ReleaseNativePointer(ri);
+                for (int i = 0; i < total; i++)
+                {
+                    var sampleInfo = new SampleInfo();
+                    sampleInfo.FromCDR(reader);
+                    receivedInfo.Add(sampleInfo);
+                }
             }
 
             return ret;
@@ -1017,40 +1017,40 @@
             receivedData.Clear();
             receivedInfo.Clear();
 
-            IntPtr rd = IntPtr.Zero;
-            IntPtr ri = IntPtr.Zero;
+           IntPtr ptrData = IntPtr.Zero;
+           IntPtr ptrInfo = IntPtr.Zero;
+           UIntPtr sizeData = UIntPtr.Zero;
+           UIntPtr sizeInfo = UIntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
+            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextInstanceWithCondition(_native, ref ptrData, ref sizeData, ref ptrInfo, ref sizeInfo, previousHandle, maxSamples, condition.ToNative());
 
-            if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
+            if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
-                IList<string> data = new List<string>();
-                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
+                byte[] dataArray = new byte[(int)sizeData];
+                Marshal.Copy(ptrData, dataArray, 0, (int)sizeData);
 
-                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
-                MarshalHelper.PtrToSequence(ri, ref info);
+                OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
+                var total = reader.ReadUInt32();
 
-                if (data != null)
+                for (int i = 0; i < total; i++)
                 {
-                    foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
-                    }
+                    var sample = new <%TYPE%>();
+                    sample.FromCDR(reader);
+                    receivedData.Add(sample);
                 }
 
-                if (info != null && info.Count > 0)
-                {
-                    foreach (var i in info)
-                    {
-                        SampleInfo aux = new SampleInfo();
-                        aux.FromNative(i);
-                        receivedInfo.Add(aux);
-                    }
-                }
+                byte[] infoArray = new byte[(int)sizeInfo];
+                Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
+                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
+                total = reader.ReadUInt32();
 
-                MarshalHelper.ReleaseNativeStringSequence(rd);
-                MarshalHelper.ReleaseNativePointer(ri);
+                for (int i = 0; i < total; i++)
+                {
+                    var sampleInfo = new SampleInfo();
+                    sampleInfo.FromCDR(reader);
+                    receivedInfo.Add(sampleInfo);
+                }
             }
 
             return ret;
@@ -1066,40 +1066,40 @@
             receivedData.Clear();
             receivedInfo.Clear();
 
-            IntPtr rd = IntPtr.Zero;
-            IntPtr ri = IntPtr.Zero;
+            IntPtr ptrData = IntPtr.Zero;
+            IntPtr ptrInfo = IntPtr.Zero;
+            UIntPtr sizeData = UIntPtr.Zero;
+            UIntPtr sizeInfo = UIntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextInstance(_native, ref ptrData, ref sizeData, ref ptrInfo, ref sizeInfo, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
 
-            if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
+            if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
-                IList<string> data = new List<string>();
-                IList<SampleInfoWrapper> info = new List<SampleInfoWrapper>();
+                byte[] dataArray = new byte[(int)sizeData];
+                Marshal.Copy(ptrData, dataArray, 0, (int)sizeData);
 
-                MarshalHelper.PtrToUTF8StringSequence(rd, ref data);
-                MarshalHelper.PtrToSequence(ri, ref info);
+                OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
+                var total = reader.ReadUInt32();
 
-                if (data != null)
+                for (int i = 0; i < total; i++)
                 {
-                    foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
-                    }
+                    var sample = new <%TYPE%>();
+                    sample.FromCDR(reader);
+                    receivedData.Add(sample);
                 }
 
-                if (info != null && info.Count > 0)
-                {
-                    foreach (var i in info)
-                    {
-                        SampleInfo aux = new SampleInfo();
-                        aux.FromNative(i);
-                        receivedInfo.Add(aux);
-                    }
-                }
+                byte[] infoArray = new byte[(int)sizeInfo];
+                Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
+                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
+                total = reader.ReadUInt32();
 
-                MarshalHelper.ReleaseNativeStringSequence(rd);
-                MarshalHelper.ReleaseNativePointer(ri);
+                for (int i = 0; i < total; i++)
+                {
+                    var sampleInfo = new SampleInfo();
+                    sampleInfo.FromCDR(reader);
+                    receivedInfo.Add(sampleInfo);
+                }
             }
 
             return ret;
@@ -1265,24 +1265,24 @@
         internal static partial int TakeInstanceWithCondition(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int ReadNextInstance(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int TakeNextInstance(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr")]
@@ -1341,20 +1341,20 @@
         internal static extern int TakeInstanceWithCondition(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ReadNextInstance(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int TakeNextInstance(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
