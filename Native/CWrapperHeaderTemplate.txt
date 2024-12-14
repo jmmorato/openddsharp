@@ -78,7 +78,11 @@ EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadWithCon
 
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
 
+EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
+
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
+
+EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_LookupInstance_Json(<%SCOPED%>DataReader_ptr dr, const char* json_data);
 
