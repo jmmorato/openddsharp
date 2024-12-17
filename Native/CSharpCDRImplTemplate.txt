@@ -1181,23 +1181,18 @@
                 return ReturnCode.BadParameter;
             }
 
-            var str = _typeSupport.EncodeToString(data);
-            var ptr = MarshalHelper.NativeUtf8FromString(str);
+            IntPtr ptrData = IntPtr.Zero;
+            UIntPtr sizeData = UIntPtr.Zero;
 
-            var ret = (ReturnCode)<%TYPE%>DataReaderNative.GetKeyValue(_native, ref ptr, handle);
+            var ret = (ReturnCode)<%TYPE%>DataReaderNative.GetKeyValue(_native, ref ptrData, ref sizeData, handle);
 
             if (ret == ReturnCode.Ok)
             {
-                var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
+                byte[] managedArray = new byte[(int)sizeData];
+                Marshal.Copy(ptrData, managedArray, 0, (int)sizeData);
 
-                if (!string.IsNullOrWhiteSpace(json_data))
-                {
-                    var sample = _typeSupport.DecodeFromString(json_data);
-
-                    data.MemberwiseCopy(sample);
-                }
-
-                MarshalHelper.ReleaseNativeStringPointer(ptr);
+                var sample = _typeSupport.DecodeFromBytes(managedArray);
+                data.MemberwiseCopy(sample);
             }
 
             return ret;
@@ -1207,9 +1202,9 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var json_data = _typeSupport.EncodeToString(instance);
+            var bytes = _typeSupport.EncodeToBytes(instance);
 
-            ret = <%TYPE%>DataReaderNative.LookupInstance(_native, json_data);
+            ret = <%TYPE%>DataReaderNative.LookupInstance(_native, bytes, (UIntPtr)bytes.Length);
 
             return ret;
         }
@@ -1295,14 +1290,14 @@
         internal static partial int TakeNextSample(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int LookupInstance(IntPtr dr, string jsonData);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int LookupInstance(IntPtr dr, byte[] cdrData, UIntPtr sizeData);
 
         [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int GetKeyValue(IntPtr dr, ref IntPtr data, int handle);
+        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue_Cdr")]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        internal static partial int GetKeyValue(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, int handle);
 #else
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
@@ -1365,11 +1360,11 @@
         internal static extern int TakeNextSample(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, ref IntPtr cdrInfo, ref UIntPtr sizeInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int LookupInstance(IntPtr dr, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int LookupInstance(IntPtr dr, byte[] cdrData, UIntPtr sizeData);
 
         [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetKeyValue(IntPtr dr, [In, Out] ref IntPtr data, int handle);
+        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue_Cdr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetKeyValue(IntPtr dr, ref IntPtr cdrData, ref UIntPtr sizeData, int handle);
 #endif
     }

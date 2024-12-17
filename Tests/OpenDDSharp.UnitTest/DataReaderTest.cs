@@ -329,7 +329,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceStateMask.AnyInstanceState, condition.InstanceStateMask);
             Assert.AreEqual(SampleStateMask.AnySampleState, condition.SampleStateMask);
             Assert.AreEqual(ViewStateMask.AnyViewState, condition.ViewStateMask);
-            Assert.AreEqual(false, condition.TriggerValue);
+            Assert.IsFalse(condition.TriggerValue);
 
             // Create a read condition with the full parameters overload
             condition = reader.CreateReadCondition(
@@ -342,7 +342,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState, condition.InstanceStateMask);
             Assert.AreEqual(SampleStateKind.ReadSampleState, condition.SampleStateMask);
             Assert.AreEqual(ViewStateKind.NotNewViewState, condition.ViewStateMask);
-            Assert.AreEqual(false, condition.TriggerValue);
+            Assert.IsFalse(condition.TriggerValue);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
@@ -369,7 +369,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceStateMask.AnyInstanceState, condition.InstanceStateMask);
             Assert.AreEqual(SampleStateMask.AnySampleState, condition.SampleStateMask);
             Assert.AreEqual(ViewStateMask.AnyViewState, condition.ViewStateMask);
-            Assert.AreEqual(false, condition.TriggerValue);
+            Assert.IsFalse(condition.TriggerValue);
             Assert.AreEqual(expression, condition.QueryExpression);
 
             var parameters = new List<string>();
@@ -391,7 +391,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceStateKind.NotAliveDisposedInstanceState | InstanceStateKind.NotAliveNoWritersInstanceState, condition.InstanceStateMask);
             Assert.AreEqual(SampleStateKind.ReadSampleState, condition.SampleStateMask);
             Assert.AreEqual(ViewStateKind.NotNewViewState, condition.ViewStateMask);
-            Assert.AreEqual(false, condition.TriggerValue);
+            Assert.IsFalse(condition.TriggerValue);
             Assert.AreEqual(expression, condition.QueryExpression);
 
             parameters = new List<string>();
@@ -432,7 +432,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceStateMask.AnyInstanceState, readCondition.InstanceStateMask);
             Assert.AreEqual(SampleStateMask.AnySampleState, readCondition.SampleStateMask);
             Assert.AreEqual(ViewStateMask.AnyViewState, readCondition.ViewStateMask);
-            Assert.AreEqual(false, readCondition.TriggerValue);
+            Assert.IsFalse(readCondition.TriggerValue);
 
             // Create a QueryCondition with the simplest overload
             var queryCondition = reader.CreateQueryCondition(expression, parameter1, parameter2);
@@ -440,7 +440,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceStateMask.AnyInstanceState, queryCondition.InstanceStateMask);
             Assert.AreEqual(SampleStateMask.AnySampleState, queryCondition.SampleStateMask);
             Assert.AreEqual(ViewStateMask.AnyViewState, queryCondition.ViewStateMask);
-            Assert.AreEqual(false, queryCondition.TriggerValue);
+            Assert.IsFalse(queryCondition.TriggerValue);
             Assert.AreEqual(expression, queryCondition.QueryExpression);
 
             var parameters = new List<string>();
@@ -1178,7 +1178,7 @@ namespace OpenDDSharp.UnitTest
 
             // OPENDDS ISSUE: Cannot use ExclusiveOwnership for the test because when calling delete_datareader
             // the BitPubListenerImpl::on_data_available take_next_sample method enter in a infinite loop if we already called
-            // the GetMatchedPublicationData. It tries to take a not_read_sample but it doesn't exists because it is already marked
+            // the GetMatchedPublicationData. It tries to take a not_read_sample but it doesn't exist because it is already marked
             // as read in the GetMatchedPublicationData call.
             drQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var reader = _subscriber.CreateDataReader(_topic, drQos);
@@ -1193,7 +1193,7 @@ namespace OpenDDSharp.UnitTest
             // https://github.com/OpenDDS/OpenDDS/blob/master/docs/design/RTPS
 
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
-            // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
+            // because it is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
             // WORKAROUND: Create another participant for the DataReader.
             var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);

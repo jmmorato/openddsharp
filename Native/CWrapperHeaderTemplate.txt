@@ -86,6 +86,8 @@ EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCon
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_LookupInstance_Json(<%SCOPED%>DataReader_ptr dr, const char* json_data);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, const char* cdr_data, size_t size);
+
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstance_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
@@ -120,9 +122,11 @@ EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextIns
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, int handle);
 
+EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_GetKeyValue_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, int handle);
+
 /*
 #include <fstream>
-    using std::ofstream;
+using std::ofstream;
 #include <iostream>
 using std::cout;
 using std::endl;

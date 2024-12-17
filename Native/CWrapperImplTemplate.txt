@@ -465,6 +465,14 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Json(<%SCOPED%>DataReader_ptr dr,
     return dr->lookup_instance(sample);
 }
 
+
+int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, const char* cdr_data, size_t size)
+{
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+
+    return dr->lookup_instance(sample);
+}
+
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
@@ -783,6 +791,21 @@ int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, ch
         <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
         <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
         json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
+    }
+
+    return ret;
+}
+
+int <%SCOPED_METHOD%>DataReader_GetKeyValue_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size_data, int handle)
+{
+    <%SCOPED%> sample_key;
+    ::DDS::ReturnCode_t ret = dr->get_key_value(sample_key, handle);
+
+    if (ret == ::DDS::RETCODE_OK)
+    {
+       <%SCOPED%> sample;
+       <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
+       <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size_data);
     }
 
     return ret;
