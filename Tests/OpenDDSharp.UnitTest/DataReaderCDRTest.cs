@@ -1225,7 +1225,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1266,7 +1265,7 @@ namespace OpenDDSharp.UnitTest
             var result = dataWriter.Write(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = dataWriter.WaitForAcknowledgments(duration);
+            result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsTrue(evt.Wait(1_500));
@@ -1288,7 +1287,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.Write(new TestInclude { Id = "1", ShortField = 2, IncludeField = new IncludeStruct { Message = "Test"} });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = dataWriter.WaitForAcknowledgments(duration);
+            result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsTrue(evt.Wait(1_500));
@@ -1355,7 +1354,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1396,7 +1394,7 @@ namespace OpenDDSharp.UnitTest
             var result = dataWriter.Write(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = dataWriter.WaitForAcknowledgments(duration);
+            result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsTrue(evt.Wait(1_500));
 
@@ -1428,7 +1426,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = "2", ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1465,7 +1463,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = "3", ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1514,7 +1512,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1559,7 +1556,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1570,7 +1567,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1663,7 +1660,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1708,7 +1704,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1719,7 +1715,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1818,7 +1814,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1858,31 +1853,31 @@ namespace OpenDDSharp.UnitTest
             found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
-            // // Write two samples of three different instances
-            // for (short i = 1; i <= 3; i++)
-            // {
-            //     evt.Reset();
-            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
-            //
-            //     result = dataWriter.Write(new TestInclude { Id = i.ToString() });
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     result = dataWriter.WaitForAcknowledgments(duration);
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     Assert.IsTrue(evt.Wait(1_500));
-            //
-            //     evt.Reset();
-            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
-            //
-            //     result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     result = dataWriter.WaitForAcknowledgments(duration);
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     Assert.IsTrue(evt.Wait(1_500));
-            // }
+            // Write two samples of three different instances
+            for (short i = 1; i <= 3; i++)
+            {
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
+
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
+            }
 
             // Read next instance with the simplest overload
             var data = new List<TestInclude>();
@@ -1950,7 +1945,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1995,7 +1989,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2006,7 +2000,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2078,7 +2072,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -2123,7 +2116,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2134,7 +2127,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2191,7 +2184,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -2236,7 +2228,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2247,7 +2239,7 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
