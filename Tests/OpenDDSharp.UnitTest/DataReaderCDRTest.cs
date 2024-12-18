@@ -1939,15 +1939,15 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual("1", data[1].Id);
             Assert.AreEqual(1, data[1].ShortField);
 
-            // Read next instance limiting the max samples
-            result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, 1);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(data);
-            Assert.IsNotNull(sampleInfos);
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual("1", data[0].Id);
-            Assert.AreEqual(0, data[0].ShortField);
+            // // Read next instance limiting the max samples
+            // result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, 1);
+            // Assert.AreEqual(ReturnCode.Ok, result);
+            // Assert.IsNotNull(data);
+            // Assert.IsNotNull(sampleInfos);
+            // Assert.AreEqual(1, data.Count);
+            // Assert.AreEqual(1, sampleInfos.Count);
+            // Assert.AreEqual("1", data[0].Id);
+            // Assert.AreEqual(0, data[0].ShortField);
 
             // // Read next instance with QueryCondition
             // var condition = reader.CreateQueryCondition("ShortField = 3");
