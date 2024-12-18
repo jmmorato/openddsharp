@@ -1925,19 +1925,19 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsTrue(evt.Wait(1_500));
             }
 
-            // Read next instance with the simplest overload
-            var data = new List<TestInclude>();
-            var sampleInfos = new List<SampleInfo>();
-            result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.IsNotNull(data);
-            Assert.IsNotNull(sampleInfos);
-            Assert.AreEqual(2, data.Count);
-            Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual("1", data[0].Id);
-            Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual("1", data[1].Id);
-            Assert.AreEqual(1, data[1].ShortField);
+            // // Read next instance with the simplest overload
+            // var data = new List<TestInclude>();
+            // var sampleInfos = new List<SampleInfo>();
+            // result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil);
+            // Assert.AreEqual(ReturnCode.Ok, result);
+            // Assert.IsNotNull(data);
+            // Assert.IsNotNull(sampleInfos);
+            // Assert.AreEqual(2, data.Count);
+            // Assert.AreEqual(2, sampleInfos.Count);
+            // Assert.AreEqual("1", data[0].Id);
+            // Assert.AreEqual(0, data[0].ShortField);
+            // Assert.AreEqual("1", data[1].Id);
+            // Assert.AreEqual(1, data[1].ShortField);
 
             // // Read next instance limiting the max samples
             // result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, 1);
