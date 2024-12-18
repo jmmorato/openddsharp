@@ -545,9 +545,8 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.SampleRejectedStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos();
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -590,9 +589,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -629,7 +626,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastPublicationHandle);
 
             // Creates a datawriter
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos
             {
                 Liveliness =
@@ -638,7 +634,7 @@ namespace OpenDDSharp.UnitTest
                     LeaseDuration = new Duration { Seconds = 1 },
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
             Assert.IsNotNull(dataWriter);
@@ -682,9 +678,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -697,9 +691,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var qos = new DataWriterQos
             {
                 Deadline =
@@ -707,7 +698,7 @@ namespace OpenDDSharp.UnitTest
                     Period = new Duration { Seconds = 1 },
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, qos);
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -755,9 +746,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -795,9 +784,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.LastPolicyId);
 
             // Create a not compatible writer
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -805,7 +791,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             Assert.IsTrue(evt.Wait(1_500));
@@ -823,9 +809,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -863,9 +847,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastPublicationHandle);
 
             // Create a not compatible writer
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -873,7 +854,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             // Wait for discovery and check the status
@@ -888,7 +869,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastPublicationHandle);
 
             // Create a compatible writer
-            var otherWriter = publisher.CreateDataWriter(_topic);
+            var otherWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(otherWriter);
 
             // Wait for discovery and check the status
@@ -904,10 +885,8 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteDataWriter(otherWriter);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
+            _publisher.DeleteDataWriter(otherWriter);
         }
 
         /// <summary>
@@ -943,9 +922,8 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.SampleLostStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos();
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -985,9 +963,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1000,9 +976,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1018,7 +991,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -1086,9 +1059,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1126,9 +1097,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Create a not compatible writer
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1136,7 +1104,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             // Wait for discovery and check the matched subscriptions
@@ -1147,7 +1115,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, list.Count);
 
             // Create a compatible writer
-            var otherWriter = publisher.CreateDataWriter(_topic);
+            var otherWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(otherWriter);
 
             // Wait for discovery and check the matched subscriptions
@@ -1160,10 +1128,8 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteDataWriter(otherWriter);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
+            _publisher.DeleteDataWriter(otherWriter);
         }
 
         /// <summary>
@@ -1278,9 +1244,6 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1288,7 +1251,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -1376,9 +1339,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1411,9 +1372,6 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1421,7 +1379,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -1537,8 +1495,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1571,9 +1528,6 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1581,7 +1535,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -1688,9 +1642,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1723,9 +1675,6 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1733,7 +1682,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -1846,9 +1795,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1892,7 +1839,9 @@ namespace OpenDDSharp.UnitTest
             };
             var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
+
             var dataWriter = new TestIncludeDataWriter(writer);
+            Assert.IsNotNull(dataWriter);
 
             // Wait for discovery
             var found = reader.WaitForPublications(1, 5_000);
@@ -1909,8 +1858,8 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                // result = dataWriter.WaitForAcknowledgments(duration);
-                // Assert.AreEqual(ReturnCode.Ok, result);
+                result = dataWriter.WaitForAcknowledgments(duration);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
 
@@ -1920,8 +1869,8 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                // result = dataWriter.WaitForAcknowledgments(duration);
-                // Assert.AreEqual(ReturnCode.Ok, result);
+                result = dataWriter.WaitForAcknowledgments(duration);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
@@ -2011,9 +1960,6 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -2021,7 +1967,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -2109,9 +2055,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2144,9 +2088,6 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -2154,7 +2095,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -2227,9 +2168,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2262,9 +2201,6 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -2272,7 +2208,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -2345,9 +2281,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2375,7 +2309,6 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -2383,7 +2316,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -2423,9 +2356,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2453,8 +2384,7 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
-            var writer = publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
@@ -2484,9 +2414,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
         #endregion
     }
