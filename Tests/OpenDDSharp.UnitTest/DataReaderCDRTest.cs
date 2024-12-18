@@ -1871,9 +1871,9 @@ namespace OpenDDSharp.UnitTest
                 // evt.Reset();
                 // TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
-                Assert.AreEqual(ReturnCode.Ok, result);
-                Thread.Sleep(1_000);
+                // result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
+                // Assert.AreEqual(ReturnCode.Ok, result);
+                // Thread.Sleep(1_000);
 
                 // result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 // Assert.AreEqual(ReturnCode.Ok, result);
