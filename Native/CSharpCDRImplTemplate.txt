@@ -307,7 +307,7 @@
 
     public static partial class <%TYPE%>DataWriterNative
     {
-#if NET7_0_OR_GREATER
+#if NET8_0_OR_GREATER
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow")]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
