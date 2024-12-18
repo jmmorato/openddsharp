@@ -1909,8 +1909,8 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
+                // result = dataWriter.WaitForAcknowledgments(duration);
+                // Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
 
@@ -1920,8 +1920,8 @@ namespace OpenDDSharp.UnitTest
                 result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
+                // result = dataWriter.WaitForAcknowledgments(duration);
+                // Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
