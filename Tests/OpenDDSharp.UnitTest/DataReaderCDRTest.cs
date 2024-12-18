@@ -1883,9 +1883,6 @@ namespace OpenDDSharp.UnitTest
             var statusCondition = dataReader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1893,95 +1890,95 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
             var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
-            // // Write two samples of three different instances
-            // for (short i = 1; i <= 3; i++)
-            // {
-            //     evt.Reset();
-            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
-            //
-            //     result = dataWriter.Write(new TestInclude { Id = i.ToString() });
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     result = dataWriter.WaitForAcknowledgments(duration);
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     Assert.IsTrue(evt.Wait(1_500));
-            //
-            //     evt.Reset();
-            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
-            //
-            //     result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     result = dataWriter.WaitForAcknowledgments(duration);
-            //     Assert.AreEqual(ReturnCode.Ok, result);
-            //
-            //     Assert.IsTrue(evt.Wait(1_500));
-            // }
+            // Write two samples of three different instances
+            for (short i = 1; i <= 3; i++)
+            {
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            // // Read next instance with the simplest overload
-            // var data = new List<TestInclude>();
-            // var sampleInfos = new List<SampleInfo>();
-            // result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil);
-            // Assert.AreEqual(ReturnCode.Ok, result);
-            // Assert.IsNotNull(data);
-            // Assert.IsNotNull(sampleInfos);
-            // Assert.AreEqual(2, data.Count);
-            // Assert.AreEqual(2, sampleInfos.Count);
-            // Assert.AreEqual("1", data[0].Id);
-            // Assert.AreEqual(0, data[0].ShortField);
-            // Assert.AreEqual("1", data[1].Id);
-            // Assert.AreEqual(1, data[1].ShortField);
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // // Read next instance limiting the max samples
-            // result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, 1);
-            // Assert.AreEqual(ReturnCode.Ok, result);
-            // Assert.IsNotNull(data);
-            // Assert.IsNotNull(sampleInfos);
-            // Assert.AreEqual(1, data.Count);
-            // Assert.AreEqual(1, sampleInfos.Count);
-            // Assert.AreEqual("1", data[0].Id);
-            // Assert.AreEqual(0, data[0].ShortField);
+                result = dataWriter.WaitForAcknowledgments(duration);
+                Assert.AreEqual(ReturnCode.Ok, result);
 
-            // // Read next instance with QueryCondition
-            // var condition = reader.CreateQueryCondition("ShortField = 3");
-            // Assert.IsNotNull(condition);
-            //
-            // result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, ResourceLimitsQosPolicy.LengthUnlimited, condition);
-            // Assert.AreEqual(ReturnCode.Ok, result);
-            // Assert.IsNotNull(data);
-            // Assert.IsNotNull(sampleInfos);
-            // Assert.AreEqual(1, data.Count);
-            // Assert.AreEqual(1, sampleInfos.Count);
-            // Assert.AreEqual("3", data[0].Id);
-            // Assert.AreEqual(3, data[0].ShortField);
-            //
-            // // Read next instance with mask parameters
-            // var handle = dataReader.LookupInstance(new TestInclude { Id = "2" });
-            // Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
-            //
-            // result = dataReader.ReadNextInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateKind.AliveInstanceState);
-            // Assert.AreEqual(ReturnCode.Ok, result);
-            // Assert.IsNotNull(data);
-            // Assert.IsNotNull(sampleInfos);
-            // Assert.AreEqual(1, data.Count);
-            // Assert.AreEqual(1, sampleInfos.Count);
-            // Assert.AreEqual("3", data[0].Id);
-            // Assert.AreEqual(0, data[0].ShortField);
+                Assert.IsTrue(evt.Wait(1_500));
+
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(duration);
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
+            }
+
+            // Read next instance with the simplest overload
+            var data = new List<TestInclude>();
+            var sampleInfos = new List<SampleInfo>();
+            result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(sampleInfos);
+            Assert.AreEqual(2, data.Count);
+            Assert.AreEqual(2, sampleInfos.Count);
+            Assert.AreEqual("1", data[0].Id);
+            Assert.AreEqual(0, data[0].ShortField);
+            Assert.AreEqual("1", data[1].Id);
+            Assert.AreEqual(1, data[1].ShortField);
+
+            // Read next instance limiting the max samples
+            result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, 1);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(sampleInfos);
+            Assert.AreEqual(1, data.Count);
+            Assert.AreEqual(1, sampleInfos.Count);
+            Assert.AreEqual("1", data[0].Id);
+            Assert.AreEqual(0, data[0].ShortField);
+
+            // Read next instance with QueryCondition
+            var condition = reader.CreateQueryCondition("ShortField = 3");
+            Assert.IsNotNull(condition);
+
+            result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil, ResourceLimitsQosPolicy.LengthUnlimited, condition);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(sampleInfos);
+            Assert.AreEqual(1, data.Count);
+            Assert.AreEqual(1, sampleInfos.Count);
+            Assert.AreEqual("3", data[0].Id);
+            Assert.AreEqual(3, data[0].ShortField);
+
+            // Read next instance with mask parameters
+            var handle = dataReader.LookupInstance(new TestInclude { Id = "2" });
+            Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
+
+            result = dataReader.ReadNextInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateKind.AliveInstanceState);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(sampleInfos);
+            Assert.AreEqual(1, data.Count);
+            Assert.AreEqual(1, sampleInfos.Count);
+            Assert.AreEqual("3", data[0].Id);
+            Assert.AreEqual(0, data[0].ShortField);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -2030,6 +2027,8 @@ namespace OpenDDSharp.UnitTest
 
             // Wait for discovery
             var found = reader.WaitForPublications(1, 5000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -2161,6 +2160,8 @@ namespace OpenDDSharp.UnitTest
 
             // Wait for discovery
             var found = reader.WaitForPublications(1, 5000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of two different instances
