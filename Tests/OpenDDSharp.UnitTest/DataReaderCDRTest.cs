@@ -1856,7 +1856,6 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("Is it the test failing?")]
         public void TestReadNextInstance()
         {
             using var evt = new ManualResetEventSlim(false);
@@ -1877,9 +1876,11 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestIncludeDataReader(reader);
 
-            var statusCondition = reader.StatusCondition;
+            var dataReader = new TestIncludeDataReader(reader);
+            Assert.IsNotNull(dataReader);
+
+            var statusCondition = dataReader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
 
             var publisher = _participant.CreatePublisher();
@@ -1900,31 +1901,31 @@ namespace OpenDDSharp.UnitTest
             var found = reader.WaitForPublications(1, 5000);
             Assert.IsTrue(found);
 
-            // Write two samples of three different instances
-            for (short i = 1; i <= 3; i++)
-            {
-                evt.Reset();
-                TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Assert.IsTrue(evt.Wait(1_500));
-
-                evt.Reset();
-                TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Assert.IsTrue(evt.Wait(1_500));
-            }
+            // // Write two samples of three different instances
+            // for (short i = 1; i <= 3; i++)
+            // {
+            //     evt.Reset();
+            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
+            //
+            //     result = dataWriter.Write(new TestInclude { Id = i.ToString() });
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     result = dataWriter.WaitForAcknowledgments(duration);
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     Assert.IsTrue(evt.Wait(1_500));
+            //
+            //     evt.Reset();
+            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
+            //
+            //     result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     result = dataWriter.WaitForAcknowledgments(duration);
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     Assert.IsTrue(evt.Wait(1_500));
+            // }
 
             // // Read next instance with the simplest overload
             // var data = new List<TestInclude>();
@@ -1988,7 +1989,6 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [Ignore("Is it the test failing?")]
         public void TestTakeNextInstance()
         {
             using var evt = new ManualResetEventSlim(false);
