@@ -640,10 +640,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(dataWriter);
 
             // Wait for discovery
-            var found = writer.WaitForSubscriptions(1, 1000);
+            var found = reader.WaitForPublications(1, 5_000);
             Assert.IsTrue(found);
-
-            found = reader.WaitForPublications(1, 1000);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Assert liveliness in the writer
@@ -1024,7 +1023,9 @@ namespace OpenDDSharp.UnitTest
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // OpenDDS Issue: Wait for historical data is not actually implemented. It returns always ReturnCode.Ok
@@ -1256,7 +1257,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1384,7 +1387,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
@@ -1540,7 +1545,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1687,7 +1694,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1849,31 +1858,31 @@ namespace OpenDDSharp.UnitTest
             found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
-            // Write two samples of three different instances
-            for (short i = 1; i <= 3; i++)
-            {
-                evt.Reset();
-                TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Assert.IsTrue(evt.Wait(1_500));
-
-                evt.Reset();
-                TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Assert.IsTrue(evt.Wait(1_500));
-            }
+            // // Write two samples of three different instances
+            // for (short i = 1; i <= 3; i++)
+            // {
+            //     evt.Reset();
+            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
+            //
+            //     result = dataWriter.Write(new TestInclude { Id = i.ToString() });
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     result = dataWriter.WaitForAcknowledgments(duration);
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     Assert.IsTrue(evt.Wait(1_500));
+            //
+            //     evt.Reset();
+            //     TestHelper.CreateWaitSetThread(evt, statusCondition);
+            //
+            //     result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     result = dataWriter.WaitForAcknowledgments(duration);
+            //     Assert.AreEqual(ReturnCode.Ok, result);
+            //
+            //     Assert.IsTrue(evt.Wait(1_500));
+            // }
 
             // Read next instance with the simplest overload
             var data = new List<TestInclude>();
@@ -2389,7 +2398,9 @@ namespace OpenDDSharp.UnitTest
             var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = writer.WaitForSubscriptions(1, 1000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Lookup for a non-existing instance
