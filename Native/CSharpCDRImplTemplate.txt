@@ -71,7 +71,7 @@
     [SuppressUnmanagedCodeSecurity]
     internal static partial class <%TYPE%>TypeSupportNative
     {
-#if NET7_0_OR_GREATER
+#if NET8_0_OR_GREATER
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
@@ -1213,7 +1213,7 @@
 
     internal static partial class <%TYPE%>DataReaderNative
     {
-#if NET7_0_OR_GREATER
+#if NET8_0_OR_GREATER
         [SuppressUnmanagedCodeSecurity]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow")]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
