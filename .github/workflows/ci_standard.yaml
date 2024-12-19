@@ -80,16 +80,12 @@ jobs:
       if: steps.opendds-libraries-windows.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
-      env:
-        _NO_DEBUG_HEAP: 1
 
     - name: Build & Test with Cake (Cached)
       shell: pwsh
       if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
-      env:
-        _NO_DEBUG_HEAP: 1
 
     - name: Test Report
       uses: dorny/test-reporter@v1

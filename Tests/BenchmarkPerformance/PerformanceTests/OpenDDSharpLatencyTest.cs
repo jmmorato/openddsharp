@@ -118,12 +118,16 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         var dwQos = new DataWriterQos
         {
-            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            Reliability =
+            {
+                Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+            },
             History =
             {
                 Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
                 Depth = 1,
             },
+            Durability = { Kind = DurabilityQosPolicyKind.VolatileDurabilityQos}
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
@@ -136,23 +140,27 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         var drQos = new DataReaderQos
         {
-            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            Reliability =
+            {
+                Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+            },
             History =
             {
                 Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
                 Depth = 1,
             },
+            Durability = { Kind = DurabilityQosPolicyKind.VolatileDurabilityQos}
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);
-
-        _dataWriter.Enable();
-        _dataReader.Enable();
 
         _waitSet = new WaitSet();
         _statusCondition = _dataReader.StatusCondition;
         _statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
         _waitSet.AttachCondition(_statusCondition);
+
+        _dataWriter.Enable();
+        _dataReader.Enable();
 
         _readerThread = new Thread(ReaderThreadProc)
         {
@@ -172,7 +180,9 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
             var sample = new KeyedOctets();
             var sampleInfo = new SampleInfo();
+
             _dataReader.TakeNextSample(sample, sampleInfo);
+
             _count += 1;
 
             _evt.Set();

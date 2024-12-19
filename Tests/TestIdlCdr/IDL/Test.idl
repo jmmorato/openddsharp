@@ -154,6 +154,7 @@ module CdrWrapper {
     @topic
     struct TestInclude {
         @key string Id;
+        int16 ShortField;
         CdrWrapperInclude::IncludeStruct IncludeField;
     };
 
