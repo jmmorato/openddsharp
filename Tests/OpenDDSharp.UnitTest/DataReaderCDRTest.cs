@@ -22,7 +22,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
-using JsonWrapper;
+using CdrWrapper;
+using CdrWrapperInclude;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.UnitTest.Helpers;
@@ -34,7 +35,7 @@ namespace OpenDDSharp.UnitTest
     /// <see cref="DataReader"/> unit test class.
     /// </summary>
     [TestClass]
-    public class DataReaderTest
+    public class DataReaderCDRTest
     {
         #region Constants
         private const string TEST_CATEGORY = "DataReader";
@@ -72,7 +73,7 @@ namespace OpenDDSharp.UnitTest
             _subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(_subscriber);
 
-            var typeSupport = new TestStructTypeSupport();
+            var typeSupport = new TestIncludeTypeSupport();
             var typeName = typeSupport.GetTypeName();
             var ret = typeSupport.RegisterType(_participant, typeName);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -544,11 +545,10 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.SampleRejectedStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos();
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
@@ -566,9 +566,9 @@ namespace OpenDDSharp.UnitTest
             // Write two samples of the same instances
             for (var i = 1; i <= 2; i++)
             {
-                result = dataWriter.Write(new TestStruct
+                result = dataWriter.Write(new TestInclude
                 {
-                    Id = 1,
+                    Id = "1",
                 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
@@ -589,9 +589,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -628,7 +626,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastPublicationHandle);
 
             // Creates a datawriter
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos
             {
                 Liveliness =
@@ -637,16 +634,15 @@ namespace OpenDDSharp.UnitTest
                     LeaseDuration = new Duration { Seconds = 1 },
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
             Assert.IsNotNull(dataWriter);
 
             // Wait for discovery
-            var found = writer.WaitForSubscriptions(1, 1000);
+            var found = reader.WaitForPublications(1, 5_000);
             Assert.IsTrue(found);
-
-            found = reader.WaitForPublications(1, 1000);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Assert liveliness in the writer
@@ -681,9 +677,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -696,9 +690,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var qos = new DataWriterQos
             {
                 Deadline =
@@ -706,9 +697,9 @@ namespace OpenDDSharp.UnitTest
                     Period = new Duration { Seconds = 1 },
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, qos);
+            var writer = _publisher.CreateDataWriter(_topic, qos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             var drQos = new DataReaderQos
             {
@@ -731,7 +722,7 @@ namespace OpenDDSharp.UnitTest
             found = reader.WaitForPublications(1, 1000);
             Assert.IsTrue(found);
 
-            dataWriter.Write(new TestStruct { Id = 1 });
+            dataWriter.Write(new TestInclude { Id = "1" });
 
             // After half second deadline should not be lost yet
             Assert.IsFalse(evt.Wait(500));
@@ -754,9 +745,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -794,9 +783,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.LastPolicyId);
 
             // Create a not compatible writer
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -804,7 +790,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             Assert.IsTrue(evt.Wait(1_500));
@@ -822,9 +808,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -862,9 +846,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastPublicationHandle);
 
             // Create a not compatible writer
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -872,7 +853,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             // Wait for discovery and check the status
@@ -887,7 +868,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastPublicationHandle);
 
             // Create a compatible writer
-            var otherWriter = publisher.CreateDataWriter(_topic);
+            var otherWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(otherWriter);
 
             // Wait for discovery and check the status
@@ -903,10 +884,8 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteDataWriter(otherWriter);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
+            _publisher.DeleteDataWriter(otherWriter);
         }
 
         /// <summary>
@@ -942,11 +921,10 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.SampleLostStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos();
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
@@ -960,17 +938,17 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.TotalCountChange);
 
             // Write two samples of the same instances
-            var handle = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle = dataWriter.RegisterInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             var time = DateTime.Now.ToTimestamp();
-            result = dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+            result = dataWriter.Write(new TestInclude { Id = "1" }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsFalse(evt.Wait(500));
 
             time = DateTime.Now.Subtract(TimeSpan.FromSeconds(10)).ToTimestamp();
-            result = dataWriter.Write(new TestStruct { Id = 1 }, handle, time);
+            result = dataWriter.Write(new TestInclude { Id = "1" }, handle, time);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsTrue(evt.Wait(1_500));
@@ -984,9 +962,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -999,9 +975,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1017,12 +990,12 @@ namespace OpenDDSharp.UnitTest
                     Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Writes an instance
-            var result = dataWriter.Write(new TestStruct { Id = 1 });
+            var result = dataWriter.Write(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Create a DataReader
@@ -1043,14 +1016,16 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // OpenDDS Issue: Wait for historical data is not actually implemented. It returns always ReturnCode.Ok
@@ -1060,13 +1035,13 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(evt.Wait(1_500));
 
             // Read the previous published instance
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsNotNull(data);
             Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.IsTrue(sampleInfos[0].ValidData);
@@ -1085,9 +1060,7 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
@@ -1125,9 +1098,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             // Create a not compatible writer
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -1135,7 +1105,7 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
 
             // Wait for discovery and check the matched subscriptions
@@ -1146,7 +1116,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, list.Count);
 
             // Create a compatible writer
-            var otherWriter = publisher.CreateDataWriter(_topic);
+            var otherWriter = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(otherWriter);
 
             // Wait for discovery and check the matched subscriptions
@@ -1159,10 +1129,8 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteDataWriter(otherWriter);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
+            _publisher.DeleteDataWriter(otherWriter);
         }
 
         /// <summary>
@@ -1177,8 +1145,8 @@ namespace OpenDDSharp.UnitTest
             drQos.Reliability.Kind = ReliabilityQosPolicyKind.BestEffortReliabilityQos;
 
             // OPENDDS ISSUE: Cannot use ExclusiveOwnership for the test because when calling delete_datareader
-            // the BitPubListenerImpl::on_data_available take_next_sample method enter in a infinite loop if we already called
-            // the GetMatchedPublicationData. It tries to take a not_read_sample but it doesn't exist because it is already marked
+            // the BitPubListenerImpl::on_data_available take_next_sample method enter an infinite loop if we already called
+            // the GetMatchedPublicationData. It tries to take a not_read_sample, but it doesn't exist because it is already marked
             // as read in the GetMatchedPublicationData call.
             drQos.Ownership.Kind = OwnershipQosPolicyKind.SharedOwnershipQos;
             var reader = _subscriber.CreateDataReader(_topic, drQos);
@@ -1199,7 +1167,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(otherParticipant);
             otherParticipant.BindRtpsUdpTransportConfig();
 
-            var support = new TestStructTypeSupport();
+            var support = new TestIncludeTypeSupport();
             var typeName = support.GetTypeName();
             var result = support.RegisterType(otherParticipant, typeName);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1248,7 +1216,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.Read(List{TestStruct}, List{SampleInfo}, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.Read(List{TestInclude}, List{SampleInfo}, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1257,7 +1225,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1271,14 +1238,11 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -1287,25 +1251,27 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
-            var result = dataWriter.Write(new TestStruct { Id = 1 });
+            var result = dataWriter.Write(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = dataWriter.WaitForAcknowledgments(duration);
+            result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsTrue(evt.Wait(1_500));
 
             // Read the data with the simplest overload
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1313,21 +1279,21 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
 
             // Write another sample of the same instance
             evt.Reset();
             TestHelper.CreateWaitSetThread(evt, statusCondition);
-            result = dataWriter.Write(new TestStruct { Id = 1, ShortField = 2 });
+            result = dataWriter.Write(new TestInclude { Id = "1", ShortField = 2, IncludeField = new IncludeStruct { Message = "Test"} });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = dataWriter.WaitForAcknowledgments(duration);
+            result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.IsTrue(evt.Wait(1_500));
 
             // Read the data limiting the max samples
-            data = new List<TestStruct>();
+            data = new List<TestInclude>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos, 1);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1335,9 +1301,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
 
-            data = new List<TestStruct>();
+            data = new List<TestInclude>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos, 2);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1345,16 +1311,16 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual(1, data[1].Id);
+            Assert.AreEqual("1", data[1].Id);
             Assert.AreEqual(2, data[1].ShortField);
 
             // Read the data with a QueryCondition
             var condition = reader.CreateQueryCondition("ShortField = 2");
             Assert.IsNotNull(condition);
 
-            data = new List<TestStruct>();
+            data = new List<TestInclude>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(data, sampleInfos, ResourceLimitsQosPolicy.LengthUnlimited, condition);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1362,7 +1328,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(2, data[0].ShortField);
 
             // Read the data with mask parameters
@@ -1375,13 +1341,11 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.Take(List{TestStruct}, List{SampleInfo}, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.Take(List{TestInclude}, List{SampleInfo}, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1390,7 +1354,6 @@ namespace OpenDDSharp.UnitTest
             using var evt = new ManualResetEventSlim(false);
 
             // Initialize entities
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1404,14 +1367,11 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -1420,24 +1380,26 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write an instance a wait for acknowledgment
-            var result = dataWriter.Write(new TestStruct { Id = 1 });
+            var result = dataWriter.Write(new TestInclude { Id = "1" });
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            result = dataWriter.WaitForAcknowledgments(duration);
+            result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.IsTrue(evt.Wait(1_500));
 
             // Take the data with the simplest overload
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.Take(data, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1445,7 +1407,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
 
             // Take again to test NoData
             result = dataReader.Take(data, sampleInfos);
@@ -1461,10 +1423,10 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = 2, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = "2", ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1477,7 +1439,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual("2", data[0].Id);
             Assert.AreEqual(1, data[0].ShortField);
 
             // Take all the remaining samples
@@ -1487,9 +1449,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual("2", data[0].Id);
             Assert.AreEqual(2, data[0].ShortField);
-            Assert.AreEqual(2, data[1].Id);
+            Assert.AreEqual("2", data[1].Id);
             Assert.AreEqual(3, data[1].ShortField);
 
             // Write three samples more
@@ -1498,10 +1460,10 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = 3, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = "3", ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1510,7 +1472,7 @@ namespace OpenDDSharp.UnitTest
             // Take the data with a QueryCondition
             var condition = reader.CreateQueryCondition("ShortField = 2");
             Assert.IsNotNull(condition);
-            data = new List<TestStruct>();
+            data = new List<TestInclude>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.Take(data, sampleInfos, ResourceLimitsQosPolicy.LengthUnlimited, condition);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1518,7 +1480,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(2, data[0].ShortField);
 
             // Take the data with mask parameters
@@ -1529,19 +1491,18 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(1, data[0].ShortField);
-            Assert.AreEqual(3, data[1].Id);
+            Assert.AreEqual("3", data[1].Id);
             Assert.AreEqual(3, data[1].ShortField);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.ReadInstance(List{TestStruct}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.ReadInstance(List{TestInclude}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1551,7 +1512,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1565,13 +1525,10 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -1580,12 +1537,14 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1594,10 +1553,10 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1605,20 +1564,20 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
 
             // Read instance with the simplest overload
-            var handle = dataReader.LookupInstance(new TestStruct { Id = 1 });
+            var handle = dataReader.LookupInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.ReadInstance(data, sampleInfos, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1626,9 +1585,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual(1, data[1].Id);
+            Assert.AreEqual("1", data[1].Id);
             Assert.AreEqual(1, data[1].ShortField);
 
             // Read instance limiting the max samples
@@ -1638,13 +1597,13 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             // Read instance with a QueryCondition
             var condition = reader.CreateQueryCondition("ShortField = 1");
             Assert.IsNotNull(condition);
-            data = new List<TestStruct>();
+            data = new List<TestInclude>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.ReadInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, condition);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1652,7 +1611,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(1, data[0].ShortField);
 
             // Read instance with mask parameters
@@ -1667,7 +1626,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(0, sampleInfos.Count);
 
-            handle = dataReader.LookupInstance(new TestStruct { Id = 2 });
+            handle = dataReader.LookupInstance(new TestInclude { Id = "2" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = dataReader.ReadInstance(data, sampleInfos, handle,
@@ -1680,20 +1639,18 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual("2", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual(2, data[1].Id);
+            Assert.AreEqual("2", data[1].Id);
             Assert.AreEqual(2, data[1].ShortField);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.TakeInstance(List{TestStruct}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.TakeInstance(List{TestInclude}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1703,7 +1660,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1717,13 +1673,10 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -1732,12 +1685,14 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1746,10 +1701,10 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1757,20 +1712,20 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
 
             // Take instance with the simplest overload
-            var handle = dataReader.LookupInstance(new TestStruct { Id = 1 });
+            var handle = dataReader.LookupInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.TakeInstance(data, sampleInfos, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1778,9 +1733,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual(1, data[1].Id);
+            Assert.AreEqual("1", data[1].Id);
             Assert.AreEqual(1, data[1].ShortField);
 
             // Take again to ensure NoData is received
@@ -1788,7 +1743,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.NoData, result);
 
             // Take instance limiting the max samples
-            handle = dataReader.LookupInstance(new TestStruct { Id = 2 });
+            handle = dataReader.LookupInstance(new TestInclude { Id = "2" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = dataReader.TakeInstance(data, sampleInfos, handle, 1);
@@ -1797,7 +1752,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual("2", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             result = dataReader.TakeInstance(data, sampleInfos, handle,
@@ -1807,17 +1762,17 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual("2", data[0].Id);
             Assert.AreEqual(2, data[0].ShortField);
 
             // Take instance with a QueryCondition
-            handle = dataReader.LookupInstance(new TestStruct { Id = 3 });
+            handle = dataReader.LookupInstance(new TestInclude { Id = "3" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             var condition = reader.CreateQueryCondition("ShortField = 3");
             Assert.IsNotNull(condition);
 
-            data = new List<TestStruct>();
+            data = new List<TestInclude>();
             sampleInfos = new List<SampleInfo>();
             result = dataReader.ReadInstance(data, sampleInfos, handle,
                 ResourceLimitsQosPolicy.LengthUnlimited, condition);
@@ -1826,7 +1781,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(3, data[0].ShortField);
 
             // Take instance with mask parameters
@@ -1840,18 +1795,16 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.ReadNextInstance(List{TestStruct}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.ReadNextInstance(List{TestInclude}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1861,7 +1814,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -1875,13 +1827,12 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
 
-            var statusCondition = reader.StatusCondition;
+            var dataReader = new TestIncludeDataReader(reader);
+            Assert.IsNotNull(dataReader);
+
+            var statusCondition = dataReader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -1890,12 +1841,16 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+
+            var dataWriter = new TestIncludeDataWriter(writer);
+            Assert.IsNotNull(dataWriter);
 
             // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -1904,10 +1859,11 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
+                // Thread.Sleep(1_000);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -1915,17 +1871,18 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
+                // Thread.Sleep(1_000);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
 
             // Read next instance with the simplest overload
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.ReadNextInstance(data, sampleInfos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -1933,9 +1890,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual(1, data[1].Id);
+            Assert.AreEqual("1", data[1].Id);
             Assert.AreEqual(1, data[1].ShortField);
 
             // Read next instance limiting the max samples
@@ -1945,7 +1902,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             // Read next instance with QueryCondition
@@ -1958,11 +1915,11 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(3, data[0].ShortField);
 
             // Read next instance with mask parameters
-            var handle = dataReader.LookupInstance(new TestStruct { Id = 2 });
+            var handle = dataReader.LookupInstance(new TestInclude { Id = "2" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = dataReader.ReadNextInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateKind.AliveInstanceState);
@@ -1971,18 +1928,16 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.TakeNextInstance(List{TestStruct}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.TakeNextInstance(List{TestInclude}, List{SampleInfo}, InstanceHandle, int, SampleStateMask, ViewStateMask, InstanceStateMask)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -1992,7 +1947,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -2006,13 +1960,10 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -2021,12 +1972,14 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
             var found = reader.WaitForPublications(1, 5000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5000);
             Assert.IsTrue(found);
 
             // Write two samples of three different instances
@@ -2035,10 +1988,10 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2046,17 +1999,17 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
 
             // Take next instance with the simplest overload
-            var data = new List<TestStruct>();
+            var data = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.TakeNextInstance(data, sampleInfos, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -2064,9 +2017,9 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(2, data.Count);
             Assert.AreEqual(2, sampleInfos.Count);
-            Assert.AreEqual(1, data[0].Id);
+            Assert.AreEqual("1", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
-            Assert.AreEqual(1, data[1].Id);
+            Assert.AreEqual("1", data[1].Id);
             Assert.AreEqual(1, data[1].ShortField);
 
             // Read next instance limiting the max samples
@@ -2076,7 +2029,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(2, data[0].Id);
+            Assert.AreEqual("2", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             // Read next instance with QueryCondition
@@ -2089,11 +2042,11 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(3, data[0].ShortField);
 
             // Read next instance with mask parameters
-            var handle = dataReader.LookupInstance(new TestStruct { Id = 2 });
+            var handle = dataReader.LookupInstance(new TestInclude { Id = "2" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             result = dataReader.TakeNextInstance(data, sampleInfos, handle, ResourceLimitsQosPolicy.LengthUnlimited, SampleStateKind.NotReadSampleState, ViewStateMask.AnyViewState, InstanceStateKind.AliveInstanceState);
@@ -2102,18 +2055,16 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(sampleInfos);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(1, sampleInfos.Count);
-            Assert.AreEqual(3, data[0].Id);
+            Assert.AreEqual("3", data[0].Id);
             Assert.AreEqual(0, data[0].ShortField);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.ReadNextSample(TestStruct, SampleInfo)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.ReadNextSample(TestInclude, SampleInfo)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -2123,7 +2074,6 @@ namespace OpenDDSharp.UnitTest
 
             // Initialize entities
             ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
             var drQos = new DataReaderQos
             {
                 Reliability =
@@ -2137,13 +2087,10 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, drQos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
 
             var dwQos = new DataWriterQos
             {
@@ -2152,125 +2099,9 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
-
-            // Wait for discovery
-            var found = reader.WaitForPublications(1, 5000);
-            Assert.IsTrue(found);
-
-            // Write two samples of two different instances
-            for (short i = 1; i <= 2; i++)
-            {
-                evt.Reset();
-                TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-                result = dataWriter.Write(new TestStruct { Id = i });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Assert.IsTrue(evt.Wait(1_500));
-
-                evt.Reset();
-                TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-                result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                result = dataWriter.WaitForAcknowledgments(duration);
-                Assert.AreEqual(ReturnCode.Ok, result);
-
-                Assert.IsTrue(evt.Wait(1_500));
-            }
-
-            // Read next samples
-            var data = new TestStruct();
-            var info = new SampleInfo();
-
-            for (short i = 1; i <= 4; i++)
-            {
-                result = dataReader.ReadNextSample(data, info);
-                Assert.AreEqual(ReturnCode.Ok, result);
-                Assert.IsTrue(info.ValidData);
-                Assert.IsNotNull(data);
-                Assert.IsNotNull(info);
-                if (i < 3)
-                {
-                    Assert.AreEqual(1, data.Id);
-                    Assert.AreEqual(i % 2 == 0 ? 1 : 0, data.ShortField);
-                }
-                else
-                {
-                    Assert.AreEqual(2, data.Id);
-                    Assert.AreEqual(i % 2 == 0 ? 2 : 0, data.ShortField);
-                }
-            }
-
-            // Read next sample to check NoData
-            result = dataReader.ReadNextSample(data, info);
-            Assert.AreEqual(ReturnCode.NoData, result);
-
-            // Read samples
-            var samples = new List<TestStruct>();
-            var sampleInfos = new List<SampleInfo>();
-            result = dataReader.Read(samples, sampleInfos);
-            Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(4, samples.Count);
-            Assert.AreEqual(4, sampleInfos.Count);
-
-            reader.DeleteContainedEntities();
-            _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
-        }
-
-        /// <summary>
-        /// Test the <see cref="TestStructDataReader.TakeNextSample(TestStruct, SampleInfo)" /> method.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestTakeNextSample()
-        {
-            using var evt = new ManualResetEventSlim(false);
-
-            // Initialize entities
-            ReturnCode result;
-            var duration = new Duration { Seconds = 5 };
-            var drQos = new DataReaderQos
-            {
-                Reliability =
-                {
-                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
-                },
-                History =
-                {
-                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
-                },
-            };
-            var reader = _subscriber.CreateDataReader(_topic, drQos);
-            Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
-
-            var statusCondition = reader.StatusCondition;
-            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-
-            var publisher = _participant.CreatePublisher();
-            Assert.IsNotNull(publisher);
-
-            var dwQos = new DataWriterQos
-            {
-                Reliability =
-                {
-                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
-                },
-            };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
-            Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
             var found = reader.WaitForPublications(1, 5000);
@@ -2284,10 +2115,10 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
@@ -2295,17 +2126,129 @@ namespace OpenDDSharp.UnitTest
                 evt.Reset();
                 TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-                result = dataWriter.Write(new TestStruct { Id = i, ShortField = i });
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
-                result = dataWriter.WaitForAcknowledgments(duration);
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
+            }
+
+            // Read next samples
+            var data = new TestInclude();
+            var info = new SampleInfo();
+
+            for (short i = 1; i <= 4; i++)
+            {
+                result = dataReader.ReadNextSample(data, info);
+                Assert.AreEqual(ReturnCode.Ok, result);
+                Assert.IsTrue(info.ValidData);
+                Assert.IsNotNull(data);
+                Assert.IsNotNull(info);
+                if (i < 3)
+                {
+                    Assert.AreEqual("1", data.Id);
+                    Assert.AreEqual(i % 2 == 0 ? 1 : 0, data.ShortField);
+                }
+                else
+                {
+                    Assert.AreEqual("2", data.Id);
+                    Assert.AreEqual(i % 2 == 0 ? 2 : 0, data.ShortField);
+                }
+            }
+
+            // Read next sample to check NoData
+            result = dataReader.ReadNextSample(data, info);
+            Assert.AreEqual(ReturnCode.NoData, result);
+
+            // Read samples
+            var samples = new List<TestInclude>();
+            var sampleInfos = new List<SampleInfo>();
+            result = dataReader.Read(samples, sampleInfos);
+            Assert.AreEqual(ReturnCode.Ok, result);
+            Assert.AreEqual(4, samples.Count);
+            Assert.AreEqual(4, sampleInfos.Count);
+
+            reader.DeleteContainedEntities();
+            _subscriber.DeleteDataReader(reader);
+            _publisher.DeleteDataWriter(writer);
+        }
+
+        /// <summary>
+        /// Test the <see cref="TestIncludeDataReader.TakeNextSample(TestInclude, SampleInfo)" /> method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TEST_CATEGORY)]
+        public void TestTakeNextSample()
+        {
+            using var evt = new ManualResetEventSlim(false);
+
+            // Initialize entities
+            ReturnCode result;
+            var drQos = new DataReaderQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+            };
+            var reader = _subscriber.CreateDataReader(_topic, drQos);
+            Assert.IsNotNull(reader);
+            var dataReader = new TestIncludeDataReader(reader);
+
+            var statusCondition = reader.StatusCondition;
+            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
+
+            var dwQos = new DataWriterQos
+            {
+                Reliability =
+                {
+                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
+                },
+            };
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
+            Assert.IsNotNull(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
+
+            // Wait for discovery
+            var found = reader.WaitForPublications(1, 5000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5000);
+            Assert.IsTrue(found);
+
+            // Write two samples of two different instances
+            for (short i = 1; i <= 2; i++)
+            {
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+                result = dataWriter.Write(new TestInclude { Id = i.ToString() });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                Assert.IsTrue(evt.Wait(1_500));
+
+                evt.Reset();
+                TestHelper.CreateWaitSetThread(evt, statusCondition);
+
+                result = dataWriter.Write(new TestInclude { Id = i.ToString(), ShortField = i });
+                Assert.AreEqual(ReturnCode.Ok, result);
+
+                result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
                 Assert.AreEqual(ReturnCode.Ok, result);
 
                 Assert.IsTrue(evt.Wait(1_500));
             }
 
             // Take next samples
-            var data = new TestStruct();
+            var data = new TestInclude();
             var info = new SampleInfo();
 
             for (short i = 1; i <= 4; i++)
@@ -2317,12 +2260,12 @@ namespace OpenDDSharp.UnitTest
                 Assert.IsNotNull(info);
                 if (i < 3)
                 {
-                    Assert.AreEqual(1, data.Id);
+                    Assert.AreEqual("1", data.Id);
                     Assert.AreEqual(i % 2 == 0 ? 1 : 0, data.ShortField);
                 }
                 else
                 {
-                    Assert.AreEqual(2, data.Id);
+                    Assert.AreEqual("2", data.Id);
                     Assert.AreEqual(i % 2 == 0 ? 2 : 0, data.ShortField);
                 }
             }
@@ -2332,7 +2275,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.NoData, result);
 
             // Take samples
-            var samples = new List<TestStruct>();
+            var samples = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.Take(samples, sampleInfos);
             Assert.AreEqual(ReturnCode.NoData, result);
@@ -2341,13 +2284,11 @@ namespace OpenDDSharp.UnitTest
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.GetKeyValue(TestStruct, InstanceHandle)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.GetKeyValue(TestInclude, InstanceHandle)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -2365,13 +2306,12 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
             var dwQos = new DataWriterQos
             {
                 Reliability =
@@ -2379,19 +2319,19 @@ namespace OpenDDSharp.UnitTest
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
             };
-            var writer = publisher.CreateDataWriter(_topic, dwQos);
+            var writer = _publisher.CreateDataWriter(_topic, dwQos);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
             Assert.IsTrue(writer.WaitForSubscriptions(1, 5_000));
             Assert.IsTrue(reader.WaitForPublications(1, 5_000));
 
             // Register an instance and write it
-            var handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle1 = dataWriter.RegisterInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
-            var result = dataWriter.Write(new TestStruct { Id = 1 }, handle1);
+            var result = dataWriter.Write(new TestInclude { Id = "1" }, handle1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
@@ -2400,32 +2340,30 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(evt.Wait(1_500));
 
             // Get the for an existing instance
-            var structs = new List<TestStruct>();
+            var structs = new List<TestInclude>();
             var sampleInfos = new List<SampleInfo>();
             result = dataReader.Read(structs, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, sampleInfos.Count);
             Assert.AreNotEqual(InstanceHandle.HandleNil, sampleInfos[0].InstanceHandle);
 
-            var data = new TestStruct();
+            var data = new TestInclude();
             result = dataReader.GetKeyValue(data, sampleInfos[0].InstanceHandle);
             Assert.AreEqual(ReturnCode.Ok, result);
-            Assert.AreEqual(1, data.Id);
+            Assert.AreEqual("1", data.Id);
 
             // Call GetKeyValue with HandleNil
-            data = new TestStruct();
+            data = new TestInclude();
             result = dataReader.GetKeyValue(data, InstanceHandle.HandleNil);
             Assert.AreEqual(ReturnCode.BadParameter, result);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
 
         /// <summary>
-        /// Test the <see cref="TestStructDataReader.LookupInstance(TestStruct)" /> method.
+        /// Test the <see cref="TestIncludeDataReader.LookupInstance(TestInclude)" /> method.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -2443,30 +2381,31 @@ namespace OpenDDSharp.UnitTest
             };
             var reader = _subscriber.CreateDataReader(_topic, qos);
             Assert.IsNotNull(reader);
-            var dataReader = new TestStructDataReader(reader);
+            var dataReader = new TestIncludeDataReader(reader);
 
             var statusCondition = reader.StatusCondition;
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-            var publisher = _participant.CreatePublisher();
-            var writer = publisher.CreateDataWriter(_topic);
+            var writer = _publisher.CreateDataWriter(_topic);
             Assert.IsNotNull(writer);
-            var dataWriter = new TestStructDataWriter(writer);
+            var dataWriter = new TestIncludeDataWriter(writer);
 
             // Wait for discovery
-            var found = writer.WaitForSubscriptions(1, 1000);
+            var found = reader.WaitForPublications(1, 5_000);
+            Assert.IsTrue(found);
+            found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
             // Lookup for a non-existing instance
-            var handle = dataReader.LookupInstance(new TestStruct { Id = 1 });
+            var handle = dataReader.LookupInstance(new TestInclude { Id = "1" });
             Assert.AreEqual(InstanceHandle.HandleNil, handle);
 
             // Register an instance and write it
-            var handle1 = dataWriter.RegisterInstance(new TestStruct { Id = 1 });
+            var handle1 = dataWriter.RegisterInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle1);
 
-            var result = dataWriter.Write(new TestStruct { Id = 1 }, handle1);
+            var result = dataWriter.Write(new TestInclude { Id = "1" }, handle1);
             Assert.AreEqual(ReturnCode.Ok, result);
 
             result = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
@@ -2475,14 +2414,12 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(evt.Wait(1_500));
 
             // Lookup for an existing instance
-            handle = dataReader.LookupInstance(new TestStruct { Id = 1 });
+            handle = dataReader.LookupInstance(new TestInclude { Id = "1" });
             Assert.AreNotEqual(InstanceHandle.HandleNil, handle);
 
             reader.DeleteContainedEntities();
             _subscriber.DeleteDataReader(reader);
-            publisher.DeleteDataWriter(writer);
-            publisher.DeleteContainedEntities();
-            _participant.DeletePublisher(publisher);
+            _publisher.DeleteDataWriter(writer);
         }
         #endregion
     }
