@@ -13,14 +13,15 @@ public class LatencyTest
     private const int DOMAIN_ID = 42;
     private const string RTPS_DISCOVERY = "RtpsDiscovery";
 
-    private OpenDDSharpLatencyTest _openDDSharpLatencyTest;
+    private CDRLatencyTest _cdrLatencyTest;
+    private JSONLatencyTest _jsonLatencyTest;
     private RtiConnextLatencyTest _rtiConnextLatencyTest;
     private IList<TimeSpan> _latencyHistory;
 
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(10, 50, 100, 500, 1_000)]
+    [Params(10, 50, 100, 250, 500)]
     public int TotalInstances { get; set; }
 
     /// <summary>
@@ -35,7 +36,7 @@ public class LatencyTest
     [Params(512, 1024, 2048)]
     public ulong TotalPayload { get; set; }
 
-    [GlobalSetup(Target = nameof(OpenDDSharpLatencyTest))]
+    [GlobalSetup]
     public void OpenDDSharpGlobalSetup()
     {
         Ace.Init();
@@ -57,7 +58,7 @@ public class LatencyTest
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
     }
 
-    [GlobalCleanup(Target = nameof(OpenDDSharpLatencyTest))]
+    [GlobalCleanup]
     public void OpenDDSharpGlobalCleanup()
     {
         ParticipantService.Instance.Shutdown();
@@ -65,10 +66,16 @@ public class LatencyTest
         Ace.Fini();
     }
 
-    [IterationSetup(Target = nameof(OpenDDSharpLatencyTest))]
-    public void OpenDDSharpIterationSetup()
+    [IterationSetup(Target = nameof(OpenDDSharpCDRLatencyTest))]
+    public void OpenDDSharpCDRIterationSetup()
     {
-        _openDDSharpLatencyTest = new OpenDDSharpLatencyTest(TotalInstances, TotalSamples, TotalPayload);
+        _cdrLatencyTest = new CDRLatencyTest(TotalInstances, TotalSamples, TotalPayload);
+    }
+
+    [IterationSetup(Target = nameof(OpenDDSharpJSONLatencyTest))]
+    public void OpenDDSharpJSONIterationSetup()
+    {
+        _jsonLatencyTest = new JSONLatencyTest(TotalInstances, TotalSamples, TotalPayload);
     }
 
     [IterationSetup(Target = nameof(RtiConnextLatencyTest))]
@@ -77,12 +84,22 @@ public class LatencyTest
         _rtiConnextLatencyTest = new RtiConnextLatencyTest(TotalInstances, TotalSamples, TotalPayload);
     }
 
-    [IterationCleanup(Target = nameof(OpenDDSharpLatencyTest))]
-    public void OpenDDSharpIterationCleanup()
+    [IterationCleanup(Target = nameof(OpenDDSharpCDRLatencyTest))]
+    public void OpenDDSharpCDRIterationCleanup()
     {
-        _openDDSharpLatencyTest?.Dispose();
+        _cdrLatencyTest?.Dispose();
 
-        LatencyStatistics("openddsharp");
+        LatencyStatistics("openddsharpcdr");
+
+        _latencyHistory.Clear();
+    }
+
+    [IterationCleanup(Target = nameof(OpenDDSharpJSONLatencyTest))]
+    public void OpenDDSharpJSONIterationCleanup()
+    {
+        _jsonLatencyTest?.Dispose();
+
+        LatencyStatistics("openddsharpjson");
 
         _latencyHistory.Clear();
     }
@@ -98,9 +115,15 @@ public class LatencyTest
     }
 
     [Benchmark]
-    public void OpenDDSharpLatencyTest()
+    public void OpenDDSharpCDRLatencyTest()
     {
-        _latencyHistory = _openDDSharpLatencyTest.Run();
+        _latencyHistory = _cdrLatencyTest.Run();
+    }
+
+    [Benchmark]
+    public void OpenDDSharpJSONLatencyTest()
+    {
+        _latencyHistory = _jsonLatencyTest.Run();
     }
 
     // Cannot run without a valid RTI Connext license.

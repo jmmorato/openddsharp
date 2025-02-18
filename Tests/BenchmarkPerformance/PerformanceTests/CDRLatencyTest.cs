@@ -2,10 +2,11 @@ using System.Globalization;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using CdrWrapper;
+using OpenDDSharp.BenchmarkPerformance.Helpers;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
-internal sealed class OpenDDSharpLatencyTest : IDisposable
+internal sealed class CDRLatencyTest : IDisposable
 {
     private const int DOMAIN_ID = 42;
 
@@ -29,7 +30,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
     private WaitSet _waitSet;
     private Thread _readerThread;
 
-    public OpenDDSharpLatencyTest(int totalInstances, int totalSamples, ulong totalPayload)
+    public CDRLatencyTest(int totalInstances, int totalSamples, ulong totalPayload)
     {
         _totalInstances = totalInstances;
         _totalSamples = totalSamples;
@@ -40,9 +41,6 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         InitializeDDSEntities();
 
-        _count = 0;
-
-        _readerThread.Start();
         _sample = new KeyedOctets
         {
             ValueField = payload,
@@ -51,6 +49,13 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
     public IList<TimeSpan> Run()
     {
+        _count = 0;
+        _readerThread = new Thread(ReaderThreadProc)
+        {
+            IsBackground = true,
+            Priority = ThreadPriority.Highest,
+        };
+        _readerThread.Start();
         var latencyHistory = new List<TimeSpan>();
 
         for (var i = 1; i <= _totalSamples; i++)
@@ -124,10 +129,8 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             },
             History =
             {
-                Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                Depth = 1,
+                Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
             },
-            Durability = { Kind = DurabilityQosPolicyKind.VolatileDurabilityQos}
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
@@ -146,10 +149,8 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             },
             History =
             {
-                Kind = HistoryQosPolicyKind.KeepLastHistoryQos,
-                Depth = 1,
+                Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
             },
-            Durability = { Kind = DurabilityQosPolicyKind.VolatileDurabilityQos}
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);
@@ -162,13 +163,8 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _dataWriter.Enable();
         _dataReader.Enable();
 
-        _readerThread = new Thread(ReaderThreadProc)
-        {
-            IsBackground = true,
-            Priority = ThreadPriority.Highest,
-        };
-
-        Thread.Sleep(2_000);
+        _dataReader.WaitForPublications(1, 5_000);
+        _dataWriter.WaitForSubscriptions(1, 5_000);
     }
 
     private void ReaderThreadProc()
@@ -178,10 +174,15 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             var conditions = new List<Condition>();
             _waitSet.Wait(conditions);
 
-            var sample = new KeyedOctets();
-            var sampleInfo = new SampleInfo();
+            var samples = new List<KeyedOctets>();
+            var sampleInfos = new List<SampleInfo>();
 
-            _dataReader.TakeNextSample(sample, sampleInfo);
+            _dataReader.Take(samples, sampleInfos);
+
+            if (samples.Count > 1)
+            {
+                throw new InvalidDataException("Only one sample should be received.");
+            }
 
             _count += 1;
 

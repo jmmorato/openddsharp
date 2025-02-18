@@ -19,6 +19,8 @@
         private static readonly <%TYPE%>SerializerContext _serializerContext = new <%TYPE%>SerializerContext(_serializerOptions);
 
         private IntPtr _native;
+
+        private readonly ArrayPool<byte> _bytesPool = ArrayPool<byte>.Shared;
         #endregion
 
         #region Constructors
@@ -56,7 +58,18 @@
 
         public byte[] EncodeToBytes(<%TYPE%> sample)
         {
-            return sample.ToCDR().ToArray();
+            var span = sample.ToCDR();
+
+            var bytes = _bytesPool.Rent(span.Length);
+            try
+            {
+                span.CopyTo(bytes);
+                return bytes;
+            }
+            finally
+            {
+                _bytesPool.Return(bytes);
+            }
         }
 
         public <%TYPE%> DecodeFromBytes(byte[] data)
@@ -414,6 +427,9 @@
         #region Fields
         private readonly IntPtr _native;
         private <%TYPE%>TypeSupport _typeSupport;
+
+        private static ArrayPool<SampleInfo> infoPool = ArrayPool<SampleInfo>.Shared;
+        private static ArrayPool<<%TYPE%>> dataPool = ArrayPool<<%TYPE%>>.Shared;
         #endregion
 
         #region Constructors
@@ -467,25 +483,29 @@
 
                 OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
                 var total = reader.ReadUInt32();
+                var samplesAux = new <%TYPE%>[total];
 
                 for (int i = 0; i < total; i++)
                 {
                     var sample = new <%TYPE%>();
                     sample.FromCDR(reader);
-                    receivedData.Add(sample);
+                    samplesAux[i] = sample;
                 }
+                receivedData.AddRange(samplesAux);
 
                 byte[] infoArray = new byte[(int)sizeInfo];
                 Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
                 reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
                 total = reader.ReadUInt32();
+                var receivedInfoAux = new SampleInfo[total];
 
                 for (int i = 0; i < total; i++)
                 {
                     var sampleInfo = new SampleInfo();
                     sampleInfo.FromCDR(reader);
-                    receivedInfo.Add(sampleInfo);
+                    receivedInfoAux[i] = sampleInfo;
                 }
+                receivedInfo.AddRange(receivedInfoAux);
             }
 
             return ret;
@@ -517,24 +537,28 @@
                 OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
                 var total = reader.ReadUInt32();
 
+                var samplesAux = new <%TYPE%>[total];
                 for (int i = 0; i < total; i++)
                 {
                     var sample = new <%TYPE%>();
                     sample.FromCDR(reader);
-                    receivedData.Add(sample);
+                    samplesAux[i] = sample;
                 }
+                receivedData.AddRange(samplesAux);
 
                 byte[] infoArray = new byte[(int)sizeInfo];
                 Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
                 reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
                 total = reader.ReadUInt32();
 
+                var receivedInfoAux = new SampleInfo[total];
                 for (int i = 0; i < total; i++)
                 {
                     var sampleInfo = new SampleInfo();
                     sampleInfo.FromCDR(reader);
-                    receivedInfo.Add(sampleInfo);
+                    receivedInfoAux[i] = sampleInfo;
                 }
+                receivedInfo.AddRange(receivedInfoAux);
             }
 
             return ret;
@@ -581,30 +605,34 @@
                 OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
                 var total = reader.ReadUInt32();
 
+                var samplesAux = new <%TYPE%>[total];
                 for (int i = 0; i < total; i++)
                 {
                     var sample = new <%TYPE%>();
                     sample.FromCDR(reader);
-                    receivedData.Add(sample);
+                    samplesAux[i] = sample;
                 }
+                receivedData.AddRange(samplesAux);
 
                 byte[] infoArray = new byte[(int)sizeInfo];
                 Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
                 reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
                 total = reader.ReadUInt32();
 
+                var receivedInfoAux = new SampleInfo[total];
                 for (int i = 0; i < total; i++)
                 {
                     var sampleInfo = new SampleInfo();
                     sampleInfo.FromCDR(reader);
-                    receivedInfo.Add(sampleInfo);
+                    receivedInfoAux[i] = sampleInfo;
                 }
+                receivedInfo.AddRange(receivedInfoAux);
             }
 
             return ret;
         }
 
-        public ReturnCode Take(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples, SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
+        public unsafe ReturnCode Take(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, int maxSamples, SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
         {
             if (receivedData == null || receivedInfo == null)
             {
@@ -624,30 +652,7 @@
 
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
-                byte[] dataArray = new byte[(int)sizeData];
-                Marshal.Copy(ptrData, dataArray, 0, (int)sizeData);
-
-                OpenDDSharp.Marshaller.Cdr.CdrReader reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataArray);
-                var total = reader.ReadUInt32();
-
-                for (int i = 0; i < total; i++)
-                {
-                    var sample = new <%TYPE%>();
-                    sample.FromCDR(reader);
-                    receivedData.Add(sample);
-                }
-
-                byte[] infoArray = new byte[(int)sizeInfo];
-                Marshal.Copy(ptrInfo, infoArray, 0, (int)sizeInfo);
-                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoArray);
-                total = reader.ReadUInt32();
-
-                for (int i = 0; i < total; i++)
-                {
-                    var sampleInfo = new SampleInfo();
-                    sampleInfo.FromCDR(reader);
-                    receivedInfo.Add(sampleInfo);
-                }
+                ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
             }
 
             return ret;
@@ -1209,6 +1214,48 @@
             return ret;
         }
         #endregion
+
+        private static unsafe void ReadOrTakeFromPointer(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, IntPtr ptrData, UIntPtr sizeData, IntPtr ptrInfo, UIntPtr sizeInfo)
+        {
+            <%TYPE%>[] samplesArray = null;
+            SampleInfo[] receivedInfoArray = null;
+            try
+            {
+                var dataSpan = new Span<byte>(ptrData.ToPointer(), (int)sizeData);
+                var reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataSpan.ToArray());
+                var total = reader.ReadUInt32();
+                samplesArray = dataPool.Rent((int)total);
+                var samplesSpan = new Span<<%TYPE%>>(samplesArray, 0, (int)total);
+
+                for (int i = 0; i < total; i++)
+                {
+                    var sample = new <%TYPE%>();
+                    sample.FromCDR(reader);
+                    samplesSpan[i] = sample;
+                }
+                receivedData.AddRange(samplesSpan.ToArray());
+
+                var infoSpan = new Span<byte>(ptrInfo.ToPointer(), (int)sizeInfo);
+
+                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoSpan.ToArray());
+                total = reader.ReadUInt32();
+                receivedInfoArray = infoPool.Rent((int)total);
+                var receivedInfoSpan = new Span<SampleInfo>(receivedInfoArray, 0, (int)total);
+
+                for (int i = 0; i < total; i++)
+                {
+                    var sampleInfo = new SampleInfo();
+                    sampleInfo.FromCDR(reader);
+                    receivedInfoSpan[i] = sampleInfo;
+                }
+                receivedInfo.AddRange(receivedInfoSpan.ToArray());
+            }
+            finally
+            {
+                dataPool.Return(samplesArray);
+                infoPool.Return(receivedInfoArray);
+            }
+        }
     }
 
     internal static partial class <%TYPE%>DataReaderNative

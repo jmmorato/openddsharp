@@ -41,7 +41,7 @@ internal class ThroughputSamplesReceivedColumn : IColumn
             Replace("ThroughputTest", string.Empty, StringComparison.InvariantCultureIgnoreCase).
             ToLowerInvariant();
 
-        var numInstancesParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalInstances");
+        var numInstancesParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalSamples");
         var payloadSizeParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalPayload");
         if (numInstancesParam == null)
         {

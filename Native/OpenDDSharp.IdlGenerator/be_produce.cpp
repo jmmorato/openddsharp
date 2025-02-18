@@ -223,7 +223,8 @@ namespace {
             if (be_global->csharp_json() || be_global->csharp_cdr()) {
               out << "using System.Text.Json;\n"
                   << "using System.Text.Json.Serialization;\n"
-                  << "using OpenDDSharp.Marshaller.Json;\n";
+                  << "using OpenDDSharp.Marshaller.Json;\n"
+                  << "using System.Buffers;\n";
             }
 
             out << "using OpenDDSharp;\n"

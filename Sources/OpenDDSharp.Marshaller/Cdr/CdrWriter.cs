@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -26,7 +27,9 @@ public class CdrWriter
     /// Initializes a new instance of the <see cref="CdrWriter"/> class.
     /// </summary>
     /// <param name="buffer">The buffer to write the bytes.</param>
-    public CdrWriter(byte[] buffer) : this(new MemoryStream(buffer)) { }
+    public CdrWriter(byte[] buffer) : this(new MemoryStream(buffer))
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CdrWriter"/> class.
@@ -171,7 +174,7 @@ public class CdrWriter
     public void WriteWChar(char c)
     {
         Align(2);
-        var bytes = Encoding.Unicode.GetBytes(new[] { c });
+        var bytes = Encoding.Unicode.GetBytes([c]);
         WriteBytes(bytes);
     }
 
@@ -248,6 +251,7 @@ public class CdrWriter
     /// Write a sequence of unsigned bytes to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of unsigned bytes to be written.</param>
+    // [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void WriteByteSequence(IList<byte> sequence)
     {
         if (sequence == null)
@@ -257,7 +261,12 @@ public class CdrWriter
         }
 
         WriteSequenceLength((uint)sequence.Count);
+
+#if NET6_0_OR_GREATER
+        WriteBytes(CollectionsMarshal.AsSpan(sequence.ToList()));
+#else
         WriteBytes(sequence.ToArray());
+#endif
     }
 
     /// <summary>

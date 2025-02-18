@@ -1,7 +1,10 @@
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+#if NET6_0_OR_GREATER
+#else
 using System.Runtime.InteropServices;
+#endif
 using System.Text;
 
 namespace OpenDDSharp.Marshaller.Cdr;
@@ -11,14 +14,22 @@ namespace OpenDDSharp.Marshaller.Cdr;
 /// </summary>
 public class CdrReader
 {
-    private readonly byte[] _buf;
+    private readonly ReadOnlyMemory<byte> _buf;
     private int _position;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CdrReader"/> class.
     /// </summary>
     /// <param name="buf">The buffer to read from.</param>
-    public CdrReader(byte[] buf)
+    public CdrReader(byte[] buf) : this(new ReadOnlyMemory<byte>(buf))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CdrReader"/> class.
+    /// </summary>
+    /// <param name="buf">The buffer to read from.</param>
+    public CdrReader(ReadOnlyMemory<byte> buf)
     {
         _buf = buf;
         _position = 0;
@@ -30,7 +41,7 @@ public class CdrReader
     /// <returns>The byte value.</returns>
     public byte ReadByte()
     {
-        return _buf[_position++];
+        return _buf.Span[_position++];
     }
 
     /// <summary>
@@ -39,7 +50,7 @@ public class CdrReader
     /// <returns>The byte value.</returns>
     public sbyte ReadSByte()
     {
-        return (sbyte)_buf[_position++];
+        return (sbyte)_buf.Span[_position++];
     }
 
     /// <summary>
@@ -49,9 +60,9 @@ public class CdrReader
     /// <returns>The bytes from the stream.</returns>
     public ReadOnlySpan<byte> ReadBytes(int count)
     {
-        var result = new ReadOnlySpan<byte>(_buf, _position, count);
+        var result = _buf.Slice(_position, count);
         _position += count;
-        return result;
+        return result.Span;
     }
 
     /// <summary>

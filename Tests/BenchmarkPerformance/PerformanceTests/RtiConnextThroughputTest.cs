@@ -1,4 +1,4 @@
-using System.Globalization;
+using Omg.Dds.Core;
 using OpenDDSharp.BenchmarkPerformance.Helpers;
 using Rti.Dds.Core;
 using Rti.Dds.Core.Policy;
@@ -8,21 +8,17 @@ using Rti.Dds.Publication;
 using Rti.Dds.Subscription;
 using Rti.Dds.Topics;
 using Rti.Types.Builtin;
+using Guid = System.Guid;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
-internal sealed class RtiConnextLatencyTest : IDisposable
+internal sealed class RtiConnextThroughputTest : IDisposable
 {
     private const int DOMAIN_ID = 42;
 
-    private readonly ManualResetEventSlim _evt;
     private readonly Random _random = new ();
-    private readonly int _totalInstances;
     private readonly int _totalSamples;
-    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
     private readonly KeyedOctetsTopicType _sample;
-
-    private int _count;
 
     private DomainParticipant _participant;
     private Topic<KeyedOctetsTopicType> _topic;
@@ -32,68 +28,46 @@ internal sealed class RtiConnextLatencyTest : IDisposable
     private DataReader<KeyedOctetsTopicType> _dataReader;
     private WaitSet _waitSet;
     private Thread _readerThread;
+    private ulong _samplesReceived;
 
-    public RtiConnextLatencyTest(int totalInstances, int totalSamples, ulong totalPayload)
+    public RtiConnextThroughputTest(int totalSamples, ulong totalPayload)
     {
-        _totalInstances = totalInstances;
         _totalSamples = totalSamples;
-
-        _evt = new ManualResetEventSlim(false);
 
         var payload = new byte[totalPayload];
         _random.NextBytes(payload);
 
         InitializeDDSEntities();
 
-        _sample = new KeyedOctetsTopicType();
+        _sample = new KeyedOctetsTopicType
+        {
+            Key = "1",
+        };
         _sample.Value.AddRange(payload);
     }
 
-    public IList<TimeSpan> Run()
+    public ulong Run()
     {
-        _count = 0;
+        _samplesReceived = 0;
         _readerThread = new Thread(ReaderThread)
         {
             IsBackground = true,
             Priority = ThreadPriority.Highest,
         };
         _readerThread.Start();
-        var latencyHistory = new List<TimeSpan>();
 
         for (var i = 1; i <= _totalSamples; i++)
         {
-            for (var j = 1; j <= _totalInstances; j++)
-            {
-                _sample.Key = j.ToString(CultureInfo.InvariantCulture);
-
-                if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
-                {
-                    instanceHandle = _dataWriter.RegisterInstance(_sample);
-                    _instanceHandles.Add(j, instanceHandle);
-                }
-
-                var publicationTime = DateTime.UtcNow.Ticks;
-                _dataWriter.Write(_sample, instanceHandle);
-
-                _evt.Wait();
-
-                var receptionTime = DateTime.UtcNow.Ticks;
-                var latency = TimeSpan.FromTicks(receptionTime - publicationTime);
-                latencyHistory.Add(latency);
-
-                _evt.Reset();
-            }
+            _dataWriter.Write(_sample);
         }
 
         _readerThread.Join();
 
-        return latencyHistory;
+        return _samplesReceived;
     }
 
     public void Dispose()
     {
-        _evt.Dispose();
-
         _dataWriter.Dispose();
         _publisher.DisposeContainedEntities();
         _publisher.Dispose();
@@ -122,16 +96,23 @@ internal sealed class RtiConnextLatencyTest : IDisposable
             .WithTransportBuiltin(t => t.Mask = TransportBuiltinMask.Udpv4);
 
         _participant = DomainParticipantFactory.Instance.CreateParticipant(DOMAIN_ID, pQos);
-        _topic = _participant.CreateTopic<KeyedOctetsTopicType>("LatencyTestRtiConnext");
+
+        var topicQos = _participant.DefaultTopicQos
+            .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
+            .WithReliability(c => c.MaxBlockingTime = Duration.Infinite)
+            .WithHistory(c => c.Kind = HistoryKind.KeepAll);
+        _topic = _participant.CreateTopic<KeyedOctetsTopicType>(Guid.NewGuid().ToString(), topicQos);
 
         _publisher = _participant.CreatePublisher();
         _subscriber = _participant.CreateSubscriber();
 
         var dwQos = _publisher.DefaultDataWriterQos
             .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
+            .WithReliability(c => c.MaxBlockingTime = Duration.Infinite)
             .WithHistory(c => c.Kind = HistoryKind.KeepAll);
         var drQos = _subscriber.DefaultDataReaderQos
             .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
+            .WithReliability(c => c.MaxBlockingTime = Duration.Infinite)
             .WithHistory(c => c.Kind = HistoryKind.KeepAll);
 
         _dataWriter = _publisher.CreateDataWriter(_topic, dwQos);
@@ -148,24 +129,22 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
     private void ReaderThread()
     {
+        int i = 0;
         while (true)
         {
             _ = _waitSet.Wait();
 
             using var samples = _dataReader.Take();
-            if (samples.Count > 1)
+            _samplesReceived += (ulong)samples.Count;
+            // Console.WriteLine(samples.Count);
+
+            if (_samplesReceived >= (ulong)_totalSamples)
             {
-                throw new InvalidDataException("Only one sample should be received.");
-            }
-
-            _count += 1;
-
-            _evt.Set();
-
-            if (_count >= _totalSamples * _totalInstances)
-            {
+                Console.WriteLine(i);
                 return;
             }
+
+            i++;
         }
     }
 }

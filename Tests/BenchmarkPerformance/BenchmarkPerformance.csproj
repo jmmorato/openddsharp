@@ -18,6 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Sources\OpenDDSharp\OpenDDSharp.csproj" />
       <ProjectReference Include="..\TestIdlCdr\TestIdlCdr.csproj" />
+      <ProjectReference Include="..\TestIdlJson\TestIdlJson.csproj" />
     </ItemGroup>
 
 </Project>

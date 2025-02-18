@@ -116,7 +116,7 @@ jobs:
         $env:PATH = "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;$env:PATH"
         echo "PATH=$env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
-    - name: Latency Performance Test
+    - name: Performance Tests
       shell: cmd
       run: |
         dotnet clean ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
@@ -126,6 +126,7 @@ jobs:
         dotnet build -m:1 ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         dotnet build -m:1 ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
         dotnet run --project ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj "-1" --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet run --project ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj "-2" --configuration Release --runtime win-${{ matrix.BuildPlatform }}
       env:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
@@ -268,7 +269,7 @@ jobs:
         flag-name: coverage-linux-x64-Release
         fail-on-error: false
 
-    - name: Latency Performance Test
+    - name: Performance Tests
       shell: bash
       run: |
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime linux-x64
@@ -276,6 +277,7 @@ jobs:
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
         sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -1
+        sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -417,7 +419,7 @@ jobs:
         flag-name: coverage-macos-x64-Release
         fail-on-error: false
 
-    - name: Latency Performance Test
+    - name: Performance Tests
       shell: bash
       run: |        
         dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-x64
@@ -427,6 +429,7 @@ jobs:
         sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
         sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -1
+        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
       continue-on-error: true
 
@@ -564,7 +567,7 @@ jobs:
           flag-name: coverage-macos-arm64-Release
           fail-on-error: false
 
-      - name: Latency Performance Test
+      - name: Performance Tests
         shell: bash
         run: |
           dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-arm64
@@ -574,6 +577,7 @@ jobs:
           sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
           sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -1
+          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -2
         working-directory: ${{ github.workspace }}
         continue-on-error: true
 
