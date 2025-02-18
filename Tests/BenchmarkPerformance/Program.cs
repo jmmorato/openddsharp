@@ -49,6 +49,9 @@ switch (input)
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
 
+        Console.WriteLine();
+        Console.WriteLine("Starting OpenDDSharp CDR Latency Test...");
+
         var testCDR = new CDRLatencyTest(1000, 100, 2048);
         Stopwatch stopwatch = new();
         stopwatch.Start();
@@ -57,6 +60,9 @@ switch (input)
         testCDR.Dispose();
 
         Console.WriteLine($"OpenDDSharp CDR Latency Test {stopwatch.Elapsed.TotalSeconds}");
+
+        Console.WriteLine();
+        Console.WriteLine("Starting OpenDDSharp JSON Latency Test...");
 
         var testJson = new JSONLatencyTest(1000, 100, 2048);
         stopwatch = new Stopwatch();
@@ -71,15 +77,18 @@ switch (input)
 
         Ace.Fini();
 
-        // Requires RTI Connext DDS valid license.
-        var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
-        stopwatch.Reset();
-        stopwatch.Start();
-        test1.Run();
-        stopwatch.Stop();
-        test1.Dispose();
-
-        Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
+        // Console.WriteLine();
+        // Console.WriteLine("Starting RTI Connext Latency Test...");
+        //
+        // // Requires RTI Connext DDS valid license.
+        // var test1 = new RtiConnextLatencyTest(1000, 100, 2048);
+        // stopwatch.Reset();
+        // stopwatch.Start();
+        // test1.Run();
+        // stopwatch.Stop();
+        // test1.Dispose();
+        //
+        // Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
         break;
     }
     case "-2":
@@ -132,7 +141,7 @@ switch (input)
 
         // Requires RTI Connext DDS valid license.
         // Console.WriteLine();
-        // Console.WriteLine($"OpenDDSharp RTI Connext Throughput Test {stopwatch.Elapsed.TotalSeconds}");
+        // Console.WriteLine($"RTI Connext Throughput Test {stopwatch.Elapsed.TotalSeconds}");
         //
         // var testRti = new RtiConnextThroughputTest(1_000, 2048);
         // stopwatch.Reset();
@@ -172,5 +181,3 @@ switch (input)
         break;
     }
 }
-
-// Console.WriteLine("Press any button to exit the application.");
