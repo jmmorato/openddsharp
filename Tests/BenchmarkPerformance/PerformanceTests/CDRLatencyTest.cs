@@ -181,7 +181,7 @@ internal sealed class CDRLatencyTest : IDisposable
 
             if (samples.Count > 1)
             {
-                throw new InvalidDataException("Only one sample should be received.");
+                throw new InvalidDataException($"Only one sample should be received ({samples.Count} received).");
             }
 
             _count += 1;
