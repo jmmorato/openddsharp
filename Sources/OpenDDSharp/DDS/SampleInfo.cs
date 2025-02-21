@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using OpenDDSharp.Marshaller.Cdr;
 
 namespace OpenDDSharp.DDS;
 
@@ -104,6 +105,24 @@ public sealed class SampleInfo : IEquatable<SampleInfo>
     /// between this sample, and the most recent sample (possibly not in the returned collection) of this instance.
     /// </summary>
     public int AbsoluteGenerationRank { get; internal set; }
+    #endregion
+
+    #region Constructors
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SampleInfo" /> class.
+    /// </summary>
+    public SampleInfo()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SampleInfo" /> class.
+    /// </summary>
+    /// <param name="reader">The <see cref="CdrReader"/> instance.</param>
+    public SampleInfo(CdrReader reader)
+    {
+        FromCDR(reader);
+    }
     #endregion
 
     #region Methods

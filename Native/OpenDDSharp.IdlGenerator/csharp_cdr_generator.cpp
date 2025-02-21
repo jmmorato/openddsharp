@@ -315,6 +315,17 @@ csharp_cdr_generator::implement_struct_constructor(const std::vector<AST_Field *
     }
   }
 
+  ret.append(indent + "}\n\n");
+
+  ret.append(indent);
+  ret.append("public ");
+  ret.append(name);
+  ret.append("(OpenDDSharp.Marshaller.Cdr.CdrReader reader)\n");
+  ret.append(indent);
+  ret.append("{\n");
+
+  ret.append(indent + "    FromCDR(reader);\n");
+
   ret.append(indent + "}\n");
   return ret;
 }
