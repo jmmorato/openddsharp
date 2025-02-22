@@ -36,7 +36,7 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a unsigned byte from the stream.
+    /// Reads an unsigned byte from the stream.
     /// </summary>
     /// <returns>The byte value.</returns>
     public byte ReadByte()
@@ -60,9 +60,9 @@ public class CdrReader
     /// <returns>The bytes from the stream.</returns>
     public ReadOnlySpan<byte> ReadBytes(int count)
     {
-        var result = _buf.Slice(_position, count);
+        var result = _buf.Slice(_position, count).Span;
         _position += count;
-        return result.Span;
+        return result;
     }
 
     /// <summary>

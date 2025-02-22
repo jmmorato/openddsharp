@@ -33,7 +33,6 @@ public class ThroughputTest
     [GlobalSetup(Targets = [nameof(OpenDDSharpCDRThroughputTest), nameof(OpenDDSharpJSONThroughputTest)])]
     public void OpenDDSharpGlobalSetup()
     {
-        Console.WriteLine("OpenDDSharpGlobalSetup");
         Ace.Init();
 
         var disc = new RtpsDiscovery(RTPS_DISCOVERY)
@@ -56,7 +55,6 @@ public class ThroughputTest
     [GlobalCleanup(Targets = [nameof(OpenDDSharpCDRThroughputTest), nameof(OpenDDSharpJSONThroughputTest)])]
     public void OpenDDSharpGlobalCleanup()
     {
-        Console.WriteLine("OpenDDSharpGlobalCleanup");
         ParticipantService.Instance.Shutdown();
 
         Ace.Fini();
@@ -65,21 +63,18 @@ public class ThroughputTest
     [IterationSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
     public void OpenDDSharpCDRIterationSetup()
     {
-        Console.WriteLine("OpenDDSharpCDRIterationSetup");
         _cdrThroughputTest = new CDRThroughputTest(TotalSamples, TotalPayload);
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpJSONThroughputTest))]
     public void OpenDDSharpJSONIterationSetup()
     {
-        Console.WriteLine("OpenDDSharpJSONIterationSetup");
         _jsonThroughputTest = new JSONThroughputTest(TotalSamples, TotalPayload);
     }
 
     [IterationSetup(Target = nameof(RtiConnextThroughputTest))]
     public void RtiConnextIterationSetup()
     {
-        Console.WriteLine("RtiConnextIterationSetup");
         _rtiConnextThroughputTest = new RtiConnextThroughputTest(TotalSamples, TotalPayload);
     }
 
@@ -94,7 +89,6 @@ public class ThroughputTest
     [IterationCleanup(Target = nameof(OpenDDSharpJSONThroughputTest))]
     public void OpenDDSharpJSONIterationCleanup()
     {
-        Console.WriteLine("OpenDDSharpJSONIterationCleanup");
         _jsonThroughputTest.Dispose();
 
         ThroughputStatistics("openddsharpjson");
@@ -109,15 +103,15 @@ public class ThroughputTest
     }
 
     [Benchmark]
-    public void OpenDDSharpCDRThroughputTest()
-    {
-        _samplesReceived = _cdrThroughputTest.Run();
-    }
-
-    [Benchmark]
     public void OpenDDSharpJSONThroughputTest()
     {
         _samplesReceived = _jsonThroughputTest.Run();
+    }
+
+    [Benchmark]
+    public void OpenDDSharpCDRThroughputTest()
+    {
+        _samplesReceived = _cdrThroughputTest.Run();
     }
 
     // Cannot run without a valid RTI Connext license.

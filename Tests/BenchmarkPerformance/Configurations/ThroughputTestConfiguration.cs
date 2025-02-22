@@ -12,11 +12,13 @@ internal class ThroughputTestConfiguration : ManualConfig
 {
     public ThroughputTestConfiguration()
     {
-        AddJob(Job.Default
-            .WithIterationCount(10)
-            .WithUnrollFactor(1)
-            .WithInvocationCount(1)
-            .WithToolchain(InProcessEmitToolchain.Instance));
+        // AddJob(Job.Default
+        //     .WithIterationCount(10)
+        //     .WithUnrollFactor(1)
+        //     .WithInvocationCount(1)
+        //     .WithToolchain(InProcessEmitToolchain.Instance));
+
+        AddJob(Job.Dry);
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new ThroughputSamplesReceivedColumn());

@@ -115,15 +115,15 @@ public class LatencyTest
     }
 
     [Benchmark]
-    public void OpenDDSharpCDRLatencyTest()
-    {
-        _latencyHistory = _cdrLatencyTest.Run();
-    }
-
-    [Benchmark]
     public void OpenDDSharpJSONLatencyTest()
     {
         _latencyHistory = _jsonLatencyTest.Run();
+    }
+
+    [Benchmark]
+    public void OpenDDSharpCDRLatencyTest()
+    {
+        _latencyHistory = _cdrLatencyTest.Run();
     }
 
     // Cannot run without a valid RTI Connext license.

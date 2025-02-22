@@ -11,11 +11,13 @@ internal class LatencyTestConfiguration : ManualConfig
 {
     public LatencyTestConfiguration()
     {
-        AddJob(Job.Default
-            .WithIterationCount(10)
-            .WithUnrollFactor(1)
-            .WithInvocationCount(1)
-            .WithToolchain(InProcessEmitToolchain.Instance));
+        // AddJob(Job.Default
+        //     .WithIterationCount(10)
+        //     .WithUnrollFactor(1)
+        //     .WithInvocationCount(1)
+        //     .WithToolchain(InProcessEmitToolchain.Instance));
+
+        AddJob(Job.Dry);
 
         WithOption(ConfigOptions.DisableOptimizationsValidator, true);
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());

@@ -50,28 +50,28 @@ switch (input)
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
 
         Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp CDR Latency Test...");
-
-        var testCDR = new CDRLatencyTest(1000, 100, 2048);
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        testCDR.Run();
-        stopwatch.Stop();
-        testCDR.Dispose();
-
-        Console.WriteLine($"OpenDDSharp CDR Latency Test {stopwatch.Elapsed.TotalSeconds}");
-
-        Console.WriteLine();
         Console.WriteLine("Starting OpenDDSharp JSON Latency Test...");
 
         var testJson = new JSONLatencyTest(1000, 100, 2048);
-        stopwatch = new Stopwatch();
+        var stopwatch = new Stopwatch();
         stopwatch.Start();
         testJson.Run();
         stopwatch.Stop();
         testJson.Dispose();
 
         Console.WriteLine($"OpenDDSharp JSON Latency Test {stopwatch.Elapsed.TotalSeconds}");
+
+        Console.WriteLine();
+        Console.WriteLine("Starting OpenDDSharp CDR Latency Test...");
+
+        var testCDR = new CDRLatencyTest(1000, 100, 2048);
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
+        testCDR.Run();
+        stopwatch.Stop();
+        testCDR.Dispose();
+
+        Console.WriteLine($"OpenDDSharp CDR Latency Test {stopwatch.Elapsed.TotalSeconds}");
 
         ParticipantService.Instance.Shutdown();
 
@@ -112,28 +112,28 @@ switch (input)
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
 
         Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp CDR Throughput Test...");
-
-        var testCDR = new CDRThroughputTest(10_000, 2048);
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-        testCDR.Run();
-        stopwatch.Stop();
-        testCDR.Dispose();
-
-        Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatch.Elapsed.TotalSeconds}");
-
-        Console.WriteLine();
         Console.WriteLine("Starting OpenDDSharp JSON Throughput Test...");
 
         var testJson = new JSONThroughputTest(10_000, 2048);
-        stopwatch.Reset();
+        var stopwatch = new Stopwatch();
         stopwatch.Start();
         testJson.Run();
         stopwatch.Stop();
         testJson.Dispose();
 
         Console.WriteLine($"OpenDDSharp JSON Throughput Test {stopwatch.Elapsed.TotalSeconds}");
+
+        Console.WriteLine();
+        Console.WriteLine("Starting OpenDDSharp CDR Throughput Test...");
+
+        var testCDR = new CDRThroughputTest(10_000, 2048);
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
+        testCDR.Run();
+        stopwatch.Stop();
+        testCDR.Dispose();
+
+        Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatch.Elapsed.TotalSeconds}");
 
         ParticipantService.Instance.Shutdown();
 
