@@ -18,7 +18,8 @@ internal class ThroughputTestConfiguration : ManualConfig
         //     .WithInvocationCount(1)
         //     .WithToolchain(InProcessEmitToolchain.Instance));
 
-        AddJob(Job.Dry);
+        AddJob(Job.Dry
+            .WithToolchain(InProcessEmitToolchain.Instance));
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new ThroughputSamplesReceivedColumn());

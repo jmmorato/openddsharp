@@ -17,7 +17,8 @@ internal class LatencyTestConfiguration : ManualConfig
         //     .WithInvocationCount(1)
         //     .WithToolchain(InProcessEmitToolchain.Instance));
 
-        AddJob(Job.Dry);
+        AddJob(Job.Dry
+            .WithToolchain(InProcessEmitToolchain.Instance));
 
         WithOption(ConfigOptions.DisableOptimizationsValidator, true);
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());

@@ -114,7 +114,7 @@ switch (input)
         Console.WriteLine();
         Console.WriteLine("Starting OpenDDSharp JSON Throughput Test...");
 
-        var testJson = new JSONThroughputTest(10_000, 2048);
+        var testJson = new JSONThroughputTest(1_000, 512);
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         testJson.Run();
@@ -126,14 +126,14 @@ switch (input)
         Console.WriteLine();
         Console.WriteLine("Starting OpenDDSharp CDR Throughput Test...");
 
-        var testCDR = new CDRThroughputTest(10_000, 2048);
-        stopwatch = new Stopwatch();
-        stopwatch.Start();
+        var testCDR = new CDRThroughputTest(1_000, 512);
+        var stopwatchCdr = new Stopwatch();
+        stopwatchCdr.Start();
         testCDR.Run();
-        stopwatch.Stop();
+        stopwatchCdr.Stop();
         testCDR.Dispose();
 
-        Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatch.Elapsed.TotalSeconds}");
+        Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatchCdr.Elapsed.TotalSeconds}");
 
         ParticipantService.Instance.Shutdown();
 
