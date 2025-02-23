@@ -1,6 +1,5 @@
 using System.Globalization;
 using OpenDDSharp.DDS;
-using OpenDDSharp.OpenDDS.DCPS;
 using CdrWrapper;
 using OpenDDSharp.BenchmarkPerformance.Helpers;
 
@@ -8,19 +7,16 @@ namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
 internal sealed class CDRLatencyTest : IDisposable
 {
-    private const int DOMAIN_ID = 42;
-
     private readonly ManualResetEventSlim _evt;
     private readonly Random _random = new ();
     private readonly int _totalInstances;
     private readonly int _totalSamples;
     private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
     private readonly KeyedOctets _sample;
+    private readonly DomainParticipant _participant;
 
     private int _count;
 
-    private DomainParticipantFactory _dpf;
-    private DomainParticipant _participant;
     private Topic _topic;
     private Publisher _publisher;
     private KeyedOctetsDataWriter _dataWriter;
@@ -28,9 +24,8 @@ internal sealed class CDRLatencyTest : IDisposable
     private KeyedOctetsDataReader _dataReader;
     private StatusCondition _statusCondition;
     private WaitSet _waitSet;
-    private Thread _readerThread;
 
-    public CDRLatencyTest(int totalInstances, int totalSamples, ulong totalPayload)
+    public CDRLatencyTest(int totalInstances, int totalSamples, ulong totalPayload, DomainParticipant participant)
     {
         _totalInstances = totalInstances;
         _totalSamples = totalSamples;
@@ -38,6 +33,8 @@ internal sealed class CDRLatencyTest : IDisposable
 
         var payload = new byte[totalPayload];
         _random.NextBytes(payload);
+
+        _participant = participant;
 
         InitializeDDSEntities();
 
@@ -50,70 +47,63 @@ internal sealed class CDRLatencyTest : IDisposable
     public IList<TimeSpan> Run()
     {
         _count = 0;
-        _readerThread = new Thread(ReaderThreadProc)
+        var latencyHistory = new List<TimeSpan>();
+
+        var readerThread = new Thread(ReaderThreadProc)
         {
             IsBackground = true,
             Priority = ThreadPriority.Highest,
         };
-        _readerThread.Start();
-        var latencyHistory = new List<TimeSpan>();
 
-        for (var i = 1; i <= _totalSamples; i++)
+        var pubThread = new Thread(_ =>
         {
-            for (var j = 1; j <= _totalInstances; j++)
+            for (var i = 1; i <= _totalSamples; i++)
             {
-                _sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
-
-                if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
+                for (var j = 1; j <= _totalInstances; j++)
                 {
-                    instanceHandle = _dataWriter.RegisterInstance(_sample);
-                    _instanceHandles.Add(j, instanceHandle);
+                    _sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
+
+                    if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
+                    {
+                        instanceHandle = _dataWriter.RegisterInstance(_sample);
+                        _instanceHandles.Add(j, instanceHandle);
+                    }
+
+                    var publicationTime = DateTime.UtcNow.Ticks;
+
+                    _dataWriter.Write(_sample, instanceHandle);
+
+                    _evt.Wait();
+
+                    var receptionTime = DateTime.UtcNow.Ticks;
+                    var latency = TimeSpan.FromTicks(receptionTime - publicationTime);
+                    latencyHistory.Add(latency);
+
+                    _evt.Reset();
                 }
-
-                var publicationTime = DateTime.UtcNow.Ticks;
-
-                _dataWriter.Write(_sample, instanceHandle);
-
-                _evt.Wait();
-
-                var receptionTime = DateTime.UtcNow.Ticks;
-                var latency = TimeSpan.FromTicks(receptionTime - publicationTime);
-                latencyHistory.Add(latency);
-
-                _evt.Reset();
             }
-        }
+        });
 
-        _readerThread.Join();
+        readerThread.Start();
+        pubThread.Start();
+
+        readerThread.Join();
 
         return latencyHistory;
     }
 
     private void InitializeDDSEntities()
     {
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-
-        var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configName = "openddsharp_rtps_interop_" + guid;
-        var instName = "internal_openddsharp_rtps_transport_" + guid;
-
-        var config = TransportRegistry.Instance.CreateConfig(configName);
-        var inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-        var transport = new RtpsUdpInst(inst)
-        {
-            UseMulticast = false,
-            LocalAddress = "127.0.0.1:0",
-        };
-        config.Insert(transport);
-
-        _participant = _dpf.CreateParticipant(DOMAIN_ID);
-        TransportRegistry.Instance.BindConfig(configName, _participant);
-
         var typeSupport = new KeyedOctetsTypeSupport();
         var typeName = typeSupport.GetTypeName();
         typeSupport.RegisterType(_participant, typeName);
 
-        _topic = _participant.CreateTopic("LatencyTest", typeName);
+        var topicQos = new TopicQos
+        {
+            Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
+            History = { Kind = HistoryQosPolicyKind.KeepAllHistoryQos}
+        };
+        _topic = _participant.CreateTopic(Guid.NewGuid().ToString(), typeName, topicQos);
 
         var pubQos = new PublisherQos
         {
@@ -210,8 +200,6 @@ internal sealed class CDRLatencyTest : IDisposable
         _participant.DeleteSubscriber(_subscriber);
 
         _participant.DeleteTopic(_topic);
-
         _participant.DeleteContainedEntities();
-        _dpf.DeleteParticipant(_participant);
     }
 }

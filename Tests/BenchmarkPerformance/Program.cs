@@ -1,16 +1,8 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using System.Net;
-using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Running;
 using OpenDDSharp;
 using OpenDDSharp.BenchmarkPerformance.Configurations;
 using OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 using OpenDDSharp.OpenDDS.DCPS;
-using OpenDDSharp.OpenDDS.RTPS;
-
-const string RTPS_DISCOVERY = "RtpsDiscovery";
-const int DOMAIN_ID_CDR = 42;
-const int DOMAIN_ID_JSON = 43;
 
 var artifactsPath = Path.Combine(Environment.CurrentDirectory, "PerformanceTestArtifacts");
 
@@ -36,50 +28,62 @@ switch (input)
     {
         Ace.Init();
 
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        var config = new LatencyTestConfiguration("dry")
         {
-            SedpMulticast = false,
-            SedpLocalAddress = "127.0.0.1:0",
-            SpdpLocalAddress = "127.0.0.1:0",
-            ResendPeriod = new TimeValue
-            {
-                Seconds = 1,
-                MicroSeconds = 0,
-            },
+            ArtifactsPath = artifactsPath,
         };
+        _ = BenchmarkRunner.Run<LatencyTest>(config);
 
-        ParticipantService.Instance.AddDiscovery(disc);
-        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
-
-        Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp JSON Latency Test...");
-
-        var testJson = new JSONLatencyTest(1000, 100, 2048);
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        testJson.Run();
-        stopwatch.Stop();
-        testJson.Dispose();
-
-        Console.WriteLine($"OpenDDSharp JSON Latency Test {stopwatch.Elapsed.TotalSeconds}");
-
-        Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp CDR Latency Test...");
-
-        var testCDR = new CDRLatencyTest(1000, 100, 2048);
-        stopwatch = new Stopwatch();
-        stopwatch.Start();
-        testCDR.Run();
-        stopwatch.Stop();
-        testCDR.Dispose();
-
-        Console.WriteLine($"OpenDDSharp CDR Latency Test {stopwatch.Elapsed.TotalSeconds}");
-
+        TransportRegistry.Instance.Release();
         ParticipantService.Instance.Shutdown();
 
         Ace.Fini();
+        // Ace.Init();
+        //
+        // var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        // {
+        //     SedpMulticast = false,
+        //     SedpLocalAddress = "127.0.0.1:0",
+        //     SpdpLocalAddress = "127.0.0.1:0",
+        //     ResendPeriod = new TimeValue
+        //     {
+        //         Seconds = 1,
+        //         MicroSeconds = 0,
+        //     },
+        // };
+        //
+        // ParticipantService.Instance.AddDiscovery(disc);
+        // ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+        // ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
+        // ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
+        //
+        // Console.WriteLine();
+        // Console.WriteLine("Starting OpenDDSharp JSON Latency Test...");
+        //
+        // var testJson = new JSONLatencyTest(1000, 100, 2048);
+        // var stopwatch = new Stopwatch();
+        // stopwatch.Start();
+        // testJson.Run();
+        // stopwatch.Stop();
+        // testJson.Dispose();
+        //
+        // Console.WriteLine($"OpenDDSharp JSON Latency Test {stopwatch.Elapsed.TotalSeconds}");
+        //
+        // Console.WriteLine();
+        // Console.WriteLine("Starting OpenDDSharp CDR Latency Test...");
+        //
+        // var testCDR = new CDRLatencyTest(1000, 100, 2048);
+        // stopwatch = new Stopwatch();
+        // stopwatch.Start();
+        // testCDR.Run();
+        // stopwatch.Stop();
+        // testCDR.Dispose();
+        //
+        // Console.WriteLine($"OpenDDSharp CDR Latency Test {stopwatch.Elapsed.TotalSeconds}");
+        //
+        // ParticipantService.Instance.Shutdown();
+        //
+        // Ace.Fini();
 
         // Console.WriteLine();
         // Console.WriteLine("Starting RTI Connext Latency Test...");
@@ -217,11 +221,18 @@ switch (input)
     }
     case "1":
     {
-        var config = new LatencyTestConfiguration
+        Ace.Init();
+
+        var config = new LatencyTestConfiguration("default")
         {
             ArtifactsPath = artifactsPath,
         };
         _ = BenchmarkRunner.Run<LatencyTest>(config);
+
+        TransportRegistry.Instance.Release();
+        ParticipantService.Instance.Shutdown();
+
+        Ace.Fini();
         break;
     }
     case "2":

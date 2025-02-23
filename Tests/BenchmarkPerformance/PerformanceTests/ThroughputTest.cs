@@ -24,6 +24,10 @@ public class ThroughputTest
     private DomainParticipantFactory _dpf;
     private DomainParticipant _participantCdr;
     private DomainParticipant _participantJson;
+    private TransportConfig _configCdr;
+    private TransportInst _instCdr;
+    private TransportConfig _configJson;
+    private TransportInst _instJson;
 
     /// <summary>
     /// Gets or sets the current number of instance for the test.
@@ -37,27 +41,10 @@ public class ThroughputTest
     [Params(1024, 2048, 4096, 8192)]
     public ulong TotalPayload { get; set; }
 
-    private TransportConfig _configCdr;
-    private TransportInst _instCdr;
-    private TransportConfig _configJson;
-    private TransportInst _instJson;
-
     [GlobalSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
     public void OpenDDSharpGlobalSetupCDR()
     {
-        // Ace.Init();
-
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
-        {
-            // SedpMulticast = false,
-            // SedpLocalAddress = "127.0.0.1:",
-            // SpdpLocalAddress = "127.0.0.1:",
-            // ResendPeriod = new TimeValue
-            // {
-            //     Seconds = 1,
-            //     MicroSeconds = 0,
-            // },
-        };
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -79,7 +66,6 @@ public class ThroughputTest
 
         _participantCdr = _dpf.CreateParticipant(DOMAIN_ID_CDR);
         TransportRegistry.Instance.BindConfig(configNameCdr, _participantCdr);
-
     }
 
     [GlobalSetup(Target = nameof(OpenDDSharpJSONThroughputTest))]
@@ -87,17 +73,7 @@ public class ThroughputTest
     {
         Ace.Init();
 
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
-        {
-            // SedpMulticast = false,
-            // SedpLocalAddress = "127.0.0.1:",
-            // SpdpLocalAddress = "127.0.0.1:",
-            // ResendPeriod = new TimeValue
-            // {
-            //     Seconds = 1,
-            //     MicroSeconds = 0,
-            // },
-        };
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -129,11 +105,6 @@ public class ThroughputTest
 
         TransportRegistry.Instance.RemoveConfig(_configCdr);
         TransportRegistry.Instance.RemoveInst(_instCdr);
-
-        // TransportRegistry.Instance.Release();
-        // ParticipantService.Instance.Shutdown();
-
-        // Ace.Fini();
     }
 
     [GlobalCleanup(Target = nameof(OpenDDSharpJSONThroughputTest))]
@@ -143,11 +114,6 @@ public class ThroughputTest
 
         TransportRegistry.Instance.RemoveConfig(_configJson);
         TransportRegistry.Instance.RemoveInst(_instJson);
-        //
-        // TransportRegistry.Instance.Release();
-        // ParticipantService.Instance.Shutdown();
-        //
-        // Ace.Fini();
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
@@ -192,20 +158,20 @@ public class ThroughputTest
         ThroughputStatistics("rticonnext");
     }
 
-    [Benchmark]
+    [Benchmark(Description = "OpenDDSharp CDR")]
     public void OpenDDSharpCDRThroughputTest()
     {
         _samplesReceived = _cdrThroughputTest.Run();
     }
 
-    [Benchmark]
+    [Benchmark(Description = "OpenDDSharp JSON")]
     public void OpenDDSharpJSONThroughputTest()
     {
         _samplesReceived = _jsonThroughputTest.Run();
     }
 
     // Cannot run without a valid RTI Connext license.
-    //[Benchmark]
+    //[Benchmark(Description = "RTI Connext")]
     public void RtiConnextThroughputTest()
     {
         _samplesReceived= _rtiConnextThroughputTest.Run();

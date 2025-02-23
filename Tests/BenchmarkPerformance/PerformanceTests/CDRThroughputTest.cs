@@ -22,7 +22,6 @@ internal sealed class CDRThroughputTest : IDisposable
     private KeyedOctetsDataReader _dataReader;
     private StatusCondition _statusCondition;
     private WaitSet _waitSet;
-    private Thread _readerThread;
 
     public CDRThroughputTest(int totalSamples, ulong totalPayload, DomainParticipant participant)
     {
@@ -45,7 +44,7 @@ internal sealed class CDRThroughputTest : IDisposable
     public ulong Run()
     {
         _samplesReceived = 0;
-        _readerThread = new Thread(ReaderThreadProc)
+        var readerThread = new Thread(ReaderThreadProc)
         {
             IsBackground = true,
             Priority = ThreadPriority.AboveNormal,
@@ -58,11 +57,11 @@ internal sealed class CDRThroughputTest : IDisposable
                 _dataWriter.Write(_sample);
             }
         });
+
         pubThread.Start();
+        readerThread.Start();
 
-        _readerThread.Start();
-
-        _readerThread.Join();
+        readerThread.Join();
 
         return _samplesReceived;
     }
@@ -173,7 +172,6 @@ internal sealed class CDRThroughputTest : IDisposable
         _participant.DeleteSubscriber(_subscriber);
 
         _participant.DeleteTopic(_topic);
-
         _participant.DeleteContainedEntities();
     }
 }

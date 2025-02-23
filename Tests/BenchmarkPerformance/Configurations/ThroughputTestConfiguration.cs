@@ -14,8 +14,7 @@ internal class ThroughputTestConfiguration : ManualConfig
     {
         if (name != null && name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.Dry
-                .WithToolchain(InProcessEmitToolchain.Instance));
+            AddJob(Job.Dry.WithToolchain(InProcessEmitToolchain.Instance));
         }
         else
         {

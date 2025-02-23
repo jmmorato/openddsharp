@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Net;
 using BenchmarkDotNet.Attributes;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
+using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
 
@@ -10,72 +12,123 @@ namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by BenchmarkDotNet.")]
 public class LatencyTest
 {
-    private const int DOMAIN_ID = 42;
+    private const int DOMAIN_ID_CDR = 42;
+    private const int DOMAIN_ID_JSON = 43;
     private const string RTPS_DISCOVERY = "RtpsDiscovery";
 
     private CDRLatencyTest _cdrLatencyTest;
     private JSONLatencyTest _jsonLatencyTest;
     private RtiConnextLatencyTest _rtiConnextLatencyTest;
     private IList<TimeSpan> _latencyHistory;
+    private DomainParticipantFactory _dpf;
+    private DomainParticipant _participantCdr;
+    private DomainParticipant _participantJson;
+    private TransportConfig _configCdr;
+    private TransportInst _instCdr;
+    private TransportConfig _configJson;
+    private TransportInst _instJson;
 
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(10, 50, 100, 250, 500)]
+    [Params(50, 100, 150, 200)]
     public int TotalInstances { get; set; }
 
     /// <summary>
     /// Gets or sets the current number of samples for the test.
     /// </summary>
-    [Params(10, 50, 100)]
+    [Params(10, 20, 30)]
     public int TotalSamples { get; set; }
 
     /// <summary>
     /// Gets or sets the payload size for the test.
     /// </summary>
-    [Params(512, 1024, 2048)]
+    [Params(1024, 2048, 4096, 8192)]
     public ulong TotalPayload { get; set; }
 
-    [GlobalSetup]
-    public void OpenDDSharpGlobalSetup()
+    [GlobalSetup(Target = nameof(OpenDDSharpCDRLatencyTest))]
+    public void OpenDDSharpGlobalSetupCDR()
     {
-        Ace.Init();
-
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
-        {
-            SedpMulticast = false,
-            SedpLocalAddress = "127.0.0.1:0",
-            SpdpLocalAddress = "127.0.0.1:0",
-            ResendPeriod = new TimeValue
-            {
-                Seconds = 1,
-                MicroSeconds = 0,
-            },
-        };
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
+
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+
+        var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        var configNameCdr = "openddsharp_tcp_" + guidCdr;
+        var instNameCdr = "internal_openddsharp_tcp_" + guidCdr;
+
+        _configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
+        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
+        var transportCdr = new TcpInst(_instCdr)
+        {
+            LocalAddress = IPAddress.Loopback.ToString(),
+        };
+        _configCdr.Insert(transportCdr);
+
+        _participantCdr = _dpf.CreateParticipant(DOMAIN_ID_CDR);
+        TransportRegistry.Instance.BindConfig(configNameCdr, _participantCdr);
     }
 
-    [GlobalCleanup]
-    public void OpenDDSharpGlobalCleanup()
+    [GlobalSetup(Target = nameof(OpenDDSharpJSONLatencyTest))]
+    public void OpenDDSharpGlobalSetupJSON()
     {
-        ParticipantService.Instance.Shutdown();
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
 
-        Ace.Fini();
+        ParticipantService.Instance.AddDiscovery(disc);
+        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
+
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+
+        // Create JSON participant
+        var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        var configNameJson = "openddsharp_tcp_" + guidJson;
+        var instNameCdrJson = "internal_openddsharp_tcp_" + guidJson;
+
+        _configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
+        _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "tcp");
+        var transportJson = new TcpInst(_instJson)
+        {
+            LocalAddress = IPAddress.Loopback.ToString(),
+        };
+        _configJson.Insert(transportJson);
+
+        _participantJson = _dpf.CreateParticipant(DOMAIN_ID_JSON);
+        TransportRegistry.Instance.BindConfig(configNameJson, _participantJson);
+    }
+
+    [GlobalCleanup(Target = nameof(OpenDDSharpCDRLatencyTest))]
+    public void OpenDDSharpGlobalCleanupCDR()
+    {
+        _dpf.DeleteParticipant(_participantCdr);
+
+        TransportRegistry.Instance.RemoveConfig(_configCdr);
+        TransportRegistry.Instance.RemoveInst(_instCdr);
+    }
+
+    [GlobalCleanup(Target = nameof(OpenDDSharpJSONLatencyTest))]
+    public void OpenDDSharpGlobalCleanupJSON()
+    {
+        _dpf.DeleteParticipant(_participantJson);
+
+        TransportRegistry.Instance.RemoveConfig(_configJson);
+        TransportRegistry.Instance.RemoveInst(_instJson);
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpCDRLatencyTest))]
     public void OpenDDSharpCDRIterationSetup()
     {
-        _cdrLatencyTest = new CDRLatencyTest(TotalInstances, TotalSamples, TotalPayload);
+        _cdrLatencyTest = new CDRLatencyTest(TotalInstances, TotalSamples, TotalPayload, _participantCdr);
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpJSONLatencyTest))]
     public void OpenDDSharpJSONIterationSetup()
     {
-        _jsonLatencyTest = new JSONLatencyTest(TotalInstances, TotalSamples, TotalPayload);
+        _jsonLatencyTest = new JSONLatencyTest(TotalInstances, TotalSamples, TotalPayload, _participantJson);
     }
 
     [IterationSetup(Target = nameof(RtiConnextLatencyTest))]
@@ -87,7 +140,7 @@ public class LatencyTest
     [IterationCleanup(Target = nameof(OpenDDSharpCDRLatencyTest))]
     public void OpenDDSharpCDRIterationCleanup()
     {
-        _cdrLatencyTest?.Dispose();
+        _cdrLatencyTest.Dispose();
 
         LatencyStatistics("openddsharpcdr");
 
@@ -97,7 +150,7 @@ public class LatencyTest
     [IterationCleanup(Target = nameof(OpenDDSharpJSONLatencyTest))]
     public void OpenDDSharpJSONIterationCleanup()
     {
-        _jsonLatencyTest?.Dispose();
+        _jsonLatencyTest.Dispose();
 
         LatencyStatistics("openddsharpjson");
 
@@ -114,20 +167,20 @@ public class LatencyTest
         _latencyHistory.Clear();
     }
 
-    [Benchmark]
+    [Benchmark(Description = "OpenDDSharp CDR")]
     public void OpenDDSharpCDRLatencyTest()
     {
         _latencyHistory = _cdrLatencyTest.Run();
     }
 
-    [Benchmark]
+    [Benchmark(Description = "OpenDDSharp JSON")]
     public void OpenDDSharpJSONLatencyTest()
     {
         _latencyHistory = _jsonLatencyTest.Run();
     }
 
     // Cannot run without a valid RTI Connext license.
-    // [Benchmark]
+    // [Benchmark(Description = "RTI Connext")]
     public void RtiConnextLatencyTest()
     {
         _latencyHistory= _rtiConnextLatencyTest.Run();

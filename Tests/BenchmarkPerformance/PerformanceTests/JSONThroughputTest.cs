@@ -1,6 +1,4 @@
-using System.Globalization;
 using OpenDDSharp.DDS;
-using OpenDDSharp.OpenDDS.DCPS;
 using JsonWrapper;
 using OpenDDSharp.BenchmarkPerformance.Helpers;
 
@@ -22,7 +20,6 @@ internal sealed class JSONThroughputTest : IDisposable
     private KeyedOctetsDataReader _dataReader;
     private StatusCondition _statusCondition;
     private WaitSet _waitSet;
-    private Thread _readerThread;
 
     public JSONThroughputTest(int totalSamples, ulong totalPayload, DomainParticipant participant)
     {
@@ -45,7 +42,7 @@ internal sealed class JSONThroughputTest : IDisposable
     public ulong Run()
     {
         _samplesReceived = 0;
-        _readerThread = new Thread(ReaderThreadProc)
+        var readerThread = new Thread(ReaderThreadProc)
         {
             IsBackground = true,
             Priority = ThreadPriority.AboveNormal,
@@ -58,10 +55,11 @@ internal sealed class JSONThroughputTest : IDisposable
                 _dataWriter.Write(_sample);
             }
         });
-        pubThread.Start();
-        _readerThread.Start();
 
-        _readerThread.Join();
+        pubThread.Start();
+        readerThread.Start();
+
+        readerThread.Join();
 
         return _samplesReceived;
     }
@@ -172,7 +170,6 @@ internal sealed class JSONThroughputTest : IDisposable
         _participant.DeleteSubscriber(_subscriber);
 
         _participant.DeleteTopic(_topic);
-
         _participant.DeleteContainedEntities();
     }
 }

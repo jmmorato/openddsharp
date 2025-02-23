@@ -9,26 +9,35 @@ namespace OpenDDSharp.BenchmarkPerformance.Configurations;
 
 internal class LatencyTestConfiguration : ManualConfig
 {
-    public LatencyTestConfiguration()
+    public LatencyTestConfiguration(string name)
     {
-        // AddJob(Job.Default
-        //     .WithIterationCount(10)
-        //     .WithUnrollFactor(1)
-        //     .WithInvocationCount(1)
-        //     .WithToolchain(InProcessEmitToolchain.Instance));
+        if (name != null && name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
+        {
+            AddJob(Job.Dry.WithToolchain(InProcessEmitToolchain.Instance));
+            AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+            AddColumn(new LatencyAverageColumn());
+            AddColumn(new LatencyDeviationColumn());
+            AddColumn(new LatencyMinimumColumn());
+            AddColumn(new LatencyMaximumColumn());
+        }
+        else
+        {
+            AddJob(Job.Default
+                .WithIterationCount(10)
+                .WithUnrollFactor(1)
+                .WithInvocationCount(10)
+                .WithToolchain(InProcessEmitToolchain.Instance));
 
-        AddJob(Job.Dry
-            .WithToolchain(InProcessEmitToolchain.Instance));
+            AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+            AddColumn(new LatencyAverageColumn());
+            AddColumn(new LatencyDeviationColumn());
+            AddColumn(new LatencyMinimumColumn());
+            AddColumn(new LatencyMaximumColumn());
+            AddColumn(new LatencyFiftyColumn());
+            AddColumn(new LatencyNinetyColumn());
+            AddColumn(new LatencyNinetyNineColumn());
+        }
 
-        WithOption(ConfigOptions.DisableOptimizationsValidator, true);
-        AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
-        AddColumn(new LatencyAverageColumn());
-        AddColumn(new LatencyDeviationColumn());
-        AddColumn(new LatencyMinimumColumn());
-        AddColumn(new LatencyMaximumColumn());
-        AddColumn(new LatencyFiftyColumn());
-        AddColumn(new LatencyNinetyColumn());
-        AddColumn(new LatencyNinetyNineColumn());
         AddLogger(DefaultConfig.Instance.GetLoggers().ToArray());
         AddExporter(PlainExporter.Default);
         AddExporter(CsvExporter.Default);
