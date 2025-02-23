@@ -10,16 +10,21 @@ namespace OpenDDSharp.BenchmarkPerformance.Configurations;
 
 internal class ThroughputTestConfiguration : ManualConfig
 {
-    public ThroughputTestConfiguration()
+    public ThroughputTestConfiguration(string name)
     {
-        // AddJob(Job.Default
-        //     .WithIterationCount(10)
-        //     .WithUnrollFactor(1)
-        //     .WithInvocationCount(1)
-        //     .WithToolchain(InProcessEmitToolchain.Instance));
-
-        AddJob(Job.Dry
-            .WithToolchain(InProcessEmitToolchain.Instance));
+        if (name != null && name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
+        {
+            AddJob(Job.Dry
+                .WithToolchain(InProcessEmitToolchain.Instance));
+        }
+        else
+        {
+            AddJob(Job.Default
+                .WithIterationCount(10)
+                .WithUnrollFactor(1)
+                .WithInvocationCount(10)
+                .WithToolchain(InProcessEmitToolchain.Instance));
+        }
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new ThroughputSamplesReceivedColumn());

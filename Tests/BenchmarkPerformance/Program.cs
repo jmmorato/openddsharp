@@ -99,84 +99,98 @@ switch (input)
     {
         Ace.Init();
 
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        var config = new ThroughputTestConfiguration("dry")
         {
-            SedpMulticast = false,
-            SedpLocalAddress = "127.0.0.1:0",
-            SpdpLocalAddress = "127.0.0.1:0",
-            ResendPeriod = new TimeValue
-            {
-                Seconds = 1,
-                MicroSeconds = 0,
-            },
+            ArtifactsPath = artifactsPath,
         };
+        _ = BenchmarkRunner.Run<ThroughputTest>(config);
 
-        ParticipantService.Instance.AddDiscovery(disc);
-        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
-
-        var dpf = ParticipantService.Instance.GetDomainParticipantFactory();
-
-        var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameCdr = "openddsharp_rtps_interop_" + guidCdr;
-        var instNameCdr = "internal_openddsharp_rtps_transport_" + guidCdr;
-
-        var configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
-        var instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
-        var transportCdr = new TcpInst(instCdr)
-        {
-            LocalAddress = IPAddress.Loopback.ToString(),
-        };
-        configCdr.Insert(transportCdr);
-
-        var participantCdr = dpf.CreateParticipant(DOMAIN_ID_CDR);
-        TransportRegistry.Instance.BindConfig(configNameCdr, participantCdr);
-
-        Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp CDR Throughput Test...");
-
-        var testCDR = new CDRThroughputTest(15_000, 2048, participantCdr);
-        var stopwatchCdr = new Stopwatch();
-        stopwatchCdr.Start();
-        testCDR.Run();
-        stopwatchCdr.Stop();
-        testCDR.Dispose();
-
-        Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatchCdr.Elapsed.TotalSeconds}");
-
-        Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp JSON Throughput Test...");
-
-        var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameJson = "openddsharp_rtps_interop_" + guidJson;
-        var instNameJson = "internal_openddsharp_rtps_transport_" + guidJson;
-
-        var configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
-        var instJson = TransportRegistry.Instance.CreateInst(instNameJson, "tcp");
-        var transportJson = new TcpInst(instJson)
-        {
-            LocalAddress = IPAddress.Loopback.ToString(),
-        };
-        configJson.Insert(transportJson);
-
-        var participantJson = dpf.CreateParticipant(DOMAIN_ID_JSON);
-        TransportRegistry.Instance.BindConfig(configNameJson, participantJson);
-
-        var testJson = new JSONThroughputTest(15_000, 2048, participantJson);
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        testJson.Run();
-        stopwatch.Stop();
-        testJson.Dispose();
-
-        Console.WriteLine($"OpenDDSharp JSON Throughput Test {stopwatch.Elapsed.TotalSeconds}");
-
-        dpf.DeleteParticipant(participantCdr);
-        dpf.DeleteParticipant(participantJson);
+        TransportRegistry.Instance.Release();
         ParticipantService.Instance.Shutdown();
 
         Ace.Fini();
+        break;
+        // Ace.Init();
+        //
+        // var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        // {
+        //     SedpMulticast = false,
+        //     SedpLocalAddress = "127.0.0.1:0",
+        //     SpdpLocalAddress = "127.0.0.1:0",
+        //     ResendPeriod = new TimeValue
+        //     {
+        //         Seconds = 1,
+        //         MicroSeconds = 0,
+        //     },
+        // };
+        //
+        // ParticipantService.Instance.AddDiscovery(disc);
+        // ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+        // ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
+        // ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
+        //
+        // var dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        //
+        // var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        // var configNameCdr = "openddsharp_tcp_" + guidCdr;
+        // var instNameCdr = "internal_openddsharp_tcp_" + guidCdr;
+        //
+        // var configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
+        // var instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
+        // var transportCdr = new TcpInst(instCdr)
+        // {
+        //     LocalAddress = IPAddress.Loopback.ToString(),
+        // };
+        // configCdr.Insert(transportCdr);
+        //
+        // var participantCdr = dpf.CreateParticipant(DOMAIN_ID_CDR);
+        // TransportRegistry.Instance.BindConfig(configNameCdr, participantCdr);
+        //
+        // Console.WriteLine();
+        // Console.WriteLine("Starting OpenDDSharp CDR Throughput Test...");
+        //
+        // var testCDR = new CDRThroughputTest(15_000, 2048, participantCdr);
+        // var stopwatchCdr = new Stopwatch();
+        // stopwatchCdr.Start();
+        // testCDR.Run();
+        // stopwatchCdr.Stop();
+        // testCDR.Dispose();
+        //
+        // Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatchCdr.Elapsed.TotalSeconds}");
+        //
+        // Console.WriteLine();
+        // Console.WriteLine("Starting OpenDDSharp JSON Throughput Test...");
+        //
+        // var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        // var configNameJson = "openddsharp_tcp_" + guidJson;
+        // var instNameJson = "internal_openddsharp_tcp_" + guidJson;
+        //
+        // var configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
+        // var instJson = TransportRegistry.Instance.CreateInst(instNameJson, "tcp");
+        // var transportJson = new TcpInst(instJson)
+        // {
+        //     LocalAddress = IPAddress.Loopback.ToString(),
+        // };
+        // configJson.Insert(transportJson);
+        //
+        // var participantJson = dpf.CreateParticipant(DOMAIN_ID_JSON);
+        // TransportRegistry.Instance.BindConfig(configNameJson, participantJson);
+        //
+        // var testJson = new JSONThroughputTest(15_000, 2048, participantJson);
+        // var stopwatch = new Stopwatch();
+        // stopwatch.Start();
+        // testJson.Run();
+        // stopwatch.Stop();
+        // testJson.Dispose();
+        //
+        // Console.WriteLine($"OpenDDSharp JSON Throughput Test {stopwatch.Elapsed.TotalSeconds}");
+        //
+        // dpf.DeleteParticipant(participantCdr);
+        // dpf.DeleteParticipant(participantJson);
+        // TransportRegistry.Instance.Release();
+        // ParticipantService.Instance.Shutdown();
+        //
+        // Ace.Fini();
 
         // Requires RTI Connext DDS valid license.
         // Console.WriteLine();
@@ -199,24 +213,31 @@ switch (input)
         // testRti.Dispose();
         //
         // Console.WriteLine($"RTI Connext Throughput Test {stopwatch.Elapsed.TotalSeconds}");
-        break;
+        // break;
     }
     case "1":
+    {
+        var config = new LatencyTestConfiguration
         {
-            var config = new LatencyTestConfiguration
-            {
-                ArtifactsPath = artifactsPath,
-            };
-            _ = BenchmarkRunner.Run<LatencyTest>(config);
-            break;
-        }
+            ArtifactsPath = artifactsPath,
+        };
+        _ = BenchmarkRunner.Run<LatencyTest>(config);
+        break;
+    }
     case "2":
     {
-        var config = new ThroughputTestConfiguration
+        Ace.Init();
+
+        var config = new ThroughputTestConfiguration("default")
         {
             ArtifactsPath = artifactsPath,
         };
         _ = BenchmarkRunner.Run<ThroughputTest>(config);
+
+        TransportRegistry.Instance.Release();
+        ParticipantService.Instance.Shutdown();
+
+        Ace.Fini();
         break;
     }
 }

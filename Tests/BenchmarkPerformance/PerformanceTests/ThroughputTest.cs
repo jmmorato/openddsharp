@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Net;
 using BenchmarkDotNet.Attributes;
 using CdrWrapper;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
@@ -27,13 +28,13 @@ public class ThroughputTest
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(1_000, 2_000, 5_000, 10_000, 15_000)] //,
+    [Params(5_000, 10_000, 15_000, 20_000)]
     public int TotalSamples { get; set; }
 
     /// <summary>
     /// Gets or sets the payload size for the test.
     /// </summary>
-    [Params(512, 1024, 2048)]
+    [Params(1024, 2048, 4096, 8192)]
     public ulong TotalPayload { get; set; }
 
     private TransportConfig _configCdr;
@@ -44,7 +45,7 @@ public class ThroughputTest
     [GlobalSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
     public void OpenDDSharpGlobalSetupCDR()
     {
-        Ace.Init();
+        // Ace.Init();
 
         var disc = new RtpsDiscovery(RTPS_DISCOVERY)
         {
@@ -72,13 +73,7 @@ public class ThroughputTest
         _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
         var transportCdr = new TcpInst(_instCdr)
         {
-            // UseMulticast = false,
-            // // LocalAddress = "127.0.0.1:",
-            // HeartbeatPeriod = new TimeValue
-            // {
-            //     Seconds = 0,
-            //     MicroSeconds = 10_000,
-            // },
+            LocalAddress = IPAddress.Loopback.ToString(),
         };
         _configCdr.Insert(transportCdr);
 
@@ -117,7 +112,10 @@ public class ThroughputTest
 
         _configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
         _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "tcp");
-        var transportJson = new TcpInst(_instJson);
+        var transportJson = new TcpInst(_instJson)
+        {
+            LocalAddress = IPAddress.Loopback.ToString(),
+        };
         _configJson.Insert(transportJson);
 
         _participantJson = _dpf.CreateParticipant(DOMAIN_ID_JSON);
@@ -135,7 +133,7 @@ public class ThroughputTest
         // TransportRegistry.Instance.Release();
         // ParticipantService.Instance.Shutdown();
 
-        Ace.Fini();
+        // Ace.Fini();
     }
 
     [GlobalCleanup(Target = nameof(OpenDDSharpJSONThroughputTest))]
@@ -145,11 +143,11 @@ public class ThroughputTest
 
         TransportRegistry.Instance.RemoveConfig(_configJson);
         TransportRegistry.Instance.RemoveInst(_instJson);
-
-        TransportRegistry.Instance.Release();
-        ParticipantService.Instance.Shutdown();
-
-        Ace.Fini();
+        //
+        // TransportRegistry.Instance.Release();
+        // ParticipantService.Instance.Shutdown();
+        //
+        // Ace.Fini();
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
