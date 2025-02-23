@@ -128,8 +128,8 @@ jobs:
         dotnet publish ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
 
         cd ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish
-        ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish\BenchmarkPerformance.exe 1
-        ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish\BenchmarkPerformance.exe 2
+        ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish\BenchmarkPerformance.exe -1
+        ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish\BenchmarkPerformance.exe -2
       env:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
@@ -279,8 +279,8 @@ jobs:
         dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
         dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
-        sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 1
-        sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance 2
+        sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -1
+        sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -431,8 +431,8 @@ jobs:
         sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
         sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
-        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 1
-        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance 2
+        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -1
+        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
       continue-on-error: true
 
@@ -579,8 +579,8 @@ jobs:
           sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
           sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
-          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 1
-          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance 2
+          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -1
+          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -2
         working-directory: ${{ github.workspace }}
         continue-on-error: true
 

@@ -310,9 +310,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -328,9 +328,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -351,9 +351,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -368,9 +368,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -390,9 +390,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -406,9 +406,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -429,9 +429,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -446,9 +446,9 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -488,9 +488,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -504,9 +504,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -527,9 +527,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -544,9 +544,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -566,9 +566,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -582,9 +582,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -605,9 +605,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -622,9 +622,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -644,9 +644,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -660,9 +660,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -682,9 +682,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -698,9 +698,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -720,9 +720,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -736,9 +736,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -758,9 +758,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }
@@ -774,9 +774,9 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     {
         <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
         marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
 
-    dr->return_loan(received_data, info_seq);
+        dr->return_loan(received_data, info_seq);
+    }
 
     return ret;
 }

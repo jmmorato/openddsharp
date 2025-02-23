@@ -8,16 +8,13 @@ namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
 internal sealed class CDRThroughputTest : IDisposable
 {
-    private const int DOMAIN_ID = 42;
-
     private readonly Random _random = new ();
     private readonly int _totalSamples;
     private readonly KeyedOctets _sample;
+    private readonly DomainParticipant _participant;
 
     private ulong _samplesReceived;
 
-    private DomainParticipantFactory _dpf;
-    private DomainParticipant _participant;
     private Topic _topic;
     private Publisher _publisher;
     private KeyedOctetsDataWriter _dataWriter;
@@ -27,12 +24,14 @@ internal sealed class CDRThroughputTest : IDisposable
     private WaitSet _waitSet;
     private Thread _readerThread;
 
-    public CDRThroughputTest(int totalSamples, ulong totalPayload)
+    public CDRThroughputTest(int totalSamples, ulong totalPayload, DomainParticipant participant)
     {
         _totalSamples = totalSamples;
 
         var payload = new byte[totalPayload];
         _random.NextBytes(payload);
+
+        _participant = participant;
 
         InitializeDDSEntities();
 
@@ -49,14 +48,19 @@ internal sealed class CDRThroughputTest : IDisposable
         _readerThread = new Thread(ReaderThreadProc)
         {
             IsBackground = true,
-            Priority = ThreadPriority.Highest,
+            Priority = ThreadPriority.AboveNormal,
         };
-        _readerThread.Start();
 
-        for (var i = 1; i <= _totalSamples; i++)
+        var pubThread = new Thread(_ =>
         {
-            _dataWriter.Write(_sample);
-        }
+            for (var i = 1; i <= _totalSamples; i++)
+            {
+                _dataWriter.Write(_sample);
+            }
+        });
+        pubThread.Start();
+
+        _readerThread.Start();
 
         _readerThread.Join();
 
@@ -65,24 +69,6 @@ internal sealed class CDRThroughputTest : IDisposable
 
     private void InitializeDDSEntities()
     {
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
-
-        var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configName = "openddsharp_rtps_interop_" + guid;
-        var instName = "internal_openddsharp_rtps_transport_" + guid;
-
-        var config = TransportRegistry.Instance.CreateConfig(configName);
-        var inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-        var transport = new RtpsUdpInst(inst)
-        {
-            UseMulticast = false,
-            LocalAddress = "127.0.0.1:",
-        };
-        config.Insert(transport);
-
-        _participant = _dpf.CreateParticipant(DOMAIN_ID);
-        TransportRegistry.Instance.BindConfig(configName, _participant);
-
         var typeSupport = new KeyedOctetsTypeSupport();
         var typeName = typeSupport.GetTypeName();
         typeSupport.RegisterType(_participant, typeName);
@@ -152,14 +138,19 @@ internal sealed class CDRThroughputTest : IDisposable
 
     private void ReaderThreadProc()
     {
-        var samples = new List<KeyedOctets>();
-        var sampleInfos = new List<SampleInfo>();
-        var conditions = new List<Condition>();
         while (true)
         {
+            var conditions = new List<Condition>();
             _waitSet.Wait(conditions);
 
-            _dataReader.Take(samples, sampleInfos);
+            var samples = new List<KeyedOctets>();
+            var sampleInfos = new List<SampleInfo>();
+
+            var result = _dataReader.Take(samples, sampleInfos);
+            if (result != ReturnCode.Ok)
+            {
+                continue;
+            }
 
             _samplesReceived += (ulong)samples.Count;
             if (_samplesReceived >= (ulong)_totalSamples)
@@ -184,6 +175,5 @@ internal sealed class CDRThroughputTest : IDisposable
         _participant.DeleteTopic(_topic);
 
         _participant.DeleteContainedEntities();
-        _dpf.DeleteParticipant(_participant);
     }
 }

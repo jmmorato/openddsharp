@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
+using System.Net;
 using BenchmarkDotNet.Running;
 using OpenDDSharp;
 using OpenDDSharp.BenchmarkPerformance.Configurations;
@@ -7,7 +9,8 @@ using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;
 
 const string RTPS_DISCOVERY = "RtpsDiscovery";
-const int DOMAIN_ID = 42;
+const int DOMAIN_ID_CDR = 42;
+const int DOMAIN_ID_JSON = 43;
 
 var artifactsPath = Path.Combine(Environment.CurrentDirectory, "PerformanceTestArtifacts");
 
@@ -47,7 +50,8 @@ switch (input)
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
 
         Console.WriteLine();
         Console.WriteLine("Starting OpenDDSharp JSON Latency Test...");
@@ -109,24 +113,30 @@ switch (input)
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
-        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID, RTPS_DISCOVERY);
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
 
-        Console.WriteLine();
-        Console.WriteLine("Starting OpenDDSharp JSON Throughput Test...");
+        var dpf = ParticipantService.Instance.GetDomainParticipantFactory();
 
-        var testJson = new JSONThroughputTest(1_000, 512);
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        testJson.Run();
-        stopwatch.Stop();
-        testJson.Dispose();
+        var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        var configNameCdr = "openddsharp_rtps_interop_" + guidCdr;
+        var instNameCdr = "internal_openddsharp_rtps_transport_" + guidCdr;
 
-        Console.WriteLine($"OpenDDSharp JSON Throughput Test {stopwatch.Elapsed.TotalSeconds}");
+        var configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
+        var instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
+        var transportCdr = new TcpInst(instCdr)
+        {
+            LocalAddress = IPAddress.Loopback.ToString(),
+        };
+        configCdr.Insert(transportCdr);
+
+        var participantCdr = dpf.CreateParticipant(DOMAIN_ID_CDR);
+        TransportRegistry.Instance.BindConfig(configNameCdr, participantCdr);
 
         Console.WriteLine();
         Console.WriteLine("Starting OpenDDSharp CDR Throughput Test...");
 
-        var testCDR = new CDRThroughputTest(1_000, 512);
+        var testCDR = new CDRThroughputTest(15_000, 2048, participantCdr);
         var stopwatchCdr = new Stopwatch();
         stopwatchCdr.Start();
         testCDR.Run();
@@ -135,6 +145,35 @@ switch (input)
 
         Console.WriteLine($"OpenDDSharp CDR Throughput Test {stopwatchCdr.Elapsed.TotalSeconds}");
 
+        Console.WriteLine();
+        Console.WriteLine("Starting OpenDDSharp JSON Throughput Test...");
+
+        var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        var configNameJson = "openddsharp_rtps_interop_" + guidJson;
+        var instNameJson = "internal_openddsharp_rtps_transport_" + guidJson;
+
+        var configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
+        var instJson = TransportRegistry.Instance.CreateInst(instNameJson, "tcp");
+        var transportJson = new TcpInst(instJson)
+        {
+            LocalAddress = IPAddress.Loopback.ToString(),
+        };
+        configJson.Insert(transportJson);
+
+        var participantJson = dpf.CreateParticipant(DOMAIN_ID_JSON);
+        TransportRegistry.Instance.BindConfig(configNameJson, participantJson);
+
+        var testJson = new JSONThroughputTest(15_000, 2048, participantJson);
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        testJson.Run();
+        stopwatch.Stop();
+        testJson.Dispose();
+
+        Console.WriteLine($"OpenDDSharp JSON Throughput Test {stopwatch.Elapsed.TotalSeconds}");
+
+        dpf.DeleteParticipant(participantCdr);
+        dpf.DeleteParticipant(participantJson);
         ParticipantService.Instance.Shutdown();
 
         Ace.Fini();

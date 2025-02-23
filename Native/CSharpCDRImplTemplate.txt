@@ -546,6 +546,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -572,6 +575,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -613,6 +619,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -639,6 +648,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -680,6 +692,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -706,6 +721,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -747,6 +765,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -773,6 +794,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -814,6 +838,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -840,6 +867,9 @@
             if (ret == ReturnCode.Ok && !ptrData.Equals(IntPtr.Zero) && !ptrInfo.Equals(IntPtr.Zero))
             {
                 ReadOrTakeFromPointer(receivedData, receivedInfo, ptrData, sizeData, ptrInfo, sizeInfo);
+
+                MarshalHelper.ReleaseNativePointer(ptrData);
+                MarshalHelper.ReleaseNativePointer(ptrInfo);
             }
 
             return ret;
@@ -952,39 +982,25 @@
 
         private static unsafe void ReadOrTakeFromPointer(List<<%TYPE%>> receivedData, List<SampleInfo> receivedInfo, IntPtr ptrData, UIntPtr sizeData, IntPtr ptrInfo, UIntPtr sizeInfo)
         {
-            <%TYPE%>[] samplesArray = null;
-            SampleInfo[] receivedInfoArray = null;
-            try
+            var dataSpan = new Span<byte>(ptrData.ToPointer(), (int)sizeData);
+            var reader = new OpenDDSharp.Marshaller.Cdr.CdrReader();
+            var total = reader.ReadUInt32(dataSpan);
+            receivedData.Capacity = (int)total;
+
+            for (int i = 0; i < total; i++)
             {
-                var dataSpan = new Span<byte>(ptrData.ToPointer(), (int)sizeData);
-                var reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(dataSpan.ToArray());
-                var total = reader.ReadUInt32();
-                samplesArray = dataPool.Rent((int)total);
-                var samplesSpan = new Span<<%TYPE%>>(samplesArray, 0, (int)total);
-
-                for (int i = 0; i < total; i++)
-                {
-                    samplesSpan[i] = new <%TYPE%>(reader);
-                }
-                receivedData.AddRange(samplesSpan.ToArray());
-
-                var infoSpan = new Span<byte>(ptrInfo.ToPointer(), (int)sizeInfo);
-
-                reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(infoSpan.ToArray());
-                total = reader.ReadUInt32();
-                receivedInfoArray = infoPool.Rent((int)total);
-                var receivedInfoSpan = new Span<SampleInfo>(receivedInfoArray, 0, (int)total);
-
-                for (int i = 0; i < total; i++)
-                {
-                    receivedInfoSpan[i] = new SampleInfo(reader);
-                }
-                receivedInfo.AddRange(receivedInfoSpan.ToArray());
+                receivedData.Add(new <%TYPE%>(reader, dataSpan));
             }
-            finally
+
+            var infoSpan = new Span<byte>(ptrInfo.ToPointer(), (int)sizeInfo);
+            reader = new OpenDDSharp.Marshaller.Cdr.CdrReader();
+
+            total = reader.ReadUInt32(infoSpan);
+            receivedInfo.Capacity = (int)total;
+
+            for (int i = 0; i < total; i++)
             {
-                dataPool.Return(samplesArray);
-                infoPool.Return(receivedInfoArray);
+                receivedInfo.Add(new SampleInfo(reader, infoSpan));
             }
         }
     }
