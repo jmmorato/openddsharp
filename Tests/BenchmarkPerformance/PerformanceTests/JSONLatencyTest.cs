@@ -103,7 +103,7 @@ internal sealed class JSONLatencyTest : IDisposable
             Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
             History = { Kind = HistoryQosPolicyKind.KeepAllHistoryQos}
         };
-        _topic = _participant.CreateTopic(Guid.NewGuid().ToString(), typeName);
+        _topic = _participant.CreateTopic(Guid.NewGuid().ToString(), typeName, topicQos);
 
         var pubQos = new PublisherQos
         {
@@ -189,8 +189,6 @@ internal sealed class JSONLatencyTest : IDisposable
 
     public void Dispose()
     {
-        _evt.Dispose();
-
         _publisher.DeleteDataWriter(_dataWriter);
         _publisher.DeleteContainedEntities();
         _participant.DeletePublisher(_publisher);
@@ -203,5 +201,8 @@ internal sealed class JSONLatencyTest : IDisposable
 
         _participant.DeleteTopic(_topic);
         _participant.DeleteContainedEntities();
+
+
+        _evt.Dispose();
     }
 }

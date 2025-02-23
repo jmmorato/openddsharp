@@ -171,7 +171,7 @@ public class ThroughputTest
     }
 
     // Cannot run without a valid RTI Connext license.
-    //[Benchmark(Description = "RTI Connext")]
+    // [Benchmark(Description = "RTI Connext")]
     public void RtiConnextThroughputTest()
     {
         _samplesReceived= _rtiConnextThroughputTest.Run();

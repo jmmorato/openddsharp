@@ -14,7 +14,7 @@ namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
 internal sealed class RtiConnextThroughputTest : IDisposable
 {
-    private const int DOMAIN_ID = 42;
+    private const int DOMAIN_ID = 44;
 
     private readonly Random _random = new ();
     private readonly int _totalSamples;
@@ -27,7 +27,6 @@ internal sealed class RtiConnextThroughputTest : IDisposable
     private Subscriber _subscriber;
     private DataReader<KeyedOctetsTopicType> _dataReader;
     private WaitSet _waitSet;
-    private Thread _readerThread;
     private ulong _samplesReceived;
 
     public RtiConnextThroughputTest(int totalSamples, ulong totalPayload)
@@ -49,19 +48,24 @@ internal sealed class RtiConnextThroughputTest : IDisposable
     public ulong Run()
     {
         _samplesReceived = 0;
-        _readerThread = new Thread(ReaderThread)
+        var readerThread = new Thread(ReaderThread)
         {
             IsBackground = true,
-            Priority = ThreadPriority.Highest,
+            Priority = ThreadPriority.AboveNormal,
         };
-        _readerThread.Start();
 
-        for (var i = 1; i <= _totalSamples; i++)
+        var pubThread = new Thread(_ =>
         {
-            _dataWriter.Write(_sample);
-        }
+            for (var i = 1; i <= _totalSamples; i++)
+            {
+                _dataWriter.Write(_sample);
+            }
+        });
 
-        _readerThread.Join();
+        pubThread.Start();
+        readerThread.Start();
+
+        readerThread.Join();
 
         return _samplesReceived;
     }
@@ -93,6 +97,7 @@ internal sealed class RtiConnextThroughputTest : IDisposable
             .WithDiscovery(d => d.AcceptUnknownPeers = false)
             .WithDiscovery(d => d.InitialPeers.Clear())
             .WithDiscovery(d => d.InitialPeers.Add("builtin.udpv4://127.0.0.1"))
+            .WithProperty(d => d.Add(new KeyValuePair<string, Property.Entry>("dds.builtin_type.keyed_octets.max_size", new Property.Entry("8192"))))
             .WithTransportBuiltin(t => t.Mask = TransportBuiltinMask.Udpv4);
 
         _participant = DomainParticipantFactory.Instance.CreateParticipant(DOMAIN_ID, pQos);
@@ -109,11 +114,13 @@ internal sealed class RtiConnextThroughputTest : IDisposable
         var dwQos = _publisher.DefaultDataWriterQos
             .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
             .WithReliability(c => c.MaxBlockingTime = Duration.Infinite)
-            .WithHistory(c => c.Kind = HistoryKind.KeepAll);
+            .WithHistory(c => c.Kind = HistoryKind.KeepAll)
+            .WithProperty(p => p.Add(new KeyValuePair<string, Property.Entry>("dds.builtin_type.keyed_octets.alloc_size", "8192")));;
         var drQos = _subscriber.DefaultDataReaderQos
             .WithReliability(c => c.Kind = ReliabilityKind.Reliable)
             .WithReliability(c => c.MaxBlockingTime = Duration.Infinite)
-            .WithHistory(c => c.Kind = HistoryKind.KeepAll);
+            .WithHistory(c => c.Kind = HistoryKind.KeepAll)
+            .WithProperty(p => p.Add(new KeyValuePair<string, Property.Entry>("dds.builtin_type.keyed_octets.alloc_size", "8192")));;
 
         _dataWriter = _publisher.CreateDataWriter(_topic, dwQos);
         _dataReader = _subscriber.CreateDataReader(_topic, drQos);
@@ -129,22 +136,17 @@ internal sealed class RtiConnextThroughputTest : IDisposable
 
     private void ReaderThread()
     {
-        int i = 0;
         while (true)
         {
             _ = _waitSet.Wait();
 
             using var samples = _dataReader.Take();
             _samplesReceived += (ulong)samples.Count;
-            // Console.WriteLine(samples.Count);
 
             if (_samplesReceived >= (ulong)_totalSamples)
             {
-                Console.WriteLine(i);
                 return;
             }
-
-            i++;
         }
     }
 }

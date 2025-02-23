@@ -187,8 +187,6 @@ internal sealed class CDRLatencyTest : IDisposable
 
     public void Dispose()
     {
-        _evt.Dispose();
-
         _publisher.DeleteDataWriter(_dataWriter);
         _publisher.DeleteContainedEntities();
         _participant.DeletePublisher(_publisher);
@@ -201,5 +199,7 @@ internal sealed class CDRLatencyTest : IDisposable
 
         _participant.DeleteTopic(_topic);
         _participant.DeleteContainedEntities();
+
+        _evt.Dispose();
     }
 }
