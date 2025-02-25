@@ -20,8 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include "throughput_test.h"
 
-using random_bytes_engine = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char>;
-
 void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
   this->total_samples_ = total_samples;
   this->payload_size_ = payload_size;
@@ -30,10 +28,7 @@ void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::U
   this->sample_.KeyField = "1";
   this->sample_.ValueField.length(payload_size);
 
-  random_bytes_engine rbe(std::random_device{}());
-  std::vector<unsigned char> data(payload_size);
-  std::generate(begin(data), end(data), std::ref(rbe));
-
+  auto data = random_bytes(payload_size);
   for (CORBA::ULong i = 0; i < payload_size; ++i) {
     this->sample_.ValueField[i] = data[i];
   }

@@ -51,7 +51,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 inline std::string random_string(const std::size_t length)
 {
-  const std::string CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const std::string CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   std::random_device random_device;
   std::mt19937 generator(random_device());
@@ -65,6 +65,23 @@ inline std::string random_string(const std::size_t length)
   }
 
   return random_string;
+}
+
+inline std::vector<unsigned char> random_bytes(const std::size_t length)
+{
+
+  const std::vector<unsigned short> NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+  std::random_device random_device;
+  std::mt19937 generator(random_device());
+  std::uniform_int_distribution<> distribution(0, static_cast<int>(NUMBERS.size()) - 1);
+
+  std::vector<unsigned char> random_bytes;
+  for (std::size_t i = 0; i < length; ++i)
+  {
+    random_bytes.push_back(NUMBERS[distribution(generator)] & 0xFF);
+  }
+
+  return random_bytes;
 }
 
 inline bool wait_for_publications(::DDS::DataReader_ptr reader, int publications_count, int milliseconds)
