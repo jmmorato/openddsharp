@@ -20,7 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <random>
-#include <__random/random_device.h>
 #include <thread>
 
 #include "dds/DCPS/DomainParticipantImpl.h"
@@ -92,7 +91,7 @@ inline bool wait_for_subscriptions(DDS::DataWriter_ptr writer, int subscriptions
   int count = milliseconds / 100;
   while (handles.length() != subscriptions_count && count > 0)
   {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(::std::chrono::milliseconds(100));
     writer->get_matched_subscriptions(handles);
     count--;
   }
