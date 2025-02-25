@@ -28,7 +28,7 @@ switch (input)
     {
         Ace.Init();
 
-        var config = new LatencyTestConfiguration("dry")
+        var config = new LatencyTestConfiguration("short")
         {
             ArtifactsPath = artifactsPath,
         };
@@ -103,7 +103,7 @@ switch (input)
     {
         Ace.Init();
 
-        var config = new ThroughputTestConfiguration("dry")
+        var config = new ThroughputTestConfiguration("short")
         {
             ArtifactsPath = artifactsPath,
         };

@@ -152,7 +152,6 @@ CORBA::ULong ThroughputTest::run() {
       DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
       auto ret = this->wait_set_->wait(active_conditions, duration);
       if (ret != DDS::RETCODE_OK) {
-        ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) wait failed.\n")));
         continue;
       }
 
@@ -160,15 +159,12 @@ CORBA::ULong ThroughputTest::run() {
       DDS::SampleInfoSeq infos;
       ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED, DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
       if (ret != DDS::RETCODE_OK) {
-        ACE_ERROR((LM_ERROR, ACE_TEXT("take failed.\n")));
         continue;
       }
 
       samples_received += samples.length();
 
       this->data_reader_->return_loan(samples, infos);
-
-      // ACE_DEBUG((LM_DEBUG, ACE_TEXT("Received %d samples.\n"), samples_received));
       if (samples_received == this->total_samples_) {
         return;
       }

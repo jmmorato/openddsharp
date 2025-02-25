@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
@@ -14,14 +15,25 @@ internal class ThroughputTestConfiguration : ManualConfig
     {
         if (name != null && name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.Dry.WithToolchain(InProcessEmitToolchain.Instance));
+            AddJob(Job.Dry
+                .WithStrategy(RunStrategy.Throughput)
+                .WithToolchain(InProcessEmitToolchain.Instance));
+        }
+        if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
+        {
+            AddJob(Job.ShortRun
+                .WithStrategy(RunStrategy.Throughput)
+                .WithUnrollFactor(1)
+                .WithToolchain(InProcessEmitToolchain.Instance));
         }
         else
         {
             AddJob(Job.Default
-                .WithIterationCount(10)
+                .WithIterationCount(5)
                 .WithUnrollFactor(1)
-                .WithInvocationCount(10)
+                .WithInvocationCount(5)
+                .WithWarmupCount(5)
+                .WithStrategy(RunStrategy.Throughput)
                 .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
         }
 
