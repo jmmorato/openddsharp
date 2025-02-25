@@ -8,6 +8,9 @@
         <RootNamespace>OpenDDSharp.BenchmarkPerformance</RootNamespace>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
         <Platforms>x64;x86;ARM64</Platforms>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
+        <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +22,56 @@
       <ProjectReference Include="..\..\Sources\OpenDDSharp\OpenDDSharp.csproj" />
       <ProjectReference Include="..\TestIdlCdr\TestIdlCdr.csproj" />
       <ProjectReference Include="..\TestIdlJson\TestIdlJson.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Copy the win-x86 native libraries to the output directory -->
+        <OpenDDSRNativeWin32 Include="..\..\Native\build_win-x86\OpenDDSTestData\OpenDDSTestData.dll" Visible="false" />
+        <OpenDDSRNativeWin32 Include="..\..\Native\build_win-x86\OpenDDSPerformanceTests\OpenDDSPerformanceTests.dll" Visible="false" />
+        <None Include="@(OpenDDSRNativeWin32)" Visible="false">
+            <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToPublishDirectory>
+        </None>
+
+        <!-- Copy the win-x64 native libraries to the output directory -->
+        <OpenDDSRNativeX64 Include="..\..\Native\build_win-x64\OpenDDSTestData\OpenDDSTestData.dll" Visible="false" />
+        <OpenDDSRNativeX64 Include="..\..\Native\build_win-x64\OpenDDSPerformanceTests\OpenDDSPerformanceTests.dll" Visible="false" />
+        <None Include="@(OpenDDSRNativeX64)" Pack="true" Visible="false" PackagePath="runtimes\win-x64\native">
+            <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToPublishDirectory>
+        </None>
+
+        <!-- Copy the linux-x64 native libraries to the output directory -->
+        <Content Include="..\..\Native\build_linux-x64\OpenDDSTestData\libOpenDDSTestData.so" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
+        </Content>
+        <Content Include="..\..\Native\build_linux-x64\OpenDDSPerformanceTests\libOpenDDSPerformanceTests.so" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux'))">PreserveNewest</CopyToPublishDirectory>
+        </Content>
+
+        <!-- Copy the osx-x64 native libraries to the output directory -->
+        <Content Include="..\..\Native\build_osx-x64\OpenDDSTestData\libOpenDDSTestData.dylib" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+        </Content>
+
+        <Content Include="..\..\Native\build_osx-x64\OpenDDSPerformanceTests\libOpenDDSPerformanceTests.dylib" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+        </Content>
+
+        <!-- Copy the osx-arm64 native libraries to the output directory -->
+        <Content Include="..\..\Native\build_osx-arm64\OpenDDSTestData\libOpenDDSTestData.dylib" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+        </Content>
+
+        <Content Include="..\..\Native\build_osx-arm64\OpenDDSPerformanceTests\libOpenDDSPerformanceTests.dylib" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

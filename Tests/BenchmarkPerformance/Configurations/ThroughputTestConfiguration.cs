@@ -22,7 +22,7 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithIterationCount(10)
                 .WithUnrollFactor(1)
                 .WithInvocationCount(10)
-                .WithToolchain(InProcessEmitToolchain.Instance));
+                .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
         }
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());

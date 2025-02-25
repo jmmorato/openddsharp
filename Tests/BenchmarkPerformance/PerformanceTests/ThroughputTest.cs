@@ -15,15 +15,18 @@ public class ThroughputTest
 {
     private const int DOMAIN_ID_CDR = 42;
     private const int DOMAIN_ID_JSON = 43;
+    private const int DOMAIN_ID_NATIVE = 45;
     private const string RTPS_DISCOVERY = "RtpsDiscovery";
 
     private CDRThroughputTest _cdrThroughputTest;
     private JSONThroughputTest _jsonThroughputTest;
+    private OpenDDSThroughputTest _openDDSThroughputTest;
     private RtiConnextThroughputTest _rtiConnextThroughputTest;
     private ulong _samplesReceived;
     private DomainParticipantFactory _dpf;
     private DomainParticipant _participantCdr;
     private DomainParticipant _participantJson;
+    private IntPtr _participantNative;
     private TransportConfig _configCdr;
     private TransportInst _instCdr;
     private TransportConfig _configJson;
@@ -42,7 +45,7 @@ public class ThroughputTest
     public ulong TotalPayload { get; set; }
 
     [GlobalSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
-    public void OpenDDSharpGlobalSetupCDR()
+    public void OpenDDSharpCDRGlobalSetup()
     {
         var disc = new RtpsDiscovery(RTPS_DISCOVERY);
 
@@ -69,7 +72,7 @@ public class ThroughputTest
     }
 
     [GlobalSetup(Target = nameof(OpenDDSharpJSONThroughputTest))]
-    public void OpenDDSharpGlobalSetupJSON()
+    public void OpenDDSharpJSONGlobalSetup()
     {
         Ace.Init();
 
@@ -98,8 +101,34 @@ public class ThroughputTest
         TransportRegistry.Instance.BindConfig(configNameJson, _participantJson);
     }
 
+    [GlobalSetup(Target = nameof(OpenDDSNativeThroughputTest))]
+    public void OpenDDSNativeGlobalSetup()
+    {
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+
+        ParticipantService.Instance.AddDiscovery(disc);
+        ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
+        ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_NATIVE, RTPS_DISCOVERY);
+
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+
+        var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        var configNameCdr = "openddsharp_tcp_" + guidCdr;
+        var instNameCdr = "internal_openddsharp_tcp_" + guidCdr;
+
+        _configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
+        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
+        var transportNative = new TcpInst(_instCdr)
+        {
+            LocalAddress = IPAddress.Loopback.ToString(),
+        };
+        _configCdr.Insert(transportNative);
+
+        _participantNative = UnsafeNativeMethods.ThroughputGlobalSetup(configNameCdr);
+    }
+
     [GlobalCleanup(Target = nameof(OpenDDSharpCDRThroughputTest))]
-    public void OpenDDSharpGlobalCleanupCDR()
+    public void OpenDDSharpCDRGlobalCleanup()
     {
         _dpf.DeleteParticipant(_participantCdr);
 
@@ -108,12 +137,21 @@ public class ThroughputTest
     }
 
     [GlobalCleanup(Target = nameof(OpenDDSharpJSONThroughputTest))]
-    public void OpenDDSharpGlobalCleanupJSON()
+    public void OpenDDSharpJSONGlobalCleanup()
     {
         _dpf.DeleteParticipant(_participantJson);
 
         TransportRegistry.Instance.RemoveConfig(_configJson);
         TransportRegistry.Instance.RemoveInst(_instJson);
+    }
+
+    [GlobalCleanup(Target = nameof(OpenDDSNativeThroughputTest))]
+    public void OpenDDSNativeGlobalCleanup()
+    {
+        UnsafeNativeMethods.ThroughputGlobalCleanup(_participantNative);
+
+        TransportRegistry.Instance.RemoveConfig(_configCdr);
+        TransportRegistry.Instance.RemoveInst(_instCdr);
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
@@ -126,6 +164,12 @@ public class ThroughputTest
     public void OpenDDSharpJSONIterationSetup()
     {
         _jsonThroughputTest = new JSONThroughputTest(TotalSamples, TotalPayload, _participantJson);
+    }
+
+    [IterationSetup(Target = nameof(OpenDDSNativeThroughputTest))]
+    public void OpenDDSNativeIterationSetup()
+    {
+        _openDDSThroughputTest = new OpenDDSThroughputTest(TotalSamples, TotalPayload, _participantNative);
     }
 
     [IterationSetup(Target = nameof(RtiConnextThroughputTest))]
@@ -150,12 +194,26 @@ public class ThroughputTest
         ThroughputStatistics("openddsharpjson");
     }
 
+    [IterationCleanup(Target = nameof(OpenDDSNativeThroughputTest))]
+    public void OpenDDSNativeIterationCleanup()
+    {
+        _openDDSThroughputTest.Dispose();
+
+        ThroughputStatistics("openddsnative");
+    }
+
     [IterationCleanup(Target = nameof(RtiConnextThroughputTest))]
     public void RtiConnextIterationCleanup()
     {
         _rtiConnextThroughputTest.Dispose();
 
         ThroughputStatistics("rticonnext");
+    }
+
+    [Benchmark(Description = "OpenDDS Native")]
+    public void OpenDDSNativeThroughputTest()
+    {
+        _samplesReceived = _openDDSThroughputTest.Run();
     }
 
     [Benchmark(Description = "OpenDDSharp CDR")]

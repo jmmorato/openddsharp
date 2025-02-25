@@ -27,6 +27,7 @@ public class CdrReader
     /// <summary>
     /// Reads an unsigned byte from the stream.
     /// </summary>
+    /// <param name="span">The memory span to read from.</param>
     /// <returns>The byte value.</returns>
     public byte ReadByte(Span<byte> span)
     {
@@ -36,6 +37,7 @@ public class CdrReader
     /// <summary>
     /// Reads a signed byte from the stream.
     /// </summary>
+    /// <param name="span">The memory span to read from.</param>
     /// <returns>The byte value.</returns>
     public sbyte ReadSByte(Span<byte> span)
     {
@@ -45,6 +47,7 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of bytes from the stream.
     /// </summary>
+    /// <param name="span">The memory span to read from.</param>
     /// <param name="count">The number of bytes to read.</param>
     /// <returns>The bytes from the stream.</returns>
     public Span<byte> ReadBytes(Span<byte> span, int count)
@@ -57,12 +60,14 @@ public class CdrReader
     /// <summary>
     /// Read a boolean value from the stream.
     /// </summary>
+    /// <param name="span">The memory span to read from.</param>
     /// <returns>The boolean value.</returns>
     public bool ReadBool(Span<byte> span) => ReadByte(span) != 0x00;
 
     /// <summary>
     /// Reads a signed short from the stream.
     /// </summary>
+    /// <param name="span">The memory span to read from.</param>
     /// <returns>The signed short value.</returns>
     public short ReadInt16(Span<byte> span)
     {
@@ -752,6 +757,8 @@ public class CdrReader
 
     private uint ReadSequenceLength(Span<byte> span) => ReadUInt32(span);
 
+#if NET6_0_OR_GREATER
+#else
     /// <summary>
     /// Converts the specified 32-bit signed integer to a single-precision floating point number.
     /// </summary>
@@ -765,4 +772,5 @@ public class CdrReader
     /// <param name="value">The number to convert.</param>
     /// <returns>A double-precision floating point number whose bits are identical to <paramref name="value"/>.</returns>
     private static unsafe double Int64BitsToDouble(long value) => *((double*)&value);
+#endif
 }
