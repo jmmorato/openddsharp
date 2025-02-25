@@ -19,7 +19,7 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithStrategy(RunStrategy.Throughput)
                 .WithToolchain(InProcessEmitToolchain.Instance));
         }
-        if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
+        else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
             AddJob(Job.ShortRun
                 .WithStrategy(RunStrategy.Throughput)

@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
@@ -19,6 +20,13 @@ internal class LatencyTestConfiguration : ManualConfig
             AddColumn(new LatencyDeviationColumn());
             AddColumn(new LatencyMinimumColumn());
             AddColumn(new LatencyMaximumColumn());
+        }
+        else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
+        {
+            AddJob(Job.ShortRun
+                .WithStrategy(RunStrategy.Throughput)
+                .WithUnrollFactor(1)
+                .WithToolchain(InProcessEmitToolchain.Instance));
         }
         else
         {
