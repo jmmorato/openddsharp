@@ -144,6 +144,7 @@ jobs:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
+      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
@@ -296,6 +297,8 @@ jobs:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
+      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
@@ -444,6 +447,9 @@ jobs:
       BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
+      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
+
 
     steps:
       - uses: actions/checkout@v4

@@ -38,10 +38,11 @@ void latency_finalize(LatencyTest* test) {
 }
 
 DDS::DomainParticipant* throughput_global_setup(const char* config_name) {
-  DDS::DomainParticipant* participant = TheParticipantFactory->create_participant(DOMAIN_ID, PARTICIPANT_QOS_DEFAULT, DDS::DomainParticipantListener::_nil(), OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+  DDS::DomainParticipant* participant = TheParticipantFactory->create_participant(DOMAIN_ID,
+    PARTICIPANT_QOS_DEFAULT, DDS::DomainParticipantListener::_nil(), OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+
   if (is_nil(participant)) {
     ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_participant failed.\n")));
-    throw std::runtime_error("create_participant failed.");
   }
   TheTransportRegistry->bind_config(config_name, participant);
 
