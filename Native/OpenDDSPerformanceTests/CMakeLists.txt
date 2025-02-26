@@ -19,7 +19,7 @@ add_library(OpenDDSPerformanceTests SHARED
         performance_tests.h performance_tests.cpp
         latency_test.h latency_test.cpp
         throughput_test.h throughput_test.cpp
-        utils.h)
+        utils.h utils.cpp)
 
 if (MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS)

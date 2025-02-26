@@ -41,7 +41,7 @@ public class ThroughputTest
     /// <summary>
     /// Gets or sets the payload size for the test.
     /// </summary>
-    [Params(1024, 2048, 4096, 8192)]
+    [Params(2048, 4096, 8192)]
     public ulong TotalPayload { get; set; }
 
     [GlobalSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]

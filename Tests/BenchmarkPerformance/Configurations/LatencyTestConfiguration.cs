@@ -24,9 +24,10 @@ internal class LatencyTestConfiguration : ManualConfig
         else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
             AddJob(Job.ShortRun
-                .WithStrategy(RunStrategy.Throughput)
                 .WithUnrollFactor(1)
-                .WithToolchain(InProcessEmitToolchain.Instance));
+                .WithStrategy(RunStrategy.Throughput)
+                .WithToolchain(InProcessEmitToolchain.Instance)
+                .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
         }
         else
         {

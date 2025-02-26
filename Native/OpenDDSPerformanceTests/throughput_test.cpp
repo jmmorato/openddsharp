@@ -21,6 +21,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "throughput_test.h"
 
 void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
+  // Initialize the test parameters
   this->total_samples_ = total_samples;
   this->payload_size_ = payload_size;
   this->participant_ = participant;
@@ -37,7 +38,6 @@ void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::U
   DDS::PublisherQos publisher_qos;
   this->participant_->get_default_publisher_qos(publisher_qos);
   publisher_qos.entity_factory.autoenable_created_entities = false;
-
   this->publisher_ = this->participant_->create_publisher(publisher_qos, DDS::PublisherListener::_nil(), OpenDDS::DCPS::NO_STATUS_MASK);
 
   if (is_nil(this->publisher_)) {
