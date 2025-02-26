@@ -30,9 +30,9 @@ internal class ThroughputTestConfiguration : ManualConfig
         else
         {
             AddJob(Job.Default
-                .WithIterationCount(5)
+                .WithIterationCount(10)
                 .WithUnrollFactor(1)
-                .WithInvocationCount(5)
+                .WithInvocationCount(10)
                 .WithWarmupCount(5)
                 .WithStrategy(RunStrategy.Throughput)
                 .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));

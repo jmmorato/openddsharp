@@ -16,6 +16,7 @@ internal class LatencyTestConfiguration : ManualConfig
         {
             AddJob(Job.Dry.WithToolchain(InProcessEmitToolchain.Instance));
             AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+
             AddColumn(new LatencyAverageColumn());
             AddColumn(new LatencyDeviationColumn());
             AddColumn(new LatencyMinimumColumn());
@@ -28,6 +29,12 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithStrategy(RunStrategy.Throughput)
                 .WithToolchain(InProcessEmitToolchain.Instance)
                 .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
+
+            AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+            AddColumn(new LatencyAverageColumn());
+            AddColumn(new LatencyDeviationColumn());
+            AddColumn(new LatencyMinimumColumn());
+            AddColumn(new LatencyMaximumColumn());
         }
         else
         {
@@ -35,7 +42,10 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithIterationCount(10)
                 .WithUnrollFactor(1)
                 .WithInvocationCount(10)
-                .WithToolchain(InProcessEmitToolchain.Instance));
+                .WithWarmupCount(5)
+                .WithStrategy(RunStrategy.Throughput)
+                .WithToolchain(InProcessEmitToolchain.Instance)
+                .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
 
             AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
             AddColumn(new LatencyAverageColumn());
