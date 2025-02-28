@@ -4,7 +4,6 @@ using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 
 namespace OpenDDSharp.BenchmarkPerformance.Configurations;
@@ -38,5 +37,6 @@ internal class ThroughputTestConfiguration : ManualConfig
         AddExporter(CsvExporter.Default);
         AddExporter(MarkdownExporter.Default);
         AddDiagnoser(MemoryDiagnoser.Default);
+        WithBuildTimeout(TimeSpan.FromMinutes(30));
     }
 }

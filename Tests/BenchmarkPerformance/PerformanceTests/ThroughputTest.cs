@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Net;
 using BenchmarkDotNet.Attributes;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
+using OpenDDSharp.BenchmarkPerformance.Helpers;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.OpenDDS.RTPS;

@@ -50,5 +50,6 @@ internal class LatencyTestConfiguration : ManualConfig
         AddExporter(PlainExporter.Default);
         AddExporter(CsvExporter.Default);
         AddExporter(MarkdownExporter.Default);
+        WithBuildTimeout(TimeSpan.FromMinutes(30));
     }
 }
