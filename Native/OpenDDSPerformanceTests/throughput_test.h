@@ -19,8 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 
-#include <dds/DCPS/WaitSet.h>
-
+#include <mutex>
 #include "utils.h"
 
 class CLASS_EXPORT_FLAG ThroughputTest {
@@ -38,16 +37,13 @@ class CLASS_EXPORT_FLAG ThroughputTest {
 
   CORBA::ULong total_samples_ = 0;
   CORBA::ULong payload_size_ = 0;
-public:
   CORBA::ULong samples_received_ = 0;
 
-  // void read_thread();
-  // void write_thread();
+public:
 
-  public:
-    void initialize(CORBA::ULong total_samples, CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant);
-    CORBA::ULong run();
-    void finalize() const;
+  void initialize(CORBA::ULong total_samples, CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant);
+  CORBA::ULong run();
+  void finalize() const;
 
 };
 

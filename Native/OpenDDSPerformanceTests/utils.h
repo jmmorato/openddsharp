@@ -21,6 +21,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include <random>
 #include <thread>
+#include <dds/DCPS/WaitSet.h>
 
 #include "dds/DCPS/DomainParticipantImpl.h"
 #include "dds/DCPS/Marked_Default_Qos.h"
@@ -28,6 +29,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "TestDataC.h"
 #include "TestDataTypeSupportC.h"
 #include "TestDataTypeSupportImpl.h"
+#include <dds/DCPS/WaitSet.h>
 
 #ifndef CLASS_EXPORT_FLAG
   #ifdef _WIN32
@@ -49,10 +51,24 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
   #define DOMAIN_ID 45
 #endif
 
-std::string random_string(const std::size_t length);
+std::string random_string(std::size_t length);
 
-std::vector<unsigned char> random_bytes(const std::size_t length);
+std::vector<unsigned char> random_bytes(std::size_t length);
 
-bool wait_for_publications(::DDS::DataReader_ptr reader, int publications_count, int milliseconds);
+bool wait_for_publications(DDS::DataReader_ptr reader, int publications_count, int milliseconds);
 
 bool wait_for_subscriptions(DDS::DataWriter_ptr writer, int subscriptions_count, int milliseconds);
+
+DDS::Publisher_ptr create_publisher(DDS::DomainParticipant_ptr participant);
+
+DDS::Subscriber_ptr create_subscriber(DDS::DomainParticipant_ptr participant);
+
+DDS::Topic_ptr create_topic(DDS::DomainParticipant_ptr participant);
+
+DDS::DataWriter_ptr create_data_writer(DDS::Publisher_ptr publisher, DDS::Topic_ptr topic);
+
+DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topic_ptr topic);
+
+DDS::WaitSet_ptr create_wait_set(DDS::DataReader_ptr reader);
+
+void* serialize_latencies(const std::vector<double>& vec);

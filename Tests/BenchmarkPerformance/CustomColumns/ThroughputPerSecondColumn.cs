@@ -4,18 +4,15 @@ using BenchmarkDotNet.Running;
 
 namespace OpenDDSharp.BenchmarkPerformance.CustomColumns;
 
-/// <summary>
-/// Represents the throughput samples received column.
-/// </summary>
-internal class ThroughputSamplesReceivedColumn : IColumn
+internal class ThroughputPerSecondColumn : IColumn
 {
-    public static readonly string OutputFolder = Path.Combine(Path.GetTempPath(), nameof(ThroughputSamplesReceivedColumn));
+    public static readonly string OutputFolder = Path.Combine(Path.GetTempPath(), nameof(ThroughputPerSecondColumn));
 
     /// <inheritdoc/>
-    public string Id => nameof(ThroughputSamplesReceivedColumn);
+    public string Id => nameof(ThroughputPerSecondColumn);
 
     /// <inheritdoc/>
-    public string ColumnName => "Samples Received";
+    public string ColumnName => "Throughput (MB/sec)";
 
     /// <inheritdoc/>
     public bool AlwaysShow => true;
@@ -33,15 +30,11 @@ internal class ThroughputSamplesReceivedColumn : IColumn
     public UnitType UnitType => UnitType.Dimensionless;
 
     /// <inheritdoc/>
-    public string Legend => "Total Samples Received";
+    public string Legend => "Calculated total throughput (MB/sec)";
 
     /// <inheritdoc/>
     public string GetValue(Summary summary, BenchmarkCase benchmarkCase)
     {
-        var name = benchmarkCase.Descriptor.WorkloadMethod.Name.
-            Replace("ThroughputTest", string.Empty, StringComparison.InvariantCultureIgnoreCase).
-            ToLowerInvariant();
-
         var numInstancesParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalSamples");
         var payloadSizeParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalPayload");
         if (numInstancesParam == null)
@@ -56,8 +49,24 @@ internal class ThroughputSamplesReceivedColumn : IColumn
 
         var numInstances = numInstancesParam.Value;
         var payloadSize = payloadSizeParam.Value;
-        var filename = Path.Combine(OutputFolder, $"{name}-throughput-samples-received.{numInstances}.{payloadSize}.txt");
-        return File.Exists(filename) ? File.ReadAllText(filename) : "No file";
+
+        if (!double.TryParse(numInstances.ToString(), out var samples) ||
+            !double.TryParse(payloadSize.ToString(), out var size))
+        {
+            return "N/A";
+        }
+
+        var report = summary.Reports.FirstOrDefault(r => r.BenchmarkCase == benchmarkCase);
+        if (report.ResultStatistics == null)
+        {
+            return "N/A";
+        }
+
+        var totalSeconds = report.ResultStatistics.Mean / 1_000_000_000;
+        var dataSize = samples * size / 1024 / 1024;
+        var throughput = dataSize / totalSeconds;
+
+        return throughput.ToString("F") + " MB/sec";
     }
 
     /// <inheritdoc/>

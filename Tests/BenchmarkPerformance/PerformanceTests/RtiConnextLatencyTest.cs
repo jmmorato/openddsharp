@@ -21,7 +21,6 @@ internal sealed class RtiConnextLatencyTest : IDisposable
     private readonly Random _random = new ();
     private readonly int _totalInstances;
     private readonly int _totalSamples;
-    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
     private readonly KeyedOctetsTopicType _sample;
 
     private int _count;
@@ -33,6 +32,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
     private Subscriber _subscriber;
     private DataReader<KeyedOctetsTopicType> _dataReader;
     private WaitSet _waitSet;
+
     public RtiConnextLatencyTest(int totalInstances, int totalSamples, ulong totalPayload)
     {
         _totalInstances = totalInstances;
@@ -68,14 +68,8 @@ internal sealed class RtiConnextLatencyTest : IDisposable
                 {
                     _sample.Key = j.ToString(CultureInfo.InvariantCulture);
 
-                    if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
-                    {
-                        instanceHandle = _dataWriter.RegisterInstance(_sample);
-                        _instanceHandles.Add(j, instanceHandle);
-                    }
-
                     var publicationTime = DateTime.UtcNow.Ticks;
-                    _dataWriter.Write(_sample, instanceHandle);
+                    _dataWriter.Write(_sample);
 
                     _evt.Wait();
 
@@ -175,6 +169,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
     private void ReaderThread()
     {
+        var total = _totalSamples * _totalInstances;
         while (true)
         {
             _ = _waitSet.Wait();
@@ -189,7 +184,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
             _evt.Set();
 
-            if (_count >= _totalSamples * _totalInstances)
+            if (_count >= total)
             {
                 return;
             }

@@ -19,63 +19,146 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "latency_test.h"
 
-void LatencyTest::initialize() {
-  this->dpf = TheServiceParticipant->get_domain_participant_factory();
+void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
+  const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
 
-  this->participant = this->dpf->create_participant(0, PARTICIPANT_QOS_DEFAULT, 0, OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (!this->participant) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_participant failed.\n")));
-    throw std::runtime_error("create_participant failed.");
+  // Initialize the test parameters
+  this->total_instances_ = total_instances;
+  this->total_samples_ = total_samples;
+  this->payload_size_ = payload_size;
+  this->participant_ = participant;
+
+  this->sample_.KeyField = "1";
+  this->sample_.ValueField.length(payload_size);
+
+  const auto data = random_bytes(payload_size);
+  for (CORBA::ULong i = 0; i < payload_size; ++i) {
+    this->sample_.ValueField[i] = data[i];
   }
 
-  this->publisher = this->participant->create_publisher(PUBLISHER_QOS_DEFAULT, 0, OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (!this->publisher) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_publisher failed.\n")));
-    throw std::runtime_error("create_publisher failed.");
+  // Initialize the Publisher entity
+  this->publisher_ = create_publisher(this->participant_);
+
+  // Initialize the Subscriber entity
+  this->subscriber_ = create_subscriber(this->participant_);
+
+  // Initialize the Topic entity
+  this->topic_ = create_topic(this->participant_);
+
+  // Initialize the DataWriter entity
+  this->writer_ = create_data_writer(this->publisher_, this->topic_);
+  this->data_writer_ = OpenDDSNative::KeyedOctetsDataWriter::_narrow(writer_);
+
+  // Initialize the DataReader entity
+  this->reader_ = create_data_reader(this->subscriber_, this->topic_);
+  this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
+
+  // Initialize waitset and status condition
+  this->wait_set_ = create_wait_set(this->reader_);
+
+  // Enable the entities and wait for discovery
+  auto ret = writer_->enable();
+  if (ret != ::DDS::RETCODE_OK) {
+    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) writer enable failed.\n")));
+    throw std::runtime_error("writer enable failed.");
   }
 
-  this->subscriber = this->participant->create_subscriber(SUBSCRIBER_QOS_DEFAULT, 0, OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (!this->subscriber) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_subscriber failed.\n")));
-    throw std::runtime_error("create_subscriber failed.");
+  ret = reader_->enable();
+  if (ret != ::DDS::RETCODE_OK) {
+    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) reader enable failed.\n")));
+    throw std::runtime_error("reader enable failed.");
   }
 
-  this->topic = this->participant->create_topic("ThroughputTest", "Throughput", TOPIC_QOS_DEFAULT, 0, OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (!this->topic) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_topic failed.\n")));
-    throw std::runtime_error("create_topic failed.");
-  }
-
-  this->writer = this->publisher->create_datawriter(this->topic, DATAWRITER_QOS_DEFAULT, 0, OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (!this->writer) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_datawriter failed.\n")));
-    throw std::runtime_error("create_datawriter failed.");
-  }
-
-  this->reader = this->subscriber->create_datareader(this->topic, DATAREADER_QOS_DEFAULT, 0, OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-  if (!this->reader) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_datareader failed.\n")));
-    throw std::runtime_error("create_datareader failed.");
-  }
+  wait_for_publications(reader_, 1, 5000);
+  wait_for_subscriptions(writer_, 1, 5000);
 }
 
-int32_t LatencyTest::run() {
-  return 0;
+void LatencyTest::run() {
+  if (!this->latencies_.empty()) {
+    this->latencies_.clear();
+  }
+
+  std::thread writer_thread([this] {
+    int count = 0;
+    for (int i = 1; i <= this->total_samples_; i++) {
+      for (int j = 1; j <= this->total_instances_; j++) {
+        this->sample_.KeyField = std::to_string(j).c_str();
+
+        this->notified_ = false;
+        auto t_start = std::chrono::high_resolution_clock::now();
+
+        this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
+
+        std::unique_lock<std::mutex> u_lock(this->mtx_);
+        this->cv_.wait(u_lock, [this] { return this->notified_; });
+
+        const auto t_end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
+
+        this->latencies_.push_back(duration.count());
+      }
+    }
+  });
+
+  std::thread reader_thread([this] {
+    const CORBA::ULong total = this->total_samples_ * this->total_instances_;
+    CORBA::ULong samples_received = 0;
+
+    while (true) {
+      DDS::ConditionSeq active_conditions;
+      DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
+
+      auto ret = this->wait_set_->wait(active_conditions, duration);
+      if (ret != DDS::RETCODE_OK) {
+        std::cout << "Error waiting for samples" << std::endl;
+        continue;
+      }
+
+      OpenDDSNative::KeyedOctetsSeq samples;
+      DDS::SampleInfoSeq infos;
+
+      ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED,
+        DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
+
+      if (ret != DDS::RETCODE_OK) {
+        continue;
+      }
+
+      if (samples.length() > 1) {
+        throw std::runtime_error("Received more than one sample");
+      }
+
+      this->notified_ = true;
+      this->cv_.notify_one();
+
+      samples_received += samples.length();
+      if (samples_received == total) {
+        break;
+      }
+    }
+  });
+
+  writer_thread.join();
+  reader_thread.join();
 }
 
-void LatencyTest::finalize() {
-  this->publisher->delete_datawriter(this->writer);
+void LatencyTest::finalize() const {
 
-  this->reader->delete_contained_entities();
-  this->subscriber->delete_datareader(this->reader);
+  this->publisher_->delete_datawriter(this->writer_);
+  this->publisher_->delete_contained_entities();
+  this->participant_->delete_publisher(this->publisher_);
 
-  this->participant->delete_publisher(this->publisher);
-  this->participant->delete_subscriber(this->subscriber);
+  this->wait_set_->detach_condition(this->reader_->get_statuscondition());
 
-  this->participant->delete_topic(this->topic);
+  this->reader_->delete_contained_entities();
+  this->subscriber_->delete_datareader(this->reader_);
 
-  this->participant->delete_contained_entities();
-  this->dpf->delete_participant(this->participant);
+  this->subscriber_->delete_contained_entities();
+  this->participant_->delete_subscriber(this->subscriber_);
+
+  this->participant_->delete_topic(this->topic_);
 }
 
-
+void* LatencyTest::get_latencies() const {
+  return serialize_latencies(this->latencies_);
+}

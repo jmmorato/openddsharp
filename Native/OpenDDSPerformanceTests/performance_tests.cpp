@@ -21,23 +21,29 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include <dds/DCPS/transport/framework/TransportRegistry.h>
 
-LatencyTest* latency_initialize() {
+LatencyTest* latency_initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
+  const CORBA::ULong payload_size, const DDS::DomainParticipant_ptr participant) {
+
   auto* test = new LatencyTest();
 
-  test->initialize();
+  test->initialize(total_instances, total_samples, payload_size, participant);
 
   return test;
 }
 
-CORBA::ULong latency_run(LatencyTest* test) {
-  return test->run();
+void latency_run(LatencyTest* test) {
+  test->run();
 }
 
-void latency_finalize(LatencyTest* test) {
+void* latency_get_latencies(const LatencyTest* test) {
+  return test->get_latencies();
+}
+
+void latency_finalize(const LatencyTest* test) {
   test->finalize();
 }
 
-DDS::DomainParticipant* throughput_global_setup(const char* config_name) {
+DDS::DomainParticipant* global_setup(const char* config_name) {
   DDS::DomainParticipant* participant = TheParticipantFactory->create_participant(DOMAIN_ID,
     PARTICIPANT_QOS_DEFAULT, DDS::DomainParticipantListener::_nil(), OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 
@@ -49,7 +55,7 @@ DDS::DomainParticipant* throughput_global_setup(const char* config_name) {
   return participant;
 }
 
-void throughput_global_cleanup(DDS::DomainParticipant* participant) {
+void global_cleanup(DDS::DomainParticipant* participant) {
   participant->delete_contained_entities();
   TheParticipantFactory->delete_participant(participant);
 }

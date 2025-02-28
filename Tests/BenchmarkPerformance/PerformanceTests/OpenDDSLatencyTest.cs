@@ -2,22 +2,34 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
-using OpenDDSharp.DDS;
+using OpenDDSharp.Marshaller;
 
 namespace OpenDDSharp.BenchmarkPerformance.PerformanceTests;
 
-public sealed class OpenDDSThroughputTest(int totalSamples, ulong totalPayload, IntPtr participant) : IDisposable
+internal sealed class OpenDDSLatencyTest(int totalInstances, int totalSamples, ulong totalPayload, IntPtr participant) : IDisposable
 {
-    private readonly IntPtr _ptr = UnsafeNativeMethods.ThroughputInitialize(totalSamples, totalPayload, participant);
+    private readonly IntPtr _ptr = UnsafeNativeMethods.LatencyInitialize(totalInstances, totalSamples, totalPayload, participant);
+
+    public IList<TimeSpan> Latencies
+    {
+        get
+        {
+            var ptr = UnsafeNativeMethods.LatencyGetLatencies(_ptr);
+            IList<double> list = new List<double>();
+            ptr.PtrToSequence(ref list);
+            ptr.ReleaseNativePointer();
+            return list.Select(TimeSpan.FromMilliseconds).ToList();
+        }
+    }
 
     public ulong Run()
     {
-        return UnsafeNativeMethods.ThroughputRun(_ptr);
+        return UnsafeNativeMethods.LatencyRun(_ptr);
     }
 
     public void Dispose()
     {
-        UnsafeNativeMethods.ThroughputFinalize(_ptr);
+        UnsafeNativeMethods.LatencyFinalize(_ptr);
     }
 }
 
@@ -28,35 +40,27 @@ public sealed class OpenDDSThroughputTest(int totalSamples, ulong totalPayload, 
 /// security review to make sure that the usage is secure because no stack walk will be performed.
 /// </summary>
 [SuppressUnmanagedCodeSecurity]
-[ExcludeFromCodeCoverage]
 [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleType", Justification = "Native p/invoke calls.")]
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1601:PartialElementsMustBeDocumented", Justification = "Partial required for the source generator.")]
 internal static partial class UnsafeNativeMethods
 {
-    private const string TEST_LIBRARY_NAME = "OpenDDSPerformanceTests";
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "latency_initialize")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    internal static partial IntPtr LatencyInitialize(int totalInstances, int totalSamples, ulong payloadSize, IntPtr participant);
 
     [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "global_setup", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "latency_run")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    internal static partial IntPtr NativeGlobalSetup(string configName);
+    internal static partial uint LatencyRun(IntPtr test);
 
     [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "global_cleanup")]
+    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "latency_finalize")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    internal static partial void NativeGlobalCleanup(IntPtr ptr);
+    internal static partial void LatencyFinalize(IntPtr test);
 
     [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "throughput_initialize")]
+    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "latency_get_latencies")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    internal static partial IntPtr ThroughputInitialize(int totalSamples, ulong payloadSize, IntPtr participant);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "throughput_run")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    internal static partial uint ThroughputRun(IntPtr test);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(TEST_LIBRARY_NAME, EntryPoint = "throughput_finalize")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    internal static partial void ThroughputFinalize(IntPtr c);
+    internal static partial IntPtr LatencyGetLatencies(IntPtr test);
 }

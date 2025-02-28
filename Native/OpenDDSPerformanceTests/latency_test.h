@@ -19,22 +19,37 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 
+#include <mutex>
+#include <condition_variable>
 #include "utils.h"
+
 
 class CLASS_EXPORT_FLAG LatencyTest {
 
-  private:
-    DDS::DomainParticipantFactory_var dpf;
-    DDS::DomainParticipant_var participant;
-    DDS::Publisher_var publisher;
-    DDS::Subscriber_var subscriber;
-    DDS::Topic_var topic;
-    DDS::DataWriter_var writer;
-    DDS::DataReader_var reader;
+  DDS::DomainParticipant_ptr participant_ = DDS::DomainParticipant::_nil();
+  DDS::Publisher_ptr publisher_ = DDS::Publisher::_nil();
+  DDS::Subscriber_ptr subscriber_ = DDS::Subscriber::_nil();
+  DDS::Topic_ptr topic_ = DDS::Topic::_nil();
+  DDS::WaitSet_ptr wait_set_ = nullptr;
+  DDS::DataWriter_ptr writer_ = DDS::DataWriter::_nil();
+  DDS::DataReader_ptr reader_ = DDS::DataReader::_nil();
+  OpenDDSNative::KeyedOctetsDataWriter_ptr data_writer_ = OpenDDSNative::KeyedOctetsDataWriter::_nil();
+  OpenDDSNative::KeyedOctetsDataReader_ptr data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_nil();
+  OpenDDSNative::KeyedOctets sample_;
+  std::vector<double> latencies_;
+
+  CORBA::ULong total_instances_ = 0;
+  CORBA::ULong total_samples_ = 0;
+  CORBA::ULong payload_size_ = 0;
+  CORBA::ULong samples_received_ = 0;
+
+  std::mutex mtx_;
+  std::condition_variable cv_;
+  bool notified_ = false;
 
   public:
-    void initialize();
-    int32_t run();
-    void finalize();
-
+    void initialize(CORBA::ULong total_instances, CORBA::ULong total_samples, CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant);
+    void run();
+    void finalize() const;
+    void* get_latencies() const;
 };

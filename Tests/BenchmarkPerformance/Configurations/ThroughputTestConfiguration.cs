@@ -15,17 +15,11 @@ internal class ThroughputTestConfiguration : ManualConfig
     {
         if (name != null && name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.Dry
-                .WithStrategy(RunStrategy.Throughput)
-                .WithToolchain(InProcessEmitToolchain.Instance));
+            AddJob(Job.Dry.WithStrategy(RunStrategy.Throughput));
         }
         else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.ShortRun
-                .WithUnrollFactor(1)
-                .WithStrategy(RunStrategy.Throughput)
-                .WithToolchain(InProcessEmitToolchain.Instance)
-                .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
+            AddJob(Job.ShortRun.WithUnrollFactor(1).WithStrategy(RunStrategy.Throughput));
         }
         else
         {
@@ -34,13 +28,11 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithUnrollFactor(1)
                 .WithInvocationCount(10)
                 .WithWarmupCount(5)
-                .WithStrategy(RunStrategy.Throughput)
-                .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true)));
+                .WithStrategy(RunStrategy.Throughput));
         }
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
-        AddColumn(new ThroughputSamplesReceivedColumn());
-        AddColumn(new ThroughputMissingSamplesPercentageColumn());
+        AddColumn(new ThroughputPerSecondColumn());
         AddLogger(DefaultConfig.Instance.GetLoggers().ToArray());
         AddExporter(PlainExporter.Default);
         AddExporter(CsvExporter.Default);

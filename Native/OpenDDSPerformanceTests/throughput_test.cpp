@@ -29,97 +29,31 @@ void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::U
   this->sample_.KeyField = "1";
   this->sample_.ValueField.length(payload_size);
 
-  auto data = random_bytes(payload_size);
+  const auto data = random_bytes(payload_size);
   for (CORBA::ULong i = 0; i < payload_size; ++i) {
     this->sample_.ValueField[i] = data[i];
   }
 
   // Initialize the Publisher entity
-  DDS::PublisherQos publisher_qos;
-  this->participant_->get_default_publisher_qos(publisher_qos);
-  publisher_qos.entity_factory.autoenable_created_entities = false;
-  this->publisher_ = this->participant_->create_publisher(publisher_qos, DDS::PublisherListener::_nil(), OpenDDS::DCPS::NO_STATUS_MASK);
-
-  if (is_nil(this->publisher_)) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_publisher failed.\n")));
-    throw std::runtime_error("create_publisher failed.");
-  }
+  this->publisher_ = create_publisher(this->participant_);
 
   // Initialize the Subscriber entity
-  DDS::SubscriberQos subscriber_qos;
-  this->participant_->get_default_subscriber_qos(subscriber_qos);
-  subscriber_qos.entity_factory.autoenable_created_entities = false;
-
-  this->subscriber_ = this->participant_->create_subscriber(subscriber_qos, DDS::SubscriberListener::_nil(), OpenDDS::DCPS::NO_STATUS_MASK);
-
-  if (is_nil(this->subscriber_)) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_subscriber failed.\n")));
-    throw std::runtime_error("create_subscriber failed.");
-  }
+  this->subscriber_ = create_subscriber(this->participant_);
 
   // Initialize the Topic entity
-  const OpenDDSNative::KeyedOctetsTypeSupport_var ts = new OpenDDSNative::KeyedOctetsTypeSupportImpl;
-  const auto type_name = ts->get_type_name();
-  auto ret = ts->register_type(participant_, type_name);
-  if (ret != ::DDS::RETCODE_OK) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) register_type failed.\n")));
-    throw std::runtime_error("register_type failed.");
-  }
-
-  const auto topic_name = random_string(16);
-
-  ::DDS::TopicQos topic_qos;
-  this->participant_->get_default_topic_qos(topic_qos);
-  topic_qos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
-  topic_qos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
-
-  this->topic_ = this->participant_->create_topic(topic_name.c_str(), type_name, topic_qos, DDS::TopicListener::_nil(), OpenDDS::DCPS::NO_STATUS_MASK);
-
-  if (is_nil(this->topic_)) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_topic failed.\n")));
-    throw std::runtime_error("create_topic failed.");
-  }
+  this->topic_ = create_topic(this->participant_);
 
   // Initialize the DataWriter entity
-  DDS::DataWriterQos dw_qos;
-  this->publisher_->get_default_datawriter_qos(dw_qos);
-  dw_qos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
-  dw_qos.reliability.max_blocking_time = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
-  dw_qos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
-
-  this->writer_ = this->publisher_->create_datawriter(this->topic_, dw_qos, DDS::DataWriterListener::_nil(), OpenDDS::DCPS::NO_STATUS_MASK);
-
-  if (is_nil(this->writer_)) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_datawriter failed.\n")));
-    throw std::runtime_error("create_datawriter failed.");
-  }
-
+  this->writer_ = create_data_writer(this->publisher_, this->topic_);
   this->data_writer_ = OpenDDSNative::KeyedOctetsDataWriter::_narrow(writer_);
-
-  // Initialize the DataReader entity
-  DDS::DataReaderQos dr_qos;
-  this->subscriber_->get_default_datareader_qos(dr_qos);
-  dr_qos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
-  dr_qos.reliability.max_blocking_time = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
-  dr_qos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
-
-  this->reader_ = this->subscriber_->create_datareader(this->topic_, dr_qos, DDS::DataReaderListener::_nil(), OpenDDS::DCPS::DEFAULT_STATUS_MASK);
-
-  if (is_nil(this->reader_)) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) create_datareader failed.\n")));
-    throw std::runtime_error("create_datareader failed.");
-  }
-
+  this->reader_ = create_data_reader(this->subscriber_, this->topic_);
   this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
 
   // Initialize waitset and status condition
-  const auto status_condition = this->reader_->get_statuscondition();
-  status_condition->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
-  this->wait_set_ = new DDS::WaitSet;
-  this->wait_set_->attach_condition(status_condition);
+  this->wait_set_ = create_wait_set(this->reader_);
 
   // Enable the entities and wait for discovery
-  ret = writer_->enable();
+  auto ret = writer_->enable();
   if (ret != ::DDS::RETCODE_OK) {
     ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) writer enable failed.\n")));
     throw std::runtime_error("writer enable failed.");
@@ -146,7 +80,8 @@ CORBA::ULong ThroughputTest::run() {
   });
 
   std::thread reader_thread([this] {
-    CORBA::ULong samples_received = 0;
+    this->samples_received_ = 0;
+
     while (true) {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
@@ -157,15 +92,18 @@ CORBA::ULong ThroughputTest::run() {
 
       OpenDDSNative::KeyedOctetsSeq samples;
       DDS::SampleInfoSeq infos;
-      ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED, DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
+
+      ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED,
+        DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
+
       if (ret != DDS::RETCODE_OK) {
         continue;
       }
 
-      samples_received += samples.length();
-
+      this->samples_received_ += samples.length();
       this->data_reader_->return_loan(samples, infos);
-      if (samples_received == this->total_samples_) {
+
+      if (this->samples_received_ == this->total_samples_) {
         return;
       }
     }
@@ -174,7 +112,7 @@ CORBA::ULong ThroughputTest::run() {
   writer_thread.join();
   reader_thread.join();
 
-  return this->total_samples_;
+  return this->samples_received_;
 }
 
 void ThroughputTest::finalize() const {

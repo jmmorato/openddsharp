@@ -11,7 +11,6 @@ internal sealed class JSONLatencyTest : IDisposable
     private readonly Random _random = new ();
     private readonly int _totalInstances;
     private readonly int _totalSamples;
-    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
     private readonly KeyedOctets _sample;
     private readonly DomainParticipant _participant;
 
@@ -63,15 +62,9 @@ internal sealed class JSONLatencyTest : IDisposable
                 {
                     _sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
 
-                    if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
-                    {
-                        instanceHandle = _dataWriter.RegisterInstance(_sample);
-                        _instanceHandles.Add(j, instanceHandle);
-                    }
-
                     var publicationTime = DateTime.UtcNow.Ticks;
 
-                    _dataWriter.Write(_sample, instanceHandle);
+                    _dataWriter.Write(_sample);
 
                     _evt.Wait();
 
@@ -88,6 +81,7 @@ internal sealed class JSONLatencyTest : IDisposable
         pubThread.Start();
 
         readerThread.Join();
+        pubThread.Join();
 
         return latencyHistory;
     }
@@ -161,6 +155,7 @@ internal sealed class JSONLatencyTest : IDisposable
 
     private void ReaderThreadProc()
     {
+        var total = _totalSamples * _totalInstances;
         while (true)
         {
             var conditions = new List<Condition>();
@@ -180,7 +175,7 @@ internal sealed class JSONLatencyTest : IDisposable
 
             _evt.Set();
 
-            if (_count == _totalSamples * _totalInstances)
+            if (_count == total)
             {
                 return;
             }
@@ -201,7 +196,6 @@ internal sealed class JSONLatencyTest : IDisposable
 
         _participant.DeleteTopic(_topic);
         _participant.DeleteContainedEntities();
-
 
         _evt.Dispose();
     }

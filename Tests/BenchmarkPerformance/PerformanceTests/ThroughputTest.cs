@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using BenchmarkDotNet.Attributes;
-using CdrWrapper;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
@@ -31,11 +30,13 @@ public class ThroughputTest
     private TransportInst _instCdr;
     private TransportConfig _configJson;
     private TransportInst _instJson;
+    private TransportConfig _configNative;
+    private TransportInst _instNative;
 
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(5_000, 10_000, 15_000, 20_000)]
+    [Params(10_000, 20_000)]
     public int TotalSamples { get; set; }
 
     /// <summary>
@@ -112,19 +113,19 @@ public class ThroughputTest
 
         _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
 
-        var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameCdr = "openddsharp_tcp_" + guidCdr;
-        var instNameCdr = "internal_openddsharp_tcp_" + guidCdr;
+        var guidNative = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+        var configNameNative = "openddsharp_tcp_" + guidNative;
+        var instNameNative = "internal_openddsharp_tcp_" + guidNative;
 
-        _configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
-        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
-        var transportNative = new TcpInst(_instCdr)
+        _configNative = TransportRegistry.Instance.CreateConfig(configNameNative);
+        _instNative = TransportRegistry.Instance.CreateInst(instNameNative, "tcp");
+        var transportNative = new TcpInst(_instNative)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
         };
-        _configCdr.Insert(transportNative);
+        _configNative.Insert(transportNative);
 
-        _participantNative = UnsafeNativeMethods.ThroughputGlobalSetup(configNameCdr);
+        _participantNative = UnsafeNativeMethods.NativeGlobalSetup(configNameNative);
     }
 
     [GlobalCleanup(Target = nameof(OpenDDSharpCDRThroughputTest))]
@@ -148,10 +149,10 @@ public class ThroughputTest
     [GlobalCleanup(Target = nameof(OpenDDSNativeThroughputTest))]
     public void OpenDDSNativeGlobalCleanup()
     {
-        UnsafeNativeMethods.ThroughputGlobalCleanup(_participantNative);
+        UnsafeNativeMethods.NativeGlobalCleanup(_participantNative);
 
-        TransportRegistry.Instance.RemoveConfig(_configCdr);
-        TransportRegistry.Instance.RemoveInst(_instCdr);
+        TransportRegistry.Instance.RemoveConfig(_configNative);
+        TransportRegistry.Instance.RemoveInst(_instNative);
     }
 
     [IterationSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
@@ -210,7 +211,7 @@ public class ThroughputTest
         ThroughputStatistics("rticonnext");
     }
 
-    [Benchmark(Description = "OpenDDS Native")]
+    [Benchmark(Description = "OpenDDS Native", Baseline = true)]
     public void OpenDDSNativeThroughputTest()
     {
         _samplesReceived = _openDDSThroughputTest.Run();
@@ -228,7 +229,7 @@ public class ThroughputTest
         _samplesReceived = _jsonThroughputTest.Run();
     }
 
-    // Cannot run without a valid RTI Connext license.
+    // Cannot be run without a valid RTI Connext license.
     // [Benchmark(Description = "RTI Connext")]
     public void RtiConnextThroughputTest()
     {
