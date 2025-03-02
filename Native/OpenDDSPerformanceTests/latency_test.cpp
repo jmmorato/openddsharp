@@ -74,35 +74,14 @@ void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::UL
 }
 
 void LatencyTest::run() {
+  this->samples_received_ = 0;
+
   if (!this->latencies_.empty()) {
     this->latencies_.clear();
   }
 
-  std::thread writer_thread([this] {
-    int count = 0;
-    for (int i = 1; i <= this->total_samples_; i++) {
-      for (int j = 1; j <= this->total_instances_; j++) {
-        this->sample_.KeyField = std::to_string(j).c_str();
-
-        this->notified_ = false;
-        auto t_start = std::chrono::high_resolution_clock::now();
-
-        this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
-
-        std::unique_lock<std::mutex> u_lock(this->mtx_);
-        this->cv_.wait(u_lock, [this] { return this->notified_; });
-
-        const auto t_end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
-
-        this->latencies_.push_back(duration.count());
-      }
-    }
-  });
-
   std::thread reader_thread([this] {
     const CORBA::ULong total = this->total_samples_ * this->total_instances_;
-    CORBA::ULong samples_received = 0;
 
     while (true) {
       DDS::ConditionSeq active_conditions;
@@ -129,11 +108,32 @@ void LatencyTest::run() {
       }
 
       this->notified_ = true;
-      this->cv_.notify_one();
+      this->cv_.notify_all();
 
-      samples_received += samples.length();
-      if (samples_received == total) {
+      this->samples_received_ += samples.length();
+      if (this->samples_received_ == total) {
         break;
+      }
+    }
+  });
+
+  std::thread writer_thread([this] {
+    for (int i = 1; i <= this->total_samples_; i++) {
+      for (int j = 1; j <= this->total_instances_; j++) {
+        this->sample_.KeyField = std::to_string(j).c_str();
+
+        this->notified_ = false;
+        auto t_start = std::chrono::high_resolution_clock::now();
+
+        this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
+
+        std::unique_lock<std::mutex> u_lock(this->mtx_);
+        this->cv_.wait(u_lock, [this] { return this->notified_; });
+
+        const auto t_end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
+
+        this->latencies_.push_back(duration.count());
       }
     }
   });
@@ -143,7 +143,6 @@ void LatencyTest::run() {
 }
 
 void LatencyTest::finalize() const {
-
   this->publisher_->delete_datawriter(this->writer_);
   this->publisher_->delete_contained_entities();
   this->participant_->delete_publisher(this->publisher_);
