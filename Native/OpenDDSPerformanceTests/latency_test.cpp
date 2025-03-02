@@ -107,10 +107,11 @@ void LatencyTest::run() {
         throw std::runtime_error("Received more than one sample");
       }
 
+      this->samples_received_ += samples.length();
+
       this->notified_ = true;
       this->cv_.notify_all();
 
-      this->samples_received_ += samples.length();
       if (this->samples_received_ == total) {
         break;
       }

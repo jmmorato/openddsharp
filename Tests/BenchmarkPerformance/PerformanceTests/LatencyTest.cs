@@ -243,8 +243,7 @@ public class LatencyTest
         _latencyHistory = _jsonLatencyTest.Run();
     }
 
-    // Cannot run without a valid RTI Connext license.
-    // [Benchmark(Description = "RTI Connext")]
+    [Benchmark(Description = "RTI Connext")]
     public void RtiConnextLatencyTest()
     {
         _latencyHistory= _rtiConnextLatencyTest.Run();

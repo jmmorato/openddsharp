@@ -3,6 +3,7 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 
@@ -19,6 +20,9 @@ internal class ThroughputTestConfiguration : ManualConfig
         else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
             AddJob(Job.ShortRun.WithUnrollFactor(1).WithStrategy(RunStrategy.Throughput));
+
+            // Does not run JSON tests in this configuration.
+            AddFilter(new NameFilter(n => !n.Contains("JSON")));
         }
         else
         {
@@ -29,6 +33,9 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithWarmupCount(5)
                 .WithStrategy(RunStrategy.Throughput));
         }
+
+        // Cannot be run without a valid RTI Connext license.
+        AddFilter(new NameFilter(n => !n.Contains("RTI")));
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new ThroughputPerSecondColumn());
