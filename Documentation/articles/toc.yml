@@ -22,3 +22,5 @@
 #      href: built_in_topics.md
 - name: IDL to C# Mapping
   href: idl.md
+- name: Performance Tests
+  href: performance_tests.md
