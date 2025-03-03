@@ -22,7 +22,7 @@ internal class ThroughputTestConfiguration : ManualConfig
             AddJob(Job.ShortRun.WithUnrollFactor(1).WithStrategy(RunStrategy.Throughput));
 
             // Does not run JSON tests in this configuration.
-            AddFilter(new NameFilter(n => !n.Contains("JSON")));
+            AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
         }
         else
         {
@@ -35,7 +35,7 @@ internal class ThroughputTestConfiguration : ManualConfig
         }
 
         // Cannot be run without a valid RTI Connext license.
-        AddFilter(new NameFilter(n => !n.Contains("RTI")));
+        AddFilter(new NameFilter(n => !n.Contains("RTI", StringComparison.CurrentCultureIgnoreCase)));
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new ThroughputPerSecondColumn());
