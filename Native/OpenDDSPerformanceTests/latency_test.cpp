@@ -139,7 +139,6 @@ void LatencyTest::run() {
     }
   });
 
-  writer_thread.join();
   reader_thread.join();
 }
 

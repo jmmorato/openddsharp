@@ -1,4 +1,6 @@
-# Introduction
+# OpenDDSharp Performance Tests
+
+## Introduction
 
 The main goals of OpenDDSharp is to provide an open source high-performance C# DDS implementation.
 
@@ -45,9 +47,9 @@ performance of the library in different scenarios.
 The tests are executed using the [BenchmarkDotNet](https://benchmarkdotnet.org/) library and the results are compared
 with the native OpenDDS C++ implementation.
 
-## OpenDDSharp vNext
+### OpenDDSharp vNext
 
-### Latency Default
+#### Latency Default
 
 BenchmarkDotNet v0.14.0, macOS Sequoia 15.2 (24C101) Darwin 24.2.0  
 Apple M3, 1 CPU, 8 logical and 8 physical cores  
@@ -138,7 +140,7 @@ Test Configuration:
 | 'OpenDDSharp CDR'    | 200            | 30           | 8192         |     0.0833 ms |         0.0104 ms |       0.0750 ms |       0.3430 ms |     0.0810 ms |     0.0790 ms |     0.0820 ms |
 | 'OpenDDSharp JSON'   | 200            | 30           | 8192         |     0.4938 ms |         0.0159 ms |       0.4720 ms |       0.6700 ms |     0.4950 ms |     0.4950 ms |     0.4890 ms |
 
-### Latency Payload
+#### Latency Payload
 
 BenchmarkDotNet v0.14.0, macOS Sequoia 15.2 (24C101) Darwin 24.2.0  
 Apple M3, 1 CPU, 8 logical and 8 physical cores  
@@ -165,7 +167,7 @@ Test Configuration:
 | **'OpenDDS Native'** | **1000**       | **10**       | **65536**    | **0.1040 ms** |     **0.0049 ms** |   **0.0888 ms** |   **0.1278 ms** | **0.1082 ms** | **0.0942 ms** | **0.0947 ms** |
 | 'OpenDDSharp CDR'    | 1000           | 10           | 65536        |     0.1230 ms |         0.0139 ms |       0.1060 ms |       0.2250 ms |     0.1120 ms |     0.1240 ms |     0.1240 ms |
 
-### Latency Samples
+#### Latency Samples
 
 BenchmarkDotNet v0.14.0, macOS Sequoia 15.2 (24C101) Darwin 24.2.0  
 Apple M3, 1 CPU, 8 logical and 8 physical cores  
@@ -195,7 +197,7 @@ Test Configuration:
 | **'OpenDDS Native'** | **1000**       | **10**       | **16384**    | **1.00** | **0.0795 ms** |     **0.0028 ms** |   **0.0714 ms** |   **0.0928 ms** | **0.0821 ms** | **0.0815 ms** | **0.0775 ms** |
 | 'OpenDDSharp CDR'    | 1000           | 10           | 16384        |     1.10 |     0.0874 ms |         0.0088 ms |       0.0800 ms |       0.2680 ms |     0.0900 ms |     0.0910 ms |     0.0850 ms |
 
-### Throughput Default
+#### Throughput Default
 
 BenchmarkDotNet v0.14.0, macOS Sequoia 15.2 (24C101) Darwin 24.2.0  
 Apple M3, 1 CPU, 8 logical and 8 physical cores  
@@ -237,7 +239,7 @@ Test Configuration:
 | 'OpenDDSharp CDR'    | 20000        | 8192         |     915.5 ms |     1.10 |     9.95 ms |     5.92 ms |      170.667 MB/sec |  509591558 B |
 | 'OpenDDSharp JSON'   | 20000        | 8192         |   5,355.1 ms |     6.45 |   260.54 ms |   172.33 ms |       29.178 MB/sec | 2698018365 B |
 
-### Throughput Payload
+#### Throughput Payload
 
 BenchmarkDotNet v0.14.0, macOS Sequoia 15.2 (24C101) Darwin 24.2.0  
 Apple M3, 1 CPU, 8 logical and 8 physical cores  
@@ -264,7 +266,7 @@ Test Configuration:
 | **'OpenDDS Native'** | **100000**   | **65536**    | **7.229 s** | **1.00** | **0.0878 s** | **0.0581 s** |  **864.552 MB/sec** |      **74 B** |
 | 'OpenDDSharp CDR'    | 100000       | 65536        |     8.202 s |     1.13 |     0.0426 s |     0.0282 s |      762.000 MB/sec | 19765681308 B |
 
-### Throughput Samples
+#### Throughput Samples
 
 BenchmarkDotNet v0.14.0, macOS Sequoia 15.2 (24C101) Darwin 24.2.0  
 Apple M3, 1 CPU, 8 logical and 8 physical cores  
@@ -294,7 +296,7 @@ Test Configuration:
 | **'OpenDDS Native'** | **200000**   | **16384**    | **8.449 s** | **1.00** | **0.0837 s** | **0.0554 s** |  **369.878 MB/sec** |      **74 B** |
 | 'OpenDDSharp CDR'    | 200000       | 16384        |     9.314 s |     1.10 |     0.0547 s |     0.0326 s |      335.501 MB/sec | 10014268015 B |
 
-# Conclusions
+## Conclusions
 
 OpenDDSharp CDR implementation performs better in terms of latency and throughput compared to the OpenDDSharp JSON
 implementation.
