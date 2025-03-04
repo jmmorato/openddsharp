@@ -82,7 +82,6 @@ void LatencyTest::run() {
 
   std::thread reader_thread([this] {
     const CORBA::ULong total = this->total_samples_ * this->total_instances_;
-
     while (true) {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
@@ -113,23 +112,25 @@ void LatencyTest::run() {
       this->cv_.notify_all();
 
       if (this->samples_received_ == total) {
-        break;
+        return;
       }
     }
   });
 
   std::thread writer_thread([this] {
+    this->notified_ = false;
+
     for (int i = 1; i <= this->total_samples_; i++) {
       for (int j = 1; j <= this->total_instances_; j++) {
         this->sample_.KeyField = std::to_string(j).c_str();
 
-        this->notified_ = false;
         auto t_start = std::chrono::high_resolution_clock::now();
 
         this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
 
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
+        this->notified_ = false;
 
         const auto t_end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
@@ -140,6 +141,7 @@ void LatencyTest::run() {
   });
 
   reader_thread.join();
+  writer_thread.join();
 }
 
 void LatencyTest::finalize() const {
