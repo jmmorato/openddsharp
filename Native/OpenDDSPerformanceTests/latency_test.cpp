@@ -80,43 +80,6 @@ void LatencyTest::run() {
     this->latencies_.clear();
   }
 
-  std::thread reader_thread([this] {
-    const CORBA::ULong total = this->total_samples_ * this->total_instances_;
-    while (true) {
-      DDS::ConditionSeq active_conditions;
-      DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
-
-      auto ret = this->wait_set_->wait(active_conditions, duration);
-      if (ret != DDS::RETCODE_OK) {
-        std::cout << "Error waiting for samples" << std::endl;
-        continue;
-      }
-
-      OpenDDSNative::KeyedOctetsSeq samples;
-      DDS::SampleInfoSeq infos;
-
-      ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED,
-        DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
-
-      if (ret != DDS::RETCODE_OK) {
-        continue;
-      }
-
-      if (samples.length() > 1) {
-        throw std::runtime_error("Received more than one sample");
-      }
-
-      this->samples_received_ += samples.length();
-
-      this->notified_ = true;
-      this->cv_.notify_all();
-
-      if (this->samples_received_ == total) {
-        return;
-      }
-    }
-  });
-
   std::thread writer_thread([this] {
     this->notified_ = false;
 
@@ -136,6 +99,45 @@ void LatencyTest::run() {
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
 
         this->latencies_.push_back(duration.count());
+      }
+    }
+  });
+
+  std::thread reader_thread([this] {
+    const CORBA::ULong total = this->total_samples_ * this->total_instances_;
+    while (true) {
+      DDS::ConditionSeq active_conditions;
+      DDS::Duration_t duration = { 5, 0 };
+
+      auto ret = this->wait_set_->wait(active_conditions, duration);
+      if (ret != DDS::RETCODE_OK) {
+        std::cout << "Error waiting for samples" << std::endl;
+        continue;
+      }
+
+      OpenDDSNative::KeyedOctetsSeq samples;
+      DDS::SampleInfoSeq infos;
+
+      ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED,
+        DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
+
+      if (ret != DDS::RETCODE_OK) {
+        std::cout << "Error taking samples" << std::endl;
+        continue;
+      }
+
+      if (samples.length() > 1) {
+        throw std::runtime_error("Received more than one sample");
+      }
+
+      this->samples_received_ += samples.length();
+      this->data_reader_->return_loan(samples, infos);
+
+      this->notified_ = true;
+      this->cv_.notify_all();
+
+      if (this->samples_received_ == total) {
+        return;
       }
     }
   });
