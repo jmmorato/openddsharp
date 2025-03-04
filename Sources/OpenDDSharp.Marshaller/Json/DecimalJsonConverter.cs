@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -18,7 +19,7 @@ namespace OpenDDSharp.Marshaller.Json
         /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options)
         {
-            writer.WriteRawValue(value.ToString("0.############################e+0"));
+            writer.WriteRawValue(value.ToString("0.############################e+0", CultureInfo.InvariantCulture));
         }
     }
 }
