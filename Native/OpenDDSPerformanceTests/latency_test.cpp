@@ -111,7 +111,7 @@ void LatencyTest::run() {
 
       auto ret = this->wait_set_->wait(active_conditions, duration);
       if (ret != DDS::RETCODE_OK) {
-        std::cout << "Error waiting for samples" << std::endl;
+        std::cout << "Error waiting for samples" << ret << ": " << this->samples_received_ << std::endl;
         continue;
       }
 
@@ -122,7 +122,7 @@ void LatencyTest::run() {
         DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
 
       if (ret != DDS::RETCODE_OK) {
-        std::cout << "Error taking samples" << std::endl;
+        std::cout << "Error taking samples" << ret << ": " << this->samples_received_ << std::endl;
         continue;
       }
 
