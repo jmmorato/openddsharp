@@ -38,6 +38,7 @@ switch (input)
         ParticipantService.Instance.Shutdown();
 
         Ace.Fini();
+
         // Ace.Init();
         //
         // var disc = new RtpsDiscovery(RTPS_DISCOVERY)

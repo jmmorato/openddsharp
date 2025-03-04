@@ -51,7 +51,7 @@ internal sealed class CDRLatencyTest : IDisposable
         var readerThread = new Thread(ReaderThreadProc)
         {
             IsBackground = true,
-            Priority = ThreadPriority.Highest,
+            Priority = ThreadPriority.AboveNormal,
         };
 
         var pubThread = new Thread(_ =>
@@ -156,12 +156,27 @@ internal sealed class CDRLatencyTest : IDisposable
         while (true)
         {
             var conditions = new List<Condition>();
-            _waitSet.Wait(conditions);
+            var result = _waitSet.Wait(conditions, new Duration
+            {
+                Seconds = 5,
+                NanoSeconds = 0,
+            });
+
+            if (result != ReturnCode.Ok)
+            {
+                Console.WriteLine($"WaitSet error: {result}");
+                continue;
+            }
 
             var samples = new List<KeyedOctets>();
             var sampleInfos = new List<SampleInfo>();
 
-            _dataReader.Take(samples, sampleInfos);
+            result = _dataReader.Take(samples, sampleInfos);
+            if (result != ReturnCode.Ok)
+            {
+                Console.WriteLine($"DataReader take error: {result}");
+                continue;
+            }
 
             if (samples.Count > 1)
             {
@@ -172,7 +187,7 @@ internal sealed class CDRLatencyTest : IDisposable
 
             _evt.Set();
 
-            if (_count == total)
+            if (_count >= total)
             {
                 return;
             }
