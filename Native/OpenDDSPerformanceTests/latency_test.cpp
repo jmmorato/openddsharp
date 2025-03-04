@@ -89,7 +89,11 @@ void LatencyTest::run() {
 
         auto t_start = std::chrono::high_resolution_clock::now();
 
-        this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
+        const auto ret = this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
+        if (ret != ::DDS::RETCODE_OK) {
+          std::cout << "Error writing sample " << ret << ": " << i << std::endl;
+          continue;
+        }
 
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
@@ -112,6 +116,8 @@ void LatencyTest::run() {
       auto ret = this->wait_set_->wait(active_conditions, duration);
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error waiting for samples" << ret << ": " << this->samples_received_ << std::endl;
+        this->notified_ = true;
+        this->cv_.notify_all();
         continue;
       }
 
@@ -122,7 +128,9 @@ void LatencyTest::run() {
         DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
 
       if (ret != DDS::RETCODE_OK) {
-        std::cout << "Error taking samples" << ret << ": " << this->samples_received_ << std::endl;
+        std::cout << "Error taking samples " << ret << ": " << this->samples_received_ << std::endl;
+        this->notified_ = true;
+        this->cv_.notify_all();
         continue;
       }
 
