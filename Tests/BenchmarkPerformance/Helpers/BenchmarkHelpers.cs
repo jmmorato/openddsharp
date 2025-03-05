@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using OpenDDSharp.DDS;
 using Rti.Dds.Publication;
@@ -80,9 +81,10 @@ internal static class BenchmarkHelpers
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            return RuntimeInformation.FrameworkDescription.Contains("x86", StringComparison.CurrentCultureIgnoreCase) ?
-                "x86" :
-                "x64";
+            var handle = Process.GetCurrentProcess().Handle;
+            UnsafeNativeMethods.IsWow64Process2(handle, out var processMachine, out var nativeMachine);
+
+            return processMachine == 0x8664 ? "x64" : "x86";
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))

@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using BenchmarkDotNet.Columns;
+﻿using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Environments;
@@ -23,7 +22,12 @@ internal class LatencyTestConfiguration : ManualConfig
 
         if (name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.Dry.WithStrategy(RunStrategy.Throughput).WithRuntime(CoreRuntime.Core80));
+            AddJob(Job.Dry
+                .WithStrategy(RunStrategy.Throughput)
+                .WithRuntime(CoreRuntime.Core80)
+                .WithArguments([
+                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                ]));
         }
         else if (name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
@@ -31,8 +35,9 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithUnrollFactor(1)
                 .WithStrategy(RunStrategy.Throughput)
                 .WithRuntime(CoreRuntime.Core80)
-                .WithArguments([new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")]));
-
+                .WithArguments([
+                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                ]));
 
             // Does not run JSON tests in this configuration.
             AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
@@ -45,7 +50,10 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithInvocationCount(10)
                 .WithWarmupCount(5)
                 .WithRuntime(CoreRuntime.Core80)
-                .WithStrategy(RunStrategy.Throughput));
+                .WithStrategy(RunStrategy.Throughput)
+                .WithArguments([
+                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                ]));
         }
 
         // Cannot be run without a valid RTI Connext license.
