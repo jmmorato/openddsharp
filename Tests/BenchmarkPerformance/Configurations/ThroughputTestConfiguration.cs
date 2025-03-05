@@ -1,11 +1,14 @@
 ﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
+using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
+using OpenDDSharp.BenchmarkPerformance.Helpers;
+using OpenDDSharp.Marshaller;
 
 namespace OpenDDSharp.BenchmarkPerformance.Configurations;
 
@@ -19,7 +22,11 @@ internal class ThroughputTestConfiguration : ManualConfig
         }
         else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.ShortRun.WithUnrollFactor(1).WithStrategy(RunStrategy.Throughput));
+            AddJob(Job.ShortRun
+                .WithUnrollFactor(1)
+                .WithStrategy(RunStrategy.Throughput)
+                .WithRuntime(CoreRuntime.Core80)
+                .WithArguments([new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")]));
 
             // Does not run JSON tests in this configuration.
             AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));

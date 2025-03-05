@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using OpenDDSharp.DDS;
 using Rti.Dds.Publication;
 using Rti.Dds.Subscription;
@@ -62,11 +63,33 @@ internal static class BenchmarkHelpers
         var count = milliseconds / 100;
         while (status.CurrentCount.Value != publicationsCount && count > 0)
         {
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
             status = dr.SubscriptionMatchedStatus;
             count--;
         }
 
         return count != 0 || status.CurrentCount.Value == publicationsCount;
+    }
+
+    public static string GetPlatformString()
+    {
+        if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return "x64";
+        }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return RuntimeInformation.FrameworkDescription.Contains("x86", StringComparison.CurrentCultureIgnoreCase) ?
+                "x86" :
+                "x64";
+        }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            return RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "Arm64" : "x64";
+        }
+
+        throw new PlatformNotSupportedException();
     }
 }
