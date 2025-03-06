@@ -55,7 +55,7 @@ public sealed class ReliabilityQosPolicy : IEquatable<ReliabilityQosPolicy>
         MaxBlockingTime = new Duration
         {
             Seconds = Duration.InfiniteSeconds,
-            NanoSeconds = Duration.InfiniteNanoseconds,
+            NanoSeconds = Duration.InfiniteNanoSeconds,
         };
     }
     #endregion

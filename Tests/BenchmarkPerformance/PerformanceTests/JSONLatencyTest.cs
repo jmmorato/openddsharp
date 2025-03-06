@@ -64,22 +64,25 @@ internal sealed class JSONLatencyTest : IDisposable
 
                     var publicationTime = DateTime.UtcNow.Ticks;
 
-                    _dataWriter.Write(_sample);
+                    var result = _dataWriter.Write(_sample);
+                    if (result != ReturnCode.Ok)
+                    {
+                        throw new InvalidOperationException($"Error writing sample: {result}");
+                    }
 
                     _evt.Wait();
 
                     var receptionTime = DateTime.UtcNow.Ticks;
                     var latency = TimeSpan.FromTicks(receptionTime - publicationTime);
+                    latencyHistory.Add(latency);
 
                     _evt.Reset();
-
-                    latencyHistory.Add(latency);
                 }
             }
         });
 
-        readerThread.Start();
         pubThread.Start();
+        readerThread.Start();
 
         readerThread.Join();
         pubThread.Join();
@@ -117,6 +120,7 @@ internal sealed class JSONLatencyTest : IDisposable
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
                 Depth = 1,
             },
+            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos}
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
@@ -138,6 +142,7 @@ internal sealed class JSONLatencyTest : IDisposable
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
                 Depth = 1,
             },
+            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos }
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);
@@ -150,8 +155,15 @@ internal sealed class JSONLatencyTest : IDisposable
         _dataWriter.Enable();
         _dataReader.Enable();
 
-        _dataReader.WaitForPublications(1, 5_000);
-        _dataWriter.WaitForSubscriptions(1, 5_000);
+        if (!_dataReader.WaitForPublications(1, 5_000))
+        {
+            throw new InvalidOperationException("Error waiting for publications.");
+        }
+
+        if (_dataWriter.WaitForSubscriptions(1, 5_000))
+        {
+            throw new InvalidOperationException("Error waiting for subscriptions.");
+        }
     }
 
     private void ReaderThreadProc()
@@ -177,8 +189,7 @@ internal sealed class JSONLatencyTest : IDisposable
             result = _dataReader.Take(samples, sampleInfos);
             if (result != ReturnCode.Ok)
             {
-                Console.WriteLine($"DataReader error: {result}");
-                continue;
+                throw new InvalidOperationException($"Error taking samples: {result}");
             }
 
             if (samples.Count > 1)

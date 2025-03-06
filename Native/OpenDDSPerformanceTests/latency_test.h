@@ -31,6 +31,7 @@ class CLASS_EXPORT_FLAG LatencyTest {
   DDS::Subscriber_ptr subscriber_ = DDS::Subscriber::_nil();
   DDS::Topic_ptr topic_ = DDS::Topic::_nil();
   DDS::WaitSet_ptr wait_set_ = nullptr;
+  DDS::StatusCondition_ptr status_condition_ = nullptr;
   DDS::DataWriter_ptr writer_ = DDS::DataWriter::_nil();
   DDS::DataReader_ptr reader_ = DDS::DataReader::_nil();
   OpenDDSNative::KeyedOctetsDataWriter_ptr data_writer_ = OpenDDSNative::KeyedOctetsDataWriter::_nil();

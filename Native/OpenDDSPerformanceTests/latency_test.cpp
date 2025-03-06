@@ -19,8 +19,10 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "latency_test.h"
 
+#include <dds/DCPS/RTPS/RtpsCoreC.h>
+
 void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
-  const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
+                             const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
 
   // Initialize the test parameters
   this->total_instances_ = total_instances;
@@ -54,7 +56,13 @@ void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::UL
   this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
 
   // Initialize waitset and status condition
-  this->wait_set_ = create_wait_set(this->reader_);
+  this->status_condition_ = this->data_reader_->get_statuscondition();
+  this->status_condition_->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
+  this->wait_set_ = new DDS::WaitSet;
+  const auto result = this->wait_set_->attach_condition(this->status_condition_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("attach_condition failed.");
+  }
 
   // Enable the entities and wait for discovery
   auto ret = writer_->enable();
@@ -69,8 +77,13 @@ void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::UL
     throw std::runtime_error("reader enable failed.");
   }
 
-  wait_for_publications(reader_, 1, 5000);
-  wait_for_subscriptions(writer_, 1, 5000);
+  if (!wait_for_publications(reader_, 1, 5000)) {
+    throw std::runtime_error("wait_for_publications failed.");
+  }
+
+  if (!wait_for_subscriptions(writer_, 1, 5000)) {
+    throw std::runtime_error("wait_for_subscriptions failed.");
+  }
 }
 
 void LatencyTest::run() {
@@ -81,23 +94,23 @@ void LatencyTest::run() {
   }
 
   std::thread writer_thread([this] {
-    this->notified_ = false;
 
     for (int i = 1; i <= this->total_samples_; i++) {
       for (int j = 1; j <= this->total_instances_; j++) {
         this->sample_.KeyField = std::to_string(j).c_str();
 
+        this->notified_ = false;
         auto t_start = std::chrono::high_resolution_clock::now();
 
-        const auto ret = this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
-        if (ret != ::DDS::RETCODE_OK) {
+        auto ret = this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
+        if (ret != DDS::RETCODE_OK) {
           std::cout << "Error writing sample " << ret << ": " << i << std::endl;
-          continue;
+          throw std::runtime_error("Error writing sample.");
         }
 
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
-        this->notified_ = false;
+        // this->notified_ = false;
 
         const auto t_end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
@@ -111,14 +124,20 @@ void LatencyTest::run() {
     const CORBA::ULong total = this->total_samples_ * this->total_instances_;
     while (true) {
       DDS::ConditionSeq active_conditions;
-      DDS::Duration_t duration = { 5, 0 };
+      DDS::Duration_t duration = { 10, 0 };
 
       auto ret = this->wait_set_->wait(active_conditions, duration);
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error waiting for samples" << ret << ": " << this->samples_received_ << std::endl;
-        this->notified_ = true;
-        this->cv_.notify_all();
-        continue;
+        throw std::runtime_error("Error waiting for samples.");
+      }
+
+      if (active_conditions.length() > 1) {
+        throw std::runtime_error("Error waiting for all conditions.");
+      }
+
+      if (active_conditions[0] != this->status_condition_) {
+        throw std::runtime_error("Error waiting for all conditions.");
       }
 
       OpenDDSNative::KeyedOctetsSeq samples;
@@ -129,9 +148,7 @@ void LatencyTest::run() {
 
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error taking samples " << ret << ": " << this->samples_received_ << std::endl;
-        this->notified_ = true;
-        this->cv_.notify_all();
-        continue;
+        throw std::runtime_error("Taking samples failed.");
       }
 
       if (samples.length() > 1) {
@@ -144,7 +161,7 @@ void LatencyTest::run() {
       this->notified_ = true;
       this->cv_.notify_all();
 
-      if (this->samples_received_ == total) {
+      if (this->samples_received_ >= total) {
         return;
       }
     }
@@ -155,19 +172,51 @@ void LatencyTest::run() {
 }
 
 void LatencyTest::finalize() const {
-  this->publisher_->delete_datawriter(this->writer_);
-  this->publisher_->delete_contained_entities();
-  this->participant_->delete_publisher(this->publisher_);
+  DDS::ReturnCode_t result = this->publisher_->delete_datawriter(this->data_writer_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_datawriter failed.");
+  }
 
-  this->wait_set_->detach_condition(this->reader_->get_statuscondition());
+  result = this->publisher_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
+  }
+  result = this->participant_->delete_publisher(this->publisher_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_publisher failed.");
+  }
 
-  this->reader_->delete_contained_entities();
-  this->subscriber_->delete_datareader(this->reader_);
+  result = this->status_condition_->set_enabled_statuses(OpenDDS::DCPS::NO_STATUS_MASK);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("set_enabled_statuses failed.");
+  }
+  result = this->wait_set_->detach_condition(this->status_condition_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("detach_condition failed.");
+  }
 
-  this->subscriber_->delete_contained_entities();
-  this->participant_->delete_subscriber(this->subscriber_);
+  result = this->reader_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
+  }
+  result = this->subscriber_->delete_datareader(this->data_reader_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_datareader failed.");
+  }
 
-  this->participant_->delete_topic(this->topic_);
+  result = this->subscriber_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
+  }
+  result = this->participant_->delete_subscriber(this->subscriber_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_subscriber failed.");
+  }
+
+  result = this->participant_->delete_topic(this->topic_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_topic failed.");
+  }
 }
 
 void* LatencyTest::get_latencies() const {

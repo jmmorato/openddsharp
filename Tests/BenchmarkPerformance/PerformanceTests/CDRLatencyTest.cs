@@ -63,7 +63,12 @@ internal sealed class CDRLatencyTest : IDisposable
                     _sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
 
                     var publicationTime = DateTime.UtcNow.Ticks;
-                    _dataWriter.Write(_sample);
+
+                    var result = _dataWriter.Write(_sample);
+                    if (result != ReturnCode.Ok)
+                    {
+                        throw new InvalidOperationException($"Error writing sample: {result}");
+                    }
 
                     _evt.Wait();
 
@@ -76,8 +81,8 @@ internal sealed class CDRLatencyTest : IDisposable
             }
         });
 
-        readerThread.Start();
         pubThread.Start();
+        readerThread.Start();
 
         readerThread.Join();
         pubThread.Join();
@@ -114,6 +119,7 @@ internal sealed class CDRLatencyTest : IDisposable
             {
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
             },
+            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos }
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
@@ -134,6 +140,7 @@ internal sealed class CDRLatencyTest : IDisposable
             {
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
             },
+            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos }
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);
@@ -146,8 +153,15 @@ internal sealed class CDRLatencyTest : IDisposable
         _dataWriter.Enable();
         _dataReader.Enable();
 
-        _dataReader.WaitForPublications(1, 5_000);
-        _dataWriter.WaitForSubscriptions(1, 5_000);
+        if (!_dataReader.WaitForPublications(1, 5_000))
+        {
+            throw new InvalidOperationException("Error waiting for publications.");
+        }
+
+        if (!_dataWriter.WaitForSubscriptions(1, 5_000))
+        {
+            throw new InvalidOperationException("Error waiting for subscriptions.");
+        }
     }
 
     private void ReaderThreadProc()
@@ -174,8 +188,7 @@ internal sealed class CDRLatencyTest : IDisposable
             result = _dataReader.Take(samples, sampleInfos);
             if (result != ReturnCode.Ok)
             {
-                Console.WriteLine($"DataReader take error: {result}");
-                continue;
+                throw new InvalidOperationException($"Error taking samples: {result}");
             }
 
             if (samples.Count > 1)
@@ -184,7 +197,6 @@ internal sealed class CDRLatencyTest : IDisposable
             }
 
             _count += 1;
-
             _evt.Set();
 
             if (_count >= total)

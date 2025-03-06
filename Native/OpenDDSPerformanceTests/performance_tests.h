@@ -30,7 +30,7 @@ EXTERN_METHOD_EXPORT
 void latency_run(LatencyTest* test);
 
 EXTERN_METHOD_EXPORT
-void latency_finalize(const LatencyTest* test);
+void latency_finalize(LatencyTest* test);
 
 EXTERN_METHOD_EXPORT
 void* latency_get_latencies(const LatencyTest* test);

@@ -28,7 +28,7 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithStrategy(RunStrategy.Throughput)
                 .WithRuntime(CoreRuntime.Core80)
                 .WithArguments([
-                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]));
         }
         else if (name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
@@ -38,7 +38,7 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithStrategy(RunStrategy.Throughput)
                 .WithRuntime(CoreRuntime.Core80)
                 .WithArguments([
-                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]);
 
             // Due to the error building the external process, we need to use the in-process emit toolchain.
@@ -62,7 +62,7 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithRuntime(CoreRuntime.Core80)
                 .WithStrategy(RunStrategy.Throughput)
                 .WithArguments([
-                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]));
         }
 

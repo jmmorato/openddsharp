@@ -53,6 +53,10 @@ jobs:
         ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 8.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
+    - name: Windows Long Paths
+      shell: pwsh
+      run: Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name LongPathsEnabled -Value 1
+
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
       uses: actions/cache@v4

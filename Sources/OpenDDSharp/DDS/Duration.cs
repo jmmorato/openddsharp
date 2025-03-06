@@ -37,7 +37,7 @@ public struct Duration : IEquatable<Duration>
     /// <summary>
     /// Infinite nanoseconds duration.
     /// </summary>
-    public const uint InfiniteNanoseconds = 2147483647U;
+    public const uint InfiniteNanoSeconds = 2147483647U;
 
     /// <summary>
     /// Zero seconds duration.

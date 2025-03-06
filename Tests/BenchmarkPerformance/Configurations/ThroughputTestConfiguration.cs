@@ -24,7 +24,7 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithStrategy(RunStrategy.Throughput)
                 .WithRuntime(CoreRuntime.Core80)
                 .WithArguments([
-                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]));
         }
         else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
@@ -34,7 +34,7 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithStrategy(RunStrategy.Throughput)
                 .WithRuntime(CoreRuntime.Core80)
                 .WithArguments([
-                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]);
 
             // Due to the error building the external process, we need to use the in-process emit toolchain.
@@ -58,7 +58,7 @@ internal class ThroughputTestConfiguration : ManualConfig
                 .WithWarmupCount(5)
                 .WithStrategy(RunStrategy.Throughput)
                 .WithArguments([
-                    new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
+                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]));
         }
 

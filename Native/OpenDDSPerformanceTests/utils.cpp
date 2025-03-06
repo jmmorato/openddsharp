@@ -56,10 +56,12 @@ bool wait_for_publications(::DDS::DataReader_ptr reader, int publications_count,
   reader->get_matched_publications(handles);
 
   int count = milliseconds / 100;
-  while (handles.length() != publications_count && count > 0)
-  {
+  while (handles.length() != publications_count && count > 0) {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+    handles.length(0);
     reader->get_matched_publications(handles);
+
     count--;
   }
 
@@ -71,10 +73,12 @@ bool wait_for_subscriptions(DDS::DataWriter_ptr writer, int subscriptions_count,
   writer->get_matched_subscriptions(handles);
 
   int count = milliseconds / 100;
-  while (handles.length() != subscriptions_count && count > 0)
-  {
+  while (handles.length() != subscriptions_count && count > 0) {
     std::this_thread::sleep_for(::std::chrono::milliseconds(100));
+
+    handles.length(0);
     writer->get_matched_subscriptions(handles);
+
     count--;
   }
 
@@ -166,6 +170,7 @@ DDS::DataWriter_ptr create_data_writer(DDS::Publisher_ptr publisher, DDS::Topic_
   dw_qos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
   dw_qos.reliability.max_blocking_time = {DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC};
   dw_qos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
+  dw_qos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
 
   DDS::DataWriter_ptr writer = publisher->create_datawriter(topic, dw_qos, DDS::DataWriterListener::_nil(), OpenDDS::DCPS::NO_STATUS_MASK);
 
@@ -174,7 +179,7 @@ DDS::DataWriter_ptr create_data_writer(DDS::Publisher_ptr publisher, DDS::Topic_
     throw std::runtime_error("create_datawriter failed.");
   }
 
-  return writer;
+  return DDS::DataWriter::_duplicate(writer);
 }
 
 DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topic_ptr topic) {
@@ -183,6 +188,7 @@ DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topi
   dr_qos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
   dr_qos.reliability.max_blocking_time = {DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC};
   dr_qos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
+  dr_qos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
 
   DDS::DataReader_ptr reader = subscriber->create_datareader(topic, dr_qos, DDS::DataReaderListener::_nil(), OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 
@@ -191,14 +197,19 @@ DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topi
     throw std::runtime_error("create_datareader failed.");
   }
 
-  return reader;
+  return DDS::DataReader::_duplicate(reader);
 }
 
-DDS::WaitSet_ptr create_wait_set(DDS::DataReader_ptr reader) {
-  const auto status_condition = reader->get_statuscondition();
-  status_condition->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
-  DDS::WaitSet_ptr wait_set = new DDS::WaitSet;
-  wait_set->attach_condition(status_condition);
-
-  return wait_set;
-}
+// DDS::WaitSet_ptr create_wait_set(OpenDDSNative::KeyedOctetsDataReader_ptr reader) {
+//   const auto status_condition = reader->get_statuscondition();
+//   status_condition->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
+//
+//   DDS::WaitSet_ptr wait_set = new DDS::WaitSet();
+//   const auto result = wait_set->attach_condition(status_condition);
+//
+//   if (result != DDS::RETCODE_OK) {
+//     throw std::runtime_error("attach_condition failed.");
+//   }
+//
+//   return DDS::WaitSet::_duplicate(wait_set);
+// }

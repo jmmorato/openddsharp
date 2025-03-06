@@ -12,17 +12,17 @@ internal static class BenchmarkHelpers
     {
         ArgumentNullException.ThrowIfNull(writer);
 
-        PublicationMatchedStatus status = default;
-        writer.GetPublicationMatchedStatus(ref status);
+        var handles = new List<InstanceHandle>();
+        writer.GetMatchedSubscriptions(handles);
         var count = milliseconds / 100;
-        while (status.CurrentCount != subscriptionsCount && count > 0)
+        while (handles.Count != subscriptionsCount && count > 0)
         {
             Thread.Sleep(100);
-            writer.GetPublicationMatchedStatus(ref status);
+            writer.GetMatchedSubscriptions(handles);
             count--;
         }
 
-        return count != 0 || status.CurrentCount == subscriptionsCount;
+        return count != 0 || handles.Count == subscriptionsCount;
     }
 
     internal static bool WaitForPublications(this DataReader reader, int publicationsCount, int milliseconds)
@@ -89,7 +89,7 @@ internal static class BenchmarkHelpers
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "Arm64" : "x64";
+            return RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "ARM64" : "x64";
         }
 
         throw new PlatformNotSupportedException();

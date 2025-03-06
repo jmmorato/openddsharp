@@ -39,7 +39,7 @@ void* latency_get_latencies(const LatencyTest* test) {
   return test->get_latencies();
 }
 
-void latency_finalize(const LatencyTest* test) {
+void latency_finalize(LatencyTest* test) {
   test->finalize();
 }
 

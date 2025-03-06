@@ -69,6 +69,6 @@ DDS::DataWriter_ptr create_data_writer(DDS::Publisher_ptr publisher, DDS::Topic_
 
 DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topic_ptr topic);
 
-DDS::WaitSet_ptr create_wait_set(DDS::DataReader_ptr reader);
+DDS::WaitSet_ptr create_wait_set(OpenDDSNative::KeyedOctetsDataReader_ptr reader);
 
 void* serialize_latencies(const std::vector<double>& vec);

@@ -91,7 +91,7 @@ internal sealed class JSONThroughputTest : IDisposable
                 MaxBlockingTime = new Duration
                 {
                     Seconds = Duration.InfiniteSeconds,
-                    NanoSeconds = Duration.InfiniteNanoseconds
+                    NanoSeconds = Duration.InfiniteNanoSeconds
                 },
             },
             History = { Kind = HistoryQosPolicyKind.KeepAllHistoryQos },
@@ -113,7 +113,7 @@ internal sealed class JSONThroughputTest : IDisposable
                 MaxBlockingTime = new Duration
                 {
                     Seconds = Duration.InfiniteSeconds,
-                    NanoSeconds = Duration.InfiniteNanoseconds
+                    NanoSeconds = Duration.InfiniteNanoSeconds
                 },
             },
             History = { Kind = HistoryQosPolicyKind.KeepAllHistoryQos },

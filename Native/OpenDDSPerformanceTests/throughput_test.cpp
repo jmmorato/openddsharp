@@ -50,7 +50,15 @@ void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::U
   this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
 
   // Initialize waitset and status condition
-  this->wait_set_ = create_wait_set(this->reader_);
+  // Initialize waitset and status condition
+  this->status_condition_ = this->data_reader_->get_statuscondition();
+  this->status_condition_->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
+  this->wait_set_ = new DDS::WaitSet;
+  const auto result = this->wait_set_->attach_condition(this->status_condition_);
+
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("attach_condition failed.");
+  }
 
   // Enable the entities and wait for discovery
   auto ret = writer_->enable();
@@ -120,7 +128,9 @@ void ThroughputTest::finalize() const {
   this->publisher_->delete_contained_entities();
   this->participant_->delete_publisher(this->publisher_);
 
-  this->wait_set_->detach_condition(this->reader_->get_statuscondition());
+  this-status_condition_->set_enabled_statuses(OpenDDS::DCPS::NO_STATUS_MASK);
+  this->wait_set_->detach_condition(this->status_condition_);
+
 
   this->reader_->delete_contained_entities();
   this->subscriber_->delete_datareader(this->reader_);
