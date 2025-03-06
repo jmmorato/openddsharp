@@ -84,7 +84,7 @@ internal static class BenchmarkHelpers
             var handle = Process.GetCurrentProcess().Handle;
             UnsafeNativeMethods.IsWow64Process2(handle, out var processMachine, out var nativeMachine);
 
-            return processMachine == 0x8664 ? "x64" : "x86";
+            return processMachine == 0x00 ? "x64" : "x86";
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
