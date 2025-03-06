@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Configs;
+﻿using System.Runtime.InteropServices;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Environments;
@@ -6,6 +7,7 @@ using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 using OpenDDSharp.BenchmarkPerformance.Helpers;
 using OpenDDSharp.Marshaller;
@@ -27,13 +29,22 @@ internal class ThroughputTestConfiguration : ManualConfig
         }
         else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.ShortRun
+            var job = Job.ShortRun
                 .WithUnrollFactor(1)
                 .WithStrategy(RunStrategy.Throughput)
                 .WithRuntime(CoreRuntime.Core80)
                 .WithArguments([
                     new MsBuildArgument(@"/p:Platform=""" + BenchmarkHelpers.GetPlatformString() + @"""")
-                ]));
+                ]);
+
+            // Due to the error building the external process, we need to use the in-process emit toolchain.
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
+            }
+
+            AddJob(job);
+
 
             // Does not run JSON tests in this configuration.
             AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
