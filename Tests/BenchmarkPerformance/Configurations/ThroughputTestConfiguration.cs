@@ -37,11 +37,11 @@ internal class ThroughputTestConfiguration : ManualConfig
                     new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]);
 
-            // Due to the error building the external process, we need to use the in-process emit toolchain.
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
-            }
+            // // Due to the error building the external process, we need to use the in-process emit toolchain.
+            // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            // {
+            //     job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
+            // }
 
             AddJob(job);
 

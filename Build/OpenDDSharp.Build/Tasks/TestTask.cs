@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using Path = System.IO.Path;
@@ -63,6 +64,7 @@ public class TestTask : FrostingTask<BuildContext>
             Configuration = context.BuildConfiguration,
             Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
             Collectors = { "XPlat Code Coverage" },
+            ArgumentCustomization = args => args.Append("--self-contained"),
         };
 
         context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);

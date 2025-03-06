@@ -45,6 +45,5 @@ public:
   void initialize(CORBA::ULong total_samples, CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant);
   CORBA::ULong run();
   void finalize() const;
-
 };
 

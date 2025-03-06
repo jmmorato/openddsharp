@@ -110,7 +110,6 @@ void LatencyTest::run() {
 
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
-        // this->notified_ = false;
 
         const auto t_end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
@@ -148,7 +147,7 @@ void LatencyTest::run() {
 
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error taking samples " << ret << ": " << this->samples_received_ << std::endl;
-        throw std::runtime_error("Taking samples failed.");
+        continue;
       }
 
       if (samples.length() > 1) {

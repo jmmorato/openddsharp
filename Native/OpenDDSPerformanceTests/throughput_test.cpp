@@ -124,19 +124,53 @@ CORBA::ULong ThroughputTest::run() {
 }
 
 void ThroughputTest::finalize() const {
-  this->publisher_->delete_datawriter(this->writer_);
-  this->publisher_->delete_contained_entities();
-  this->participant_->delete_publisher(this->publisher_);
+  DDS::ReturnCode_t result = this->publisher_->delete_datawriter(this->writer_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_datawriter failed.");
+  }
 
-  this-status_condition_->set_enabled_statuses(OpenDDS::DCPS::NO_STATUS_MASK);
-  this->wait_set_->detach_condition(this->status_condition_);
+  result = this->publisher_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
+  }
 
+  result = this->participant_->delete_publisher(this->publisher_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_publisher failed.");
+  }
 
-  this->reader_->delete_contained_entities();
-  this->subscriber_->delete_datareader(this->reader_);
+  result = this->status_condition_->set_enabled_statuses(OpenDDS::DCPS::NO_STATUS_MASK);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("set_enabled_statuses failed.");
+  }
 
-  this->subscriber_->delete_contained_entities();
-  this->participant_->delete_subscriber(this->subscriber_);
+  result = this->wait_set_->detach_condition(this->status_condition_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("detach_condition failed.");
+  }
 
-  this->participant_->delete_topic(this->topic_);
+  result = this->reader_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
+  }
+
+  result = this->subscriber_->delete_datareader(this->reader_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_datareader failed.");
+  }
+
+  result = this->subscriber_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
+  }
+
+  result = this->participant_->delete_subscriber(this->subscriber_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_subscriber failed.");
+  }
+
+  result = this->participant_->delete_topic(this->topic_);
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_topic failed.");
+  }
 }
