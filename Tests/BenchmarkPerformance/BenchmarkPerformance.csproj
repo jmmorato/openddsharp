@@ -32,17 +32,17 @@
 
     <ItemGroup>
         <!-- Copy the win-x86 native libraries to the output directory -->
-        <OpenDDSRNativeWin32 Include="..\..\Native\build_x86\OpenDDSTestData\Release\OpenDDSTestData.dll" Visible="false" />
-        <OpenDDSRNativeWin32 Include="..\..\Native\build_x86\OpenDDSPerformanceTests\Release\OpenDDSPerformanceTests.dll" Visible="false" />
-        <None Include="@(OpenDDSRNativeWin32)" Visible="false">
+        <OpenDDSNativeWin32 Include="..\..\Native\build_x86\OpenDDSTestData\Release\OpenDDSTestData.dll" Visible="false" />
+        <OpenDDSNativeWin32 Include="..\..\Native\build_x86\OpenDDSPerformanceTests\Release\OpenDDSPerformanceTests.dll" Visible="false" />
+        <None Include="@(OpenDDSNativeWin32)" Visible="false">
             <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToPublishDirectory>
         </None>
 
         <!-- Copy the win-x64 native libraries to the output directory -->
-        <OpenDDSRNativeX64 Include="..\..\Native\build_x64\OpenDDSTestData\Release\OpenDDSTestData.dll" Visible="false" />
-        <OpenDDSRNativeX64 Include="..\..\Native\build_x64\OpenDDSPerformanceTests\Release\OpenDDSPerformanceTests.dll" Visible="false" />
-        <None Include="@(OpenDDSRNativeX64)" Pack="true" Visible="false" PackagePath="runtimes\win-x64\native">
+        <OpenDDSNativeX64 Include="..\..\Native\build_x64\OpenDDSTestData\Release\OpenDDSTestData.dll" Visible="false" />
+        <OpenDDSNativeX64 Include="..\..\Native\build_x64\OpenDDSPerformanceTests\Release\OpenDDSPerformanceTests.dll" Visible="false" />
+        <None Include="@(OpenDDSNativeX64)" Pack="true" Visible="false" PackagePath="runtimes\win-x64\native">
             <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToPublishDirectory>
         </None>
