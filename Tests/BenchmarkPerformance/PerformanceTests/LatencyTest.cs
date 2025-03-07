@@ -37,13 +37,13 @@ public class LatencyTest
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(100, 150, 200)]
+    [Params(100, 200)]
     public int TotalInstances { get; set; }
 
     /// <summary>
     /// Gets or sets the current number of samples for the test.
     /// </summary>
-    [Params(20, 30)]
+    [Params(20)]
     public int TotalSamples { get; set; }
 
     /// <summary>

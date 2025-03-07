@@ -139,6 +139,10 @@ void LatencyTest::run() {
         throw std::runtime_error("Error waiting for all conditions.");
       }
 
+      if (active_conditions[0]->get_trigger_value() != true) {
+        continue;
+      }
+
       OpenDDSNative::KeyedOctetsSeq samples;
       DDS::SampleInfoSeq infos;
 
@@ -147,7 +151,7 @@ void LatencyTest::run() {
 
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error taking samples " << ret << ": " << this->samples_received_ << std::endl;
-        continue;
+        throw std::runtime_error("Error taking samples.");
       }
 
       if (samples.length() > 1) {
