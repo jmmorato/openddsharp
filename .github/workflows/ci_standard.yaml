@@ -228,7 +228,7 @@ jobs:
 
     - name: Build OpenDDSharp TestSupportProcessCore project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --self-contained
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -237,7 +237,7 @@ jobs:
 
     - name: Build OpenDDSharp UnitTest project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --self-contained
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -380,7 +380,7 @@ jobs:
 
     - name: Build OpenDDSharp TestSupportProcessCore Project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --self-contained
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
@@ -389,7 +389,7 @@ jobs:
 
     - name: Build OpenDDSharp UnitTest Project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --self-contained
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"

@@ -64,7 +64,6 @@ public class TestTask : FrostingTask<BuildContext>
             Configuration = context.BuildConfiguration,
             Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
             Collectors = { "XPlat Code Coverage" },
-            ArgumentCustomization = args => args.Append("--self-contained"),
         };
 
         context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
