@@ -26,6 +26,7 @@ jobs:
 
     env:
       OpenDdsVersion: "3.29.1"
+      COMPlus_JITMinOpts: "1"
 
     steps:
     - uses: actions/checkout@v4

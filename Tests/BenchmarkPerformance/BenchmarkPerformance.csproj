@@ -17,6 +17,8 @@
         <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Linux))'">linux-x64</RuntimeIdentifier>
         <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">osx-x64</RuntimeIdentifier>
         <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">osx-arm64</RuntimeIdentifier>
+        <SelfContained>true</SelfContained>
+        <PublishSelfContained>true</PublishSelfContained>
     </PropertyGroup>
 
     <ItemGroup>

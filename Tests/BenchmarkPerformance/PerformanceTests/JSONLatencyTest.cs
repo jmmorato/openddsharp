@@ -180,9 +180,24 @@ internal sealed class JSONLatencyTest : IDisposable
 
             if (result != ReturnCode.Ok)
             {
-                Console.WriteLine($"WaitSet error: {result}");
+                throw new InvalidOperationException($"Error waiting for conditions: {result}");
+            }
+
+            if (conditions.Count > 1)
+            {
+                throw new InvalidDataException($"Only one condition should be received ({conditions.Count} received).");
+            }
+
+            if (conditions[0] != _statusCondition)
+            {
+                throw new InvalidDataException("Invalid condition received.");
+            }
+
+            if (conditions[0].TriggerValue != true)
+            {
                 continue;
             }
+
             var samples = new List<KeyedOctets>();
             var sampleInfos = new List<SampleInfo>();
 

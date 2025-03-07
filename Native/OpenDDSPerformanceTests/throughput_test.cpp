@@ -80,7 +80,6 @@ void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::U
 CORBA::ULong ThroughputTest::run() {
   this->samples_received_ = 0;
 
-  // std::thread writer_thread(&ThroughputTest::write_thread, this);
   std::thread writer_thread([this] {
     for (int i = 1; i <= this->total_samples_; i++) {
       this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
@@ -95,7 +94,7 @@ CORBA::ULong ThroughputTest::run() {
       DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
       auto ret = this->wait_set_->wait(active_conditions, duration);
       if (ret != DDS::RETCODE_OK) {
-        continue;
+        throw std::runtime_error("wait_set failed.");
       }
 
       OpenDDSNative::KeyedOctetsSeq samples;
@@ -105,7 +104,7 @@ CORBA::ULong ThroughputTest::run() {
         DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
 
       if (ret != DDS::RETCODE_OK) {
-        continue;
+        throw std::runtime_error("data_reader take failed.");
       }
 
       this->samples_received_ += samples.length();
@@ -172,5 +171,10 @@ void ThroughputTest::finalize() const {
   result = this->participant_->delete_topic(this->topic_);
   if (result != DDS::RETCODE_OK) {
     throw std::runtime_error("delete_topic failed.");
+  }
+
+  result = this->participant_->delete_contained_entities();
+  if (result != DDS::RETCODE_OK) {
+    throw std::runtime_error("delete_contained_entities failed.");
   }
 }

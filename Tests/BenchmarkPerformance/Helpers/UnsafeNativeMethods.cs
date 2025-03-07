@@ -64,6 +64,8 @@ internal static partial class UnsafeNativeMethods
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     internal static partial void ThroughputFinalize(IntPtr c);
 
-    [DllImport("kernel32.dll", SetLastError = true)]
-    internal static extern bool IsWow64Process2(IntPtr process, out ushort processMachine, out ushort nativeMachine);
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool IsWow64Process2(IntPtr process, out ushort processMachine, out ushort nativeMachine);
 }

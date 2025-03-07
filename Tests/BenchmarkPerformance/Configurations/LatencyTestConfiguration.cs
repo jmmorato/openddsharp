@@ -26,7 +26,6 @@ internal class LatencyTestConfiguration : ManualConfig
         {
             AddJob(Job.Dry
                 .WithStrategy(RunStrategy.Throughput)
-                .WithRuntime(CoreRuntime.Core80)
                 .WithArguments([
                     new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
                 ]));
@@ -35,11 +34,7 @@ internal class LatencyTestConfiguration : ManualConfig
         {
             var job = Job.ShortRun
                 .WithUnrollFactor(1)
-                .WithStrategy(RunStrategy.Throughput)
-                .WithRuntime(CoreRuntime.Core80)
-                .WithArguments([
-                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
-                ]);
+                .WithStrategy(RunStrategy.Throughput);
 
             // Due to the error building the external process, we need to use the in-process emit toolchain.
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -59,7 +54,6 @@ internal class LatencyTestConfiguration : ManualConfig
                 .WithUnrollFactor(1)
                 .WithInvocationCount(10)
                 .WithWarmupCount(5)
-                .WithRuntime(CoreRuntime.Core80)
                 .WithStrategy(RunStrategy.Throughput)
                 .WithArguments([
                     new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
