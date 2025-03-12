@@ -140,7 +140,6 @@ internal sealed class CDRLatencyTest : IDisposable
             {
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
             },
-            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos }
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);

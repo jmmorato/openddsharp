@@ -142,7 +142,6 @@ internal sealed class JSONLatencyTest : IDisposable
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
                 Depth = 1,
             },
-            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos }
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
         _dataReader = new KeyedOctetsDataReader(dr);

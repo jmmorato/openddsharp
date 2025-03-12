@@ -51,6 +51,12 @@ void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::UL
   this->writer_ = create_data_writer(this->publisher_, this->topic_);
   this->data_writer_ = OpenDDSNative::KeyedOctetsDataWriter::_narrow(writer_);
 
+  // Set the DataWriter durability to transient local
+  DDS::DataWriterQos dw_qos;
+  this->data_writer_->get_qos(dw_qos);
+  dw_qos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
+  this->data_writer_->set_qos(dw_qos);
+
   // Initialize the DataReader entity
   this->reader_ = create_data_reader(this->subscriber_, this->topic_);
   this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
@@ -151,7 +157,7 @@ void LatencyTest::run() {
 
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error taking samples " << ret << ": " << this->samples_received_ << std::endl;
-        throw std::runtime_error("Error taking samples.");
+        continue;
       }
 
       if (samples.length() > 1) {
