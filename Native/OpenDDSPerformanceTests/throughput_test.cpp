@@ -50,7 +50,6 @@ void ThroughputTest::initialize(const CORBA::ULong total_samples, const CORBA::U
   this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
 
   // Initialize waitset and status condition
-  // Initialize waitset and status condition
   this->status_condition_ = this->data_reader_->get_statuscondition();
   this->status_condition_->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
   this->wait_set_ = new DDS::WaitSet;
