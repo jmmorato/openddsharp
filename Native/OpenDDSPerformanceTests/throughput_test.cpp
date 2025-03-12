@@ -103,7 +103,6 @@ CORBA::ULong ThroughputTest::run() {
         DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
 
       if (ret != DDS::RETCODE_OK) {
-        std::cout << "Take failed: " << ret << std::endl;
         continue;
       }
 
