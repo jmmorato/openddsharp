@@ -25,7 +25,7 @@ jobs:
         BuildConfiguration: [Release]
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.31"
       COMPlus_JITMinOpts: "1"
 
     steps:
@@ -145,7 +145,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.31"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
@@ -298,7 +298,7 @@ jobs:
     runs-on: macos-13
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.31"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
@@ -448,7 +448,7 @@ jobs:
     runs-on: macos-14
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.31"
       BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
