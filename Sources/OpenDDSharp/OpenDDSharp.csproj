@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
@@ -53,11 +53,11 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.6.0.109712">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.2">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
@@ -83,7 +83,10 @@
       <PackagePath>runtimes\win-x64\lib\net6.0;runtimes\linux-x64\lib\net6.0;runtimes\osx-x64\lib\net6.0;</PackagePath>
     </None>
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net7.0/$(AssemblyName).dll" Pack="true" Visible="false">
-      <PackagePath>runtimes\win-x64\lib\net7.0;runtimes\linux-x64\lib\net7.0;;runtimes\osx-x64\lib\net7.0;</PackagePath>
+      <PackagePath>runtimes\win-x64\lib\net7.0;runtimes\linux-x64\lib\net7.0;runtimes\osx-x64\lib\net7.0;</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net8.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x64\lib\net8.0;runtimes\linux-x64\lib\net8.0;runtimes\osx-x64\lib\net8.0;</PackagePath>
     </None>
 
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">
@@ -93,7 +96,10 @@
       <PackagePath>runtimes\win-x86\lib\net6.0</PackagePath>
     </None>
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/net7.0/$(AssemblyName).dll" Pack="true" Visible="false">
-      <PackagePath>runtimes\win-x86\lib\net7.0;</PackagePath>
+      <PackagePath>runtimes\win-x86\lib\net7.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/net8.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x86\lib\net8.0</PackagePath>
     </None>
 
     <None Include="$(IntermediateOutputPath)/netstandard2.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
@@ -105,6 +111,9 @@
     <None Include="$(IntermediateOutputPath)/net7.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
       <PackagePath>ref\net7.0</PackagePath>
     </None>
+    <None Include="$(IntermediateOutputPath)/net8.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>ref\net8.0</PackagePath>
+    </None>
 
     <None Include="$(IntermediateOutputPath)/netstandard2.0/$(AssemblyName).xml" Pack="true" Visible="false">
       <PackagePath>ref\netstandard2.0</PackagePath>
@@ -114,6 +123,9 @@
     </None>
     <None Include="$(IntermediateOutputPath)/net7.0/$(AssemblyName).xml" Pack="true" Visible="false">
       <PackagePath>ref\net7.0</PackagePath>
+    </None>
+    <None Include="$(IntermediateOutputPath)/net8.0/$(AssemblyName).xml" Pack="true" Visible="false">
+      <PackagePath>ref\net8.0</PackagePath>
     </None>
   </ItemGroup>
 </Project>

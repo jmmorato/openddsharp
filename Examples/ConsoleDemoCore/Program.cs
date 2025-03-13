@@ -120,14 +120,22 @@ namespace ConsoleDemoCore
                 return null;
             }
 
-            var qos = new DataWriterQos
+            var dwQos = new DataWriterQos
             {
                 Reliability =
                 {
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+                Durability =
+                {
+                    Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
+                },
             };
-            var dw = publisher.CreateDataWriter(topic, qos);
+            var dw = publisher.CreateDataWriter(topic, dwQos);
             if (dw != null)
             {
                 return new TestStructDataWriter(dw);
@@ -153,14 +161,22 @@ namespace ConsoleDemoCore
                 return null;
             }
 
-            var qos = new DataReaderQos
+            var drQos = new DataReaderQos
             {
                 Reliability =
                 {
                     Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
                 },
+                History =
+                {
+                    Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
+                },
+                Durability =
+                {
+                    Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos,
+                },
             };
-            var dr = subscriber.CreateDataReader(topic, qos);
+            var dr = subscriber.CreateDataReader(topic, drQos);
             if (dr != null)
             {
                 return new TestStructDataReader(dr);
