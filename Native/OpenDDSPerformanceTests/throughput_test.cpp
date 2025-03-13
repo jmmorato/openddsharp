@@ -91,15 +91,12 @@ CORBA::ULong ThroughputTest::run() {
     while (true) {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { DDS::DURATION_INFINITE_SEC, DDS::DURATION_INFINITE_NSEC };
-      auto ret = this->wait_set_->wait(active_conditions, duration);
-      if (ret != DDS::RETCODE_OK) {
-        throw std::runtime_error("wait_set failed.");
-      }
+      this->wait_set_->wait(active_conditions, duration);
 
       OpenDDSNative::KeyedOctetsSeq samples;
       DDS::SampleInfoSeq infos;
 
-      ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED,
+      auto ret = this->data_reader_->take(samples, infos, DDS::LENGTH_UNLIMITED,
         DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
 
       if (ret != DDS::RETCODE_OK) {

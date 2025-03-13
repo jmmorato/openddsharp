@@ -61,6 +61,12 @@ void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::UL
   this->reader_ = create_data_reader(this->subscriber_, this->topic_);
   this->data_reader_ = OpenDDSNative::KeyedOctetsDataReader::_narrow(reader_);
 
+  // Set the DataReader durability to transient local
+  DDS::DataReaderQos dr_qos;
+  this->data_reader_->get_qos(dr_qos);
+  dr_qos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
+  this->data_reader_->set_qos(dr_qos);
+
   // Initialize waitset and status condition
   this->status_condition_ = this->data_reader_->get_statuscondition();
   this->status_condition_->set_enabled_statuses(DDS::DATA_AVAILABLE_STATUS);
@@ -100,12 +106,12 @@ void LatencyTest::run() {
   }
 
   std::thread writer_thread([this] {
+    this->notified_ = false;
 
     for (int i = 1; i <= this->total_samples_; i++) {
       for (int j = 1; j <= this->total_instances_; j++) {
         this->sample_.KeyField = std::to_string(j).c_str();
 
-        this->notified_ = false;
         auto t_start = std::chrono::high_resolution_clock::now();
 
         auto ret = this->data_writer_->write(this->sample_, DDS::HANDLE_NIL);
@@ -116,6 +122,7 @@ void LatencyTest::run() {
 
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
+        this->notified_ = false;
 
         const auto t_end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
@@ -135,18 +142,6 @@ void LatencyTest::run() {
       if (ret != DDS::RETCODE_OK) {
         std::cout << "Error waiting for samples" << ret << ": " << this->samples_received_ << std::endl;
         throw std::runtime_error("Error waiting for samples.");
-      }
-
-      if (active_conditions.length() > 1) {
-        throw std::runtime_error("Error waiting for all conditions.");
-      }
-
-      if (active_conditions[0] != this->status_condition_) {
-        throw std::runtime_error("Error waiting for all conditions.");
-      }
-
-      if (active_conditions[0]->get_trigger_value() != true) {
-        continue;
       }
 
       OpenDDSNative::KeyedOctetsSeq samples;
