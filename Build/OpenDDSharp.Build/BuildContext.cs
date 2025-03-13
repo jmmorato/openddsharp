@@ -32,7 +32,7 @@ namespace OpenDDSharp.Build
     public class BuildContext : FrostingContext
     {
         #region Constants
-        internal const string DEFAULT_OPENDDS_VERSION = "3.29.1";
+        internal const string DEFAULT_OPENDDS_VERSION = "3.31";
 
         private const string DEFAULT_PERL_FOLDER = "C:/Strawberry/perl/bin";
 
