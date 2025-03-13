@@ -99,8 +99,6 @@ void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::UL
 }
 
 void LatencyTest::run() {
-  this->samples_received_ = 0;
-
   if (!this->latencies_.empty()) {
     this->latencies_.clear();
   }
@@ -133,7 +131,9 @@ void LatencyTest::run() {
   });
 
   std::thread reader_thread([this] {
+    this->samples_received_ = 0;
     const CORBA::ULong total = this->total_samples_ * this->total_instances_;
+
     while (true) {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { 10, 0 };
@@ -159,11 +159,11 @@ void LatencyTest::run() {
         throw std::runtime_error("Received more than one sample");
       }
 
-      this->samples_received_ += samples.length();
+      this->samples_received_ += 1;
       this->data_reader_->return_loan(samples, infos);
 
       this->notified_ = true;
-      this->cv_.notify_all();
+      this->cv_.notify_one();
 
       if (this->samples_received_ >= total) {
         return;
@@ -171,8 +171,8 @@ void LatencyTest::run() {
     }
   });
 
-  reader_thread.join();
   writer_thread.join();
+  reader_thread.join();
 }
 
 void LatencyTest::finalize() const {
