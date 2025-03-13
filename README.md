@@ -1,5 +1,6 @@
 [![Continuous Integration](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml/badge.svg?branch=develop)](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/jmmorato/openddsharp/badge.svg)](https://coveralls.io/github/jmmorato/openddsharp)
+![GitHub Sponsor](https://img.shields.io/github/sponsors/jmmorato?label=Sponsor&logo=GitHub)
 
 # OpenDDSharp
 
@@ -98,7 +99,7 @@ the development will be focus to provide other advanced DDS features
 * ...
 
 # How to Collaborate
-OpenDDSharp is developed and maintained as a hobby during my free time but as (almost) all human beens I have kids, wife, family,
+OpenDDSharp is developed and maintained as a hobby during my free time but as (almost) all human been I have kids, wife, family,
 friends or other hobbies that I like to enjoy with.
 
 You should understand that I'm not 100% dedicated to the project and the only way to make it grow is collaborating together.
@@ -124,5 +125,3 @@ If you are using OpenDDSharp successfully in your projects or just want an open 
 you should consider to sponsor it to ensure the future development of the project.
 
 Check the monthly and one-time tiers in the GitHub [Sponsor](https://github.com/sponsors/jmmorato) section for more information.
-
-![GitHub Sponsor](https://img.shields.io/github/sponsors/jmmorato?label=Sponsor&logo=GitHub)

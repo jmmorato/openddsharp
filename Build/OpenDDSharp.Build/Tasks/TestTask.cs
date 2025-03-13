@@ -20,6 +20,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using Path = System.IO.Path;
