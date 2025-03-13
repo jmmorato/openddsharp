@@ -21,8 +21,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include <dds/DCPS/transport/framework/TransportRegistry.h>
 
-LatencyTest* latency_initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
-  const CORBA::ULong payload_size, const DDS::DomainParticipant_ptr participant) {
+LatencyTest* latency_initialize(const CORBA::Long total_instances, const CORBA::Long total_samples,
+  const CORBA::ULongLong payload_size,  DDS::DomainParticipant_ptr participant) {
 
   auto* test = new LatencyTest();
 
@@ -60,7 +60,9 @@ void global_cleanup(DDS::DomainParticipant* participant) {
   TheParticipantFactory->delete_participant(participant);
 }
 
-ThroughputTest* throughput_initialize(const CORBA::Long total_samples, const CORBA::ULongLong payload_size, DDS::DomainParticipant_ptr participant) {
+ThroughputTest* throughput_initialize(const CORBA::Long total_samples, const CORBA::ULongLong payload_size,
+  DDS::DomainParticipant_ptr participant) {
+
   auto * test = new ThroughputTest();
 
   test->initialize(total_samples, payload_size, participant);

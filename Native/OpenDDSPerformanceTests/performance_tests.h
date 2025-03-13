@@ -23,8 +23,8 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include "throughput_test.h"
 
 EXTERN_METHOD_EXPORT
-LatencyTest* latency_initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
-  const CORBA::ULong payload_size, const DDS::DomainParticipant_ptr participant);
+LatencyTest* latency_initialize(CORBA::Long total_instances, CORBA::Long total_samples, CORBA::ULongLong payload_size,
+  DDS::DomainParticipant_ptr participant);
 
 EXTERN_METHOD_EXPORT
 void latency_run(LatencyTest* test);
@@ -42,7 +42,8 @@ EXTERN_METHOD_EXPORT
 void global_cleanup(DDS::DomainParticipant* participant);
 
 EXTERN_METHOD_EXPORT
-ThroughputTest* throughput_initialize(CORBA::Long total_samples, CORBA::ULongLong payload_size, DDS::DomainParticipant* participant);
+ThroughputTest* throughput_initialize(CORBA::Long total_samples, CORBA::ULongLong payload_size,
+  DDS::DomainParticipant* participant);
 
 EXTERN_METHOD_EXPORT
 CORBA::ULong throughput_run(ThroughputTest* test);
