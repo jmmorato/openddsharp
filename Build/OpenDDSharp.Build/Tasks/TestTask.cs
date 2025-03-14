@@ -41,13 +41,13 @@ public class TestTask : FrostingTask<BuildContext>
         var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
         var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.UnitTest/bin/{context.BuildConfiguration}/net8.0/{context.RunTime}");
         context.Log.Information($"Unit test path: {path}");
-        var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/6.0.4/build/netstandard2.0");
+        // var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/6.0.4/build/netstandard2.0");
         var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
         context.Log.Information($"Settings file: {settingsFile}");
 
         var dotnetTestSettings = new DotNetTestSettings
         {
-            TestAdapterPath = Path.GetFullPath(testAdapterPath),
+            // TestAdapterPath = Path.GetFullPath(testAdapterPath),
             WorkingDirectory = path,
             EnvironmentVariables =
             {
@@ -62,10 +62,13 @@ public class TestTask : FrostingTask<BuildContext>
             NoRestore = true,
             Verbosity = DotNetVerbosity.Normal,
             Configuration = context.BuildConfiguration,
-            Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
-            Collectors = { "XPlat Code Coverage;Format=lcov" },
+            Loggers = { "trx;LogFilePrefix=test-results", "console;verbosity=normal" },
+            ArgumentCustomization = builder => builder
+                .Append("--collect:\"XPlat Code Coverage\"")
+                .Append($"--results-directory {solutionFullPath}/TestResults"),
         };
 
-        context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
+        var projectFile = Path.Combine(solutionFullPath, "Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj");
+        context.DotNetTest(projectFile, dotnetTestSettings);
     }
 }
