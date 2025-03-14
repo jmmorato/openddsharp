@@ -103,7 +103,7 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: bash
-      run: printf 'lcov_path=%s\n' ./TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
+      run: printf 'lcov_path=%s\n' ./TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
       uses: coverallsapp/github-action@v2
@@ -266,7 +266,7 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: bash
-      run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
+      run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
@@ -418,7 +418,7 @@ jobs:
     - name: Get path to lcov file
       id: get_lcov_path
       shell: bash
-      run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
+      run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
@@ -569,7 +569,7 @@ jobs:
       - name: Get path to lcov file
         id: get_lcov_path
         shell: bash
-        run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
+        run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
