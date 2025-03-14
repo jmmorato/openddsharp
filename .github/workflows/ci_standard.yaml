@@ -253,7 +253,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-arm64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime linux-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -411,7 +411,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: sudo dotnet test --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
+      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
