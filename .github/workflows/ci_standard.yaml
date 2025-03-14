@@ -100,11 +100,6 @@ jobs:
         path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
-#    - name: Get path to lcov file
-#      id: get_lcov_path
-#      shell: bash
-#      run: printf 'lcov_path=%s\n' ./TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
-
     - name: Merge coverage files
       shell: bash
       run: |
@@ -116,7 +111,7 @@ jobs:
       uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}/TestResults/reports.cobertura"
+        file: "${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml"
         parallel: true
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
         fail-on-error: false
@@ -253,7 +248,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime linux-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime linux-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -276,16 +271,11 @@ jobs:
         export PATH="$PATH:$HOME/.dotnet/tools"
         reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
 
-#    - name: Get path to lcov file
-#      id: get_lcov_path
-#      shell: bash
-#      run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
-
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}/TestResults/reports.cobertura
+        file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
         parallel: true
         flag-name: coverage-linux-x64-Release
         fail-on-error: false
@@ -411,7 +401,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
+      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
@@ -434,16 +424,11 @@ jobs:
         export PATH="$PATH:$HOME/.dotnet/tools"
         reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
 
-#    - name: Get path to lcov file
-#      id: get_lcov_path
-#      shell: bash
-#      run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net8.0/*/coverage.info >> $GITHUB_OUTPUT
-
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}/TestResults/reports.cobertura
+        file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
         parallel: true
         flag-name: coverage-macos-x64-Release
         fail-on-error: false
@@ -568,7 +553,7 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: bash
-        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-arm64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFileName=test-results.trx"
+        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime osx-arm64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
         working-directory: ${{ github.workspace }}
         env:
           DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
@@ -595,7 +580,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ github.workspace }}/TestResults/reports.cobertura
+          file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
           parallel: true
           flag-name: coverage-macos-arm64-Release
           fail-on-error: false
