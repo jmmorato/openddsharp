@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using JsonWrapper;
+using CdrWrapper;
 using OpenDDSharp;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
@@ -73,11 +73,11 @@ namespace ConsoleDemoCore
             }
 
             Console.WriteLine("Subscription found. Writing test data...");
-            var data = CreateTestStruct();
+            var data = CreateFullStruct();
             dw.Write(data);
 
             Console.WriteLine("Waiting for sample...");
-            var received = new List<TestStruct>();
+            var received = new List<FullStruct>();
             var sampleInfo = new List<SampleInfo>();
             var ret = dr.Take(received, sampleInfo);
             while (ret != ReturnCode.Ok)
@@ -94,7 +94,7 @@ namespace ConsoleDemoCore
 
             Console.WriteLine("Shutting down... that's enough for today.");
 
-            var test = new TestStruct();
+            var test = new FullStruct();
             dr.GetKeyValue(test, sampleInfo[0].InstanceHandle);
 
             participant.DeleteContainedEntities();
@@ -104,7 +104,7 @@ namespace ConsoleDemoCore
             Ace.Fini();
         }
 
-        private static TestStructDataWriter CreateTestDataWriter(DomainParticipant participant)
+        private static FullStructDataWriter CreateTestDataWriter(DomainParticipant participant)
         {
             var publisher = participant.CreatePublisher();
             if (publisher == null)
@@ -138,14 +138,14 @@ namespace ConsoleDemoCore
             var dw = publisher.CreateDataWriter(topic, dwQos);
             if (dw != null)
             {
-                return new TestStructDataWriter(dw);
+                return new FullStructDataWriter(dw);
             }
 
             Console.Error.WriteLine("DataWriter could not be created.");
             return null;
         }
 
-        private static TestStructDataReader CreateTestDataReader(DomainParticipant participant)
+        private static FullStructDataReader CreateTestDataReader(DomainParticipant participant)
         {
             var subscriber = participant.CreateSubscriber();
             if (subscriber == null)
@@ -179,7 +179,7 @@ namespace ConsoleDemoCore
             var dr = subscriber.CreateDataReader(topic, drQos);
             if (dr != null)
             {
-                return new TestStructDataReader(dr);
+                return new FullStructDataReader(dr);
             }
 
             Console.Error.WriteLine("DataReader could NOT be created.");
@@ -187,9 +187,9 @@ namespace ConsoleDemoCore
 
         }
 
-        private static TestStruct CreateTestStruct()
+        private static FullStruct CreateFullStruct()
         {
-            return new TestStruct
+            return new FullStruct
             {
                 ShortField = -1,
                 LongField = -2,
@@ -725,7 +725,7 @@ namespace ConsoleDemoCore
             };
         }
 
-        private static void PrintReceivedSample(TestStruct received)
+        private static void PrintReceivedSample(FullStruct received)
         {
             PrintStructField(nameof(received.ShortField), received.ShortField);
             PrintStructField(nameof(received.LongField), received.LongField);
@@ -814,12 +814,12 @@ namespace ConsoleDemoCore
 
         private static Topic CreateTestTopic(DomainParticipant participant)
         {
-            var typeSupport = new TestStructTypeSupport();
+            var typeSupport = new FullStructTypeSupport();
             var typeName = typeSupport.GetTypeName();
             var ret = typeSupport.RegisterType(participant, typeName);
             if (ret != ReturnCode.Ok)
             {
-                Console.Error.WriteLine("TestStructTypeSupport could not be registered: " + ret);
+                Console.Error.WriteLine("FullStructTypeSupport could not be registered: " + ret);
                 return null;
             }
 

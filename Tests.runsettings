@@ -16,7 +16,7 @@
       <!-- https://github.com/tonerdo/coverlet/blob/master/Documentation/VSTestIntegration.md -->
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>cobertura,lcov</Format>
+          <Format>json,cobertura,lcov</Format>
           <Include>[OpenDDSharp]*</Include>
           <Exclude>[TestIdlJson]*,[TestIdlCdr]*,[OpenDDSharp.BuildTasks]*,[OpenDDSharp.Marshaller]*,[OpenDDSharp.Native]*,[OpenDDSharp.Templates]*,[BenchmarkPerformance]*,[OpenDDSharp.UnitTest]*,[TestSupportProcessCore]*,[OpenDDSharp.Doc]*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
