@@ -139,7 +139,7 @@ jobs:
     env:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
+      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/lib:."
 
     steps:
@@ -722,8 +722,8 @@ jobs:
           cd Test
           dotnet new openddsharp-idl-project
           Remove-Item ./IDL/Test.idl
-          Copy-Item "${{ github.workspace }}/Tests/TestIdlJson/IDL/Test.idl" -Destination "./IDL" -Force
-          Copy-Item "${{ github.workspace }}/Tests/TestIdlJson/IDL/TestInclude.idl" -Destination "./IDL" -Force
+          Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/Test.idl" -Destination "./IDL" -Force
+          Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/TestInclude.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build Test.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
           dotnet clean Test.csproj
