@@ -604,5 +604,5 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-          carryforward: coverage-windows-x64-Release,coverage-windows-x86-Release,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release
+          carryforward: "coverage-windows-x64-Release,coverage-windows-x86-Release,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release"
           fail-on-error: false
