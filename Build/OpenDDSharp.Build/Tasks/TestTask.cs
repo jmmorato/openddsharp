@@ -63,7 +63,7 @@ public class TestTask : FrostingTask<BuildContext>
             Verbosity = DotNetVerbosity.Normal,
             Configuration = context.BuildConfiguration,
             Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
-            Collectors = { "XPlat Code Coverage" },
+            Collectors = { "XPlat Code Coverage;Format=lcov" },
         };
 
         context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
