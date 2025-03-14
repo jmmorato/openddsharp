@@ -266,7 +266,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/test-results.trx
         reporter: dotnet-trx
 
     - name: Merge coverage files
@@ -424,7 +424,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/test-results.trx
         reporter: dotnet-trx
 
     - name: Merge coverage files
@@ -581,7 +581,7 @@ jobs:
         if: success() || failure()
         with:
           name: "Test Report: osx-arm64"
-          path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx
+          path: TestResults/test-results.trx
           reporter: dotnet-trx
 
       - name: Merge coverage files
