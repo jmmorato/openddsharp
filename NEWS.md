@@ -1,4 +1,59 @@
-# Version 0.5.0
+# OpenDDSharp v3.310.1
+
+### New Features
+
+- Update to OpenDDS v3.31.0 [#275](https://github.com/jmmorato/openddsharp/pull/275)
+- Added ITypeSupport interface to be implemented by the IDL data-types [#212](https://github.com/jmmorato/openddsharp/pull/212)
+- P/Invoke with LibraryImport [#216](https://github.com/jmmorato/openddsharp/pull/216)
+- Supported macOS ARM64 runtime (osx-arm64) [#239](https://github.com/jmmorato/openddsharp/pull/239)
+
+### Bug Fixes
+
+- OpenDDSharp.Marshaller JsonConverters now always format decimal point symbol as '.' instead of ',' [#273](https://github.com/jmmorato/openddsharp/pull/273)
+
+### Breaking Changes
+
+- Implemented CDR serialization for the IDL data-types
+  - CDR primitives serialization [#219](https://github.com/jmmorato/openddsharp/pull/219)
+  - CDR primitive sequences serialization [#220](https://github.com/jmmorato/openddsharp/pull/220)
+  - CDR primitive arrays serialization [#221](https://github.com/jmmorato/openddsharp/pull/221)
+  - CDR multi-array serialization [#222](https://github.com/jmmorato/openddsharp/pull/222)
+  - CDR wchar support [#223](https://github.com/jmmorato/openddsharp/pull/223)
+  - CDR int8 support [#224](https://github.com/jmmorato/openddsharp/pull/224)
+  - CDR strings [#248](https://github.com/jmmorato/openddsharp/pull/248)
+  - CDR Constants and Enums serialization [#249](https://github.com/jmmorato/openddsharp/pull/249)
+  - CDR structures serialization [#257](https://github.com/jmmorato/openddsharp/pull/257)
+  - CDR include IDL files [#260](https://github.com/jmmorato/openddsharp/pull/257)
+  - Typed DataWriter methods with CDR serialization [#261](https://github.com/jmmorato/openddsharp/pull/261)
+  - Typed DataReader methods with CDR serialization [#264](https://github.com/jmmorato/openddsharp/pull/264)
+  - Use CDR serialization as default marshaling method [#276](https://github.com/jmmorato/openddsharp/pull/276)
+
+# OpenDDSharp v3.250.2
+
+### New Features
+- Updated to OpenDDS v3.25.0 using TAO 3
+- JSON samples serialization
+- Link native libraries with RPATH
+
+### Bug Fixes
+- Fixed IDL include pre-processor issues
+- Fixed whitespaces issue in cmake argument call
+
+### Breaking Changes
+- Removed Standard suffix from OpenDDSharp NuGet projects
+- Implemented dispose pattern in Listeners
+
+# OpenDDSharp v0.8.23023.106
+
+### New Features
+- Update OpenDDS v3.23.0 [#141](https://github.com/jmmorato/openddsharp/pull/141)
+
+### Bug Fixes
+- Added TAO_Valuetype library dependency [#135](https://github.com/jmmorato/openddsharp/pull/135)
+- Added TAO_Valuetype dependency to the code generator [#136](https://github.com/jmmorato/openddsharp/pull/136)
+- Fixed LookupDataReader and LookupDataWriter [#138](https://github.com/jmmorato/openddsharp/pull/138)
+
+# OpenDDSharp v0.5.0
 
 ### New Features
 - Updated to OpenDDS v3.14
