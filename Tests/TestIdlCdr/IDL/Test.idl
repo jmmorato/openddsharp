@@ -36,18 +36,6 @@ module CdrWrapper {
     typedef float FloatArrayType[5];
     typedef double DoubleArrayType[5];
 
-    typedef int16 Int16MultiArrayType[3][4][2];
-    typedef uint16 UInt16MultiArrayType[3][4][2];
-    typedef int32 Int32MultiArrayType[3][4][2];
-    typedef uint32 UInt32MultiArrayType[3][4][2];
-    typedef int64 Int64MultiArrayType[3][4][2];
-    typedef uint64 UInt64MultiArrayType[3][4][2];
-    typedef float FloatMultiArrayType[3][4][2];
-    typedef double DoubleMultiArrayType[3][4][2];
-    typedef char CharMultiArrayType[3][4][2];
-    typedef boolean BooleanMultiArrayType[3][4][2];
-    typedef octet OctetMultiArrayType[3][4][2];
-
     typedef sequence<octet, 2048> OctetSequenceType;
 
     @topic
@@ -105,21 +93,6 @@ module CdrWrapper {
         FloatArrayType FloatArrayField;
         DoubleArrayType DoubleArrayField;
         CharArrayType CharArrayField;
-    };
-
-    @topic
-    struct TestPrimitiveMultiArray {
-        Int16MultiArrayType Int16MultiArrayField;
-        UInt16MultiArrayType UInt16MultiArrayField;
-        Int32MultiArrayType Int32MultiArrayField;
-        UInt32MultiArrayType UInt32MultiArrayField;
-        Int64MultiArrayType Int64MultiArrayField;
-        UInt64MultiArrayType UInt64MultiArrayField;
-        FloatMultiArrayType FloatMultiArrayField;
-        DoubleMultiArrayType DoubleMultiArrayField;
-        CharMultiArrayType CharMultiArrayField;
-        BooleanMultiArrayType BooleanMultiArrayField;
-        OctetMultiArrayType OctetMultiArrayField;
     };
 
     @topic

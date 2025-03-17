@@ -1024,161 +1024,96 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
             case AST_PredefinedType::PT_uint8:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteByteArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "byte", "WriteByte", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteByteArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_short:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteInt16Array(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "short", "WriteInt16", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteInt16Array(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_long:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteInt32Array(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "int", "WriteInt32", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteInt32Array(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_longlong:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteInt64Array(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "long", "WriteInt64", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteInt64Array(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_ushort:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteUInt16Array(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "ushort", "WriteUInt16", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteUInt16Array(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_ulong:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteUInt32Array(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "uint", "WriteUInt32", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteUInt32Array(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_ulonglong:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteUInt64Array(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "ulong", "WriteUInt64", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteUInt64Array(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_float:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteSingleArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "float", "WriteSingle", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteSingleArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_double:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteDoubleArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "double", "WriteDouble", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteDoubleArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_longdouble:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteDoubleArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "double", "WriteDouble", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteDoubleArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_octet:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteByteArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "byte", "WriteByte", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteByteArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_char:
             case AST_PredefinedType::PT_wchar:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteCharArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "char", "WriteChar", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteCharArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_boolean:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteBoolArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "bool", "WriteBool", dims, total_dim, indent));
-              }
+              ret.append("    writer.WriteBoolArray(");
+              ret.append(field_name);
+              ret.append(", ");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             default:
               ret.append(field_name);
@@ -1409,148 +1344,96 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
             case AST_PredefinedType::PT_uint8:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadByteArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "byte", "ReadByte", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadByteArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_short:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadInt16Array(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "short", "ReadInt16", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadInt16Array(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_long:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadInt32Array(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "int", "ReadInt32", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadInt32Array(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_longlong:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadInt64Array(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "long", "ReadInt64", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadInt64Array(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_ushort:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadUInt16Array(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "ushort", "ReadUInt16", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadUInt16Array(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_ulong:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadUInt32Array(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "uint", "ReadUInt32", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadUInt32Array(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_ulonglong:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadUInt64Array(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "ulong", "ReadUInt64", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadUInt64Array(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_float:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadSingleArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "float", "ReadSingle", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadSingleArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_double:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadDoubleArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "double", "ReadDouble", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadDoubleArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_longdouble:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadDoubleArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                  ret.append(read_cdr_multi_array(field_name, "double", "ReadDouble", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadDoubleArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_octet:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadByteArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                  ret.append(read_cdr_multi_array(field_name, "byte", "ReadByte", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadByteArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_char:
             case AST_PredefinedType::PT_wchar:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadCharArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                  ret.append(read_cdr_multi_array(field_name, "char", "ReadChar", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadCharArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             case AST_PredefinedType::PT_boolean:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadBoolArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                  ret.append(read_cdr_multi_array(field_name, "bool", "ReadBool", dims, total_dim, indent));
-              }
+              ret.append("    ");
+              ret.append(field_name);
+              ret.append(" = reader.ReadBoolArray(");
+              ret.append(std::to_string(dims[0]->ev()->u.ulval));
+              ret.append(");\n");
               break;
             default:
               ret.append(field_name);
@@ -1561,128 +1444,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
         }
       }
     }
-  }
-
-  return ret;
-}
-
-std::string
-csharp_cdr_generator::read_cdr_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent)
-{
-  std::string ret("    ");
-
-  ret.append(name);
-  ret.append(" = new ");
-  ret.append(csharp_base_type);
-  ret.append("[");
-  ret.append(std::to_string(dims[0]->ev()->u.ulval));
-  ret.append("]");
-  for (unsigned int i = 1; i < total_dim; ++i) {
-    ret.append("[]");
-  }
-  ret.append(";\n");
-
-  indent.append("    ");
-  std::string loop_indent(indent);
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append(loop_indent);
-    ret.append("for (int i");
-    ret.append(std::to_string(i));
-    ret.append(" = 0; i");
-    ret.append(std::to_string(i));
-    ret.append(" < ");
-    ret.append(std::to_string(dims[i]->ev()->u.ulval));
-    ret.append("; ++i");
-    ret.append(std::to_string(i));
-    ret.append(") {\n");
-
-    loop_indent.append("    ");
-
-    if (i + 1 < total_dim) {
-      ret.append(loop_indent);
-      ret.append(name);
-      for (unsigned int j = 0; j < i + 1; ++j) {
-
-        ret.append("[i");
-        ret.append(std::to_string(j));
-        ret.append("]");
-      }
-      ret.append(" = new ");
-      ret.append(csharp_base_type);
-      ret.append("[");
-      ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
-      ret.append("]");
-      for (unsigned int j = i + 2; j < total_dim; ++j) {
-        ret.append("[]");
-      }
-      ret.append(";\n");
-    }
-  }
-
-  ret.append(loop_indent);
-  ret.append(name);
-  ret.append("[");
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append("i");
-    ret.append(std::to_string(i));
-    if (i + 1 < total_dim) {
-      ret.append("][");
-    }
-  }
-  ret.append("] = reader.");
-  ret.append(read_method);
-  ret.append("();\n");
-
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    loop_indent.erase(0, 4);
-    ret.append(loop_indent);
-    ret.append("}\n");
-  }
-
-  return ret;
-}
-
-std::string
-csharp_cdr_generator::write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent)
-{
-  std::string ret("");
-
-  indent.append("    ");
-  std::string loop_indent(indent);
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append(loop_indent);
-    ret.append("for (int i");
-    ret.append(std::to_string(i));
-    ret.append(" = 0; i");
-    ret.append(std::to_string(i));
-    ret.append(" < ");
-    ret.append(std::to_string(dims[i]->ev()->u.ulval));
-    ret.append("; ++i");
-    ret.append(std::to_string(i));
-    ret.append(") {\n");
-
-    loop_indent.append("    ");
-  }
-
-  ret.append(loop_indent);
-  ret.append("writer.");
-  ret.append(write_method);
-  ret.append("(");
-  ret.append(name);
-  ret.append("[");
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append("i");
-    ret.append(std::to_string(i));
-    if (i + 1 < total_dim) {
-      ret.append("][");
-    }
-  }
-  ret.append("]);\n");
-
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    loop_indent.erase(0, 4);
-    ret.append(loop_indent);
-    ret.append("}\n");
   }
 
   return ret;
