@@ -341,7 +341,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_MacOS"

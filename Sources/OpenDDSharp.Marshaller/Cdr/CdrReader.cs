@@ -191,22 +191,6 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an array of boolean values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of booleans from the stream.</returns>
-    public bool[] ReadBoolArray(int len)
-    {
-        var result = new bool[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadBool();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a sequence of bytes from the stream.
     /// </summary>
     /// <returns>The sequence of bytes from the stream.</returns>
@@ -217,38 +201,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an array of bytes from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of bytes from the stream.</returns>
-    public byte[] ReadByteArray(int len)
-    {
-        return ReadBytes(len).ToArray();
-    }
-
-    /// <summary>
     /// Reads a sequence of signed short values from the stream.
     /// </summary>
     /// <returns>The sequence of signed short values from the stream.</returns>
     public IList<short> ReadInt16Sequence()
     {
         var len = ReadSequenceLength();
-        var result = new short[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadInt16();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads an array of signed short values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of signed short values from the stream.</returns>
-    public short[] ReadInt16Array(int len)
-    {
         var result = new short[len];
         for (var i = 0; i < len; i++)
         {
@@ -275,44 +233,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an array of unsigned short values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of unsigned short values from the stream.</returns>
-    public ushort[] ReadUInt16Array(int len)
-    {
-        var result = new ushort[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadUInt16();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a sequence of signed integer values from the stream.
     /// </summary>
     /// <returns>The sequence of signed integer values from the stream.</returns>
     public IList<int> ReadInt32Sequence()
     {
         var len = ReadSequenceLength();
-        var result = new int[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadInt32();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads an array of signed integer values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of signed integer values from the stream.</returns>
-    public int[] ReadInt32Array(int len)
-    {
         var result = new int[len];
         for (var i = 0; i < len; i++)
         {
@@ -339,44 +265,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an array of unsigned integer values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of unsigned integer values from the stream.</returns>
-    public uint[] ReadUInt32Array(int len)
-    {
-        var result = new uint[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadUInt32();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a sequence of signed long values from the stream.
     /// </summary>
     /// <returns>The sequence of signed long values from the stream.</returns>
     public IList<long> ReadInt64Sequence()
     {
         var len = ReadSequenceLength();
-        var result = new long[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadInt64();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads an array of signed long values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of signed long values from the stream.</returns>
-    public long[] ReadInt64Array(int len)
-    {
         var result = new long[len];
         for (var i = 0; i < len; i++)
         {
@@ -403,44 +297,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an array of unsigned long values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of unsigned long values from the stream.</returns>
-    public ulong[] ReadUInt64Array(int len)
-    {
-        var result = new ulong[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadUInt64();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a sequence of float values from the stream.
     /// </summary>
     /// <returns>The sequence of float values from the stream.</returns>
     public IList<float> ReadSingleSequence()
     {
         var len = ReadSequenceLength();
-        var result = new float[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadSingle();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads an array of float values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of float values from the stream.</returns>
-    public float[] ReadSingleArray(int len)
-    {
         var result = new float[len];
         for (var i = 0; i < len; i++)
         {
@@ -467,44 +329,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an array of double values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of double values from the stream.</returns>
-    public double[] ReadDoubleArray(int len)
-    {
-        var result = new double[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadDouble();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a sequence of character values from the stream.
     /// </summary>
     /// <returns>The sequence of character values from the stream.</returns>
     public IList<char> ReadCharSequence()
     {
         var len = ReadSequenceLength();
-        var result = new char[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadChar();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads a sequence of character values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The sequence of character values from the stream.</returns>
-    public char[] ReadCharArray(int len)
-    {
         var result = new char[len];
         for (var i = 0; i < len; i++)
         {
@@ -531,44 +361,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a array of string values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of string values from the stream.</returns>
-    public string[] ReadStringArray(int len)
-    {
-        var result = new string[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadString();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a sequence of enumeration values from the stream.
     /// </summary>
     /// <returns>The sequence of enumeration values from the stream.</returns>
     public IList<uint> ReadEnumSequence()
     {
         var len = ReadSequenceLength();
-        var result = new uint[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadEnum();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads an array of enumeration values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of enumeration values from the stream.</returns>
-    public uint[] ReadEnumArray(int len)
-    {
         var result = new uint[len];
         for (var i = 0; i < len; i++)
         {

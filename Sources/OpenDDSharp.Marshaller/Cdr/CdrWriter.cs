@@ -54,7 +54,7 @@ public class CdrWriter
     public void WriteByte(byte b) => _writer.Write(b);
 
     /// <summary>
-    /// Writes a array of bytes to the stream.
+    /// Writes a sequence of bytes to the stream.
     /// </summary>
     /// <param name="buf">The bytes to be written.</param>
     public void WriteBytes(ReadOnlySpan<byte> buf)
@@ -176,9 +176,9 @@ public class CdrWriter
     public void WriteEnum(uint enumVal) => WriteUInt32(enumVal);
 
     /// <summary>
-    /// Write a array of booleans to the stream.
+    /// Write a sequence of booleans to the stream.
     /// </summary>
-    /// <param name="sequence">The array of booleans to be written.</param>
+    /// <param name="sequence">The sequence of booleans to be written.</param>
     public void WriteBoolSequence(IList<bool> sequence)
     {
         if (sequence == null)
@@ -189,27 +189,6 @@ public class CdrWriter
 
         var bytes = sequence.Select(b => b ? (byte)0x01 : (byte)0x00).ToArray();
         WriteSequenceLength((uint)bytes.Length);
-        WriteBytes(bytes);
-    }
-
-    /// <summary>
-    /// Write a array of booleans to the stream.
-    /// </summary>
-    /// <param name="array">The array of booleans to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteBoolArray(bool[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteBool(false);
-            }
-
-            return;
-        }
-
-        var bytes = array.Select(b => b ? (byte)0x01 : (byte)0x00).ToArray();
         WriteBytes(bytes);
     }
 
@@ -230,26 +209,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write an array of bytes to the stream.
-    /// </summary>
-    /// <param name="array">The array of bytes to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteByteArray(byte[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteByte(0);
-            }
-
-            return;
-        }
-
-        WriteBytes(array);
-    }
-
-    /// <summary>
     /// Write a sequence of shorts to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of shorts to be written.</param>
@@ -263,29 +222,6 @@ public class CdrWriter
 
         WriteSequenceLength((uint)sequence.Count);
         foreach (var item in sequence)
-        {
-            WriteInt16(item);
-        }
-    }
-
-    /// <summary>
-    /// Write an array of shorts to the stream.
-    /// </summary>
-    /// <param name="array">The array of shorts to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteInt16Array(short[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteInt16(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
         {
             WriteInt16(item);
         }
@@ -311,29 +247,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write an array of integers to the stream.
-    /// </summary>
-    /// <param name="array">The array of integers to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteInt32Array(int[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteInt32(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
-        {
-            WriteInt32(item);
-        }
-    }
-
-    /// <summary>
     /// Write a sequence of longs to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of longs to be written.</param>
@@ -347,29 +260,6 @@ public class CdrWriter
 
         WriteSequenceLength((uint)sequence.Count);
         foreach (var item in sequence)
-        {
-            WriteInt64(item);
-        }
-    }
-
-    /// <summary>
-    /// Write an array of longs to the stream.
-    /// </summary>
-    /// <param name="array">The array of longs to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteInt64Array(long[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteInt64(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
         {
             WriteInt64(item);
         }
@@ -395,29 +285,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write an array of unsigned shorts to the stream.
-    /// </summary>
-    /// <param name="array">The array of unsigned shorts to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteUInt16Array(ushort[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteUInt16(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
-        {
-            WriteUInt16(item);
-        }
-    }
-
-    /// <summary>
     /// Write a sequence of unsigned integers to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of unsigned integers to be written.</param>
@@ -431,29 +298,6 @@ public class CdrWriter
 
         WriteSequenceLength((uint)sequence.Count);
         foreach (var item in sequence)
-        {
-            WriteUInt32(item);
-        }
-    }
-
-    /// <summary>
-    /// Write an array of unsigned integers to the stream.
-    /// </summary>
-    /// <param name="array">The array of unsigned integers to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteUInt32Array(uint[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteUInt32(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
         {
             WriteUInt32(item);
         }
@@ -479,29 +323,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write an array of unsigned longs to the stream.
-    /// </summary>
-    /// <param name="array">The array of unsigned longs to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteUInt64Array(ulong[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteUInt64(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
-        {
-            WriteUInt64(item);
-        }
-    }
-
-    /// <summary>
     /// Write a sequence of floats to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of floats to be written.</param>
@@ -515,29 +336,6 @@ public class CdrWriter
 
         WriteSequenceLength((uint)sequence.Count);
         foreach (var item in sequence)
-        {
-            WriteSingle(item);
-        }
-    }
-
-    /// <summary>
-    /// Write an array of floats to the stream.
-    /// </summary>
-    /// <param name="array">The array of floats to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteSingleArray(float[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteSingle(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
         {
             WriteSingle(item);
         }
@@ -563,29 +361,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write an array of doubles to the stream.
-    /// </summary>
-    /// <param name="array">The array of doubles to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteDoubleArray(double[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteDouble(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
-        {
-            WriteDouble(item);
-        }
-    }
-
-    /// <summary>
     /// Write a sequence of chars to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of chars to be written.</param>
@@ -599,27 +374,6 @@ public class CdrWriter
 
         var bytes = Encoding.UTF8.GetBytes(sequence.ToArray());
         WriteSequenceLength((uint)bytes.Length);
-        WriteBytes(bytes);
-    }
-
-    /// <summary>
-    /// Write an array of chars to the stream.
-    /// </summary>
-    /// <param name="array">The array of chars to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteCharArray(char[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteChar('\0');
-            }
-
-            return;
-        }
-
-        var bytes = Encoding.UTF8.GetBytes(array);
         WriteBytes(bytes);
     }
 
@@ -641,27 +395,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write an array of strings to the stream.
-    /// </summary>
-    /// <param name="array">The array of strings to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteStringArray(string[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteString(string.Empty);
-            }
-
-            return;
-        }
-
-        var bytes = Encoding.UTF8.GetBytes(string.Join(string.Empty, array));
-        WriteBytes(bytes);
-    }
-
-    /// <summary>
     /// Write a sequence of enumerations to the stream.
     /// </summary>
     /// <param name="sequence">The sequence of enumerations to be written.</param>
@@ -676,29 +409,6 @@ public class CdrWriter
         WriteSequenceLength((uint)sequence.Count);
 
         foreach (var item in sequence)
-        {
-            WriteEnum(item);
-        }
-    }
-
-    /// <summary>
-    /// Write an array of enumerations to the stream.
-    /// </summary>
-    /// <param name="array">The array of enumerations to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteEnumArray(uint[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteEnum(0);
-            }
-
-            return;
-        }
-
-        foreach (var item in array)
         {
             WriteEnum(item);
         }
