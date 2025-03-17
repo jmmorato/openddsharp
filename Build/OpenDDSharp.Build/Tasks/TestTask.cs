@@ -24,47 +24,47 @@ using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using Path = System.IO.Path;
 
-namespace OpenDDSharp.Build.Tasks;
-
-/// <summary>
-/// Run OpenDDSharp unit test task.
-/// </summary>
-[TaskName("TestTask")]
-public class TestTask : FrostingTask<BuildContext>
+namespace OpenDDSharp.Build.Tasks
 {
-    /// <inheritdoc/>
-    public override void Run(BuildContext context)
+    /// <summary>
+    /// Run OpenDDSharp unit test task.
+    /// </summary>
+    [TaskName("TestTask")]
+    public class TestTask : FrostingTask<BuildContext>
     {
-        context.Log.Information("Starting test task...");
-
-        var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-        var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.UnitTest/bin/{context.BuildConfiguration}/net8.0/{context.RunTime}");
-        context.Log.Information($"Unit test path: {path}");
-        var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/6.0.4/build/netstandard2.0");
-        var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
-        context.Log.Information($"Settings file: {settingsFile}");
-
-        var dotnetTestSettings = new DotNetTestSettings
+        /// <inheritdoc/>
+        public override void Run(BuildContext context)
         {
-            TestAdapterPath = Path.GetFullPath(testAdapterPath),
-            WorkingDirectory = path,
-            EnvironmentVariables =
-            {
-                { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
-                { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
-                { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
-                { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
-            },
-            Settings = settingsFile,
-            Runtime = context.RunTime,
-            NoBuild = true,
-            NoRestore = true,
-            Verbosity = DotNetVerbosity.Normal,
-            Configuration = context.BuildConfiguration,
-            Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
-            Collectors = { "XPlat Code Coverage" },
-        };
+            context.Log.Information("Starting test task...");
 
-        context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
+            var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+            var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.UnitTest/bin/{context.BuildConfiguration}/net8.0/{context.RunTime}");
+            context.Log.Information($"Unit test path: {path}");
+            var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/6.0.2/build/netstandard2.0");
+            var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
+            context.Log.Information($"Settings file: {settingsFile}");
+
+            var dotnetTestSettings = new DotNetTestSettings
+            {
+                TestAdapterPath = Path.GetFullPath(testAdapterPath),
+                WorkingDirectory = path,
+                EnvironmentVariables =
+                {
+                    { "DDS_ROOT", Path.GetFullPath(context.DdsRoot).TrimEnd('\\') },
+                    { "ACE_ROOT", Path.GetFullPath(context.AceRoot).TrimEnd('\\') },
+                    { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd('\\') },
+                    { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
+                },
+                Settings = settingsFile,
+                Runtime = context.RunTime,
+                NoBuild = true,
+                NoRestore = true,
+                Verbosity = DotNetVerbosity.Normal,
+                Configuration = context.BuildConfiguration,
+                Loggers = { "trx;LogFileName=test-results.trx", "console;verbosity=normal" },
+            };
+
+            context.DotNetTest(solutionFullPath + "/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", dotnetTestSettings);
+        }
     }
 }

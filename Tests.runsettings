@@ -4,8 +4,6 @@
     <DisableAppDomain>True</DisableAppDomain>
   </RunConfiguration>
   <MSTest>
-    <!-- 0 = As many processes as possible, limited by number of cores on machine, 1 = Sequential (1 process)-->
-    <MaxCpuCount>1</MaxCpuCount>
     <!-- Do not run the test assemblies in parallel since they could interfere each other. -->
     <DisableParallelization>true</DisableParallelization>
   </MSTest>
@@ -20,7 +18,7 @@
           <Include>[OpenDDSharp]*</Include>
           <Exclude>[TestIdlJson]*,[TestIdlCdr]*,[OpenDDSharp.BuildTasks]*,[OpenDDSharp.Marshaller]*,[OpenDDSharp.Native]*,[OpenDDSharp.Templates]*,[BenchmarkPerformance]*,[OpenDDSharp.UnitTest]*,[TestSupportProcessCore]*,[OpenDDSharp.Doc]*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
-          <SingleHit>true</SingleHit>
+          <SingleHit>false</SingleHit>
           <UseSourceLink>true</UseSourceLink>
           <IncludeTestAssembly>true</IncludeTestAssembly>
           <SkipAutoProps>true</SkipAutoProps>
@@ -32,7 +30,7 @@
   </DataCollectionRunSettings>
   <InProcDataCollectionRunSettings>
     <InProcDataCollectors>
-      <InProcDataCollector assemblyQualifiedName="Coverlet.Collector.DataCollection.CoverletInProcDataCollector, coverlet.collector, Version=6.0.4, Culture=neutral, PublicKeyToken=null"
+      <InProcDataCollector assemblyQualifiedName="Coverlet.Collector.DataCollection.CoverletInProcDataCollector, coverlet.collector, Version=6.0.2, Culture=neutral, PublicKeyToken=null"
                            friendlyName="XPlat Code Coverage"
                            enabled="True"
                            codebase="coverlet.collector.dll" />
