@@ -1,5 +1,3 @@
-#include "TestInclude.idl"
-
 module CdrWrapper {
 
     const short TEST_SHORT_CONST = -1;
@@ -149,12 +147,6 @@ module CdrWrapper {
     @topic
     struct TestStructMultiArray {
         StructMultiArrayType StructMultiArrayField;
-    };
-
-    @topic
-    struct TestInclude {
-        @key string Id;
-        CdrWrapperInclude::IncludeStruct IncludeField;
     };
 
     @topic

@@ -1,8 +1,0 @@
-module CdrWrapperInclude {
-
-    @topic
-    struct IncludeStruct {
-        @key string Message;
-    };
-
-};

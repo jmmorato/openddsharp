@@ -929,27 +929,10 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       break;
     }
     case AST_Decl::NT_struct: {
-        ret.append("    if (");
-        ret.append(field_name);
-        ret.append(" == null)\n");
-
-        ret.append(indent);
-        ret.append("    {\n");
-
-        ret.append(indent);
-        ret.append("        ");
-        ret.append(field_name);
-        ret.append(" = new ");
-        ret.append(replaceString(std::string(field_type->full_name()), std::string("::"), std::string(".")));
-        ret.append("();\n");
-
-        ret.append(indent);
-        ret.append("    }\n");
-
-        ret.append(indent);
-        ret.append("    ");
-        ret.append(field_name);
-        ret.append(".ToCDR(writer);\n");
+      ret.append(indent);
+      ret.append("    writer.WriteBytes(");
+      ret.append(field_name);
+      ret.append(".ToCDR());\n");
       break;
     }
     case AST_Decl::NT_string: {

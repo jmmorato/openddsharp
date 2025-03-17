@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using CdrWrapper;
-using CdrWrapperInclude;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.UnitTest.Helpers;
@@ -75,84 +74,6 @@ namespace OpenDDSharp.UnitTest
         #endregion
 
         #region Test Methods
-        /// <summary>
-        /// Test include idl files.
-        /// </summary>
-        [TestMethod]
-        [TestCategory(TEST_CATEGORY)]
-        public void TestInclude()
-        {
-            using var evt = new ManualResetEventSlim(false);
-
-            var test = new TestInclude();
-            Assert.AreEqual(typeof(IncludeStruct), test.IncludeField.GetType());
-            Assert.IsNotNull(test.IncludeField);
-            Assert.AreEqual(test.IncludeField.Message.GetType(), typeof(string));
-
-            var typeSupport = new TestIncludeTypeSupport();
-            var typeName = typeSupport.GetTypeName();
-            var ret = typeSupport.RegisterType(_participant, typeName);
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            var topic = _participant.CreateTopic("TestTopic", typeName);
-            Assert.IsNotNull(topic);
-
-            var drQos = new DataReaderQos
-            {
-                Reliability =
-                {
-                    Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos,
-                },
-            };
-            var dr = _subscriber.CreateDataReader(topic, drQos);
-            Assert.IsNotNull(dr);
-            var dataReader = new TestIncludeDataReader(dr);
-
-            var statusCondition = dr.StatusCondition;
-            Assert.IsNotNull(statusCondition);
-            statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
-            TestHelper.CreateWaitSetThread(evt, statusCondition);
-
-            var dw = _publisher.CreateDataWriter(topic);
-            Assert.IsNotNull(dw);
-            var dataWriter = new TestIncludeDataWriter(dw);
-
-            Assert.IsTrue(dataWriter.WaitForSubscriptions(1, 5000));
-            Assert.IsTrue(dataReader.WaitForPublications(1, 5000));
-
-            test = new TestInclude
-            {
-                Id = "1",
-                IncludeField = new IncludeStruct
-                {
-                    Message = "Test",
-                },
-            };
-            ret = dataWriter.Write(test);
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            ret = dataWriter.WaitForAcknowledgments(new Duration { Seconds = 5 });
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            Assert.IsTrue(evt.Wait(1_500));
-
-            var received = new TestInclude();
-            var sampleInfo = new SampleInfo();
-            ret = dataReader.ReadNextSample(received, sampleInfo);
-            Assert.AreEqual(ReturnCode.Ok, ret);
-
-            Assert.AreEqual(test.Id, received.Id);
-            Assert.AreEqual(test.IncludeField.Message, received.IncludeField.Message);
-
-            dr.DeleteContainedEntities();
-            _subscriber.DeleteDataReader(dr);
-            _subscriber.DeleteContainedEntities();
-            _publisher.DeleteDataWriter(dw);
-            _publisher.DeleteContainedEntities();
-            _participant.DeleteTopic(topic);
-            _participant.DeleteContainedEntities();
-        }
-
         /// <summary>
         /// Test the code generated for the primitives types.
         /// </summary>
