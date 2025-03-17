@@ -1,23 +1,6 @@
 	public class <%TYPE%>TypeSupport : ITypeSupport<<%TYPE%>>
     {
         #region Field
-        private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            WriteIndented = false,
-            AllowTrailingCommas = true,
-            Converters =
-            {
-                new JsonStringEnumConverter(),
-                new OctetArrayConverter(),
-                new FloatJsonConverter(),
-                new DoubleJsonConverter(),
-                new DecimalJsonConverter(),
-            },
-        };
-
-        private static readonly <%TYPE%>SerializerContext _serializerContext = new <%TYPE%>SerializerContext(_serializerOptions);
-
         private IntPtr _native;
         #endregion
 
@@ -46,12 +29,34 @@
 
         public string EncodeToString(<%TYPE%> sample)
         {
-            return JsonSerializer.Serialize(sample, typeof(<%TYPE%>), _serializerContext);
+            return JsonSerializer.Serialize(sample, new JsonSerializerOptions
+            {
+                AllowTrailingCommas = false,
+                Converters =
+                {
+                    new JsonStringEnumConverter(),
+                    new OctetArrayConverter(),
+                    new FloatJsonConverter(),
+                    new DoubleJsonConverter(),
+                    new DecimalJsonConverter(),
+                }
+            });
         }
 
         public <%TYPE%> DecodeFromString(string str)
         {
-            return JsonSerializer.Deserialize(str, typeof(<%TYPE%>), _serializerContext) as <%TYPE%>;
+            return JsonSerializer.Deserialize<<%TYPE%>>(str, new JsonSerializerOptions
+            {
+                AllowTrailingCommas = true,
+                Converters =
+                {
+                    new JsonStringEnumConverter(),
+                    new OctetArrayConverter(),
+                    new FloatJsonConverter(),
+                    new DoubleJsonConverter(),
+                    new DecimalJsonConverter(),
+                }
+            });
         }
         #endregion
 
@@ -72,12 +77,6 @@
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int UnregisterType(IntPtr native, IntPtr dp, string typeName);
         #endregion
-    }
-
-    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default)]
-    [JsonSerializable(typeof(<%TYPE%>))]
-    public partial class <%TYPE%>SerializerContext : JsonSerializerContext
-    {
     }
 
     public class <%TYPE%>DataWriter : DataWriter

@@ -32,36 +32,29 @@ jobs:
       with:
         fetch-depth: 0
 
-#    - name: Setup dotnet 8.0
-#      uses: actions/setup-dotnet@v3
-#      with:
-#        dotnet-version: '8.0.x'
-#
-#    - name: Setup dotnet 6.0
-#      uses: actions/setup-dotnet@v3
-#      with:
-#        dotnet-version: '6.0.x'
-
     - name: Setup dotnet 6.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 6.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
 
     - name: Setup dotnet 7.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.402'
 
-    - name: Setup dotnet 8.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 8.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+#    - name: Setup dotnet 6.0
+#      shell: pwsh
+#      run: |
+#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+#        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 6.0;
+#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+#
+#    - name: Setup dotnet 7.0
+#      shell: pwsh
+#      run: |
+#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+#        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
+#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
@@ -100,7 +93,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
-        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -109,14 +102,13 @@ jobs:
       run: printf 'lcov_path=%s\n' ./TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Coveralls
-      uses: coverallsapp/github-action@v2.2.3
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: "${{ steps.get_lcov_path.outputs.lcov_path }}"
         format: lcov
         parallel: true
         flag-name: coverage-windows-${{ join(matrix.*, '-') }}
-        fail-on-error: false
 
   build_linux:
     runs-on: ubuntu-latest
@@ -137,10 +129,10 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Setup dotnet 8.0
+    - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '7.0.402'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux
@@ -227,7 +219,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -236,14 +228,13 @@ jobs:
       run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2.2.3
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
         format: lcov
         parallel: true
         flag-name: coverage-linux-x64-Release
-        fail-on-error: false
 
   build_macos:
     runs-on: macos-13
@@ -264,10 +255,10 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Setup dotnet 8.0
+    - name: Setup dotnet 7.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '7.0.402'
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos
@@ -354,7 +345,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
-        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -363,24 +354,22 @@ jobs:
       run: printf 'lcov_path=%s\n' ${{ github.workspace }}/TestResults/net6.0/*/coverage.info >> $GITHUB_OUTPUT
 
     - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2.2.3
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ steps.get_lcov_path.outputs.lcov_path }}
         format: lcov
         parallel: true
         flag-name: coverage-macos-x64-Release
-        fail-on-error: false
 
   publish_coveralls:
     runs-on: ubuntu-latest
     needs: [build_windows, build_linux, build_macos]
     steps:
       - name: Publish coverage on Coveralls
-        uses: coverallsapp/github-action@v2.2.3
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
           carryforward: coverage-windows-x64-Release,coverage-windows-x64-Debug,coverage-windows-x86-Release,coverage-windows-x86-Debug,coverage-linux-x64-Release,coverage-macos-x64-Release
-          fail-on-error: false
 

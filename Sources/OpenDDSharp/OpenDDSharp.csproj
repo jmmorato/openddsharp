@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0;</TargetFrameworks>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <Platforms>x64;x86;ARM64</Platforms>
@@ -39,7 +39,7 @@
     <Version>1.0.0</Version>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0">
@@ -57,7 +57,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.8.14">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
@@ -71,7 +71,7 @@
   <ItemGroup>
     <None Include="..\..\icon_128.png" Pack="true" PackagePath="\" Visible="false" />
     <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
-
+    
     <!-- As we put libraries in the `runtimes\{rid}\lib` folder, .NET Core will ignore
      the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
      directories. We keep the one in the `lib` for applications using .NET Framework. -->
