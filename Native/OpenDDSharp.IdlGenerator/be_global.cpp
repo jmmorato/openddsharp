@@ -39,7 +39,7 @@ using namespace std;
 BE_GlobalData *be_global = 0;
 
 BE_GlobalData::BE_GlobalData()
-    : filename_(0), java_(false), cppcli_(true), csharp_(false), csharp_json_(false), csharp_cdr_(false),cwrapper_(false),
+    : filename_(0), java_(false), cppcli_(true), csharp_(false), csharp_json_(false), cwrapper_(false),
       suppress_idl_(false), suppress_typecode_(false), no_default_gen_(false), generate_itl_(false),
       generate_v8_(false), generate_rapidjson_(true), face_ts_(false), seq_("Seq"), language_mapping_(LANGMAP_NONE),
       root_default_nested_(true), warn_about_dcps_data_type_(true) {
@@ -182,14 +182,6 @@ bool BE_GlobalData::csharp_json() const {
   return this->csharp_json_;
 }
 
-void BE_GlobalData::csharp_cdr(bool b) {
-  this->csharp_cdr_ = b;
-}
-
-bool BE_GlobalData::csharp_cdr() const {
-  return this->csharp_cdr_;
-}
-
 void BE_GlobalData::cwrapper(bool b) {
   this->cwrapper_ = b;
 }
@@ -255,7 +247,7 @@ BE_GlobalData::open_streams(const char *filename) {
     filebase = filebase.substr(idx + 1);
   }
 
-  if (csharp_ || csharp_json_ || csharp_cdr_) {
+  if (csharp_ || csharp_json_) {
     impl_name_ = (filebase + "TypeSupport.cs").c_str();
   } else {
     header_name_ = (filebase + "TypeSupport.h").c_str();
@@ -329,16 +321,12 @@ BE_GlobalData::parse_args(long &i, char **av) {
     case 'c': {
       csharp_ = false;
       csharp_json_ = false;
-      csharp_cdr_ = false;
       cwrapper_ = false;
       cppcli_ = false;
-
       if (0 == ACE_OS::strcmp(av[i], "-csharp"))
         csharp_ = true;
       else if (0 == ACE_OS::strcmp(av[i], "-csharp_json"))
         csharp_json_ = true;
-      else if (0 == ACE_OS::strcmp(av[i], "-csharp_cdr"))
-        csharp_cdr_ = true;
       else if (0 == ACE_OS::strcmp(av[i], "-cwrapper"))
         cwrapper_ = true;
       else if (0 == ACE_OS::strcmp(av[i], "-cppcli"))

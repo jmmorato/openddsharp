@@ -18,7 +18,6 @@ add_executable(openddsharp_idl
         be_util.h be_util.cpp
         cli_generator.h cli_generator.cpp
         csharp_json_generator.h csharp_json_generator.cpp
-        csharp_cdr_generator.h csharp_cdr_generator.cpp
         cwrapper_generator.h cwrapper_generator.cpp
         dds_generator.h dds_generator.cpp
         dds_visitor.h dds_visitor.cpp

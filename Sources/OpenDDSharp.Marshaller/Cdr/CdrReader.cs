@@ -11,6 +11,7 @@ namespace OpenDDSharp.Marshaller.Cdr;
 public class CdrReader
 {
     private readonly byte[] _buf;
+    private readonly Endianness _endianness;
     private int _position;
 
     /// <summary>
@@ -19,8 +20,14 @@ public class CdrReader
     /// <param name="buf">The buffer to read from.</param>
     public CdrReader(byte[] buf)
     {
+        // DDS SerializedPayloadHeader (RepresentationIdentifier 2 bytes, RepresentationOptions 2 bytes)
+        var rid = BinaryPrimitives.ReadUInt16BigEndian(buf);
+        _ = BinaryPrimitives.ReadUInt16BigEndian(new ReadOnlySpan<byte>(buf, 2, 2));
+
+        _endianness = (rid & 0x0001) == 0x0001 ? Endianness.LittleEndian : Endianness.BigEndian;
+
         _buf = buf;
-        _position = 0;
+        _position = 4;
     }
 
     /// <summary>
@@ -57,7 +64,9 @@ public class CdrReader
     public short ReadInt16()
     {
         Align(2);
-        return BinaryPrimitives.ReadInt16LittleEndian(ReadBytes(2));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadInt16LittleEndian(ReadBytes(2))
+            : BinaryPrimitives.ReadInt16BigEndian(ReadBytes(2));
     }
 
     /// <summary>
@@ -67,7 +76,9 @@ public class CdrReader
     public ushort ReadUInt16()
     {
         Align(2);
-        return BinaryPrimitives.ReadUInt16LittleEndian(ReadBytes(2));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadUInt16LittleEndian(ReadBytes(2))
+            : BinaryPrimitives.ReadUInt16BigEndian(ReadBytes(2));
     }
 
     /// <summary>
@@ -77,7 +88,9 @@ public class CdrReader
     public int ReadInt32()
     {
         Align(4);
-        return BinaryPrimitives.ReadInt32LittleEndian(ReadBytes(4));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadInt32LittleEndian(ReadBytes(4))
+            : BinaryPrimitives.ReadInt32BigEndian(ReadBytes(4));
     }
 
     /// <summary>
@@ -87,7 +100,9 @@ public class CdrReader
     public uint ReadUInt32()
     {
         Align(4);
-        return BinaryPrimitives.ReadUInt32LittleEndian(ReadBytes(4));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadUInt32LittleEndian(ReadBytes(4))
+            : BinaryPrimitives.ReadUInt32BigEndian(ReadBytes(4));
     }
 
     /// <summary>
@@ -97,7 +112,9 @@ public class CdrReader
     public long ReadInt64()
     {
         Align(8);
-        return BinaryPrimitives.ReadInt64LittleEndian(ReadBytes(8));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadInt64LittleEndian(ReadBytes(8))
+            : BinaryPrimitives.ReadInt64BigEndian(ReadBytes(8));
     }
 
     /// <summary>
@@ -107,7 +124,9 @@ public class CdrReader
     public ulong ReadUInt64()
     {
         Align(8);
-        return BinaryPrimitives.ReadUInt64LittleEndian(ReadBytes(8));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadUInt64LittleEndian(ReadBytes(8))
+            : BinaryPrimitives.ReadUInt64BigEndian(ReadBytes(8));
     }
 
     /// <summary>
@@ -118,11 +137,22 @@ public class CdrReader
     {
         Align(4);
 #if NET6_0_OR_GREATER
-        return BinaryPrimitives.ReadSingleLittleEndian(ReadBytes(4));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadSingleLittleEndian(ReadBytes(4))
+            : BinaryPrimitives.ReadSingleBigEndian(ReadBytes(4));
 #else
-        return !BitConverter.IsLittleEndian
+        if (_endianness == Endianness.LittleEndian)
+        {
+            return !BitConverter.IsLittleEndian
                 ? Int32BitsToSingle(BinaryPrimitives.ReverseEndianness(ReadInt32()))
                 : MemoryMarshal.Read<float>(ReadBytes(4));
+        }
+        else
+        {
+            return BitConverter.IsLittleEndian
+                ? Int32BitsToSingle(BinaryPrimitives.ReverseEndianness(ReadInt32()))
+                : MemoryMarshal.Read<float>(ReadBytes(4));
+        }
 #endif
     }
 
@@ -135,11 +165,22 @@ public class CdrReader
         Align(8);
 
 #if NET6_0_OR_GREATER
-        return BinaryPrimitives.ReadDoubleLittleEndian(ReadBytes(8));
+        return _endianness == Endianness.LittleEndian
+            ? BinaryPrimitives.ReadDoubleLittleEndian(ReadBytes(8))
+            : BinaryPrimitives.ReadDoubleBigEndian(ReadBytes(8));
 #else
-        return !BitConverter.IsLittleEndian ?
+        if (_endianness == Endianness.LittleEndian)
+        {
+            return !BitConverter.IsLittleEndian ?
                 Int64BitsToDouble(BinaryPrimitives.ReverseEndianness(ReadInt64())) :
                 MemoryMarshal.Read<double>(ReadBytes(8));
+        }
+        else
+        {
+            return BitConverter.IsLittleEndian ?
+                Int64BitsToDouble(BinaryPrimitives.ReverseEndianness(ReadInt64())) :
+                MemoryMarshal.Read<double>(ReadBytes(8));
+        }
 #endif
     }
 
@@ -181,7 +222,7 @@ public class CdrReader
 
     private void Align(int alignment)
     {
-        var modulo = _position % alignment;
+        var modulo = (_position + 4) % alignment;
         if (modulo > 0)
         {
             ReadBytes(alignment - modulo);

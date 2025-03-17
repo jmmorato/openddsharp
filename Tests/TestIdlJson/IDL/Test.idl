@@ -105,8 +105,6 @@ module JsonWrapper {
 	typedef string StringMultiArrayType[3][4][2];
 	typedef wstring WStringMultiArrayType[3][4][2];
 
-	typedef sequence<octet, 2048> OctetSequenceType;
-
 	@topic
 	struct NestedStruct {
 		long Id;
@@ -296,10 +294,4 @@ module JsonWrapper {
 		long Rank;
 		float Score;
 	};
-
-    @topic
-	struct KeyedOctets {
-        @key string<1024> KeyField;
-        OctetSequenceType ValueField;
-    };
 };

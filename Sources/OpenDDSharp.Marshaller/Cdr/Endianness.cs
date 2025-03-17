@@ -12,5 +12,5 @@ public enum Endianness
     /// <summary>
     /// Little endian byte order.
     /// </summary>
-    LittleEndian,
+    LittleEndian
 }
