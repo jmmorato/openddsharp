@@ -54,8 +54,13 @@ namespace OpenDDSharp.Build.Tasks
                 return true;
             }
 
-            var currentHead = GitDescribe(context);
-            return _versionTag != currentHead;
+            string currentHead = GitDescribe(context);
+            if (_versionTag != currentHead)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <inheritdoc/>

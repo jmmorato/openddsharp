@@ -191,7 +191,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsNotNull(qos.TopicData);
             Assert.IsNotNull(qos.TransportPriority);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Deadline.Period.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
             Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
             Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, qos.Durability.Kind);
             Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.DurabilityService.HistoryKind);
@@ -204,14 +204,14 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(Duration.ZeroSeconds, qos.LatencyBudget.Duration.Seconds);
             Assert.AreEqual(Duration.ZeroNanoseconds, qos.LatencyBudget.Duration.NanoSeconds);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Lifespan.Duration.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Lifespan.Duration.NanoSeconds);
             Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, qos.Liveliness.Kind);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Liveliness.LeaseDuration.NanoSeconds);
             Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, qos.Ownership.Kind);
             Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, qos.Reliability.Kind);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
@@ -554,7 +554,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsNotNull(qos.Deadline.Period);
             Assert.IsNotNull(qos.Representation.Value);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Deadline.Period.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
             Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
             Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, qos.Durability.Kind);
             Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.DurabilityService.HistoryKind);
@@ -569,11 +569,11 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(Duration.ZeroNanoseconds, qos.LatencyBudget.Duration.NanoSeconds);
             Assert.IsNotNull(qos.Lifespan.Duration);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Lifespan.Duration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Lifespan.Duration.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Lifespan.Duration.NanoSeconds);
             Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, qos.Liveliness.Kind);
             Assert.IsNotNull(qos.Liveliness.LeaseDuration);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Liveliness.LeaseDuration.NanoSeconds);
             Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, qos.Ownership.Kind);
             Assert.AreEqual(0, qos.OwnershipStrength.Value);
             Assert.AreEqual(ReliabilityQosPolicyKind.ReliableReliabilityQos, qos.Reliability.Kind);
@@ -778,7 +778,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsNotNull(qos.Deadline.Period);
             Assert.IsNotNull(qos.Representation.Value);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Deadline.Period.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Deadline.Period.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Deadline.Period.NanoSeconds);
             Assert.AreEqual(DestinationOrderQosPolicyKind.ByReceptionTimestampDestinationOrderQos, qos.DestinationOrder.Kind);
             Assert.AreEqual(DurabilityQosPolicyKind.VolatileDurabilityQos, qos.Durability.Kind);
             Assert.AreEqual(HistoryQosPolicyKind.KeepLastHistoryQos, qos.History.Kind);
@@ -789,18 +789,18 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(LivelinessQosPolicyKind.AutomaticLivelinessQos, qos.Liveliness.Kind);
             Assert.IsNotNull(qos.Liveliness.LeaseDuration);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Liveliness.LeaseDuration.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Liveliness.LeaseDuration.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Liveliness.LeaseDuration.NanoSeconds);
             Assert.AreEqual(OwnershipQosPolicyKind.SharedOwnershipQos, qos.Ownership.Kind);
             Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.ReaderDataLifecycle.AutopurgeDisposedSamplesDelay.NanoSeconds);
             Assert.IsNotNull(qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.ReaderDataLifecycle.AutopurgeNowriterSamplesDelay.NanoSeconds);
             Assert.AreEqual(ReliabilityQosPolicyKind.BestEffortReliabilityQos, qos.Reliability.Kind);
             Assert.IsNotNull(qos.Reliability.MaxBlockingTime);
             Assert.AreEqual(Duration.InfiniteSeconds, qos.Reliability.MaxBlockingTime.Seconds);
-            Assert.AreEqual(Duration.InfiniteNanoSeconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
+            Assert.AreEqual(Duration.InfiniteNanoseconds, qos.Reliability.MaxBlockingTime.NanoSeconds);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxInstances);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamples);
             Assert.AreEqual(ResourceLimitsQosPolicy.LengthUnlimited, qos.ResourceLimits.MaxSamplesPerInstance);
@@ -1030,7 +1030,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 
             PublicationMatchedStatus status = default;
             writer.GetPublicationMatchedStatus(ref status);
-            var count = milliseconds / 100;
+            int count = milliseconds / 100;
             while (status.CurrentCount != subscriptionsCount && count > 0)
             {
                 Thread.Sleep(100);

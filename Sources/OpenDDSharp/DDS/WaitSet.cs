@@ -81,7 +81,7 @@ namespace OpenDDSharp.DDS
         {
             Duration duration = default;
             duration.Seconds = Duration.InfiniteSeconds;
-            duration.NanoSeconds = Duration.InfiniteNanoSeconds;
+            duration.NanoSeconds = Duration.InfiniteNanoseconds;
 
             return Wait(activeConditions, duration);
         }

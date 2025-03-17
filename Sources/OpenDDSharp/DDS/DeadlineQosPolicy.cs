@@ -60,7 +60,7 @@ public sealed class DeadlineQosPolicy : IEquatable<DeadlineQosPolicy>
         Period = new Duration
         {
             Seconds = Duration.InfiniteSeconds,
-            NanoSeconds = Duration.InfiniteNanoSeconds,
+            NanoSeconds = Duration.InfiniteNanoseconds,
         };
     }
     #endregion

@@ -105,7 +105,7 @@ module JsonWrapper {
 	typedef string StringMultiArrayType[3][4][2];
 	typedef wstring WStringMultiArrayType[3][4][2];
 
-	typedef sequence<octet> OctetSequenceType;
+	typedef sequence<octet, 2048> OctetSequenceType;
 
 	@topic
 	struct NestedStruct {

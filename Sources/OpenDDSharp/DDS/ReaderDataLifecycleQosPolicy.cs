@@ -51,13 +51,13 @@ public sealed class ReaderDataLifecycleQosPolicy : IEquatable<ReaderDataLifecycl
         AutopurgeNowriterSamplesDelay = new Duration
         {
             Seconds = Duration.InfiniteSeconds,
-            NanoSeconds = Duration.InfiniteNanoSeconds,
+            NanoSeconds = Duration.InfiniteNanoseconds,
         };
 
         AutopurgeDisposedSamplesDelay = new Duration
         {
             Seconds = Duration.InfiniteSeconds,
-            NanoSeconds = Duration.InfiniteNanoSeconds,
+            NanoSeconds = Duration.InfiniteNanoseconds,
         };
     }
     #endregion

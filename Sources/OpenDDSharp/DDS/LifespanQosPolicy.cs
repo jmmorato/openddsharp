@@ -58,7 +58,7 @@ public sealed class LifespanQosPolicy : IEquatable<LifespanQosPolicy>
         Duration = new Duration
         {
             Seconds = Duration.InfiniteSeconds,
-            NanoSeconds = Duration.InfiniteNanoSeconds,
+            NanoSeconds = Duration.InfiniteNanoseconds,
         };
     }
     #endregion

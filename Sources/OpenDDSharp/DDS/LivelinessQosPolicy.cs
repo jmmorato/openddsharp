@@ -61,7 +61,7 @@ public sealed class LivelinessQosPolicy : IEquatable<LivelinessQosPolicy>
         LeaseDuration = new Duration
         {
             Seconds = Duration.InfiniteSeconds,
-            NanoSeconds = Duration.InfiniteNanoSeconds,
+            NanoSeconds = Duration.InfiniteNanoseconds,
         };
     }
     #endregion

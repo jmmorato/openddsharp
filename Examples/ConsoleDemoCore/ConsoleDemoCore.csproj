@@ -5,11 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Platforms>x64;x86;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
-    <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Windows))' And '$(Platform)'=='x64'">win-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Windows))' And '$(Platform)'=='x86'">win-x86</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Linux))'">linux-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">osx-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">osx-arm64</RuntimeIdentifier>
+    <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
 	<CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -19,7 +15,7 @@
     <ProjectReference Include="..\..\Tests\TestIdlJson\TestIdlJson.csproj" />
 
 	<!-- Analyzer API for our custom checks. -->
-	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0">
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
 
@@ -30,11 +26,11 @@
 	<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
-	<PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+	<PackageReference Include="SonarAnalyzer.CSharp" Version="10.6.0.109712">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
 
-	<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.2">
+	<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
   </ItemGroup>
@@ -51,4 +47,5 @@
       <_Parameter1_TypeName>System.Boolean</_Parameter1_TypeName>
 	</AssemblyAttribute>
   </ItemGroup>
+
 </Project>

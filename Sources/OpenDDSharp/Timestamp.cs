@@ -69,12 +69,12 @@ public struct Timestamp : IEquatable<Timestamp>
     /// <summary>
     /// Updates the time value from a CDR representation.
     /// </summary>
-    /// <param name="span">The byte span serialized.</param>
-    public void FromCDR(Span<byte> span)
+    /// <param name="data">The byte span serialized.</param>
+    public void FromCDR(ReadOnlySpan<byte> data)
     {
-        var reader = new Marshaller.Cdr.CdrReader();
-        Seconds = reader.ReadInt32(span);
-        NanoSeconds = reader.ReadUInt32(span);
+        var reader = new Marshaller.Cdr.CdrReader(data.ToArray());
+        Seconds = reader.ReadInt32();
+        NanoSeconds = reader.ReadUInt32();
     }
     #endregion
 

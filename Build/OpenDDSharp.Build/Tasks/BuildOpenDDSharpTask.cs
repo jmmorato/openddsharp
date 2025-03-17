@@ -109,7 +109,6 @@ namespace OpenDDSharp.Build.Tasks
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
                 Runtime = context.RunTime,
-                ArgumentCustomization = args => args.Append("--self-contained"),
             });
             context.DotNetBuild("./Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", new DotNetBuildSettings
             {
@@ -123,7 +122,6 @@ namespace OpenDDSharp.Build.Tasks
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd('\\') },
                 },
                 Runtime = context.RunTime,
-                ArgumentCustomization = args => args.Append("--self-contained"),
             });
         }
     }

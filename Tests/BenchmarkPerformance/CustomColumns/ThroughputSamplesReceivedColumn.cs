@@ -1,12 +1,11 @@
-﻿using BenchmarkDotNet.Columns;
+﻿using System.IO;
+using System.Linq;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 
 namespace OpenDDSharp.BenchmarkPerformance.CustomColumns;
 
-/// <summary>
-/// Represents the throughput samples received column.
-/// </summary>
 internal class ThroughputSamplesReceivedColumn : IColumn
 {
     public static readonly string OutputFolder = Path.Combine(Path.GetTempPath(), nameof(ThroughputSamplesReceivedColumn));
@@ -42,7 +41,7 @@ internal class ThroughputSamplesReceivedColumn : IColumn
             Replace("ThroughputTest", string.Empty, StringComparison.InvariantCultureIgnoreCase).
             ToLowerInvariant();
 
-        var numInstancesParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalSamples");
+        var numInstancesParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalInstances");
         var payloadSizeParam = benchmarkCase.Parameters.Items.FirstOrDefault(x => x.Name == "TotalPayload");
         if (numInstancesParam == null)
         {

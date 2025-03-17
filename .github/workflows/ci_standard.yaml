@@ -26,7 +26,6 @@ jobs:
 
     env:
       OpenDdsVersion: "3.29.1"
-      COMPlus_JITMinOpts: "1"
 
     steps:
     - uses: actions/checkout@v4
@@ -53,10 +52,6 @@ jobs:
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 8.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-
-    - name: Windows Long Paths
-      shell: pwsh
-      run: Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name LongPathsEnabled -Value 1
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows
@@ -97,7 +92,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -121,20 +116,16 @@ jobs:
         $env:PATH = "${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\lib;${{ github.workspace }}\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\lib;$env:PATH"
         echo "PATH=$env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
-    - name: Performance Tests
+    - name: Latency Performance Test
       shell: cmd
       run: |
         dotnet clean ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
         dotnet clean ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
         dotnet restore ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj
         dotnet restore ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj
-        dotnet build -m:1 ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }} --framework net8.0 --self-contained
-        dotnet build -m:1 ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }} --framework net8.0 --self-contained
-        dotnet publish ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }} --framework net8.0 --self-contained
-
-        cd ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish
-        ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish\BenchmarkPerformance.exe -1
-        ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\win-${{ matrix.BuildPlatform }}\publish\BenchmarkPerformance.exe -2
+        dotnet build -m:1 ${{ github.workspace }}\Tests\TestIdlCdr\TestIdlCdr.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet build -m:1 ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime win-${{ matrix.BuildPlatform }}
+        dotnet run --project ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj "-1" --configuration Release --runtime win-${{ matrix.BuildPlatform }}
       env:
         DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}"
         ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.BuildPlatform }}\\ACE_wrappers"
@@ -149,7 +140,6 @@ jobs:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
-      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
@@ -229,7 +219,7 @@ jobs:
 
     - name: Build OpenDDSharp TestSupportProcessCore project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --self-contained
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -238,7 +228,7 @@ jobs:
 
     - name: Build OpenDDSharp UnitTest project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --self-contained
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -260,7 +250,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -278,21 +268,20 @@ jobs:
         flag-name: coverage-linux-x64-Release
         fail-on-error: false
 
-    - name: Performance Tests
+    - name: Latency Performance Test
       shell: bash
       run: |
-        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime linux-x64 --framework net8.0 --self-contained
-        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64 --framework net8.0 --self-contained
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64 --framework net8.0 --self-contained
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime linux-x64
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
         sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -1
-        sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
-      continue-on-error: false
+      continue-on-error: true
 
   build_macos_x64:
     runs-on: macos-13
@@ -302,8 +291,6 @@ jobs:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
-      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
-      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
@@ -381,7 +368,7 @@ jobs:
 
     - name: Build OpenDDSharp TestSupportProcessCore Project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --self-contained
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
@@ -390,7 +377,7 @@ jobs:
 
     - name: Build OpenDDSharp UnitTest Project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --self-contained
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime osx-x64
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
@@ -412,7 +399,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -430,19 +417,18 @@ jobs:
         flag-name: coverage-macos-x64-Release
         fail-on-error: false
 
-    - name: Performance Tests
+    - name: Latency Performance Test
       shell: bash
       run: |        
-        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-x64 --framework net8.0 --self-contained
-        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64 --framework net8.0 --self-contained
-        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64 --framework net8.0 --self-contained
+        dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-x64
+        dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64
+        dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-x64
         sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
         sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
         cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish
         sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -1
-        sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
-      continue-on-error: false
+      continue-on-error: true
 
   build_macos_arm64:
     runs-on: macos-14
@@ -452,9 +438,6 @@ jobs:
       BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
-      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
-      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
-
 
     steps:
       - uses: actions/checkout@v4
@@ -581,19 +564,18 @@ jobs:
           flag-name: coverage-macos-arm64-Release
           fail-on-error: false
 
-      - name: Performance Tests
+      - name: Latency Performance Test
         shell: bash
         run: |
-          dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-arm64 --framework net8.0 --self-contained
-          dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64 --framework net8.0 --self-contained
-          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64 --framework net8.0 --self-contained
+          dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime osx-arm64
+          dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64
+          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime osx-arm64
           sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
           sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish
           sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -1
-          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/osx-arm64/publish/BenchmarkPerformance -2
         working-directory: ${{ github.workspace }}
-        continue-on-error: false
+        continue-on-error: true
 
   publish_coveralls:
     runs-on: ubuntu-latest

@@ -20,7 +20,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using OpenDDSharp.Marshaller.Cdr;
 
 namespace OpenDDSharp.DDS;
 
@@ -107,25 +106,6 @@ public sealed class SampleInfo : IEquatable<SampleInfo>
     public int AbsoluteGenerationRank { get; internal set; }
     #endregion
 
-    #region Constructors
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SampleInfo" /> class.
-    /// </summary>
-    public SampleInfo()
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SampleInfo" /> class.
-    /// </summary>
-    /// <param name="reader">The <see cref="CdrReader"/> instance.</param>
-    /// <param name="span">The memory span where to read.</param>
-    public SampleInfo(CdrReader reader, Span<byte> span)
-    {
-        FromCDR(reader, span);
-    }
-    #endregion
-
     #region Methods
     internal SampleInfoWrapper ToNative()
     {
@@ -193,52 +173,46 @@ public sealed class SampleInfo : IEquatable<SampleInfo>
     /// <summary>
     /// Updates the time value from a CDR representation.
     /// </summary>
-    /// <param name="span">The byte span serialized.</param>
-    public void FromCDR(Span<byte> span)
+    /// <param name="data">The byte span serialized.</param>
+    public void FromCDR(ReadOnlySpan<byte> data)
     {
-        var reader = new CdrReader();
-        ValidData = reader.ReadBool(span);
-        SampleState = reader.ReadUInt32(span);
-        ViewState = reader.ReadUInt32(span);
-        InstanceState = reader.ReadUInt32(span);
+        var reader = new Marshaller.Cdr.CdrReader(data.ToArray());
+        ValidData = reader.ReadBool();
+        SampleState = reader.ReadUInt32();
+        ViewState = reader.ReadUInt32();
+        InstanceState = reader.ReadUInt32();
         SourceTimestamp = new Timestamp
         {
-            Seconds = reader.ReadInt32(span),
-            NanoSeconds = reader.ReadUInt32(span),
+            Seconds = reader.ReadInt32(),
+            NanoSeconds = reader.ReadUInt32(),
         };
-        InstanceHandle = reader.ReadInt32(span);
-        PublicationHandle = reader.ReadInt32(span);
-        DisposedGenerationCount = reader.ReadInt32(span);
-        NoWritersGenerationCount = reader.ReadInt32(span);
-        SampleRank = reader.ReadInt32(span);
-        GenerationRank = reader.ReadInt32(span);
-        AbsoluteGenerationRank = reader.ReadInt32(span);
+        InstanceHandle = reader.ReadInt32();
+        PublicationHandle = reader.ReadInt32();
+        DisposedGenerationCount = reader.ReadInt32();
+        NoWritersGenerationCount = reader.ReadInt32();
+        SampleRank = reader.ReadInt32();
+        GenerationRank = reader.ReadInt32();
+        AbsoluteGenerationRank = reader.ReadInt32();
     }
 
-
-    /// <summary>
-    /// Updates the time value from a CDR representation.
-    /// </summary>
-    /// <param name="reader">The current <see cref="CdrReader"/> object.</param>
-    /// <param name="span">The byte span serialized.</param>
-    public void FromCDR(CdrReader reader, Span<byte> span)
+    public void FromCDR(Marshaller.Cdr.CdrReader reader)
     {
-        ValidData = reader.ReadBool(span);
-        SampleState = reader.ReadUInt32(span);
-        ViewState = reader.ReadUInt32(span);
-        InstanceState = reader.ReadUInt32(span);
+        ValidData = reader.ReadBool();
+        SampleState = reader.ReadUInt32();
+        ViewState = reader.ReadUInt32();
+        InstanceState = reader.ReadUInt32();
         SourceTimestamp = new Timestamp
         {
-            Seconds = reader.ReadInt32(span),
-            NanoSeconds = reader.ReadUInt32(span),
+            Seconds = reader.ReadInt32(),
+            NanoSeconds = reader.ReadUInt32(),
         };
-        InstanceHandle = reader.ReadInt32(span);
-        PublicationHandle = reader.ReadInt32(span);
-        DisposedGenerationCount = reader.ReadInt32(span);
-        NoWritersGenerationCount = reader.ReadInt32(span);
-        SampleRank = reader.ReadInt32(span);
-        GenerationRank = reader.ReadInt32(span);
-        AbsoluteGenerationRank = reader.ReadInt32(span);
+        InstanceHandle = reader.ReadInt32();
+        PublicationHandle = reader.ReadInt32();
+        DisposedGenerationCount = reader.ReadInt32();
+        NoWritersGenerationCount = reader.ReadInt32();
+        SampleRank = reader.ReadInt32();
+        GenerationRank = reader.ReadInt32();
+        AbsoluteGenerationRank = reader.ReadInt32();
     }
     #endregion
 

@@ -1,10 +1,7 @@
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
-#if NET6_0_OR_GREATER
-#else
 using System.Runtime.InteropServices;
-#endif
 using System.Text;
 
 namespace OpenDDSharp.Marshaller.Cdr;
@@ -14,45 +11,45 @@ namespace OpenDDSharp.Marshaller.Cdr;
 /// </summary>
 public class CdrReader
 {
+    private readonly byte[] _buf;
     private int _position;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CdrReader"/> class.
     /// </summary>
-    public CdrReader()
+    /// <param name="buf">The buffer to read from.</param>
+    public CdrReader(byte[] buf)
     {
+        _buf = buf;
         _position = 0;
     }
 
     /// <summary>
-    /// Reads an unsigned byte from the stream.
+    /// Reads a unsigned byte from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The byte value.</returns>
-    public byte ReadByte(Span<byte> span)
+    public byte ReadByte()
     {
-        return span[_position++];
+        return _buf[_position++];
     }
 
     /// <summary>
     /// Reads a signed byte from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The byte value.</returns>
-    public sbyte ReadSByte(Span<byte> span)
+    public sbyte ReadSByte()
     {
-        return (sbyte)span[_position++];
+        return (sbyte)_buf[_position++];
     }
 
     /// <summary>
     /// Reads a sequence of bytes from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="count">The number of bytes to read.</param>
     /// <returns>The bytes from the stream.</returns>
-    public Span<byte> ReadBytes(Span<byte> span, int count)
+    public ReadOnlySpan<byte> ReadBytes(int count)
     {
-        var result = span.Slice(_position, count);
+        var result = new ReadOnlySpan<byte>(_buf, _position, count);
         _position += count;
         return result;
     }
@@ -60,156 +57,145 @@ public class CdrReader
     /// <summary>
     /// Read a boolean value from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The boolean value.</returns>
-    public bool ReadBool(Span<byte> span) => ReadByte(span) != 0x00;
+    public bool ReadBool() => ReadByte() != 0x00;
 
     /// <summary>
     /// Reads a signed short from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The signed short value.</returns>
-    public short ReadInt16(Span<byte> span)
+    public short ReadInt16()
     {
         Align(2);
-        return BinaryPrimitives.ReadInt16LittleEndian(ReadBytes(span, 2));
+        return BinaryPrimitives.ReadInt16LittleEndian(ReadBytes(2));
     }
 
     /// <summary>
     /// Reads an unsigned short from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The unsigned short value.</returns>
-    public ushort ReadUInt16(Span<byte> span)
+    public ushort ReadUInt16()
     {
         Align(2);
-        return BinaryPrimitives.ReadUInt16LittleEndian(ReadBytes(span, 2));
+        return BinaryPrimitives.ReadUInt16LittleEndian(ReadBytes(2));
     }
 
     /// <summary>
     /// Reads a signed integer from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The signed integer value.</returns>
-    public int ReadInt32(Span<byte> span)
+    public int ReadInt32()
     {
         Align(4);
-        return BinaryPrimitives.ReadInt32LittleEndian(ReadBytes(span, 4));
+        return BinaryPrimitives.ReadInt32LittleEndian(ReadBytes(4));
     }
 
     /// <summary>
     /// Reads an unsigned integer from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The unsigned integer value.</returns>
-    public uint ReadUInt32(Span<byte> span)
+    public uint ReadUInt32()
     {
         Align(4);
-        return BinaryPrimitives.ReadUInt32LittleEndian(ReadBytes(span, 4));
+        return BinaryPrimitives.ReadUInt32LittleEndian(ReadBytes(4));
     }
 
     /// <summary>
     /// Reads a signed long from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The signed long value.</returns>
-    public long ReadInt64(Span<byte> span)
+    public long ReadInt64()
     {
         Align(8);
-        return BinaryPrimitives.ReadInt64LittleEndian(ReadBytes(span, 8));
+        return BinaryPrimitives.ReadInt64LittleEndian(ReadBytes(8));
     }
 
     /// <summary>
     /// Reads an unsigned long from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The unsigned long value.</returns>
-    public ulong ReadUInt64(Span<byte> span)
+    public ulong ReadUInt64()
     {
         Align(8);
-        return BinaryPrimitives.ReadUInt64LittleEndian(ReadBytes(span, 8));
+        return BinaryPrimitives.ReadUInt64LittleEndian(ReadBytes(8));
     }
 
     /// <summary>
     /// Reads a float from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The float value.</returns>
-    public float ReadSingle(Span<byte> span)
+    public float ReadSingle()
     {
         Align(4);
 #if NET6_0_OR_GREATER
-        return BinaryPrimitives.ReadSingleLittleEndian(ReadBytes(span, 4));
+        return BinaryPrimitives.ReadSingleLittleEndian(ReadBytes(4));
 #else
         return !BitConverter.IsLittleEndian
-                ? Int32BitsToSingle(BinaryPrimitives.ReverseEndianness(ReadInt32(span)))
-                : MemoryMarshal.Read<float>(ReadBytes(span, 4));
+                ? Int32BitsToSingle(BinaryPrimitives.ReverseEndianness(ReadInt32()))
+                : MemoryMarshal.Read<float>(ReadBytes(4));
 #endif
     }
 
     /// <summary>
     /// Reads a double from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The double value.</returns>
-    public double ReadDouble(Span<byte> span)
+    public double ReadDouble()
     {
         Align(8);
+
 #if NET6_0_OR_GREATER
-        return BinaryPrimitives.ReadDoubleLittleEndian(ReadBytes(span, 8));
+        return BinaryPrimitives.ReadDoubleLittleEndian(ReadBytes(8));
 #else
         return !BitConverter.IsLittleEndian ?
-                Int64BitsToDouble(BinaryPrimitives.ReverseEndianness(ReadInt64(span))) :
-                MemoryMarshal.Read<double>(ReadBytes(span, 8));
+                Int64BitsToDouble(BinaryPrimitives.ReverseEndianness(ReadInt64())) :
+                MemoryMarshal.Read<double>(ReadBytes(8));
 #endif
     }
 
     /// <summary>
     /// Reads a character from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The character value.</returns>
-    public char ReadChar(Span<byte> span) => Convert.ToChar(ReadByte(span));
+    public char ReadChar() => Convert.ToChar(ReadByte());
 
     /// <summary>
     /// Reads a wide character from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The wide character value.</returns>
-    public char ReadWChar(Span<byte> span)
+    public char ReadWChar()
     {
         Align(2);
-        var c = ReadBytes(span, 2);
+        var c = ReadBytes(2);
         return Encoding.Unicode.GetString(c.ToArray())[0];
     }
 
     /// <summary>
-    /// Reads a string from the stream.
+    /// Reads an string from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The string value.</returns>
-    public string ReadString(Span<byte> span)
+    public string ReadString()
     {
-        var len = ReadUInt32(span);
+        var len = ReadUInt32();
 
-        var strBuf = ReadBytes(span, (int)len - 1);
-        ReadByte(span);
+        var strBuf = ReadBytes((int)len - 1);
+        ReadByte();
+
 #if NET6_0_OR_GREATER
         return Encoding.UTF8.GetString(strBuf);
 #else
         return Encoding.UTF8.GetString(strBuf.ToArray());
-    #endif
+#endif
     }
 
     /// <summary>
     /// Reads a string from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The string value.</returns>
-    public string ReadWString(Span<byte> span)
+    public string ReadWString()
     {
-        var len = ReadUInt32(span);
-        var strBuf = ReadBytes(span, (int)len);
+        var len = ReadUInt32();
+        var strBuf = ReadBytes((int)len);
 
 #if NET6_0_OR_GREATER
         return Encoding.Unicode.GetString(strBuf);
@@ -221,23 +207,20 @@ public class CdrReader
     /// <summary>
     /// Read an enumeration value from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The unsigned integer that represents the enumeration.</returns>
-
-    public uint ReadEnum(Span<byte> span) => ReadUInt32(span);
+    public uint ReadEnum() => ReadUInt32();
 
     /// <summary>
     /// Reads a sequence of boolean values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of booleans from the stream.</returns>
-    public IList<bool> ReadBoolSequence(Span<byte> span)
+    public IList<bool> ReadBoolSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new bool[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadBool(span);
+            result[i] = ReadBool();
         }
 
         return result;
@@ -246,15 +229,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of boolean values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of booleans from the stream.</returns>
-    public bool[] ReadBoolArray(Span<byte> span, int len)
+    public bool[] ReadBoolArray(int len)
     {
         var result = new bool[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadBool(span);
+            result[i] = ReadBool();
         }
 
         return result;
@@ -263,59 +245,55 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of bytes from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of bytes from the stream.</returns>
-    public IList<byte> ReadByteSequence(Span<byte> span)
+    public IList<byte> ReadByteSequence()
     {
-        var len = ReadSequenceLength(span);
-        return ReadBytes(span, (int)len).ToArray();
+        var len = ReadSequenceLength();
+        return ReadBytes((int)len).ToArray();
     }
 
     /// <summary>
     /// Reads a sequence of bytes from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of bytes from the stream.</returns>
-    public IList<sbyte> ReadSByteSequence(Span<byte> span)
+    public IList<sbyte> ReadSByteSequence()
     {
-        var len = ReadSequenceLength(span);
-        return (sbyte[])(Array)ReadBytes(span, (int)len).ToArray();
+        var len = ReadSequenceLength();
+        return (sbyte[])(Array)ReadBytes((int)len).ToArray();
     }
 
     /// <summary>
     /// Reads an array of bytes from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of bytes from the stream.</returns>
-    public byte[] ReadByteArray(Span<byte> span, int len)
+    public byte[] ReadByteArray(int len)
     {
-        return ReadBytes(span, len).ToArray();
+        return ReadBytes(len).ToArray();
     }
 
     /// <summary>
     /// Reads an array of signed bytes from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of signed bytes from the stream.</returns>
-    public sbyte[] ReadSByteArray(Span<byte> span, int len)
+    public sbyte[] ReadSByteArray(int len)
     {
-        return (sbyte[])(Array)ReadBytes(span, len).ToArray();
+        return (sbyte[])(Array)ReadBytes(len).ToArray();
     }
+
 
     /// <summary>
     /// Reads a sequence of signed short values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of signed short values from the stream.</returns>
-    public IList<short> ReadInt16Sequence(Span<byte> span)
+    public IList<short> ReadInt16Sequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new short[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadInt16(span);
+            result[i] = ReadInt16();
         }
 
         return result;
@@ -324,15 +302,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of signed short values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of signed short values from the stream.</returns>
-    public short[] ReadInt16Array(Span<byte> span, int len)
+    public short[] ReadInt16Array(int len)
     {
         var result = new short[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadInt16(span);
+            result[i] = ReadInt16();
         }
 
         return result;
@@ -341,15 +318,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of unsigned short values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of unsigned short values from the stream.</returns>
-    public IList<ushort> ReadUInt16Sequence(Span<byte> span)
+    public IList<ushort> ReadUInt16Sequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new ushort[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadUInt16(span);
+            result[i] = ReadUInt16();
         }
 
         return result;
@@ -358,15 +334,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of unsigned short values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of unsigned short values from the stream.</returns>
-    public ushort[] ReadUInt16Array(Span<byte> span, int len)
+    public ushort[] ReadUInt16Array(int len)
     {
         var result = new ushort[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadUInt16(span);
+            result[i] = ReadUInt16();
         }
 
         return result;
@@ -375,15 +350,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of signed integer values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of signed integer values from the stream.</returns>
-    public IList<int> ReadInt32Sequence(Span<byte> span)
+    public IList<int> ReadInt32Sequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new int[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadInt32(span);
+            result[i] = ReadInt32();
         }
 
         return result;
@@ -392,15 +366,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of signed integer values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of signed integer values from the stream.</returns>
-    public int[] ReadInt32Array(Span<byte> span, int len)
+    public int[] ReadInt32Array(int len)
     {
         var result = new int[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadInt32(span);
+            result[i] = ReadInt32();
         }
 
         return result;
@@ -409,15 +382,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of unsigned integer values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of unsigned integer values from the stream.</returns>
-    public IList<uint> ReadUInt32Sequence(Span<byte> span)
+    public IList<uint> ReadUInt32Sequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new uint[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadUInt32(span);
+            result[i] = ReadUInt32();
         }
 
         return result;
@@ -426,15 +398,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of unsigned integer values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of unsigned integer values from the stream.</returns>
-    public uint[] ReadUInt32Array(Span<byte> span, int len)
+    public uint[] ReadUInt32Array(int len)
     {
         var result = new uint[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadUInt32(span);
+            result[i] = ReadUInt32();
         }
 
         return result;
@@ -443,15 +414,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of signed long values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of signed long values from the stream.</returns>
-    public IList<long> ReadInt64Sequence(Span<byte> span)
+    public IList<long> ReadInt64Sequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new long[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadInt64(span);
+            result[i] = ReadInt64();
         }
 
         return result;
@@ -460,15 +430,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of signed long values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of signed long values from the stream.</returns>
-    public long[] ReadInt64Array(Span<byte> span, int len)
+    public long[] ReadInt64Array(int len)
     {
         var result = new long[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadInt64(span);
+            result[i] = ReadInt64();
         }
 
         return result;
@@ -477,15 +446,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of unsigned long values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of unsigned long values from the stream.</returns>
-    public IList<ulong> ReadUInt64Sequence(Span<byte> span)
+    public IList<ulong> ReadUInt64Sequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new ulong[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadUInt64(span);
+            result[i] = ReadUInt64();
         }
 
         return result;
@@ -494,15 +462,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of unsigned long values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of unsigned long values from the stream.</returns>
-    public ulong[] ReadUInt64Array(Span<byte> span, int len)
+    public ulong[] ReadUInt64Array(int len)
     {
         var result = new ulong[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadUInt64(span);
+            result[i] = ReadUInt64();
         }
 
         return result;
@@ -511,15 +478,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of float values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of float values from the stream.</returns>
-    public IList<float> ReadSingleSequence(Span<byte> span)
+    public IList<float> ReadSingleSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new float[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadSingle(span);
+            result[i] = ReadSingle();
         }
 
         return result;
@@ -528,15 +494,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of float values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of float values from the stream.</returns>
-    public float[] ReadSingleArray(Span<byte> span, int len)
+    public float[] ReadSingleArray(int len)
     {
         var result = new float[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadSingle(span);
+            result[i] = ReadSingle();
         }
 
         return result;
@@ -545,15 +510,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of double values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of double values from the stream.</returns>
-    public IList<double> ReadDoubleSequence(Span<byte> span)
+    public IList<double> ReadDoubleSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new double[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadDouble(span);
+            result[i] = ReadDouble();
         }
 
         return result;
@@ -562,15 +526,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of double values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of double values from the stream.</returns>
-    public double[] ReadDoubleArray(Span<byte> span, int len)
+    public double[] ReadDoubleArray(int len)
     {
         var result = new double[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadDouble(span);
+            result[i] = ReadDouble();
         }
 
         return result;
@@ -579,15 +542,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of character values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of character values from the stream.</returns>
-    public IList<char> ReadCharSequence(Span<byte> span)
+    public IList<char> ReadCharSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new char[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadChar(span);
+            result[i] = ReadChar();
         }
 
         return result;
@@ -596,15 +558,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of wide character values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of wide character values from the stream.</returns>
-    public IList<char> ReadWCharSequence(Span<byte> span)
+    public IList<char> ReadWCharSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new char[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadWChar(span);
+            result[i] = ReadWChar();
         }
 
         return result;
@@ -613,15 +574,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of character values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of character values from the stream.</returns>
-    public char[] ReadCharArray(Span<byte> span, int len)
+    public char[] ReadCharArray(int len)
     {
         var result = new char[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadChar(span);
+            result[i] = ReadChar();
         }
 
         return result;
@@ -630,15 +590,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of wide character values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of wide character values from the stream.</returns>
-    public char[] ReadWCharArray(Span<byte> span, int len)
+    public char[] ReadWCharArray(int len)
     {
         var result = new char[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadWChar(span);
+            result[i] = ReadWChar();
         }
 
         return result;
@@ -647,15 +606,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of string values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of string values from the stream.</returns>
-    public IList<string> ReadStringSequence(Span<byte> span)
+    public IList<string> ReadStringSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new string[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadString(span);
+            result[i] = ReadString();
         }
 
         return result;
@@ -664,49 +622,46 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of wide string values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of string values from the stream.</returns>
-    public IList<string> ReadWStringSequence(Span<byte> span)
+    public IList<string> ReadWStringSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new string[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadWString(span);
+            result[i] = ReadWString();
         }
 
         return result;
     }
 
     /// <summary>
-    /// Reads an array of string values from the stream.
+    /// Reads a array of string values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of string values from the stream.</returns>
-    public string[] ReadStringArray(Span<byte> span, int len)
+    public string[] ReadStringArray(int len)
     {
         var result = new string[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadString(span);
+            result[i] = ReadString();
         }
 
         return result;
     }
 
     /// <summary>
-    /// Reads an array of string values from the stream.
+    /// Reads a array of string values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of string values from the stream.</returns>
-    public string[] ReadWStringArray(Span<byte> span, int len)
+    public string[] ReadWStringArray(int len)
     {
         var result = new string[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadWString(span);
+            result[i] = ReadWString();
         }
 
         return result;
@@ -715,15 +670,14 @@ public class CdrReader
     /// <summary>
     /// Reads a sequence of enumeration values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <returns>The sequence of enumeration values from the stream.</returns>
-    public IList<uint> ReadEnumSequence(Span<byte> span)
+    public IList<uint> ReadEnumSequence()
     {
-        var len = ReadSequenceLength(span);
+        var len = ReadSequenceLength();
         var result = new uint[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadEnum(span);
+            result[i] = ReadEnum();
         }
 
         return result;
@@ -732,15 +686,14 @@ public class CdrReader
     /// <summary>
     /// Reads an array of enumeration values from the stream.
     /// </summary>
-    /// <param name="span">The memory span to read from.</param>
     /// <param name="len">The length of the array.</param>
     /// <returns>The array of enumeration values from the stream.</returns>
-    public uint[] ReadEnumArray(Span<byte> span, int len)
+    public uint[] ReadEnumArray(int len)
     {
         var result = new uint[len];
         for (var i = 0; i < len; i++)
         {
-            result[i] = ReadEnum(span);
+            result[i] = ReadEnum();
         }
 
         return result;
@@ -751,14 +704,12 @@ public class CdrReader
         var modulo = _position % alignment;
         if (modulo > 0)
         {
-            _position += alignment - modulo;
+            ReadBytes(alignment - modulo);
         }
     }
 
-    private uint ReadSequenceLength(Span<byte> span) => ReadUInt32(span);
+    private uint ReadSequenceLength() => ReadUInt32();
 
-#if NET6_0_OR_GREATER
-#else
     /// <summary>
     /// Converts the specified 32-bit signed integer to a single-precision floating point number.
     /// </summary>
@@ -772,5 +723,4 @@ public class CdrReader
     /// <param name="value">The number to convert.</param>
     /// <returns>A double-precision floating point number whose bits are identical to <paramref name="value"/>.</returns>
     private static unsafe double Int64BitsToDouble(long value) => *((double*)&value);
-#endif
 }

@@ -77,7 +77,7 @@ module CdrWrapper {
     typedef boolean BooleanMultiArrayType[3][4][2];
     typedef octet OctetMultiArrayType[3][4][2];
 
-    typedef sequence<octet> OctetSequenceType;
+    typedef sequence<octet, 2048> OctetSequenceType;
 
     typedef string<32> BoundedStringType;
     typedef wstring<32> BoundedWStringType;
