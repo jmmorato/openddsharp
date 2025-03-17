@@ -52,10 +52,10 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
-#elif (OSX && X64)
-        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_osx-x64";
-        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_osx-x64/ACE_wrappers";
-        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_osx-x64/ACE_wrappers/TAO";
+#elif OSX
+        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_MacOS";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_wrappers";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_MacOS/ACE_wrappers/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
@@ -63,17 +63,6 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
-#elif (OSX && ARM64)
-        private const string DDS_ROOT = "../../../../../../ext/OpenDDS_osx-arm64";
-        private const string ACE_ROOT = "../../../../../../ext/OpenDDS_osx-arm64/ACE_wrappers";
-        private const string TAO_ROOT = "../../../../../../ext/OpenDDS_osx-arm64/ACE_wrappers/TAO";
-        private const string DEBUG_TARGET_FOLDER = "Debug/";
-        private const string RELEASE_TARGET_FOLDER = "Release/";
-        private const string SIXTY_FOUR_PLATFORM_FOLDER = "x64/";
-        private const string ARM_SIXTY_FOUR_PLATFORM_FOLDER = "ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = "../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = "TestSupportProcessCore.dll";
-        private const string DCPSINFOREPO_PROCESS_EXE_NAME = "DCPSInfoRepo";
 #endif
         #endregion
 
@@ -103,10 +92,10 @@ namespace OpenDDSharp.UnitTest.Helpers
             var ddsPath = Path.GetFullPath(DDS_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
-            var ddsBin = Path.Combine(ddsPath, "bin");
-            var ddsLib = Path.Combine(ddsPath, "lib");
-            var aceBin = Path.Combine(acePath, "bin");
-            var aceLib = Path.Combine(acePath, "lib");
+            var ddsBin = Path.Combine(ddsPath, $"bin");
+            var ddsLib = Path.Combine(ddsPath, $"lib");
+            var aceBin = Path.Combine(acePath, $"bin");
+            var aceLib = Path.Combine(acePath, $"lib");
             string path = $"{ddsBin};{ddsLib};{aceBin};{aceLib};";
             Environment.SetEnvironmentVariable("Path", path + Environment.GetEnvironmentVariable("Path"));
             Environment.SetEnvironmentVariable("DDS_ROOT", ddsPath);

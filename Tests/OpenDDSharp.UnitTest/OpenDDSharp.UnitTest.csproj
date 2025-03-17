@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
-    <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
+    <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64'">true</IsARM64>
     <TargetFrameworks Condition="'$(IsARM64)'!='true'">net462;net47;net471;net472;net48;net6.0;net7.0;net8.0;</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsARM64)'=='true'">net6.0;net7.0;net8.0;</TargetFrameworks>
     <IsPackable>false</IsPackable>
@@ -44,12 +43,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="'$(Platform)'=='x86' Or '$(RuntimeIdentifier)'=='win-x86'">$(DefineConstants);X86</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition="'$(IsARM64)'=='true'">$(DefineConstants);ARM64</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition="'$(IsX64)'=='true'">$(DefineConstants);X64</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -86,7 +86,7 @@ The following table shows the Runtimes Identifiers that are already implemented 
 | linux-x64   | :white_check_mark: |
 | linux-arm64 | :x:                |
 | osx-x64     | :white_check_mark: |
-| osx-arm64   | :white_check_mark: |
+| osx-arm64   | :x:                |
 
 Once the core API is stable and working for all the planned Frameworks/Runtimes,
 the development will be focus to provide other advanced DDS features

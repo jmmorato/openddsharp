@@ -12,8 +12,6 @@
     <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
-    <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
-    <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64;</RuntimeIdentifiers>
     <RootNamespace>TestIdlJson</RootNamespace>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
@@ -36,12 +34,6 @@
   <PropertyGroup>
 	<DefineConstants Condition="'$(IsOSX)'=='true'">$(DefineConstants);OSX</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition="'$(IsARM64)'=='true'">$(DefineConstants);ARM64</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants Condition="'$(IsX64)'=='true'">$(DefineConstants);X64</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup>
     <IdlFiles Include="IDL\*.idl" />
@@ -57,24 +49,14 @@
     <TAO_ROOT>$(MSBuildThisFileDirectory)..\..\ext\OpenDDS_$(PlatformFolder)\ACE_wrappers\TAO</TAO_ROOT>
   </PropertyGroup>
 
-  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_osx-x64</DDS_ROOT>
+  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsOSX)'=='true'">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS</DDS_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="ACE Home" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_osx-x64/ACE_wrappers</ACE_ROOT>
+  <PropertyGroup Label="ACE Home" Condition="'$(IsOSX)'=='true'">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS/ACE_wrappers</ACE_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="TAO Home" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_osx-x64/ACE_wrappers/TAO</TAO_ROOT>
-  </PropertyGroup>
-
-  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_osx-arm64</DDS_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Label="ACE Home" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_osx-arm64/ACE_wrappers</ACE_ROOT>
-  </PropertyGroup>
-  <PropertyGroup Label="TAO Home" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_osx-arm64/ACE_wrappers/TAO</TAO_ROOT>
+  <PropertyGroup Label="TAO Home" Condition="'$(IsOSX)'=='true'">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)../../ext/OpenDDS_MacOS/ACE_wrappers/TAO</TAO_ROOT>
   </PropertyGroup>
 
   <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
@@ -159,13 +141,9 @@
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
     <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlWrapperMacOSX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.h')" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
+  <Target Name="OpenDDSharpIdlWrapperMacOS" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.h')" Condition="'$(IsOSX)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_osx-x64/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
-  </Target>
-  <Target Name="OpenDDSharpIdlWrapperMacOSARM64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.h')" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">
-    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_osx-arm64/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Create cmake-->
@@ -181,13 +159,9 @@
     <Message Text="Create native project with cmake..." Importance="High" />
     <Exec ToolExe="sh" Command="cmake -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpCmakeOpenddsOSX64" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/CMakeFiles/CMakeOutput.log')">
+  <Target Name="OpenDDSharpCmakeOpenddsOSX" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/CMakeFiles/CMakeOutput.log')">
     <Message Text="Create native project with cmake..." Importance="High" />
-    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_APPLE_SILICON_PROCESSOR=x86_64 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
-  </Target>
-  <Target Name="OpenDDSharpCmakeOpenddsOSARM64" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/CMakeFiles/CMakeOutput.log')">
-    <Message Text="Create native project with cmake..." Importance="High" />
-    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_APPLE_SILICON_PROCESSOR=arm64 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_PREFIX_PATH=$(DDS_ROOT) -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject')) -B$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
 
   <!--Build cmake-->
@@ -213,13 +187,9 @@
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_Linux/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlCSharpMacOSX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
+  <Target Name="OpenDDSharpIdlCSharpMacOSX" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true'">
 	<Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_osx-x64/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
-  </Target>
-  <Target Name="OpenDDSharpIdlCSharpMacOSARM64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">
-    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_osx-arm64/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	<Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_MacOS/OpenDDSharp.IdlGenerator/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <ItemGroup>
     <CsFiles Include="@(IdlFiles->'$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.cs')" />

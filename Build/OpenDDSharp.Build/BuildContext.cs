@@ -73,7 +73,7 @@ namespace OpenDDSharp.Build
         public string BuildNumber { get; internal set; }
 
         /// <summary>
-        /// Gets the current pre-release tag.
+        /// Gets the current pre release tag.
         /// </summary>
         public string PreReleaseTag { get; internal set; }
 
@@ -133,8 +133,6 @@ namespace OpenDDSharp.Build
 
         internal static bool IsOSX => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-        internal static bool IsARM64 => RuntimeInformation.OSArchitecture == Architecture.Arm64;
-
         internal string DdsRoot { get; private set; }
 
         internal string AceRoot { get; private set; }
@@ -170,7 +168,7 @@ namespace OpenDDSharp.Build
                 else if (IsOSX)
                 {
                     runtime = "osx-x64";
-                    if (BuildPlatform == PlatformTarget.ARM64)
+                    if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
                     {
                         runtime = "osx-arm64";
                     }
@@ -329,13 +327,9 @@ namespace OpenDDSharp.Build
                 DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";
             }
 
-            if (IsOSX && IsARM64)
+            if (IsOSX)
             {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_osx-arm64/";
-            }
-            else if (IsOSX && !IsARM64)
-            {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_osx-x64/";
+                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_MacOS/";
             }
 
             AceRoot = DdsRoot + "ACE_wrappers/";
