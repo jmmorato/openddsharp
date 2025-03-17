@@ -245,8 +245,8 @@ jobs:
         flag-name: coverage-linux-x64-Release
         fail-on-error: false
 
-  build_macos_x64:
-    runs-on: macos-13
+  build_macos:
+    runs-on: macos-latest
 
     env:
       OpenDdsVersion: "3.25"
@@ -374,7 +374,7 @@ jobs:
 
   publish_coveralls:
     runs-on: ubuntu-latest
-    needs: [build_windows, build_linux, build_macos_x64]
+    needs: [build_windows, build_linux, build_macos]
     steps:
       - name: Publish coverage on Coveralls
         uses: coverallsapp/github-action@v2

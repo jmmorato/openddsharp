@@ -243,7 +243,7 @@ jobs:
         name: opendds-linux-x64-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-linux-x64.zip
 
-  build_macos_x64_native:
+  build_macos_native:
     runs-on: macos-latest
 
     env:
@@ -366,7 +366,7 @@ jobs:
   build_artifacts:
     runs-on: windows-latest
 
-    needs: [build_windows_native, build_linux_native, build_macos_x64_native]
+    needs: [build_windows_native, build_linux_native, build_macos_native]
 
     steps:
     - uses: actions/checkout@v4
