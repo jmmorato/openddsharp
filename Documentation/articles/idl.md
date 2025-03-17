@@ -75,7 +75,7 @@ The following legend is used to define the current version status:
 |-------------|---------|--------------------|
 | float       | float   | :white_check_mark: |
 | double      | double  | :white_check_mark: |
-| long double | decimal | :x:                |
+| long double | decimal | :white_check_mark: |
 
 #### Char Types
 
@@ -130,7 +130,7 @@ the corresponding C# boolean literals `true` and `false`.
 | sequence\<uint64\>             | System.Collections.Generic.IList\<ulong\>   | :white_check_mark: |
 | sequence\<float\>              | System.Collections.Generic.IList\<float\>   | :white_check_mark: |
 | sequence\<double\>             | System.Collections.Generic.IList\<double\>  | :white_check_mark: |
-| sequence\<long double\>        | System.Collections.Generic.IList\<decimal\> | :x:                |
+| sequence\<long double\>        | System.Collections.Generic.IList\<decimal\> | :white_check_mark: |
 
 #### Strings
 
