@@ -53,7 +53,7 @@ jobs:
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ${{ github.workspace }}/README.md
@@ -160,7 +160,7 @@ jobs:
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ${{ github.workspace }}/README.md
@@ -279,7 +279,7 @@ jobs:
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-macos-cd
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ${{ github.workspace }}/README.md
