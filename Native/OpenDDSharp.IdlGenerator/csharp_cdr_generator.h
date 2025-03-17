@@ -58,11 +58,7 @@ private:
 
     std::string implement_to_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
 
-    std::string implement_to_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
-
     std::string implement_from_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
-
-    std::string implement_from_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
 };
 
 #endif

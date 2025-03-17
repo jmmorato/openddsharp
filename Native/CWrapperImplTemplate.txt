@@ -40,7 +40,12 @@ int <%SCOPED_METHOD%>DataWriter_Write_Json(<%SCOPED%>DataWriter_ptr dw, const ch
 
 int <%SCOPED_METHOD%>DataWriter_Write_Cdr(<%SCOPED%>DataWriter_ptr dw, const char* cdr_data, size_t size, int handle)
 {
-    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
+    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_string(cdr_data, size);
+    /*if (samplev == NULL)
+    {
+        return ::DDS::RETCODE_ERROR;
+    }
+    <%SCOPED%> sample = samplev.in();*/
 
     ::DDS::ReturnCode_t ret = dw->write(sample, handle);
 
@@ -183,7 +188,10 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size);
+        <%SCOPED_METHOD%>_serialize_to_string(sample, cdr_data, size);
+        /*cdr_data = (char*)malloc(str.length());
+        size = str.length();
+        memcpy(cdr_data, str.c_str(), str.length());*/
     }
 
     return (int)ret;
@@ -197,19 +205,6 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Json(<%SCOPED%>DataReader_ptr dr,
     if (ret == ::DDS::RETCODE_OK)
     {
         json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
-    }
-
-    return (int)ret;
-}
-
-int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, ::DDS::SampleInfo* sampleInfo)
-{
-    <%SCOPED%> sample;
-    ::DDS::ReturnCode_t ret = dr->take_next_sample(sample, *sampleInfo);
-
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size);
     }
 
     return (int)ret;

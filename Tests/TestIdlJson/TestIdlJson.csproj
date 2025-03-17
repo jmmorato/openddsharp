@@ -80,6 +80,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <IdlTemplates Include="..\..\Native\CSharpCDRImplTemplate.txt">
+      <Visible>false</Visible>
+      <Link>Native\CSharpCDRImplTemplate.txt</Link>
+    </IdlTemplates>
     <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpJsonImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
   </ItemGroup>
 

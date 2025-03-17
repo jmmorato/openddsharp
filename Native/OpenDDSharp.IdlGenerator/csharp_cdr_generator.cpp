@@ -804,7 +804,7 @@ std::string
 csharp_cdr_generator::implement_to_cdr(const std::vector<AST_Field *> &fields, const std::string indent)
 {
   std::string ret(indent);
-  ret.append("public ReadOnlySpan<byte> ToCDR()\n");
+  ret.append("public byte[] ToCDR()\n");
   ret.append(indent);
   ret.append("{\n");
 
@@ -814,205 +814,98 @@ csharp_cdr_generator::implement_to_cdr(const std::vector<AST_Field *> &fields, c
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
+    AST_Decl::NodeType node_type = field_type->node_type();
     const char *field_name = field->local_name()->get_string();
 
-    ret.append(implement_to_cdr_field(field_type, field_name, indent));
+    ret.append(indent);
+    switch (node_type) {
+      case AST_Decl::NT_string:
+      case AST_Decl::NT_wstring: {
+        ret.append("    writer.WriteString(");
+        ret.append(field_name);
+        ret.append(");\n");
+        break;
+      }
+      case AST_Decl::NT_pre_defined: {
+        AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
+        switch (predefined_type->pt()) {
+          case AST_PredefinedType::PT_int8:
+          case AST_PredefinedType::PT_uint8:
+            ret.append("    writer.WriteByte(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_short:
+            ret.append("    writer.WriteInt16(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_long:
+            ret.append("    writer.WriteInt32(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_longlong:
+            ret.append("    writer.WriteInt64(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_ushort:
+            ret.append("    writer.WriteUInt16(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_ulong:
+            ret.append("    writer.WriteUInt32(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_ulonglong:
+            ret.append("    writer.WriteUInt64(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_float:
+            ret.append("    writer.WriteSingle(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_double:
+            ret.append("    writer.WriteDouble(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_longdouble:
+            ret.append("    writer.WriteDouble(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_octet:
+            ret.append("    writer.WriteByte(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_char:
+          case AST_PredefinedType::PT_wchar:
+            ret.append("    writer.WriteChar(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+          case AST_PredefinedType::PT_boolean:
+            ret.append("    writer.WriteBool(");
+            ret.append(field_name);
+            ret.append(");\n");
+            break;
+        }
+        break;
+      }
+    }
   }
 
   ret.append(indent);
-  ret.append("    return writer.GetBuffer();\n");
+  ret.append("    return writer.GetBuffer().ToArray();\n");
   ret.append(indent);
   ret.append("}\n\n");
-
-  return ret;
-}
-
-std::string
-csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string field_name, std::string indent)
-{
-  std::string ret(indent);
-
-  AST_Decl::NodeType node_type = field_type->node_type();
-  switch (node_type) {
-    case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef*>(field_type);
-      ret = implement_to_cdr_field(typedef_type->base_type(), field_name, indent);
-      break;
-    }
-    case AST_Decl::NT_string:
-    case AST_Decl::NT_wstring: {
-      ret.append("    writer.WriteString(");
-      ret.append(field_name);
-      ret.append(");\n");
-      break;
-    }
-    case AST_Decl::NT_pre_defined: {
-      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
-      switch (predefined_type->pt()) {
-        case AST_PredefinedType::PT_int8:
-        case AST_PredefinedType::PT_uint8:
-          ret.append("    writer.WriteByte(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_short:
-          ret.append("    writer.WriteInt16(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_long:
-          ret.append("    writer.WriteInt32(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_longlong:
-          ret.append("    writer.WriteInt64(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_ushort:
-          ret.append("    writer.WriteUInt16(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_ulong:
-          ret.append("    writer.WriteUInt32(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_ulonglong:
-          ret.append("    writer.WriteUInt64(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_float:
-          ret.append("    writer.WriteSingle(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_double:
-          ret.append("    writer.WriteDouble(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_longdouble:
-          ret.append("    writer.WriteDouble(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_octet:
-          ret.append("    writer.WriteByte(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_char:
-        case AST_PredefinedType::PT_wchar:
-          ret.append("    writer.WriteChar(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        case AST_PredefinedType::PT_boolean:
-          ret.append("    writer.WriteBool(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        default:
-          ret.append("    // ");
-          ret.append(field_name);
-          ret.append(": Not implemented yet.\n");
-          break;
-      }
-      break;
-    }
-    case AST_Decl::NT_sequence: {
-      AST_Sequence *seq_type = dynamic_cast<AST_Sequence*>(field_type);
-      AST_Type *base_type = seq_type->base_type();
-      AST_Decl::NodeType base_node_type = base_type->node_type();
-
-      switch (base_node_type) {
-        case AST_Decl::NT_pre_defined: {
-          AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
-          switch (base_predefined_type->pt()) {
-            case AST_PredefinedType::PT_int8:
-            case AST_PredefinedType::PT_uint8:
-              ret.append("    writer.WriteByteSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_short:
-              ret.append("    writer.WriteInt16Sequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_long:
-              ret.append("    writer.WriteInt32Sequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_longlong:
-              ret.append("    writer.WriteInt64Sequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_ushort:
-              ret.append("    writer.WriteUInt16Sequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_ulong:
-              ret.append("    writer.WriteUInt32Sequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_ulonglong:
-              ret.append("    writer.WriteUInt64Sequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_float:
-              ret.append("    writer.WriteSingleSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_double:
-              ret.append("    writer.WriteDoubleSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_longdouble:
-              ret.append("    writer.WriteDoubleSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_octet:
-              ret.append("    writer.WriteByteSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_char:
-            case AST_PredefinedType::PT_wchar:
-              ret.append("    writer.WriteCharSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            case AST_PredefinedType::PT_boolean:
-              ret.append("    writer.WriteBoolSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
-            default:
-              ret.append(field_name);
-              ret.append(": Not implemented yet.\n");
-              break;
-          }
-          break;
-        }
-        default:
-          break;
-      }
-      break;
-    }
-  }
 
   return ret;
 }
@@ -1021,204 +914,106 @@ std::string
 csharp_cdr_generator::implement_from_cdr(const std::vector<AST_Field *> &fields, const std::string indent)
 {
   std::string ret(indent);
-  ret.append("public void FromCDR(ReadOnlySpan<byte> data)\n");
+  ret.append("public void FromCDR(byte[] data)\n");
   ret.append(indent);
   ret.append("{\n");
 
   ret.append(indent);
-  ret.append("    var reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(data.ToArray());\n");
+  ret.append("    var reader = new OpenDDSharp.Marshaller.Cdr.CdrReader(data);\n");
 
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
+    AST_Decl::NodeType node_type = field_type->node_type();
     const char *field_name = field->local_name()->get_string();
 
-    ret.append(implement_from_cdr_field(field_type, field_name, indent));
+    ret.append(indent);
+    switch (node_type) {
+      case AST_Decl::NT_string:
+      case AST_Decl::NT_wstring: {
+        ret.append("    ");
+        ret.append(field_name);
+        ret.append(" = reader.ReadString();\n");
+        break;
+      }
+      case AST_Decl::NT_pre_defined: {
+        AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
+        switch (predefined_type->pt()) {
+          case AST_PredefinedType::PT_int8:
+          case AST_PredefinedType::PT_uint8:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadByte();\n");
+            break;
+          case AST_PredefinedType::PT_short:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadInt16();\n");
+            break;
+          case AST_PredefinedType::PT_long:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadInt32();\n");
+            break;
+          case AST_PredefinedType::PT_longlong:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadInt64();\n");
+            break;
+          case AST_PredefinedType::PT_ushort:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadUInt16();\n");
+            break;
+          case AST_PredefinedType::PT_ulong:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadUInt32();\n");
+            break;
+          case AST_PredefinedType::PT_ulonglong:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadUInt64();\n");
+            break;
+          case AST_PredefinedType::PT_float:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadSingle();\n");
+            break;
+          case AST_PredefinedType::PT_double:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadDouble();\n");
+            break;
+          case AST_PredefinedType::PT_longdouble:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadDouble();\n");
+            break;
+          case AST_PredefinedType::PT_octet:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadByte();\n");
+            break;
+          case AST_PredefinedType::PT_char:
+          case AST_PredefinedType::PT_wchar:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadChar();\n");
+            break;
+          case AST_PredefinedType::PT_boolean:
+            ret.append("    ");
+            ret.append(field_name);
+            ret.append(" = reader.ReadBool();\n");
+            break;
+        }
+        break;
+      }
+    }
   }
 
   ret.append(indent);
   ret.append("}\n");
-
-  return ret;
-}
-
-std::string
-csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string field_name, std::string indent)
-{
-  std::string ret(indent);
-
-  AST_Decl::NodeType node_type = field_type->node_type();
-  switch (node_type) {
-    case AST_Decl::NT_typedef: {
-      AST_Typedef *typedef_type = dynamic_cast<AST_Typedef *>(field_type);
-      ret = implement_from_cdr_field(typedef_type->base_type(), field_name, indent);
-      break;
-    }
-    case AST_Decl::NT_string:
-    case AST_Decl::NT_wstring: {
-      ret.append("    ");
-      ret.append(field_name);
-      ret.append(" = reader.ReadString();\n");
-      break;
-    }
-    case AST_Decl::NT_pre_defined: {
-      AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
-      switch (predefined_type->pt()) {
-        case AST_PredefinedType::PT_int8:
-        case AST_PredefinedType::PT_uint8:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadByte();\n");
-          break;
-        case AST_PredefinedType::PT_short:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadInt16();\n");
-          break;
-        case AST_PredefinedType::PT_long:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadInt32();\n");
-          break;
-        case AST_PredefinedType::PT_longlong:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadInt64();\n");
-          break;
-        case AST_PredefinedType::PT_ushort:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadUInt16();\n");
-          break;
-        case AST_PredefinedType::PT_ulong:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadUInt32();\n");
-          break;
-        case AST_PredefinedType::PT_ulonglong:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadUInt64();\n");
-          break;
-        case AST_PredefinedType::PT_float:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadSingle();\n");
-          break;
-        case AST_PredefinedType::PT_double:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadDouble();\n");
-          break;
-        case AST_PredefinedType::PT_longdouble:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadDouble();\n");
-          break;
-        case AST_PredefinedType::PT_octet:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadByte();\n");
-          break;
-        case AST_PredefinedType::PT_char:
-        case AST_PredefinedType::PT_wchar:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadChar();\n");
-          break;
-        case AST_PredefinedType::PT_boolean:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadBool();\n");
-          break;
-      }
-      break;
-    }
-    case AST_Decl::NT_sequence: {
-      AST_Sequence *seq_type = dynamic_cast<AST_Sequence *>(field_type);
-      AST_Type *base_type = seq_type->base_type();
-      AST_Decl::NodeType base_node_type = base_type->node_type();
-
-      switch (base_node_type) {
-        case AST_Decl::NT_pre_defined: {
-          AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
-          switch (base_predefined_type->pt()) {
-            case AST_PredefinedType::PT_int8:
-            case AST_PredefinedType::PT_uint8:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadByteSequence();\n");
-              break;
-            case AST_PredefinedType::PT_short:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadInt16Sequence();\n");
-              break;
-            case AST_PredefinedType::PT_long:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadInt32Sequence();\n");
-              break;
-            case AST_PredefinedType::PT_longlong:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadInt64Sequence();\n");
-              break;
-            case AST_PredefinedType::PT_ushort:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadUInt16Sequence();\n");
-              break;
-            case AST_PredefinedType::PT_ulong:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadUInt32Sequence();\n");
-              break;
-            case AST_PredefinedType::PT_ulonglong:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadUInt64Sequence();\n");
-              break;
-            case AST_PredefinedType::PT_float:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadSingleSequence();\n");
-              break;
-            case AST_PredefinedType::PT_double:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadDoubleSequence();\n");
-              break;
-            case AST_PredefinedType::PT_longdouble:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadDoubleSequence();\n");
-              break;
-            case AST_PredefinedType::PT_octet:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadByteSequence();\n");
-              break;
-            case AST_PredefinedType::PT_char:
-            case AST_PredefinedType::PT_wchar:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadCharSequence();\n");
-              break;
-            case AST_PredefinedType::PT_boolean:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadBoolSequence();\n");
-              break;
-            default:
-              ret.append(field_name);
-              ret.append(": Not implemented yet.\n");
-              break;
-          }
-        }
-      }
-    }
-  }
 
   return ret;
 }

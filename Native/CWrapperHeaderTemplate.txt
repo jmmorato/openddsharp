@@ -48,8 +48,6 @@ EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr(<%SCOPED
 
 EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_TakeNextSample_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, ::DDS::SampleInfo* sampleInfo);
 
-EXTERN_METHOD_EXPORT int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, ::DDS::SampleInfo* sampleInfo);
-
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates);
 
 EXTERN_METHOD_EXPORT ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadWithCondition_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition);
@@ -130,7 +128,7 @@ char* <%SCOPED_METHOD%>_EncodeJsonSample(<%SCOPED%> sample)
     return CORBA::string_dup(buffer);
 }
 
-void <%SCOPED_METHOD%>_serialize_to_bytes(const <%SCOPED%>& idl_value, char* &data, size_t &size)
+void <%SCOPED_METHOD%>_serialize_to_string(const <%SCOPED%>& idl_value, char* &data, size_t &size)
 {
   const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
 
@@ -145,7 +143,7 @@ void <%SCOPED_METHOD%>_serialize_to_bytes(const <%SCOPED%>& idl_value, char* &da
   size = xcdr_size;
 }
 
-<%SCOPED%> <%SCOPED_METHOD%>_deserialize_from_bytes(const char* xcdr, size_t size)
+<%SCOPED%> <%SCOPED_METHOD%>_deserialize_from_string(const char* xcdr, size_t size)
 {
   const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
   ACE_Message_Block mb(size);

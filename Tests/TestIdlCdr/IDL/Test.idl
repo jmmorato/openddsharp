@@ -1,31 +1,5 @@
 module CdrWrapper {
 
-    typedef sequence<octet> UnboundedOctetSeqType;
-    typedef sequence<char> UnboundedCharSeqType;
-    typedef sequence<boolean> UnboundedBooleanSeqType;
-    typedef sequence<int16> UnboundedInt16SeqType;
-    typedef sequence<int32> UnboundedInt32SeqType;
-    typedef sequence<int64> UnboundedInt64SeqType;
-    typedef sequence<uint16> UnboundedUInt16SeqType;
-    typedef sequence<uint32> UnboundedUInt32SeqType;
-    typedef sequence<uint64> UnboundedUInt64SeqType;
-    typedef sequence<float> UnboundedFloatSeqType;
-    typedef sequence<double> UnboundedDoubleSeqType;
-
-    typedef sequence<octet, 5> BoundedOctetSeqType;
-    typedef sequence<char, 5> BoundedCharSeqType;
-    typedef sequence<boolean, 5> BoundedBooleanSeqType;
-    typedef sequence<int16, 5> BoundedInt16SeqType;
-    typedef sequence<int32, 5> BoundedInt32SeqType;
-    typedef sequence<int64, 5> BoundedInt64SeqType;
-    typedef sequence<uint16, 5> BoundedUInt16SeqType;
-    typedef sequence<uint32, 5> BoundedUInt32SeqType;
-    typedef sequence<uint64, 5> BoundedUInt64SeqType;
-    typedef sequence<float, 5> BoundedFloatSeqType;
-    typedef sequence<double, 5> BoundedDoubleSeqType;
-
-    typedef sequence<octet, 2048> OctetSequenceType;
-
     @topic
     struct TestPrimitive {
         boolean BoolField;
@@ -39,38 +13,6 @@ module CdrWrapper {
         float FloatField;
         double DoubleField;
         char CharField;
-    };
-
-    @topic
-    struct TestPrimitiveSequence {
-        UnboundedBooleanSeqType UnboundedBooleanSequenceField;
-        UnboundedOctetSeqType UnboundedByteSequenceField;
-        UnboundedInt16SeqType UnboundedInt16SequenceField;
-        UnboundedInt32SeqType UnboundedInt32SequenceField;
-        UnboundedInt64SeqType UnboundedInt64SequenceField;
-        UnboundedUInt16SeqType UnboundedUInt16SequenceField;
-        UnboundedUInt32SeqType UnboundedUInt32SequenceField;
-        UnboundedUInt64SeqType UnboundedUInt64SequenceField;
-        UnboundedFloatSeqType UnboundedFloatSequenceField;
-        UnboundedDoubleSeqType UnboundedDoubleSequenceField;
-        UnboundedCharSeqType UnboundedCharSequenceField;
-
-        BoundedBooleanSeqType BoundedBooleanSequenceField;
-        BoundedOctetSeqType BoundedByteSequenceField;
-        BoundedInt16SeqType BoundedInt16SequenceField;
-        BoundedInt32SeqType BoundedInt32SequenceField;
-        BoundedInt64SeqType BoundedInt64SequenceField;
-        BoundedUInt16SeqType BoundedUInt16SequenceField;
-        BoundedUInt32SeqType BoundedUInt32SequenceField;
-        BoundedUInt64SeqType BoundedUInt64SequenceField;
-        BoundedFloatSeqType BoundedFloatSequenceField;
-        BoundedDoubleSeqType BoundedDoubleSequenceField;
-        BoundedCharSeqType BoundedCharSequenceField;
-    };
-
-    @topic
-    struct KeyedOctets {
-        @key string<1024> KeyField;
-        OctetSequenceType ValueField;
+//        wchar WCharField;
     };
 };
