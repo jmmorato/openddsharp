@@ -906,12 +906,8 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           ret.append(");\n");
           break;
         case AST_PredefinedType::PT_char:
-          ret.append("    writer.WriteChar(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
         case AST_PredefinedType::PT_wchar:
-          ret.append("    writer.WriteWChar(");
+          ret.append("    writer.WriteChar(");
           ret.append(field_name);
           ret.append(");\n");
           break;
@@ -994,12 +990,8 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
               ret.append(");\n");
               break;
             case AST_PredefinedType::PT_char:
-              ret.append("    writer.WriteCharSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
             case AST_PredefinedType::PT_wchar:
-              ret.append("    writer.WriteWCharSequence(");
+              ret.append("    writer.WriteCharSequence(");
               ret.append(field_name);
               ret.append(");\n");
               break;
@@ -1164,6 +1156,7 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
               }
               break;
             case AST_PredefinedType::PT_char:
+            case AST_PredefinedType::PT_wchar:
               if (total_dim == 1) {
                 ret.append("    writer.WriteCharArray(");
                 ret.append(field_name);
@@ -1173,18 +1166,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
               } else {
                 ret.erase(0, 8);
                 ret.append(write_cdr_multi_array(field_name, "char", "WriteChar", dims, total_dim, indent));
-              }
-              break;
-            case AST_PredefinedType::PT_wchar:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteWCharArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "char", "WriteWChar", dims, total_dim, indent));
               }
               break;
             case AST_PredefinedType::PT_boolean:
@@ -1318,14 +1299,10 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           ret.append(" = reader.ReadByte();\n");
           break;
         case AST_PredefinedType::PT_char:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadChar();\n");
-          break;
         case AST_PredefinedType::PT_wchar:
           ret.append("    ");
           ret.append(field_name);
-          ret.append(" = reader.ReadWChar();\n");
+          ret.append(" = reader.ReadChar();\n");
           break;
         case AST_PredefinedType::PT_boolean:
           ret.append("    ");
@@ -1401,14 +1378,10 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
               ret.append(" = reader.ReadByteSequence();\n");
               break;
             case AST_PredefinedType::PT_char:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadCharSequence();\n");
-              break;
             case AST_PredefinedType::PT_wchar:
               ret.append("    ");
               ret.append(field_name);
-              ret.append(" = reader.ReadWCharSequence();\n");
+              ret.append(" = reader.ReadCharSequence();\n");
               break;
             case AST_PredefinedType::PT_boolean:
               ret.append("    ");
@@ -1557,6 +1530,7 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
               }
               break;
             case AST_PredefinedType::PT_char:
+            case AST_PredefinedType::PT_wchar:
               if (total_dim == 1) {
                 ret.append("    ");
                 ret.append(field_name);
@@ -1564,18 +1538,7 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
                 ret.append(std::to_string(dims[0]->ev()->u.ulval));
                 ret.append(");\n");
               } else {
-                ret.append(read_cdr_multi_array(field_name, "char", "ReadChar", dims, total_dim, indent));
-              }
-              break;
-            case AST_PredefinedType::PT_wchar:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadWCharArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                  ret.append(read_cdr_multi_array(field_name, "char", "ReadWChar", dims, total_dim, indent));
+                  ret.append(read_cdr_multi_array(field_name, "char", "ReadChar", dims, total_dim, indent));
               }
               break;
             case AST_PredefinedType::PT_boolean:

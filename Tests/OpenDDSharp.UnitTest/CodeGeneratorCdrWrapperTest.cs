@@ -128,7 +128,6 @@ namespace OpenDDSharp.UnitTest
                 FloatField = 42.42f,
                 DoubleField = -23.23,
                 CharField = 'A',
-                WCharField = 'あ',
             };
             ret = dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -154,7 +153,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(data.FloatField, received.FloatField);
             Assert.AreEqual(data.DoubleField, received.DoubleField);
             Assert.AreEqual(data.CharField, received.CharField);
-            Assert.AreEqual(data.WCharField, received.WCharField);
 
             Assert.AreEqual(typeof(short), data.Int16Field.GetType());
             Assert.AreEqual(typeof(int), data.Int32Field.GetType());
@@ -167,7 +165,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(float), data.FloatField.GetType());
             Assert.AreEqual(typeof(double), data.DoubleField.GetType());
             Assert.AreEqual(typeof(char), data.CharField.GetType());
-            Assert.AreEqual(typeof(char), data.WCharField.GetType());
 
             Assert.AreEqual(0, defaultStruct.Int16Field);
             Assert.AreEqual(0, defaultStruct.Int32Field);
@@ -180,7 +177,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, defaultStruct.FloatField);
             Assert.AreEqual(0, defaultStruct.DoubleField);
             Assert.AreEqual('\0', defaultStruct.CharField);
-            Assert.AreEqual('\0', defaultStruct.WCharField);
 
             Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteDataWriter(dw));
             Assert.AreEqual(ReturnCode.Ok, _publisher.DeleteContainedEntities());
@@ -236,8 +232,6 @@ namespace OpenDDSharp.UnitTest
                 UnboundedBooleanSequenceField = { true, true, false, false, true, true, false },
                 BoundedCharSequenceField = { 'z' },
                 UnboundedCharSequenceField = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' },
-                BoundedWCharSequenceField = { 'あ' },
-                UnboundedWCharSequenceField = { 'あ', 'な', 'た', 'の', '基', '地', 'は', 'す' },
                 BoundedByteSequenceField = { 0x01, 0x02, 0x03 },
                 UnboundedByteSequenceField = { 0x04, 0x05, 0x06, 0x07, 0x08 },
                 BoundedInt16SequenceField = { -1, 2, -3 },
@@ -275,8 +269,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.UnboundedBooleanSequenceField.SequenceEqual(received.UnboundedBooleanSequenceField));
             Assert.IsTrue(data.BoundedCharSequenceField.SequenceEqual(received.BoundedCharSequenceField));
             Assert.IsTrue(data.UnboundedCharSequenceField.SequenceEqual(received.UnboundedCharSequenceField));
-            Assert.IsTrue(data.BoundedWCharSequenceField.SequenceEqual(received.BoundedWCharSequenceField));
-            Assert.IsTrue(data.UnboundedWCharSequenceField.SequenceEqual(received.UnboundedWCharSequenceField));
             Assert.IsTrue(data.BoundedByteSequenceField.SequenceEqual(received.BoundedByteSequenceField));
             Assert.IsTrue(data.UnboundedByteSequenceField.SequenceEqual(received.UnboundedByteSequenceField));
             Assert.IsTrue(data.BoundedInt16SequenceField.SequenceEqual(received.BoundedInt16SequenceField));
@@ -296,13 +288,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.BoundedDoubleSequenceField.SequenceEqual(received.BoundedDoubleSequenceField));
             Assert.IsTrue(data.UnboundedDoubleSequenceField.SequenceEqual(received.UnboundedDoubleSequenceField));
 
-
             Assert.AreEqual(data.BoundedBooleanSequenceField.GetType(), typeof(List<bool>));
             Assert.AreEqual(data.UnboundedBooleanSequenceField.GetType(), typeof(List<bool>));
             Assert.AreEqual(data.BoundedCharSequenceField.GetType(), typeof(List<char>));
             Assert.AreEqual(data.UnboundedCharSequenceField.GetType(), typeof(List<char>));
-            Assert.AreEqual(data.BoundedWCharSequenceField.GetType(), typeof(List<char>));
-            Assert.AreEqual(data.UnboundedWCharSequenceField.GetType(), typeof(List<char>));
             Assert.AreEqual(data.BoundedByteSequenceField.GetType(), typeof(List<byte>));
             Assert.AreEqual(data.UnboundedByteSequenceField.GetType(), typeof(List<byte>));
             Assert.AreEqual(data.BoundedInt16SequenceField.GetType(), typeof(List<short>));
@@ -330,10 +319,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, defaultStruct.BoundedCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedCharSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedCharSequenceField.Count);
-            Assert.IsNotNull(defaultStruct.BoundedWCharSequenceField);
-            Assert.AreEqual(0, defaultStruct.BoundedWCharSequenceField.Count);
-            Assert.IsNotNull(defaultStruct.UnboundedWCharSequenceField);
-            Assert.AreEqual(0, defaultStruct.UnboundedWCharSequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedByteSequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedByteSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedByteSequenceField);
@@ -418,7 +403,6 @@ namespace OpenDDSharp.UnitTest
             {
                 BooleanArrayField = new[] { true, true, false, false, true },
                 CharArrayField = new[] { 'a', 'b', 'c', 'd', 'e' },
-                WCharArrayField = new[] { 'あ', 'な', 'た', 'の', '基' },
                 ByteArrayField = new byte[] { 0x04, 0x05, 0x06, 0x07, 0x08 },
                 Int16ArrayField = new short[] { 4, -5, 6, -7, 8 },
                 UInt16ArrayField = new ushort[] { 4, 5, 6, 7, 8 },
@@ -444,7 +428,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.IsTrue(data.BooleanArrayField.SequenceEqual(received.BooleanArrayField));
             Assert.IsTrue(data.CharArrayField.SequenceEqual(received.CharArrayField));
-            Assert.IsTrue(data.WCharArrayField.SequenceEqual(received.WCharArrayField));
             Assert.IsTrue(data.ByteArrayField.SequenceEqual(received.ByteArrayField));
             Assert.IsTrue(data.Int16ArrayField.SequenceEqual(received.Int16ArrayField));
             Assert.IsTrue(data.UInt16ArrayField.SequenceEqual(received.UInt16ArrayField));
@@ -457,7 +440,6 @@ namespace OpenDDSharp.UnitTest
 
             Assert.AreEqual(typeof(bool[]), data.BooleanArrayField.GetType());
             Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
-            Assert.AreEqual(typeof(char[]), data.WCharArrayField.GetType());
             Assert.AreEqual(typeof(byte[]), data.ByteArrayField.GetType());
             Assert.AreEqual(typeof(short[]), data.Int16ArrayField.GetType());
             Assert.AreEqual(typeof(ushort[]), data.UInt16ArrayField.GetType());
@@ -478,13 +460,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(defaultStruct.CharArrayField);
             Assert.AreEqual(5, defaultStruct.CharArrayField.Length);
             foreach (var i in defaultStruct.CharArrayField)
-            {
-                Assert.AreEqual(default, i);
-            }
-
-            Assert.IsNotNull(defaultStruct.WCharArrayField);
-            Assert.AreEqual(5, defaultStruct.WCharArrayField.Length);
-            foreach (var i in defaultStruct.WCharArrayField)
             {
                 Assert.AreEqual(default, i);
             }
@@ -643,30 +618,6 @@ namespace OpenDDSharp.UnitTest
                         new[] { '9', '0' },
                         new[] { '1', '2' },
                         new[] { '3', '4' },
-                    },
-                },
-                WCharMultiArrayField = new[]
-                {
-                    new[]
-                    {
-                        new[] { 'あ', 'な' },
-                        new[] { 'た', 'の' },
-                        new[] { '基', '地' },
-                        new[] { 'は', 'す' },
-                    },
-                    new[]
-                    {
-                        new[] { 'べ', 'て' },
-                        new[] { '私', 'た' },
-                        new[] { 'ち', 'の' },
-                        new[] { 'も', 'の' },
-                    },
-                    new[]
-                    {
-                        new[] { 'で', 'す' },
-                        new[] { 'た', 'の' },
-                        new[] { '基', '地' },
-                        new[] { 'は', 'す' },
                     },
                 },
                 OctetMultiArrayField = new[]
@@ -902,7 +853,6 @@ namespace OpenDDSharp.UnitTest
 
             Assert.IsTrue(TestHelper.CompareMultiArray(data.BooleanMultiArrayField, received.BooleanMultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.CharMultiArrayField, received.CharMultiArrayField));
-            Assert.IsTrue(TestHelper.CompareMultiArray(data.WCharMultiArrayField, received.WCharMultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.OctetMultiArrayField, received.OctetMultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.Int16MultiArrayField, received.Int16MultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt16MultiArrayField, received.UInt16MultiArrayField));
@@ -915,7 +865,6 @@ namespace OpenDDSharp.UnitTest
 
             Assert.AreEqual(typeof(bool[][][]), data.BooleanMultiArrayField.GetType());
             Assert.AreEqual(typeof(char[][][]), data.CharMultiArrayField.GetType());
-            Assert.AreEqual(typeof(char[][][]), data.WCharMultiArrayField.GetType());
             Assert.AreEqual(typeof(byte[][][]), data.OctetMultiArrayField.GetType());
             Assert.AreEqual(typeof(short[][][]), data.Int16MultiArrayField.GetType());
             Assert.AreEqual(typeof(ushort[][][]), data.UInt16MultiArrayField.GetType());
@@ -934,7 +883,6 @@ namespace OpenDDSharp.UnitTest
                     {
                         Assert.AreEqual(default, defaultStruct.BooleanMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.CharMultiArrayField[i0][i1][i2]);
-                        Assert.AreEqual(default, defaultStruct.WCharMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.OctetMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.Int16MultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.UInt16MultiArrayField[i0][i1][i2]);

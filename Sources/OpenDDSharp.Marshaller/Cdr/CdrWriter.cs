@@ -159,17 +159,6 @@ public class CdrWriter
     public void WriteChar(char c) => _writer.Write(Convert.ToByte(c));
 
     /// <summary>
-    /// Writes a wide char to the stream.
-    /// </summary>
-    /// <param name="c">The wide char value to be written.</param>
-    public void WriteWChar(char c)
-    {
-        Align(2);
-        var bytes = Encoding.Unicode.GetBytes(new[] { c });
-        WriteBytes(bytes);
-    }
-
-    /// <summary>
     /// Writes a string to the stream.
     /// </summary>
     /// <param name="s">The string to be written.</param>
@@ -614,23 +603,6 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write a sequence of wide chars to the stream.
-    /// </summary>
-    /// <param name="sequence">The sequence of wide chars to be written.</param>
-    public void WriteWCharSequence(IList<char> sequence)
-    {
-        if (sequence == null)
-        {
-            WriteSequenceLength(0);
-            return;
-        }
-
-        var bytes = Encoding.Unicode.GetBytes(sequence.ToArray());
-        WriteSequenceLength((uint)sequence.Count);
-        WriteBytes(bytes);
-    }
-
-    /// <summary>
     /// Write an array of chars to the stream.
     /// </summary>
     /// <param name="array">The array of chars to be written.</param>
@@ -649,29 +621,6 @@ public class CdrWriter
 
         var bytes = Encoding.UTF8.GetBytes(array);
         WriteBytes(bytes);
-    }
-
-    /// <summary>
-    /// Write an array of wide chars to the stream.
-    /// </summary>
-    /// <param name="array">The array of wide chars to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteWCharArray(char[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteWChar('\0');
-            }
-
-            return;
-        }
-
-        foreach (var c in array)
-        {
-            WriteWChar(c);
-        }
     }
 
     /// <summary>
