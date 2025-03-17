@@ -3,8 +3,6 @@
 
 #include "ace/Basic_Types.h"
 #include "tao/Unbounded_Value_Sequence_T.h"
-#include "dds/DCPS/Serializer.h"
-#include "dds/DdsDcpsCoreC.h"
 
 class marshal {
 
@@ -500,29 +498,13 @@ public:
     static void *wchar_to_ptr(wchar_t wchar) {
       const size_t size = sizeof(wchar_t);
 
-      // Alloc memory for the pointer
+      // Alloc memory for the poninter
       void *ptr = ACE_OS::malloc(size);
 
       // Copy the bytes in the pointer
       ACE_OS::memcpy(ptr, &wchar, size);
 
       return ptr;
-    }
-
-    static DDS::Time_t dds_time_deserialize_from_bytes(const char *bytes, size_t size) {
-        const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
-        ACE_Message_Block mb(size);
-        mb.copy(bytes, size);
-        OpenDDS::DCPS::Serializer serializer(&mb, encoding);
-        DDS::Time_t time_value;
-        if (!(serializer >> time_value.sec)) {
-          throw std::runtime_error("Failed to deserialize DDS::Time_t seconds from bytes");
-        }
-
-        if (!(serializer >> time_value.nanosec)) {
-          throw std::runtime_error("Failed to deserialize DDS::Time_t nanoseconds from bytes");
-        }
-        return time_value;
     }
 };
 

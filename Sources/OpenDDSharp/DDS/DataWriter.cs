@@ -174,7 +174,7 @@ public class DataWriter : Entity
     /// <remarks>
     /// <para>This operation is intended to be used only if the <see cref="DataWriter" /> has
     /// configured <see cref="ReliabilityQosPolicyKind.ReliableReliabilityQos" />.
-    /// Otherwise, the operation will return immediately with <see cref="ReturnCode.Ok" />.</para>
+    /// Otherwise the operation will return immediately with <see cref="ReturnCode.Ok" />.</para>
     /// <para>A return value of <see cref="ReturnCode.Ok" /> indicates that all the samples
     /// written have been acknowledged by all reliable matched data readers; a return value of
     /// <see cref="ReturnCode.Timeout" /> indicates that maxWait
@@ -256,7 +256,7 @@ public class DataWriter : Entity
     /// <see cref="LivelinessQosPolicyKind.ManualByParticipantLivelinessQos" />
     /// or <see cref="LivelinessQosPolicyKind.ManualByTopicLivelinessQos" />. Otherwise, it has no effect.</para>
     /// <para>NOTE: Writing data via the write operation on a <see cref="DataWriter" /> asserts liveliness on
-    /// the <see cref="DataWriter" /> itself and its <see cref="DomainParticipant" />. Consequently, the use of
+    /// the <see cref="DataWriter" /> itself and its <see cref="DomainParticipant" />. Consequently the use of
     /// AssertLiveliness is only needed if the application is not writing data regularly.</para>
     /// </remarks>
     /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
@@ -372,7 +372,7 @@ public class DataWriter : Entity
             else
             {
                 publisher = new Publisher(ptrPublisher);
-                EntityManager.Instance.Add(((Entity)publisher).ToNative(), publisher);
+                EntityManager.Instance.Add((publisher as Entity).ToNative(), publisher);
             }
         }
 

@@ -793,7 +793,7 @@ namespace OpenDDSharp.UnitTest
             // https://github.com/OpenDDS/OpenDDS/blob/master/docs/design/RTPS
 
             // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
-            // because it is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
+            // because is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
             // WORKAROUND: Create another participant for the DataReader.
             var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);

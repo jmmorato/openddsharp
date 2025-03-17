@@ -76,18 +76,4 @@ public interface ITypeSupport<T> : ITypeSupport
     /// <param name="encoded">The sample JSON representation.</param>
     /// <returns>The decoded sample.</returns>
     T DecodeFromString(string encoded);
-
-    /// <summary>
-    /// Encodes a sample into a byte array using CDR format.
-    /// </summary>
-    /// <param name="sample">The sample to be encoded.</param>
-    /// <returns>The CDR sample representation.</returns>
-    byte[] EncodeToBytes(T sample);
-
-    /// <summary>
-    /// Decodes a CDR byte array into a sample.
-    /// </summary>
-    /// <param name="encoded">The sample CDR representation.</param>
-    /// <returns>The decoded sample.</returns>
-    T DecodeFromBytes(byte[] encoded);
 }

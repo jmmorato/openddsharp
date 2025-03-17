@@ -58,7 +58,7 @@ public struct Timestamp : IEquatable<Timestamp>
     /// Converts the time value to a CDR representation.
     /// </summary>
     /// <returns>The byte span serialized.</returns>
-    public ReadOnlySpan<byte> ToCDR()
+    internal ReadOnlySpan<byte> ToCDR()
     {
         var writer = new Marshaller.Cdr.CdrWriter();
         writer.WriteInt32(Seconds);
@@ -70,7 +70,7 @@ public struct Timestamp : IEquatable<Timestamp>
     /// Updates the time value from a CDR representation.
     /// </summary>
     /// <param name="data">The byte span serialized.</param>
-    public void FromCDR(ReadOnlySpan<byte> data)
+    internal void FromCDR(ReadOnlySpan<byte> data)
     {
         var reader = new Marshaller.Cdr.CdrReader(data.ToArray());
         Seconds = reader.ReadInt32();
