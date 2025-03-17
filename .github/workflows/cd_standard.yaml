@@ -402,22 +402,22 @@ jobs:
       uses: tj-actions/branch-names@v8
 
     - name: Download OpenDDS Native win-x86
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         name: opendds-win-x86-${{ github.run_number }}
 
     - name: Download OpenDDS Native win-x64
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         name: opendds-win-x64-${{ github.run_number }}
 
     - name: Download OpenDDS Native linux-x64
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         name: opendds-linux-x64-${{ github.run_number }}
 
     - name: Download OpenDDS Native osx-x64
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
         name: opendds-osx-x64-${{ github.run_number }}
 
@@ -543,7 +543,7 @@ jobs:
           useConfigFile: true
 
       - name: Download OpenDDSharp NuGets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: openddsharp-nuget-${{ github.run_number }}
           path: ${{ github.workspace }}/nupkg
@@ -625,7 +625,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download OpenDDSharp NuGets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: openddsharp-nuget-${{ github.run_number }}
           path: ${{ github.workspace }}/Release
