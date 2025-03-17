@@ -24,769 +24,643 @@ using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
 
-#if NET7_0_OR_GREATER
-using System.Runtime.CompilerServices;
-#endif
-
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// A Subscriber is the object responsible for the actual reception of the data resulting from its subscriptions.
-/// </summary>
-/// <remarks>
-/// <para>
-/// A Subscriber acts on the behalf of one or several <see cref="DataReader" /> objects that are related to it.
-/// When it receives data (from the other parts of the system), it builds the list of concerned
-/// <see cref="DataReader" /> objects, and then indicates to the application that data is available, through its
-/// listener or by enabling related conditions. The application can access the list of concerned
-/// <see cref="DataReader" /> objects through the operation GetDataReaders and then access the data available though
-/// operations on the <see cref="DataReader" />.
-/// </para>
-/// <para>All operations except for the operations <see cref="SetQos" />, <see cref="GetQos" />, SetListener,
-/// <see cref="GetListener" />, <see cref="Entity.Enable" />, <see cref="Entity.StatusCondition" />, CreateDataReader,
-/// return the value <see cref="ReturnCode.NotEnabled" /> if the Subscriber has not been enabled yet.</para>
-/// </remarks>
-public class Subscriber : Entity
+namespace OpenDDSharp.DDS
 {
-    #region Fields
-    private readonly IntPtr _native;
-    #endregion
-
-    #region Properties
     /// <summary>
-    /// Gets the attached <see cref="SubscriberListener"/>.
-    /// </summary>
-    [SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Keep coherency with the setter method and DDS API.")]
-    public SubscriberListener Listener { get; internal set; }
-
-    /// <summary>
-    /// Gets the <see cref="DomainParticipant" /> to which the <see cref="Subscriber" /> belongs.
-    /// </summary>
-    public DomainParticipant Participant => GetParticipant();
-    #endregion
-
-    #region Constructors
-    internal Subscriber(IntPtr native) : base(NarrowBase(native))
-    {
-        _native = native;
-    }
-    #endregion
-
-    #region Methods
-    /// <summary>
-    /// Creates a new <see cref="DataReader" /> with the default QoS policies and without listener attached.
+    /// A Subscriber is the object responsible for the actual reception of the data resulting from its subscriptions.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.
-    /// </para>
-    /// <para>
-    /// The <see cref="ITopicDescription"/> passed to this operation must have been created from the same
-    /// <see cref="DomainParticipant" /> that was used to create this <see cref="Subscriber" />. If the
-    /// <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation
-    /// will fail and return a <see langword="null"/> result.</para>
+    /// <para>A Subscriber acts on the behalf of one or several <see cref="DataReader" /> objects that are related to it. When it receives data (from the
+    /// other parts of the system), it builds the list of concerned <see cref="DataReader" /> objects, and then indicates to the application that data is
+    /// available, through its listener or by enabling related conditions. The application can access the list of concerned <see cref="DataReader" />
+    /// objects through the operation GetDataReaders and then access the data available though operations on the <see cref="DataReader" />.</para>
+    /// <para>All operations except for the operations <see cref="SetQos" />, <see cref="GetQos" />, SetListener,
+    /// <see cref="GetListener" />, <see cref="Entity.Enable" />, <see cref="Entity.StatusCondition" />, CreateDataReader,
+    /// return the value <see cref="ReturnCode.NotEnabled" /> if the Subscriber has not been enabled yet.</para>
     /// </remarks>
-    /// <param name="topicDescription">
-    /// The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.
-    /// </param>
-    /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
-    public DataReader CreateDataReader(ITopicDescription topicDescription)
+    public class Subscriber : Entity
     {
-        return CreateDataReader(topicDescription, null);
-    }
+        #region Fields
+        private readonly IntPtr _native;
+        #endregion
 
-    /// <summary>
-    /// Creates a new <see cref="DataReader" /> with the desired QoS policies and without listener attached.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.
-    /// </para>
-    /// <para>
-    /// The <see cref="ITopicDescription"/> passed to this operation must have been created from the same
-    /// <see cref="DomainParticipant" /> that was used to create this <see cref="Subscriber" />. If the
-    /// <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />,
-    /// the operation will fail and return a <see langword="null"/> result.</para>
-    /// </remarks>
-    /// <param name="topicDescription">
-    /// The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.
-    /// </param>
-    /// <param name="qos">
-    /// The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.
-    /// </param>
-    /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
-    public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos)
-    {
-        return CreateDataReader(topicDescription, qos, null, StatusMask.DefaultStatusMask);
-    }
+        #region Properties
+        /// <summary>
+        /// Gets the attached <see cref="SubscriberListener"/>.
+        /// </summary>
+        [SuppressMessage("Naming", "CA1721:Property names should not match get methods", Justification = "Keep coherency with the setter method and DDS API.")]
+        public SubscriberListener Listener { get; internal set; }
 
-    /// <summary>
-    /// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified
-    /// <see cref="DataReaderListener" />. The specified <see cref="DataReaderListener" /> will be attached with the
-    /// default <see cref="StatusMask" />.
-    /// </summary>
-    /// <param name="topicDescription">
-    /// The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.
-    /// </param>
-    /// <param name="qos">
-    /// The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.
-    /// </param>
-    /// <param name="listener">
-    /// The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.
-    /// </param>
-    /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
-    public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos, DataReaderListener listener)
-    {
-        return CreateDataReader(topicDescription, qos, listener, StatusMask.DefaultStatusMask);
-    }
+        /// <summary>
+        /// Gets the <see cref="DomainParticipant" /> to which the <see cref="Subscriber" /> belongs.
+        /// </summary>
+        public DomainParticipant Participant => GetParticipant();
+        #endregion
 
-    /// <summary>
-    /// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified
-    /// <see cref="DataReaderListener" />.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.
-    /// </para>
-    /// <para>
-    /// The <see cref="ITopicDescription"/> passed to this operation must have been created from the same
-    /// <see cref="DomainParticipant" /> that was used to create this <see cref="Subscriber" />.
-    /// If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />,
-    /// the operation will fail and return a <see langword="null"/> result.</para>
-    /// </remarks>
-    /// <param name="topicDescription">
-    /// The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.
-    /// </param>
-    /// <param name="qos">
-    /// The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.
-    /// </param>
-    /// <param name="listener">
-    /// The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.
-    /// </param>
-    /// <param name="statusMask">
-    /// The <see cref="StatusMask" /> of which status changes the listener should be notified.
-    /// </param>
-    /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
-    public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos, DataReaderListener listener, StatusMask statusMask)
-    {
-        if (topicDescription is null)
+        #region Constructors
+        internal Subscriber(IntPtr native) : base(NarrowBase(native))
         {
-            throw new ArgumentNullException(nameof(topicDescription));
+            _native = native;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the default QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
+        /// <para>The <see cref="ITopicDescription"/> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to
+        /// create this <see cref="Subscriber" />. If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation will fail and
+        /// return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataReader CreateDataReader(ITopicDescription topicDescription)
+        {
+            return CreateDataReader(topicDescription, null);
         }
 
-        DataReaderQosWrapper qosWrapper = default;
-        if (qos is null)
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the desired QoS policies and without listener attached.
+        /// </summary>
+        /// <remarks>
+        /// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
+        /// <para>The <see cref="ITopicDescription"/> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to
+        /// create this <see cref="Subscriber" />. If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation will fail and
+        /// return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos)
         {
-            qos = new DataReaderQos();
-            var ret = GetDefaultDataReaderQos(qos);
-            if (ret == ReturnCode.Ok)
+            return CreateDataReader(topicDescription, qos, null, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="DataReaderListener" />.
+        /// The specified <see cref="DataReaderListener" /> will be attached with the default <see cref="StatusMask" />.
+        /// </summary>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
+        /// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos, DataReaderListener listener)
+        {
+            return CreateDataReader(topicDescription, qos, listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DataReader" /> with the desired QoS policies and attaches to it the specified <see cref="DataReaderListener" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The returned <see cref="DataReader" /> will be attached and belong to the <see cref="Subscriber" />.</para>
+        /// <para>The <see cref="ITopicDescription"/> passed to this operation must have been created from the same <see cref="DomainParticipant" /> that was used to
+        /// create this <see cref="Subscriber" />. If the <see cref="ITopicDescription"/> was created from a different <see cref="DomainParticipant" />, the operation will fail and
+        /// return a <see langword="null"/> result.</para>
+        /// </remarks>
+        /// <param name="topicDescription">The <see cref="ITopicDescription" /> that the <see cref="DataReader" /> will be associated with.</param>
+        /// <param name="qos">The <see cref="DataReaderQos" /> policies to be used for creating the new <see cref="DataReader" />.</param>
+        /// <param name="listener">The <see cref="DataReaderListener" /> to be attached to the newly created <see cref="DataReader" />.</param>
+        /// <param name="statusMask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The newly created <see cref="DataReader" /> on success, otherwise <see langword="null"/>.</returns>
+        public DataReader CreateDataReader(ITopicDescription topicDescription, DataReaderQos qos, DataReaderListener listener, StatusMask statusMask)
+        {
+            if (topicDescription is null)
             {
-                qosWrapper = qos.ToNative();
-            }
-        }
-        else
-        {
-            qosWrapper = qos.ToNative();
-        }
-
-        IntPtr nativeListener = IntPtr.Zero;
-        if (listener != null)
-        {
-            nativeListener = listener.ToNative();
-        }
-
-        IntPtr td = topicDescription.ToNativeTopicDescription();
-        IntPtr native = UnsafeNativeMethods.CreateDataReader(_native, td, qosWrapper, nativeListener, statusMask);
-
-        qos.Release();
-
-        if (native.Equals(IntPtr.Zero))
-        {
-            return null;
-        }
-
-        var dr = new DataReader(native)
-        {
-            Listener = listener,
-        };
-
-        EntityManager.Instance.Add((dr as Entity).ToNative(), dr);
-        ContainedEntities.Add(dr);
-
-        return dr;
-    }
-
-    /// <summary>
-    /// Deletes a <see cref="DataReader" /> that belongs to the <see cref="Subscriber" />.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// If the <see cref="DataReader" /> does not belong to the <see cref="Subscriber" />, the operation returns the
-    /// error <see cref="ReturnCode.PreconditionNotMet" />.
-    /// </para>
-    /// <para>
-    /// The deletion of a <see cref="DataReader" /> is not allowed if there are any existing
-    /// <see cref="ReadCondition" /> or <see cref="QueryCondition" /> objects that are attached to the
-    /// <see cref="DataReader" />. If the DeleteDataReader operation is called on a <see cref="DataReader" /> with any
-    /// of these existing objects attached to it, it will return <see cref="ReturnCode.PreconditionNotMet" />.
-    /// </para>
-    /// <para>
-    /// The DeleteDataReader operation must be called on the same <see cref="Subscriber" /> object used to create the
-    /// <see cref="DataReader" />. If DeleteDataReader is called on a different <see cref="Subscriber" />, the operation
-    /// will have no effect and it will return <see cref="ReturnCode.PreconditionNotMet" />.
-    /// </para>
-    /// </remarks>
-    /// <param name="dataReader">The <see cref="DataReader" /> to be deleted.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode DeleteDataReader(DataReader dataReader)
-    {
-        if (dataReader == null)
-        {
-            return ReturnCode.Ok;
-        }
-
-        ReturnCode ret = UnsafeNativeMethods.DeleteDataReader(_native, dataReader.ToNative());
-        if (ret == ReturnCode.Ok)
-        {
-            EntityManager.Instance.Remove((dataReader as Entity).ToNative());
-            ContainedEntities.Remove(dataReader);
-        }
-
-        return ret;
-    }
-
-    /// <summary>
-    /// This operation deletes all the entities that were created by means of the "create" operations on the
-    /// <see cref="Subscriber" />. That is, it deletes all contained <see cref="DataReader" /> objects. This pattern
-    /// is applied recursively. In this manner the operation DeleteContainedEntities on the <see cref="Subscriber" />
-    /// will end up deleting all the entities recursively contained in the <see cref="Subscriber" />, that
-    /// is also the <see cref="QueryCondition" /> and <see cref="ReadCondition" /> objects belonging to the
-    /// contained <see cref="DataReader" />s.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The operation will return <see cref="ReturnCode.PreconditionNotMet" /> if any of the contained entities is in a
-    /// state where it cannot be deleted.
-    /// </para>
-    /// <para>
-    /// Once DeleteContainedEntities returns successfully, the application may delete the <see cref="Subscriber" />
-    /// knowing that it has no contained <see cref="DataReader" /> objects.</para>
-    /// </remarks>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode DeleteContainedEntities()
-    {
-        ReturnCode ret = UnsafeNativeMethods.SubscriberDeleteContainedEntities(_native);
-        if (ret == ReturnCode.Ok)
-        {
-            foreach (Entity e in ContainedEntities)
-            {
-                EntityManager.Instance.Remove(e.ToNative());
-                e.ClearContainedEntities();
+                throw new ArgumentNullException(nameof(topicDescription));
             }
 
-            ContainedEntities.Clear();
-        }
-
-        return ret;
-    }
-
-    /// <summary>
-    /// Gets a previously-created <see cref="DataReader" /> belonging to the <see cref="Subscriber" /> that is attached to a <see cref="Topic" /> with a
-    /// matching topicName. If no such <see cref="DataReader" /> exists, the operation will return <see langword="null"/>.
-    /// </summary>
-    /// <remarks>
-    /// <para>If multiple <see cref="DataReader" />s attached to the <see cref="Subscriber" /> satisfy this condition, then the operation will return one of them.
-    /// It is not specified which one.</para>
-    /// <para>The use of this operation on the built-in <see cref="Subscriber" /> allows access to the built-in <see cref="DataReader" /> entities for the built-in topics</para>
-    /// </remarks>
-    /// <param name="topicName">The <see cref="Topic" />'s name related with the <see cref="DataReader" /> to look up.</param>
-    /// <returns>The <see cref="DataReader" />, if it exists, otherwise <see langword="null"/>.</returns>
-    public DataReader LookupDataReader(string topicName)
-    {
-        IntPtr native = UnsafeNativeMethods.LookupDataReader(_native, topicName);
-
-        DataReader reader = null;
-
-        if (!native.Equals(IntPtr.Zero))
-        {
-            IntPtr ptr = DataReader.NarrowBase(native);
-
-            if (!ptr.Equals(IntPtr.Zero))
+            DataReaderQosWrapper qosWrapper = default;
+            if (qos is null)
             {
-                Entity entity = EntityManager.Instance.Find(ptr);
-                if (entity != null)
+                qos = new DataReaderQos();
+                var ret = GetDefaultDataReaderQos(qos);
+                if (ret == ReturnCode.Ok)
                 {
-                    reader = (DataReader)entity;
+                    qosWrapper = qos.ToNative();
                 }
-                else
-                {
-                    reader = new DataReader(native);
-                    EntityManager.Instance.Add((reader as Entity).ToNative(), reader);
-                }
-            }
-        }
-
-        return reader;
-    }
-
-    /// <summary>
-    /// Allows the application to access the <see cref="DataReader" /> objects that contain samples with any sample states,
-    /// any view states, and any instance states.
-    /// </summary>
-    /// <remarks>
-    /// <para>If the <see cref="PresentationQosPolicy" /> of the <see cref="Subscriber" /> to which the <see cref="DataReader" /> belongs has the
-    /// <see cref="PresentationQosPolicy.AccessScope" /> set to <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" />,
-    /// this operation should only be invoked inside a <see cref="BeginAccess" />/<see cref="EndAccess" /> block. Otherwise it will return the error
-    /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
-    /// <para>Depending on the setting of the <see cref="PresentationQosPolicy" />, the returned collection of <see cref="DataReader" /> objects may
-    /// be a 'set' containing each <see cref="DataReader" /> at most once in no specified order, or a 'list' containing each <see cref="DataReader" /> one or more
-    /// times in a specific order.
-    /// <list type="number">
-    /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.InstancePresentationQos" /> or
-    /// <see cref="PresentationQosPolicyAccessScopeKind.TopicPresentationQos" /> the returned collection behaves as a 'set'.</description></item>
-    /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" /> and
-    /// <see cref="PresentationQosPolicy.OrderedAccess" /> is set to <see langword="true"/>, then the returned collection behaves as a 'list'.</description></item>
-    /// </list></para>
-    /// <para>This difference is due to the fact that, in the second situation it is required to access samples belonging to different <see cref="DataReader" />
-    /// objects in a particular order. In this case, the application should process each <see cref="DataReader" /> in the same order it appears in the
-    /// 'list' and Read or Take exactly one sample from each <see cref="DataReader" />.</para>
-    /// </remarks>
-    /// <param name="readers">The <see cref="DataReader" /> collection to be filled up.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode GetDataReaders(IList<DataReader> readers)
-    {
-        return GetDataReaders(readers, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
-    }
-
-    /// <summary>
-    /// Allows the application to access the <see cref="DataReader" /> objects that contain samples with the specified sampleStates,
-    /// viewStates, and instanceStates.
-    /// </summary>
-    /// <remarks>
-    /// <para>If the <see cref="PresentationQosPolicy" /> of the <see cref="Subscriber" /> to which the <see cref="DataReader" /> belongs has the
-    /// <see cref="PresentationQosPolicy.AccessScope" /> set to <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" />,
-    /// this operation should only be invoked inside a <see cref="BeginAccess" />/<see cref="EndAccess" /> block. Otherwise it will return the error
-    /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
-    /// <para>Depending on the setting of the <see cref="PresentationQosPolicy" />, the returned collection of <see cref="DataReader" /> objects may
-    /// be a 'set' containing each <see cref="DataReader" /> at most once in no specified order, or a 'list' containing each <see cref="DataReader" /> one or more
-    /// times in a specific order.
-    /// <list type="number">
-    /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.InstancePresentationQos" /> or
-    /// <see cref="PresentationQosPolicyAccessScopeKind.TopicPresentationQos" /> the returned collection behaves as a 'set'.</description></item>
-    /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" /> and
-    /// <see cref="PresentationQosPolicy.OrderedAccess" /> is set to <see langword="true"/>, then the returned collection behaves as a 'list'.</description></item>
-    /// </list></para>
-    /// <para>This difference is due to the fact that, in the second situation it is required to access samples belonging to different <see cref="DataReader" />
-    /// objects in a particular order. In this case, the application should process each <see cref="DataReader" /> in the same order it appears in the
-    /// 'list' and Read or Take exactly one sample from each <see cref="DataReader" />.</para>
-    /// </remarks>
-    /// <param name="readers">The <see cref="DataReader" /> collection to be filled up.</param>
-    /// <param name="sampleStates">The returned <see cref="DataReader" /> in the collection must contain samples that have one of the sample states.</param>
-    /// <param name="viewStates">The returned <see cref="DataReader" /> in the collection must contain samples that have one of the view states.</param>
-    /// <param name="instanceStates">The returned <see cref="DataReader" /> in the collection must contain samples that have one of the instance states.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode GetDataReaders(IList<DataReader> readers, SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
-    {
-        if (readers == null)
-        {
-            return ReturnCode.BadParameter;
-        }
-
-        readers.Clear();
-
-        IntPtr ptr = IntPtr.Zero;
-        ReturnCode ret = UnsafeNativeMethods.GetDataReaders(_native, ref ptr, sampleStates, viewStates, instanceStates);
-
-        if (ret == ReturnCode.Ok && !ptr.Equals(IntPtr.Zero))
-        {
-            IList<IntPtr> lst = new List<IntPtr>();
-            MarshalHelper.PtrToSequence(ptr, ref lst);
-            if (lst != null)
-            {
-                foreach (IntPtr ptrReader in lst)
-                {
-                    IntPtr ptrEnity = DataReader.NarrowBase(ptrReader);
-
-                    var entity = EntityManager.Instance.Find(ptrEnity);
-                    if (entity is DataReader dataReader)
-                    {
-                        readers.Add(dataReader);
-                    }
-                    else
-                    {
-                        readers.Add(new DataReader(ptrReader));
-                    }
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /// <summary>
-    /// Invokes the operation OnDataAvailable on the <see cref="DataReaderListener" /> objects attached to contained <see cref="DataReader" />
-    /// entities with a <see cref="StatusKind.DataAvailableStatus" /> that is considered changed.
-    /// </summary>
-    /// <remarks>
-    /// This operation is typically invoked from the OnDataOnReaders operation in the <see cref="SubscriberListener" />. That way the
-    /// <see cref="SubscriberListener" /> can delegate to the <see cref="DataReaderListener" /> objects the handling of the data.
-    /// </remarks>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode NotifyDataReaders()
-    {
-        return UnsafeNativeMethods.NotifyDataReaders(_native);
-    }
-
-    /// <summary>
-    /// Gets the <see cref="Subscriber" /> QoS policies.
-    /// </summary>
-    /// <param name="qos">The <see cref="SubscriberQos" /> to be filled up.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode GetQos(SubscriberQos qos)
-    {
-        if (qos == null)
-        {
-            return ReturnCode.BadParameter;
-        }
-
-        SubscriberQosWrapper qosWrapper = default;
-        var ret = UnsafeNativeMethods.GetQos(_native, ref qosWrapper);
-
-        if (ret == ReturnCode.Ok)
-        {
-            qos.FromNative(qosWrapper);
-        }
-
-        qos.Release();
-
-        return ret;
-    }
-
-    /// <summary>
-    /// Sets the <see cref="Subscriber" /> QoS policies.
-    /// </summary>
-    /// <param name="qos">The <see cref="SubscriberQos" /> to be set.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode SetQos(SubscriberQos qos)
-    {
-        if (qos == null)
-        {
-            return ReturnCode.BadParameter;
-        }
-
-        var qosNative = qos.ToNative();
-
-        var ret = UnsafeNativeMethods.SetQos(_native, qosNative);
-
-        qos.Release();
-
-        return ret;
-    }
-
-    /// <summary>
-    /// Allows access to the attached <see cref="SubscriberListener" />.
-    /// </summary>
-    /// <returns>The attached <see cref="SubscriberListener" />.</returns>
-    [Obsolete(nameof(GetListener) + " is deprecated, please use Listener property instead.")]
-    [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
-    public SubscriberListener GetListener()
-    {
-        return Listener;
-    }
-
-    /// <summary>
-    /// Sets the <see cref="SubscriberListener" /> using the <see cref="StatusMask.DefaultStatusMask" />.
-    /// </summary>
-    /// <param name="listener">The <see cref="SubscriberListener" /> to be set.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode SetListener(SubscriberListener listener)
-    {
-        return SetListener(listener, StatusMask.DefaultStatusMask);
-    }
-
-    /// <summary>
-    /// Sets the <see cref="SubscriberListener" />.
-    /// </summary>
-    /// <param name="listener">The <see cref="SubscriberListener" /> to be set.</param>
-    /// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode SetListener(SubscriberListener listener, StatusMask mask)
-    {
-        Listener = listener;
-        IntPtr ptr = IntPtr.Zero;
-        if (listener != null)
-        {
-            ptr = listener.ToNative();
-        }
-
-        return UnsafeNativeMethods.SubscriberSetListener(_native, ptr, mask);
-    }
-
-    /// <summary>
-    /// Indicates that the application is about to access the data samples in any of the <see cref="DataReader" /> objects attached to
-    /// the <see cref="Subscriber" />.
-    /// </summary>
-    /// <remarks>
-    /// <para>The application is required to use this operation only if <see cref="PresentationQosPolicy" /> of the <see cref="Subscriber" /> to which the
-    /// <see cref="DataReader" /> belongs has the <see cref="PresentationQosPolicy.AccessScope" /> set to
-    /// <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" />.</para>
-    /// <para>In the aforementioned case, the operation BeginAccess must be called prior to calling any of the sample-accessing operations,
-    /// namely: GetDataReaders on the <see cref="Subscriber" /> and Read, Take on any <see cref="DataReader" />.
-    /// Otherwise the sample-accessing operations will return the error <see cref="ReturnCode.PreconditionNotMet" />. Once the application has
-    /// finished accessing the data samples it must call <see cref="EndAccess" />.</para>
-    /// <para>The calls to BeginAccess/<see cref="EndAccess" /> may be nested. In that case, the application must call <see cref="EndAccess" /> as many times as it
-    /// called BeginAccess.</para>
-    /// </remarks>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode BeginAccess()
-    {
-        return UnsafeNativeMethods.BeginAccess(_native);
-    }
-
-    /// <summary>
-    /// Indicates that the application has finished accessing the data samples in <see cref="DataReader" /> objects managed by the <see cref="Subscriber" />.
-    /// </summary>
-    /// <remarks>
-    /// <para>This operation must be used to 'close' a corresponding <see cref="BeginAccess" />.</para>
-    /// <para>After calling EndAccess the application should no longer access any of the data or <see cref="SampleInfo" /> elements returned from the
-    /// sample-accessing operations. This call must close a previous call to <see cref="BeginAccess" /> otherwise the operation will return the error
-    /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
-    /// </remarks>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode EndAccess()
-    {
-        return UnsafeNativeMethods.EndAccess(_native);
-    }
-
-    /// <summary>
-    /// Gets the default value of the <see cref="DataReader" /> QoS, that is, the QoS policies which will be used for newly
-    /// created <see cref="DataReader" /> entities in the case where the QoS policies are defaulted in the CreateDataReader operation.
-    /// </summary>
-    /// <remarks>
-    /// The values retrieved GetDefaultDataReaderQos will match the set of values specified on the last successful call to
-    /// <see cref="SetDefaultDataReaderQos" />, or else, if the call was never made, the default DDS standard values.
-    /// </remarks>
-    /// <param name="qos">The <see cref="DataReaderQos" /> to be filled up.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode GetDefaultDataReaderQos(DataReaderQos qos)
-    {
-        if (qos is null)
-        {
-            return ReturnCode.BadParameter;
-        }
-
-        DataReaderQosWrapper qosWrapper = default;
-        var ret = UnsafeNativeMethods.GetDefaultDataReaderQos(_native, ref qosWrapper);
-
-        if (ret == ReturnCode.Ok)
-        {
-            qos.FromNative(qosWrapper);
-        }
-
-        qos.Release();
-
-        return ret;
-    }
-
-    /// <summary>
-    /// Sets a default value of the <see cref="DataReader" /> QoS policies which will be used for newly created <see cref="DataReader" /> entities
-    /// in the case where the QoS policies are defaulted in the CreateDataReader operation.
-    /// </summary>
-    /// <remarks>
-    /// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
-    /// return <see cref="ReturnCode.InconsistentPolicy" />.
-    /// </remarks>
-    /// <param name="qos">The default <see cref="DataReaderQos" /> to be set.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode SetDefaultDataReaderQos(DataReaderQos qos)
-    {
-        if (qos is null)
-        {
-            return ReturnCode.BadParameter;
-        }
-
-        var qosNative = qos.ToNative();
-        var ret = UnsafeNativeMethods.SetDefaultDataReaderQos(_native, qosNative);
-        qos.Release();
-
-        return ret;
-    }
-
-    internal static IntPtr NarrowBase(IntPtr ptr)
-    {
-        return UnsafeNativeMethods.SubscriberNativeNarrowBase(ptr);
-    }
-
-    internal new IntPtr ToNative()
-    {
-        return _native;
-    }
-
-    private DomainParticipant GetParticipant()
-    {
-        var ptrParticipant = UnsafeNativeMethods.SubscriberGetParticipant(_native);
-
-        DomainParticipant participant = null;
-
-        if (!ptrParticipant.Equals(IntPtr.Zero))
-        {
-            IntPtr ptr = DomainParticipant.NarrowBase(ptrParticipant);
-
-            Entity entity = EntityManager.Instance.Find(ptr);
-            if (entity != null)
-            {
-                participant = (DomainParticipant)entity;
             }
             else
             {
-                participant = new DomainParticipant(ptrParticipant);
-                EntityManager.Instance.Add(ptrParticipant, participant);
+                qosWrapper = qos.ToNative();
             }
+
+            IntPtr nativeListener = IntPtr.Zero;
+            if (listener != null)
+            {
+                nativeListener = listener.ToNative();
+            }
+
+            IntPtr td = topicDescription.ToNativeTopicDescription();
+            IntPtr native = UnsafeNativeMethods.CreateDataReader(_native, td, qosWrapper, nativeListener, statusMask);
+
+            qos.Release();
+
+            if (native.Equals(IntPtr.Zero))
+            {
+                return null;
+            }
+
+            var dr = new DataReader(native)
+            {
+                Listener = listener,
+            };
+
+            EntityManager.Instance.Add((dr as Entity).ToNative(), dr);
+            ContainedEntities.Add(dr);
+
+            return dr;
         }
 
-        return participant;
+        /// <summary>
+        /// Deletes a <see cref="DataReader" /> that belongs to the <see cref="Subscriber" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>If the <see cref="DataReader" /> does not belong to the <see cref="Subscriber" />, the operation returns the error <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>The deletion of a <see cref="DataReader" /> is not allowed if there are any existing <see cref="ReadCondition" /> or <see cref="QueryCondition" /> objects that are
+        /// attached to the <see cref="DataReader" />. If the DeleteDataReader operation is called on a <see cref="DataReader" /> with any of these existing objects
+        /// attached to it, it will return <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>The DeleteDataReader operation must be called on the same <see cref="Subscriber" /> object used to create the <see cref="DataReader" />. If
+        /// DeleteDataReader is called on a different <see cref="Subscriber" />, the operation will have no effect and it will return
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// </remarks>
+        /// <param name="dataReader">The <see cref="DataReader" /> to be deleted.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode DeleteDataReader(DataReader dataReader)
+        {
+            if (dataReader == null)
+            {
+                return ReturnCode.Ok;
+            }
+
+            ReturnCode ret = UnsafeNativeMethods.DeleteDataReader(_native, dataReader.ToNative());
+            if (ret == ReturnCode.Ok)
+            {
+                EntityManager.Instance.Remove((dataReader as Entity).ToNative());
+                ContainedEntities.Remove(dataReader);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// This operation deletes all the entities that were created by means of the "create" operations on the <see cref="Subscriber" />. That is, it
+        /// deletes all contained <see cref="DataReader" /> objects. This pattern is applied recursively. In this manner the operation
+        /// DeleteContainedEntities on the <see cref="Subscriber" /> will end up deleting all the entities recursively contained in the <see cref="Subscriber" />, that
+        /// is also the <see cref="QueryCondition" /> and <see cref="ReadCondition" /> objects belonging to the contained <see cref="DataReader" />s.
+        /// </summary>
+        /// <remarks>
+        /// <para>The operation will return <see cref="ReturnCode.PreconditionNotMet" /> if any of the contained entities is in a state where it cannot be deleted.</para>
+        /// <para>Once DeleteContainedEntities returns successfully, the application may delete the <see cref="Subscriber" /> knowing that it has no
+        /// contained <see cref="DataReader" /> objects.</para>
+        /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode DeleteContainedEntities()
+        {
+            ReturnCode ret = UnsafeNativeMethods.DeleteContainedEntities(_native);
+            if (ret == ReturnCode.Ok)
+            {
+                foreach (Entity e in ContainedEntities)
+                {
+                    EntityManager.Instance.Remove(e.ToNative());
+                    e.ClearContainedEntities();
+                }
+
+                ContainedEntities.Clear();
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Gets a previously-created <see cref="DataReader" /> belonging to the <see cref="Subscriber" /> that is attached to a <see cref="Topic" /> with a
+        /// matching topicName. If no such <see cref="DataReader" /> exists, the operation will return <see langword="null"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>If multiple <see cref="DataReader" />s attached to the <see cref="Subscriber" /> satisfy this condition, then the operation will return one of them.
+        /// It is not specified which one.</para>
+        /// <para>The use of this operation on the built-in <see cref="Subscriber" /> allows access to the built-in <see cref="DataReader" /> entities for the built-in topics</para>
+        /// </remarks>
+        /// <param name="topicName">The <see cref="Topic" />'s name related with the <see cref="DataReader" /> to look up.</param>
+        /// <returns>The <see cref="DataReader" />, if it exists, otherwise <see langword="null"/>.</returns>
+        public DataReader LookupDataReader(string topicName)
+        {
+            IntPtr native = UnsafeNativeMethods.LookupDataReader(_native, topicName);
+
+            DataReader reader = null;
+
+            if (!native.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = DataReader.NarrowBase(native);
+
+                if (!ptr.Equals(IntPtr.Zero))
+                {
+                    Entity entity = EntityManager.Instance.Find(ptr);
+                    if (entity != null)
+                    {
+                        reader = (DataReader)entity;
+                    }
+                    else
+                    {
+                        reader = new DataReader(native);
+                        EntityManager.Instance.Add((reader as Entity).ToNative(), reader);
+                    }
+                }
+            }
+
+            return reader;
+        }
+
+        /// <summary>
+        /// Allows the application to access the <see cref="DataReader" /> objects that contain samples with any sample states,
+        /// any view states, and any instance states.
+        /// </summary>
+        /// <remarks>
+        /// <para>If the <see cref="PresentationQosPolicy" /> of the <see cref="Subscriber" /> to which the <see cref="DataReader" /> belongs has the
+        /// <see cref="PresentationQosPolicy.AccessScope" /> set to <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" />,
+        /// this operation should only be invoked inside a <see cref="BeginAccess" />/<see cref="EndAccess" /> block. Otherwise it will return the error
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>Depending on the setting of the <see cref="PresentationQosPolicy" />, the returned collection of <see cref="DataReader" /> objects may
+        /// be a 'set' containing each <see cref="DataReader" /> at most once in no specified order, or a 'list' containing each <see cref="DataReader" /> one or more
+        /// times in a specific order.
+        /// <list type="number"> 
+        /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.InstancePresentationQos" /> or
+        /// <see cref="PresentationQosPolicyAccessScopeKind.TopicPresentationQos" /> the returned collection behaves as a 'set'.</description></item>
+        /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" /> and
+        /// <see cref="PresentationQosPolicy.OrderedAccess" /> is set to <see langword="true"/>, then the returned collection behaves as a 'list'.</description></item>
+        /// </list></para>
+        /// <para>This difference is due to the fact that, in the second situation it is required to access samples belonging to different <see cref="DataReader" />
+        /// objects in a particular order. In this case, the application should process each <see cref="DataReader" /> in the same order it appears in the
+        /// 'list' and Read or Take exactly one sample from each <see cref="DataReader" />.</para>
+        /// </remarks>
+        /// <param name="readers">The <see cref="DataReader" /> collection to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDataReaders(IList<DataReader> readers)
+        {
+            return GetDataReaders(readers, SampleStateMask.AnySampleState, ViewStateMask.AnyViewState, InstanceStateMask.AnyInstanceState);
+        }
+
+        /// <summary>
+        /// Allows the application to access the <see cref="DataReader" /> objects that contain samples with the specified sampleStates,
+        /// viewStates, and instanceStates.
+        /// </summary>
+        /// <remarks>
+        /// <para>If the <see cref="PresentationQosPolicy" /> of the <see cref="Subscriber" /> to which the <see cref="DataReader" /> belongs has the
+        /// <see cref="PresentationQosPolicy.AccessScope" /> set to <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" />,
+        /// this operation should only be invoked inside a <see cref="BeginAccess" />/<see cref="EndAccess" /> block. Otherwise it will return the error
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// <para>Depending on the setting of the <see cref="PresentationQosPolicy" />, the returned collection of <see cref="DataReader" /> objects may
+        /// be a 'set' containing each <see cref="DataReader" /> at most once in no specified order, or a 'list' containing each <see cref="DataReader" /> one or more
+        /// times in a specific order.
+        /// <list type="number"> 
+        /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.InstancePresentationQos" /> or
+        /// <see cref="PresentationQosPolicyAccessScopeKind.TopicPresentationQos" /> the returned collection behaves as a 'set'.</description></item>
+        /// <item><description>If <see cref="PresentationQosPolicy.AccessScope" /> is <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" /> and
+        /// <see cref="PresentationQosPolicy.OrderedAccess" /> is set to <see langword="true"/>, then the returned collection behaves as a 'list'.</description></item>
+        /// </list></para>
+        /// <para>This difference is due to the fact that, in the second situation it is required to access samples belonging to different <see cref="DataReader" />
+        /// objects in a particular order. In this case, the application should process each <see cref="DataReader" /> in the same order it appears in the
+        /// 'list' and Read or Take exactly one sample from each <see cref="DataReader" />.</para>
+        /// </remarks>
+        /// <param name="readers">The <see cref="DataReader" /> collection to be filled up.</param>
+        /// <param name="sampleStates">The returned <see cref="DataReader" /> in the collection must contain samples that have one of the sample states.</param>
+        /// <param name="viewStates">The returned <see cref="DataReader" /> in the collection must contain samples that have one of the view states.</param>
+        /// <param name="instanceStates">The returned <see cref="DataReader" /> in the collection must contain samples that have one of the instance states.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDataReaders(IList<DataReader> readers, SampleStateMask sampleStates, ViewStateMask viewStates, InstanceStateMask instanceStates)
+        {
+            if (readers == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            readers.Clear();
+
+            IntPtr ptr = IntPtr.Zero;
+            ReturnCode ret = UnsafeNativeMethods.GetDataReaders(_native, ref ptr, sampleStates, viewStates, instanceStates);
+
+            if (ret == ReturnCode.Ok && !ptr.Equals(IntPtr.Zero))
+            {
+                IList<IntPtr> lst = new List<IntPtr>();
+                MarshalHelper.PtrToSequence(ptr, ref lst);
+                if (lst != null)
+                {
+                    foreach (IntPtr ptrReader in lst)
+                    {
+                        IntPtr ptrEnity = DataReader.NarrowBase(ptrReader);
+
+                        var entity = EntityManager.Instance.Find(ptrEnity);
+                        if (entity is DataReader dataReader)
+                        {
+                            readers.Add(dataReader);
+                        }
+                        else
+                        {
+                            readers.Add(new DataReader(ptrReader));
+                        }
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Invokes the operation OnDataAvailable on the <see cref="DataReaderListener" /> objects attached to contained <see cref="DataReader" />
+        /// entities with a <see cref="StatusKind.DataAvailableStatus" /> that is considered changed.
+        /// </summary>
+        /// <remarks>
+        /// This operation is typically invoked from the OnDataOnReaders operation in the <see cref="SubscriberListener" />. That way the
+        /// <see cref="SubscriberListener" /> can delegate to the <see cref="DataReaderListener" /> objects the handling of the data.
+        /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode NotifyDataReaders()
+        {
+            return UnsafeNativeMethods.NotifyDataReaders(_native);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Subscriber" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="SubscriberQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetQos(SubscriberQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            SubscriberQosWrapper qosWrapper = default;
+            var ret = UnsafeNativeMethods.GetQos(_native, ref qosWrapper);
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="Subscriber" /> QoS policies.
+        /// </summary>
+        /// <param name="qos">The <see cref="SubscriberQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetQos(SubscriberQos qos)
+        {
+            if (qos == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+
+            var ret = UnsafeNativeMethods.SetQos(_native, qosNative);
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Allows access to the attached <see cref="SubscriberListener" />.
+        /// </summary>
+        /// <returns>The attached <see cref="SubscriberListener" />.</returns>
+        [Obsolete(nameof(GetListener) + " is deprecated, please use Listener property instead.")]
+        [SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Keep coherency with the setter method and DDS API.")]
+        public SubscriberListener GetListener()
+        {
+            return Listener;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="SubscriberListener" /> using the <see cref="StatusMask.DefaultStatusMask" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="SubscriberListener" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(SubscriberListener listener)
+        {
+            return SetListener(listener, StatusMask.DefaultStatusMask);
+        }
+
+        /// <summary>
+        /// Sets the <see cref="SubscriberListener" />.
+        /// </summary>
+        /// <param name="listener">The <see cref="SubscriberListener" /> to be set.</param>
+        /// <param name="mask">The <see cref="StatusMask" /> of which status changes the listener should be notified.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetListener(SubscriberListener listener, StatusMask mask)
+        {
+            Listener = listener;
+            IntPtr ptr = IntPtr.Zero;
+            if (listener != null)
+            {
+                ptr = listener.ToNative();
+            }
+
+            return UnsafeNativeMethods.SetListener(_native, ptr, mask);
+        }
+
+        /// <summary>
+        /// Indicates that the application is about to access the data samples in any of the <see cref="DataReader" /> objects attached to
+        /// the <see cref="Subscriber" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>The application is required to use this operation only if <see cref="PresentationQosPolicy" /> of the <see cref="Subscriber" /> to which the
+        /// <see cref="DataReader" /> belongs has the <see cref="PresentationQosPolicy.AccessScope" /> set to 
+        /// <see cref="PresentationQosPolicyAccessScopeKind.GroupPresentationQos" />.</para>
+        /// <para>In the aforementioned case, the operation BeginAccess must be called prior to calling any of the sample-accessing operations,
+        /// namely: GetDataReaders on the <see cref="Subscriber" /> and Read, Take on any <see cref="DataReader" />.
+        /// Otherwise the sample-accessing operations will return the error <see cref="ReturnCode.PreconditionNotMet" />. Once the application has
+        /// finished accessing the data samples it must call <see cref="EndAccess" />.</para>
+        /// <para>The calls to BeginAccess/<see cref="EndAccess" /> may be nested. In that case, the application must call <see cref="EndAccess" /> as many times as it
+        /// called BeginAccess.</para>
+        /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode BeginAccess()
+        {
+            return UnsafeNativeMethods.BeginAccess(_native);
+        }
+
+        /// <summary>
+        /// Indicates that the application has finished accessing the data samples in <see cref="DataReader" /> objects managed by the <see cref="Subscriber" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>This operation must be used to 'close' a corresponding <see cref="BeginAccess" />.</para>
+        /// <para>After calling EndAccess the application should no longer access any of the data or <see cref="SampleInfo" /> elements returned from the
+        /// sample-accessing operations. This call must close a previous call to <see cref="BeginAccess" /> otherwise the operation will return the error
+        /// <see cref="ReturnCode.PreconditionNotMet" />.</para>
+        /// </remarks>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode EndAccess()
+        {
+            return UnsafeNativeMethods.EndAccess(_native);
+        }
+
+        /// <summary>
+        /// Gets the default value of the <see cref="DataReader" /> QoS, that is, the QoS policies which will be used for newly
+        /// created <see cref="DataReader" /> entities in the case where the QoS policies are defaulted in the CreateDataReader operation.
+        /// </summary>
+        /// <remarks>
+        /// The values retrieved GetDefaultDataReaderQos will match the set of values specified on the last successful call to
+        /// <see cref="SetDefaultDataReaderQos" />, or else, if the call was never made, the default DDS standard values.
+        /// </remarks>
+        /// <param name="qos">The <see cref="DataReaderQos" /> to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetDefaultDataReaderQos(DataReaderQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            DataReaderQosWrapper qosWrapper = default;
+            var ret = UnsafeNativeMethods.GetDefaultDataReaderQos(_native, ref qosWrapper);
+
+            if (ret == ReturnCode.Ok)
+            {
+                qos.FromNative(qosWrapper);
+            }
+
+            qos.Release();
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Sets a default value of the <see cref="DataReader" /> QoS policies which will be used for newly created <see cref="DataReader" /> entities
+        /// in the case where the QoS policies are defaulted in the CreateDataReader operation.
+        /// </summary>
+        /// <remarks>
+        /// This operation will check that the resulting policies are self consistent; if they are not, the operation will have no effect and
+        /// return <see cref="ReturnCode.InconsistentPolicy" />.
+        /// </remarks>
+        /// <param name="qos">The default <see cref="DataReaderQos" /> to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetDefaultDataReaderQos(DataReaderQos qos)
+        {
+            if (qos is null)
+            {
+                return ReturnCode.BadParameter;
+            }
+
+            var qosNative = qos.ToNative();
+            var ret = UnsafeNativeMethods.SetDefaultDataReaderQos(_native, qosNative);
+            qos.Release();
+
+            return ret;
+        }
+
+        internal static IntPtr NarrowBase(IntPtr ptr)
+        {
+            return UnsafeNativeMethods.NativeNarrowBase(ptr);
+        }
+
+        internal new IntPtr ToNative()
+        {
+            return _native;
+        }
+
+        private DomainParticipant GetParticipant()
+        {
+            IntPtr ptrParticipant = UnsafeNativeMethods.GetParticipant64(_native);
+
+            DomainParticipant participant = null;
+
+            if (!ptrParticipant.Equals(IntPtr.Zero))
+            {
+                IntPtr ptr = DomainParticipant.NarrowBase(ptrParticipant);
+
+                Entity entity = EntityManager.Instance.Find(ptr);
+                if (entity != null)
+                {
+                    participant = (DomainParticipant)entity;
+                }
+                else
+                {
+                    participant = new DomainParticipant(ptrParticipant);
+                    EntityManager.Instance.Add(ptrParticipant, participant);
+                }
+            }
+
+            return participant;
+        }
+        #endregion
+
+        #region Unsafe Native Methods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NativeNarrowBase(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr CreateDataReader(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetListener", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetListener(IntPtr sub, IntPtr listener, uint mask);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern ReturnCode DeleteDataReader(IntPtr s, IntPtr dr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_BeginAccess", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode BeginAccess(IntPtr s);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_EndAccess", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode EndAccess(IntPtr s);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr GetParticipant64(IntPtr pub);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_LookupDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr LookupDataReader(IntPtr pub, string topicName);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DeleteContainedEntities(IntPtr sub);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NotifyDataReaders", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode NotifyDataReaders(IntPtr sub);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDataReaders", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetDataReaders(IntPtr sub, ref IntPtr lst, uint sampleMask, uint viewMask, uint instanceMask);
+        }
+        #endregion
     }
-    #endregion
-}
-
-/// <summary>
-/// This class suppresses stack walks for unmanaged code permission.
-/// (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
-/// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full
-/// security review to make sure that the usage is secure because no stack walk will be performed.
-/// </summary>
-[SuppressUnmanagedCodeSecurity]
-internal static partial class UnsafeNativeMethods
-{
-#if NET7_0_OR_GREATER
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NarrowBase")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr SubscriberNativeNarrowBase(IntPtr ptr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr CreateDataReader(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode GetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode GetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetListener")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode SubscriberSetListener(IntPtr sub, IntPtr listener, uint mask);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteDataReader")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode DeleteDataReader(IntPtr s, IntPtr dr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_BeginAccess")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode BeginAccess(IntPtr s);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_EndAccess")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode EndAccess(IntPtr s);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetParticipant")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr SubscriberGetParticipant(IntPtr pub);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_LookupDataReader", StringMarshalling = StringMarshalling.Utf8)]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr LookupDataReader(IntPtr pub, string topicName);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteContainedEntities")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode SubscriberDeleteContainedEntities(IntPtr sub);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NotifyDataReaders")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode NotifyDataReaders(IntPtr sub);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDataReaders")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode GetDataReaders(IntPtr sub, ref IntPtr lst, uint sampleMask, uint viewMask, uint instanceMask);
-#else
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SubscriberNativeNarrowBase(IntPtr ptr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_CreateDataReader", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr CreateDataReader(IntPtr sub, IntPtr topic, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos, IntPtr a_listener, uint mask);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode GetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref DataReaderQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetDefaultDataReaderQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SetDefaultDataReaderQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] DataReaderQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode GetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In, Out] ref SubscriberQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetQos", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SetQos(IntPtr sub, [MarshalAs(UnmanagedType.Struct), In] SubscriberQosWrapper qos);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_SetListener", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SubscriberSetListener(IntPtr sub, IntPtr listener, uint mask);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-    public static extern ReturnCode DeleteDataReader(IntPtr s, IntPtr dr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_BeginAccess", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode BeginAccess(IntPtr s);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_EndAccess", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode EndAccess(IntPtr s);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetParticipant", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr SubscriberGetParticipant(IntPtr pub);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_LookupDataReader", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-    public static extern IntPtr LookupDataReader(IntPtr pub, string topicName);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_DeleteContainedEntities", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SubscriberDeleteContainedEntities(IntPtr sub);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_NotifyDataReaders", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode NotifyDataReaders(IntPtr sub);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "Subscriber_GetDataReaders", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode GetDataReaders(IntPtr sub, ref IntPtr lst, uint sampleMask, uint viewMask, uint instanceMask);
-#endif
 }

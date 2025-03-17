@@ -21,53 +21,54 @@ using System;
 using System.Collections.Concurrent;
 using OpenDDSharp.DDS;
 
-namespace OpenDDSharp.Helpers;
-
-internal sealed class EntityManager
+namespace OpenDDSharp.Helpers
 {
-    #region Fields
-    private static readonly object _lock = new object();
-    private static EntityManager _instance;
-    private readonly ConcurrentDictionary<IntPtr, Entity> _insts = new ConcurrentDictionary<IntPtr, Entity>();
-    #endregion
-
-    #region Singleton
-    public static EntityManager Instance
+    internal sealed class EntityManager
     {
-        get
-        {
-            lock (_lock)
-            {
-                if (_instance == null)
-                {
-                    _instance = new EntityManager();
-                }
+        #region Fields
+        private static readonly object _lock = new object();
+        private static EntityManager _instance;
+        private readonly ConcurrentDictionary<IntPtr, Entity> _insts = new ConcurrentDictionary<IntPtr, Entity>();
+        #endregion
 
-                return _instance;
+        #region Singleton
+        public static EntityManager Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new EntityManager();
+                    }
+
+                    return _instance;
+                }
             }
         }
-    }
-    #endregion
+        #endregion
 
-    #region Methods
-    public void Add(IntPtr ptr, Entity inst)
-    {
-        _insts.AddOrUpdate(ptr, inst, (p, t) => inst);
-    }
-
-    public void Remove(IntPtr ptr)
-    {
-        _insts.TryRemove(ptr, out _);
-    }
-
-    public Entity Find(IntPtr ptr)
-    {
-        if (_insts.TryGetValue(ptr, out var found))
+        #region Methods
+        public void Add(IntPtr ptr, Entity inst)
         {
-            return found;
+            _insts.AddOrUpdate(ptr, inst, (p, t) => inst);
         }
 
-        return null;
+        public void Remove(IntPtr ptr)
+        {
+            _insts.TryRemove(ptr, out _);
+        }
+
+        public Entity Find(IntPtr ptr)
+        {
+            if (_insts.TryGetValue(ptr, out var found))
+            {
+                return found;
+            }
+
+            return null;
+        }
+        #endregion
     }
-    #endregion
 }

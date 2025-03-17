@@ -24,24 +24,24 @@
         #region Constructors
         public <%TYPE%>TypeSupport()
         {
-            _native = <%TYPE%>TypeSupportNative.<%TYPE%>TypeSupportNew();
+            _native = <%TYPE%>TypeSupportNew();
         }
         #endregion
 
         #region Methods
         public string GetTypeName()
         {
-            return Marshal.PtrToStringAnsi(<%TYPE%>TypeSupportNative.GetTypeName(_native));
+            return Marshal.PtrToStringAnsi(GetTypeName(_native));
         }
 
         public ReturnCode RegisterType(DomainParticipant dp, string typeName)
         {
-            return (ReturnCode)<%TYPE%>TypeSupportNative.RegisterType(_native, dp.ToNative(), typeName);
+            return (ReturnCode)RegisterType(_native, dp.ToNative(), typeName);
         }
 
         public ReturnCode UnregisterType(DomainParticipant dp, string typeName)
         {
-            return (ReturnCode)<%TYPE%>TypeSupportNative.UnregisterType(_native, dp.ToNative(), typeName);
+            return (ReturnCode)UnregisterType(_native, dp.ToNative(), typeName);
         }
 
         public string EncodeToString(<%TYPE%> sample)
@@ -54,48 +54,24 @@
             return JsonSerializer.Deserialize(str, typeof(<%TYPE%>), _serializerContext) as <%TYPE%>;
         }
         #endregion
-    }
 
-    [SuppressUnmanagedCodeSecurity]
-    internal static partial class <%TYPE%>TypeSupportNative
-    {
-#if NET7_0_OR_GREATER
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial IntPtr <%TYPE%>TypeSupportNew();
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_GetTypeName", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial IntPtr GetTypeName(IntPtr native);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_RegisterType", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int RegisterType(IntPtr native, IntPtr dp, string typeName);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int UnregisterType(IntPtr native, IntPtr dp, string typeName);
-#else
+        #region PInvoke
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_new", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr <%TYPE%>TypeSupportNew();
+        private static extern IntPtr <%TYPE%>TypeSupportNew();
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_GetTypeName", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        internal static extern IntPtr GetTypeName(IntPtr native);
+        private static extern IntPtr GetTypeName(IntPtr native);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_RegisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        internal static extern int RegisterType(IntPtr native, IntPtr dp, string typeName);
+        private static extern int RegisterType(IntPtr native, IntPtr dp, string typeName);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>TypeSupport_UnregisterType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        internal static extern int UnregisterType(IntPtr native, IntPtr dp, string typeName);
-#endif
+        private static extern int UnregisterType(IntPtr native, IntPtr dp, string typeName);
+        #endregion
     }
 
     [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default)]
@@ -115,7 +91,7 @@
         public <%TYPE%>DataWriter(DataWriter dw) : base(dw.ToNative())
         {
 			IntPtr ptr = base.ToNative();
-            _native = <%TYPE%>DataWriterNative.Narrow(ptr);
+            _native = Narrow(ptr);
 
             _typeSupport = new <%TYPE%>TypeSupport();
         }
@@ -129,7 +105,7 @@
             var str = _typeSupport.EncodeToString(instance);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = <%TYPE%>DataWriterNative.RegisterInstance(_native, json_data);
+            ret = RegisterInstance(_native, json_data);
 
             return ret;
         }
@@ -141,7 +117,7 @@
             var str = _typeSupport.EncodeToString(instance);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = <%TYPE%>DataWriterNative.RegisterInstanceTimestamp(_native, json_data, timestamp);
+            ret = RegisterInstanceTimestamp(_native, json_data, timestamp);
 
             return ret;
         }
@@ -157,7 +133,7 @@
             var str = _typeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-	        return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstance(_native, json_data, handle);
+	        return (ReturnCode)UnregisterInstance(_native, json_data, handle);
         }
 
 		public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle)
@@ -165,7 +141,7 @@
             var str = _typeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstance(_native, json_data, handle);
+            return (ReturnCode)UnregisterInstance(_native, json_data, handle);
         }
 
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
@@ -173,7 +149,7 @@
             var str = _typeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            return (ReturnCode)<%TYPE%>DataWriterNative.UnregisterInstanceTimestamp(_native, json_data, handle, timestamp);
+            return (ReturnCode)UnregisterInstanceTimestamp(_native, json_data, handle, timestamp);
         }
 
         public ReturnCode Write(<%TYPE%> data)
@@ -191,13 +167,9 @@
             ReturnCode ret = ReturnCode.Error;
 
             var str = _typeSupport.EncodeToString(data);
- #if NET7_0_OR_GREATER
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.Write(_native, str, handle);
- #else
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.Write(_native, json_data, handle);
-#endif
+            ret = (ReturnCode)Write(_native, json_data, handle);
 
             return ret;
         }
@@ -214,7 +186,7 @@
             var str = _typeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.WriteWithTimestamp(_native, json_data, handle, timestamp);
+            ret = (ReturnCode)WriteWithTimestamp(_native, json_data, handle, timestamp);
 
             return ret;
         }
@@ -236,7 +208,7 @@
             var str = _typeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.Dispose(_native, json_data, handle);
+            ret = (ReturnCode)Dispose(_native, json_data, handle);
 
             return ret;
         }
@@ -253,7 +225,7 @@
             var str = _typeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.DisposeTimestamp(_native, json_data, handle, timestamp);
+            ret = (ReturnCode)DisposeTimestamp(_native, json_data, handle, timestamp);
 
             return ret;
         }
@@ -274,7 +246,7 @@
 
             var str = _typeSupport.EncodeToString(data);
             var ptr = MarshalHelper.NativeUtf8FromString(str);
-            ret = (ReturnCode)<%TYPE%>DataWriterNative.GetKeyValue(_native, ref ptr, handle);
+            ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);
 
             if (ret == ReturnCode.Ok)
             {
@@ -300,115 +272,57 @@
             var str = _typeSupport.EncodeToString(instance);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = <%TYPE%>DataWriterNative.LookupInstance(_native, json_data);
+            ret = LookupInstance(_native, json_data);
 
             return ret;
         }
         #endregion
-     }
 
-    public static partial class <%TYPE%>DataWriterNative
-    {
-#if NET7_0_OR_GREATER
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial IntPtr Narrow(IntPtr dw);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int Write(IntPtr dw, string jsonData, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int WriteWithTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int RegisterInstance(IntPtr dw, IntPtr jsonData);
-
-        [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int UnregisterInstance(IntPtr dw, IntPtr jsonData, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int LookupInstance(IntPtr dw, IntPtr jsonData);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int Dispose(IntPtr dw, IntPtr jsonData, int handle);
-
-        [SuppressUnmanagedCodeSecurity]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DisposeTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int GetKeyValue(IntPtr dw, ref IntPtr json_data, int handle);
-#else
+        #region PInvoke
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr Narrow(IntPtr dw);
+        private static extern IntPtr Narrow(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Json", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-        internal static extern int Write(IntPtr dw, [In] IntPtr jsonData, int handle);
+        private static extern int Write(IntPtr dw, [In] IntPtr jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_WriteWithTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int WriteWithTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int WriteWithTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstance(IntPtr dw, [In] IntPtr jsonData);
+        private static extern int RegisterInstance(IntPtr dw, [In] IntPtr jsonData);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int RegisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstance(IntPtr dw, [In] IntPtr jsonData, int handle);
+        private static extern int UnregisterInstance(IntPtr dw, [In] IntPtr jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_UnregisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UnregisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int UnregisterInstanceTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int LookupInstance(IntPtr dw, [In] IntPtr jsonData);
+        private static extern int LookupInstance(IntPtr dw, [In] IntPtr jsonData);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Dispose_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Dispose(IntPtr dw, [In] IntPtr jsonData, int handle);
+        private static extern int Dispose(IntPtr dw, [In] IntPtr jsonData, int handle);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_DisposeTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DisposeTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
+        private static extern int DisposeTimestamp(IntPtr dw, [In] IntPtr jsonData, int handle, [MarshalAs(UnmanagedType.Struct), In] Timestamp timestamp);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_GetKeyValue_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetKeyValue(IntPtr dw, [In, Out] ref IntPtr json_data, int handle);
-#endif
+        private static extern int GetKeyValue(IntPtr dw, [In, Out] ref IntPtr json_data, int handle);
+        #endregion
     }
 
     public class <%TYPE%>DataReader : DataReader
@@ -422,7 +336,7 @@
         public <%TYPE%>DataReader(DataReader dr) : base(dr.ToNative())
         {
 			IntPtr ptr = base.ToNative();
-            _native = <%TYPE%>DataReaderNative.Narrow(ptr);
+            _native = Narrow(ptr);
 
             _typeSupport = new <%TYPE%>TypeSupport();
         }
@@ -458,7 +372,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
+            ret = (ReturnCode)ReadWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -507,7 +421,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.Read(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)Read(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -571,7 +485,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
+            ret = (ReturnCode)TakeWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -620,7 +534,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.Take(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)Take(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -684,7 +598,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadInstanceWithCondition(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
+            ret = (ReturnCode)ReadInstanceWithCondition(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -733,7 +647,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadInstance(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)ReadInstance(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -797,7 +711,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeInstanceWithCondition(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
+            ret = (ReturnCode)TakeInstanceWithCondition(_native, ref rd, ref ri, (int)handle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -846,7 +760,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeInstance(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)TakeInstance(_native, ref rd, ref ri, handle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -910,7 +824,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
+            ret = (ReturnCode)ReadNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -959,7 +873,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)ReadNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1023,7 +937,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
+            ret = (ReturnCode)TakeNextInstanceWithCondition(_native, ref rd, ref ri, previousHandle, maxSamples, condition.ToNative());
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1072,7 +986,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)TakeNextInstance(_native, ref rd, ref ri, previousHandle, maxSamples, sampleStates, viewStates, instanceStates);
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -1118,7 +1032,7 @@
             IntPtr ptr = IntPtr.Zero;
             SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
 
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.ReadNextSample(_native, ref ptr, ref infoWrapper);
+            ret = (ReturnCode)ReadNextSample(_native, ref ptr, ref infoWrapper);
 
             if (ret == ReturnCode.Ok)
             {
@@ -1149,7 +1063,7 @@
             ReturnCode ret = ReturnCode.Error;
             var ptr = IntPtr.Zero;
             var infoWrapper = new SampleInfoWrapper();
-            ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref infoWrapper);
+            ret = (ReturnCode)TakeNextSample(_native, ref ptr, ref infoWrapper);
             if (ret == ReturnCode.Ok)
             {
                 var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
@@ -1184,7 +1098,7 @@
             var str = _typeSupport.EncodeToString(data);
             var ptr = MarshalHelper.NativeUtf8FromString(str);
 
-            var ret = (ReturnCode)<%TYPE%>DataReaderNative.GetKeyValue(_native, ref ptr, handle);
+            var ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);
 
             if (ret == ReturnCode.Ok)
             {
@@ -1209,165 +1123,79 @@
 
             var json_data = _typeSupport.EncodeToString(instance);
 
-            ret = <%TYPE%>DataReaderNative.LookupInstance(_native, json_data);
+            ret = LookupInstance(_native, json_data);
 
             return ret;
         }
         #endregion
-    }
 
-    internal static partial class <%TYPE%>DataReaderNative
-    {
-#if NET7_0_OR_GREATER
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial IntPtr Narrow(IntPtr dr);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int Read(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int Take(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstance_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstance_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int LookupInstance(IntPtr dr, string jsonData);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue_Json")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        internal static partial int GetKeyValue(IntPtr dr, ref IntPtr data, int handle);
-#else
+        #region PInvoke
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Narrow", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr Narrow(IntPtr dr);
+        private static extern IntPtr Narrow(IntPtr dr);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Read_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Read(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        private static extern int Read(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
+        private static extern int ReadWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_Take_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Take(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        private static extern int Take(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
+        private static extern int TakeWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        private static extern int ReadInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        private static extern int ReadInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        private static extern int TakeInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        private static extern int TakeInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        private static extern int ReadNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        private static extern int ReadNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
+        private static extern int TakeNextInstance(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, uint sampleStates, uint viewStates, uint instanceStates);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
+        private static extern int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
+        private static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
+        private static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr json_data, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_LookupInstance_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int LookupInstance(IntPtr dr, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
+        private static extern int LookupInstance(IntPtr dr, [MarshalAs(UnmanagedType.LPStr), In]string jsonData);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_GetKeyValue_Json", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetKeyValue(IntPtr dr, [In, Out] ref IntPtr data, int handle);
-#endif
+        private static extern int GetKeyValue(IntPtr dr, [In, Out] ref IntPtr data, int handle);
+        #endregion
     }

@@ -17,33 +17,31 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// This enumeration defines the valid values of the <see cref="SampleRejectedStatus" /> LastReason.
-/// </summary>
-public enum SampleRejectedStatusKind
+namespace OpenDDSharp.DDS
 {
     /// <summary>
-    /// No sample has been rejected yet.
+    /// This enumeration defines the valid values of the <see cref="SampleRejectedStatus" /> LastReason.
     /// </summary>
-    NotRejected = 0,
+    public enum SampleRejectedStatusKind
+    {
+        /// <summary>
+        /// No sample has been rejected yet.
+        /// </summary>
+        NotRejected = 0,
 
-    /// <summary>
-    /// The sample was rejected because it would exceed the maximum number of instances set by the
-    /// <see cref="ResourceLimitsQosPolicy" />.
-    /// </summary>
-    RejectedByInstancesLimit = 1,
+        /// <summary>
+        /// The sample was rejected because it would exceed the maximum number of instances set by the <see cref="ResourceLimitsQosPolicy" />.
+        /// </summary>
+        RejectedByInstancesLimit = 1,
 
-    /// <summary>
-    /// The sample was rejected because it would exceed the maximum number of samples set by the
-    /// <see cref="ResourceLimitsQosPolicy" />.
-    /// </summary>
-    RejectedBySamplesLimit = 2,
+        /// <summary>
+        /// The sample was rejected because it would exceed the maximum number of samples set by the <see cref="ResourceLimitsQosPolicy" />.
+        /// </summary>
+        RejectedBySamplesLimit = 2,
 
-    /// <summary>
-    /// The sample was rejected because it would exceed the maximum number of samples per instance set by the
-    /// <see cref="ResourceLimitsQosPolicy" />.
-    /// </summary>
-    RejectedBySamplesPerInstanceLimit = 3,
+        /// <summary>
+        /// The sample was rejected because it would exceed the maximum number of samples per instance set by the <see cref="ResourceLimitsQosPolicy" />.
+        /// </summary>
+        RejectedBySamplesPerInstanceLimit = 3,
+    }
 }

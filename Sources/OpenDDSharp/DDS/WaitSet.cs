@@ -21,15 +21,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
-
-#if NET7_0_OR_GREATER
-using System.Runtime.CompilerServices;
-#endif
 
 namespace OpenDDSharp.DDS
 {
@@ -52,7 +47,7 @@ namespace OpenDDSharp.DDS
         /// <summary>
         /// Initializes a new instance of the <see cref="WaitSet"/> class.
         /// </summary>
-        public WaitSet() : this(UnsafeNativeMethods.NewWaitSet())
+        public WaitSet() : this(UnsafeNativeMethods.NewWaitset())
         {
         }
 
@@ -109,15 +104,14 @@ namespace OpenDDSharp.DDS
             }
             activeConditions.Clear();
 
-            var seq = IntPtr.Zero;
-            var ret = UnsafeNativeMethods.Wait(_native, ref seq, timeout);
+            IntPtr seq = IntPtr.Zero;
+            ReturnCode ret = UnsafeNativeMethods.Wait(_native, ref seq, timeout);
 
             if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
             {
                 ICollection<IntPtr> lst = new Collection<IntPtr>();
                 seq.PtrToSequence(ref lst);
-
-                foreach (var ptr in lst)
+                foreach (IntPtr ptr in lst)
                 {
                     if (_conditions.TryGetValue(ptr, out var condition))
                     {
@@ -200,11 +194,10 @@ namespace OpenDDSharp.DDS
             if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
             {
                 IList<IntPtr> lst = new List<IntPtr>();
-                seq.PtrToSequence(ref lst);
-
+                MarshalHelper.PtrToSequence(seq, ref lst);
                 if (lst != null)
                 {
-                    foreach (var ptrCondition in lst)
+                    foreach (IntPtr ptrCondition in lst)
                     {
                         if (_conditions.TryGetValue(ptrCondition, out var condition))
                         {
@@ -229,90 +222,56 @@ namespace OpenDDSharp.DDS
                 return ReturnCode.Ok;
             }
 
-            var seq = IntPtr.Zero;
+            IntPtr seq = IntPtr.Zero;
             ICollection<IntPtr> pointers = conditions.Select(c => c.ToNative()).ToList();
-            pointers.SequenceToPtr(ref seq);
+            MarshalHelper.SequenceToPtr(pointers, ref seq);
+            ReturnCode ret = UnsafeNativeMethods.DetachConditions(_native, seq);
 
-            var ret = UnsafeNativeMethods.DetachConditions(_native, seq);
-
-            if (ret != ReturnCode.Ok)
+            if (ret == ReturnCode.Ok)
             {
-                return ret;
-            }
-
-            foreach (var ptr in pointers)
-            {
-                _conditions.TryRemove(ptr, out _);
+                foreach (var ptr in pointers)
+                {
+                    _conditions.TryRemove(ptr, out _);
+                }
             }
 
             return ret;
         }
         #endregion
+
+        #region UnsafeNativeMethods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_New", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NewWaitset();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_Wait", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode Wait(IntPtr ws, ref IntPtr seq, [MarshalAs(UnmanagedType.Struct), In] Duration duration);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_AttachCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode AttachCondition(IntPtr ws, IntPtr condition);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachCondition", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DetachCondition(IntPtr ws, IntPtr condition);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_GetConditions", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetConditions(IntPtr ws, ref IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachConditions", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode DetachConditions(IntPtr ws, IntPtr seq);
+        }
+        #endregion
     }
-
-    #region UnsafeNativeMethods
-    /// <summary>
-    /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
-    /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
-    /// is secure because no stack walk will be performed.
-    /// </summary>
-    [SuppressUnmanagedCodeSecurity]
-    internal static partial class UnsafeNativeMethods
-    {
-#if NET7_0_OR_GREATER
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_New")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        internal static partial IntPtr NewWaitSet();
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_Wait")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        internal static partial ReturnCode Wait(IntPtr ws, ref IntPtr seq, Duration duration);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_AttachCondition")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        internal static partial ReturnCode AttachCondition(IntPtr ws, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachCondition")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        internal static partial ReturnCode DetachCondition(IntPtr ws, IntPtr condition);
-
-        [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_GetConditions")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        internal static partial ReturnCode GetConditions(IntPtr ws, ref IntPtr seq);
-
-        [SuppressUnmanagedCodeSecurity]
-        [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachConditions")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        internal static partial ReturnCode DetachConditions(IntPtr ws, IntPtr seq);
-#else
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_New", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr NewWaitSet();
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_Wait", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ReturnCode Wait(IntPtr ws, ref IntPtr seq, [MarshalAs(UnmanagedType.Struct), In] Duration duration);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_AttachCondition", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ReturnCode AttachCondition(IntPtr ws, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachCondition", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ReturnCode DetachCondition(IntPtr ws, IntPtr condition);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_GetConditions", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ReturnCode GetConditions(IntPtr ws, ref IntPtr seq);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(MarshalHelper.API_DLL, EntryPoint = "WaitSet_DetachConditions", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ReturnCode DetachConditions(IntPtr ws, IntPtr seq);
-#endif
-    }
-    #endregion
 }

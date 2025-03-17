@@ -16,48 +16,59 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Concurrent;
 
-namespace OpenDDSharp.OpenDDS.DCPS;
-
-internal class TransportConfigManager
+namespace OpenDDSharp.OpenDDS.DCPS
 {
-    #region Fields
-    private static readonly object _lock = new ();
-    private static TransportConfigManager _instance;
-    private readonly ConcurrentDictionary<IntPtr, TransportConfig> _configs = new ();
-    #endregion
-
-    #region Singleton
-    public static TransportConfigManager Instance
+    internal class TransportConfigManager
     {
-        get
+        #region Fields
+        private static readonly object _lock = new object();
+        private static TransportConfigManager _instance;
+        private readonly ConcurrentDictionary<IntPtr, TransportConfig> _configs = new ConcurrentDictionary<IntPtr, TransportConfig>();
+        #endregion
+
+        #region Singleton
+        public static TransportConfigManager Instance
         {
-            lock (_lock)
+            get
             {
-                return _instance ??= new TransportConfigManager();
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new TransportConfigManager();
+                    }
+
+                    return _instance;
+                }
             }
         }
-    }
-    #endregion
+        #endregion
 
-    #region Methods
-    public void Add(IntPtr ptr, TransportConfig config)
-    {
-        _configs.AddOrUpdate(ptr, config, (_, _) => config);
-    }
+        #region Methods
+        public void Add(IntPtr ptr, TransportConfig config)
+        {
+            _configs.AddOrUpdate(ptr, config, (p, t) => config);
+        }
 
-    public void Remove(IntPtr ptr)
-    {
-        _configs.TryRemove(ptr, out _);
-    }
+        public void Remove(IntPtr ptr)
+        {
+            _configs.TryRemove(ptr, out _);
+        }
 
-    public TransportConfig Find(IntPtr ptr)
-    {
-        return _configs.TryGetValue(ptr, out var found) ? found : null;
-    }
+        public TransportConfig Find(IntPtr ptr)
+        {
+            if (_configs.TryGetValue(ptr, out var found))
+            {
+                return found;
+            }
 
-    public void Clear()
-    {
-        _configs.Clear();
+            return null;
+        }
+
+        public void Clear()
+        {
+            _configs.Clear();
+        }
+        #endregion
     }
-    #endregion
 }

@@ -23,151 +23,123 @@ using System.Runtime.InteropServices;
 using System.Security;
 using OpenDDSharp.Helpers;
 
-#if NET7_0_OR_GREATER
-using System.Runtime.CompilerServices;
-#endif
-
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// QueryCondition objects are specialized <see cref="ReadCondition" /> objects that allow the application to also
-/// specify a filter on the locally available data.
-/// </summary>
-/// <remarks>
-/// The query is similar to an SQL WHERE clause and can be parameterized by arguments that are dynamically changeable
-/// by the <see cref="SetQueryParameters" /> operation.
-/// </remarks>
-public class QueryCondition : ReadCondition
+namespace OpenDDSharp.DDS
 {
-    #region Fields
-    private readonly IntPtr _native;
-    #endregion
-
-    #region Properties
     /// <summary>
-    /// Gets the QueryExpression associated with the <see cref="QueryCondition" />.
-    /// That is, the expression specified when the <see cref="QueryCondition" /> was created.
+    /// QueryCondition objects are specialized <see cref="ReadCondition" /> objects that allow the application to also specify a filter on the locally available data.
     /// </summary>
-    public string QueryExpression => GetQueryExpression();
-    #endregion
-
-    #region Constructors
-    internal QueryCondition(IntPtr native, DataReader reader)
-        : base(UnsafeNativeMethods.QueryConditionNarrowBase(native), reader)
+    /// <remarks>
+    /// The query is similar to an SQL WHERE clause and can be parameterized by arguments that are dynamically changeable by the <see cref="SetQueryParameters" /> operation.
+    /// </remarks>
+    public class QueryCondition : ReadCondition
     {
-        _native = native;
-    }
-    #endregion
+        #region Fields
+        private readonly IntPtr _native;
+        #endregion
 
-    #region Methods
-    /// <summary>
-    /// Gets the query parameters associated with the <see cref="QueryCondition" />. That is, the parameters
-    /// specified on the last successful call to <see cref="SetQueryParameters" />, or if
-    /// <see cref="SetQueryParameters" /> was never called, the arguments specified when the
-    /// <see cref="QueryCondition" /> was created.
-    /// </summary>
-    /// <param name="queryParameters">The query parameters list to be filled up.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode GetQueryParameters(IList<string> queryParameters)
-    {
-        if (queryParameters == null)
+        #region Properties
+        /// <summary>
+        /// Gets the queryexpression associated with the <see cref="QueryCondition" />.
+        /// That is, the expression specified when the <see cref="QueryCondition" /> was created.
+        /// </summary>
+        public string QueryExpression => GetQueryExpresion();
+        #endregion
+
+        #region Constructors
+        internal QueryCondition(IntPtr native, DataReader reader) : base(UnsafeNativeMethods.NarrowBase(native), reader)
         {
-            return ReturnCode.BadParameter;
+            _native = native;
         }
-        queryParameters.Clear();
+        #endregion
 
-        var seq = IntPtr.Zero;
-
-        var ret = UnsafeNativeMethods.GetQueryParameters(_native, ref seq);
-
-        if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
+        #region Methods
+        /// <summary>
+        /// Gets the query parameters associated with the <see cref="QueryCondition" />. That is, the parameters specified on the last
+        /// successful call to <see cref="SetQueryParameters" />, or if <see cref="SetQueryParameters" /> was never called, the arguments specified when the
+        /// <see cref="QueryCondition" /> was created.
+        /// </summary>
+        /// <param name="queryParameters">The query parameters list to be filled up.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode GetQueryParameters(IList<string> queryParameters)
         {
-            seq.PtrToStringSequence(ref queryParameters, false);
-        }
+            if (queryParameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
+            queryParameters.Clear();
 
-        return ret;
-    }
+            IntPtr seq = IntPtr.Zero;
 
-    /// <summary>
-    /// Changes the query parameters associated with the <see cref="QueryCondition" />.
-    /// </summary>
-    /// <param name="queryParameters">The query parameters values to be set.</param>
-    /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
-    public ReturnCode SetQueryParameters(params string[] queryParameters)
-    {
-        if (queryParameters == null)
-        {
-            return ReturnCode.BadParameter;
-        }
+            ReturnCode ret = UnsafeNativeMethods.GetQueryParameters(_native, ref seq);
 
-        var seq = IntPtr.Zero;
-        queryParameters.StringSequenceToPtr(ref seq, false);
-        if (seq.Equals(IntPtr.Zero))
-        {
-            return ReturnCode.Error;
+            if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
+            {
+                MarshalHelper.PtrToStringSequence(seq, ref queryParameters, false);
+            }
+
+            return ret;
         }
 
-        var ret = UnsafeNativeMethods.SetQueryParameters(_native, seq);
+        /// <summary>
+        /// Changes the query parameters associated with the <see cref="QueryCondition" />.
+        /// </summary>
+        /// <param name="queryParameters">The query parameters values to be set.</param>
+        /// <returns>The <see cref="ReturnCode" /> that indicates the operation result.</returns>
+        public ReturnCode SetQueryParameters(params string[] queryParameters)
+        {
+            if (queryParameters == null)
+            {
+                return ReturnCode.BadParameter;
+            }
 
-        return ret;
+            IntPtr seq = IntPtr.Zero;
+            MarshalHelper.StringSequenceToPtr(queryParameters, ref seq, false);
+            if (seq.Equals(IntPtr.Zero))
+            {
+                return ReturnCode.Error;
+            }
+
+            ReturnCode ret = UnsafeNativeMethods.SetQueryParameters(_native, seq);
+
+            return ret;
+        }
+
+        private string GetQueryExpresion()
+        {
+            return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetQueryExpresion(_native));
+        }
+
+        internal new IntPtr ToNative()
+        {
+            return _native;
+        }
+        #endregion
+
+        #region UnsafeNativeMethods
+        /// <summary>
+        /// This class suppresses stack walks for unmanaged code permission. (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
+        /// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full security review to make sure that the usage
+        /// is secure because no stack walk will be performed.
+        /// </summary>
+        [SuppressUnmanagedCodeSecurity]
+        private static class UnsafeNativeMethods
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
+            public static extern IntPtr NarrowBase(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_GetQueryExpresion", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+            public static extern IntPtr GetQueryExpresion(IntPtr ptr);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_GetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode GetQueryParameters(IntPtr ptr, ref IntPtr seq);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_SetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
+            public static extern ReturnCode SetQueryParameters(IntPtr ptr, IntPtr seq);
+        }
+        #endregion
     }
-
-    private string GetQueryExpression()
-    {
-        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetQueryExpression(_native));
-    }
-
-    internal new IntPtr ToNative()
-    {
-        return _native;
-    }
-    #endregion
-}
-
-/// <summary>
-/// This class suppresses stack walks for unmanaged code permission.
-/// (System.Security.SuppressUnmanagedCodeSecurityAttribute is applied to this class.)
-/// This class is for methods that are potentially dangerous. Any caller of these methods must perform a full
-/// security review to make sure that the usage is secure because no stack walk will be performed.
-/// </summary>
-[SuppressUnmanagedCodeSecurity]
-internal static partial class UnsafeNativeMethods
-{
-#if NET7_0_OR_GREATER
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_NarrowBase")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr QueryConditionNarrowBase(IntPtr ptr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_GetQueryExpresion")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr GetQueryExpression(IntPtr ptr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_GetQueryParameters")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode GetQueryParameters(IntPtr ptr, ref IntPtr seq);
-
-    [SuppressUnmanagedCodeSecurity]
-    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_SetQueryParameters")]
-    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial ReturnCode SetQueryParameters(IntPtr ptr, IntPtr seq);
-#else
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_NarrowBase", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr QueryConditionNarrowBase(IntPtr ptr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_GetQueryExpresion", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-    public static extern IntPtr GetQueryExpression(IntPtr ptr);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_GetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode GetQueryParameters(IntPtr ptr, ref IntPtr seq);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "QueryCondition_SetQueryParameters", CallingConvention = CallingConvention.Cdecl)]
-    public static extern ReturnCode SetQueryParameters(IntPtr ptr, IntPtr seq);
-#endif
 }

@@ -17,30 +17,27 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
-
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// This enumeration defines the valid kinds of the <see cref="PresentationQosPolicy.AccessScope" />.
-/// </summary>
-public enum PresentationQosPolicyAccessScopeKind
+namespace OpenDDSharp.DDS
 {
     /// <summary>
-    /// Indicates that changes occur to instances independently. Instance access essentially acts as
-    /// a no-op with respect to CoherentAccess and OrderedAccess. Setting either of these values to true
-    /// has no observable affect within the subscribing application.
+    /// This enumeration defines the valid kinds of the <see cref="PresentationQosPolicy.AccessScope" />.
     /// </summary>
-    InstancePresentationQos = 0,
+    public enum PresentationQosPolicyAccessScopeKind
+    {
+        /// <summary>
+        /// Indicates that changes occur to instances independently. Instance access essentially acts as a no-op with respect to
+        /// CoherentAccess and OrderedAccess. Setting either of these values to true has no observable affect within the subscribing application.
+        /// </summary>
+        InstancePresentationQos = 0,
 
-    /// <summary>
-    /// Indicates that accepted changes are limited to all instances within the same
-    /// <see cref="DataReader" /> or <see cref="DataWriter" />.
-    /// </summary>
-    TopicPresentationQos = 1,
+        /// <summary>
+        /// Indicates that accepted changes are limited to all instances within the same <see cref="DataReader" /> or <see cref="DataWriter" />.
+        /// </summary>
+        TopicPresentationQos = 1,
 
-    /// <summary>
-    /// Indicates that accepted changes are limited to all instances within the same
-    /// <see cref="Publisher" /> or <see cref="Subscriber" />.
-    /// </summary>
-    GroupPresentationQos = 2,
+        /// <summary>
+        /// Indicates that accepted changes are limited to all instances within the same <see cref="Publisher" /> or <see cref="Subscriber" />.
+        /// </summary>
+        GroupPresentationQos = 2,
+    }
 }

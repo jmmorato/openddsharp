@@ -20,155 +20,146 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Runtime.InteropServices;
 
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// Represent a bit-mask of <see cref="ViewStateKind" />.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public readonly struct ViewStateMask : IEquatable<ViewStateMask>
+namespace OpenDDSharp.DDS
 {
-    #region Constants
     /// <summary>
-    /// A mask containing any <see cref="ViewStateKind" />.
+    /// Represent a bit-mask of <see cref="ViewStateKind" />.
     /// </summary>
-    public static readonly ViewStateMask AnyViewState = 65535U;
-    #endregion
-
-    #region Fields
-    private readonly uint _value;
-    #endregion
-
-    #region Constructors
-    internal ViewStateMask(uint value)
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ViewStateMask : IEquatable<ViewStateMask>
     {
-        _value = value;
-    }
-    #endregion
+        #region Constants
+        /// <summary>
+        /// A mask containing any <see cref="ViewStateKind" />.
+        /// </summary>
+        public static readonly ViewStateMask AnyViewState = 65535U;
+        #endregion
 
-    #region Methods
-    /// <summary>
-    /// Creates a new <see cref="ViewStateMask"/> from an <c>uint</c> value.
-    /// </summary>
-    /// <param name="value">The <c>uint</c> value.</param>
-    /// <returns>A newly created <see cref="ViewStateMask"/> object.</returns>
-    public static ViewStateMask FromUInt32(uint value)
-    {
-        return new ViewStateMask(value);
-    }
+        #region Fields
+        private readonly uint _value;
+        #endregion
 
-    /// <summary>
-    /// Gets the <c>uint</c> value of the <see cref="ViewStateMask"/>.
-    /// </summary>
-    /// <returns>The <c>uint</c> value.</returns>
-    public uint ToUInt32()
-    {
-        return _value;
-    }
-    #endregion
-
-    #region IEquatable<ViewStateMask> Members
-    /// <summary>
-    /// Indicates whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with this object.</param>
-    /// <returns>
-    /// <see langword="true" /> if the current object is equal to the other parameter;
-    /// otherwise, <see langword="false" />.
-    /// </returns>
-    public bool Equals(ViewStateMask other)
-    {
-        return _value == other._value;
-    }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>
-    /// <see langword="true" /> if the specified object is equal to the current object;
-    /// otherwise, <see langword="false" />.
-    /// </returns>
-    public override bool Equals(object obj)
-    {
-        if (obj == null)
+        #region Constructors
+        internal ViewStateMask(uint value)
         {
-            return false;
+            _value = value;
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Creates a new <see cref="ViewStateMask"/> from an <c>uint</c> value.
+        /// </summary>
+        /// <param name="value">The <c>uint</c> value.</param>
+        /// <returns>A newly created <see cref="ViewStateMask"/> object.</returns>
+        public static ViewStateMask FromUInt32(uint value)
+        {
+            return new ViewStateMask(value);
         }
 
-        if (GetType() != obj.GetType() && !(obj is uint))
+        /// <summary>
+        /// Gets the <c>uint</c> value of the <see cref="ViewStateMask"/>.
+        /// </summary>
+        /// <returns>The <c>uint</c> value.</returns>
+        public uint ToUInt32()
         {
-            return false;
+            return _value;
+        }
+        #endregion
+
+        #region IEquatable<ViewStateMask> Members
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+        public bool Equals(ViewStateMask other)
+        {
+            return _value == other._value;
         }
 
-        ViewStateMask aux;
-        if (obj is uint u)
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+        public override bool Equals(object obj)
         {
-            aux = u;
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (GetType() != obj.GetType() && !(obj is uint))
+            {
+                return false;
+            }
+
+            ViewStateMask aux;
+            if (obj is uint)
+            {
+                aux = (uint)obj;
+            }
+            else
+            {
+                aux = (ViewStateMask)obj;
+            }
+
+            return _value == aux._value;
         }
-        else
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
         {
-            aux = (ViewStateMask)obj;
+            return _value.GetHashCode();
+        }
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="ViewStateMask" /> to <c>uint</c>.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <c>uint</c> value.</returns>
+        public static implicit operator uint(ViewStateMask value)
+        {
+            return value.ToUInt32();
         }
 
-        return _value == aux._value;
-    }
+        /// <summary>
+        /// Implicit conversion operator from <c>uint</c> to <see cref="ViewStateMask" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="ViewStateMask" /> value.</returns>
+        public static implicit operator ViewStateMask(uint value)
+        {
+            return FromUInt32(value);
+        }
 
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode()
-    {
-        return _value.GetHashCode();
-    }
-    #endregion
+        /// <summary>
+        /// Equals comparison operator.
+        /// </summary>
+        /// <param name="x">The left value for the comparison.</param>
+        /// <param name="y">The right value for the comparison.</param>
+        /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+        public static bool operator ==(ViewStateMask x, ViewStateMask y)
+        {
+            return x.Equals(y);
+        }
 
-    #region Operators
-    /// <summary>
-    /// Implicit conversion operator from <see cref="ViewStateMask" /> to <c>uint</c>.
-    /// </summary>
-    /// <param name="value">The value to transform.</param>
-    /// <returns>The <c>uint</c> value.</returns>
-    public static implicit operator uint(ViewStateMask value)
-    {
-        return value.ToUInt32();
+        /// <summary>
+        /// Not equals comparison operator.
+        /// </summary>
+        /// <param name="x">The left value for the comparison.</param>
+        /// <param name="y">The right value for the comparison.</param>
+        /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+        public static bool operator !=(ViewStateMask x, ViewStateMask y)
+        {
+            return !x.Equals(y);
+        }
+        #endregion
     }
-
-    /// <summary>
-    /// Implicit conversion operator from <c>uint</c> to <see cref="ViewStateMask" />.
-    /// </summary>
-    /// <param name="value">The value to transform.</param>
-    /// <returns>The <see cref="ViewStateMask" /> value.</returns>
-    public static implicit operator ViewStateMask(uint value)
-    {
-        return FromUInt32(value);
-    }
-
-    /// <summary>
-    /// Equals comparison operator.
-    /// </summary>
-    /// <param name="x">The left value for the comparison.</param>
-    /// <param name="y">The right value for the comparison.</param>
-    /// <returns>
-    /// <see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.
-    /// </returns>
-    public static bool operator ==(ViewStateMask x, ViewStateMask y)
-    {
-        return x.Equals(y);
-    }
-
-    /// <summary>
-    /// Not equals comparison operator.
-    /// </summary>
-    /// <param name="x">The left value for the comparison.</param>
-    /// <param name="y">The right value for the comparison.</param>
-    /// <returns>
-    /// <see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.
-    /// </returns>
-    public static bool operator !=(ViewStateMask x, ViewStateMask y)
-    {
-        return !x.Equals(y);
-    }
-    #endregion
 }

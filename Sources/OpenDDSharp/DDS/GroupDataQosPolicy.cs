@@ -23,170 +23,171 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using OpenDDSharp.Helpers;
 
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// The purpose of this QoS is to allow the application to attach additional information to the created <see cref="Entity" /> objects such that when
-/// a remote application discovers their existence it can access that information and use it for its own purposes.
-/// </summary>
-public sealed class GroupDataQosPolicy : IEquatable<GroupDataQosPolicy>
+namespace OpenDDSharp.DDS
 {
-    #region Fields
-    private readonly List<IntPtr> toRelease = new List<IntPtr>();
-    #endregion
-
-    #region Properties
     /// <summary>
-    /// Gets or sets the bytes assigned to the <see cref="GroupDataQosPolicy" />.
+    /// The purpose of this QoS is to allow the application to attach additional information to the created <see cref="Entity" /> objects such that when
+    /// a remote application discovers their existence it can access that information and use it for its own purposes.
     /// </summary>
-    public IList<byte> Value { get; set; }
-    #endregion
-
-    #region Constructors
-    internal GroupDataQosPolicy()
+    public sealed class GroupDataQosPolicy : IEquatable<GroupDataQosPolicy>
     {
-        Value = new List<byte>();
-    }
-    #endregion
+        #region Fields
+        private readonly List<IntPtr> toRelease = new List<IntPtr>();
+        #endregion
 
-    #region Methods
-    internal GroupDataQosPolicyWrapper ToNative()
-    {
-        IntPtr ptr = IntPtr.Zero;
+        #region Properties
+        /// <summary>
+        /// Gets or sets the bytes assigned to the <see cref="GroupDataQosPolicy" />.
+        /// </summary>
+        public IList<byte> Value { get; set; }
+        #endregion
 
-        if (Value != null)
+        #region Constructors
+        internal GroupDataQosPolicy()
         {
-            Value.SequenceToPtr(ref ptr);
-            toRelease.Add(ptr);
+            Value = new List<byte>();
         }
+        #endregion
 
-        return new GroupDataQosPolicyWrapper
+        #region Methods
+        internal GroupDataQosPolicyWrapper ToNative()
         {
-            Value = ptr,
-        };
-    }
+            IntPtr ptr = IntPtr.Zero;
 
-    internal void FromNative(GroupDataQosPolicyWrapper wrapper)
-    {
-        IList<byte> list = new List<byte>();
-
-        if (wrapper.Value != IntPtr.Zero)
-        {
-            wrapper.Value.PtrToSequence(ref list);
-        }
-
-        Value = list;
-    }
-
-    internal void Release()
-    {
-        if (toRelease == null)
-        {
-            return;
-        }
-
-        foreach (IntPtr ptr in toRelease)
-        {
-            Marshal.FreeHGlobal(ptr);
-        }
-
-        toRelease.Clear();
-    }
-    #endregion
-
-    #region IEquatable<GroupDataQosPolicy> Members
-    /// <summary>
-    /// Indicates whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with this object.</param>
-    /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-    public bool Equals(GroupDataQosPolicy other)
-    {
-        if (other == null)
-        {
-            return false;
-        }
-
-        return Value.SequenceEqual(other.Value);
-    }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
-    public override bool Equals(object obj)
-    {
-        return (obj is GroupDataQosPolicy other) && Equals(other);
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode()
-    {
-        var hashCode = 1476352029;
-        if (Value != null)
-        {
-            foreach (var b in Value)
+            if (Value != null)
             {
-                hashCode = (hashCode * -1521134295) + b.GetHashCode();
+                Value.SequenceToPtr(ref ptr);
+                toRelease.Add(ptr);
             }
-        }
-        return hashCode;
-    }
-    #endregion
 
-    #region Operators
-    /// <summary>
-    /// Equals comparison operator.
-    /// </summary>
-    /// <param name="left">The left value for the comparison.</param>
-    /// <param name="right">The right value for the comparison.</param>
-    /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(GroupDataQosPolicy left, GroupDataQosPolicy right)
+            return new GroupDataQosPolicyWrapper
+            {
+                Value = ptr,
+            };
+        }
+
+        internal void FromNative(GroupDataQosPolicyWrapper wrapper)
+        {
+            IList<byte> list = new List<byte>();
+
+            if (wrapper.Value != IntPtr.Zero)
+            {
+                wrapper.Value.PtrToSequence(ref list);
+            }
+
+            Value = list;
+        }
+
+        internal void Release()
+        {
+            if (toRelease == null)
+            {
+                return;
+            }
+
+            foreach (IntPtr ptr in toRelease)
+            {
+                Marshal.FreeHGlobal(ptr);
+            }
+
+            toRelease.Clear();
+        }
+        #endregion
+
+        #region IEquatable<GroupDataQosPolicy> Members
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+        public bool Equals(GroupDataQosPolicy other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Value.SequenceEqual(other.Value);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+        public override bool Equals(object obj)
+        {
+            return (obj is GroupDataQosPolicy other) && Equals(other);
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            var hashCode = 1476352029;
+            if (Value != null)
+            {
+                foreach (var b in Value)
+                {
+                    hashCode = (hashCode * -1521134295) + b.GetHashCode();
+                }
+            }
+            return hashCode;
+        }
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Equals comparison operator.
+        /// </summary>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
+        /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+        public static bool operator ==(GroupDataQosPolicy left, GroupDataQosPolicy right)
+        {
+            if (left is null && right is null)
+            {
+                return true;
+            }
+
+            if (left is null || right is null)
+            {
+                return false;
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Not equals comparison operator.
+        /// </summary>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
+        /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+        public static bool operator !=(GroupDataQosPolicy left, GroupDataQosPolicy right)
+        {
+            if (left is null && right is null)
+            {
+                return false;
+            }
+
+            if (left is null || right is null)
+            {
+                return true;
+            }
+
+            return !left.Equals(right);
+        }
+        #endregion
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct GroupDataQosPolicyWrapper
     {
-        if (left is null && right is null)
-        {
-            return true;
-        }
-
-        if (left is null || right is null)
-        {
-            return false;
-        }
-
-        return left.Equals(right);
+        #region Fields
+        public IntPtr Value;
+        #endregion
     }
-
-    /// <summary>
-    /// Not equals comparison operator.
-    /// </summary>
-    /// <param name="left">The left value for the comparison.</param>
-    /// <param name="right">The right value for the comparison.</param>
-    /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
-    public static bool operator !=(GroupDataQosPolicy left, GroupDataQosPolicy right)
-    {
-        if (left is null && right is null)
-        {
-            return false;
-        }
-
-        if (left is null || right is null)
-        {
-            return true;
-        }
-
-        return !left.Equals(right);
-    }
-    #endregion
-}
-
-[StructLayout(LayoutKind.Sequential)]
-internal struct GroupDataQosPolicyWrapper
-{
-    #region Fields
-    public IntPtr Value;
-    #endregion
 }

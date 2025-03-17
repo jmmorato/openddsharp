@@ -20,155 +20,143 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Runtime.InteropServices;
 
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// This QoS policy should be used in combination with the <see cref="OwnershipQosPolicy" />.
-/// It only applies to the situation case where ownership kind is set to
-/// <see cref="OwnershipQosPolicyKind.ExclusiveOwnershipQos" />.
-/// </summary>
-public sealed class OwnershipStrengthQosPolicy : IEquatable<OwnershipStrengthQosPolicy>
+namespace OpenDDSharp.DDS
 {
-    #region Properties
     /// <summary>
-    /// Gets or sets the value of the ownership strength. The value member is used to determine which
-    /// <see cref="DataWriter" /> is the owner of the data-object instance. The default value is zero.
+    /// This QoS policy should be used in combination with the <see cref="OwnershipQosPolicy" />. It only applies to the situation case where
+    /// ownership kind is set to <see cref="OwnershipQosPolicyKind.ExclusiveOwnershipQos" />.
     /// </summary>
-    public int Value { get; set; }
-    #endregion
-
-    #region Constructors
-    internal OwnershipStrengthQosPolicy()
+    public sealed class OwnershipStrengthQosPolicy : IEquatable<OwnershipStrengthQosPolicy>
     {
-        Value = 0;
-    }
-    #endregion
+        #region Properties
+        /// <summary>
+        /// Gets or sets the value of the ownership strength. The value member is used to determine which <see cref="DataWriter" /> is the owner of the data-object
+        /// instance. The default value is zero.
+        /// </summary>
+        public int Value { get; set; }
+        #endregion
 
-    #region IEquatable<OwnershipStrengthQosPolicy> Members
-    /// <summary>
-    /// Indicates whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with this object.</param>
-    /// <returns>
-    /// <see langword="true" /> if the current object is equal to the other parameter;
-    /// otherwise, <see langword="false" />.
-    /// </returns>
-    public bool Equals(OwnershipStrengthQosPolicy other)
-    {
-        if (other == null)
+        #region Constructors
+        internal OwnershipStrengthQosPolicy()
         {
-            return false;
+            Value = 0;
+        }
+        #endregion
+
+        #region IEquatable<OwnershipStrengthQosPolicy> Members
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+        public bool Equals(OwnershipStrengthQosPolicy other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Value == other.Value;
         }
 
-        return Value == other.Value;
-    }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>
-    /// <see langword="true" /> if the specified object is equal to the current object;
-    /// otherwise, <see langword="false" />.
-    /// </returns>
-    public override bool Equals(object obj)
-    {
-        return (obj is OwnershipStrengthQosPolicy other) && Equals(other);
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode()
-    {
-        return -1937169414 + Value.GetHashCode();
-    }
-    #endregion
-
-    #region Operators
-    /// <summary>
-    /// Equals comparison operator.
-    /// </summary>
-    /// <param name="left">The left value for the comparison.</param>
-    /// <param name="right">The right value for the comparison.</param>
-    /// <returns>
-    /// <see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.
-    /// </returns>
-    public static bool operator ==(OwnershipStrengthQosPolicy left, OwnershipStrengthQosPolicy right)
-    {
-        if (left is null && right is null)
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+        public override bool Equals(object obj)
         {
-            return true;
+            return (obj is OwnershipStrengthQosPolicy other) && Equals(other);
         }
 
-        if (left is null || right is null)
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
         {
-            return false;
+            return -1937169414 + Value.GetHashCode();
+        }
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Equals comparison operator.
+        /// </summary>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
+        /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+        public static bool operator ==(OwnershipStrengthQosPolicy left, OwnershipStrengthQosPolicy right)
+        {
+            if (left is null && right is null)
+            {
+                return true;
+            }
+
+            if (left is null || right is null)
+            {
+                return false;
+            }
+
+            return left.Equals(right);
         }
 
-        return left.Equals(right);
+        /// <summary>
+        /// Not equals comparison operator.
+        /// </summary>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
+        /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+        public static bool operator !=(OwnershipStrengthQosPolicy left, OwnershipStrengthQosPolicy right)
+        {
+            if (left is null && right is null)
+            {
+                return false;
+            }
+
+            if (left is null || right is null)
+            {
+                return true;
+            }
+
+            return !left.Equals(right);
+        }
+        #endregion
     }
 
-    /// <summary>
-    /// Not equals comparison operator.
-    /// </summary>
-    /// <param name="left">The left value for the comparison.</param>
-    /// <param name="right">The right value for the comparison.</param>
-    /// <returns>
-    /// <see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.
-    /// </returns>
-    public static bool operator !=(OwnershipStrengthQosPolicy left, OwnershipStrengthQosPolicy right)
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct OwnershipStrengthQosPolicyWrapper
     {
-        if (left is null && right is null)
+        #region Fields
+        public int Value;
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Implicit conversion operator from <see cref="OwnershipStrengthQosPolicyWrapper" /> to <see cref="OwnershipStrengthQosPolicy" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="OwnershipStrengthQosPolicy" /> object.</returns>
+        public static implicit operator OwnershipStrengthQosPolicy(OwnershipStrengthQosPolicyWrapper value)
         {
-            return false;
+            return new OwnershipStrengthQosPolicy
+            {
+                Value = value.Value,
+            };
         }
 
-        if (left is null || right is null)
+        /// <summary>
+        /// Implicit conversion operator from <see cref="OwnershipStrengthQosPolicy" /> to <see cref="OwnershipStrengthQosPolicyWrapper" />.
+        /// </summary>
+        /// <param name="value">The value to transform.</param>
+        /// <returns>The <see cref="OwnershipStrengthQosPolicyWrapper" /> object.</returns>
+        public static implicit operator OwnershipStrengthQosPolicyWrapper(OwnershipStrengthQosPolicy value)
         {
-            return true;
+            return new OwnershipStrengthQosPolicyWrapper
+            {
+                Value = value.Value,
+            };
         }
-
-        return !left.Equals(right);
+        #endregion
     }
-    #endregion
-}
-
-[StructLayout(LayoutKind.Sequential)]
-internal struct OwnershipStrengthQosPolicyWrapper
-{
-    #region Fields
-    public int Value;
-    #endregion
-
-    #region Operators
-    /// <summary>
-    /// Implicit conversion operator from <see cref="OwnershipStrengthQosPolicyWrapper" /> to
-    /// <see cref="OwnershipStrengthQosPolicy" />.
-    /// </summary>
-    /// <param name="value">The value to transform.</param>
-    /// <returns>The <see cref="OwnershipStrengthQosPolicy" /> object.</returns>
-    public static implicit operator OwnershipStrengthQosPolicy(OwnershipStrengthQosPolicyWrapper value)
-    {
-        return new OwnershipStrengthQosPolicy
-        {
-            Value = value.Value,
-        };
-    }
-
-    /// <summary>
-    /// Implicit conversion operator from <see cref="OwnershipStrengthQosPolicy" /> to
-    /// <see cref="OwnershipStrengthQosPolicyWrapper" />.
-    /// </summary>
-    /// <param name="value">The value to transform.</param>
-    /// <returns>The <see cref="OwnershipStrengthQosPolicyWrapper" /> object.</returns>
-    public static implicit operator OwnershipStrengthQosPolicyWrapper(OwnershipStrengthQosPolicy value)
-    {
-        return new OwnershipStrengthQosPolicyWrapper
-        {
-            Value = value.Value,
-        };
-    }
-    #endregion
 }

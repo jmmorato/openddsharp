@@ -22,84 +22,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace OpenDDSharp.DDS;
-
-/// <summary>
-/// Global unique identifier of the built-in topics.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public readonly struct BuiltinTopicKey : IEquatable<BuiltinTopicKey>
+namespace OpenDDSharp.DDS
 {
-    #region Fields
-    [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 16)]
-    private readonly byte[] _value;
-    #endregion
-
-    #region Properties
     /// <summary>
-    /// Gets the value of the <see cref="BuiltinTopicKey" />.
+    /// Global unique identifier of the built-in topics.
     /// </summary>
-    public byte[] Value => _value;
-    #endregion
-
-    #region IEquatable<BuiltinTopicKey> Members
-    /// <summary>
-    /// Indicates whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with this object.</param>
-    /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
-    public bool Equals(BuiltinTopicKey other)
+    [StructLayout(LayoutKind.Sequential)]
+    public struct BuiltinTopicKey : IEquatable<BuiltinTopicKey>
     {
-        return _value.SequenceEqual(other.Value);
-    }
+        #region Fields
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I1, SizeConst = 16)]
+        private readonly byte[] _value;
+        #endregion
 
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
-    public override bool Equals(object obj)
-    {
-        if (obj == null)
+        #region Properties
+        /// <summary>
+        /// Gets the value of the <see cref="BuiltinTopicKey" />.
+        /// </summary>
+        public byte[] Value => _value;
+        #endregion
+
+        #region IEquatable<BuiltinTopicKey> Members
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><see langword="true" /> if the current object is equal to the other parameter; otherwise, <see langword="false" />.</returns>
+        public bool Equals(BuiltinTopicKey other)
         {
-            return false;
+            return _value.SequenceEqual(other.Value);
         }
 
-        return GetType() == obj.GetType() && Equals((BuiltinTopicKey)obj);
-    }
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
 
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode()
-    {
-        return -1939223833 + EqualityComparer<byte[]>.Default.GetHashCode(_value);
-    }
-    #endregion
+            if (GetType() != obj.GetType())
+            {
+                return false;
+            }
 
-    #region Operators
-    /// <summary>
-    /// Equals comparison operator.
-    /// </summary>
-    /// <param name="left">The left value for the comparison.</param>
-    /// <param name="right">The right value for the comparison.</param>
-    /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(BuiltinTopicKey left, BuiltinTopicKey right)
-    {
-        return left.Equals(right);
-    }
+            return Equals((BuiltinTopicKey)obj);
+        }
 
-    /// <summary>
-    /// Not equals comparison operator.
-    /// </summary>
-    /// <param name="left">The left value for the comparison.</param>
-    /// <param name="right">The right value for the comparison.</param>
-    /// <returns><see langword="false" /> if the left object is equal to the right object;
-    /// otherwise, <see langword="true" />.</returns>
-    public static bool operator !=(BuiltinTopicKey left, BuiltinTopicKey right)
-    {
-        return !left.Equals(right);
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return -1939223833 + EqualityComparer<byte[]>.Default.GetHashCode(_value);
+        }
+        #endregion
+
+        #region Operators
+        /// <summary>
+        /// Equals comparison operator.
+        /// </summary>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
+        /// <returns><see langword="true" /> if the left object is equal to the right object; otherwise, <see langword="false" />.</returns>
+        public static bool operator ==(BuiltinTopicKey left, BuiltinTopicKey right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Not equals comparison operator.
+        /// </summary>
+        /// <param name="left">The left value for the comparison.</param>
+        /// <param name="right">The right value for the comparison.</param>
+        /// <returns><see langword="false" /> if the left object is equal to the right object; otherwise, <see langword="true" />.</returns>
+        public static bool operator !=(BuiltinTopicKey left, BuiltinTopicKey right)
+        {
+            return !left.Equals(right);
+        }
+        #endregion
     }
-    #endregion
 }
