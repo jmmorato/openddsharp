@@ -119,7 +119,7 @@ jobs:
         Compress-Archive @compress        
 
     - name: Artifacts OpenDDS libraries
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: opendds-win-${{ matrix.BuildPlatform }}-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-win-${{ matrix.BuildPlatform }}.zip
@@ -238,7 +238,7 @@ jobs:
         zip -r "opendds-native-linux-x64.zip" "./opendds-native-linux-x64"
 
     - name: Artifact OpenDDS libraries
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: opendds-linux-x64-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-linux-x64.zip
@@ -358,7 +358,7 @@ jobs:
         zip -r "opendds-native-osx-x64.zip" "./opendds-native-osx-x64"
 
     - name: Artifacts OpenDDS libraries
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: opendds-osx-x64-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-osx-x64.zip
@@ -496,7 +496,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: NuGet Artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: openddsharp-nuget-${{ github.run_number }}
         path:  ${{ github.workspace }}/Release/*.nupkg
