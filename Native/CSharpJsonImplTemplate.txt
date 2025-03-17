@@ -1,4 +1,4 @@
-	public class <%TYPE%>TypeSupport : ITypeSupport<<%TYPE%>>
+	public class <%TYPE%>TypeSupport
     {
         #region Field
         private IntPtr _native;
@@ -23,11 +23,11 @@
         }
 
         public ReturnCode UnregisterType(DomainParticipant dp, string typeName)
-        {
+        {            
             return (ReturnCode)UnregisterType(_native, dp.ToNative(), typeName);
         }
-
-        public string EncodeToString(<%TYPE%> sample)
+        
+        public static string EncodeToString(<%TYPE%> sample)
         {
             return JsonSerializer.Serialize(sample, new JsonSerializerOptions
             {
@@ -42,8 +42,8 @@
                 }
             });
         }
-
-        public <%TYPE%> DecodeFromString(string str)
+        
+        public static <%TYPE%> DecodeFromString(string str)
         {
             return JsonSerializer.Deserialize<<%TYPE%>>(str, new JsonSerializerOptions
             {
@@ -83,7 +83,6 @@
     {
         #region Fields
         private readonly IntPtr _native;
-        private <%TYPE%>TypeSupport _typeSupport;
         #endregion
 
         #region Constructors
@@ -91,8 +90,6 @@
         {
 			IntPtr ptr = base.ToNative();
             _native = Narrow(ptr);
-
-            _typeSupport = new <%TYPE%>TypeSupport();
         }
         #endregion
 
@@ -101,7 +98,7 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var str = _typeSupport.EncodeToString(instance);
+            var str = <%TYPE%>TypeSupport.EncodeToString(instance);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = RegisterInstance(_native, json_data);
@@ -113,7 +110,7 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var str = _typeSupport.EncodeToString(instance);
+            var str = <%TYPE%>TypeSupport.EncodeToString(instance);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = RegisterInstanceTimestamp(_native, json_data, timestamp);
@@ -124,12 +121,12 @@
         public ReturnCode UnregisterInstance(<%TYPE%> data)
         {
             InstanceHandle handle = LookupInstance(data);
-            if (handle == InstanceHandle.HandleNil)
+            if (handle == InstanceHandle.HandleNil) 
             {
                 return ReturnCode.PreconditionNotMet;
             }
 
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
 	        return (ReturnCode)UnregisterInstance(_native, json_data, handle);
@@ -137,7 +134,7 @@
 
 		public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle)
         {
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             return (ReturnCode)UnregisterInstance(_native, json_data, handle);
@@ -145,7 +142,7 @@
 
         public ReturnCode UnregisterInstance(<%TYPE%> data, InstanceHandle handle, Timestamp timestamp)
         {
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             return (ReturnCode)UnregisterInstanceTimestamp(_native, json_data, handle, timestamp);
@@ -165,7 +162,7 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)Write(_native, json_data, handle);
@@ -182,7 +179,7 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)WriteWithTimestamp(_native, json_data, handle, timestamp);
@@ -204,11 +201,11 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)Dispose(_native, json_data, handle);
-
+            
             return ret;
         }
 
@@ -221,7 +218,7 @@
 
             ReturnCode ret = ReturnCode.Error;
 
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = (ReturnCode)DisposeTimestamp(_native, json_data, handle, timestamp);
@@ -242,8 +239,8 @@
             }
 
             ReturnCode ret = ReturnCode.Error;
-
-            var str = _typeSupport.EncodeToString(data);
+            
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var ptr = MarshalHelper.NativeUtf8FromString(str);
             ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);
 
@@ -253,7 +250,7 @@
 
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
-                    var sample = _typeSupport.DecodeFromString(json_data);
+                    var sample = <%TYPE%>TypeSupport.DecodeFromString(json_data);
 
                     data.MemberwiseCopy(sample);
                 }
@@ -267,8 +264,8 @@
         public InstanceHandle LookupInstance(<%TYPE%> instance)
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
-
-            var str = _typeSupport.EncodeToString(instance);
+                        
+            var str = <%TYPE%>TypeSupport.EncodeToString(instance);
             var json_data = MarshalHelper.NativeUtf8FromString(str);
 
             ret = LookupInstance(_native, json_data);
@@ -281,7 +278,7 @@
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Narrow", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr Narrow(IntPtr dw);
-
+        
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Json", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         private static extern int Write(IntPtr dw, [In] IntPtr jsonData, int handle);
@@ -328,7 +325,6 @@
     {
         #region Fields
         private readonly IntPtr _native;
-        private <%TYPE%>TypeSupport _typeSupport;
         #endregion
 
         #region Constructors
@@ -336,8 +332,6 @@
         {
 			IntPtr ptr = base.ToNative();
             _native = Narrow(ptr);
-
-            _typeSupport = new <%TYPE%>TypeSupport();
         }
         #endregion
 
@@ -372,7 +366,7 @@
 
             ReturnCode ret = ReturnCode.Error;
             ret = (ReturnCode)ReadWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
-
+            
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
                 IList<string> data = new List<string>();
@@ -384,8 +378,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -398,7 +392,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -420,7 +414,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)Read(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);
+            ret = (ReturnCode)Read(_native, ref rd, ref ri, maxSamples, sampleStates, viewStates, instanceStates);            
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -433,8 +427,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -447,7 +441,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -484,7 +478,7 @@
             IntPtr ri = IntPtr.Zero;
 
             ReturnCode ret = ReturnCode.Error;
-            ret = (ReturnCode)TakeWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());
+            ret = (ReturnCode)TakeWithCondition(_native, ref rd, ref ri, maxSamples, condition.ToNative());            
 
             if (ret == ReturnCode.Ok && !rd.Equals(IntPtr.Zero) && !ri.Equals(IntPtr.Zero))
             {
@@ -497,8 +491,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -511,7 +505,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -546,8 +540,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -560,7 +554,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -610,8 +604,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -624,7 +618,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -659,8 +653,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -673,7 +667,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -723,8 +717,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -737,7 +731,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -772,8 +766,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -786,7 +780,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -836,8 +830,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -850,7 +844,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -885,8 +879,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -899,7 +893,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -949,8 +943,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -963,7 +957,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -998,8 +992,8 @@
                 if (data != null)
                 {
                     foreach (var d in data)
-                    {
-                        receivedData.Add(_typeSupport.DecodeFromString(d));
+                    {                      
+                        receivedData.Add(<%TYPE%>TypeSupport.DecodeFromString(d));
                     }
                 }
 
@@ -1012,7 +1006,7 @@
                         receivedInfo.Add(aux);
                     }
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringSequence(rd);
                 MarshalHelper.ReleaseNativePointer(ri);
             }
@@ -1030,22 +1024,22 @@
             ReturnCode ret = ReturnCode.Error;
             IntPtr ptr = IntPtr.Zero;
             SampleInfoWrapper infoWrapper = new SampleInfoWrapper();
-
+            
             ret = (ReturnCode)ReadNextSample(_native, ref ptr, ref infoWrapper);
 
             if (ret == ReturnCode.Ok)
             {
                 var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
-
+                
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
-                    var sample = _typeSupport.DecodeFromString(json_data);
+                    var sample = <%TYPE%>TypeSupport.DecodeFromString(json_data);
 
                     data.MemberwiseCopy(sample);
                 }
 
                 MarshalHelper.ReleaseNativeStringPointer(ptr);
-
+                
                 sampleInfo.FromNative(infoWrapper);
             }
 
@@ -1066,14 +1060,14 @@
             if (ret == ReturnCode.Ok)
             {
                 var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
-
+            
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
-                    var sample = _typeSupport.DecodeFromString(json_data);
+                    var sample = <%TYPE%>TypeSupport.DecodeFromString(json_data);
 
                     data.MemberwiseCopy(sample);
                 }
-
+                
                 MarshalHelper.ReleaseNativeStringPointer(ptr);
 
                 sampleInfo.FromNative(infoWrapper);
@@ -1094,18 +1088,18 @@
                 return ReturnCode.BadParameter;
             }
 
-            var str = _typeSupport.EncodeToString(data);
+            var str = <%TYPE%>TypeSupport.EncodeToString(data);
             var ptr = MarshalHelper.NativeUtf8FromString(str);
 
-            var ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);
+            var ret = (ReturnCode)GetKeyValue(_native, ref ptr, handle);            
 
             if (ret == ReturnCode.Ok)
             {
                 var json_data = MarshalHelper.StringFromNativeUtf8(ptr) ?? string.Empty;
-
+                
                 if (!string.IsNullOrWhiteSpace(json_data))
                 {
-                    var sample = _typeSupport.DecodeFromString(json_data);
+                    var sample = <%TYPE%>TypeSupport.DecodeFromString(json_data);
 
                     data.MemberwiseCopy(sample);
                 }
@@ -1120,7 +1114,7 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var json_data = _typeSupport.EncodeToString(instance);
+            var json_data = <%TYPE%>TypeSupport.EncodeToString(instance);
 
             ret = LookupInstance(_native, json_data);
 
