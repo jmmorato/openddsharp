@@ -1040,12 +1040,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           ret.append(");\n");
           break;
         }
-        case AST_Decl::NT_enum: {
-          ret.append("    writer.WriteEnumSequence((");
-          ret.append(field_name);
-          ret.append(".Select(e => (uint)e)).ToList());\n");
-          break;
-        }
         default:
           break;
       }
@@ -1274,27 +1268,7 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           }
           break;
         }
-        case AST_Decl::NT_enum:  {
-          std::string enum_type = replaceString(std::string(base_type->full_name()), std::string("::"), std::string("."));
-          if (total_dim == 1) {
-            ret.append("    writer.WriteEnumArray(");
-            ret.append(field_name);
-            ret.append(".Select(e => (uint)e).ToArray(), ");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            ret.append(");\n");
-          } else {
-            ret.erase(0, 8);
-            ret.append(write_cdr_enum_multi_array(field_name, enum_type, "WriteEnum", dims, total_dim, indent));
-          }
-          break;
-        }
       }
-      break;
-    }
-    case AST_Decl::NT_enum: {
-      ret.append("    writer.WriteEnum((uint)");
-      ret.append(field_name);
-      ret.append(");\n");
       break;
     }
   }
@@ -1535,14 +1509,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           ret.append(" = reader.ReadWStringSequence();\n");
           break;
         }
-        case AST_Decl::NT_enum:  {
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = (reader.ReadEnumSequence().Select(e => (");
-          ret.append(replaceString(std::string(base_type->full_name()), std::string("::"), std::string(".")));
-          ret.append(")e)).ToList();\n");
-          break;
-        }
       }
       break;
     }
@@ -1752,31 +1718,7 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           }
           break;
         }
-        case AST_Decl::NT_enum:  {
-          std::string enum_type = replaceString(std::string(base_type->full_name()), std::string("::"), std::string("."));
-          if (total_dim == 1) {
-            ret.append("    ");
-            ret.append(field_name);
-            ret.append(" = reader.ReadEnumArray(");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            ret.append(").Select(e => (");
-            ret.append(enum_type);
-            ret.append(")e).ToArray();\n");
-          } else {
-            ret.append(read_cdr_enum_multi_array(field_name, enum_type, "ReadEnum", dims, total_dim, indent));
-          }
-          break;
-        }
       }
-      break;
-    }
-    case AST_Decl::NT_enum:  {
-      ret.append("    ");
-      ret.append(field_name);
-      ret.append(" = (");
-      ret.append(replaceString(std::string(field_type->full_name()), std::string("::"), std::string(".")));
-      ret.append(")reader.ReadEnum();\n");
-      break;
     }
   }
 
@@ -1860,84 +1802,6 @@ csharp_cdr_generator::read_cdr_multi_array(std::string name, std::string csharp_
 }
 
 std::string
-csharp_cdr_generator::read_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent)
-{
-  std::string ret("    ");
-
-  ret.append(name);
-  ret.append(" = new ");
-  ret.append(csharp_base_type);
-  ret.append("[");
-  ret.append(std::to_string(dims[0]->ev()->u.ulval));
-  ret.append("]");
-  for (unsigned int i = 1; i < total_dim; ++i) {
-    ret.append("[]");
-  }
-  ret.append(";\n");
-
-  indent.append("    ");
-  std::string loop_indent(indent);
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append(loop_indent);
-    ret.append("for (int i");
-    ret.append(std::to_string(i));
-    ret.append(" = 0; i");
-    ret.append(std::to_string(i));
-    ret.append(" < ");
-    ret.append(std::to_string(dims[i]->ev()->u.ulval));
-    ret.append("; ++i");
-    ret.append(std::to_string(i));
-    ret.append(") {\n");
-
-    loop_indent.append("    ");
-
-    if (i + 1 < total_dim) {
-      ret.append(loop_indent);
-      ret.append(name);
-      for (unsigned int j = 0; j < i + 1; ++j) {
-
-        ret.append("[i");
-        ret.append(std::to_string(j));
-        ret.append("]");
-      }
-      ret.append(" = new ");
-      ret.append(csharp_base_type);
-      ret.append("[");
-      ret.append(std::to_string(dims[i + 1]->ev()->u.ulval));
-      ret.append("]");
-      for (unsigned int j = i + 2; j < total_dim; ++j) {
-        ret.append("[]");
-      }
-      ret.append(";\n");
-    }
-  }
-
-  ret.append(loop_indent);
-  ret.append(name);
-  ret.append("[");
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append("i");
-    ret.append(std::to_string(i));
-    if (i + 1 < total_dim) {
-      ret.append("][");
-    }
-  }
-  ret.append("] = (");
-  ret.append(csharp_base_type);
-  ret.append(")reader.");
-  ret.append(read_method);
-  ret.append("();\n");
-
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    loop_indent.erase(0, 4);
-    ret.append(loop_indent);
-    ret.append("}\n");
-  }
-
-  return ret;
-}
-
-std::string
 csharp_cdr_generator::write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent)
 {
   std::string ret("");
@@ -1963,52 +1827,6 @@ csharp_cdr_generator::write_cdr_multi_array(std::string name, std::string csharp
   ret.append("writer.");
   ret.append(write_method);
   ret.append("(");
-  ret.append(name);
-  ret.append("[");
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append("i");
-    ret.append(std::to_string(i));
-    if (i + 1 < total_dim) {
-      ret.append("][");
-    }
-  }
-  ret.append("]);\n");
-
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    loop_indent.erase(0, 4);
-    ret.append(loop_indent);
-    ret.append("}\n");
-  }
-
-  return ret;
-}
-
-std::string
-csharp_cdr_generator::write_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent)
-{
-  std::string ret("");
-
-  indent.append("    ");
-  std::string loop_indent(indent);
-  for (ACE_UINT32 i = 0; i < total_dim; i++) {
-    ret.append(loop_indent);
-    ret.append("for (int i");
-    ret.append(std::to_string(i));
-    ret.append(" = 0; i");
-    ret.append(std::to_string(i));
-    ret.append(" < ");
-    ret.append(std::to_string(dims[i]->ev()->u.ulval));
-    ret.append("; ++i");
-    ret.append(std::to_string(i));
-    ret.append(") {\n");
-
-    loop_indent.append("    ");
-  }
-
-  ret.append(loop_indent);
-  ret.append("writer.");
-  ret.append(write_method);
-  ret.append("((uint)");
   ret.append(name);
   ret.append("[");
   for (ACE_UINT32 i = 0; i < total_dim; i++) {

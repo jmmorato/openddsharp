@@ -827,6 +827,7 @@ public class CdrWriter
         }
 
         WriteSequenceLength((uint)sequence.Count);
+
         foreach (var item in sequence)
         {
             WriteEnum(item);
