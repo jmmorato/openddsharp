@@ -18,8 +18,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
     private readonly Random _random = new ();
     private readonly int _totalInstances;
     private readonly int _totalSamples;
-    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
-    private readonly KeyedOctetsTopicType _sample;
+    private readonly byte[] _payload;
 
     private int _count;
 
@@ -39,37 +38,29 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
         _evt = new ManualResetEventSlim(false);
 
-        var payload = new byte[totalPayload];
-        _random.NextBytes(payload);
+        _payload = new byte[totalPayload];
+        _random.NextBytes(_payload);
 
         InitializeDDSEntities();
-
-        _count = 0;
-
-        _readerThread.Start();
-
-        _sample = new KeyedOctetsTopicType();
-        _sample.Value.AddRange(payload);
     }
 
     public IList<TimeSpan> Run()
     {
         var latencyHistory = new List<TimeSpan>();
 
+        _readerThread.Start();
+
+        var sample = new KeyedOctetsTopicType();
+        sample.Value.AddRange(_payload);
+
         for (var i = 1; i <= _totalSamples; i++)
         {
             for (var j = 1; j <= _totalInstances; j++)
             {
-                _sample.Key = j.ToString(CultureInfo.InvariantCulture);
+                sample.Key = j.ToString(CultureInfo.InvariantCulture);
 
-                if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
-                {
-                    instanceHandle = _dataWriter.RegisterInstance(_sample);
-                    _instanceHandles.Add(j, instanceHandle);
-                }
-
-                var publicationTime = DateTime.UtcNow.Ticks;
-                _dataWriter.Write(_sample);
+                var publicationTime = DateTime.Now.Ticks;
+                _dataWriter.Write(sample);
 
                 _evt.Wait();
 
@@ -103,8 +94,6 @@ internal sealed class RtiConnextLatencyTest : IDisposable
 
         _participant.DisposeContainedEntities();
         _participant.Dispose();
-
-        DomainParticipantFactory.Instance.Dispose();
     }
 
     private void InitializeDDSEntities()
@@ -118,7 +107,7 @@ internal sealed class RtiConnextLatencyTest : IDisposable
             .WithTransportBuiltin(t => t.Mask = TransportBuiltinMask.Udpv4);
 
         _participant = DomainParticipantFactory.Instance.CreateParticipant(DOMAIN_ID, pQos);
-        _topic = _participant.CreateTopic<KeyedOctetsTopicType>("LatencyTestRtiConnext");
+        _topic = _participant.CreateTopic<KeyedOctetsTopicType>("KeyedOctetsTopic");
 
         _publisher = _participant.CreatePublisher();
         _subscriber = _participant.CreateSubscriber();
@@ -144,8 +133,6 @@ internal sealed class RtiConnextLatencyTest : IDisposable
         {
             IsBackground = true,
         };
-
-        Thread.Sleep(2_000);
     }
 
     private void ReaderThread()

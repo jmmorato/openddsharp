@@ -53,31 +53,6 @@ public struct TimeValue : IEquatable<TimeValue>
     }
     #endregion
 
-    #region Methods
-    /// <summary>
-    /// Converts the time value to a CDR representation.
-    /// </summary>
-    /// <returns>The byte span serialized.</returns>
-    internal ReadOnlySpan<byte> ToCDR()
-    {
-        var writer = new Marshaller.Cdr.CdrWriter();
-        writer.WriteInt64(Seconds);
-        writer.WriteInt32(MicroSeconds);
-        return writer.GetBuffer();
-    }
-
-    /// <summary>
-    /// Updates the time value from a CDR representation.
-    /// </summary>
-    /// <param name="data">The byte span serialized.</param>
-    internal void FromCDR(ReadOnlySpan<byte> data)
-    {
-        var reader = new Marshaller.Cdr.CdrReader(data.ToArray());
-        Seconds = reader.ReadInt64();
-        MicroSeconds = reader.ReadInt32();
-    }
-    #endregion
-
     #region IEquatable<TimeValue> Members
     /// <summary>
     /// Indicates whether the current object is equal to another object of the same type.

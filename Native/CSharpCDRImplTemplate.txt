@@ -117,9 +117,10 @@
         {
             InstanceHandle ret = InstanceHandle.HandleNil;
 
-            var bytes = _typeSupport.EncodeToBytes(instance);
+            var str = _typeSupport.EncodeToString(instance);
+            var json_data = MarshalHelper.NativeUtf8FromString(str);
 
-            ret = <%TYPE%>DataWriterNative.RegisterInstance(_native, bytes, (UIntPtr)bytes.Length);
+            ret = <%TYPE%>DataWriterNative.RegisterInstance(_native, json_data);
 
             return ret;
         }
@@ -301,9 +302,8 @@
         internal static partial IntPtr Narrow(IntPtr dw);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressGCTransition]
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_Write_Cdr")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         internal static partial int Write(IntPtr dw, byte[] cdrData, UIntPtr size, int handle);
 
         [SuppressUnmanagedCodeSecurity]
@@ -315,12 +315,6 @@
         [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         internal static partial int RegisterInstance(IntPtr dw, IntPtr jsonData);
-
-        [SuppressUnmanagedCodeSecurity]
-        [SuppressGCTransition]
-        [LibraryImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr")]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvSuppressGCTransition) })]
-        internal static partial int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
         [SuppressUnmanagedCodeSecurity]
@@ -372,10 +366,6 @@
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Json", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int RegisterInstance(IntPtr dw, [In] IntPtr jsonData);
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstance_Cdr", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RegisterInstance(IntPtr dw, byte[] cdrData, UIntPtr size);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataWriter_RegisterInstanceTimestamp_Json", CallingConvention = CallingConvention.Cdecl)]
@@ -1141,7 +1131,7 @@
             ReturnCode ret = ReturnCode.Error;
             var ptr = IntPtr.Zero;
             var infoWrapper = new SampleInfoWrapper();
-            var size = UIntPtr.Zero;
+            UIntPtr size = UIntPtr.Zero;
             ret = (ReturnCode)<%TYPE%>DataReaderNative.TakeNextSample(_native, ref ptr, ref size, ref infoWrapper);
             if (ret == ReturnCode.Ok)
             {
@@ -1273,12 +1263,10 @@
         internal static partial int TakeNextInstanceWithCondition(IntPtr dr, ref IntPtr receivedData, ref IntPtr receivedInfo, int handle, int maxSamples, IntPtr condition);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressGCTransition]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int ReadNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 
         [SuppressUnmanagedCodeSecurity]
-        [SuppressGCTransition]
         [DllImport(<%TYPE%>.API_DLL, EntryPoint = "<%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int TakeNextSample(IntPtr dr, [In, Out] ref IntPtr cdr_data, [In, Out] ref UIntPtr size, [In, Out] ref SampleInfoWrapper sampleInfo);
 

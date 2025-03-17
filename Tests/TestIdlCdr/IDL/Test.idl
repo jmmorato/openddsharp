@@ -48,7 +48,7 @@ module CdrWrapper {
     typedef char CharArrayType[5];
     typedef wchar WCharArrayType[5];
     typedef boolean BooleanArrayType[5];
-    typedef octet OctetArrayType[2048];
+    typedef octet OctetArrayType[5];
     typedef int8 Int8ArrayType[5];
     typedef uint8 UInt8ArrayType[5];
     typedef short Int16ArrayType[5];
@@ -114,40 +114,6 @@ module CdrWrapper {
     typedef TestEnum EnumArrayType[5];
 
     typedef TestEnum EnumMultiArrayType[3][4][2];
-
-    @topic
-    struct NestedStruct {
-        long Id;
-        string Message;
-    };
-
-    typedef sequence<NestedStruct> UnboundedStructSequenceType;
-    typedef sequence<NestedStruct, 5> BoundedStructSequenceType;
-
-    typedef NestedStruct StructArrayType[5];
-
-    typedef NestedStruct StructMultiArrayType[3][4][2];
-
-    @topic
-    struct TestStruct {
-        NestedStruct NestedStructField;
-    };
-
-    @topic
-    struct TestStructSequence {
-        UnboundedStructSequenceType UnboundedStructSequenceField;
-        BoundedStructSequenceType BoundedStructSequenceField;
-    };
-
-    @topic
-    struct TestStructArray {
-        StructArrayType StructArrayField;
-    };
-
-    @topic
-    struct TestStructMultiArray {
-        StructMultiArrayType StructMultiArrayField;
-    };
 
     @topic
     struct TestPrimitive {

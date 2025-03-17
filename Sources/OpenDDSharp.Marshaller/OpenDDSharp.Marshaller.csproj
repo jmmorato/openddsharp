@@ -40,7 +40,7 @@
 
     <ItemGroup>
         <!-- Analyzer API for our custom checks. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.10.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
@@ -51,7 +51,7 @@
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.28.0.94264">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
@@ -83,7 +83,7 @@
 
     <ItemGroup>
         <AssemblyAttribute Include="System.CLSCompliant">
-            <_Parameter1>false</_Parameter1>
+            <_Parameter1>true</_Parameter1>
             <_Parameter1_TypeName>System.Boolean</_Parameter1_TypeName>
         </AssemblyAttribute>
     </ItemGroup>

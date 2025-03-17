@@ -117,7 +117,11 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib --std=c++14";
+                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --prefix=/usr/lib";
+                if (BuildContext.IsOSX)
+                {
+                    arguments += " --std=c++11";
+                }
                 context.Log.Information(arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings
@@ -144,8 +148,8 @@ namespace OpenDDSharp.Build.Tasks
                     Version = version,
                 });
 
-                var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}";
-                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test --std=c++14";
+                var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}"; // -vcvars_ver=14.36.32532
+                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test";
                 if (context.BuildConfiguration == "Release")
                 {
                     arguments += " --no-debug --optimize";
@@ -161,7 +165,6 @@ namespace OpenDDSharp.Build.Tasks
                     Arguments = arguments,
                     WorkingDirectory = context.DdsRoot,
                 });
-
                 if (exit != 0)
                 {
                     throw new BuildException($"Error calling the OpenDDS configure script. Exit code: {exit}");
@@ -225,10 +228,10 @@ namespace OpenDDSharp.Build.Tasks
             {
                 try
                 {
-                    var output = process.GetStandardOutput().ToList();
+                    var output = process.GetStandardOutput();
                     if (output.Any())
                     {
-                        return output[0];
+                        return output.First();
                     }
                 }
                 catch

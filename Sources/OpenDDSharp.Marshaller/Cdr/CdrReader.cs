@@ -189,7 +189,7 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a string from the stream.
+    /// Reads an string from the stream.
     /// </summary>
     /// <returns>The string value.</returns>
     public string ReadWString()

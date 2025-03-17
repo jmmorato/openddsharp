@@ -60,7 +60,7 @@ public class CdrWriter
     public void WriteSByte(sbyte b) => _writer.Write(b);
 
     /// <summary>
-    /// Writes an array of unsigned bytes to the stream.
+    /// Writes a array of unsigned bytes to the stream.
     /// </summary>
     /// <param name="buf">The unsigned bytes to be written.</param>
     public void WriteBytes(ReadOnlySpan<byte> buf)

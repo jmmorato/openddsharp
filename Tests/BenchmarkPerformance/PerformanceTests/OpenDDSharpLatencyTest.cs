@@ -13,8 +13,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
     private readonly Random _random = new ();
     private readonly int _totalInstances;
     private readonly int _totalSamples;
-    private readonly Dictionary<int, InstanceHandle> _instanceHandles = new();
-    private readonly KeyedOctets _sample;
+    private readonly byte[] _payload;
 
     private int _count;
 
@@ -35,39 +34,32 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _totalSamples = totalSamples;
         _evt = new ManualResetEventSlim(false);
 
-        var payload = new byte[totalPayload];
-        _random.NextBytes(payload);
+        _payload = new byte[totalPayload];
+        _random.NextBytes(_payload);
 
         InitializeDDSEntities();
-
-        _count = 0;
-
-        _readerThread.Start();
-        _sample = new KeyedOctets
-        {
-            ValueField = payload,
-        };
     }
 
     public IList<TimeSpan> Run()
     {
+        _count = 0;
+
         var latencyHistory = new List<TimeSpan>();
+
+        _readerThread.Start();
+        var sample = new KeyedOctets
+        {
+            ValueField = _payload,
+        };
 
         for (var i = 1; i <= _totalSamples; i++)
         {
             for (var j = 1; j <= _totalInstances; j++)
             {
-                _sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
+                sample.KeyField = j.ToString(CultureInfo.InvariantCulture);
 
-                if (!_instanceHandles.TryGetValue(j, out var instanceHandle))
-                {
-                    instanceHandle = _dataWriter.RegisterInstance(_sample);
-                    _instanceHandles.Add(j, instanceHandle);
-                }
-
-                var publicationTime = DateTime.UtcNow.Ticks;
-
-                _dataWriter.Write(_sample, instanceHandle);
+                var publicationTime = DateTime.Now.Ticks;
+                _dataWriter.Write(sample);
 
                 _evt.Wait();
 
@@ -76,7 +68,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
                 latencyHistory.Add(latency);
 
                 _evt.Reset();
-            }
+            };
         }
 
         _readerThread.Join();
@@ -94,12 +86,22 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         var config = TransportRegistry.Instance.CreateConfig(configName);
         var inst = TransportRegistry.Instance.CreateInst(instName, "rtps_udp");
-        var transport = new RtpsUdpInst(inst)
+        var rui = new RtpsUdpInst(inst)
         {
             UseMulticast = false,
-            LocalAddress = "127.0.0.1:0",
+            LocalAddress = "127.0.0.1",
+            NakResponseDelay = new TimeValue
+            {
+                Seconds = 0,
+                MicroSeconds = 50_000,
+            },
+            HeartbeatPeriod = new TimeValue
+            {
+                Seconds = 0,
+                MicroSeconds = 50_000,
+            },
         };
-        config.Insert(transport);
+        config.Insert(rui);
 
         _participant = _dpf.CreateParticipant(DOMAIN_ID);
         TransportRegistry.Instance.BindConfig(configName, _participant);
@@ -110,11 +112,7 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
 
         _topic = _participant.CreateTopic("LatencyTest", typeName);
 
-        var pubQos = new PublisherQos
-        {
-            EntityFactory = { AutoenableCreatedEntities = false }
-        };
-        _publisher = _participant.CreatePublisher(pubQos);
+        _publisher = _participant.CreatePublisher();
 
         var dwQos = new DataWriterQos
         {
@@ -126,14 +124,10 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
+        TransportRegistry.Instance.BindConfig(configName, dw);
         _dataWriter = new KeyedOctetsDataWriter(dw);
 
-        var subQos = new SubscriberQos
-        {
-            EntityFactory = { AutoenableCreatedEntities = false }
-        };
-        _subscriber = _participant.CreateSubscriber(subQos);
-
+        _subscriber = _participant.CreateSubscriber();
         var drQos = new DataReaderQos
         {
             Reliability = { Kind = ReliabilityQosPolicyKind.ReliableReliabilityQos },
@@ -144,10 +138,8 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
             },
         };
         var dr =  _subscriber.CreateDataReader(_topic, drQos);
+        TransportRegistry.Instance.BindConfig(configName, dr);
         _dataReader = new KeyedOctetsDataReader(dr);
-
-        _dataWriter.Enable();
-        _dataReader.Enable();
 
         _waitSet = new WaitSet();
         _statusCondition = _dataReader.StatusCondition;
@@ -157,18 +149,20 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _readerThread = new Thread(ReaderThreadProc)
         {
             IsBackground = true,
-            Priority = ThreadPriority.Highest,
         };
-
-        Thread.Sleep(2_000);
     }
 
     private void ReaderThreadProc()
     {
+        var duration = new Duration
+        {
+            Seconds = 1,
+            NanoSeconds = 0,
+        };
         while (true)
         {
             var conditions = new List<Condition>();
-            _waitSet.Wait(conditions);
+            _waitSet.Wait(conditions, duration);
 
             var sample = new KeyedOctets();
             var sampleInfo = new SampleInfo();
@@ -192,7 +186,6 @@ internal sealed class OpenDDSharpLatencyTest : IDisposable
         _publisher.DeleteContainedEntities();
         _participant.DeletePublisher(_publisher);
 
-        _waitSet.DetachCondition(_statusCondition);
         _dataReader.DeleteContainedEntities();
         _subscriber.DeleteDataReader(_dataReader);
         _subscriber.DeleteContainedEntities();

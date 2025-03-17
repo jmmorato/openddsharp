@@ -28,7 +28,7 @@ using OpenDDSharp.UnitTest.Helpers;
 namespace OpenDDSharp.UnitTest
 {
     /// <summary>
-    /// The assembly initializer class.
+    /// The assemble initializer class.
     /// </summary>
     [TestClass]
     public static class AssemblyInitializer
