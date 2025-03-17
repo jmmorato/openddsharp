@@ -4,11 +4,9 @@ module CdrWrapper {
     typedef sequence<char> UnboundedCharSeqType;
     typedef sequence<wchar> UnboundedWCharSeqType;
     typedef sequence<boolean> UnboundedBooleanSeqType;
-    typedef sequence<int8> UnboundedInt8SeqType;
     typedef sequence<int16> UnboundedInt16SeqType;
     typedef sequence<int32> UnboundedInt32SeqType;
     typedef sequence<int64> UnboundedInt64SeqType;
-    typedef sequence<uint8> UnboundedUInt8SeqType;
     typedef sequence<uint16> UnboundedUInt16SeqType;
     typedef sequence<uint32> UnboundedUInt32SeqType;
     typedef sequence<uint64> UnboundedUInt64SeqType;
@@ -19,11 +17,9 @@ module CdrWrapper {
     typedef sequence<char, 5> BoundedCharSeqType;
     typedef sequence<wchar, 5> BoundedWCharSeqType;
     typedef sequence<boolean, 5> BoundedBooleanSeqType;
-    typedef sequence<int8, 5> BoundedInt8SeqType;
     typedef sequence<int16, 5> BoundedInt16SeqType;
     typedef sequence<int32, 5> BoundedInt32SeqType;
     typedef sequence<int64, 5> BoundedInt64SeqType;
-    typedef sequence<uint8, 5> BoundedUInt8SeqType;
     typedef sequence<uint16, 5> BoundedUInt16SeqType;
     typedef sequence<uint32, 5> BoundedUInt32SeqType;
     typedef sequence<uint64, 5> BoundedUInt64SeqType;
@@ -34,8 +30,6 @@ module CdrWrapper {
     typedef wchar WCharArrayType[5];
     typedef boolean BooleanArrayType[5];
     typedef octet OctetArrayType[5];
-    typedef int8 Int8ArrayType[5];
-    typedef uint8 UInt8ArrayType[5];
     typedef short Int16ArrayType[5];
     typedef unsigned short UInt16ArrayType[5];
     typedef long Int32ArrayType[5];
@@ -45,8 +39,6 @@ module CdrWrapper {
     typedef float FloatArrayType[5];
     typedef double DoubleArrayType[5];
 
-    typedef int8 Int8MultiArrayType[3][4][2];
-    typedef uint8 UInt8MultiArrayType[3][4][2];
     typedef int16 Int16MultiArrayType[3][4][2];
     typedef uint16 UInt16MultiArrayType[3][4][2];
     typedef int32 Int32MultiArrayType[3][4][2];
@@ -66,11 +58,9 @@ module CdrWrapper {
     struct TestPrimitive {
         boolean BoolField;
         octet ByteField;
-        int8 Int8Field;
         int16 Int16Field;
         int32 Int32Field;
         int64 Int64Field;
-        uint8 UInt8Field;
         uint16 UInt16Field;
         uint32 UInt32Field;
         uint64 UInt64Field;
@@ -84,11 +74,9 @@ module CdrWrapper {
     struct TestPrimitiveSequence {
         UnboundedBooleanSeqType UnboundedBooleanSequenceField;
         UnboundedOctetSeqType UnboundedByteSequenceField;
-        UnboundedInt8SeqType UnboundedInt8SequenceField;
         UnboundedInt16SeqType UnboundedInt16SequenceField;
         UnboundedInt32SeqType UnboundedInt32SequenceField;
         UnboundedInt64SeqType UnboundedInt64SequenceField;
-        UnboundedUInt8SeqType UnboundedUInt8SequenceField;
         UnboundedUInt16SeqType UnboundedUInt16SequenceField;
         UnboundedUInt32SeqType UnboundedUInt32SequenceField;
         UnboundedUInt64SeqType UnboundedUInt64SequenceField;
@@ -99,11 +87,9 @@ module CdrWrapper {
 
         BoundedBooleanSeqType BoundedBooleanSequenceField;
         BoundedOctetSeqType BoundedByteSequenceField;
-        BoundedInt8SeqType BoundedInt8SequenceField;
         BoundedInt16SeqType BoundedInt16SequenceField;
         BoundedInt32SeqType BoundedInt32SequenceField;
         BoundedInt64SeqType BoundedInt64SequenceField;
-        BoundedUInt8SeqType BoundedUInt8SequenceField;
         BoundedUInt16SeqType BoundedUInt16SequenceField;
         BoundedUInt32SeqType BoundedUInt32SequenceField;
         BoundedUInt64SeqType BoundedUInt64SequenceField;
@@ -117,8 +103,6 @@ module CdrWrapper {
     struct TestPrimitiveArray {
         BooleanArrayType BooleanArrayField;
         OctetArrayType ByteArrayField;
-        Int8ArrayType Int8ArrayField;
-        UInt8ArrayType UInt8ArrayField;
         Int16ArrayType Int16ArrayField;
         Int32ArrayType Int32ArrayField;
         Int64ArrayType Int64ArrayField;
@@ -133,8 +117,6 @@ module CdrWrapper {
 
     @topic
     struct TestPrimitiveMultiArray {
-        Int8MultiArrayType Int8MultiArrayField;
-        UInt8MultiArrayType UInt8MultiArrayField;
         Int16MultiArrayType Int16MultiArrayField;
         UInt16MultiArrayType UInt16MultiArrayField;
         Int32MultiArrayType Int32MultiArrayField;

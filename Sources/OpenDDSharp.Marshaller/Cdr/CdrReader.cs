@@ -25,21 +25,12 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a unsigned byte from the stream.
+    /// Reads a byte from the stream.
     /// </summary>
     /// <returns>The byte value.</returns>
     public byte ReadByte()
     {
         return _buf[_position++];
-    }
-
-    /// <summary>
-    /// Reads a signed byte from the stream.
-    /// </summary>
-    /// <returns>The byte value.</returns>
-    public sbyte ReadSByte()
-    {
-        return (sbyte)_buf[_position++];
     }
 
     /// <summary>
@@ -237,16 +228,6 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a sequence of bytes from the stream.
-    /// </summary>
-    /// <returns>The sequence of bytes from the stream.</returns>
-    public IList<sbyte> ReadSByteSequence()
-    {
-        var len = ReadSequenceLength();
-        return (sbyte[])(Array)ReadBytes((int)len).ToArray();
-    }
-
-    /// <summary>
     /// Reads an array of bytes from the stream.
     /// </summary>
     /// <param name="len">The length of the array.</param>
@@ -255,17 +236,6 @@ public class CdrReader
     {
         return ReadBytes(len).ToArray();
     }
-
-    /// <summary>
-    /// Reads an array of signed bytes from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of signed bytes from the stream.</returns>
-    public sbyte[] ReadSByteArray(int len)
-    {
-        return (sbyte[])(Array)ReadBytes(len).ToArray();
-    }
-
 
     /// <summary>
     /// Reads a sequence of signed short values from the stream.

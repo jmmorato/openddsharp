@@ -117,13 +117,11 @@ namespace OpenDDSharp.UnitTest
 
             var data = new TestPrimitive
             {
-                Int8Field = -11,
                 Int16Field = -11,
                 Int32Field = 22,
                 Int64Field = -33,
                 BoolField = true,
                 ByteField = 0x42,
-                UInt8Field = 11,
                 UInt16Field = 11,
                 UInt32Field = 22,
                 UInt64Field = 33,
@@ -145,13 +143,11 @@ namespace OpenDDSharp.UnitTest
             ret = dataReader.ReadNextSample(received, sampleInfo);
             Assert.AreEqual(ReturnCode.Ok, ret);
 
-            Assert.AreEqual(data.Int8Field, received.Int8Field);
             Assert.AreEqual(data.Int16Field, received.Int16Field);
             Assert.AreEqual(data.Int32Field, received.Int32Field);
             Assert.AreEqual(data.Int64Field, received.Int64Field);
             Assert.AreEqual(data.BoolField, received.BoolField);
             Assert.AreEqual(data.ByteField, received.ByteField);
-            Assert.AreEqual(data.UInt8Field, received.UInt8Field);
             Assert.AreEqual(data.UInt16Field, received.UInt16Field);
             Assert.AreEqual(data.UInt32Field, received.UInt32Field);
             Assert.AreEqual(data.UInt64Field, received.UInt64Field);
@@ -160,13 +156,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(data.CharField, received.CharField);
             Assert.AreEqual(data.WCharField, received.WCharField);
 
-            Assert.AreEqual(typeof(sbyte), data.Int8Field.GetType());
             Assert.AreEqual(typeof(short), data.Int16Field.GetType());
             Assert.AreEqual(typeof(int), data.Int32Field.GetType());
             Assert.AreEqual(typeof(long), data.Int64Field.GetType());
             Assert.AreEqual(typeof(bool), data.BoolField.GetType());
             Assert.AreEqual(typeof(byte), data.ByteField.GetType());
-            Assert.AreEqual(typeof(byte), data.UInt8Field.GetType());
             Assert.AreEqual(typeof(ushort), data.UInt16Field.GetType());
             Assert.AreEqual(typeof(uint), data.UInt32Field.GetType());
             Assert.AreEqual(typeof(ulong), data.UInt64Field.GetType());
@@ -175,13 +169,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(char), data.CharField.GetType());
             Assert.AreEqual(typeof(char), data.WCharField.GetType());
 
-            Assert.AreEqual(0, defaultStruct.Int8Field);
             Assert.AreEqual(0, defaultStruct.Int16Field);
             Assert.AreEqual(0, defaultStruct.Int32Field);
             Assert.AreEqual(0, defaultStruct.Int64Field);
             Assert.AreEqual(false, defaultStruct.BoolField);
             Assert.AreEqual(0, defaultStruct.ByteField);
-            Assert.AreEqual(0, defaultStruct.UInt8Field);
             Assert.AreEqual(0, defaultStruct.UInt16Field);
             Assert.AreEqual<uint>(0, defaultStruct.UInt32Field);
             Assert.AreEqual<ulong>(0, defaultStruct.UInt64Field);
@@ -264,10 +256,6 @@ namespace OpenDDSharp.UnitTest
                 UnboundedFloatSequenceField = { 1f, -2.6f, 3.7f, -100.8f, 200.9f, -300.1f, 1000.1f },
                 BoundedDoubleSequenceField = { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
                 UnboundedDoubleSequenceField = { 1.0d, -2.6d, 3.7d, -100.8d, 200.9d, -300.02d, 1000.1d },
-                BoundedInt8SequenceField = { -1, 2, -3 },
-                UnboundedInt8SequenceField = { 4, -5, 6, -7, 8 },
-                BoundedUInt8SequenceField = { 1, 2, 3 },
-                UnboundedUInt8SequenceField = { 4, 5, 6, 7, 8 },
             };
 
             ret = dataWriter.Write(data);
@@ -291,10 +279,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.UnboundedWCharSequenceField.SequenceEqual(received.UnboundedWCharSequenceField));
             Assert.IsTrue(data.BoundedByteSequenceField.SequenceEqual(received.BoundedByteSequenceField));
             Assert.IsTrue(data.UnboundedByteSequenceField.SequenceEqual(received.UnboundedByteSequenceField));
-            Assert.IsTrue(data.BoundedInt8SequenceField.SequenceEqual(received.BoundedInt8SequenceField));
-            Assert.IsTrue(data.UnboundedInt8SequenceField.SequenceEqual(received.UnboundedInt8SequenceField));
-            Assert.IsTrue(data.BoundedUInt8SequenceField.SequenceEqual(received.BoundedUInt8SequenceField));
-            Assert.IsTrue(data.UnboundedUInt8SequenceField.SequenceEqual(received.UnboundedUInt8SequenceField));
             Assert.IsTrue(data.BoundedInt16SequenceField.SequenceEqual(received.BoundedInt16SequenceField));
             Assert.IsTrue(data.UnboundedInt16SequenceField.SequenceEqual(received.UnboundedInt16SequenceField));
             Assert.IsTrue(data.BoundedUInt16SequenceField.SequenceEqual(received.BoundedUInt16SequenceField));
@@ -321,10 +305,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(data.UnboundedWCharSequenceField.GetType(), typeof(List<char>));
             Assert.AreEqual(data.BoundedByteSequenceField.GetType(), typeof(List<byte>));
             Assert.AreEqual(data.UnboundedByteSequenceField.GetType(), typeof(List<byte>));
-            Assert.AreEqual(data.BoundedInt8SequenceField.GetType(), typeof(List<sbyte>));
-            Assert.AreEqual(data.UnboundedInt8SequenceField.GetType(), typeof(List<sbyte>));
-            Assert.AreEqual(data.BoundedUInt8SequenceField.GetType(), typeof(List<byte>));
-            Assert.AreEqual(data.UnboundedUInt8SequenceField.GetType(), typeof(List<byte>));
             Assert.AreEqual(data.BoundedInt16SequenceField.GetType(), typeof(List<short>));
             Assert.AreEqual(data.UnboundedInt16SequenceField.GetType(), typeof(List<short>));
             Assert.AreEqual(data.BoundedUInt16SequenceField.GetType(), typeof(List<ushort>));
@@ -358,10 +338,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, defaultStruct.UnboundedByteSequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedByteSequenceField);
             Assert.AreEqual(0, defaultStruct.BoundedByteSequenceField.Count);
-            Assert.IsNotNull(defaultStruct.BoundedInt8SequenceField);
-            Assert.AreEqual(0, defaultStruct.BoundedUInt8SequenceField.Count);
-            Assert.IsNotNull(defaultStruct.UnboundedInt8SequenceField);
-            Assert.AreEqual(0, defaultStruct.UnboundedUInt8SequenceField.Count);
             Assert.IsNotNull(defaultStruct.UnboundedInt16SequenceField);
             Assert.AreEqual(0, defaultStruct.UnboundedInt16SequenceField.Count);
             Assert.IsNotNull(defaultStruct.BoundedInt16SequenceField);
@@ -452,8 +428,6 @@ namespace OpenDDSharp.UnitTest
                 UInt64ArrayField = new[] { 1UL, 2UL, 3UL, 100UL, 200UL },
                 FloatArrayField = new[] { -1.0f, 2.1f, -3.2f, 100.3f, -200.4f },
                 DoubleArrayField = new[] { -1.0d, 2.1d, -3.2d, 100.3d, -200.4d },
-                Int8ArrayField = new sbyte[] { 4, -5, 6, -7, 8 },
-                UInt8ArrayField = new byte[] { 4, 5, 6, 7, 8 },
             };
             ret = dataWriter.Write(data);
             Assert.AreEqual(ReturnCode.Ok, ret);
@@ -472,8 +446,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(data.CharArrayField.SequenceEqual(received.CharArrayField));
             Assert.IsTrue(data.WCharArrayField.SequenceEqual(received.WCharArrayField));
             Assert.IsTrue(data.ByteArrayField.SequenceEqual(received.ByteArrayField));
-            Assert.IsTrue(data.Int8ArrayField.SequenceEqual(received.Int8ArrayField));
-            Assert.IsTrue(data.UInt8ArrayField.SequenceEqual(received.UInt8ArrayField));
             Assert.IsTrue(data.Int16ArrayField.SequenceEqual(received.Int16ArrayField));
             Assert.IsTrue(data.UInt16ArrayField.SequenceEqual(received.UInt16ArrayField));
             Assert.IsTrue(data.Int32ArrayField.SequenceEqual(received.Int32ArrayField));
@@ -487,8 +459,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(char[]), data.CharArrayField.GetType());
             Assert.AreEqual(typeof(char[]), data.WCharArrayField.GetType());
             Assert.AreEqual(typeof(byte[]), data.ByteArrayField.GetType());
-            Assert.AreEqual(typeof(sbyte[]), data.Int8ArrayField.GetType());
-            Assert.AreEqual(typeof(byte[]), data.UInt8ArrayField.GetType());
             Assert.AreEqual(typeof(short[]), data.Int16ArrayField.GetType());
             Assert.AreEqual(typeof(ushort[]), data.UInt16ArrayField.GetType());
             Assert.AreEqual(typeof(int[]), data.Int32ArrayField.GetType());
@@ -522,20 +492,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(defaultStruct.ByteArrayField);
             Assert.AreEqual(5, defaultStruct.ByteArrayField.Length);
             foreach (var i in defaultStruct.ByteArrayField)
-            {
-                Assert.AreEqual(default, i);
-            }
-
-            Assert.IsNotNull(defaultStruct.Int8ArrayField);
-            Assert.AreEqual(5, defaultStruct.Int8ArrayField.Length);
-            foreach (var i in defaultStruct.Int8ArrayField)
-            {
-                Assert.AreEqual(default, i);
-            }
-
-            Assert.IsNotNull(defaultStruct.UInt8ArrayField);
-            Assert.AreEqual(5, defaultStruct.UInt8ArrayField.Length);
-            foreach (var i in defaultStruct.UInt8ArrayField)
             {
                 Assert.AreEqual(default, i);
             }
@@ -929,54 +885,6 @@ namespace OpenDDSharp.UnitTest
                         new[] { 23.23, 24.24 },
                     },
                 },
-                Int8MultiArrayField = new[]
-                {
-                    new[]
-                    {
-                        new sbyte[] { 01, 02 },
-                        new sbyte[] { -03, -04 },
-                        new sbyte[] { 05, 06 },
-                        new sbyte[] { -07, -08 },
-                    },
-                    new[]
-                    {
-                        new sbyte[] { 09, 10 },
-                        new sbyte[] { -11, -12 },
-                        new sbyte[] { 13, 14 },
-                        new sbyte[] { -15, -16 },
-                    },
-                    new[]
-                    {
-                        new sbyte[] { -17, -18 },
-                        new sbyte[] { 19, 20 },
-                        new sbyte[] { -21, -22 },
-                        new sbyte[] { 23, 24 },
-                    },
-                },
-                UInt8MultiArrayField = new[]
-                {
-                    new[]
-                    {
-                        new byte[] { 01, 02 },
-                        new byte[] { 03, 04 },
-                        new byte[] { 05, 06 },
-                        new byte[] { 07, 08 },
-                    },
-                    new[]
-                    {
-                        new byte[] { 09, 10 },
-                        new byte[] { 11, 12 },
-                        new byte[] { 13, 14 },
-                        new byte[] { 15, 16 },
-                    },
-                    new[]
-                    {
-                        new byte[] { 17, 18 },
-                        new byte[] { 19, 20 },
-                        new byte[] { 21, 22 },
-                        new byte[] { 23, 24 },
-                    },
-                },
             };
 
             ret = dataWriter.Write(data);
@@ -996,8 +904,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(TestHelper.CompareMultiArray(data.CharMultiArrayField, received.CharMultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.WCharMultiArrayField, received.WCharMultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.OctetMultiArrayField, received.OctetMultiArrayField));
-            Assert.IsTrue(TestHelper.CompareMultiArray(data.Int8MultiArrayField, received.Int8MultiArrayField));
-            Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt8MultiArrayField, received.UInt8MultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.Int16MultiArrayField, received.Int16MultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.UInt16MultiArrayField, received.UInt16MultiArrayField));
             Assert.IsTrue(TestHelper.CompareMultiArray(data.Int32MultiArrayField, received.Int32MultiArrayField));
@@ -1011,8 +917,6 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(typeof(char[][][]), data.CharMultiArrayField.GetType());
             Assert.AreEqual(typeof(char[][][]), data.WCharMultiArrayField.GetType());
             Assert.AreEqual(typeof(byte[][][]), data.OctetMultiArrayField.GetType());
-            Assert.AreEqual(typeof(sbyte[][][]), data.Int8MultiArrayField.GetType());
-            Assert.AreEqual(typeof(byte[][][]), data.UInt8MultiArrayField.GetType());
             Assert.AreEqual(typeof(short[][][]), data.Int16MultiArrayField.GetType());
             Assert.AreEqual(typeof(ushort[][][]), data.UInt16MultiArrayField.GetType());
             Assert.AreEqual(typeof(int[][][]), data.Int32MultiArrayField.GetType());
@@ -1032,8 +936,6 @@ namespace OpenDDSharp.UnitTest
                         Assert.AreEqual(default, defaultStruct.CharMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.WCharMultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.OctetMultiArrayField[i0][i1][i2]);
-                        Assert.AreEqual(default, defaultStruct.Int8MultiArrayField[i0][i1][i2]);
-                        Assert.AreEqual(default, defaultStruct.UInt8MultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.Int16MultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.UInt16MultiArrayField[i0][i1][i2]);
                         Assert.AreEqual(default, defaultStruct.Int32MultiArrayField[i0][i1][i2]);

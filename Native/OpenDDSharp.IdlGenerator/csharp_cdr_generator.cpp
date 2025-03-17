@@ -850,10 +850,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
       switch (predefined_type->pt()) {
         case AST_PredefinedType::PT_int8:
-          ret.append("    writer.WriteSByte(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
         case AST_PredefinedType::PT_uint8:
           ret.append("    writer.WriteByte(");
           ret.append(field_name);
@@ -942,10 +938,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
-              ret.append("    writer.WriteSByteSequence(");
-              ret.append(field_name);
-              ret.append(");\n");
-              break;
             case AST_PredefinedType::PT_uint8:
               ret.append("    writer.WriteByteSequence(");
               ret.append(field_name);
@@ -1039,17 +1031,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
-              if (total_dim == 1) {
-                ret.append("    writer.WriteSByteArray(");
-                ret.append(field_name);
-                ret.append(", ");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.erase(0, 8);
-                ret.append(write_cdr_multi_array(field_name, "sbyte", "WriteSByte", dims, total_dim, indent));
-              }
-              break;
             case AST_PredefinedType::PT_uint8:
               if (total_dim == 1) {
                 ret.append("    writer.WriteByteArray(");
@@ -1281,10 +1262,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
       AST_PredefinedType *predefined_type = dynamic_cast<AST_PredefinedType *>(field_type);
       switch (predefined_type->pt()) {
         case AST_PredefinedType::PT_int8:
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadSByte();\n");
-          break;
         case AST_PredefinedType::PT_uint8:
           ret.append("    ");
           ret.append(field_name);
@@ -1368,10 +1345,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
-              ret.append("    ");
-              ret.append(field_name);
-              ret.append(" = reader.ReadSByteSequence();\n");
-              break;
             case AST_PredefinedType::PT_uint8:
               ret.append("    ");
               ret.append(field_name);
@@ -1462,16 +1435,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
           AST_PredefinedType *base_predefined_type = dynamic_cast<AST_PredefinedType *>(base_type);
           switch (base_predefined_type->pt()) {
             case AST_PredefinedType::PT_int8:
-              if (total_dim == 1) {
-                ret.append("    ");
-                ret.append(field_name);
-                ret.append(" = reader.ReadSByteArray(");
-                ret.append(std::to_string(dims[0]->ev()->u.ulval));
-                ret.append(");\n");
-              } else {
-                ret.append(read_cdr_multi_array(field_name, "sbyte", "ReadSByte", dims, total_dim, indent));
-              }
-              break;
             case AST_PredefinedType::PT_uint8:
               if (total_dim == 1) {
                 ret.append("    ");

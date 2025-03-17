@@ -48,21 +48,15 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Writes an unsigned byte to the stream.
+    /// Writes a byte to the stream.
     /// </summary>
-    /// <param name="b">The unsigned byte to be written.</param>
+    /// <param name="b">The byte to be written.</param>
     public void WriteByte(byte b) => _writer.Write(b);
 
     /// <summary>
-    /// Writes a signed byte to the stream.
+    /// Writes a array of bytes to the stream.
     /// </summary>
-    /// <param name="b">The signed byte to be written.</param>
-    public void WriteSByte(sbyte b) => _writer.Write(b);
-
-    /// <summary>
-    /// Writes a array of unsigned bytes to the stream.
-    /// </summary>
-    /// <param name="buf">The unsigned bytes to be written.</param>
+    /// <param name="buf">The bytes to be written.</param>
     public void WriteBytes(ReadOnlySpan<byte> buf)
     {
 #if NET6_0_OR_GREATER
@@ -231,9 +225,9 @@ public class CdrWriter
     }
 
     /// <summary>
-    /// Write a sequence of unsigned bytes to the stream.
+    /// Write a sequence of bytes to the stream.
     /// </summary>
-    /// <param name="sequence">The sequence of unsigned bytes to be written.</param>
+    /// <param name="sequence">The sequence of bytes to be written.</param>
     public void WriteByteSequence(IList<byte> sequence)
     {
         if (sequence == null)
@@ -244,22 +238,6 @@ public class CdrWriter
 
         WriteSequenceLength((uint)sequence.Count);
         WriteBytes(sequence.ToArray());
-    }
-
-    /// <summary>
-    /// Write a sequence of signed bytes to the stream.
-    /// </summary>
-    /// <param name="sequence">The sequence of signed bytes to be written.</param>
-    public void WriteSByteSequence(IList<sbyte> sequence)
-    {
-        if (sequence == null)
-        {
-            WriteSequenceLength(0);
-            return;
-        }
-
-        WriteSequenceLength((uint)sequence.Count);
-        WriteBytes((byte[])(Array)sequence.ToArray());
     }
 
     /// <summary>
@@ -280,26 +258,6 @@ public class CdrWriter
         }
 
         WriteBytes(array);
-    }
-
-    /// <summary>
-    /// Write an array of signed bytes to the stream.
-    /// </summary>
-    /// <param name="array">The array of signed bytes to be written.</param>
-    /// <param name="len">The length of the array.</param>
-    public void WriteSByteArray(sbyte[] array, int len)
-    {
-        if (array == null)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                WriteByte(0);
-            }
-
-            return;
-        }
-
-        WriteBytes((byte[])(Array)array);
     }
 
     /// <summary>
