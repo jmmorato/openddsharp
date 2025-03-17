@@ -839,14 +839,9 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
       ret = implement_to_cdr_field(typedef_type->base_type(), field_name, indent);
       break;
     }
-    case AST_Decl::NT_string: {
-      ret.append("    writer.WriteString(");
-      ret.append(field_name);
-      ret.append(");\n");
-      break;
-    }
+    case AST_Decl::NT_string:
     case AST_Decl::NT_wstring: {
-      ret.append("    writer.WriteWString(");
+      ret.append("    writer.WriteString(");
       ret.append(field_name);
       ret.append(");\n");
       break;
@@ -1026,18 +1021,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
               ret.append(": Not implemented yet.\n");
               break;
           }
-          break;
-        }
-        case AST_Decl::NT_string:  {
-          ret.append("    writer.WriteStringSequence(");
-          ret.append(field_name);
-          ret.append(");\n");
-          break;
-        }
-        case AST_Decl::NT_wstring: {
-          ret.append("    writer.WriteWStringSequence(");
-          ret.append(field_name);
-          ret.append(");\n");
           break;
         }
         default:
@@ -1242,32 +1225,6 @@ csharp_cdr_generator::implement_to_cdr_field(AST_Type *field_type, std::string f
           }
           break;
         }
-        case AST_Decl::NT_string:  {
-          if (total_dim == 1) {
-            ret.append("    writer.WriteStringArray(");
-            ret.append(field_name);
-            ret.append(", ");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            ret.append(");\n");
-          } else {
-            ret.erase(0, 8);
-            ret.append(write_cdr_multi_array(field_name, "string", "WriteString", dims, total_dim, indent));
-          }
-          break;
-        }
-        case AST_Decl::NT_wstring: {
-          if (total_dim == 1) {
-            ret.append("    writer.WriteWStringArray(");
-            ret.append(field_name);
-            ret.append(", ");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            ret.append(");\n");
-          } else {
-            ret.erase(0, 8);
-            ret.append(write_cdr_multi_array(field_name, "string", "WriteWString", dims, total_dim, indent));
-          }
-          break;
-        }
       }
       break;
     }
@@ -1313,16 +1270,11 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
       ret = implement_from_cdr_field(typedef_type->base_type(), field_name, indent);
       break;
     }
-    case AST_Decl::NT_string:  {
-      ret.append("    ");
-      ret.append(field_name);
-      ret.append(" = reader.ReadString();\n");
-      break;
-    }
+    case AST_Decl::NT_string:
     case AST_Decl::NT_wstring: {
       ret.append("    ");
       ret.append(field_name);
-      ret.append(" = reader.ReadWString();\n");
+      ret.append(" = reader.ReadString();\n");
       break;
     }
     case AST_Decl::NT_pre_defined: {
@@ -1495,19 +1447,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
               ret.append(": Not implemented yet.\n");
               break;
           }
-          break;
-        }
-        case AST_Decl::NT_string:  {
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadStringSequence();\n");
-          break;
-        }
-        case AST_Decl::NT_wstring: {
-          ret.append("    ");
-          ret.append(field_name);
-          ret.append(" = reader.ReadWStringSequence();\n");
-          break;
         }
       }
       break;
@@ -1691,30 +1630,6 @@ csharp_cdr_generator::implement_from_cdr_field(AST_Type *field_type, std::string
               ret.append(field_name);
               ret.append(": Not implemented yet.\n");
               break;
-          }
-          break;
-        }
-        case AST_Decl::NT_string:  {
-          if (total_dim == 1) {
-            ret.append("    ");
-            ret.append(field_name);
-            ret.append(" = reader.ReadStringArray(");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            ret.append(");\n");
-          } else {
-            ret.append(read_cdr_multi_array(field_name, "string", "ReadString", dims, total_dim, indent));
-          }
-          break;
-        }
-        case AST_Decl::NT_wstring: {
-          if (total_dim == 1) {
-            ret.append("    ");
-            ret.append(field_name);
-            ret.append(" = reader.ReadWStringArray(");
-            ret.append(std::to_string(dims[0]->ev()->u.ulval));
-            ret.append(");\n");
-          } else {
-            ret.append(read_cdr_multi_array(field_name, "string", "ReadWString", dims, total_dim, indent));
           }
           break;
         }

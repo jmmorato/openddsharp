@@ -189,22 +189,6 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads an string from the stream.
-    /// </summary>
-    /// <returns>The string value.</returns>
-    public string ReadWString()
-    {
-        var len = ReadUInt32();
-        var strBuf = ReadBytes((int)len);
-
-#if NET6_0_OR_GREATER
-        return Encoding.Unicode.GetString(strBuf);
-#else
-        return Encoding.Unicode.GetString(strBuf.ToArray());
-#endif
-    }
-
-    /// <summary>
     /// Read an enumeration value from the stream.
     /// </summary>
     /// <returns>The unsigned integer that represents the enumeration.</returns>
@@ -620,22 +604,6 @@ public class CdrReader
     }
 
     /// <summary>
-    /// Reads a sequence of wide string values from the stream.
-    /// </summary>
-    /// <returns>The sequence of string values from the stream.</returns>
-    public IList<string> ReadWStringSequence()
-    {
-        var len = ReadSequenceLength();
-        var result = new string[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadWString();
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Reads a array of string values from the stream.
     /// </summary>
     /// <param name="len">The length of the array.</param>
@@ -646,22 +614,6 @@ public class CdrReader
         for (var i = 0; i < len; i++)
         {
             result[i] = ReadString();
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Reads a array of string values from the stream.
-    /// </summary>
-    /// <param name="len">The length of the array.</param>
-    /// <returns>The array of string values from the stream.</returns>
-    public string[] ReadWStringArray(int len)
-    {
-        var result = new string[len];
-        for (var i = 0; i < len; i++)
-        {
-            result[i] = ReadWString();
         }
 
         return result;
