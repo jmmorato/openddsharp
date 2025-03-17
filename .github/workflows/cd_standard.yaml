@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  OpenDdsVersion: "3.29.1"
+  OpenDdsVersion: "3.28.1"
 
 jobs:
   build_windows_native:

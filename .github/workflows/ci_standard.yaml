@@ -25,7 +25,7 @@ jobs:
         BuildConfiguration: [Release]
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.28.1"
 
     steps:
     - uses: actions/checkout@v4
@@ -80,16 +80,12 @@ jobs:
       if: steps.opendds-libraries-windows.outputs.cache-hit != 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
-      env:
-        _NO_DEBUG_HEAP: 1
 
     - name: Build & Test with Cake (Cached)
       shell: pwsh
       if: steps.opendds-libraries-windows.outputs.cache-hit == 'true'
       run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
-      env:
-        _NO_DEBUG_HEAP: 1
 
     - name: Test Report
       uses: dorny/test-reporter@v1
@@ -118,7 +114,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.28.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
@@ -247,7 +243,7 @@ jobs:
     runs-on: macos-13
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.28.1"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
@@ -376,7 +372,7 @@ jobs:
     runs-on: macos-14
 
     env:
-      OpenDdsVersion: "3.29.1"
+      OpenDdsVersion: "3.28.1"
       BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
