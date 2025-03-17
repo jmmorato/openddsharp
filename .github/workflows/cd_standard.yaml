@@ -545,7 +545,7 @@ jobs:
 
     - name: Get branch names
       id: branch-name
-      uses: mrsimonemms/get-branch-name-action@v1
+      uses: tj-actions/branch-names@v8
 
     - name: Download OpenDDS Native win-x86
       uses: actions/download-artifact@v4
