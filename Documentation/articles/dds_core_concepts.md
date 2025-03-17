@@ -345,17 +345,9 @@ This chapter has provided an overview of the core concepts and features of DDS.
 
 Understanding the Data-Centric Publish-Subscribe model, Quality of Service policies, Extensible Transport Framework,
 DDS Discovery, DDS Domains an DDS Entities, and the underlying native layer of OpenDDS will help developers effectively utilize
-DDS for building distributed applications.
+DDS for building distributed applications. For more detailed information and specific implementation details,
+refer to the DDS documentation and resources available in internet:
 
-For best practices and additional guidance on using the OpenDDSharp DDS implementation, please refer to the
-following resources:
-
-- OpenDDSharp Website: [https://www.openddsharp.com](https://www.openddsharp.com)
-- OpenDDSharp Discussions: [https://github.com/jmmorato/openddsharp/discussions](https://github.com/jmmorato/openddsharp/discussions)
-- DDS Foundation: [https://dds-foundation.org](https://dds-foundation.org)
-- OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthedocs.io)
-- DDS Specification v1.4: [https://www.omg.org/spec/DDS/1.4](https://www.omg.org/spec/DDS/1.4)
-- IDL4 to C# Language Mapping Specification: [https://www.omg.org/spec/IDL4-CSHARP](https://www.omg.org/spec/IDL4-CSHARP)
-
-These resources provide comprehensive information on DDS concepts, usage guidelines, and recommended practices for
-building robust and efficient distributed systems using OpenDDSharp.
+- [DDS Specification](https://www.omg.org/spec/DDS/About-DDS/)
+- [DDS Foundation](https://dds-foundation.org/)
+- [OpenDDS Documentation](https://opendds.org/documentation.html)

@@ -6,7 +6,7 @@
           "files": [
             "OpenDDSharp.csproj"
           ],
-          "src": "../Sources/OpenDDSharp"
+          "src": "../../Sources/OpenDDSharp"
         }
       ],
       "dest": "api",

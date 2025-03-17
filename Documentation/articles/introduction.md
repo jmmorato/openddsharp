@@ -13,8 +13,8 @@ volume, robustness, failure tolerant data distribution utilizing a
 publish and subscribe model.
 
 OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)  
-OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)  
-OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthedocs.io/en/latest/)  
+OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)
+OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthedocs.io/en/latest/)
 
 OpenDDSharp has been compiled with OpenDDS v3.25
 
@@ -51,7 +51,7 @@ OpenDDSharp started as a proof of concept during a distributed system technology
 * [Using TAO and OpenDDS with .NET](https://objectcomputing.com/resources/publications/mnb/2009/01/15/using-tao-and-opendds-net-part-i)
 * [Code Generation with OpenDDS](https://objectcomputing.com/resources/publications/mnb/2010/06/02/code-generation-opendds-part-i)
 
-The first versions of OpenDDSharp were using a similar C++/CLI wrapper than the articles explain but that solution ties the API to .NET Framework and Windows operating systems.
+The first vesions of OpenDDSharp were using a similar C++/CLI wrapper than the articles explain but that solution ties the API to .NET Framework and Windows operating systems.
 In order to avoid the restrictions, the wrapper has been re-implemented using PInvoke and compiled for NET Standard 2.0.
 
 The Data-Centric Publish-Subscribe (DCPS) model described in the main [DDS Specification v1.4](https://www.omg.org/spec/DDS/1.4)

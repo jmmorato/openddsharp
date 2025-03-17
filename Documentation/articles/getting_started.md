@@ -29,15 +29,13 @@ Applications that use the Data Distribution Service (DDS) define the data types 
 the programming language or operating system/processor platform by using the Interface Definition Language (IDL).
 
 OpenDDSharp generates the C# code based on the [IDL4 to C# Language Mapping specification](https://www.omg.org/spec/IDL4-CSHARP/)
-using his owns code generation tool. Check this [link](idl.md) to get more information about the IDL language and the
-current implementation of the specification.
+using his owns code generation tool. Check this [link](idl.md) to get more information about the IDL language and the current implementation of the specification.
 
 Execute the following command in order to create your OpenDDSharp IDL project:
 
 `dotnet new openddsharp-idl-project --name TestMessage --output TestMessage`
 
-A new C# IDL project will be created in the `TestMessage` folder, where you can define your own data types using the
-Interface Definition Language.
+A new C# IDL project will be created in the `TestMessage` folder, where you can define your own data types using the Interface Definition Language.
 
 For the current example, modify the `IDL/TestMessage.idl` file content as follow:
 
