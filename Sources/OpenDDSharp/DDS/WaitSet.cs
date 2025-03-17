@@ -112,19 +112,17 @@ namespace OpenDDSharp.DDS
             var seq = IntPtr.Zero;
             var ret = UnsafeNativeMethods.Wait(_native, ref seq, timeout);
 
-            if (ret != ReturnCode.Ok || seq.Equals(IntPtr.Zero))
+            if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
             {
-                return ret;
-            }
+                ICollection<IntPtr> lst = new Collection<IntPtr>();
+                seq.PtrToSequence(ref lst);
 
-            ICollection<IntPtr> lst = new List<IntPtr>();
-            seq.PtrToSequence(ref lst);
-
-            foreach (var ptr in lst)
-            {
-                if (_conditions.TryGetValue(ptr, out var condition))
+                foreach (var ptr in lst)
                 {
-                    activeConditions.Add(condition);
+                    if (_conditions.TryGetValue(ptr, out var condition))
+                    {
+                        activeConditions.Add(condition);
+                    }
                 }
             }
 
@@ -148,7 +146,7 @@ namespace OpenDDSharp.DDS
                 return ReturnCode.BadParameter;
             }
 
-            var ret = UnsafeNativeMethods.AttachCondition(_native, cond.ToNative());
+            ReturnCode ret = UnsafeNativeMethods.AttachCondition(_native, cond.ToNative());
 
             if (ret == ReturnCode.Ok)
             {
@@ -173,7 +171,7 @@ namespace OpenDDSharp.DDS
                 return ReturnCode.BadParameter;
             }
 
-            var ret = UnsafeNativeMethods.DetachCondition(_native, cond.ToNative());
+            ReturnCode ret = UnsafeNativeMethods.DetachCondition(_native, cond.ToNative());
 
             if (ret == ReturnCode.Ok)
             {
@@ -196,8 +194,8 @@ namespace OpenDDSharp.DDS
             }
             attachedConditions.Clear();
 
-            var seq = IntPtr.Zero;
-            var ret = UnsafeNativeMethods.GetConditions(_native, ref seq);
+            IntPtr seq = IntPtr.Zero;
+            ReturnCode ret = UnsafeNativeMethods.GetConditions(_native, ref seq);
 
             if (ret == ReturnCode.Ok && !seq.Equals(IntPtr.Zero))
             {

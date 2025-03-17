@@ -509,194 +509,20 @@ public:
       return ptr;
     }
 
-    static DDS::Time_t dds_time_deserialize_from_bytes(const char *bytes, size_t size)
-    {
+    static DDS::Time_t dds_time_deserialize_from_bytes(const char *bytes, size_t size) {
         const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
-
         ACE_Message_Block mb(size);
         mb.copy(bytes, size);
-
         OpenDDS::DCPS::Serializer serializer(&mb, encoding);
-
         DDS::Time_t time_value;
         if (!(serializer >> time_value.sec)) {
           throw std::runtime_error("Failed to deserialize DDS::Time_t seconds from bytes");
         }
 
         if (!(serializer >> time_value.nanosec)) {
-          throw std::runtime_error("Failed to deserialize DDS::Time_t nanosec from bytes");
+          throw std::runtime_error("Failed to deserialize DDS::Time_t nanoseconds from bytes");
         }
         return time_value;
-    }
-
-    static void dds_sample_info_serialize_to_bytes(DDS::SampleInfo& sample_info, char* &data, size_t &size)
-    {
-      const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
-
-      size_t xcdr_size = 0;
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.valid_data);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.sample_state, 1);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.view_state);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.instance_state);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.source_timestamp.sec);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.source_timestamp.nanosec);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.instance_handle);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.publication_handle);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.disposed_generation_count);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.no_writers_generation_count);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.sample_rank);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.generation_rank);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, sample_info.absolute_generation_rank);
-
-      ACE_Message_Block mb(xcdr_size);
-
-      OpenDDS::DCPS::Serializer serializer(&mb, encoding);
-
-      if (!(serializer << sample_info.valid_data)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo valid_data to bytes");
-      }
-
-      if (!(serializer << sample_info.sample_state)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo sample_state to bytes");
-      }
-
-      if (!(serializer << sample_info.view_state)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo view_state to bytes");
-      }
-
-      if (!(serializer << sample_info.instance_state)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo instance_state to bytes");
-      }
-
-      if (!(serializer << sample_info.source_timestamp.sec)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo source_timestamp.sec to bytes");
-      }
-
-      if (!(serializer << sample_info.source_timestamp.nanosec)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo source_timestamp.nanosec to bytes");
-      }
-
-      if (!(serializer << sample_info.instance_handle)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo instance_handle to bytes");
-      }
-
-      if (!(serializer << sample_info.publication_handle)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo publication_handle to bytes");
-      }
-
-      if (!(serializer << sample_info.disposed_generation_count)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo disposed_generation_count to bytes");
-      }
-
-      if (!(serializer << sample_info.no_writers_generation_count)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo no_writers_generation_count to bytes");
-      }
-
-      if (!(serializer << sample_info.sample_rank)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo sample_rank to bytes");
-      }
-
-      if (!(serializer << sample_info.generation_rank)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo generation_rank to bytes");
-      }
-
-      if (!(serializer << sample_info.absolute_generation_rank)) {
-        throw std::runtime_error("Failed to serialize DDS::SampleInfo absolute_generation_rank to bytes");
-      }
-
-      data = (char*)malloc(xcdr_size);
-      memcpy(data, mb.base(), xcdr_size);
-      size = xcdr_size;
-    }
-
-    static void dds_sample_info_seq_serialize_to_bytes(::DDS::SampleInfoSeq& seq_info, char* &data, size_t &size)
-    {
-      const OpenDDS::DCPS::Encoding encoding(OpenDDS::DCPS::Encoding::KIND_XCDR1, OpenDDS::DCPS::ENDIAN_LITTLE);
-
-      size_t xcdr_size = 0;
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].valid_data);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].sample_state, 1);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].view_state);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].instance_state);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].source_timestamp.sec);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].source_timestamp.nanosec);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].instance_handle);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].publication_handle);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].disposed_generation_count);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].no_writers_generation_count);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].sample_rank);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].generation_rank);
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info[0].absolute_generation_rank);
-
-      xcdr_size*=seq_info.length();
-
-      OpenDDS::DCPS::primitive_serialized_size(encoding, xcdr_size, seq_info.length());
-
-      ACE_Message_Block mb(xcdr_size);
-
-      OpenDDS::DCPS::Serializer serializer(&mb, encoding);
-
-      if (!(serializer << ACE_CDR::ULong(seq_info.length()))) {
-        throw std::runtime_error("Failed to serialize sequence length.");
-      }
-
-      for (int i = 0; i < seq_info.length(); i++) {
-        if (!(serializer << seq_info[i].valid_data)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo valid_data to bytes");
-        }
-
-        if (!(serializer << seq_info[i].sample_state)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo sample_state to bytes");
-        }
-
-        if (!(serializer << seq_info[i].view_state)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo view_state to bytes");
-        }
-
-        if (!(serializer << seq_info[i].instance_state)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo instance_state to bytes");
-        }
-
-        if (!(serializer << seq_info[i].source_timestamp.sec)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo source_timestamp.sec to bytes");
-        }
-
-        if (!(serializer << seq_info[i].source_timestamp.nanosec)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo source_timestamp.nanosec to bytes");
-        }
-
-        if (!(serializer << seq_info[i].instance_handle)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo instance_handle to bytes");
-        }
-
-        if (!(serializer << seq_info[i].publication_handle)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo publication_handle to bytes");
-        }
-
-        if (!(serializer << seq_info[i].disposed_generation_count)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo disposed_generation_count to bytes");
-        }
-
-        if (!(serializer << seq_info[i].no_writers_generation_count)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo no_writers_generation_count to bytes");
-        }
-
-        if (!(serializer << seq_info[i].sample_rank)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo sample_rank to bytes");
-        }
-
-        if (!(serializer << seq_info[i].generation_rank)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo generation_rank to bytes");
-        }
-
-        if (!(serializer << seq_info[i].absolute_generation_rank)) {
-          throw std::runtime_error("Failed to serialize DDS::SampleInfo absolute_generation_rank to bytes");
-        }
-      }
-
-      data = (char*)malloc(xcdr_size);
-      memcpy(data, mb.base(), xcdr_size);
-      size = xcdr_size;
     }
 };
 

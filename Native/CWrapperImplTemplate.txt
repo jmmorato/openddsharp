@@ -251,16 +251,14 @@ int <%SCOPED_METHOD%>DataReader_ReadNextSample_Json(<%SCOPED%>DataReader_ptr dr,
     return (int)ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, char* & cdr_info, size_t & size_info)
+int <%SCOPED_METHOD%>DataReader_ReadNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, ::DDS::SampleInfo* sampleInfo)
 {
     <%SCOPED%> sample;
-    ::DDS::SampleInfo sampleInfo;
-    ::DDS::ReturnCode_t ret = dr->read_next_sample(sample, sampleInfo);
+    ::DDS::ReturnCode_t ret = dr->read_next_sample(sample, *sampleInfo);
 
     if (ret == ::DDS::RETCODE_OK)
     {
         <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size);
-        marshal::dds_sample_info_serialize_to_bytes(sampleInfo, cdr_info, size_info);
     }
 
     return (int)ret;
@@ -279,16 +277,14 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Json(<%SCOPED%>DataReader_ptr dr,
     return (int)ret;
 }
 
-int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size_data, char* & cdr_info, size_t & size_info)
+int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size, ::DDS::SampleInfo* sampleInfo)
 {
     <%SCOPED%> sample;
-    ::DDS::SampleInfo sampleInfo;
-    ::DDS::ReturnCode_t ret = dr->take_next_sample(sample, sampleInfo);
+    ::DDS::ReturnCode_t ret = dr->take_next_sample(sample, *sampleInfo);
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size_data);
-        marshal::dds_sample_info_serialize_to_bytes(sampleInfo, cdr_info, size_info);
+        <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size);
     }
 
     return (int)ret;
@@ -310,24 +306,6 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Read_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-
-    ::DDS::ReturnCode_t ret = dr->read(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
-
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
     }
 
     dr->return_loan(received_data, info_seq);
@@ -358,23 +336,6 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-
-    ::DDS::ReturnCode_t ret = dr->read_w_condition(received_data, info_seq, maxSamples, condition);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
@@ -390,22 +351,6 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_Take_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->take(received_data, info_seq, maxSamples, sampleStates, viewStates, instanceStates);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
     }
 
     dr->return_loan(received_data, info_seq);
@@ -436,23 +381,6 @@ int <%SCOPED_METHOD%>DataReader_TakeNextSample_Cdr(<%SCOPED%>DataReader_ptr dr, 
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-
-    ::DDS::ReturnCode_t ret = dr->take_w_condition(received_data, info_seq, maxSamples, condition);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
 int <%SCOPED_METHOD%>DataReader_LookupInstance_Json(<%SCOPED%>DataReader_ptr dr, const char* json_data)
 {
     <%SCOPED%>_var samplev = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
@@ -461,14 +389,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Json(<%SCOPED%>DataReader_ptr dr,
         return ::DDS::RETCODE_ERROR;
     }
     <%SCOPED%> sample = samplev.in();
-
-    return dr->lookup_instance(sample);
-}
-
-
-int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, const char* cdr_data, size_t size)
-{
-    <%SCOPED%> sample = <%SCOPED_METHOD%>_deserialize_from_bytes(cdr_data, size);
 
     return dr->lookup_instance(sample);
 }
@@ -488,22 +408,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstance_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->read_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
     }
 
     dr->return_loan(received_data, info_seq);
@@ -534,23 +438,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadInstanceWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-
-    ::DDS::ReturnCode_t ret = dr->read_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
@@ -566,22 +453,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstance_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->take_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
     }
 
     dr->return_loan(received_data, info_seq);
@@ -612,23 +483,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeInstanceWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-
-    ::DDS::ReturnCode_t ret = dr->take_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
@@ -644,22 +498,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstance_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->read_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
     }
 
     dr->return_loan(received_data, info_seq);
@@ -689,22 +527,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_ReadNextInstanceWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->read_next_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
 ::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstance_Json(<%SCOPED%>DataReader_ptr dr, void*& receivedData, void*& receivedInfo, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
 {
     <%SCOPED%>Seq received_data;
@@ -720,22 +542,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
 
         marshal::unbounded_sequence_to_ptr(seq, receivedData);
         marshal::unbounded_sequence_to_ptr(info_seq, receivedInfo);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstance_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::SampleStateMask sampleStates, ::DDS::ViewStateMask viewStates, ::DDS::InstanceStateMask instanceStates)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->take_next_instance(received_data, info_seq, maxSamples, handle, sampleStates, viewStates, instanceStates);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
     }
 
     dr->return_loan(received_data, info_seq);
@@ -765,22 +571,6 @@ int <%SCOPED_METHOD%>DataReader_LookupInstance_Cdr(<%SCOPED%>DataReader_ptr dr, 
     return ret;
 }
 
-::DDS::ReturnCode_t <%SCOPED_METHOD%>DataReader_TakeNextInstanceWithCondition_Cdr(<%SCOPED%>DataReader_ptr dr, char*& cdr_data, size_t & size_data, char*& cdr_info, size_t & size_info, ::DDS::InstanceHandle_t handle, CORBA::Long maxSamples, ::DDS::ReadCondition_ptr condition)
-{
-    <%SCOPED%>Seq received_data;
-    ::DDS::SampleInfoSeq info_seq;
-    ::DDS::ReturnCode_t ret = dr->take_next_instance_w_condition(received_data, info_seq, maxSamples, handle, condition);
-    if (ret == ::DDS::RETCODE_OK)
-    {
-        <%SCOPED_METHOD%>Seq_serialize_to_bytes(received_data, cdr_data, size_data);
-        marshal::dds_sample_info_seq_serialize_to_bytes(info_seq, cdr_info, size_info);
-    }
-
-    dr->return_loan(received_data, info_seq);
-
-    return ret;
-}
-
 int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, char* & json_data, int handle)
 {
     <%SCOPED%> sample_key;
@@ -791,21 +581,6 @@ int <%SCOPED_METHOD%>DataReader_GetKeyValue_Json(<%SCOPED%>DataReader_ptr dr, ch
         <%SCOPED%> sample = <%SCOPED_METHOD%>_DecodeJsonSample(json_data);
         <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
         json_data = <%SCOPED_METHOD%>_EncodeJsonSample(sample);
-    }
-
-    return ret;
-}
-
-int <%SCOPED_METHOD%>DataReader_GetKeyValue_Cdr(<%SCOPED%>DataReader_ptr dr, char* & cdr_data, size_t & size_data, int handle)
-{
-    <%SCOPED%> sample_key;
-    ::DDS::ReturnCode_t ret = dr->get_key_value(sample_key, handle);
-
-    if (ret == ::DDS::RETCODE_OK)
-    {
-       <%SCOPED%> sample;
-       <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
-       <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size_data);
     }
 
     return ret;
