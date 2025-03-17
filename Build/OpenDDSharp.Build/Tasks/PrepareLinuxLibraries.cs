@@ -21,79 +21,80 @@ using System.IO;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Tasks;
-
-/// <summary>
-/// Prepare linux files taks.
-/// </summary>
-[TaskName("PrepareLinuxLibraries")]
-public class PrepareLinuxLibraries : FrostingTask<BuildContext>
+namespace OpenDDSharp.Build.Tasks
 {
-    private const string OPENDDS_VERSION = "3.31.0";
-    private const string ACE_VERSION = "7.1.3";
-    private const string TAO_VERSION = "3.1.3";
-
-    private readonly string[] _aceLibraries =
+    /// <summary>
+    /// Prepare linux files taks.
+    /// </summary>
+    [TaskName("PrepareLinuxLibraries")]
+    public class PrepareLinuxLibraries : FrostingTask<BuildContext>
     {
-        @"ext\OpenDDS_Linux\ACE_wrappers\ace\libACE.so",
-    };
+        private const string OPENDDS_VERSION = "3.29.1";
+        private const string ACE_VERSION = "7.1.3";
+        private const string TAO_VERSION = "3.1.3";
 
-    private readonly string[] _taoLibraries =
-    {
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\libTAO.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PI\libTAO_PI.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.so",
-    };
-
-    private readonly string[] _openddsLibraries =
-    {
-        @"ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so",
-        @"ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so",
-    };
-
-    /// <inheritdoc/>
-    public override void Run(BuildContext context)
-    {
-        var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-
-        foreach (var s in _aceLibraries)
+        private readonly string[] _aceLibraries =
         {
-            var sourceFile = Path.Combine(solutionPath, $"{s}.{ACE_VERSION}");
-            var destinationFile = Path.Combine(solutionPath, s);
+            @"ext\OpenDDS_Linux\ACE_wrappers\ace\libACE.so",
+        };
 
-            context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
-
-            File.Copy(sourceFile, destinationFile, true);
-        }
-
-        foreach (var s in _taoLibraries)
+        private readonly string[] _taoLibraries =
         {
-            var sourceFile = Path.Combine(solutionPath, $"{s}.{TAO_VERSION}");
-            var destinationFile = Path.Combine(solutionPath, s);
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\libTAO.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PI\libTAO_PI.so",
+            @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.so",
+        };
 
-            context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
-
-            File.Copy(sourceFile, destinationFile, true);
-        }
-
-        foreach (var s in _openddsLibraries)
+        private readonly string[] _openddsLibraries =
         {
-            var sourceFile = Path.Combine(solutionPath, $"{s}.{OPENDDS_VERSION}");
-            var destinationFile = Path.Combine(solutionPath, s);
+            @"ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so",
+            @"ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so",
+            @"ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so",
+        };
 
-            context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
+        /// <inheritdoc/>
+        public override void Run(BuildContext context)
+        {
+            var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
 
-            File.Copy(sourceFile, destinationFile, true);
+            foreach (var s in _aceLibraries)
+            {
+                var sourceFile = Path.Combine(solutionPath, $"{s}.{ACE_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
+
+                File.Copy(sourceFile, destinationFile, true);
+            }
+
+            foreach (var s in _taoLibraries)
+            {
+                var sourceFile = Path.Combine(solutionPath, $"{s}.{TAO_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
+
+                File.Copy(sourceFile, destinationFile, true);
+            }
+
+            foreach (var s in _openddsLibraries)
+            {
+                var sourceFile = Path.Combine(solutionPath, $"{s}.{OPENDDS_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
+
+                File.Copy(sourceFile, destinationFile, true);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-next-version: "3.310.1"
+next-version: "3.281.1"
 mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
