@@ -225,7 +225,9 @@ int <%SCOPED_METHOD%>DataWriter_GetKeyValue_Cdr(<%SCOPED%>DataWriter_ptr dw, cha
 
     if (ret == ::DDS::RETCODE_OK)
     {
-        <%SCOPED_METHOD%>_serialize_to_bytes(sample_key, cdr_data, size);
+        <%SCOPED%> sample;
+        <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
+        <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size);
     }
 
     return ret;
@@ -801,7 +803,9 @@ int <%SCOPED_METHOD%>DataReader_GetKeyValue_Cdr(<%SCOPED%>DataReader_ptr dr, cha
 
     if (ret == ::DDS::RETCODE_OK)
     {
-       <%SCOPED_METHOD%>_serialize_to_bytes(sample_key, cdr_data, size_data);
+       <%SCOPED%> sample;
+       <%SCOPED_METHOD%>_CopyKeys(&sample_key, &sample);
+       <%SCOPED_METHOD%>_serialize_to_bytes(sample, cdr_data, size_data);
     }
 
     return ret;

@@ -13,12 +13,10 @@
     <Configurations>Debug;Release</Configurations>
 	<CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <SelfContained>true</SelfContained>
-    <PublishSelfContained>true</PublishSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Tests\TestIdlCdr\TestIdlCdr.csproj" />
+    <ProjectReference Include="..\..\Tests\TestIdlJson\TestIdlJson.csproj" />
 
 	<!-- Analyzer API for our custom checks. -->
 	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0">

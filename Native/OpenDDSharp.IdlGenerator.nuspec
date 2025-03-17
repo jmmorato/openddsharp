@@ -112,7 +112,6 @@
     <!--Code generation templates x86-->
     <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
-    <file src=".\CSharpCDRImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_x86\dds\idl" />
     <file src="..\ext\OpenDDS_x86\dds\idl\IDLTemplate.txt" target="tools\DDS_x86\dds\idl" />
@@ -120,7 +119,6 @@
     <!--Code generation templates x64-->
     <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
-    <file src=".\CSharpCDRImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_x64\dds\idl" />
     <file src="..\ext\OpenDDS_x64\dds\idl\IDLTemplate.txt" target="tools\DDS_x64\dds\idl" />
@@ -128,23 +126,20 @@
     <!--Code generation templates Linux-->
     <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
-    <file src=".\CSharpCDRImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_Linux\dds\idl" />
     <file src="..\ext\OpenDDS_Linux\dds\idl\IDLTemplate.txt" target="tools\DDS_Linux\dds\idl" />
 
-    <!--Code generation templates macOS x64 -->
+    <!--Code generation templates MacOS x64 -->
     <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_osx-x64\dds\idl" />
     <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_osx-x64\dds\idl" />
-    <file src=".\CSharpCDRImplTemplate.txt" target="tools\DDS_osx-x64\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_osx-x64\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_osx-x64\dds\idl" />
     <file src="..\ext\OpenDDS_osx-x64\dds\idl\IDLTemplate.txt" target="tools\DDS_osx-x64\dds\idl" />
 
-    <!--Code generation templates macOS arm64 -->
+    <!--Code generation templates MacOS arm64 -->
     <file src=".\CSharpStructImplTemplate.txt" target="tools\DDS_osx-arm64\dds\idl" />
     <file src=".\CSharpJsonImplTemplate.txt" target="tools\DDS_osx-arm64\dds\idl" />
-    <file src=".\CSharpCDRImplTemplate.txt" target="tools\DDS_osx-arm64\dds\idl" />
     <file src=".\CWrapperHeaderTemplate.txt" target="tools\DDS_osx-arm64\dds\idl" />
     <file src=".\CWrapperImplTemplate.txt" target="tools\DDS_osx-arm64\dds\idl" />
     <file src="..\ext\OpenDDS_osx-arm64\dds\idl\IDLTemplate.txt" target="tools\DDS_osx-arm64\dds\idl" />
