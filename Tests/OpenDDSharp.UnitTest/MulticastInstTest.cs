@@ -162,17 +162,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(mi.SynTimeout);
             Assert.AreEqual(10, mi.SynTimeout.Seconds);
             Assert.AreEqual(500000, mi.SynTimeout.MicroSeconds);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Assert.IsTrue(mi.AsyncSend);
-            }
-            else
-            {
-                // AsyncSend is not supported on Unix platforms and should always be false.
-                Assert.IsFalse(mi.AsyncSend);
-            }
-
+            Assert.IsTrue(mi.AsyncSend);
             Assert.AreEqual(2, mi.Ttl);
             Assert.AreEqual(64U, mi.DatalinkControlChunks);
             Assert.AreEqual(20000, mi.DatalinkReleaseDelay);

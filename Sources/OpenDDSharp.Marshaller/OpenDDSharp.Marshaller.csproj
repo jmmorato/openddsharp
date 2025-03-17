@@ -23,7 +23,7 @@
         <RepositoryUrl>https://github.com/jmmorato/openddsharp</RepositoryUrl>
         <PackageReleaseNotes>https://github.com/jmmorato/openddsharp/blob/master/NEWS.md</PackageReleaseNotes>
         <PackageIcon>icon_128.png</PackageIcon>
-        <PackageTags>OpenDDSharp;DDS;OpenDDS</PackageTags>
+        <PackageTags>OpenDDSharp DDS OpenDDS</PackageTags>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <!-- Create a ref assembly to include in the ref NuGet dir.
          It makes a warning: https://github.com/NuGet/Home/issues/4184 -->
@@ -35,12 +35,12 @@
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
         <PackageReference Include="System.Memory" Version="4.5.5" />
-        <PackageReference Include="System.Text.Json" Version="8.0.3" />
+        <PackageReference Include="System.Text.Json" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
         <!-- Analyzer API for our custom checks. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.10.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
@@ -51,7 +51,7 @@
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.28.0.94264">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.12.0.78982">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

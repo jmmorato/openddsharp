@@ -26,7 +26,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/multicast/MulticastInst_rch.h>
 #include <dds/DCPS/transport/framework/TransportInst.h>
 #include <dds/DCPS/transport/framework/TransportInst_rch.h>
-#include <dds/DCPS/LogAddr.h>
 
 EXTERN_METHOD_EXPORT
 ::OpenDDS::DCPS::MulticastInst *MulticastInst_new(::OpenDDS::DCPS::TransportInst *inst);

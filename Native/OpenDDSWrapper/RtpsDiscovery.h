@@ -25,7 +25,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include <dds/DCPS/RTPS/RtpsDiscovery.h>
 #include <dds/DCPS/transport/rtps_udp/RtpsUdp.h>
-#include <dds/DCPS/LogAddr.h>
 #include <string>
 
 EXTERN_METHOD_EXPORT
@@ -107,7 +106,7 @@ EXTERN_METHOD_EXPORT
 void RtpsDiscovery_SetMulticastInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);
 
 EXTERN_METHOD_EXPORT
-char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, int domain_id);
+char *RtpsDiscovery_GetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
 void RtpsDiscovery_SetDefaultMulticastGroup(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);

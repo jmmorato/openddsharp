@@ -24,9 +24,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 }
 
 ::OpenDDS::DCPS::InfoRepoDiscovery *InfoRepoDiscovery_new(const char *key, const char *ior) {
-  ::OpenDDS::DCPS::InfoRepoDiscovery* infoRepo = new ::OpenDDS::DCPS::InfoRepoDiscovery(key);
-  TheServiceParticipant->set_repo_ior(ior, key, false);
-  return infoRepo;
+  return new ::OpenDDS::DCPS::InfoRepoDiscovery(key, ior);
 }
 
 CORBA::Long InfoRepoDiscovery_GetBitTransportPort(::OpenDDS::DCPS::InfoRepoDiscovery *idr) {

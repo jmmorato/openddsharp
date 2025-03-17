@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  OpenDdsVersion: "3.28.1"
+  OpenDdsVersion: "3.25"
 
 jobs:
   build_windows_native:
@@ -76,8 +76,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-cd
 
     - name: Build Native (No cached)
@@ -101,8 +99,6 @@ jobs:
         XCOPY ".\README.md" "$targetDir\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\" /D /S /Y /M
         XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\TAO\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\" /D /S /Y /M
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
         XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
@@ -134,7 +130,7 @@ jobs:
         path: ${{ github.workspace }}/opendds-native-win-${{ matrix.BuildPlatform }}.zip
 
   build_linux_native:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     env:
       BuildPlatform: "x64"
@@ -192,8 +188,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl          
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/TAO_IDL/tao_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-cd
 
     - name: Build Native (No cached)
@@ -237,8 +231,6 @@ jobs:
         rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/TAO/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
         rsync -r -m -v --include='Native/build_Linux/OpenDDSWrapper/libOpenDDSWrapper.so' --include='*/' --exclude='*' ./ $targetDir
@@ -315,8 +307,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/opendds_idl          
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
 
     - name: Build Native (No cached)
@@ -361,8 +351,6 @@ jobs:
         rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
         rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/TAO/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
         
         rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
         rsync -r -m -v --include='Native/build_osx-x64/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
@@ -439,8 +427,6 @@ jobs:
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/opendds_idl          
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/apps/gperf/src/ace_gperf
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/TAO_IDL/tao_idl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/VERSION.txt
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/VERSION.txt
           key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
 
       - name: Build Native (No cached)
@@ -485,8 +471,6 @@ jobs:
           rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
           rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
           rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-          rsync -r -m -v -L --include='ACE_wrappers/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-          rsync -r -m -v -L --include='ACE_wrappers/TAO/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
           
           rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
           rsync -r -m -v --include='Native/build_osx-arm64/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
@@ -662,9 +646,7 @@ jobs:
             runtime: win-x86
           - os: windows-latest
             runtime: win-x64
-          - os: ubuntu-20.04
-            runtime: linux-x64
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             runtime: linux-x64
           - os: macos-13
             runtime: osx-x64

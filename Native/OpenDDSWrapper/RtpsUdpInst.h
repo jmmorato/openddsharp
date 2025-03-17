@@ -26,7 +26,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 #include <dds/DCPS/transport/rtps_udp/RtpsUdpInst_rch.h>
 #include <dds/DCPS/transport/framework/TransportInst.h>
 #include <dds/DCPS/transport/framework/TransportInst_rch.h>
-#include <dds/DCPS/LogAddr.h>
 
 EXTERN_METHOD_EXPORT
 ::OpenDDS::DCPS::RtpsUdpInst *RtpsUdpInst_new(::OpenDDS::DCPS::TransportInst *inst);
@@ -68,7 +67,7 @@ EXTERN_METHOD_EXPORT
 void RtpsUdpInst_SetTtl(::OpenDDS::DCPS::RtpsUdpInst *ri, CORBA::Octet value);
 
 EXTERN_METHOD_EXPORT
-char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, int domain_id);
+char *RtpsUdpInst_GetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri);
 
 EXTERN_METHOD_EXPORT
 void RtpsUdpInst_SetMulticastGroupAddress(::OpenDDS::DCPS::RtpsUdpInst *ri, char *value);

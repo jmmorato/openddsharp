@@ -33,63 +33,63 @@ CORBA::Boolean TcpInst_GetIsReliable(::OpenDDS::DCPS::TcpInst *ti) {
 }
 
 CORBA::Boolean TcpInst_GetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->enable_nagle_algorithm();
+  return ti->enable_nagle_algorithm_;
 }
 
 void TcpInst_SetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti, CORBA::Boolean value) {
-  ti->enable_nagle_algorithm(value);
+  ti->enable_nagle_algorithm_ = value;
 }
 
 CORBA::Long TcpInst_GetConnRetryInitialDelay(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->conn_retry_initial_delay();
+  return ti->conn_retry_initial_delay_;
 }
 
 void TcpInst_SetConnRetryInitialDelay(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
-  ti->conn_retry_initial_delay(value);
+  ti->conn_retry_initial_delay_ = value;
 }
 
 CORBA::Double TcpInst_GetConnRetryBackoffMultiplier(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->conn_retry_backoff_multiplier();
+  return ti->conn_retry_backoff_multiplier_;
 }
 
 void TcpInst_SetConnRetryBackoffMultiplier(::OpenDDS::DCPS::TcpInst *ti, CORBA::Double value) {
-  ti->conn_retry_backoff_multiplier(value);
+  ti->conn_retry_backoff_multiplier_ = value;
 }
 
 CORBA::Long TcpInst_GetConnRetryAttempts(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->conn_retry_attempts();
+  return ti->conn_retry_attempts_;
 }
 
 void TcpInst_SetConnRetryAttempts(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
-  ti->conn_retry_attempts(value);
+  ti->conn_retry_attempts_ = value;
 }
 
 CORBA::Long TcpInst_GetMaxOutputPausePeriod(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->max_output_pause_period();
+  return ti->max_output_pause_period_;
 }
 
 void TcpInst_SetMaxOutputPausePeriod(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
-  ti->max_output_pause_period(value);
+  ti->max_output_pause_period_ = value;
 }
 
 CORBA::Long TcpInst_GetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti) {
-  return ti->passive_reconnect_duration();
+  return ti->passive_reconnect_duration_;
 }
 
 void TcpInst_SetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
-  ti->passive_reconnect_duration(value);
+  ti->passive_reconnect_duration_ = value;
 }
 
 char *TcpInst_GetPublicAddress(::OpenDDS::DCPS::TcpInst *ti) {
-  return CORBA::string_dup(ti->pub_address_str().c_str());
+  return CORBA::string_dup(ti->get_public_address().c_str());
 }
 
 void TcpInst_SetPublicAddress(::OpenDDS::DCPS::TcpInst *ti, char *value) {
-  ti->pub_address_str(value);
+  ti->pub_address_str_ = value;
 }
 
 char *TcpInst_GetLocalAddress(::OpenDDS::DCPS::TcpInst *ti) {
-  return CORBA::string_dup(ti->local_address().c_str());
+  return CORBA::string_dup(ti->local_address_string().c_str());
 }
 
 void TcpInst_SetLocalAddress(::OpenDDS::DCPS::TcpInst *ti, char *value) {

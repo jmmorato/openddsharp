@@ -25,32 +25,19 @@ namespace OpenDDSharp;
 /// <summary>
 /// Structure for time value representation.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
+[StructLayout(LayoutKind.Sequential)]
 public struct TimeValue : IEquatable<TimeValue>
 {
-    [MarshalAs(UnmanagedType.I8)]
-    private long _seconds;
-    [MarshalAs(UnmanagedType.I4)]
-    private int _microSeconds;
-
     #region Properties
     /// <summary>
     /// Gets or sets the seconds.
     /// </summary>
-    public long Seconds
-    {
-        get => _seconds;
-        set => _seconds = value;
-    }
+    public long Seconds { get; set; }
 
     /// <summary>
     /// Gets or sets the microseconds.
     /// </summary>
-    public int MicroSeconds
-    {
-        get => _microSeconds;
-        set => _microSeconds = value;
-    }
+    public int MicroSeconds { get; set; }
     #endregion
 
     #region IEquatable<TimeValue> Members

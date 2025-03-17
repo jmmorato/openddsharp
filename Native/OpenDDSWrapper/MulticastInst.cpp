@@ -33,64 +33,58 @@ CORBA::Boolean MulticastInst_GetIsReliable(::OpenDDS::DCPS::MulticastInst *mi) {
 }
 
 CORBA::Boolean MulticastInst_GetReliable(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->reliable();
+  return mi->reliable_;
 }
 
 void MulticastInst_SetReliable(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value) {
-  mi->reliable(value);
+  mi->reliable_ = value;
 }
 
 CORBA::Boolean MulticastInst_GetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->default_to_ipv6();
+  return mi->default_to_ipv6_;
 }
 
 void MulticastInst_SetDefaultToIpv6(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Boolean value) {
-  mi->default_to_ipv6(value);
+  mi->default_to_ipv6_ = value;
 }
 
 CORBA::UShort MulticastInst_GetPortOffset(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->port_offset();
+  return mi->port_offset_;
 }
 
 void MulticastInst_SetPortOffset(::OpenDDS::DCPS::MulticastInst *mi, CORBA::UShort value) {
-  mi->port_offset(value);
+  mi->port_offset_ = value;
 }
 
 char *MulticastInst_GetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi) {
-  const std::string addr_str = ::OpenDDS::DCPS::LogAddr(mi->group_address()).str();
-  if (addr_str.empty()) {
-    return CORBA::string_dup("");
-  }
-  return CORBA::string_dup(addr_str.c_str());
+  char *buffer = new char[512];
+  mi->group_address_.addr_to_string(buffer, 512);
+
+  return CORBA::string_dup(buffer);
 }
 
 void MulticastInst_SetGroupAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value) {
-  const ::OpenDDS::DCPS::NetworkAddress addr_obj(value);
-  mi->group_address(addr_obj);
+  mi->group_address_.set(value);
 }
 
 char *MulticastInst_GetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi) {
-  const char * addr = CORBA::string_dup(mi->local_address().c_str());
-  if (addr == NULL) {
-    return CORBA::string_dup("");
-  }
-  return CORBA::string_dup(addr);
+  return CORBA::string_dup(mi->local_address_.c_str());
 }
 
 void MulticastInst_SetLocalAddress(::OpenDDS::DCPS::MulticastInst *mi, char *value) {
-  mi->local_address(value);
+  mi->local_address_ = value;
 }
 
 CORBA::Double MulticastInst_GetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->syn_backoff();
+  return mi->syn_backoff_;
 }
 
 void MulticastInst_SetSynBackoff(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Double value) {
-  mi->syn_backoff(value);
+  mi->syn_backoff_ = value;
 }
 
 TimeValueWrapper MulticastInst_GetSynInterval(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->syn_interval_.get();
+  return mi->syn_interval_;
 }
 
 void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -98,7 +92,7 @@ void MulticastInst_SetSynInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueW
 }
 
 TimeValueWrapper MulticastInst_GetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->syn_timeout_.get();
+  return mi->syn_timeout_;
 }
 
 void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -106,7 +100,7 @@ void MulticastInst_SetSynTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWr
 }
 
 size_t MulticastInst_GetNakDepth(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_depth_.get();
+  return mi->nak_depth_;
 }
 
 void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst *mi, size_t value) {
@@ -114,7 +108,7 @@ void MulticastInst_SetNakDepth(::OpenDDS::DCPS::MulticastInst *mi, size_t value)
 }
 
 TimeValueWrapper MulticastInst_GetNakInterval(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_interval_.get();
+  return mi->nak_interval_;
 }
 
 void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -122,7 +116,7 @@ void MulticastInst_SetNakInterval(::OpenDDS::DCPS::MulticastInst *mi, TimeValueW
 }
 
 size_t MulticastInst_GetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_delay_intervals_.get();
+  return mi->nak_delay_intervals_;
 }
 
 void MulticastInst_SetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst *mi, size_t value) {
@@ -130,7 +124,7 @@ void MulticastInst_SetNakDelayIntervals(::OpenDDS::DCPS::MulticastInst *mi, size
 }
 
 size_t MulticastInst_GetNakMax(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_max_.get();
+  return mi->nak_max_;
 }
 
 void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst *mi, size_t value) {
@@ -138,7 +132,7 @@ void MulticastInst_SetNakMax(::OpenDDS::DCPS::MulticastInst *mi, size_t value) {
 }
 
 TimeValueWrapper MulticastInst_GetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->nak_timeout_.get();
+  return mi->nak_timeout_;
 }
 
 void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWrapper value) {
@@ -146,7 +140,7 @@ void MulticastInst_SetNakTimeout(::OpenDDS::DCPS::MulticastInst *mi, TimeValueWr
 }
 
 CORBA::Octet MulticastInst_GetTtl(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->ttl_.get();
+  return mi->ttl_;
 }
 
 void MulticastInst_SetTtl(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Octet value) {
@@ -154,7 +148,7 @@ void MulticastInst_SetTtl(::OpenDDS::DCPS::MulticastInst *mi, CORBA::Octet value
 }
 
 size_t MulticastInst_GetRcvBufferSize(::OpenDDS::DCPS::MulticastInst *mi) {
-  return mi->rcv_buffer_size_.get();
+  return mi->rcv_buffer_size_;
 }
 
 void MulticastInst_SetRcvBufferSize(::OpenDDS::DCPS::MulticastInst *mi, size_t value) {

@@ -98,7 +98,7 @@ public class RtpsDiscovery : Discovery
     /// The default value is 2.
     /// </summary>
     /// <remarks>
-    /// The port gain assists in configuring SPDP Unicast
+    /// The port gain assists in confguring SPDP Unicast
     /// ports and serves as an offset multiplier as
     /// participants are assigned addresses using the
     /// formula: PB + DG * domainId + d1 + PG * participantId.
@@ -129,7 +129,7 @@ public class RtpsDiscovery : Discovery
     /// The default value is 10.
     /// </summary>
     /// <remarks>
-    /// The offset one assists in providing an offset
+    /// The offset one assists in providing an ofset
     /// for calculating an assignable port in SPDP Unicast
     /// configurations. The formula used is: PB + DG * domainId + d1 + PG * participantId.
     /// </remarks>
@@ -196,7 +196,7 @@ public class RtpsDiscovery : Discovery
 
     /// <summary>
     /// Gets or sets a value indicating whether
-    /// Multicast is used for the SEDP traffic. When set to true,
+    /// Multicast is used for the SEDP trafic. When set to true,
     /// Multicast is used. When set to false Unicast for
     /// SEDP is used. The default value is true.
     /// </summary>
@@ -218,12 +218,30 @@ public class RtpsDiscovery : Discovery
     }
 
     /// <summary>
+    /// Gets or sets a network address specifying the multicast group to
+    /// be used for SPDP discovery. The default value is 239.255.0.1.
+    /// </summary>
+    /// <remarks>
+    /// This overrides the interoperability group of the specification.
+    /// It can be used, for example, to specify use of a routed group
+    /// address to provide a larger discovery scope.
+    /// </remarks>
+    public string DefaultMulticastGroup
+    {
+        get => GetDefaultMulticastGroup();
+        set => SetDefaultMulticastGroup(value);
+    }
+
+    /// <summary>
     /// Gets a list (comma or whitespace separated) of host:port
     /// pairs used as destinations for SPDP content. This
     /// can be a combination of Unicast and Multicast
     /// addresses.
     /// </summary>
-    public IEnumerable<string> SpdpSendAddrs => GetSpdpSendAddrs();
+    public IEnumerable<string> SpdpSendAddrs
+    {
+        get => GetSpdpSendAddrs();
+    }
 
     /// <summary>
     /// Gets or sets the specific network interface to use when
@@ -255,42 +273,6 @@ public class RtpsDiscovery : Discovery
     #endregion
 
     #region Methods
-    /// <summary>
-    /// Gets the network address specifying the multicast group to
-    /// be used for SPDP discovery. The default value is '239.255.0.1'.
-    /// </summary>
-    /// <param name="domainId">The domain Id.</param>
-    /// <remarks>
-    /// This overrides the interoperability group of the specification.
-    /// It can be used, for example, to specify use of a routed group
-    /// address to provide a larger discovery scope.
-    /// </remarks>
-    /// <returns>The network address string representation</returns>
-    public string GetDefaultMulticastGroup(int domainId)
-    {
-        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetDefaultMulticastGroup(_native, domainId));
-    }
-
-    /// <summary>
-    /// Sets the network address specifying the multicast group to
-    /// be used for SPDP discovery. The default value is '239.255.0.1'.
-    /// </summary>
-    /// <param name="value">The network address string represenation</param>
-    /// <remarks>
-    /// This overrides the interoperability group of the specification.
-    /// It can be used, for example, to specify use of a routed group
-    /// address to provide a larger discovery scope.
-    /// </remarks>
-    public void SetDefaultMulticastGroup(string value)
-    {
-        var full = value;
-        if (!full.Contains(":"))
-        {
-            full += ":0";
-        }
-        UnsafeNativeMethods.SetDefaultMulticastGroup(_native, full);
-    }
-
     private TimeValue GetResendPeriod()
     {
         return UnsafeNativeMethods.GetResendPeriod(_native);
@@ -419,6 +401,21 @@ public class RtpsDiscovery : Discovery
     private void SetMulticastInterface(string value)
     {
         UnsafeNativeMethods.SetMulticastInterface(_native, value);
+    }
+
+    private string GetDefaultMulticastGroup()
+    {
+        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetDefaultMulticastGroup(_native));
+    }
+
+    private void SetDefaultMulticastGroup(string value)
+    {
+        string full = value;
+        if (!full.Contains(":"))
+        {
+            full += ":0";
+        }
+        UnsafeNativeMethods.SetDefaultMulticastGroup(_native, full);
     }
 
     private IEnumerable<string> GetSpdpSendAddrs()
@@ -589,7 +586,7 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetDefaultMulticastGroup")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial IntPtr GetDefaultMulticastGroup(IntPtr ird, int domainId);
+    public static partial IntPtr GetDefaultMulticastGroup(IntPtr ird);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_SetDefaultMulticastGroup", StringMarshalling = StringMarshalling.Utf8)]
@@ -719,7 +716,7 @@ internal static partial class UnsafeNativeMethods
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetDefaultMulticastGroup", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr GetDefaultMulticastGroup(IntPtr ird, int domainId);
+    public static extern IntPtr GetDefaultMulticastGroup(IntPtr ird);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_SetDefaultMulticastGroup", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

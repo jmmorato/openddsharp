@@ -22,15 +22,25 @@ jobs:
       fail-fast: false
       matrix:
         BuildPlatform: [x64, x86]
-        BuildConfiguration: [Release]
+        BuildConfiguration: [Release, Debug]
 
     env:
-      OpenDdsVersion: "3.28.1"
+      OpenDdsVersion: "3.25"
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+
+#    - name: Setup dotnet 8.0
+#      uses: actions/setup-dotnet@v4
+#      with:
+#        dotnet-version: '8.0.x'
+#
+#    - name: Setup dotnet 6.0
+#      uses: actions/setup-dotnet@v4
+#      with:
+#        dotnet-version: '6.0.x'
 
     - name: Setup dotnet 6.0
       shell: pwsh
@@ -71,8 +81,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-ci
 
     - name: Build & Test with Cake (No cached)
@@ -92,7 +100,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -111,10 +119,10 @@ jobs:
         fail-on-error: false
 
   build_linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     env:
-      OpenDdsVersion: "3.28.1"
+      OpenDdsVersion: "3.25"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN'"
@@ -157,8 +165,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/TAO_IDL/tao_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
@@ -208,7 +214,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --collect "XPlat code coverage" --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed""console;verbosity=detailed" --settings ${{ github.workspace }}/Tests.runsettings --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.2/build/netstandard2.0/"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity detailed --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --collect "XPlat code coverage" --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed""console;verbosity=detailed" --settings ${{ github.workspace }}/Tests.runsettings --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
@@ -221,7 +227,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -243,7 +249,7 @@ jobs:
     runs-on: macos-13
 
     env:
-      OpenDdsVersion: "3.28.1"
+      OpenDdsVersion: "3.25"
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
@@ -286,8 +292,6 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/opendds_idl
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/apps/gperf/src/ace_gperf
           ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
@@ -337,7 +341,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.2/build/netstandard2.0/"
+      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-x64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-x64"
@@ -350,7 +354,7 @@ jobs:
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
-        path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
+        path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
         reporter: dotnet-trx
 
     - name: Get path to lcov file
@@ -372,7 +376,7 @@ jobs:
     runs-on: macos-14
 
     env:
-      OpenDdsVersion: "3.28.1"
+      OpenDdsVersion: "3.25"
       BuildPlatform: "ARM64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
@@ -415,8 +419,6 @@ jobs:
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/opendds_idl
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/apps/gperf/src/ace_gperf
             ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/TAO_IDL/tao_idl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/VERSION.txt
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/VERSION.txt
           key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-ci
 
       - name: Build Native (No cached)
@@ -466,7 +468,7 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: bash
-        run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-arm64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.2/build/netstandard2.0/"
+        run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --verbosity diagnostic --configuration ${{ env.BuildConfiguration }} --runtime osx-arm64 --collect "XPlat code coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=detailed" --test-adapter-path "${{ github.workspace }}/packages/coverlet.collector/6.0.0/build/netstandard1.0/"
         working-directory: ${{ github.workspace }}
         env:
           DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_osx-arm64"
@@ -479,7 +481,7 @@ jobs:
         if: success() || failure()
         with:
           name: "Test Report: osx-arm64"
-          path: TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx
+          path: TestResults/netcoreapp3.1/test-results.trx,TestResults/net5.0/test-results.trx,TestResults/net6.0/test-results.trx,TestResults/net7.0/test-results.trx,TestResults/net8.0/test-results.trx,TestResults/net461/test-results.trx,TestResults/net462/test-results.trx,TestResults/net47/test-results.trx,TestResults/net471/test-results.trx,TestResults/net472/test-results.trx,TestResults/net48/test-results.trx
           reporter: dotnet-trx
 
       - name: Get path to lcov file
@@ -506,6 +508,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-          carryforward: coverage-windows-x64-Release,coverage-windows-x86-Release,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release
+          carryforward: coverage-windows-x64-Release,coverage-windows-x64-Debug,coverage-windows-x86-Release,coverage-windows-x86-Debug,coverage-linux-x64-Release,coverage-macos-x64-Release,coverage-macos-arm64-Release
           fail-on-error: false
 

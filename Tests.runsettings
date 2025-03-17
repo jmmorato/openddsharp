@@ -16,7 +16,7 @@
         <Configuration>
           <Format>cobertura,lcov</Format>
           <Include>[OpenDDSharp*]OpenDDSharp.*</Include>
-          <Exclude>[TestIdl]*,[*]OpenDDSharp.BuildTasks[*],[*]OpenDDSharp.UnitTest[*],[TestSupportProcessCore]*,[*]BenchmarkPerformance[*],[*]OpenDDSharp.Doc[*]</Exclude>
+          <Exclude>[TestIdlStandard]*,[*]OpenDDSharp.BuildTasks.*,[*]OpenDDSharp.UnitTest.*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <UseSourceLink>true</UseSourceLink>
           <SkipAutoProps>true</SkipAutoProps>

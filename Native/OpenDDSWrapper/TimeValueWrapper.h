@@ -19,16 +19,19 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #pragma once
 
-#include <dds/DCPS/TimeDuration.h>
+#include "Utils.h"
+#include "dds/DCPS/TimeDuration.h"
 
-static_assert(true);
-#pragma pack(push)
-#pragma pack(1)
-extern "C" struct TimeValueWrapper {
-    ::CORBA::LongLong sec = 0;
-    ::CORBA::Long microsec = 0;
+EXTERN_STRUCT_EXPORT TimeValueWrapper {
+    ::CORBA::LongLong sec;
+    ::CORBA::Long microsec;
 
 public:
+
+    TimeValueWrapper() {
+      sec = 0;
+      microsec = 0;
+    }
 
     TimeValueWrapper(const ::OpenDDS::DCPS::TimeDuration td) {
       sec = td.value().sec();
@@ -39,4 +42,3 @@ public:
       return ::OpenDDS::DCPS::TimeDuration(sec, microsec);
     }
 };
-#pragma pack(pop)

@@ -46,7 +46,7 @@ namespace OpenDDSharp.UnitTest
             var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
             var rui = new RtpsUdpInst(inst);
             Assert.IsTrue(rui.UseMulticast);
-            Assert.AreEqual("239.255.0.2:7401", rui.GetMulticastGroupAddress(0));
+            Assert.AreEqual("239.255.0.2:7401", rui.MulticastGroupAddress);
             Assert.AreEqual(string.Empty, rui.MulticastInterface);
             Assert.AreEqual("0.0.0.0:0", rui.LocalAddress);
             Assert.AreEqual(0U, rui.NakDepth);
@@ -94,6 +94,7 @@ namespace OpenDDSharp.UnitTest
             var rui = new RtpsUdpInst(inst)
             {
                 UseMulticast = false,
+                MulticastGroupAddress = "239.255.0.1:7402",
                 LocalAddress = "127.0.0.1:",
                 MulticastInterface = "eth0",
                 NakDepth = 64U,
@@ -123,10 +124,8 @@ namespace OpenDDSharp.UnitTest
                 },
             };
 
-            rui.SetMulticastGroupAddress("239.255.0.1:7402");
-
             Assert.IsFalse(rui.UseMulticast);
-            Assert.AreEqual("239.255.0.1:7402", rui.GetMulticastGroupAddress(0));
+            Assert.AreEqual("239.255.0.1:7402", rui.MulticastGroupAddress);
             Assert.AreEqual("eth0", rui.MulticastInterface);
             Assert.AreEqual("127.0.0.1:0", rui.LocalAddress);
             Assert.AreEqual(64U, rui.NakDepth);
