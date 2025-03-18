@@ -1,3 +1,11 @@
+# OpenDDSharp vNext
+
+### New Features
+
+### Bug Fixes
+
+- Copy TAO libraries required by `opendds_idl` to the DDS bin folder [#281](https://github.com/jmmorato/openddsharp/pull/281)
+
 # OpenDDSharp v3.310.1
 
 ### New Features

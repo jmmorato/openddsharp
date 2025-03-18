@@ -444,7 +444,7 @@ namespace OpenDDSharp.UnitTest
                 evt.Set();
             };
 
-            // Create a incompatible DataWriter
+            // Create an incompatible DataWriter
             var dwQos = new DataWriterQos
             {
                 Reliability =
