@@ -1,4 +1,4 @@
-next-version: "3.310.1"
+next-version: "3.310.2"
 mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
@@ -35,7 +35,7 @@ branches:
     pre-release-weight: 20000
   feature:
     regex: ^(feature|features|fix|fixes)[/-]
-    mode: ContinuousDeployment
+    mode: ContinuousDeploymentf
     tag: alpha
     increment: None
     prevent-increment-of-merged-branch-version: false
