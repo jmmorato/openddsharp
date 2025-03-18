@@ -35,7 +35,7 @@ branches:
     pre-release-weight: 20000
   feature:
     regex: ^(feature|features|fix|fixes)[/-]
-    mode: ContinuousDeploymentf
+    mode: ContinuousDeployment
     tag: alpha
     increment: None
     prevent-increment-of-merged-branch-version: false

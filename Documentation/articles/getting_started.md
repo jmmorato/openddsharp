@@ -5,10 +5,9 @@ The full code of this example can be found in this [GitHub repository](https://g
 ## Requirements
 
 In order to follow this tutorial, you need to install in your computer:
-- Microsoft [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) or greater
+- Microsoft [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or greater
 - CMake [Version 3.8.2](https://cmake.org/download/) or greater
 - Perl, on Windows system is recommended to use [Strawberry Perl](https://strawberryperl.com/)
-- For Apple ARM64 systems, you must install Rosetta 2 (`softwareupdate --install-rosetta`)
 
 ## Install the OpenDDSharp Templates
 
@@ -60,6 +59,7 @@ Build the project to auto-generate and compile the C# code for the defined struc
 > - win-x86
 > - linux-x64
 > - osx-x64
+> - osx-arm64
 
 ## HelloWorld Publisher
 
@@ -302,8 +302,10 @@ Build the publisher and subscriber project with the following commands:
 > - win-x86
 > - linux-x64
 > - osx-x64
+> - osx-arm64
 
 > [!NOTE]
 > To run the program on Linux systems, you should set the `LD_LIBRARY_PATH` pointing to the directory where the executable is created.
-> Similar, to run the program on MacOS systems, you should set the `DYLD_FALLBACK_LIBRARY_PATH` pointing to the directory where the executable is created. 
+> Similar, to run the program on macOS systems, you should set the `DYLD_LIBRARY_PATH` and/or `DYLD_FALLBACK_LIBRARY_PATH`
+> pointing to the directory where the executable is created. 
 
