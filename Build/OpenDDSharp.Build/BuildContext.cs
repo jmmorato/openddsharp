@@ -166,10 +166,16 @@ namespace OpenDDSharp.Build
                 else if (IsLinux)
                 {
                     runtime = "linux-x64";
+
+                    if (BuildPlatform == PlatformTarget.ARM64)
+                    {
+                        runtime = "linux-arm64";
+                    }
                 }
                 else if (IsOSX)
                 {
                     runtime = "osx-x64";
+
                     if (BuildPlatform == PlatformTarget.ARM64)
                     {
                         runtime = "osx-arm64";
@@ -324,18 +330,9 @@ namespace OpenDDSharp.Build
             }
 
             DdsRoot = $"{THIRD_PARTY_FOLDER}OpenDDS_{BuildPlatform}/";
-            if (IsLinux)
+            if (!IsWindows)
             {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_Linux/";
-            }
-
-            if (IsOSX && IsARM64)
-            {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_osx-arm64/";
-            }
-            else if (IsOSX && !IsARM64)
-            {
-                DdsRoot = THIRD_PARTY_FOLDER + "OpenDDS_osx-x64/";
+                DdsRoot = THIRD_PARTY_FOLDER + $"OpenDDS_{RunTime}/";
             }
 
             AceRoot = DdsRoot + "ACE_wrappers/";

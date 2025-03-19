@@ -35,30 +35,30 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
 
     private readonly string[] _aceLibraries =
     {
-        @"ext\OpenDDS_Linux\ACE_wrappers\ace\libACE.so",
+        @"ACE_wrappers\ace\libACE.so",
     };
 
     private readonly string[] _taoLibraries =
     {
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\libTAO.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PI\libTAO_PI.so",
-        @"ext\OpenDDS_Linux\ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.so",
+        @"ACE_wrappers\TAO\tao\libTAO.so",
+        @"ACE_wrappers\TAO\tao\CodecFactory\libTAO_CodecFactory.so",
+        @"ACE_wrappers\TAO\tao\AnyTypeCode\libTAO_AnyTypeCode.so",
+        @"ACE_wrappers\TAO\tao\BiDir_GIOP\libTAO_BiDirGIOP.so",
+        @"ACE_wrappers\TAO\tao\PI\libTAO_PI.so",
+        @"ACE_wrappers\TAO\tao\PortableServer\libTAO_PortableServer.so",
     };
 
     private readonly string[] _openddsLibraries =
     {
-        @"ext\OpenDDS_Linux\dds\libOpenDDS_Dcps.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\RTPS\libOpenDDS_Rtps.so",
-        @"ext\OpenDDS_Linux\dds\InfoRepo\libOpenDDS_InfoRepoLib.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\shmem\libOpenDDS_Shmem.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\tcp\libOpenDDS_Tcp.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\multicast\libOpenDDS_Multicast.so",
-        @"ext\OpenDDS_Linux\dds\DCPS\transport\udp\libOpenDDS_Udp.so",
+        @"dds\libOpenDDS_Dcps.so",
+        @"dds\DCPS\RTPS\libOpenDDS_Rtps.so",
+        @"dds\InfoRepo\libOpenDDS_InfoRepoLib.so",
+        @"dds\DCPS\InfoRepoDiscovery\libOpenDDS_InfoRepoDiscovery.so",
+        @"dds\DCPS\transport\rtps_udp\libOpenDDS_Rtps_Udp.so",
+        @"dds\DCPS\transport\shmem\libOpenDDS_Shmem.so",
+        @"dds\DCPS\transport\tcp\libOpenDDS_Tcp.so",
+        @"dds\DCPS\transport\multicast\libOpenDDS_Multicast.so",
+        @"dds\DCPS\transport\udp\libOpenDDS_Udp.so",
     };
 
     /// <inheritdoc/>
@@ -68,7 +68,7 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
 
         foreach (var s in _aceLibraries)
         {
-            var sourceFile = Path.Combine(solutionPath, $"{s}.{ACE_VERSION}");
+            var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{ACE_VERSION}");
             var destinationFile = Path.Combine(solutionPath, s);
 
             context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
@@ -78,7 +78,7 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
 
         foreach (var s in _taoLibraries)
         {
-            var sourceFile = Path.Combine(solutionPath, $"{s}.{TAO_VERSION}");
+            var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{TAO_VERSION}");
             var destinationFile = Path.Combine(solutionPath, s);
 
             context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
@@ -88,7 +88,7 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
 
         foreach (var s in _openddsLibraries)
         {
-            var sourceFile = Path.Combine(solutionPath, $"{s}.{OPENDDS_VERSION}");
+            var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{OPENDDS_VERSION}");
             var destinationFile = Path.Combine(solutionPath, s);
 
             context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
