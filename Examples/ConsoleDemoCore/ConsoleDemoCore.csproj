@@ -6,10 +6,11 @@
     <Platforms>x64;x86;ARM64</Platforms>
     <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
     <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
-    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Windows))' And '$(Platform)'=='x64'">win-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Windows))' And '$(Platform)'=='x86'">win-x86</RuntimeIdentifier>
-    <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Linux))'">linux-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Linux))' And '$(IsX64)'=='true'">linux-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$([MSBuild]::IsOSPlatform(Linux))' And '$(IsARM64)'=='true'">linux-arm64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsX64)'=='true'">osx-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(IsARM64)'=='true'">osx-arm64</RuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
