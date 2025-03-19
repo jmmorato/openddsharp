@@ -37,35 +37,43 @@ namespace OpenDDSharp.Build.Tasks
         {
             context.Log.Information(Path.GetFullPath(BuildContext.NATIVE_FOLDER));
             var nativeFolder = Path.GetFullPath(BuildContext.NATIVE_FOLDER).Replace("\\", "/");
-            var buildFoder = nativeFolder + "build";
+            var buildFolder = nativeFolder + "build";
             var platform = context.BuildPlatform == PlatformTarget.x86 ? "Win32" : "x64";
 
             if (BuildContext.IsWindows)
             {
-                buildFoder += $"_{context.BuildPlatform}";
+                buildFolder += $"_{context.BuildPlatform}";
             }
-            var arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE={context.BuildConfiguration} -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFoder}";
+            var arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE={context.BuildConfiguration} -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFolder}";
 
             if (BuildContext.IsLinux)
             {
-                buildFoder += "_Linux";
-                arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
+                buildFolder += "_linux";
+                if (BuildContext.IsARM64)
+                {
+                    buildFolder += "-arm64";
+                }
+                else
+                {
+                    buildFolder += "-x64";
+                }
+                arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFolder}";
             }
             else if (BuildContext.IsOSX && BuildContext.IsARM64)
             {
-                buildFoder += "_osx-arm64";
-                arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
+                buildFolder += "_osx-arm64";
+                arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFolder}";
             }
             else if (BuildContext.IsOSX && !BuildContext.IsARM64)
             {
-                buildFoder += "_osx-x64";
-                arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFoder}";
+                buildFolder += "_osx-x64";
+                arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H{nativeFolder} -B{buildFolder}";
             }
 
             context.CMake(new CMakeSettings
             {
                 SourcePath = nativeFolder,
-                OutputPath = buildFoder,
+                OutputPath = buildFolder,
                 ArgumentCustomization = args => arguments,
                 WorkingDirectory = nativeFolder,
                 EnvironmentVariables =
@@ -79,7 +87,7 @@ namespace OpenDDSharp.Build.Tasks
 
             var buildSettings = new CMakeBuildSettings
             {
-                BinaryPath = buildFoder,
+                BinaryPath = buildFolder,
                 WorkingDirectory = nativeFolder,
                 CleanFirst = true,
                 EnvironmentVariables =
