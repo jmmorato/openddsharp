@@ -48,18 +48,32 @@
     <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)..\tools\DDS_$(PlatformFolder)\tools\rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
 
-  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true'">
-    <DDS_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux</DDS_ROOT>
+  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_linux-x64</DDS_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="ACE Home" Condition="'$(IsLinux)'=='true'">
-    <ACE_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_Linux</ACE_ROOT>
+  <PropertyGroup Label="ACE Home" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_linux-x64</ACE_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true'">
-    <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_Linux/TAO</TAO_ROOT>
+  <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_linux-x64/TAO</TAO_ROOT>
   </PropertyGroup>
-  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsLinux)'=='true'">
-    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_Linux/tools/rapidjson</RAPIDJSON_ROOT>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_linux-x64/tools/rapidjson</RAPIDJSON_ROOT>
   </PropertyGroup>
+
+  <PropertyGroup Label="OpenDDS Home" Condition="'$(IsLinux)'=='true' And '$(IsARM64)'=='true'">
+    <DDS_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_linux-arm64</DDS_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="ACE Home" Condition="'$(IsLinux)'=='true' And '$(IsARM64)'=='true'">
+    <ACE_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_linux-arm64</ACE_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="TAO Home" Condition="'$(IsLinux)'=='true' And '$(IsARM64)'=='true'">
+    <TAO_ROOT>$(MSBuildThisFileDirectory)../tools/ACE_linux-arm64/TAO</TAO_ROOT>
+  </PropertyGroup>
+  <PropertyGroup Label="Rapid JSON Home" Condition="'$(IsLinux)'=='true' And '$(IsARM64)'=='true'">
+    <RAPIDJSON_ROOT>$(MSBuildThisFileDirectory)../tools/DDS_linux-arm64/tools/rapidjson</RAPIDJSON_ROOT>
+  </PropertyGroup>
+
   <PropertyGroup Label="Library Path" Condition="'$(IsLinux)'=='true'">
     <LD_LIBRARY_PATH>$(DDS_ROOT)/lib:$(ACE_ROOT)/lib</LD_LIBRARY_PATH>
   </PropertyGroup>
@@ -133,15 +147,17 @@
 
   <!-- Set specific Linux environment variables -->
   <Target Name="SetEnvVarTargetLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'">
-    <Message Text="Set Linux environment variables:" Importance="High" />
+      <Message Text="Set Linux environment variables:" Importance="High" />
 	  <Message Text="LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)" Importance="High" />
 	  <SetEnvVar Variable="LD_LIBRARY_PATH" Value="$(LD_LIBRARY_PATH)" />
   </Target>
 
   <!-- Set specific MacOS environment variables -->
   <Target Name="SetEnvVarTargetMacOS" BeforeTargets="PreBuildEvent" Condition="'$(IsOSX)'=='true'">
-    <Message Text="Set MacOS environment variables:" Importance="High" />
+      <Message Text="Set MacOS environment variables:" Importance="High" />
+      <Message Text="DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH)" Importance="High" />
 	  <Message Text="DYLD_FALLBACK_LIBRARY_PATH=$(DYLD_FALLBACK_LIBRARY_PATH)" Importance="High" />
+      <SetEnvVar Variable="DYLD_LIBRARY_PATH" Value="$(DYLD_LIBRARY_PATH)" />
 	  <SetEnvVar Variable="DYLD_FALLBACK_LIBRARY_PATH" Value="$(DYLD_FALLBACK_LIBRARY_PATH)" />
   </Target>
 
@@ -161,9 +177,13 @@
 	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
 	  <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlWrapperLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsLinux)'=='true'">
+  <Target Name="OpenDDSharpIdlWrapperLinuxX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
 	  <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
-	  <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_Linux/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_linux-x64/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+  </Target>
+  <Target Name="OpenDDSharpIdlWrapperLinuxARM64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\%(filename)TypeSupport.h')" Condition="'$(IsLinux)'=='true' And '$(IsARM64)'=='true'">
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_linux-arm64/bin/openddsharp_idl&quot; &quot;%(IdlFiles.Filename).idl&quot; -cwrapper" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlWrapperMacOSX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)../$(IntermediateOutputPath)NativeProject/%(filename)TypeSupport.h')" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) wrapper..." Importance="High" />
@@ -219,9 +239,13 @@
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
     <Exec Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_x86/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
-  <Target Name="OpenDDSharpIdlCSharpLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true'">
+  <Target Name="OpenDDSharpIdlCSharpLinuxX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_Linux/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_linux-x64/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+  </Target>
+  <Target Name="OpenDDSharpIdlCSharpLinuxARM64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true' And '$(IsARM64)'=='true'">
+    <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
+    <Exec ToolExe="sh" Command="&quot;$(MSBuildThisFileDirectory)../tools/DDS_linux-arm64/bin/openddsharp_idl&quot; &quot;$(MSBuildProjectDirectory)/%(IdlFiles.Identity)&quot; -csharp_cdr -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpMacOSX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />

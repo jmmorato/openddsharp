@@ -65,35 +65,43 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
     public override void Run(BuildContext context)
     {
         var solutionPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
-
-        foreach (var s in _aceLibraries)
+        var buildPlatforms = new[]
         {
-            var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{ACE_VERSION}");
-            var destinationFile = Path.Combine(solutionPath, s);
+            "x64",
+            "arm64",
+        };
 
-            context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
-
-            File.Copy(sourceFile, destinationFile, true);
-        }
-
-        foreach (var s in _taoLibraries)
+        foreach (var platform in buildPlatforms)
         {
-            var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{TAO_VERSION}");
-            var destinationFile = Path.Combine(solutionPath, s);
+            foreach (var s in _aceLibraries)
+            {
+                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", $"{s}.{ACE_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
 
-            context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
+                context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
 
-            File.Copy(sourceFile, destinationFile, true);
-        }
+                File.Copy(sourceFile, destinationFile, true);
+            }
 
-        foreach (var s in _openddsLibraries)
-        {
-            var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{OPENDDS_VERSION}");
-            var destinationFile = Path.Combine(solutionPath, s);
+            foreach (var s in _taoLibraries)
+            {
+                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{TAO_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
 
-            context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
+                context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
 
-            File.Copy(sourceFile, destinationFile, true);
+                File.Copy(sourceFile, destinationFile, true);
+            }
+
+            foreach (var s in _openddsLibraries)
+            {
+                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{OPENDDS_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, s);
+
+                context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
+
+                File.Copy(sourceFile, destinationFile, true);
+            }
         }
     }
 }
