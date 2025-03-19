@@ -76,7 +76,7 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
             foreach (var s in _aceLibraries)
             {
                 var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", $"{s}.{ACE_VERSION}");
-                var destinationFile = Path.Combine(solutionPath, s);
+                var destinationFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", s);
 
                 context.Log.Information($"Copying ACE Library {sourceFile} to {destinationFile}");
 
@@ -85,8 +85,8 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
 
             foreach (var s in _taoLibraries)
             {
-                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{TAO_VERSION}");
-                var destinationFile = Path.Combine(solutionPath, s);
+                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", $"{s}.{TAO_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", s);
 
                 context.Log.Information($"Copying TAO Library {sourceFile} to {destinationFile}");
 
@@ -95,8 +95,8 @@ public class PrepareLinuxLibraries : FrostingTask<BuildContext>
 
             foreach (var s in _openddsLibraries)
             {
-                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_{context.RunTime}", $"{s}.{OPENDDS_VERSION}");
-                var destinationFile = Path.Combine(solutionPath, s);
+                var sourceFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", $"{s}.{OPENDDS_VERSION}");
+                var destinationFile = Path.Combine(solutionPath, "ext", $"OpenDDS_linux-{platform}", s);
 
                 context.Log.Information($"Copying DDS Library {sourceFile} to {destinationFile}");
 
