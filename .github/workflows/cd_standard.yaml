@@ -157,19 +157,19 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup dotnet 6.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-
-    - name: Setup dotnet 7.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+#    - name: Setup dotnet 6.0
+#      shell: sh
+#      run: |
+#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
+#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+#
+#    - name: Setup dotnet 7.0
+#      shell: sh
+#      run: |
+#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
+#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
     - name: Setup dotnet 8.0
       shell: sh
@@ -264,7 +264,7 @@ jobs:
     - name: Artifact OpenDDS libraries
       uses: actions/upload-artifact@v4
       with:
-        name: opendds-linux-x64-${{ github.run_number }}
+        name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
 
   build_macos_x64_native:
@@ -572,6 +572,11 @@ jobs:
       with:
         name: opendds-linux-x64-${{ github.run_number }}
 
+    - name: Download OpenDDS Native linux-arm64
+      uses: actions/download-artifact@v4
+      with:
+        name: opendds-linux-arm64-${{ github.run_number }}
+
     - name: Download OpenDDS Native osx-x64
       uses: actions/download-artifact@v4
       with:
@@ -588,6 +593,7 @@ jobs:
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x64.zip" -DestinationPath "."
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-win-x86.zip" -DestinationPath "."
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-linux-x64.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-linux-arm64.zip" -DestinationPath "."
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-osx-x64.zip" -DestinationPath "."
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-osx-arm64.zip" -DestinationPath "."
         
@@ -597,8 +603,11 @@ jobs:
         XCOPY ".\opendds-native-win-x86\OpenDDS_x86\*" "${{ github.workspace }}\ext\OpenDDS_x86\" /D /S /Y /M
         XCOPY ".\opendds-native-win-x86\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-native-linux-x64\OpenDDS_Linux\*" "${{ github.workspace }}\ext\OpenDDS_Linux\" /D /S /Y /M
+        XCOPY ".\opendds-native-linux-x64\OpenDDS_linux-x64\*" "${{ github.workspace }}\ext\OpenDDS_linux-x64\" /D /S /Y /M
         XCOPY ".\opendds-native-linux-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        
+        XCOPY ".\opendds-native-linux-arm64\OpenDDS_linux-arm64\*" "${{ github.workspace }}\ext\OpenDDS_linux-arm64\" /D /S /Y /M
+        XCOPY ".\opendds-native-linux-arm64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
         XCOPY ".\opendds-native-osx-x64\OpenDDS_osx-x64\*" "${{ github.workspace }}\ext\OpenDDS_osx-x64\" /D /S /Y /M
         XCOPY ".\opendds-native-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
@@ -635,6 +644,11 @@ jobs:
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=x64
       working-directory: ${{ github.workspace }}
 
+    - name: Build OpenDDSharp ARM64
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=ARM64
+      working-directory: ${{ github.workspace }}
+
     - name: Build OpenDDSharp AnyCPU
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp/OpenDDSharp.csproj -property:Configuration=Release -property:Platform=AnyCPU
@@ -648,6 +662,11 @@ jobs:
     - name: Build OpenDDSharp.Marshaller x64
       shell: cmd
       run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj -property:Configuration=Release -property:Platform=x64
+      working-directory: ${{ github.workspace }}
+
+    - name: Build OpenDDSharp.Marshaller ARM64
+      shell: cmd
+      run: dotnet msbuild -target:build ${{ github.workspace }}/Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj -property:Configuration=Release -property:Platform=ARM64
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp.Marshaller AnyCPU
@@ -681,6 +700,8 @@ jobs:
             runtime: linux-x64
           - os: ubuntu-24.04
             runtime: linux-x64
+          - os: ubuntu-22.04-arm
+            runtime: linux-arm64
           - os: macos-13
             runtime: osx-x64
           - os: macos-14
