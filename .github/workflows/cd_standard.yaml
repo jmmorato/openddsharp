@@ -149,27 +149,13 @@ jobs:
 
     env:
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-E,-Wl,-rpath,$$ORIGIN,-Wl,-rpath-link,$$ORIGIN"
-      #LD_LIBKRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
+      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
+      #LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
-#    - name: Setup dotnet 6.0
-#      shell: sh
-#      run: |
-#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
-#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-#
-#    - name: Setup dotnet 7.0
-#      shell: sh
-#      run: |
-#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
-#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
     - name: Setup dotnet 8.0
       shell: sh
