@@ -33,16 +33,18 @@ namespace ConsoleDemoCore
     {
         private static void Main()
         {
+            Console.WriteLine("ACE initialization...");
             Ace.Init();
 
-            var dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini",
-                "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
+            Console.WriteLine("Get domain participant factory...");
+            var dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
             if (dpf == null)
             {
                 Console.Error.WriteLine("Domain participant factory could NOT be created.");
                 Environment.Exit(-1);
             }
 
+            Console.WriteLine("Create participant...");
             var participant = dpf.CreateParticipant(42);
             if (participant == null)
             {
@@ -50,12 +52,15 @@ namespace ConsoleDemoCore
                 Environment.Exit(-1);
             }
 
+            Console.WriteLine("Create data writer...");
             var dw = CreateTestDataWriter(participant);
             if (dw == null)
             {
                 Console.Error.WriteLine("DataWriter could NOT be created.");
                 Environment.Exit(-1);
             }
+
+            Console.WriteLine("Create data reader...");
             var dr = CreateTestDataReader(participant);
             if (dr == null)
             {
