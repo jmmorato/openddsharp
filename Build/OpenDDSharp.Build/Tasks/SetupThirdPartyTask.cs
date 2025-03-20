@@ -112,7 +112,7 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --std=c++14";
+                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --std=c++14";
                 context.Log.Information(arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings

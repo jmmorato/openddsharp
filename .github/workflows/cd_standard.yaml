@@ -149,8 +149,8 @@ jobs:
 
     env:
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
-      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
+      LD_RPATH_FLAGS: "-Wl,-E,-Wl,-rpath,$$ORIGIN,-Wl,-rpath-link,$$ORIGIN"
+      #LD_LIBKRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
