@@ -149,7 +149,7 @@ jobs:
 
     env:
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
+      LD_RPATH_FLAGS: "-Wl,-rpath='$ORIGIN/.'"
       #LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
