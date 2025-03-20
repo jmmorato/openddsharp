@@ -709,6 +709,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    env:
+      LD_LIBRARY_PATH: "."
+
     steps:
       - uses: actions/checkout@v4
         with:
