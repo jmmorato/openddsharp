@@ -150,7 +150,7 @@ jobs:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
-      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/lib:."
+      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_linux-x64/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
@@ -177,26 +177,26 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ${{ github.workspace }}/ext/OpenDDS_Linux/cmake/**/*
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/lib*.so*
-          ${{ github.workspace }}/ext/OpenDDS_Linux/bin/
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/bin/
-          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/**/*.pidl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_Linux/tools/
-          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/InfoRepo/DCPSInfoRepo
-          ${{ github.workspace }}/ext/OpenDDS_Linux/dds/idl/opendds_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/apps/gperf/src/ace_gperf
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/TAO_IDL/tao_idl
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/lib*.so*
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/bin/
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/bin/
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/tools/
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/dds/InfoRepo/DCPSInfoRepo
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/dds/idl/opendds_idl
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/apps/gperf/src/ace_gperf
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-linux-${{ env.BuildPlatform }}-ci
 
     - name: Build Native (No cached)
@@ -233,28 +233,28 @@ jobs:
       run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --self-contained
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
 
     - name: Build OpenDDSharp UnitTest project
       shell: bash
       run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime linux-x64 --self-contained
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
 
     - name: Test OpenDDSharp
       shell: bash
       run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime linux-x64 --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
-        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/lib:."
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_linux-x64/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
 
     - name: Test Report
       uses: dorny/test-reporter@v1
@@ -291,9 +291,9 @@ jobs:
         sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -2
       working-directory: ${{ github.workspace }}
       env:
-        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux"
-        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers"
-        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/TAO"
+        DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64"
+        ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers"
+        TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
       continue-on-error: false
 
   build_macos_x64:

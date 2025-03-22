@@ -178,7 +178,7 @@ DDS::DataWriter_ptr create_data_writer(DDS::Publisher_ptr publisher, DDS::Topic_
     throw std::runtime_error("create_datawriter failed.");
   }
 
-  return DDS::DataWriter::_duplicate(writer);
+  return writer;
 }
 
 DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topic_ptr topic) {
@@ -195,5 +195,5 @@ DDS::DataReader_ptr create_data_reader(DDS::Subscriber_ptr subscriber, DDS::Topi
     throw std::runtime_error("create_datareader failed.");
   }
 
-  return DDS::DataReader::_duplicate(reader);
+  return reader;
 }

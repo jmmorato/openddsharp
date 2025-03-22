@@ -42,17 +42,27 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
-#elif Linux
-        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_Linux";
-        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_wrappers";
-        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_Linux/ACE_wrappers/TAO";
+#elif Linux && X64
+        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_linux-x64";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_linux-x64/ACE_wrappers";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_linux-x64/ACE_wrappers/TAO";
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
-#elif (OSX && X64)
+#elif Linux && ARM64
+        private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_linux-arm64";
+        private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_linux-arm64/ACE_wrappers";
+        private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_linux-arm64/ACE_wrappers/TAO";
+        private const string DEBUG_TARGET_FOLDER = @"Debug/";
+        private const string RELEASE_TARGET_FOLDER = @"Release/";
+        private const string SIXTY_FOUR_PLATFORM_FOLDER = @"ARM64/";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
+#elif OSX && X64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_osx-x64";
         private const string ACE_ROOT = @"../../../../../../ext/OpenDDS_osx-x64/ACE_wrappers";
         private const string TAO_ROOT = @"../../../../../../ext/OpenDDS_osx-x64/ACE_wrappers/TAO";
@@ -63,7 +73,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
         private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
-#elif (OSX && ARM64)
+#elif OSX && ARM64
         private const string DDS_ROOT = "../../../../../../ext/OpenDDS_osx-arm64";
         private const string ACE_ROOT = "../../../../../../ext/OpenDDS_osx-arm64/ACE_wrappers";
         private const string TAO_ROOT = "../../../../../../ext/OpenDDS_osx-arm64/ACE_wrappers/TAO";
