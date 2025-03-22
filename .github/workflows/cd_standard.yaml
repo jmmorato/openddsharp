@@ -436,12 +436,12 @@ jobs:
 
     - name: Build OpenDDSharp.BuildTasks project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
+      run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration Release
       working-directory: ${{ github.workspace }}
 
     - name: Build OpenDDSharp TestSupportProcessCore project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
+      run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
@@ -450,7 +450,7 @@ jobs:
 
     - name: Build OpenDDSharp UnitTest project
       shell: bash
-      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
+      run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained
       working-directory: ${{ github.workspace }}
       env:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
@@ -465,13 +465,13 @@ jobs:
         DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
         ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
         TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
-        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
+        LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: "Test Report: ${{ matrix.runtime }}"
+        name: "Test Report: ${{ matrix.os }} ${{ matrix.runtime }}"
         path: TestResults/test-results_*.trx
         reporter: dotnet-trx
 
@@ -488,7 +488,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
         parallel: true
-        flag-name: coverage-${{ matrix.os }}-Release
+        flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
         fail-on-error: true
 
   build_artifacts:
