@@ -18,43 +18,49 @@ env:
 
 jobs:
   build_windows_native:
-    runs-on: windows-2022
     strategy:
       fail-fast: false
       matrix:
-        BuildPlatform: [x64, x86]
-        BuildConfiguration: [Release]
+        include:
+          - os: windows-2022
+            runtime: win-x64
+            build_platform: x64
+          - os: windows-2022
+            runtime: win-x86
+            build_platform: x86
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Setup dotnet 6.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 6.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+#    - name: Setup dotnet 6.0
+#      shell: pwsh
+#      run: |
+#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+#        ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 6.0;
+#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
-    - name: Setup dotnet 7.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+#    - name: Setup dotnet 7.0
+#      shell: pwsh
+#      run: |
+#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+#        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
+#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 8.0
       shell: pwsh
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 8.0;
+        ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
       with:
-        msbuild-architecture: ${{ matrix.BuildPlatform }}
+        msbuild-architecture: ${{ matrix.build_platform }}
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-windows-cd
@@ -62,76 +68,76 @@ jobs:
       with:
         path: |
           ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/cmake/**/*
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/tools/rapidjson/**/*
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.dll
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.lib
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.exe
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/**/*.pidl
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.BuildPlatform }}/ACE_wrappers/TAO/VERSION.txt
-        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.BuildConfiguration }}-win-${{ matrix.BuildPlatform }}-cd
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/cmake/**/*
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/tools/rapidjson/**/*
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.pl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.dll
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.lib
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.exe
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/dds/idl/IDLTemplate.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.h
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.hpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.cpp
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.inl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.idl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/**/*.pidl
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers/VERSION.txt
+          ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers/TAO/VERSION.txt
+        key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.runtime }}-cd
 
     - name: Build Native (No cached)
       shell: pwsh
       if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build Native (Cached)
       shell: pwsh
       if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ matrix.BuildConfiguration }} --BuildPlatform=${{ matrix.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
       working-directory: ${{ github.workspace }}/Build
 
     - name: Stage Native
       shell: pwsh
       run: |
-        $targetDir = ".\opendds-native-win-${{ matrix.BuildPlatform }}"
-        New-Item -Path "." -Name "opendds-native-win-${{ matrix.BuildPlatform }}" -ItemType "directory"
+        $targetDir = ".\opendds-native-${{ matrix.runtime }}"
+        New-Item -Path "." -Name "opendds-native-${{ matrix.runtime }}" -ItemType "directory"
         
         XCOPY ".\README.md" "$targetDir\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\IDLTemplate.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\dds\idl\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\TAO\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\ACE_wrappers\" /D /S /Y /M
-        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSWrapper\Release\" /D /S /Y /M
-        XCOPY ".\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.BuildPlatform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\dds\idl\IDLTemplate.txt" "$targetDir\OpenDDS_${{ matrix.build_platform }}\dds\idl\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\TAO\VERSION.txt" "$targetDir\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.build_platform }}\OpenDDSWrapper\Release\OpenDDSWrapper.dll" "$targetDir\Native\build_${{ matrix.build_platform }}\OpenDDSWrapper\Release\" /D /S /Y /M
+        XCOPY ".\Native\build_${{ matrix.build_platform }}\OpenDDSharp.IdlGenerator\Release\openddsharp_idl.exe" "$targetDir\Native\build_${{ matrix.build_platform }}\OpenDDSharp.IdlGenerator\Release\" /D /S /Y /M
         
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\cmake\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\cmake\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\*" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\tools\rapidjson\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.lib" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.exe" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.h" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.hpp" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.cpp" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.inl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.idl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
-        XCOPY ".\ext\OpenDDS_${{ matrix.BuildPlatform }}\*.pidl" "$targetDir\OpenDDS_${{ matrix.BuildPlatform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\cmake\*" "$targetDir\OpenDDS_${{ matrix.build_platform }}\cmake\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\tools\rapidjson\*" "$targetDir\OpenDDS_${{ matrix.build_platform }}\tools\rapidjson\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.cmake" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.pl" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.dll" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.lib" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.exe" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.h" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.hpp" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.cpp" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.inl" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.idl" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
+        XCOPY ".\ext\OpenDDS_${{ matrix.build_platform }}\*.pidl" "$targetDir\OpenDDS_${{ matrix.build_platform }}\" /D /S /Y /M
         
         $compress = @{
           Path = $targetDir
           CompressionLevel = "Fastest"
-          DestinationPath = ".\opendds-native-win-${{ matrix.BuildPlatform }}.zip"
+          DestinationPath = ".\opendds-native-${{ matrix.runtime }}.zip"
         }
         Compress-Archive @compress        
 
     - name: Artifacts OpenDDS libraries
       uses: actions/upload-artifact@v4
       with:
-        name: opendds-win-${{ matrix.BuildPlatform }}-${{ github.run_number }}
-        path: ${{ github.workspace }}/opendds-native-win-${{ matrix.BuildPlatform }}.zip
+        name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+        path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
 
   build_linux_native:
     strategy:
@@ -253,214 +259,83 @@ jobs:
         name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
         path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
 
-  build_macos_x64_native:
-    runs-on: macos-13
+  build_macos_native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-13
+            runtime: osx-x64
+            build_platform: x64
+          - os: macos-14
+            runtime: osx-arm64
+            build_platform: ARM64
+
+    runs-on: ${{ matrix.os }}
 
     env:
-      BuildPlatform: "x64"
-      BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
-      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
-      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Setup dotnet 6.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 6.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-
-    - name: Setup dotnet 7.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 7.0
-         echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-         echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-
-    - name: Setup dotnet 8.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 8.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-
-    - name: Cache OpenDDS libraries
-      id: opendds-libraries-macos-x64-cd
-      uses: actions/cache@v4
-      with:
-        path: |
-          ${{ github.workspace }}/README.md
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/cmake/**/*
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/tools/rapidjson/**/*
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.pl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/lib*.dylib
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/bin/
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/bin/
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/IDLTemplate.txt
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.h
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.hpp
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.cpp
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.inl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.idl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/**/*.pidl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/tools/
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/InfoRepo/DCPSInfoRepo          
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/dds/idl/opendds_idl          
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/apps/gperf/src/ace_gperf
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/TAO_IDL/tao_idl
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/VERSION.txt
-          ${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/TAO/VERSION.txt
-        key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
-
-    - name: Build Native (No cached)
-      shell: pwsh
-      if: steps.opendds-libraries-macos-x64-cd.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
-      working-directory: ${{ github.workspace }}/Build
-
-    - name: Build Native (Cached)
-      shell: pwsh
-      if: steps.opendds-libraries-macos-x64-cd.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
-      working-directory: ${{ github.workspace }}/Build
-
-    - name: Stage Native
-      shell: pwsh
-      run: |
-        $sourceDir = "./ext/OpenDDS_osx-x64"
-        $targetDir = "./opendds-native-osx-x64"
-        mkdir "$targetDir"
-
-        rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='*.h' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='*.hpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='*.cpp' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='*.inl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='*.idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='*.pidl' --include='*/' --exclude='*' $sourceDir $targetDir
-        
-        rsync -r -m -v -LKH --include='bin/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -LKH --include='tools/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -LKH --include='cmake/*' --include='*/' --exclude='*' $sourceDir $targetDir
-        
-        rsync -r -m -v -LKH --include='*lib*.dylib' --include='*/' --exclude='*' $sourceDir $targetDir
-        
-        rsync -r -m -v --include='VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v --include='dds/idl/IDLTemplate.txt' --include='*/' --exclude='*' $sourceDir $targetDir       
-        rsync -r -m -v -L --include='dds/InfoRepo/DCPSInfoRepo' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='tools/dcpsinfo_dump/dcpsinfo_dump'--include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='dds/idl/opendds_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='tools/repoctl/repoctl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/apps/gperf/src/ace_gperf' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/TAO/TAO_IDL/tao_idl' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        rsync -r -m -v -L --include='ACE_wrappers/TAO/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
-        
-        rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_osx-x64/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
-        rsync -r -m -v --include='Native/build_osx-x64/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
-                
-        ls -la ./opendds-native-osx-x64
-        ls -la ./opendds-native-osx-x64/OpenDDS_osx-x64
-        ls -la ./opendds-native-osx-x64/Native
-
-        zip -r "opendds-native-osx-x64.zip" "./opendds-native-osx-x64"
-
-    - name: Artifacts OpenDDS libraries
-      uses: actions/upload-artifact@v4
-      with:
-        name: opendds-osx-x64-${{ github.run_number }}
-        path: ${{ github.workspace }}/opendds-native-osx-x64.zip
-
-  build_macos_arm64_native:
-    runs-on: macos-14
-
-    env:
-      BuildPlatform: "ARM64"
-      BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
-      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
-      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
+      DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
+      DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 6.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 6.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-
-      - name: Setup dotnet 7.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 7.0
-           echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-           echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-
       - name: Setup dotnet 8.0
         shell: sh
         run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ env.BuildPlatform }}' --channel 8.0
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
           echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
           echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
       - name: Cache OpenDDS libraries
-        id: opendds-libraries-macos-arm64-cd
+        id: opendds-libraries-macos-cd
         uses: actions/cache@v4
         with:
           path: |
             ${{ github.workspace }}/README.md
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/cmake/**/*
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/tools/rapidjson/**/*
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.pl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/lib*.dylib
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/bin/
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/bin/
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/IDLTemplate.txt
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.h
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.hpp
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.cpp
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.inl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.idl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/**/*.pidl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/VERSION.txt
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/tools/
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/InfoRepo/DCPSInfoRepo          
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/dds/idl/opendds_idl          
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/apps/gperf/src/ace_gperf
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/TAO_IDL/tao_idl
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/VERSION.txt
-            ${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO/VERSION.txt
-          key: opendds-cache-${{ env.OpenDdsVersion }}-osx-${{ env.BuildPlatform }}-cd
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/cmake/**/*
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/tools/rapidjson/**/*
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.pl
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/lib*.dylib
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/bin/
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/bin/
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/dds/idl/IDLTemplate.txt
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.h
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.hpp
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.cpp
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.inl
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.idl
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/**/*.pidl
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/VERSION.txt
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/tools/
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/dds/InfoRepo/DCPSInfoRepo          
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/dds/idl/opendds_idl          
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/apps/gperf/src/ace_gperf
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO/TAO_IDL/tao_idl
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/VERSION.txt
+            ${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO/VERSION.txt
+          key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.runtime }}-cd
 
       - name: Build Native (No cached)
         shell: pwsh
-        if: steps.opendds-libraries-macos-ARM64-cd.outputs.cache-hit != 'true'
-        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+        if: steps.opendds-libraries-macos-cd.outputs.cache-hit != 'true'
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
         working-directory: ${{ github.workspace }}/Build
 
       - name: Build Native (Cached)
         shell: pwsh
-        if: steps.opendds-libraries-macos-ARM64-cd.outputs.cache-hit == 'true'
-        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=${{ env.BuildConfiguration }} --BuildPlatform=${{ env.BuildPlatform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+        if: steps.opendds-libraries-macos-cd.outputs.cache-hit == 'true'
+        run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
         working-directory: ${{ github.workspace }}/Build
 
       - name: Stage Native
         shell: pwsh
         run: |
-          $sourceDir = "./ext/OpenDDS_osx-arm64"
-          $targetDir = "./opendds-native-osx-arm64"
+          $sourceDir = "./ext/OpenDDS_${{ matrix.runtime }}"
+          $targetDir = "./opendds-native-${{ matrix.runtime }}"
           mkdir "$targetDir"
           
           rsync -r -m -v --include='*.pl' --include='*/' --exclude='*' $sourceDir $targetDir
@@ -490,37 +365,141 @@ jobs:
           rsync -r -m -v -L --include='ACE_wrappers/TAO/VERSION.txt' --include='*/' --exclude='*' $sourceDir $targetDir
           
           rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
-          rsync -r -m -v --include='Native/build_osx-arm64/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
-          rsync -r -m -v --include='Native/build_osx-arm64/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
+          rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
+          rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
           
-          ls -la ./opendds-native-osx-arm64
-          ls -la ./opendds-native-osx-arm64/OpenDDS_osx-arm64
-          ls -la ./opendds-native-osx-arm64/Native
+          ls -la ./opendds-native-${{ matrix.runtime }}
+          ls -la ./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}
+          ls -la ./opendds-native-${{ matrix.runtime }}/Native
           
-          zip -r "opendds-native-osx-arm64.zip" "./opendds-native-osx-arm64"
+          zip -r "opendds-native-${{ matrix.runtime }}.zip" "./opendds-native-${{ matrix.runtime }}"
 
       - name: Artifacts OpenDDS libraries
         uses: actions/upload-artifact@v4
         with:
-          name: opendds-osx-ARM64-${{ github.run_number }}
-          path: ${{ github.workspace }}/opendds-native-osx-arm64.zip
+          name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+          path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
+
+  unit_test_linux:
+    needs: build_linux_native
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            runtime: linux-x64
+            build_platform: x64
+          - os: ubuntu-22.04
+            runtime: linux-x64
+            build_platform: x64
+          - os: ubuntu-24.04
+            runtime: linux-x64
+            build_platform: x64
+          - os: ubuntu-22.04-arm
+            runtime: linux-arm64
+            build_platform: ARM64
+          - os: ubuntu-24.04-arm
+            runtime: linux-arm64
+            build_platform: ARM64
+
+      runs-on: ${{ matrix.os }}
+
+      steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Setup dotnet 8.0
+          shell: sh
+          run: |
+            curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+            echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+            echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+
+        - name: Download OpenDDS Native ${{ matrix.build_platform }}
+          uses: actions/download-artifact@v4
+          with:
+            name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+
+        - name: Dotnet restore
+          shell: bash
+          run: |
+            dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+            dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+            dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+            dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+            dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+            dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+            dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          working-directory: ${{ github.workspace }}
+
+        - name: Build OpenDDSharp.BuildTasks project
+          shell: bash
+          run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
+          working-directory: ${{ github.workspace }}
+
+        - name: Build OpenDDSharp TestSupportProcessCore project
+          shell: bash
+          run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
+          working-directory: ${{ github.workspace }}
+          env:
+            DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+            ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+            TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+
+        - name: Build OpenDDSharp UnitTest project
+          shell: bash
+          run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
+          working-directory: ${{ github.workspace }}
+          env:
+            DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+            ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+            TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+
+        - name: Test OpenDDSharp
+          shell: bash
+          run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
+          working-directory: ${{ github.workspace }}
+          env:
+            DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+            ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+            TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+            LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
+
+        - name: Test Report
+          uses: dorny/test-reporter@v1
+          if: success() || failure()
+          with:
+            name: "Test Report: ${{ matrix.runtime }}"
+            path: TestResults/test-results_*.trx
+            reporter: dotnet-trx
+
+        - name: Merge coverage files
+          shell: bash
+          run: |
+            dotnet tool install -g dotnet-reportgenerator-globaltool
+            export PATH="$PATH:$HOME/.dotnet/tools"
+            reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
+
+        - name: Upload coverage to Coveralls
+          uses: coverallsapp/github-action@v2
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
+            parallel: true
+            flag-name: coverage-${{ matrix.os }}-Release
+            fail-on-error: true
 
   build_artifacts:
     runs-on: windows-latest
 
-    needs: [build_windows_native, build_linux_native, build_macos_x64_native, build_macos_arm64_native]
+    needs: [build_windows_native, build_linux_native, build_macos_native]
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
-    - name: Setup dotnet 6.0
-      shell: pwsh
-      run: |
-        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-        ./dotnet-install.ps1 -Architecture 'x64' -Channel 6.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Setup dotnet 8.0
       shell: pwsh
@@ -541,7 +520,7 @@ jobs:
 
     - name: Get branch names
       id: branch-name
-      uses: mrsimonemms/get-branch-name-action@v1
+      uses: tj-actions/branch-names@v8
 
     - name: Download OpenDDS Native win-x86
       uses: actions/download-artifact@v4
@@ -571,7 +550,7 @@ jobs:
     - name: Download OpenDDS Native osx-arm64
       uses: actions/download-artifact@v4
       with:
-        name: opendds-osx-ARM64-${{ github.run_number }}
+        name: opendds-osx-arm64-${{ github.run_number }}
 
     - name: Prepare OpenDDS Native
       shell: pwsh
@@ -598,8 +577,8 @@ jobs:
         XCOPY ".\opendds-native-osx-x64\OpenDDS_osx-x64\*" "${{ github.workspace }}\ext\OpenDDS_osx-x64\" /D /S /Y /M
         XCOPY ".\opendds-native-osx-x64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
         
-        XCOPY ".\opendds-native-osx-ARM64\OpenDDS_osx-arm64\*" "${{ github.workspace }}\ext\OpenDDS_osx-arm64\" /D /S /Y /M
-        XCOPY ".\opendds-native-osx-ARM64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-arm64\OpenDDS_osx-arm64\*" "${{ github.workspace }}\ext\OpenDDS_osx-arm64\" /D /S /Y /M
+        XCOPY ".\opendds-native-osx-arm64\Native\*" "${{ github.workspace }}\Native\" /D /S /Y /M
 
     - name: Set release version
       shell: pwsh
@@ -690,9 +669,13 @@ jobs:
             runtime: linux-x64
           - os: ubuntu-22.04-arm
             runtime: linux-arm64
+          - os: ubuntu-24.04-arm
+            runtime: linux-arm64
           - os: macos-13
             runtime: osx-x64
           - os: macos-14
+            runtime: osx-arm64
+          - os: macos-15
             runtime: osx-arm64
 
     runs-on: ${{ matrix.os }}
@@ -792,7 +775,7 @@ jobs:
           Write-Host "exit code: $($p.ExitCode)"
 
   publish_artifacts:
-    needs: test_artifacts
+    needs: [test_artifacts, unit_test_linux]
     if: ${{ github.event.inputs.publish == 'true' }}
     runs-on: windows-latest
 
