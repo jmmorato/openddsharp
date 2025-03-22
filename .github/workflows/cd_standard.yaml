@@ -406,90 +406,90 @@ jobs:
       runs-on: ${{ matrix.os }}
 
       steps:
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-        - name: Setup dotnet 8.0
-          shell: sh
-          run: |
-            curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-            echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-            echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+      - name: Setup dotnet 8.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
-        - name: Download OpenDDS Native ${{ matrix.build_platform }}
-          uses: actions/download-artifact@v4
-          with:
-            name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+      - name: Download OpenDDS Native ${{ matrix.build_platform }}
+        uses: actions/download-artifact@v4
+        with:
+          name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
-        - name: Dotnet restore
-          shell: bash
-          run: |
-            dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-            dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-            dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-            dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-            dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-            dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-            dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-          working-directory: ${{ github.workspace }}
+      - name: Dotnet restore
+        shell: bash
+        run: |
+          dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        working-directory: ${{ github.workspace }}
 
-        - name: Build OpenDDSharp.BuildTasks project
-          shell: bash
-          run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
-          working-directory: ${{ github.workspace }}
+      - name: Build OpenDDSharp.BuildTasks project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration ${{ env.BuildConfiguration }}
+        working-directory: ${{ github.workspace }}
 
-        - name: Build OpenDDSharp TestSupportProcessCore project
-          shell: bash
-          run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
-          working-directory: ${{ github.workspace }}
-          env:
-            DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
-            ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
-            TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+      - name: Build OpenDDSharp TestSupportProcessCore project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
 
-        - name: Build OpenDDSharp UnitTest project
-          shell: bash
-          run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
-          working-directory: ${{ github.workspace }}
-          env:
-            DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
-            ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
-            TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+      - name: Build OpenDDSharp UnitTest project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration ${{ env.BuildConfiguration }} --runtime ${{ matrix.runtime }} --self-contained
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
 
-        - name: Test OpenDDSharp
-          shell: bash
-          run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
-          working-directory: ${{ github.workspace }}
-          env:
-            DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
-            ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
-            TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
-            LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
+      - name: Test OpenDDSharp
+        shell: bash
+        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+          LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
 
-        - name: Test Report
-          uses: dorny/test-reporter@v1
-          if: success() || failure()
-          with:
-            name: "Test Report: ${{ matrix.runtime }}"
-            path: TestResults/test-results_*.trx
-            reporter: dotnet-trx
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: "Test Report: ${{ matrix.runtime }}"
+          path: TestResults/test-results_*.trx
+          reporter: dotnet-trx
 
-        - name: Merge coverage files
-          shell: bash
-          run: |
-            dotnet tool install -g dotnet-reportgenerator-globaltool
-            export PATH="$PATH:$HOME/.dotnet/tools"
-            reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
+      - name: Merge coverage files
+        shell: bash
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
 
-        - name: Upload coverage to Coveralls
-          uses: coverallsapp/github-action@v2
-          with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
-            parallel: true
-            flag-name: coverage-${{ matrix.os }}-Release
-            fail-on-error: true
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
+          parallel: true
+          flag-name: coverage-${{ matrix.os }}-Release
+          fail-on-error: true
 
   build_artifacts:
     runs-on: windows-latest
