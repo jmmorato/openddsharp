@@ -425,9 +425,10 @@ jobs:
     - name: Prepare OpenDDS Native ${{ matrix.runtime }}
       shell: pwsh
       run: |
-        Expand-Archive -Path "${{ github.workspace }}\opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
+        Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
 
-        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' './ext/OpenDDS_${{ matrix.runtime }}/'
+        mkdir "./ext/OpenDDS_${{ matrix.runtime }}"
+        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' './ext/OpenDDS_${{ matrix.runtime }}'        
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' './Native/'
 
     - name: Dotnet restore
