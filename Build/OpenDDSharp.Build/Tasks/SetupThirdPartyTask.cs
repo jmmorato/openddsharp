@@ -112,7 +112,7 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --std=c++14";
+                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative";
                 context.Log.Information(arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings
@@ -140,7 +140,7 @@ namespace OpenDDSharp.Build.Tasks
                 });
 
                 var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}";
-                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test --std=c++14";
+                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test";
                 if (context.BuildConfiguration == "Release")
                 {
                     arguments += " --no-debug --optimize";
