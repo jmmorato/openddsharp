@@ -427,8 +427,8 @@ jobs:
       run: |
         Expand-Archive -Path "${{ github.workspace }}\opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
 
-        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' '{{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}'
-        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' '${{ github.workspace }}/Native/'
+        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' './ext/OpenDDS_${{ matrix.runtime }}/'
+        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' './Native/'
 
     - name: Dotnet restore
       shell: bash
