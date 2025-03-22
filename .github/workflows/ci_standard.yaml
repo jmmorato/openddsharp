@@ -150,7 +150,7 @@ jobs:
       BuildPlatform: "x64"
       BuildConfiguration: "Release"
       LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
-      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_Linux/lib:${{ github.workspace }}/ext/OpenDDS_Linux/ACE_wrappers/lib:."
+      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_linux-x64/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
 
     steps:
     - uses: actions/checkout@v4
