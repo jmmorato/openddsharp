@@ -417,10 +417,18 @@ jobs:
         echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
         echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
 
-    - name: Download OpenDDS Native ${{ matrix.build_platform }}
+    - name: Download OpenDDS Native ${{ matrix.runtime }}
       uses: actions/download-artifact@v4
       with:
         name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+
+    - name: Prepare OpenDDS Native ${{ matrix.runtime }}
+      shell: pwsh
+      run: |
+        Expand-Archive -Path "${{ github.workspace }}\opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
+
+        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' '{{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}'
+        rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' '${{ github.workspace }}/Native/'
 
     - name: Dotnet restore
       shell: bash
