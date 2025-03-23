@@ -503,7 +503,6 @@ jobs:
         parallel: true
         flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
         fail-on-error: true
-      working-directory: ${{ github.workspace }}
 
   unit_test_macos:
     needs: build_macos_native
