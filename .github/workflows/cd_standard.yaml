@@ -625,7 +625,6 @@ jobs:
           parallel: true
           flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
           fail-on-error: true
-        working-directory: ${{ github.workspace }}
 
   build_artifacts:
     runs-on: windows-latest
