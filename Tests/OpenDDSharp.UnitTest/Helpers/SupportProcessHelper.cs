@@ -129,7 +129,12 @@ namespace OpenDDSharp.UnitTest.Helpers
             }
 #if Linux
             Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+
             _runtime = "linux-x64/";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                _runtime = "linux-arm64";
+            }
 #elif OSX
             Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
 
@@ -145,12 +150,12 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind teskKind)
         {
-            string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net6.0", TEST_SUPPORT_PROCESS_EXE_NAME);
+            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
             if (!File.Exists(supportProcessPath))
             {
-                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net6.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
 
                 if (!File.Exists(supportProcessPath))
                 {
@@ -159,7 +164,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                 }
             }
 #if Linux || OSX
-            var arguments = supportProcessPath + " " + teskKind.ToString();
+            var arguments = supportProcessPath + " " + teskKind;
 
             return SpawnProcess("dotnet", arguments);
 #else

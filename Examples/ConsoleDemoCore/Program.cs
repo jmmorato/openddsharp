@@ -100,11 +100,13 @@ namespace ConsoleDemoCore
             var received = new List<FullStruct>();
             var sampleInfo = new List<SampleInfo>();
             ret = dr.Take(received, sampleInfo);
-            while (ret != ReturnCode.Ok)
+            var count = 10;
+            while (ret != ReturnCode.Ok && count >= 0)
             {
                 Console.WriteLine($"No sample received. Error code: {ret}");
                 Thread.Sleep(500);
                 ret = dr.Take(received, sampleInfo);
+                count--;
             }
 
             Console.WriteLine("================");
