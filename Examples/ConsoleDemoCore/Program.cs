@@ -31,6 +31,8 @@ namespace ConsoleDemoCore
 {
     internal static class Program
     {
+        private static readonly string TOPIC_NAME = Guid.NewGuid().ToString();
+
         private static void Main()
         {
             Console.WriteLine("ACE initialization...");
@@ -53,8 +55,15 @@ namespace ConsoleDemoCore
                 Environment.Exit(-1);
             }
 
+            var topic = CreateTestTopic(participant);
+            if (topic == null)
+            {
+                Console.Error.WriteLine("Topic could not be created.");
+                Environment.Exit(-1);
+            }
+
             Console.WriteLine("Create data writer...");
-            var dw = CreateTestDataWriter(participant);
+            var dw = CreateTestDataWriter(participant, topic);
             if (dw == null)
             {
                 Console.Error.WriteLine("DataWriter could NOT be created.");
@@ -62,7 +71,7 @@ namespace ConsoleDemoCore
             }
 
             Console.WriteLine("Create data reader...");
-            var dr = CreateTestDataReader(participant);
+            var dr = CreateTestDataReader(participant, topic);
             if (dr == null)
             {
                 Console.Error.WriteLine("DataReader could NOT be created.");
@@ -111,19 +120,12 @@ namespace ConsoleDemoCore
             Ace.Fini();
         }
 
-        private static FullStructDataWriter CreateTestDataWriter(DomainParticipant participant)
+        private static FullStructDataWriter CreateTestDataWriter(DomainParticipant participant, Topic topic)
         {
             var publisher = participant.CreatePublisher();
             if (publisher == null)
             {
                 Console.Error.WriteLine("Publisher could not be created.");
-                return null;
-            }
-
-            var topic = CreateTestTopic(participant);
-            if (topic == null)
-            {
-                Console.Error.WriteLine("Topic could not be created.");
                 return null;
             }
 
@@ -152,19 +154,12 @@ namespace ConsoleDemoCore
             return null;
         }
 
-        private static FullStructDataReader CreateTestDataReader(DomainParticipant participant)
+        private static FullStructDataReader CreateTestDataReader(DomainParticipant participant, Topic topic)
         {
             var subscriber = participant.CreateSubscriber();
             if (subscriber == null)
             {
                 Console.Error.WriteLine("Subscriber could NOT be created.");
-                return null;
-            }
-
-            var topic = CreateTestTopic(participant);
-            if (topic == null)
-            {
-                Console.Error.WriteLine("Topic could NOT be created.");
                 return null;
             }
 
@@ -830,7 +825,7 @@ namespace ConsoleDemoCore
                 return null;
             }
 
-            var topic = participant.CreateTopic("TestTopic", typeName);
+            var topic = participant.CreateTopic(TOPIC_NAME, typeName);
             if (topic != null)
             {
                 return topic;
