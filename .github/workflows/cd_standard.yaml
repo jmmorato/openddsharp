@@ -416,6 +416,7 @@ jobs:
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
         echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
         echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+      working-directory: ${{ github.workspace }}
 
     - name: Download OpenDDS Native ${{ matrix.runtime }}
       uses: actions/download-artifact@v4
@@ -427,12 +428,13 @@ jobs:
       run: |
         Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
         
+        ls -la ./
         ls -la ./opendds-native-${{ matrix.runtime }}
         ls -la ./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}
         ls -la ./opendds-native-${{ matrix.runtime }}/Native
 
         $targetDir = "./ext/OpenDDS_${{ matrix.runtime }}"
-        mkdir "$targetDir"
+        mkdir -p "$targetDir"
         
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' $targetDir        
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' './Native/'
