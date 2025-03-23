@@ -174,7 +174,12 @@ public class CdrWriter
     public void WriteWChar(char c)
     {
         Align(2);
-        var bytes = Encoding.Unicode.GetBytes([c]);
+        char[] chars =
+        [
+            c
+        ];
+
+        var bytes = Encoding.Unicode.GetBytes(chars);
         WriteBytes(bytes);
     }
 

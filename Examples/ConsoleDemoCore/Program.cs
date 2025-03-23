@@ -79,7 +79,7 @@ namespace ConsoleDemoCore
             }
 
             Console.WriteLine("Waiting for the subscriber...");
-            var wait = WaitForSubscriptions(dw, 1, 60000);
+            var wait = WaitForSubscriptions(dw, 1, 60_000);
 
             if (!wait)
             {
@@ -89,12 +89,17 @@ namespace ConsoleDemoCore
 
             Console.WriteLine("Subscription found. Writing test data...");
             var data = CreateFullStruct();
-            dw.Write(data);
+            var ret = dw.Write(data);
+            if (ret != ReturnCode.Ok)
+            {
+                Console.Error.WriteLine($"Error writing data. Error code: {ret}");
+                Environment.Exit(-1);
+            }
 
             Console.WriteLine("Waiting for sample...");
             var received = new List<FullStruct>();
             var sampleInfo = new List<SampleInfo>();
-            var ret = dr.Take(received, sampleInfo);
+            ret = dr.Take(received, sampleInfo);
             while (ret != ReturnCode.Ok)
             {
                 Console.WriteLine($"No sample received. Error code: {ret}");
