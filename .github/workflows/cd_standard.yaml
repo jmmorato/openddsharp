@@ -144,7 +144,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             runtime: linux-x64
             build_platform: x64
           - os: ubuntu-22.04-arm
@@ -155,7 +155,7 @@ jobs:
 
     env:
       BuildConfiguration: "Release"
-#      LD_RPATH_FLAGS: "-Wl,-E '-Wl,-rpath,$$ORIGIN'"
+      LD_RPATH_FLAGS: "-Wl,-E -Wl,-rpath,'$ORIGIN'"
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
@@ -387,9 +387,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
-            runtime: linux-x64
-            build_platform: x64
           - os: ubuntu-22.04
             runtime: linux-x64
             build_platform: x64
