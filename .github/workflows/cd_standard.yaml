@@ -795,8 +795,6 @@ jobs:
             runtime: win-x86
           - os: windows-2022
             runtime: win-x64
-          - os: ubuntu-20.04
-            runtime: linux-x64
           - os: ubuntu-22.04
             runtime: linux-x64
           - os: ubuntu-24.04

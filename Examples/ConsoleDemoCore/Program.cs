@@ -104,9 +104,16 @@ namespace ConsoleDemoCore
             while (ret != ReturnCode.Ok && count >= 0)
             {
                 Console.WriteLine($"No sample received. Error code: {ret}");
+
                 Thread.Sleep(500);
                 ret = dr.Take(received, sampleInfo);
                 count--;
+            }
+
+            if (ret != ReturnCode.Ok)
+            {
+                Console.Error.WriteLine($"Error taking data. Error code: {ret}");
+                Environment.Exit(-1);
             }
 
             Console.WriteLine("================");
