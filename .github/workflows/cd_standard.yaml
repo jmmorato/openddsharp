@@ -428,18 +428,18 @@ jobs:
       run: |
         Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
 
-        $sourceDir = "./opendds-native-${{ matrix.runtime }}"
+        $sourceDir = "./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/"
         $targetDir = "./ext/OpenDDS_${{ matrix.runtime }}"
         mkdir -p "$targetDir"
         
-        rsync -r -m -v -LKH --include='OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -a $sourceDir $targetDir
         ls -la $targetDir
         
-        $sourceDir = "./opendds-native-${{ matrix.runtime }}/Native"
+        $sourceDir = "./opendds-native-${{ matrix.runtime }}/Native/build_${{ matrix.runtime }}/"
         $targetDir = "./Native/build_${{ matrix.runtime }}"
         mkdir -p "$targetDir"
         
-        rsync -r -m -v -LKH --include='build_${{ matrix.runtime }}/*' --include='*/' --exclude='*' $sourceDir $targetDir
+        rsync -a $sourceDir $targetDir
         ls -la $targetDir
 
       working-directory: ${{ github.workspace }}
