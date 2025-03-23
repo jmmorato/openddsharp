@@ -422,16 +422,21 @@ jobs:
       with:
         name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
-    - name: Prepare OpenDDS Native ${{ matrix.runtime }}
+    - name: Prepare ${{ matrix.runtime }} native
       shell: pwsh
       run: |
         Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
         
+        ls -la ./opendds-native-${{ matrix.runtime }}
+        ls -la ./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}
+        ls -la ./opendds-native-${{ matrix.runtime }}/Native
+
         $targetDir = "./ext/OpenDDS_${{ matrix.runtime }}"
         mkdir "$targetDir"
         
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' $targetDir        
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' './Native/'
+      working-directory: ${{ github.workspace }}
 
     - name: Dotnet restore
       shell: bash
@@ -492,6 +497,7 @@ jobs:
         dotnet tool install -g dotnet-reportgenerator-globaltool
         export PATH="$PATH:$HOME/.dotnet/tools"
         reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
+      working-directory: ${{ github.workspace }}
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
@@ -784,6 +790,7 @@ jobs:
           }
           
           Write-Host "exit code: $($p.ExitCode)"
+        working-directory: ${{ github.workspace }}
 
   publish_artifacts:
     needs: [test_artifacts, unit_test_linux]
