@@ -429,7 +429,6 @@ jobs:
         Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
         
         ls -la ./
-        ls -la ./opendds-native-${{ matrix.runtime }}
         ls -la ./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}
         ls -la ./opendds-native-${{ matrix.runtime }}/Native
 
@@ -438,6 +437,9 @@ jobs:
         
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/*' --include='*/' --exclude='*' './' $targetDir        
         rsync -r -m -v -LKH --include='./opendds-native-${{ matrix.runtime }}/Native/*' --include='*/' --exclude='*' './' './Native/'
+        
+        ls -la $targetDir
+        ls -la ./Native
       working-directory: ${{ github.workspace }}
 
     - name: Dotnet restore
