@@ -1085,7 +1085,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
   publish_artifacts:
-    needs: [test_artifacts, unit_test_linux]
+    needs: [test_artifacts, publish_coveralls]
     if: ${{ github.event.inputs.publish == 'true' }}
     runs-on: windows-latest
 
