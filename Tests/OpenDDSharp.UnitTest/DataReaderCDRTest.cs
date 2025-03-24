@@ -1184,7 +1184,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(writer);
 
             // Wait for publications
-            var found = reader.WaitForPublications(1, 5000);
+            var found = reader.WaitForPublications(1, 5_000);
             Assert.IsTrue(found);
 
             // Get the matched subscriptions

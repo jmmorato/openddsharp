@@ -148,14 +148,15 @@ namespace OpenDDSharp.UnitTest.Helpers
         #endregion
 
         #region Methods
-        public Process SpawnSupportProcess(SupportTestKind teskKind)
+        public Process SpawnSupportProcess(SupportTestKind testKind)
         {
             var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
+
             if (!File.Exists(supportProcessPath))
             {
-                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
 
                 if (!File.Exists(supportProcessPath))
                 {
@@ -164,7 +165,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                 }
             }
 #if Linux || OSX
-            var arguments = supportProcessPath + " " + teskKind;
+            var arguments = supportProcessPath + " " + testKind;
 
             return SpawnProcess("dotnet", arguments);
 #else

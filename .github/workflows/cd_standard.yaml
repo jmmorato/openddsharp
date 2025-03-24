@@ -413,6 +413,22 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup dotnet 6.0
+      shell: sh
+      run: |
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+      working-directory: ${{ github.workspace }}
+
+    - name: Setup dotnet 7.0
+      shell: sh
+      run: |
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+      working-directory: ${{ github.workspace }}
+
     - name: Setup dotnet 8.0
       shell: sh
       run: |
@@ -444,7 +460,6 @@ jobs:
         
         rsync -a $sourceDir $targetDir
         ls -la $targetDir
-
       working-directory: ${{ github.workspace }}
 
     - name: Dotnet restore
@@ -464,7 +479,7 @@ jobs:
       run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration Release
       working-directory: ${{ github.workspace }}
 
-    - name: Build OpenDDSharp TestSupportProcessCore project
+    - name: Build OpenDDSharp TestSupportProcess project
       shell: bash
       run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcessCore/TestSupportProcessCore.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained
       working-directory: ${{ github.workspace }}
@@ -501,7 +516,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
         parallel: true
-        flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
+        flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}
         fail-on-error: false
 
   unit_test_macos:
@@ -534,6 +549,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Setup dotnet 6.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 7.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        working-directory: ${{ github.workspace }}
 
       - name: Setup dotnet 8.0
         shell: sh
@@ -604,7 +635,7 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
-          name: "Test Report: ${{ matrix.os }} ${{ matrix.runtime }}"
+          name: "Test Report: ${{ matrix.os }}-${{ matrix.runtime }}"
           path: TestResults/test-results_*.trx
           reporter: dotnet-trx
 
@@ -622,7 +653,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
           parallel: true
-          flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
+          flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}
           fail-on-error: false
 
   build_artifacts:
@@ -814,15 +845,13 @@ jobs:
 
     env:
       LD_LIBRARY_PATH: "."
+      DYLD_LIBRARY_PATH: "."
+      DYLD_FALLBACK_LIBRARY_PATH: "."
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.0.x'
 
       - uses: actions/setup-dotnet@v4
         with:
