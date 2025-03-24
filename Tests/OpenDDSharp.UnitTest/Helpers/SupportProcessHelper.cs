@@ -150,13 +150,13 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind testKind)
         {
-            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net6.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
 
             if (!File.Exists(supportProcessPath))
             {
-                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net6.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
 
                 if (!File.Exists(supportProcessPath))
                 {
