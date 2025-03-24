@@ -491,7 +491,7 @@ jobs:
           reporter: dotnet-trx
 
       - name: Merge coverage files
-        shell: pwsh
+        shell: bash
         run: |
           dotnet tool install -g dotnet-reportgenerator-globaltool
           export PATH="$PATH:$HOME/.dotnet/tools"
