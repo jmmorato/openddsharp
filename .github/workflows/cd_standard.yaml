@@ -36,20 +36,6 @@ jobs:
       with:
         fetch-depth: 0
 
-#    - name: Setup dotnet 6.0
-#      shell: pwsh
-#      run: |
-#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-#        ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 6.0;
-#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-
-#    - name: Setup dotnet 7.0
-#      shell: pwsh
-#      run: |
-#        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-#        ./dotnet-install.ps1 -Architecture '${{ matrix.BuildPlatform }}' -Channel 7.0;
-#        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-
     - name: Setup dotnet 8.0
       shell: pwsh
       run: |
@@ -155,7 +141,7 @@ jobs:
 
     env:
       BuildConfiguration: "Release"
-#      LD_RPATH_FLAGS: "-Wl,-E -Wl,-rpath,'$ORIGIN'"
+      LD_RPATH_FLAGS: "-Wl,-E -Wl,-rpath,'$ORIGIN'"
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
@@ -274,7 +260,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-#      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
       DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
       DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
@@ -380,6 +366,138 @@ jobs:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
 
+  unit_test_windows:
+    needs: build_windows_native
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            runtime: win-x64
+            build_platform: x64
+          - os: windows-2022
+            runtime: win-x86
+            build_platform: x86
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}"
+      ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers"
+      TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers/TAO"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet 6.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 6.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 7.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 7.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 8.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
+      - name: Download ${{ matrix.runtime }} native
+        uses: actions/download-artifact@v4
+        with:
+          name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+
+      - name: Prepare ${{ matrix.runtime }} native
+        shell: pwsh
+        run: |
+          Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
+          
+          $sourceDir = ".\opendds-native-${{ matrix.runtime }}\OpenDDS_${{ matrix.build_platform }}/"
+          $targetDir = ".\ext\OpenDDS_${{ matrix.build_platform }}"
+          mkdir "$targetDir"
+          
+          XCOPY "$sourceDir\*" "$targetDir\" /D /S /Y /M
+          dir "$targetDir"
+          
+          $sourceDir = ".\opendds-native-${{ matrix.runtime }}\Native\build_${{ matrix.runtime }}"
+          $targetDir = ".\Native\build_${{ matrix.runtime }}"
+          mkdir "$targetDir"
+          
+          XCOPY "$sourceDir\*" "$targetDir\" /D /S /Y /M
+          dir "$targetDir"
+        working-directory: ${{ github.workspace }}
+
+      - name: Dotnet restore
+        shell: pwsh
+        run: |
+          dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Examples/ConsoleDemo/ConsoleDemo.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        working-directory: ${{ github.workspace }}
+
+      - name: Build OpenDDSharp.BuildTasks project
+        shell: pwsh
+        run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration Release
+        working-directory: ${{ github.workspace }}
+
+      - name: Build OpenDDSharp TestSupportProcess project
+        shell: pwsh
+        run: dotnet build ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained
+        working-directory: ${{ github.workspace }}
+
+      - name: Build OpenDDSharp UnitTest project
+        shell: pwsh
+        run: dotnet build ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained
+        working-directory: ${{ github.workspace }}
+
+      - name: Test OpenDDSharp
+        shell: pwsh
+        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
+        working-directory: ${{ github.workspace }}
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: "Test Report: ${{ matrix.os }}-${{ matrix.runtime }}"
+          path: TestResults/test-results_*.trx
+          reporter: dotnet-trx
+
+      - name: Merge coverage files
+        shell: pwsh
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
+          parallel: true
+          flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}
+          fail-on-error: false
+
   unit_test_linux:
     needs: build_linux_native
 
@@ -440,11 +558,11 @@ jobs:
     - name: Setup Mono
       shell: bash
       run: |
-        sudo apt-get install -y gnupg ca-certificates
+        sudo apt-get install -y dirmngr gnupg apt-transport-https ca-certificates software-properties-common
         sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
         echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
         sudo apt-get update
-        sudo apt-get install -y mono-devel
+        sudo apt-get install -y mono-complete
       working-directory: ${{ github.workspace }}
 
     - name: Download ${{ matrix.runtime }} native
@@ -542,9 +660,10 @@ jobs:
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
-          - os: macos-15
-            runtime: osx-arm64
-            build_platform: ARM64
+# Issues with macos-15 found, waiting for official image review to fix it
+#          - os: macos-15
+#            runtime: osx-arm64
+#            build_platform: ARM64
 
     runs-on: ${{ matrix.os }}
 
@@ -834,22 +953,32 @@ jobs:
         include:
           - os: windows-2022
             runtime: win-x86
+            build_platform: x86
           - os: windows-2022
             runtime: win-x64
+            build_platform: x64
           - os: ubuntu-22.04
             runtime: linux-x64
+            build_platform: x64
           - os: ubuntu-24.04
             runtime: linux-x64
+            build_platform: x64
           - os: ubuntu-22.04-arm
             runtime: linux-arm64
+            build_platform: ARM64
           - os: ubuntu-24.04-arm
             runtime: linux-arm64
+            build_platform: ARM64
           - os: macos-13
             runtime: osx-x64
+            build_platform: x64
           - os: macos-14
             runtime: osx-arm64
-          - os: macos-15
-            runtime: osx-arm64
+            build_platform: ARM64
+# Issues with macos-15 found, waiting for official image review to fix it
+#          - os: macos-15
+#            runtime: osx-arm64
+#            build_platform: ARM64
 
     runs-on: ${{ matrix.os }}
 
@@ -863,9 +992,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
+      - name: Setup dotnet 8.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        working-directory: ${{ github.workspace }}
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v3

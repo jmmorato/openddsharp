@@ -150,7 +150,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind testKind)
         {
-            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", TEST_SUPPORT_PROCESS_EXE_NAME);
+            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
 
@@ -179,7 +179,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 #if Windows
             string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
-            string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
+            var infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #endif
             if (!File.Exists(infoRepoPath))
             {
@@ -187,7 +187,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
 
-            return SpawnProcess(infoRepoPath, @"-o repo.ior -ORBListenEndpoints iiop://localhost:12345");
+            return SpawnProcess(infoRepoPath, "-o repo.ior -ORBListenEndpoints iiop://localhost:12345");
         }
 
         private Process SpawnProcess(string path, string arguments)
@@ -196,7 +196,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(path)
+            var processInfo = new ProcessStartInfo(path)
             {
                 Arguments = arguments,
                 RedirectStandardOutput = true,
@@ -214,7 +214,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             processInfo.EnvironmentVariables["DYLD_FALLBACK_LIBRARY_PATH"] = $"DYLD_FALLBACK_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
 #endif
 
-            Process process = new Process
+            var process = new Process
             {
                 StartInfo = processInfo,
                 EnableRaisingEvents = true,
@@ -223,7 +223,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             process.OutputDataReceived += SupportProcessOnOutputDataReceived;
             process.ErrorDataReceived += SupportProcessOnErrorDataReceived;
 
-            bool processStarted = false;
+            bool processStarted;
             try
             {
                 processStarted = process.Start();
@@ -235,6 +235,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                     _testContext.WriteLine($"The support process executable at {path} could not be executed.");
                     throw new FileNotFoundException($"The support process executable at {path} could not be executed.", e);
                 }
+
                 _testContext.WriteLine($"The support process executable can not be located at {path}.");
                 throw new InvalidOperationException($"The support process executable can not be located at {path}.", e);
             }
