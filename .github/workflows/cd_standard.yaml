@@ -155,7 +155,7 @@ jobs:
 
     env:
       BuildConfiguration: "Release"
-      LD_RPATH_FLAGS: "-Wl,-E -Wl,-rpath,'$ORIGIN'"
+#      LD_RPATH_FLAGS: "-Wl,-E -Wl,-rpath,'$ORIGIN'"
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
@@ -274,7 +274,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
+#      LD_RPATH_FLAGS: "-Wl,-rpath,@executable_path -Wl,-rpath,@loader_path"
       DYLD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
       DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
@@ -483,7 +483,7 @@ jobs:
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: "Test Report: ${{ matrix.os }} ${{ matrix.runtime }}"
+        name: "Test Report: ${{ matrix.os }}-${{ matrix.runtime }}"
         path: TestResults/test-results_*.trx
         reporter: dotnet-trx
 
@@ -502,7 +502,7 @@ jobs:
         file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
         parallel: true
         flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
-        fail-on-error: true
+        fail-on-error: false
 
   unit_test_macos:
     needs: build_macos_native
@@ -623,7 +623,7 @@ jobs:
           file: ${{ github.workspace }}/TestResults/reports.cobertura/Cobertura.xml
           parallel: true
           flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}-Release
-          fail-on-error: true
+          fail-on-error: false
 
   build_artifacts:
     runs-on: windows-latest
