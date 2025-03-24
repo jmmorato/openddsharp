@@ -778,6 +778,18 @@ jobs:
           flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}
           fail-on-error: false
 
+  publish_coveralls:
+    runs-on: ubuntu-latest
+    needs: [ unit_test_windows, unit_test_linux, unit_test_macos ]
+    steps:
+      - name: Publish coverage on Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          carryforward: "coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
+          fail-on-error: false
+
   build_artifacts:
     runs-on: windows-latest
 
