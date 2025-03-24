@@ -56,7 +56,7 @@ namespace OpenDDSharp.Build.Tasks
                 Runtime = context.RunTime,
             });
 
-            context.DotNetRestore("./Tests/TestSupportProcessCore/TestSupportProcessCore.csproj", new DotNetRestoreSettings
+            context.DotNetRestore("./Tests/TestSupportProcess/TestSupportProcess.csproj", new DotNetRestoreSettings
             {
                 ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
                 NoCache = true,
@@ -97,7 +97,7 @@ namespace OpenDDSharp.Build.Tasks
             });
 
             context.Log.Information("Build OpenDDSharp solution...");
-            context.DotNetBuild("./Tests/TestSupportProcessCore/TestSupportProcessCore.csproj", new DotNetBuildSettings
+            context.DotNetBuild("./Tests/TestSupportProcess/TestSupportProcess.csproj", new DotNetBuildSettings
             {
                 Configuration = context.BuildConfiguration,
                 WorkingDirectory = solutionFolder,

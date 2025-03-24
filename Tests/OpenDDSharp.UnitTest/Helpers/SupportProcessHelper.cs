@@ -39,8 +39,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string RELEASE_TARGET_FOLDER = @"Release";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64";
         private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
 #elif Linux && X64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_linux-x64";
@@ -49,8 +49,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif Linux && ARM64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_linux-arm64";
@@ -59,8 +59,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif OSX && X64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_osx-x64";
@@ -70,8 +70,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
         private const string ARM_SIXTY_FOUR_PLATFORM_FOLDER = @"ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif OSX && ARM64
         private const string DDS_ROOT = "../../../../../../ext/OpenDDS_osx-arm64";
@@ -81,8 +81,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string RELEASE_TARGET_FOLDER = "Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = "x64/";
         private const string ARM_SIXTY_FOUR_PLATFORM_FOLDER = "ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = "../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = "TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = "../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = "TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = "DCPSInfoRepo";
 #endif
         #endregion

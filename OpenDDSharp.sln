@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp", "Sources\OpenDDSharp\OpenDDSharp.csproj", "{E9C9793D-5761-4222-850D-DF8B42C2A920}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleDemoCore", "Examples\ConsoleDemoCore\ConsoleDemoCore.csproj", "{12F78B1F-EBE5-4A82-A98F-62AE1B21D57A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleDemo", "Examples\ConsoleDemo\ConsoleDemo.csproj", "{12F78B1F-EBE5-4A82-A98F-62AE1B21D57A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDDSharp.UnitTest", "Tests\OpenDDSharp.UnitTest\OpenDDSharp.UnitTest.csproj", "{DA9645FE-381E-495E-9652-3DF086570B71}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Tests.runsettings = Tests.runsettings
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupportProcessCore", "Tests\TestSupportProcessCore\TestSupportProcessCore.csproj", "{BF64F3F0-4B74-47CB-BE56-D7755E4E120E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupportProcess", "Tests\TestSupportProcess\TestSupportProcess.csproj", "{BF64F3F0-4B74-47CB-BE56-D7755E4E120E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{B9F092CD-41E2-49C2-A2C9-0F4688C8EE42}"
 EndProject

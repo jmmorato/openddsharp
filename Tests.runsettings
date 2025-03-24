@@ -18,7 +18,7 @@
         <Configuration>
           <Format>json,cobertura,lcov</Format>
           <Include>[OpenDDSharp]*</Include>
-          <Exclude>[TestIdlJson]*,[TestIdlCdr]*,[OpenDDSharp.BuildTasks]*,[OpenDDSharp.Marshaller]*,[OpenDDSharp.Native]*,[OpenDDSharp.Templates]*,[BenchmarkPerformance]*,[OpenDDSharp.UnitTest]*,[TestSupportProcessCore]*,[OpenDDSharp.Doc]*</Exclude>
+          <Exclude>[TestIdlJson]*,[TestIdlCdr]*,[OpenDDSharp.BuildTasks]*,[OpenDDSharp.Marshaller]*,[OpenDDSharp.Native]*,[OpenDDSharp.Templates]*,[BenchmarkPerformance]*,[OpenDDSharp.UnitTest]*,[TestSupportProcess]*,[OpenDDSharp.Doc]*</Exclude>
           <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
           <SingleHit>true</SingleHit>
           <UseSourceLink>true</UseSourceLink>

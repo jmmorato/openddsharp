@@ -27,7 +27,7 @@ using OpenDDSharp;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 
-namespace ConsoleDemoCore
+namespace ConsoleDemo
 {
     internal static class Program
     {
