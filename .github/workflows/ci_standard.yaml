@@ -93,7 +93,7 @@ jobs:
       working-directory: ${{ github.workspace }}/Build
 
     - name: Test Report
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: success() || failure()
       with:
         name: "Test Report: win-${{ matrix.BuildPlatform }} ${{ matrix.BuildConfiguration }}"
@@ -257,7 +257,7 @@ jobs:
         LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_linux-x64/lib:${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
 
     - name: Test Report
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: success() || failure()
       with:
         name: "Test Report: linux-x64"
@@ -410,7 +410,7 @@ jobs:
         DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-x64/lib:${{ github.workspace }}/ext/OpenDDS_osx-x64/ACE_wrappers/lib:."
 
     - name: Test Report
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: success() || failure()
       with:
         name: "Test Report: osx-x64"
@@ -562,7 +562,7 @@ jobs:
           DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_osx-arm64/lib:${{ github.workspace }}/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
 
       - name: Test Report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: "Test Report: osx-arm64"
