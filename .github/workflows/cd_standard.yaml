@@ -383,14 +383,20 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}"
-      ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers"
-      TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers/TAO"
+      DDS_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}"
+      ACE_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers"
+      TAO_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\TAO"
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Update PATH variable with OpenDDS libraries folders
+        run: |
+          echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
 
       - name: Setup dotnet 6.0
         shell: pwsh
