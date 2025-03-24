@@ -383,9 +383,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      DDS_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}"
-      ACE_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers"
-      TAO_ROOT: "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\TAO"
+      DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}"
+      ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers"
+      TAO_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers\\TAO"
 
     steps:
       - uses: actions/checkout@v4
