@@ -995,8 +995,6 @@ jobs:
 
     env:
       LD_LIBRARY_PATH: "."
-      DYLD_LIBRARY_PATH: "."
-      DYLD_FALLBACK_LIBRARY_PATH: "."
 
     steps:
       - uses: actions/checkout@v4
@@ -1004,12 +1002,9 @@ jobs:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-        working-directory: ${{ github.workspace }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v3
