@@ -169,7 +169,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 
             return SpawnProcess("dotnet", arguments);
 #else
-            return SpawnProcess(supportProcessPath, teskKind.ToString());
+            return SpawnProcess(supportProcessPath, testKind.ToString());
 #endif
         }
 
