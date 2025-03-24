@@ -51,31 +51,27 @@ namespace ConsoleDemoCore
             var participant = dpf.CreateParticipant(42);
             if (participant == null)
             {
-                Console.Error.WriteLine("Domain participant could NOT be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("Participant could NOT be created.");
             }
 
             var topic = CreateTestTopic(participant);
             if (topic == null)
             {
-                Console.Error.WriteLine("Topic could not be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("Topic could NOT be created.");
             }
 
             Console.WriteLine("Create data writer...");
             var dw = CreateTestDataWriter(participant, topic);
             if (dw == null)
             {
-                Console.Error.WriteLine("DataWriter could NOT be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("DataWriter could NOT be created.");
             }
 
             Console.WriteLine("Create data reader...");
             var dr = CreateTestDataReader(participant, topic);
             if (dr == null)
             {
-                Console.Error.WriteLine("DataReader could NOT be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("DataReader could NOT be created.");
             }
 
             Console.WriteLine("Waiting for the subscriber...");
@@ -83,8 +79,7 @@ namespace ConsoleDemoCore
 
             if (!wait)
             {
-                Console.Error.WriteLine("Subscription not found.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("Subscription not found.");
             }
 
             Console.WriteLine("Subscription found. Writing test data...");
@@ -92,8 +87,7 @@ namespace ConsoleDemoCore
             var ret = dw.Write(data);
             if (ret != ReturnCode.Ok)
             {
-                Console.Error.WriteLine($"Error writing data. Error code: {ret}");
-                Environment.Exit(-1);
+                throw new InvalidOperationException($"Error writing data. Error code: {ret}");
             }
 
             Console.WriteLine("Waiting for sample...");
@@ -112,8 +106,7 @@ namespace ConsoleDemoCore
 
             if (ret != ReturnCode.Ok)
             {
-                Console.Error.WriteLine($"Error taking data. Error code: {ret}");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("Error taking data.");
             }
 
             Console.WriteLine("================");
@@ -123,9 +116,6 @@ namespace ConsoleDemoCore
             PrintReceivedSample(received[0]);
 
             Console.WriteLine("Shutting down... that's enough for today.");
-
-            var test = new FullStruct();
-            dr.GetKeyValue(test, sampleInfo[0].InstanceHandle);
 
             participant.DeleteContainedEntities();
             dpf.DeleteParticipant(participant);
