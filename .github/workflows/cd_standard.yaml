@@ -399,6 +399,7 @@ jobs:
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 6.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
+        continue-on-error: true
 
       - name: Setup dotnet 7.0
         shell: pwsh
@@ -407,6 +408,7 @@ jobs:
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 7.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
+        continue-on-error: true
 
       - name: Setup dotnet 8.0
         shell: pwsh
@@ -415,6 +417,7 @@ jobs:
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
+        continue-on-error: true
 
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v4
@@ -424,17 +427,17 @@ jobs:
       - name: Prepare ${{ matrix.runtime }} native
         shell: pwsh
         run: |
-          Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
+          Expand-Archive -Path "${{ github.workspace }}\opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
           
-          $sourceDir = ".\opendds-native-${{ matrix.runtime }}\OpenDDS_${{ matrix.build_platform }}/"
+          $sourceDir = ".\opendds-native-${{ matrix.runtime }}\OpenDDS_${{ matrix.build_platform }}"
           $targetDir = ".\ext\OpenDDS_${{ matrix.build_platform }}"
           mkdir "$targetDir"
           
           XCOPY "$sourceDir\*" "$targetDir\" /D /S /Y /M
           dir "$targetDir"
           
-          $sourceDir = ".\opendds-native-${{ matrix.runtime }}\Native\build_${{ matrix.runtime }}"
-          $targetDir = ".\Native\build_${{ matrix.runtime }}"
+          $sourceDir = ".\opendds-native-${{ matrix.runtime }}\Native\build_${{ matrix.build_platform }}"
+          $targetDir = ".\Native\build_${{ matrix.build_platform }}"
           mkdir "$targetDir"
           
           XCOPY "$sourceDir\*" "$targetDir\" /D /S /Y /M
