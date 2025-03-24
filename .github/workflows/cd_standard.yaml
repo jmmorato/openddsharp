@@ -476,7 +476,7 @@ jobs:
       shell: bash
       run: |
         dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemo/ConsoleDemo.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
@@ -613,7 +613,7 @@ jobs:
         shell: bash
         run: |
           dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
-          dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Examples/ConsoleDemo/ConsoleDemo.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
           dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
           dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
           dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
@@ -764,7 +764,7 @@ jobs:
       shell: cmd
       run: |
         dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --no-cache --configfile ${{ github.workspace }}/nuget.config
-        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemoCore/ConsoleDemoCore.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
+        dotnet restore ${{ github.workspace }}/Examples/ConsoleDemo/ConsoleDemo.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
         dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-cache --configfile ${{ github.workspace }}/nuget.config
       working-directory: ${{ github.workspace }}
@@ -908,7 +908,7 @@ jobs:
           cd TestConsole
           dotnet new openddsharp-console-app
           Remove-Item Program.cs
-          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemoCore/Program.cs" -Destination "."
+          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
