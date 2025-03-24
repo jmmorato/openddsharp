@@ -156,7 +156,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 
             if (!File.Exists(supportProcessPath))
             {
-                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
 
                 if (!File.Exists(supportProcessPath))
                 {
