@@ -968,8 +968,8 @@ jobs:
           dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
           dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish
-          sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -1
-          sudo ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -2
+          sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -1
+          sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -2
         working-directory: ${{ github.workspace }}
         continue-on-error: false
 
