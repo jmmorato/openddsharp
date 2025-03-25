@@ -358,8 +358,8 @@ jobs:
           rsync -r -m -v --include='README.md' --include='*/' --exclude='*' ./ $targetDir
           rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSWrapper/libOpenDDSWrapper.dylib' --include='*/' --exclude='*' ./ $targetDir
           rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSharp.IdlGenerator/openddsharp_idl' --include='*/' --exclude='*' ./ $targetDir
-          rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSPerformanceTests/libOpenDDSPerformanceTests.so' --include='*/' --exclude='*' ./ $targetDir
-          rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSTestData/libOpenDDSTestData.so' --include='*/' --exclude='*' ./ $targetDir
+          rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSPerformanceTests/libOpenDDSPerformanceTests.dylib' --include='*/' --exclude='*' ./ $targetDir
+          rsync -r -m -v --include='Native/build_${{ matrix.runtime }}/OpenDDSTestData/libOpenDDSTestData.dylib' --include='*/' --exclude='*' ./ $targetDir
           
           ls -la ./opendds-native-${{ matrix.runtime }}
           ls -la ./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}
