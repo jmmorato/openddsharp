@@ -68,9 +68,9 @@
             <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
         </Content>
-        <Content Include="..\..\Native\build_linux-x64\OpenDDSPerformanceTests\libOpenDDSPerformanceTests.so" Visible="false">
-            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(IsX64)'=='true'">PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(IsX64)'=='true'">PreserveNewest</CopyToPublishDirectory>
+        <Content Include="..\..\Native\build_linux-arm64\OpenDDSPerformanceTests\libOpenDDSPerformanceTests.so" Visible="false">
+            <CopyToOutputDirectory Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(IsARM64)'=='true'">PreserveNewest</CopyToPublishDirectory>
         </Content>
 
         <!-- Copy the osx-x64 native libraries to the output directory -->
