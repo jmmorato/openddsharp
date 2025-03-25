@@ -884,6 +884,105 @@ jobs:
           ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\BenchmarkPerformance.exe -2
         continue-on-error: true
 
+  performance_test_linux:
+    needs: build_linux_native
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            runtime: linux-x64
+            build_platform: x64
+          - os: ubuntu-24.04
+            runtime: linux-x64
+            build_platform: x64
+          - os: ubuntu-22.04-arm
+            runtime: linux-arm64
+            build_platform: ARM64
+          - os: ubuntu-24.04-arm
+            runtime: linux-arm64
+            build_platform: ARM64
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}"
+      ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers"
+      TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/TAO"
+      LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet 8.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        working-directory: ${{ github.workspace }}
+
+      - name: Download ${{ matrix.runtime }} native
+        uses: actions/download-artifact@v4
+        with:
+          name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
+
+      - name: Prepare ${{ matrix.runtime }} native
+        shell: pwsh
+        run: |
+          Expand-Archive -Path "${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip" -DestinationPath "."
+          
+          $sourceDir = "./opendds-native-${{ matrix.runtime }}/OpenDDS_${{ matrix.runtime }}/"
+          $targetDir = "./ext/OpenDDS_${{ matrix.runtime }}"
+          mkdir -p "$targetDir"
+          
+          rsync -a $sourceDir $targetDir
+          ls -la $targetDir
+          
+          $sourceDir = "./opendds-native-${{ matrix.runtime }}/Native/build_${{ matrix.runtime }}/"
+          $targetDir = "./Native/build_${{ matrix.runtime }}"
+          mkdir -p "$targetDir"
+          
+          rsync -a $sourceDir $targetDir
+          ls -la $targetDir
+        working-directory: ${{ github.workspace }}
+
+      - name: Dotnet restore
+        shell: bash
+        run: |
+          dotnet restore ${{ github.workspace }}/OpenDDSharp.sln --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Examples/ConsoleDemo/ConsoleDemo.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestSupportProcess/TestSupportProcess.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+          dotnet restore ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --packages "${{ github.workspace }}/packages" --no-cache --configfile ${{ github.workspace }}/nuget.config
+        working-directory: ${{ github.workspace }}
+
+      - name: Build OpenDDSharp.BuildTasks project
+        shell: bash
+        run: dotnet build ${{ github.workspace }}/Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration Release
+        working-directory: ${{ github.workspace }}
+
+      - name: Performance Tests
+        shell: bash
+        run: |
+          dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime linux-x64 --framework net8.0 --self-contained
+          dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64 --framework net8.0 --self-contained
+          dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime linux-x64 --framework net8.0 --self-contained
+          cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish
+          sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -1
+          sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/linux-x64/publish/BenchmarkPerformance -2
+        working-directory: ${{ github.workspace }}
+        env:
+          DDS_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64"
+          ACE_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers"
+          TAO_ROOT: "${{ github.workspace }}/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
+        continue-on-error: false
+
   build_artifacts:
     runs-on: windows-latest
 
