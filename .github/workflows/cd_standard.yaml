@@ -1,7 +1,5 @@
 name: Continuous Delivery
 
-permissions: read-all
-
 on:
   push:
     branches:
