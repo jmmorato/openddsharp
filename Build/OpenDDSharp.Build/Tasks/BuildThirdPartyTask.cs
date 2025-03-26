@@ -60,14 +60,16 @@ namespace OpenDDSharp.Build.Tasks
             }
 
             var vsVersion = "2022";
+            var programFiles = Environment.SpecialFolder.ProgramFiles;
             if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
             {
+                programFiles = Environment.SpecialFolder.ProgramFilesX86;
                 vsVersion = "2019";
             }
-            var toolPath = @$"{Environment.SpecialFolder.ProgramFilesX86}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
+            var toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
             if (platform == PlatformTarget.x64)
             {
-                toolPath = @$"{Environment.SpecialFolder.ProgramFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
             }
             if (BuildContext.IsWindows)
             {
