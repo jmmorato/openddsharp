@@ -32,13 +32,15 @@ namespace OpenDDSharp.Build
     public class BuildContext : FrostingContext
     {
         #region Constants
-        internal const string DEFAULT_OPENDDS_VERSION = "3.31";
+        private const string DEFAULT_OPENDDS_VERSION = "3.31";
 
         private const string DEFAULT_PERL_FOLDER = "C:/Strawberry/perl/bin";
 
-        internal const string DEFAULT_CONFIGURATION = "Release";
+        private const string DEFAULT_CONFIGURATION = "Release";
 
-        internal const PlatformTarget DEFAULT_PLATFORM = PlatformTarget.x64;
+        private const PlatformTarget DEFAULT_PLATFORM = PlatformTarget.x64;
+
+        private const string DEFAULT_VS_EDITION = "Enterprise";
 
         internal const string THIRD_PARTY_FOLDER = "../../ext/";
 
@@ -111,6 +113,11 @@ namespace OpenDDSharp.Build
         /// Gets the Visual Studio version used to build the project.
         /// </summary>
         public MSBuildToolVersion VisualStudioVersion { get; internal set; }
+
+        /// <summary>
+        /// Gets the Visual Studio edition used to build the project.
+        /// </summary>
+        public string VisualStudioEdition { get; internal set; }
 
         /// <summary>
         /// Gets the build platform to use.
@@ -318,6 +325,15 @@ namespace OpenDDSharp.Build
             else
             {
                 VisualStudioVersion = MSBuildToolVersion.VS2022;
+            }
+
+            if (context.Arguments.HasArgument(nameof(VisualStudioEdition)))
+            {
+                VisualStudioEdition = context.Arguments.GetArgument(nameof(VisualStudioEdition));
+            }
+            else
+            {
+                VisualStudioEdition = DEFAULT_VS_EDITION;
             }
 
             if (context.Arguments.HasArgument(nameof(NugetApiKey)))

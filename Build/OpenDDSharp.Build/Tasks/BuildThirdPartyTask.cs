@@ -17,6 +17,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
 using System.IO;
 using System.Linq;
 using Cake.Common;
@@ -57,10 +58,15 @@ namespace OpenDDSharp.Build.Tasks
                 platform = PlatformTarget.Win32;
             }
 
-            var toolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
+            var vsVersion = "2022";
+            if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
+            {
+                vsVersion = "2019";
+            }
+            var toolPath = @$"C:\Program Files\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
             if (platform == PlatformTarget.x64)
             {
-                toolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                toolPath = @$"C:\Program Files\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
             }
             if (BuildContext.IsWindows)
             {
