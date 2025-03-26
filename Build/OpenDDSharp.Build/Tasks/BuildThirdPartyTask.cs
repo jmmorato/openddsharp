@@ -24,6 +24,7 @@ using System.Linq;
 using Cake.Common;
 using Cake.Common.IO;
 using Cake.Common.Tools.MSBuild;
+using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using OpenDDSharp.Build.Exceptions;
 
@@ -60,17 +61,21 @@ namespace OpenDDSharp.Build.Tasks
             }
 
             var vsVersion = "2022";
-            var programFiles = Environment.SpecialFolder.ProgramFiles;
-            if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
-            {
-                programFiles = Environment.SpecialFolder.ProgramFilesX86;
-                vsVersion = "2019";
-            }
-            var toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
+            var toolPath = @$"{Environment.SpecialFolder.ProgramFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
             if (platform == PlatformTarget.x64)
             {
-                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                toolPath = @$"{Environment.SpecialFolder.ProgramFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
             }
+            if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
+            {
+                toolPath = @$"{Environment.SpecialFolder.ProgramFilesX86}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\MSBuild.exe";
+                if (platform == PlatformTarget.x64)
+                {
+                    toolPath = @$"{Environment.SpecialFolder.ProgramFilesX86}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                }
+            }
+
+            context.Log.Information($"Tool Path: {toolPath}");
             if (BuildContext.IsWindows)
             {
                 context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
