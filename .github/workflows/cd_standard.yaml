@@ -896,7 +896,7 @@ jobs:
           cd ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish
           ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\BenchmarkPerformance.exe -1
           ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\BenchmarkPerformance.exe -2
-        continue-on-error: true
+        continue-on-error: false
 
   performance_test_linux:
     needs: build_linux_native
