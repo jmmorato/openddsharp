@@ -1,12 +1,21 @@
 name: Continuous Delivery
 
+permissions: read-all
+
 on:
+  push:
+    branches:
+      - develop
+      - main
+  schedule:
+    - cron: '0 1 * * SUN'
+  pull_request:
   workflow_dispatch:
-    branches: [ develop, main ]
     inputs:
       publish:
         type: boolean
         required: true
+        default: false
         description: Publish the NuGet packages to nuget.org
 
 concurrency:

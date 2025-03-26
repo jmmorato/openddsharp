@@ -18,12 +18,13 @@ OpenDDS Documentation: [https://opendds.readthedocs.io](https://opendds.readthed
 
 OpenDDSharp has been compiled with OpenDDS v3.25
 
-| Package                                                   | NuGet                                                            |
-|-----------------------------------------------------------|------------------------------------------------------------------|
-| [OpenDDSharp][OpenDDSharpNuget]                           | [![OpenDDSharpShield]][OpenDDSharpNuget]                         |
-| [OpenDDSharp.IdlGenerator][OpenDDSharpIdlGeneratorNuget]  | [![OpenDDSharpIdlGeneratorShield]][OpenDDSharpIdlGeneratorNuget] |
-| [OpenDDSharp.Native][OpenDDSharpNativeNuget]              | [![OpenDDSharpNativeShield]][OpenDDSharpNativeNuget]             |
-| [OpenDDSharp.Templates][OpenDDSharpTemplatesNuget]        | [![OpenDDSharpTemplatesShield]][OpenDDSharpTemplatesNuget]       |
+| Package                                                  | NuGet                                                            |
+|----------------------------------------------------------|------------------------------------------------------------------|
+| [OpenDDSharp][OpenDDSharpNuget]                          | [![OpenDDSharpShield]][OpenDDSharpNuget]                         |
+| [OpenDDSharp.IdlGenerator][OpenDDSharpIdlGeneratorNuget] | [![OpenDDSharpIdlGeneratorShield]][OpenDDSharpIdlGeneratorNuget] |
+| [OpenDDSharp.Native][OpenDDSharpNativeNuget]             | [![OpenDDSharpNativeShield]][OpenDDSharpNativeNuget]             |
+| [OpenDDSharp.Marshaller][OpenDDSharpMarshallerNuget]     | [![OpenDDSharpMarshallerShield]][OpenDDSharpMarshallerNuget]     |
+| [OpenDDSharp.Templates][OpenDDSharpTemplatesNuget]       | [![OpenDDSharpTemplatesShield]][OpenDDSharpTemplatesNuget]       |
 
 [OpenDDSharpNuget]: https://www.nuget.org/packages/OpenDDSharp/
 [OpenDDSharpShield]: https://img.shields.io/nuget/v/OpenDDSharp.svg
@@ -31,6 +32,8 @@ OpenDDSharp has been compiled with OpenDDS v3.25
 [OpenDDSharpIdlGeneratorShield]: https://img.shields.io/nuget/v/OpenDDSharp.IdlGenerator.svg
 [OpenDDSharpNativeNuget]: https://www.nuget.org/packages/OpenDDSharp.Native/
 [OpenDDSharpNativeShield]: https://img.shields.io/nuget/v/OpenDDSharp.Native.svg
+[OpenDDSharpMarshallerNuget]: https://www.nuget.org/packages/OpenDDSharp.Marshaller/
+[OpenDDSharpMarshallerShield]: https://img.shields.io/nuget/v/OpenDDSharp.Marshaller.svg
 [OpenDDSharpTemplatesNuget]: https://www.nuget.org/packages/OpenDDSharp.Templates/
 [OpenDDSharpTemplatesShield]: https://img.shields.io/nuget/v/OpenDDSharp.Templates.svg
 
