@@ -832,6 +832,7 @@ jobs:
       DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}"
       ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers"
       TAO_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers\\TAO"
+      COMPlus_JITMinOpts: "1"
 
     steps:
       - uses: actions/checkout@v4
