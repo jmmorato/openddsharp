@@ -29,10 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2022
+          - os: windows-2019
             runtime: win-x64
             build_platform: x64
-          - os: windows-2022
+          - os: windows-2019
             runtime: win-x86
             build_platform: x86
 
@@ -83,13 +83,13 @@ jobs:
     - name: Build Native (No cached)
       shell: pwsh
       if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2022
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
 
     - name: Build Native (Cached)
       shell: pwsh
       if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2022
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True --VisualStudioVersion=VS2019
       working-directory: ${{ github.workspace }}/Build
 
     - name: Stage Native
@@ -389,6 +389,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: windows-2019
+            runtime: win-x64
+            build_platform: x64
+          - os: windows-2019
+            runtime: win-x86
+            build_platform: x86
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
