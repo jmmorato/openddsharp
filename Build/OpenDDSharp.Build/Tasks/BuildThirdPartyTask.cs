@@ -62,21 +62,16 @@ namespace OpenDDSharp.Build.Tasks
 
             var vsVersion = "2022";
             var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            var toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
-            if (platform == PlatformTarget.x64)
-            {
-                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
-            }
-
             if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
             {
                 vsVersion = "2019";
                 programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
-                if (platform == PlatformTarget.x64)
-                {
-                    toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
-                }
+            }
+
+            var toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
+            if (platform == PlatformTarget.x64)
+            {
+                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
             }
 
             context.Log.Information($"Tool Path: {toolPath}");
