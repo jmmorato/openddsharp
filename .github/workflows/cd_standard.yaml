@@ -518,10 +518,20 @@ jobs:
           path: TestResults/test-results_*.trx
           reporter: dotnet-trx
 
+      - name: Setup dotnet 8.0 x64
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture 'x64' -Channel 8.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+        continue-on-error: true
+
       - name: Merge coverage files
         shell: bash
         run: |
-          dotnet tool install -g dotnet-reportgenerator-globaltool          
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          export PATH="$PATH:$HOME/.dotnet/tools"
           reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
         working-directory: ${{ github.workspace }}
 
