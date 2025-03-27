@@ -60,18 +60,21 @@ namespace OpenDDSharp.Build.Tasks
                 platform = PlatformTarget.Win32;
             }
 
-            var vsVersion = "2022";
-            var toolPath = @$"{Environment.SpecialFolder.ProgramFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
+            const string vsVersion = "2022";
+            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            var toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
             if (platform == PlatformTarget.x64)
             {
-                toolPath = @$"{Environment.SpecialFolder.ProgramFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
             }
+
             if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
             {
-                toolPath = @$"{Environment.SpecialFolder.ProgramFilesX86}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\MSBuild.exe";
+                programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\MSBuild.exe";
                 if (platform == PlatformTarget.x64)
                 {
-                    toolPath = @$"{Environment.SpecialFolder.ProgramFilesX86}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                    toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe";
                 }
             }
 
