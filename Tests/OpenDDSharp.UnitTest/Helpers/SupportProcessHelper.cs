@@ -39,8 +39,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string RELEASE_TARGET_FOLDER = @"Release";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64";
         private const string EIGHTY_SIX_PLATFORM_FOLDER = @"x86";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.exe";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.exe";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo.exe";
 #elif Linux && X64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_linux-x64";
@@ -49,8 +49,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif Linux && ARM64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_linux-arm64";
@@ -59,8 +59,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string DEBUG_TARGET_FOLDER = @"Debug/";
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif OSX && X64
         private const string DDS_ROOT = @"../../../../../../ext/OpenDDS_osx-x64";
@@ -70,8 +70,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string RELEASE_TARGET_FOLDER = @"Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = @"x64/";
         private const string ARM_SIXTY_FOUR_PLATFORM_FOLDER = @"ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = @"../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = @"TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = @"DCPSInfoRepo";
 #elif OSX && ARM64
         private const string DDS_ROOT = "../../../../../../ext/OpenDDS_osx-arm64";
@@ -81,8 +81,8 @@ namespace OpenDDSharp.UnitTest.Helpers
         private const string RELEASE_TARGET_FOLDER = "Release/";
         private const string SIXTY_FOUR_PLATFORM_FOLDER = "x64/";
         private const string ARM_SIXTY_FOUR_PLATFORM_FOLDER = "ARM64/";
-        private const string TEST_SUPPORT_PROCESS_PATH = "../../../../../TestSupportProcessCore/bin/";
-        private const string TEST_SUPPORT_PROCESS_EXE_NAME = "TestSupportProcessCore.dll";
+        private const string TEST_SUPPORT_PROCESS_PATH = "../../../../../TestSupportProcess/bin/";
+        private const string TEST_SUPPORT_PROCESS_EXE_NAME = "TestSupportProcess.dll";
         private const string DCPSINFOREPO_PROCESS_EXE_NAME = "DCPSInfoRepo";
 #endif
         #endregion
@@ -129,7 +129,12 @@ namespace OpenDDSharp.UnitTest.Helpers
             }
 #if Linux
             Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", "$LD_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
+
             _runtime = "linux-x64/";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64)
+            {
+                _runtime = "linux-arm64";
+            }
 #elif OSX
             Environment.SetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH:$DDS_ROOT/lib:$ACE_ROOT/lib");
 
@@ -143,11 +148,12 @@ namespace OpenDDSharp.UnitTest.Helpers
         #endregion
 
         #region Methods
-        public Process SpawnSupportProcess(SupportTestKind teskKind)
+        public Process SpawnSupportProcess(SupportTestKind testKind)
         {
-            string supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net6.0", TEST_SUPPORT_PROCESS_EXE_NAME);
+            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net6.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
+
             if (!File.Exists(supportProcessPath))
             {
                 supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net6.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
@@ -159,11 +165,11 @@ namespace OpenDDSharp.UnitTest.Helpers
                 }
             }
 #if Linux || OSX
-            var arguments = supportProcessPath + " " + teskKind.ToString();
+            var arguments = supportProcessPath + " " + testKind;
 
             return SpawnProcess("dotnet", arguments);
 #else
-            return SpawnProcess(supportProcessPath, teskKind.ToString());
+            return SpawnProcess(supportProcessPath, testKind.ToString());
 #endif
         }
 
@@ -173,7 +179,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 #if Windows
             string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
-            string infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
+            var infoRepoPath = Path.Combine(ddsPath, "bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #endif
             if (!File.Exists(infoRepoPath))
             {
@@ -181,7 +187,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                 throw new FileNotFoundException($"The support process executable could not be located at {infoRepoPath}.");
             }
 
-            return SpawnProcess(infoRepoPath, @"-o repo.ior -ORBListenEndpoints iiop://localhost:12345");
+            return SpawnProcess(infoRepoPath, "-o repo.ior -ORBListenEndpoints iiop://localhost:12345");
         }
 
         private Process SpawnProcess(string path, string arguments)
@@ -190,7 +196,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             var acePath = Path.GetFullPath(ACE_ROOT).TrimEnd(Path.DirectorySeparatorChar);
             var taoPath = Path.GetFullPath(TAO_ROOT).TrimEnd(Path.DirectorySeparatorChar);
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(path)
+            var processInfo = new ProcessStartInfo(path)
             {
                 Arguments = arguments,
                 RedirectStandardOutput = true,
@@ -208,7 +214,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             processInfo.EnvironmentVariables["DYLD_FALLBACK_LIBRARY_PATH"] = $"DYLD_FALLBACK_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
 #endif
 
-            Process process = new Process
+            var process = new Process
             {
                 StartInfo = processInfo,
                 EnableRaisingEvents = true,
@@ -217,7 +223,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             process.OutputDataReceived += SupportProcessOnOutputDataReceived;
             process.ErrorDataReceived += SupportProcessOnErrorDataReceived;
 
-            bool processStarted = false;
+            bool processStarted;
             try
             {
                 processStarted = process.Start();
@@ -229,6 +235,7 @@ namespace OpenDDSharp.UnitTest.Helpers
                     _testContext.WriteLine($"The support process executable at {path} could not be executed.");
                     throw new FileNotFoundException($"The support process executable at {path} could not be executed.", e);
                 }
+
                 _testContext.WriteLine($"The support process executable can not be located at {path}.");
                 throw new InvalidOperationException($"The support process executable can not be located at {path}.", e);
             }

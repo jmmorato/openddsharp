@@ -27,10 +27,12 @@ using OpenDDSharp;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
 
-namespace ConsoleDemoCore
+namespace ConsoleDemo
 {
     internal static class Program
     {
+        private static readonly string TOPIC_NAME = Guid.NewGuid().ToString();
+
         private static void Main()
         {
             Console.WriteLine("ACE initialization...");
@@ -49,47 +51,62 @@ namespace ConsoleDemoCore
             var participant = dpf.CreateParticipant(42);
             if (participant == null)
             {
-                Console.Error.WriteLine("Domain participant could NOT be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("Participant could NOT be created.");
+            }
+
+            var topic = CreateTestTopic(participant);
+            if (topic == null)
+            {
+                throw new InvalidOperationException("Topic could NOT be created.");
             }
 
             Console.WriteLine("Create data writer...");
-            var dw = CreateTestDataWriter(participant);
+            var dw = CreateTestDataWriter(participant, topic);
             if (dw == null)
             {
-                Console.Error.WriteLine("DataWriter could NOT be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("DataWriter could NOT be created.");
             }
 
             Console.WriteLine("Create data reader...");
-            var dr = CreateTestDataReader(participant);
+            var dr = CreateTestDataReader(participant, topic);
             if (dr == null)
             {
-                Console.Error.WriteLine("DataReader could NOT be created.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("DataReader could NOT be created.");
             }
 
             Console.WriteLine("Waiting for the subscriber...");
-            var wait = WaitForSubscriptions(dw, 1, 60000);
+            var wait = WaitForSubscriptions(dw, 1, 60_000);
 
             if (!wait)
             {
-                Console.Error.WriteLine("Subscription not found.");
-                Environment.Exit(-1);
+                throw new InvalidOperationException("Subscription not found.");
             }
 
             Console.WriteLine("Subscription found. Writing test data...");
             var data = CreateFullStruct();
-            dw.Write(data);
+            var ret = dw.Write(data);
+            if (ret != ReturnCode.Ok)
+            {
+                throw new InvalidOperationException($"Error writing data. Error code: {ret}");
+            }
 
             Console.WriteLine("Waiting for sample...");
             var received = new List<FullStruct>();
             var sampleInfo = new List<SampleInfo>();
-            var ret = dr.Take(received, sampleInfo);
-            while (ret != ReturnCode.Ok)
+            ret = dr.Take(received, sampleInfo);
+            var count = 10;
+            while (ret != ReturnCode.Ok && count >= 0)
             {
-                Thread.Sleep(100);
+                Console.WriteLine($"No sample received. Error code: {ret}");
+
+                Thread.Sleep(500);
                 ret = dr.Take(received, sampleInfo);
+                count--;
+            }
+
+            if (ret != ReturnCode.Ok)
+            {
+                throw new InvalidOperationException("Error taking data.");
             }
 
             Console.WriteLine("================");
@@ -100,9 +117,6 @@ namespace ConsoleDemoCore
 
             Console.WriteLine("Shutting down... that's enough for today.");
 
-            var test = new FullStruct();
-            dr.GetKeyValue(test, sampleInfo[0].InstanceHandle);
-
             participant.DeleteContainedEntities();
             dpf.DeleteParticipant(participant);
             ParticipantService.Instance.Shutdown();
@@ -110,19 +124,12 @@ namespace ConsoleDemoCore
             Ace.Fini();
         }
 
-        private static FullStructDataWriter CreateTestDataWriter(DomainParticipant participant)
+        private static FullStructDataWriter CreateTestDataWriter(DomainParticipant participant, Topic topic)
         {
             var publisher = participant.CreatePublisher();
             if (publisher == null)
             {
                 Console.Error.WriteLine("Publisher could not be created.");
-                return null;
-            }
-
-            var topic = CreateTestTopic(participant);
-            if (topic == null)
-            {
-                Console.Error.WriteLine("Topic could not be created.");
                 return null;
             }
 
@@ -151,19 +158,12 @@ namespace ConsoleDemoCore
             return null;
         }
 
-        private static FullStructDataReader CreateTestDataReader(DomainParticipant participant)
+        private static FullStructDataReader CreateTestDataReader(DomainParticipant participant, Topic topic)
         {
             var subscriber = participant.CreateSubscriber();
             if (subscriber == null)
             {
                 Console.Error.WriteLine("Subscriber could NOT be created.");
-                return null;
-            }
-
-            var topic = CreateTestTopic(participant);
-            if (topic == null)
-            {
-                Console.Error.WriteLine("Topic could NOT be created.");
                 return null;
             }
 
@@ -829,7 +829,7 @@ namespace ConsoleDemoCore
                 return null;
             }
 
-            var topic = participant.CreateTopic("TestTopic", typeName);
+            var topic = participant.CreateTopic(TOPIC_NAME, typeName);
             if (topic != null)
             {
                 return topic;

@@ -19,7 +19,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 using Cake.Frosting;
 
-namespace OpenDDSharp.Build.Tasks
+namespace OpenDDSharp.Build
 {
     /// <summary>
     /// Represents the program to run.

@@ -112,8 +112,13 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                const string arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative";
-                context.Log.Information(arguments);
+                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative";
+                if (context.BuildConfiguration == "Debug")
+                {
+                    context.Log.Information("Building OpenDDS in Debug mode...");
+                    arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative";
+                }
+                context.Log.Information("Configure script arguments: " + arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings
                 {
@@ -147,9 +152,10 @@ namespace OpenDDSharp.Build.Tasks
                 }
                 else
                 {
+                    context.Log.Information("Building OpenDDS in Debug mode...");
                     arguments += " --debug --no-optimize";
                 }
-                context.Log.Information(configurePath + arguments);
+                context.Log.Information("Configure script arguments: " + arguments);
 
                 var exit = context.StartProcess("cmd.exe", new ProcessSettings
                 {

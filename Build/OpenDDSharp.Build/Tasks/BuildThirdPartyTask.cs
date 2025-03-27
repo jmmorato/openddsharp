@@ -17,11 +17,14 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
+
+using System;
 using System.IO;
 using System.Linq;
 using Cake.Common;
 using Cake.Common.IO;
 using Cake.Common.Tools.MSBuild;
+using Cake.Core.Diagnostics;
 using Cake.Frosting;
 using OpenDDSharp.Build.Exceptions;
 
@@ -57,11 +60,21 @@ namespace OpenDDSharp.Build.Tasks
                 platform = PlatformTarget.Win32;
             }
 
-            var toolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
+            var vsVersion = "2022";
+            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
+            {
+                vsVersion = "2019";
+                programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            }
+
+            var toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
             if (platform == PlatformTarget.x64)
             {
-                toolPath = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
             }
+
+            context.Log.Information($"Tool Path: {toolPath}");
             if (BuildContext.IsWindows)
             {
                 context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
