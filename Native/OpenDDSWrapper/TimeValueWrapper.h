@@ -21,7 +21,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 
 #include <dds/DCPS/TimeDuration.h>
 
-static_assert(true);
 #pragma pack(push)
 #pragma pack(1)
 extern "C" struct TimeValueWrapper {
