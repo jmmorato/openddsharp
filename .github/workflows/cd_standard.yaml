@@ -514,21 +514,13 @@ jobs:
           path: TestResults/test-results_*.trx
           reporter: dotnet-trx
 
-#      - name: Merge coverage files
-#        shell: pwsh
-#        run: |
-#          dotnet tool install --global dotnet-reportgenerator-globaltool
-#          $Env:PATH = "$Env:PATH;$(dotnet tool run reportgenerator --tool-path)"
-#          reportgenerator.exe -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
-#        working-directory: ${{ github.workspace }}
-
       - name: Setup .NET Core 8.x
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x
           dotnet-quality: 'ga'
 
-      - name: ReportGenerator
+      - name: Merge coverage reports
         uses: danielpalme/ReportGenerator-GitHub-Action@v5
         with:
           reports: '**/*.cobertura.xml'
@@ -666,13 +658,18 @@ jobs:
         path: TestResults/test-results_*.trx
         reporter: dotnet-trx
 
-    - name: Merge coverage files
-      shell: bash
-      run: |
-        dotnet tool install -g dotnet-reportgenerator-globaltool
-        export PATH="$PATH:$HOME/.dotnet/tools"
-        reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
-      working-directory: ${{ github.workspace }}
+    - name: Setup .NET Core 8.x
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+        dotnet-quality: 'ga'
+
+    - name: Merge coverage reports
+      uses: danielpalme/ReportGenerator-GitHub-Action@v5
+      with:
+        reports: '**/*.cobertura.xml'
+        targetdir: '${{ github.workspace }}/TestResults/reports.cobertura'
+        reporttypes: 'HtmlInline;Cobertura'
 
     - name: Upload coverage to Coveralls
       uses: coverallsapp/github-action@v2
@@ -804,13 +801,18 @@ jobs:
           path: TestResults/test-results_*.trx
           reporter: dotnet-trx
 
-      - name: Merge coverage files
-        shell: bash
-        run: |
-          dotnet tool install -g dotnet-reportgenerator-globaltool
-          export PATH="$PATH:$HOME/.dotnet/tools"
-          reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
-        working-directory: ${{ github.workspace }}
+      - name: Setup .NET Core 8.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          dotnet-quality: 'ga'
+
+      - name: Merge coverage reports
+        uses: danielpalme/ReportGenerator-GitHub-Action@v5
+        with:
+          reports: '**/*.cobertura.xml'
+          targetdir: '${{ github.workspace }}/TestResults/reports.cobertura'
+          reporttypes: 'HtmlInline;Cobertura'
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
