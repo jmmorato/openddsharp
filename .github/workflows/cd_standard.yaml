@@ -823,18 +823,6 @@ jobs:
           flag-name: coverage-${{ matrix.os }}-${{ matrix.runtime }}
           fail-on-error: false
 
-  publish_coveralls:
-    runs-on: ubuntu-latest
-    needs: [ unit_test_windows, unit_test_linux, unit_test_macos ]
-    steps:
-      - name: Publish coverage on Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
-          carryforward: "coverage-windows-2019-win-x64,coverage-windows-2019-win-x86,coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-windows-2025-win-x64,coverage-windows-2025-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
-          fail-on-error: false
-
   performance_test_windows:
     needs: build_windows_native
 
@@ -842,12 +830,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
-          - runtime: win-x64
-          - build_platform: x64
-          - os: windows-2019
-          - runtime: win-x86
-          - build_platform: x86
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
@@ -857,9 +839,6 @@ jobs:
           - os: windows-2025
             runtime: win-x64
             build_platform: x64
-          - os: windows-2025
-            runtime: win-x86
-            build_platform: x86
 
     runs-on: ${{ matrix.os }}
 
@@ -948,9 +927,6 @@ jobs:
             runtime: linux-x64
             build_platform: x64
           - os: ubuntu-22.04-arm
-            runtime: linux-arm64
-            build_platform: ARM64
-          - os: ubuntu-24.04-arm
             runtime: linux-arm64
             build_platform: ARM64
 
@@ -1100,6 +1076,18 @@ jobs:
           sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -2
         working-directory: ${{ github.workspace }}
         continue-on-error: false
+
+  publish_coveralls:
+    runs-on: ubuntu-latest
+    needs: [ unit_test_windows, unit_test_linux, unit_test_macos ]
+    steps:
+      - name: Publish coverage on Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          carryforward: "coverage-windows-2019-win-x64,coverage-windows-2019-win-x86,coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-windows-2025-win-x64,coverage-windows-2025-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
+          fail-on-error: false
 
   build_artifacts:
     runs-on: windows-latest
