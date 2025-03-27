@@ -72,10 +72,10 @@ namespace OpenDDSharp.Build.Tasks
             {
                 vsVersion = "2019";
                 programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\MSBuild.exe";
+                toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\MSBuild.exe";
                 if (platform == PlatformTarget.x64)
                 {
-                    toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe";
+                    toolPath = @$"{programFiles}\Microsoft Visual Studio\{vsVersion}\{context.VisualStudioEdition}\MSBuild\Current\Bin\amd64\MSBuild.exe";
                 }
             }
 
