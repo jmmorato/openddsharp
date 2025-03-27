@@ -401,6 +401,12 @@ jobs:
           - os: windows-2022
             runtime: win-x86
             build_platform: x86
+          - os: windows-2025
+            runtime: win-x64
+            build_platform: x64
+          - os: windows-2025
+            runtime: win-x86
+            build_platform: x86
 
     runs-on: ${{ matrix.os }}
 
@@ -515,8 +521,7 @@ jobs:
       - name: Merge coverage files
         shell: bash
         run: |
-          dotnet tool install -g dotnet-reportgenerator-globaltool
-          export PATH="$PATH:$HOME/.dotnet/tools"
+          dotnet tool install -g dotnet-reportgenerator-globaltool          
           reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
         working-directory: ${{ github.workspace }}
 
@@ -815,7 +820,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-          carryforward: "coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
+          carryforward: "coverage-windows-2019-win-x64,coverage-windows-2019-win-x86,coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-windows-2025-win-x64,coverage-windows-2025-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
           fail-on-error: false
 
   performance_test_windows:
@@ -825,10 +830,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: windows-2019
+          - runtime: win-x64
+          - build_platform: x64
+          - os: windows-2019
+          - runtime: win-x86
+          - build_platform: x86
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
           - os: windows-2022
+            runtime: win-x86
+            build_platform: x86
+          - os: windows-2025
+            runtime: win-x64
+            build_platform: x64
+          - os: windows-2025
             runtime: win-x86
             build_platform: x86
 
@@ -1238,12 +1255,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: windows-2019
+            runtime: win-x86
+            build_platform: x86
+          - os: windows-2019
+            runtime: win-x64
+            build_platform: x64
           - os: windows-2022
             runtime: win-x86
             build_platform: x86
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
+          - os: windows-2025
+            runtime: win-x64
+            build_platform: x64
+          - os: windows-2025
+            runtime: win-x86
+            build_platform: x86
           - os: ubuntu-22.04
             runtime: linux-x64
             build_platform: x64
