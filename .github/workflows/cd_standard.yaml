@@ -518,22 +518,20 @@ jobs:
           path: TestResults/test-results_*.trx
           reporter: dotnet-trx
 
-      - name: Setup dotnet 8.0 x64
-        shell: pwsh
-        run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture 'x64' -Channel 8.0;
-          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        working-directory: ${{ github.workspace }}
-        continue-on-error: true
+#      - name: Merge coverage files
+#        shell: pwsh
+#        run: |
+#          dotnet tool install --global dotnet-reportgenerator-globaltool
+#          $Env:PATH = "$Env:PATH;$(dotnet tool run reportgenerator --tool-path)"
+#          reportgenerator.exe -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
+#        working-directory: ${{ github.workspace }}
 
-      - name: Merge coverage files
-        shell: bash
-        run: |
-          dotnet tool install -g dotnet-reportgenerator-globaltool
-          export PATH="$PATH:$HOME/.dotnet/tools"
-          reportgenerator -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
-        working-directory: ${{ github.workspace }}
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-GitHub-Action@v5
+        with:
+          reports: '**/*.cobertura.xml' # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
+          targetdir: '${{ github.workspace }}/TestResults/reports.cobertura' # REQUIRED # The directory where the generated report should be saved.
+          reporttypes: 'HtmlInline_AzurePipelines_Dark;Cobertura' # The output formats and scope (separated by semicolon) Values: Badges, Clover, Cobertura, OpenCover, CsvSummary, Html, Html_Dark, Html_Light, Html_BlueRed, HtmlChart, HtmlInline, HtmlInline_AzurePipelines, HtmlInline_AzurePipelines_Dark, HtmlInline_AzurePipelines_Light, HtmlSummary, Html_BlueRed_Summary, JsonSummary, Latex, LatexSummary, lcov, MarkdownSummary, MarkdownSummaryGithub, MarkdownDeltaSummary, MHtml, SvgChart, SonarQube, TeamCitySummary, TextSummary, TextDeltaSummary, Xml, XmlSummary
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
