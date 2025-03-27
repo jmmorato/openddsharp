@@ -48,8 +48,7 @@ jobs:
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-      continue-on-error: true
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append      
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
@@ -433,7 +432,6 @@ jobs:
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 6.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
-        continue-on-error: true
 
       - name: Setup dotnet 7.0
         shell: pwsh
@@ -442,7 +440,6 @@ jobs:
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 7.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
-        continue-on-error: true
 
       - name: Setup dotnet 8.0
         shell: pwsh
@@ -451,7 +448,6 @@ jobs:
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
-        continue-on-error: true
 
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v4
@@ -526,12 +522,18 @@ jobs:
 #          reportgenerator.exe -reports:"**/*.cobertura.xml" -targetdir:"${{ github.workspace }}/TestResults/reports.cobertura" -reporttypes:"HtmlInline_AzurePipelines_Dark;Cobertura"
 #        working-directory: ${{ github.workspace }}
 
+      - name: Setup .NET Core 8.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          dotnet-quality: 'ga'
+
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@v5
         with:
-          reports: '**/*.cobertura.xml' # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
-          targetdir: '${{ github.workspace }}/TestResults/reports.cobertura' # REQUIRED # The directory where the generated report should be saved.
-          reporttypes: 'HtmlInline_AzurePipelines_Dark;Cobertura' # The output formats and scope (separated by semicolon) Values: Badges, Clover, Cobertura, OpenCover, CsvSummary, Html, Html_Dark, Html_Light, Html_BlueRed, HtmlChart, HtmlInline, HtmlInline_AzurePipelines, HtmlInline_AzurePipelines_Dark, HtmlInline_AzurePipelines_Light, HtmlSummary, Html_BlueRed_Summary, JsonSummary, Latex, LatexSummary, lcov, MarkdownSummary, MarkdownSummaryGithub, MarkdownDeltaSummary, MHtml, SvgChart, SonarQube, TeamCitySummary, TextSummary, TextDeltaSummary, Xml, XmlSummary
+          reports: '**/*.cobertura.xml'
+          targetdir: '${{ github.workspace }}/TestResults/reports.cobertura'
+          reporttypes: 'HtmlInline;Cobertura'
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
