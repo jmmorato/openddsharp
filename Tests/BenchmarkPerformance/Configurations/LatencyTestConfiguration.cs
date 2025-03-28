@@ -1,8 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Exporters.Json;
@@ -10,7 +9,6 @@ using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
-using OpenDDSharp.BenchmarkPerformance.Helpers;
 
 namespace OpenDDSharp.BenchmarkPerformance.Configurations;
 
@@ -50,12 +48,12 @@ internal class LatencyTestConfiguration : ManualConfig
         // Does not run JSON tests
         AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
 
+        // Diagnosers
+        AddDiagnoser(MemoryDiagnoser.Default);
+
+        // Columns
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
-        HideColumns(StatisticColumn.Mean);
-        HideColumns(StatisticColumn.Error);
-        HideColumns(StatisticColumn.StdDev);
-        HideColumns(BaselineRatioColumn.RatioMean);
-        HideColumns(BaselineRatioColumn.RatioStdDev);
+        HideColumns("Gen0", "Gen1", "Alloc Ratio");
         AddColumn(new LatencyAverageColumn());
         AddColumn(new LatencyDeviationColumn());
         AddColumn(new LatencyMinimumColumn());
@@ -63,11 +61,18 @@ internal class LatencyTestConfiguration : ManualConfig
         AddColumn(new LatencyFiftyColumn());
         AddColumn(new LatencyNinetyColumn());
         AddColumn(new LatencyNinetyNineColumn());
+
+        // Loggers
         AddLogger(DefaultConfig.Instance.GetLoggers().ToArray());
+
+        // Exporters
         AddExporter(PlainExporter.Default);
-        AddExporter(CsvExporter.Default);
-        AddExporter(MarkdownExporter.Default);
+        AddExporter(MarkdownExporter.GitHub);
         AddExporter(JsonExporter.FullCompressed);
+        AddExporter(CsvMeasurementsExporter.Default);
+        AddExporter(RPlotExporter.Default);
+
+        // Increase the build timeout to 30 minutes
         WithBuildTimeout(TimeSpan.FromMinutes(30));
     }
 }

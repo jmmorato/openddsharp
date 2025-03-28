@@ -10,8 +10,10 @@ string input;
 if (args.Length == 0)
 {
     Console.WriteLine("Menu: ");
-    Console.WriteLine("[1] Latency Performance Test");
-    Console.WriteLine("[2] Throughput Performance Test");
+    Console.WriteLine("[1] Latency Payload Performance Test");
+    Console.WriteLine("[2] Throughput Payload Performance Test");
+    Console.WriteLine("[3] Latency Samples Performance Test");
+    Console.WriteLine("[4] Throughput Samples Performance Test");
     Console.WriteLine("Anything else will stop the program.");
     Console.Write("> ");
     input = Console.ReadLine();
@@ -24,7 +26,7 @@ else
 
 switch (input)
 {
-    case "-1":
+    case "-1": // Latency Short Performance Test
     {
         Ace.Init();
 
@@ -32,6 +34,11 @@ switch (input)
         {
             ArtifactsPath = artifactsPath,
         };
+
+        LatencyTest.TotalInstancesValues = [100];
+        LatencyTest.TotalSamplesValues = [20];
+        LatencyTest.TotalPayloadValues = [2_048, 4_096, 8_192];
+
         _ = BenchmarkRunner.Run<LatencyTest>(config);
 
         TransportRegistry.Instance.Release();
@@ -100,7 +107,7 @@ switch (input)
         // Console.WriteLine($"RTI Connext Latency Test {stopwatch.Elapsed.TotalSeconds}");
         break;
     }
-    case "-2":
+    case "-2": // Throughput Short Performance Test
     {
         Ace.Init();
 
@@ -108,6 +115,10 @@ switch (input)
         {
             ArtifactsPath = artifactsPath,
         };
+
+        ThroughputTest.TotalSamplesValues = [20_000];
+        ThroughputTest.TotalPayloadValues = [2_048, 4_096, 8_192];
+
         _ = BenchmarkRunner.Run<ThroughputTest>(config);
 
         TransportRegistry.Instance.Release();
@@ -220,7 +231,7 @@ switch (input)
         // Console.WriteLine($"RTI Connext Throughput Test {stopwatch.Elapsed.TotalSeconds}");
         // break;
     }
-    case "1":
+    case "1": // Latency Payload Performance Test
     {
         Ace.Init();
 
@@ -228,6 +239,9 @@ switch (input)
         {
             ArtifactsPath = artifactsPath,
         };
+        LatencyTest.TotalInstancesValues = [1000];
+        LatencyTest.TotalSamplesValues = [10];
+        LatencyTest.TotalPayloadValues = [16_384, 32_768, 65_536];
         _ = BenchmarkRunner.Run<LatencyTest>(config);
 
         TransportRegistry.Instance.Release();
@@ -236,7 +250,7 @@ switch (input)
         Ace.Fini();
         break;
     }
-    case "2":
+    case "2": // Throughput Payload Performance Test
     {
         Ace.Init();
 
@@ -244,6 +258,49 @@ switch (input)
         {
             ArtifactsPath = artifactsPath,
         };
+
+        ThroughputTest.TotalSamplesValues = [100_000];
+        ThroughputTest.TotalPayloadValues = [16_384, 32_768, 65_536];
+
+        _ = BenchmarkRunner.Run<ThroughputTest>(config);
+
+        TransportRegistry.Instance.Release();
+        ParticipantService.Instance.Shutdown();
+
+        Ace.Fini();
+        break;
+    }
+    case "3": // Latency Samples Performance Test
+    {
+        Ace.Init();
+
+        var config = new LatencyTestConfiguration("default")
+        {
+            ArtifactsPath = artifactsPath,
+        };
+        LatencyTest.TotalInstancesValues = [1000];
+        LatencyTest.TotalSamplesValues = [10, 20, 30];
+        LatencyTest.TotalPayloadValues = [16_384];
+        _ = BenchmarkRunner.Run<LatencyTest>(config);
+
+        TransportRegistry.Instance.Release();
+        ParticipantService.Instance.Shutdown();
+
+        Ace.Fini();
+        break;
+    }
+    case "4": // Throughput Samples Performance Test
+    {
+        Ace.Init();
+
+        var config = new ThroughputTestConfiguration("default")
+        {
+            ArtifactsPath = artifactsPath,
+        };
+
+        ThroughputTest.TotalSamplesValues = [50_000, 100_000, 150_000, 200_000];
+        ThroughputTest.TotalPayloadValues = [16_384];
+
         _ = BenchmarkRunner.Run<ThroughputTest>(config);
 
         TransportRegistry.Instance.Release();

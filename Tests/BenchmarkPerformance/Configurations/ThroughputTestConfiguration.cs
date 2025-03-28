@@ -52,14 +52,26 @@ internal class ThroughputTestConfiguration : ManualConfig
         // Does not run JSON tests
         AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
 
+        // Diagnosers
+        AddDiagnoser(MemoryDiagnoser.Default);
+
+        // Columns
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+        HideColumns("Gen0", "Gen1", "Alloc Ratio");
         AddColumn(new ThroughputPerSecondColumn());
+
+        // Loggers
         AddLogger(DefaultConfig.Instance.GetLoggers().ToArray());
+
+        // Exporters
         AddExporter(PlainExporter.Default);
         AddExporter(CsvExporter.Default);
         AddExporter(MarkdownExporter.Default);
-        AddDiagnoser(MemoryDiagnoser.Default);
         AddExporter(JsonExporter.FullCompressed);
+        AddExporter(CsvMeasurementsExporter.Default);
+        AddExporter(RPlotExporter.Default);
+
+        // Increase the build timeout to 30 minutes
         WithBuildTimeout(TimeSpan.FromMinutes(30));
     }
 }
