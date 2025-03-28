@@ -5,6 +5,7 @@ using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -78,6 +79,7 @@ internal class LatencyTestConfiguration : ManualConfig
         AddExporter(PlainExporter.Default);
         AddExporter(CsvExporter.Default);
         AddExporter(MarkdownExporter.Default);
+        AddExporter(JsonExporter.FullCompressed);
         WithBuildTimeout(TimeSpan.FromMinutes(30));
     }
 }

@@ -4,6 +4,7 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -64,6 +65,7 @@ internal class ThroughputTestConfiguration : ManualConfig
         AddExporter(CsvExporter.Default);
         AddExporter(MarkdownExporter.Default);
         AddDiagnoser(MemoryDiagnoser.Default);
+        AddExporter(JsonExporter.FullCompressed);
         WithBuildTimeout(TimeSpan.FromMinutes(30));
     }
 }
