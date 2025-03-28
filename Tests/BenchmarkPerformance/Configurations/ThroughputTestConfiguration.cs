@@ -41,7 +41,7 @@ internal class ThroughputTestConfiguration : ManualConfig
         {
             // Due to the error building the external process in the github-hosted runners,
             // we need to use the in-process emit toolchain
-            job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
+            job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(60), true));
         }
 
         AddJob(job);
@@ -57,7 +57,7 @@ internal class ThroughputTestConfiguration : ManualConfig
 
         // Columns
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
-        HideColumns("Gen0", "Gen1", "Alloc Ratio");
+        HideColumns("Gen0", "Gen1", "Gen2", "Alloc Ratio");
         AddColumn(new ThroughputPerSecondColumn());
 
         // Loggers

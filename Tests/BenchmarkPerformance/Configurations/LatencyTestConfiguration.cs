@@ -37,7 +37,7 @@ internal class LatencyTestConfiguration : ManualConfig
         // Due to the error building the external process, we need to use the in-process emit toolchain.
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
+            job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(60), true));
         }
 
         AddJob(job);
@@ -53,7 +53,7 @@ internal class LatencyTestConfiguration : ManualConfig
 
         // Columns
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
-        HideColumns("Gen0", "Gen1", "Alloc Ratio");
+        HideColumns("Gen0", "Gen1", "Gen2", "Alloc Ratio");
         AddColumn(new LatencyAverageColumn());
         AddColumn(new LatencyDeviationColumn());
         AddColumn(new LatencyMinimumColumn());
