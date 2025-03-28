@@ -453,10 +453,10 @@ jobs:
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
+          name: benchmark-latency-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
 
-  throughputs_performance_test_windows:
+  throughput_performance_test_windows:
     needs: build_windows_native
 
     strategy:
@@ -551,7 +551,7 @@ jobs:
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
+          name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
 
   latency_test_linux:
@@ -634,7 +634,7 @@ jobs:
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
+          name: benchmark-latency-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
   throughput_test_linux:
@@ -724,7 +724,7 @@ jobs:
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
+          name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
   latency_test_macos:
@@ -807,7 +807,7 @@ jobs:
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
+          name: benchmark-latency-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
   throughput_test_macos:
@@ -890,5 +890,5 @@ jobs:
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
+          name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
