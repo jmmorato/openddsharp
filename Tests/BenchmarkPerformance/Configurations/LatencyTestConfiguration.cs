@@ -18,56 +18,44 @@ internal class LatencyTestConfiguration : ManualConfig
 {
     public LatencyTestConfiguration(string name)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
-        }
+        name ??= string.Empty;
+
+        var job = Job.Default
+            .WithIterationCount(10)
+            .WithUnrollFactor(1)
+            .WithInvocationCount(10)
+            .WithWarmupCount(5)
+            .WithStrategy(RunStrategy.Throughput);
 
         if (name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.Dry
-                .WithStrategy(RunStrategy.Throughput)
-                .WithArguments([
-                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
-                ]));
+            AddJob(Job.Dry.WithStrategy(RunStrategy.Throughput));
         }
         else if (name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
-            var job = Job.ShortRun
-                .WithUnrollFactor(1)
-                .WithStrategy(RunStrategy.Throughput);
-
-            // Due to the error building the external process, we need to use the in-process emit toolchain.
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
-            }
-
-            AddJob(job);
-
-            // Does not run JSON tests in this configuration.
-            AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
+            job = Job.ShortRun.WithUnrollFactor(1).WithStrategy(RunStrategy.Throughput);
         }
-        else
+
+        // Due to the error building the external process, we need to use the in-process emit toolchain.
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            AddJob(Job.Default
-                .WithIterationCount(10)
-                .WithUnrollFactor(1)
-                .WithInvocationCount(10)
-                .WithWarmupCount(5)
-                .WithStrategy(RunStrategy.Throughput)
-                .WithArguments([
-                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
-                ]));
+            job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
         }
 
-        // Cannot be run without a valid RTI Connext license.
+        AddJob(job);
+
+        // Cannot be run without a valid RTI Connext license
         AddFilter(new NameFilter(n => !n.Contains("RTI", StringComparison.CurrentCultureIgnoreCase)));
+
+        // Does not run JSON tests
+        AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         HideColumns(StatisticColumn.Mean);
         HideColumns(StatisticColumn.Error);
         HideColumns(StatisticColumn.StdDev);
+        HideColumns(BaselineRatioColumn.RatioMean);
+        HideColumns(BaselineRatioColumn.RatioStdDev);
         AddColumn(new LatencyAverageColumn());
         AddColumn(new LatencyDeviationColumn());
         AddColumn(new LatencyMinimumColumn());

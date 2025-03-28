@@ -17,46 +17,40 @@ internal class ThroughputTestConfiguration : ManualConfig
 {
     public ThroughputTestConfiguration(string name)
     {
-        if (name != null && name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
+        name ??= string.Empty;
+
+        var job = Job.Default
+            .WithIterationCount(10)
+            .WithUnrollFactor(1)
+            .WithInvocationCount(10)
+            .WithWarmupCount(5)
+            .WithStrategy(RunStrategy.Throughput);
+
+        if (name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
-            AddJob(Job.Dry
-                .WithStrategy(RunStrategy.Throughput)
-                .WithArguments([
-                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
-                ]));
+            job = Job.Dry.WithStrategy(RunStrategy.Throughput);
         }
-        else if (name != null && name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
+        else if (name.Equals("short", StringComparison.InvariantCultureIgnoreCase))
         {
-            var job = Job.ShortRun
+            job = Job.ShortRun
                 .WithUnrollFactor(1)
                 .WithStrategy(RunStrategy.Throughput);
-
-            // Due to the error building the external process, we need to use the in-process emit toolchain.
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
-            }
-
-            AddJob(job);
-
-            // Does not run JSON tests in this configuration.
-            AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
         }
-        else
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            AddJob(Job.Default
-                .WithIterationCount(10)
-                .WithUnrollFactor(1)
-                .WithInvocationCount(10)
-                .WithWarmupCount(5)
-                .WithStrategy(RunStrategy.Throughput)
-                .WithArguments([
-                    new MsBuildArgument("/p:Platform=" + BenchmarkHelpers.GetPlatformString())
-                ]));
+            // Due to the error building the external process in the github-hosted runners,
+            // we need to use the in-process emit toolchain
+            job = job.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromMinutes(30), true));
         }
+
+        AddJob(job);
 
         // Cannot be run without a valid RTI Connext license.
         AddFilter(new NameFilter(n => !n.Contains("RTI", StringComparison.CurrentCultureIgnoreCase)));
+
+        // Does not run JSON tests
+        AddFilter(new NameFilter(n => !n.Contains("JSON", StringComparison.CurrentCultureIgnoreCase)));
 
         AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
         AddColumn(new ThroughputPerSecondColumn());
