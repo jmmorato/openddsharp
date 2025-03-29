@@ -68,7 +68,6 @@ internal class ThroughputTestConfiguration : ManualConfig
         AddExporter(CsvExporter.Default);
         AddExporter(MarkdownExporter.Default);
         AddExporter(JsonExporter.FullCompressed);
-        AddExporter(CsvMeasurementsExporter.Default);
         AddExporter(RPlotExporter.Default);
 
         // Increase the build timeout to 30 minutes
