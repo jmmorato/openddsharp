@@ -241,7 +241,7 @@ switch (input)
         };
         LatencyTest.TotalInstancesValues = [100];
         LatencyTest.TotalSamplesValues = [20];
-        LatencyTest.TotalPayloadValues = [16_384, 32_768, 65_536];
+        LatencyTest.TotalPayloadValues = [8_192, 16_384, 32_768, 65_536];
         _ = BenchmarkRunner.Run<LatencyTest>(config);
 
         TransportRegistry.Instance.Release();
@@ -259,8 +259,8 @@ switch (input)
             ArtifactsPath = artifactsPath,
         };
 
-        ThroughputTest.TotalSamplesValues = [25_000];
-        ThroughputTest.TotalPayloadValues = [16_384, 32_768, 65_536];
+        ThroughputTest.TotalSamplesValues = [10_000];
+        ThroughputTest.TotalPayloadValues = [8_192, 16_384, 32_768, 65_536];
 
         _ = BenchmarkRunner.Run<ThroughputTest>(config);
 
