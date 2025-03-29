@@ -564,6 +564,7 @@ jobs:
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
+          auto-push: true
 
   latency_test_linux:
     needs: build_linux_native
@@ -749,6 +750,7 @@ jobs:
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
+          auto-push: true
 
   latency_test_macos:
     needs: build_macos_native
@@ -934,3 +936,4 @@ jobs:
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
+          auto-push: true
