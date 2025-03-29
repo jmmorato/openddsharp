@@ -532,21 +532,26 @@ jobs:
           dotnet publish ${{ github.workspace }}\Tests\BenchmarkPerformance\BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
 
           cd ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish
-          ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\BenchmarkPerformance.exe 2
+          ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\BenchmarkPerformance.exe -2
         continue-on-error: false
-
-#      - name: Store benchmark result
-#        uses: benchmark-action/github-action-benchmark@v1
-#        with:
-#          name: "Throughput Performance Test: ${{ matrix.os }} ${{ matrix.runtime }}"
-#          tool: 'benchmarkdotnet'
-#          output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
 
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: "Throughput ${{ matrix.os }} ${{ matrix.runtime }}"
+          tool: 'benchmarkdotnet'
+          output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          summary-always: true
+          alert-threshold: '200%'
+          comment-on-alert: true
+          skip-fetch-gh-pages: true
 
   latency_test_linux:
     needs: build_linux_native
@@ -703,23 +708,28 @@ jobs:
           dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
           dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish
-          sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance 2
+          sudo LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH" ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -2
           sudo chmod -R 777 ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
         working-directory: ${{ github.workspace }}
         continue-on-error: false
-
-#      - name: Store benchmark result
-#        uses: benchmark-action/github-action-benchmark@v1
-#        with:
-#          name: "Throughput Performance Test: ${{ matrix.os }} ${{ matrix.runtime }}"
-#          tool: 'benchmarkdotnet'
-#          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
 
       - name: Benchmark Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: "Throughput ${{ matrix.os }} ${{ matrix.runtime }}"
+          tool: 'benchmarkdotnet'
+          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          summary-always: true
+          alert-threshold: '200%'
+          comment-on-alert: true
+          skip-fetch-gh-pages: true
 
   latency_test_macos:
     needs: build_macos_native
@@ -876,7 +886,7 @@ jobs:
           sudo env DYLD_LIBRARY_PATH="./:$DYLD_LIBRARY_PATH"
           sudo env DYLD_FALLBACK_LIBRARY_PATH="./:$DYLD_FALLBACK_LIBRARY_PATH"
           cd ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish
-          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance 2
+          sudo -E ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/BenchmarkPerformance -2
           sudo chmod -R 777 ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
         working-directory: ${{ github.workspace }}
         continue-on-error: false
@@ -886,3 +896,15 @@ jobs:
         with:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: "Throughput ${{ matrix.os }} ${{ matrix.runtime }}"
+          tool: 'benchmarkdotnet'
+          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          summary-always: true
+          alert-threshold: '200%'
+          comment-on-alert: true
+          skip-fetch-gh-pages: true
