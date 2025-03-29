@@ -20,6 +20,8 @@
 #      href: transports.md
 #    - name: Built-in Topics
 #      href: built_in_topics.md
+#- name: How to build OpenDDSharp
+#  href: how_to_build.md
 - name: IDL to C# Mapping
   href: idl.md
 - name: Performance Tests

@@ -1,4 +1,4 @@
-[![Continuous Integration](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml/badge.svg?branch=develop)](https://github.com/jmmorato/openddsharp/actions/workflows/ci_standard.yaml)
+[![Continuous Deployment](https://github.com/jmmorato/openddsharp/actions/workflows/cd_workflow.yaml/badge.svg?branch=develop)](https://github.com/jmmorato/openddsharp/actions/workflows/cd_workflow.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/jmmorato/openddsharp/badge.svg?branch=develop)](https://coveralls.io/github/jmmorato/openddsharp?branch=develop)
 ![GitHub Sponsor](https://img.shields.io/github/sponsors/jmmorato?label=Sponsor&logo=GitHub)
 

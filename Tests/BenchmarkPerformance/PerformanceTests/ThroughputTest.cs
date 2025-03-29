@@ -37,14 +37,24 @@ public class ThroughputTest
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(10_000, 20_000)]
+    [ParamsSource(nameof(TotalSamplesValues))]
     public int TotalSamples { get; set; }
+
+    /// <summary>
+    /// Gets or sets the current number of samples for the test.
+    /// </summary>
+    public static IEnumerable<int> TotalSamplesValues { get; set;  }
 
     /// <summary>
     /// Gets or sets the payload size for the test.
     /// </summary>
-    [Params(2048, 4096, 8192)]
+    [ParamsSource(nameof(TotalPayloadValues))]
     public ulong TotalPayload { get; set; }
+
+    /// <summary>
+    /// Gets or sets the payload size for the test.
+    /// </summary>
+    public static IEnumerable<ulong> TotalPayloadValues { get; set;  }
 
     [GlobalSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
     public void OpenDDSharpCDRGlobalSetup()

@@ -37,20 +37,35 @@ public class LatencyTest
     /// <summary>
     /// Gets or sets the current number of instance for the test.
     /// </summary>
-    [Params(100)]
+    [ParamsSource(nameof(TotalInstancesValues))]
     public int TotalInstances { get; set; }
+
+    /// <summary>
+    /// Gets or sets the  number of instance for the test.
+    /// </summary>
+    public static IEnumerable<int> TotalInstancesValues { get; set; }
+
+    /// <summary>
+    /// Gets or sets the current number of instance for the test.
+    /// </summary>
+    [ParamsSource(nameof(TotalSamplesValues))]
+    public int TotalSamples { get; set; }
 
     /// <summary>
     /// Gets or sets the current number of samples for the test.
     /// </summary>
-    [Params(20)]
-    public int TotalSamples { get; set; }
+    public static IEnumerable<int> TotalSamplesValues { get; set;  }
 
     /// <summary>
     /// Gets or sets the payload size for the test.
     /// </summary>
-    [Params(2048, 4096, 8192)]
+    [ParamsSource(nameof(TotalPayloadValues))]
     public ulong TotalPayload { get; set; }
+
+    /// <summary>
+    /// Gets or sets the payload size for the test.
+    /// </summary>
+    public static IEnumerable<ulong> TotalPayloadValues { get; set;  }
 
     [GlobalSetup(Target = nameof(OpenDDSharpCDRLatencyTest))]
     public void OpenDDSharpGlobalSetupCDR()

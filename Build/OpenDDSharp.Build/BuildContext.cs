@@ -201,6 +201,10 @@ namespace OpenDDSharp.Build
         /// <param name="context">The context parameter.</param>
         public BuildContext(ICakeContext context) : base(context)
         {
+            foreach (var arg in context.Arguments.GetArguments())
+            {
+                Console.WriteLine(arg.Key + ": " + arg.Value);
+            }
             if (context.Arguments.HasArgument(nameof(IgnoreThirdPartySetup)))
             {
                 IgnoreThirdPartySetup = bool.Parse(context.Arguments.GetArgument(nameof(IgnoreThirdPartySetup)));
