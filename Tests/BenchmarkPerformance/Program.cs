@@ -116,7 +116,7 @@ switch (input)
             ArtifactsPath = artifactsPath,
         };
 
-        ThroughputTest.TotalSamplesValues = [20_000];
+        ThroughputTest.TotalSamplesValues = [10_000];
         ThroughputTest.TotalPayloadValues = [2_048, 4_096, 8_192];
 
         _ = BenchmarkRunner.Run<ThroughputTest>(config);

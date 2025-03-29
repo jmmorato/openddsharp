@@ -546,12 +546,20 @@ jobs:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
 
+      # Download previous benchmark result from cache (if exists)
+      - name: Download previous benchmark data
+        uses: actions/cache@v4
+        with:
+          path: .\cache
+          key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
+
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: "Throughput ${{ matrix.os }} ${{ matrix.runtime }}"
+          name: "throughput_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
@@ -723,12 +731,20 @@ jobs:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
+      # Download previous benchmark result from cache (if exists)
+      - name: Download previous benchmark data
+        uses: actions/cache@v4
+        with:
+          path: ./cache
+          key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
+
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: "Throughput ${{ matrix.os }} ${{ matrix.runtime }}"
+          name: "throughput_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
@@ -900,12 +916,20 @@ jobs:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
+      # Download previous benchmark result from cache (if exists)
+      - name: Download previous benchmark data
+        uses: actions/cache@v4
+        with:
+          path: ./cache
+          key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
+
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: "Throughput ${{ matrix.os }} ${{ matrix.runtime }}"
+          name: "throughput_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
