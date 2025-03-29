@@ -5,6 +5,11 @@ on:
     - cron: '0 1 * * SUN'
   pull_request:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: false
+        default: ''
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
