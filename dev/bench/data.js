@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743322103296,
+  "lastUpdate": 1743322234949,
   "repoUrl": "https://github.com/jmmorato/openddsharp",
   "entries": {
     "throughput_ubuntu-22.04-arm_linux-arm64": [
@@ -550,6 +550,76 @@ window.BENCHMARK_DATA = {
             "value": 2168769041,
             "unit": "ns",
             "range": "± 88699145.45208456"
+          }
+        ]
+      }
+    ],
+    "latency_ubuntu-22.04_linux-x64": [
+      {
+        "commit": {
+          "author": {
+            "name": "jmmorato",
+            "username": "jmmorato"
+          },
+          "committer": {
+            "name": "jmmorato",
+            "username": "jmmorato"
+          },
+          "id": "59831f7f05a3064f3b09ae765027f0dbdd082e4c",
+          "message": "[feature] Continuous Benchmarking workflow",
+          "timestamp": "2025-03-27T17:21:01Z",
+          "url": "https://github.com/jmmorato/openddsharp/pull/285/commits/59831f7f05a3064f3b09ae765027f0dbdd082e4c"
+        },
+        "date": 1743322234588,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSNativeLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 8192)",
+            "value": 572349841.1899999,
+            "unit": "ns",
+            "range": "± 9544375.938388318"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSharpCDRLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 8192)",
+            "value": 804177534.78,
+            "unit": "ns",
+            "range": "± 19822401.984815657"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSNativeLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 16384)",
+            "value": 628661358.26,
+            "unit": "ns",
+            "range": "± 23900891.13332461"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSharpCDRLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 16384)",
+            "value": 791810282.825,
+            "unit": "ns",
+            "range": "± 14499763.584213383"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSNativeLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 32768)",
+            "value": 679008382.0277778,
+            "unit": "ns",
+            "range": "± 10085953.852900896"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSharpCDRLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 32768)",
+            "value": 940810257.61,
+            "unit": "ns",
+            "range": "± 24028962.199632227"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSNativeLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 65536)",
+            "value": 816235756.61,
+            "unit": "ns",
+            "range": "± 23234137.05845233"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest.OpenDDSharpCDRLatencyTest(TotalInstances: 100, TotalSamples: 20, TotalPayload: 65536)",
+            "value": 1025361826.8199999,
+            "unit": "ns",
+            "range": "± 25445639.11531484"
           }
         ]
       }
