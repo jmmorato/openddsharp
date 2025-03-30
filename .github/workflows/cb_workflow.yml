@@ -1,6 +1,10 @@
 name: Continuous Benchmarking
 
 on:
+  push:
+    branches:
+      - develop
+      - main
   schedule:
     - cron: '0 1 * * SUN'
   pull_request:
@@ -387,6 +391,7 @@ jobs:
       DDS_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}"
       ACE_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers"
       TAO_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers\\TAO"
+      COMPlus_JITMinOpts: "1"
 
     steps:
       - uses: actions/checkout@v4
@@ -470,12 +475,11 @@ jobs:
           name: "latency_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest-report-full-compressed.json
-#          external-data-json-path: .\cache\benchmark-data.json
+          external-data-json-path: .\cache\benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
-          auto-push: true
 
   throughput_performance_test_windows:
     needs: build_windows_native
@@ -578,12 +582,11 @@ jobs:
           name: "throughput_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
-#          external-data-json-path: ./cache/benchmark-data.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
-          auto-push: true
 
   latency_test_linux:
     needs: build_linux_native
@@ -680,12 +683,11 @@ jobs:
           name: "latency_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest-report-full-compressed.json
-#          external-data-json-path: ./cache/benchmark-data.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
-          auto-push: true
 
   throughput_test_linux:
     needs: build_linux_native
@@ -783,12 +785,11 @@ jobs:
           name: "throughput_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
-#          external-data-json-path: ./cache/benchmark-data.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
-          auto-push: true
 
   latency_test_macos:
     needs: build_macos_native
@@ -885,12 +886,11 @@ jobs:
           name: "latency_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest-report-full-compressed.json
-#          external-data-json-path: ./cache/benchmark-data.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
-          auto-push: true
 
   throughput_test_macos:
     needs: build_macos_native
@@ -987,9 +987,8 @@ jobs:
           name: "throughput_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
           output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
-#          external-data-json-path: ./cache/benchmark-data.json
+          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
           alert-threshold: '200%'
           comment-on-alert: true
-          auto-push: true
