@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1743255028992,
+  "lastUpdate": 1743321620098,
   "repoUrl": "https://github.com/jmmorato/openddsharp",
   "entries": {
     "throughput_ubuntu-22.04-arm_linux-arm64": [
@@ -278,6 +278,74 @@ window.BENCHMARK_DATA = {
             "value": 2157321398,
             "unit": "ns",
             "range": "± 175280816.20224702"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "jmmorato",
+            "username": "jmmorato"
+          },
+          "committer": {
+            "name": "jmmorato",
+            "username": "jmmorato"
+          },
+          "id": "59831f7f05a3064f3b09ae765027f0dbdd082e4c",
+          "message": "[feature] Continuous Benchmarking workflow",
+          "timestamp": "2025-03-27T17:21:01Z",
+          "url": "https://github.com/jmmorato/openddsharp/pull/285/commits/59831f7f05a3064f3b09ae765027f0dbdd082e4c"
+        },
+        "date": 1743321617498,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSNativeThroughputTest(TotalSamples: 10000, TotalPayload: 8192)",
+            "value": 383533475.5555556,
+            "unit": "ns",
+            "range": "± 6820285.407836887"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSharpCDRThroughputTest(TotalSamples: 10000, TotalPayload: 8192)",
+            "value": 302611939,
+            "unit": "ns",
+            "range": "± 18931304.608020842"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSNativeThroughputTest(TotalSamples: 10000, TotalPayload: 16384)",
+            "value": 426306165,
+            "unit": "ns",
+            "range": "± 5618012.686547212"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSharpCDRThroughputTest(TotalSamples: 10000, TotalPayload: 16384)",
+            "value": 500189800,
+            "unit": "ns",
+            "range": "± 6194717.350166764"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSNativeThroughputTest(TotalSamples: 10000, TotalPayload: 32768)",
+            "value": 645669297,
+            "unit": "ns",
+            "range": "± 7079088.621102138"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSharpCDRThroughputTest(TotalSamples: 10000, TotalPayload: 32768)",
+            "value": 1142485357,
+            "unit": "ns",
+            "range": "± 38890607.575030535"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSNativeThroughputTest(TotalSamples: 10000, TotalPayload: 65536)",
+            "value": 794027141,
+            "unit": "ns",
+            "range": "± 114363723.3043463"
+          },
+          {
+            "name": "OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest.OpenDDSharpCDRThroughputTest(TotalSamples: 10000, TotalPayload: 65536)",
+            "value": 2168769041,
+            "unit": "ns",
+            "range": "± 88699145.45208456"
           }
         ]
       }
