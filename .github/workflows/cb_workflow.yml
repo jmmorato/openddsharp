@@ -469,7 +469,7 @@ jobs:
         with:
           name: "latency_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          output-file-path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results\OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest-report-full-compressed.json
 #          external-data-json-path: .\cache\benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
@@ -679,7 +679,7 @@ jobs:
         with:
           name: "latency_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest-report-full-compressed.json
 #          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
@@ -884,7 +884,7 @@ jobs:
         with:
           name: "latency_${{ matrix.os }}_${{ matrix.runtime }}"
           tool: 'benchmarkdotnet'
-          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.ThroughputTest-report-full-compressed.json
+          output-file-path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results/OpenDDSharp.BenchmarkPerformance.PerformanceTests.LatencyTest-report-full-compressed.json
 #          external-data-json-path: ./cache/benchmark-data.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           summary-always: true
