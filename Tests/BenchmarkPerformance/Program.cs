@@ -278,8 +278,8 @@ switch (input)
         {
             ArtifactsPath = artifactsPath,
         };
-        LatencyTest.TotalInstancesValues = [1000];
-        LatencyTest.TotalSamplesValues = [10, 20, 30];
+        LatencyTest.TotalInstancesValues = [100];
+        LatencyTest.TotalSamplesValues = [10, 20, 30, 40, 50];
         LatencyTest.TotalPayloadValues = [16_384];
         _ = BenchmarkRunner.Run<LatencyTest>(config);
 
@@ -298,7 +298,7 @@ switch (input)
             ArtifactsPath = artifactsPath,
         };
 
-        ThroughputTest.TotalSamplesValues = [50_000, 100_000, 150_000, 200_000];
+        ThroughputTest.TotalSamplesValues = [5_000, 10_000, 15_000, 20_000];
         ThroughputTest.TotalPayloadValues = [16_384];
 
         _ = BenchmarkRunner.Run<ThroughputTest>(config);
