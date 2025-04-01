@@ -138,10 +138,19 @@ void LatencyTest::run() {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { 10, 0 };
 
+      int timeout = 5;
       auto ret = this->wait_set_->wait(active_conditions, duration);
-      if (ret != DDS::RETCODE_OK) {
-        std::cout << "Error waiting for samples" << ret << ": " << this->samples_received_ << std::endl;
-        throw std::runtime_error("Error waiting for samples.");
+      while (ret != DDS::RETCODE_OK && timeout > 0) {
+        std::cout << "Error waiting for samples: " << ret << std::endl;
+        timeout--;
+
+        duration = { 10, 0 };
+        ret = this->wait_set_->wait(active_conditions, duration);
+      }
+
+      if (ret != DDS::RETCODE_OK || timeout == 0) {
+        std::cout << "Timeout waiting for samples: " << this->samples_received_ << std::endl;
+        throw std::runtime_error("Timeout waiting for samples.");
       }
 
       OpenDDSNative::KeyedOctetsSeq samples;
