@@ -19,8 +19,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "latency_test.h"
 
-#include <dds/DCPS/RTPS/RtpsCoreC.h>
-
 void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
                              const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
 
@@ -121,6 +119,7 @@ void LatencyTest::run() {
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
         this->notified_ = false;
+        u_lock.unlock();
 
         const auto t_end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
@@ -138,6 +137,7 @@ void LatencyTest::run() {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { 10, 0 };
 
+
       int timeout = 5;
       auto ret = this->wait_set_->wait(active_conditions, duration);
       while (ret != DDS::RETCODE_OK && timeout > 0) {
@@ -153,6 +153,7 @@ void LatencyTest::run() {
         throw std::runtime_error("Timeout waiting for samples.");
       }
 
+      std::unique_lock<std::mutex> lk(mtx_);
       OpenDDSNative::KeyedOctetsSeq samples;
       DDS::SampleInfoSeq infos;
 
@@ -172,6 +173,7 @@ void LatencyTest::run() {
       this->data_reader_->return_loan(samples, infos);
 
       this->notified_ = true;
+      lk.unlock();
       this->cv_.notify_one();
 
       if (this->samples_received_ >= total) {
