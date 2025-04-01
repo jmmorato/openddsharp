@@ -119,12 +119,13 @@ void LatencyTest::run() {
         std::unique_lock<std::mutex> u_lock(this->mtx_);
         this->cv_.wait(u_lock, [this] { return this->notified_; });
         this->notified_ = false;
-        u_lock.unlock();
 
         const auto t_end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
 
         this->latencies_.push_back(duration.count());
+
+        u_lock.unlock();
       }
     }
   });
@@ -136,7 +137,6 @@ void LatencyTest::run() {
     while (true) {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { 10, 0 };
-
 
       int timeout = 5;
       auto ret = this->wait_set_->wait(active_conditions, duration);

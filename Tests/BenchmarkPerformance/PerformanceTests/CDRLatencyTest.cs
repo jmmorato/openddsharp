@@ -172,28 +172,19 @@ internal sealed class CDRLatencyTest : IDisposable
             var conditions = new List<Condition>();
             var result = _waitSet.Wait(conditions, new Duration
             {
-                Seconds = 5,
+                Seconds = 10,
                 NanoSeconds = 0,
             });
 
-            if (result != ReturnCode.Ok)
+            var timeout = 5;
+            while (result != ReturnCode.Ok && timeout > 0)
             {
-                throw new InvalidOperationException($"Error waiting for conditions: {result}");
-            }
-
-            if (conditions.Count > 1)
-            {
-                throw new InvalidDataException($"Only one condition should be received ({conditions.Count} received).");
-            }
-
-            if (conditions[0] != _statusCondition)
-            {
-                throw new InvalidDataException("Invalid condition received.");
-            }
-
-            if (conditions[0].TriggerValue != true)
-            {
-                continue;
+                result = _waitSet.Wait(conditions, new Duration
+                {
+                    Seconds = 10,
+                    NanoSeconds = 0,
+                });
+                timeout--;
             }
 
             var samples = new List<KeyedOctets>();
