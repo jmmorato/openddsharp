@@ -7,8 +7,8 @@
 ### Bug Fixes
 
 - Copy TAO libraries required by `opendds_idl` to the DDS bin folder [#281](https://github.com/jmmorato/openddsharp/pull/281)
-- Fixed linux-x64 native build (ubuntu-20.04) [#282](https://github.com/jmmorato/openddsharp/pull/282)\
-  - Tested on Ubuntu 20.04, 22.04 and 24.04
+- Fixed linux-x64 native build (ubuntu-22.04) [#282](https://github.com/jmmorato/openddsharp/pull/282)
+  - Tested on Ubuntu 22.04 and 24.04
 
 # OpenDDSharp v3.310.1
 

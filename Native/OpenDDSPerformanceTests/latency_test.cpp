@@ -19,8 +19,6 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************/
 #include "latency_test.h"
 
-#include <dds/DCPS/RTPS/RtpsCoreC.h>
-
 void LatencyTest::initialize(const CORBA::ULong total_instances, const CORBA::ULong total_samples,
                              const CORBA::ULong payload_size, DDS::DomainParticipant_ptr participant) {
 
@@ -126,6 +124,8 @@ void LatencyTest::run() {
         auto duration = std::chrono::duration<double, std::milli>(t_end - t_start);
 
         this->latencies_.push_back(duration.count());
+
+        u_lock.unlock();
       }
     }
   });
@@ -138,12 +138,22 @@ void LatencyTest::run() {
       DDS::ConditionSeq active_conditions;
       DDS::Duration_t duration = { 10, 0 };
 
+      int timeout = 5;
       auto ret = this->wait_set_->wait(active_conditions, duration);
-      if (ret != DDS::RETCODE_OK) {
-        std::cout << "Error waiting for samples" << ret << ": " << this->samples_received_ << std::endl;
-        throw std::runtime_error("Error waiting for samples.");
+      while (ret != DDS::RETCODE_OK && timeout > 0) {
+        std::cout << "Error waiting for samples: " << ret << std::endl;
+        timeout--;
+
+        duration = { 10, 0 };
+        ret = this->wait_set_->wait(active_conditions, duration);
       }
 
+      if (ret != DDS::RETCODE_OK || timeout == 0) {
+        std::cout << "Timeout waiting for samples: " << this->samples_received_ << std::endl;
+        throw std::runtime_error("Timeout waiting for samples.");
+      }
+
+      std::unique_lock<std::mutex> lk(mtx_);
       OpenDDSNative::KeyedOctetsSeq samples;
       DDS::SampleInfoSeq infos;
 
@@ -163,6 +173,7 @@ void LatencyTest::run() {
       this->data_reader_->return_loan(samples, infos);
 
       this->notified_ = true;
+      lk.unlock();
       this->cv_.notify_one();
 
       if (this->samples_received_ >= total) {
