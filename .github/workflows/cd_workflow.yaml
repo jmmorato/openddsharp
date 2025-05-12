@@ -1000,9 +1000,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        configuration:
-          - Release
-          - Debug
         include:
           - os: windows-2019
             runtime: win-x86
