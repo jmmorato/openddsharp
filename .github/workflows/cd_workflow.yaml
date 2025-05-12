@@ -1004,39 +1004,50 @@ jobs:
           - os: windows-2019
             runtime: win-x86
             build_platform: x86
+            configuration: [Release, Debug]
           - os: windows-2019
             runtime: win-x64
             build_platform: x64
+            configuration: [ Release, Debug ]
           - os: windows-2022
             runtime: win-x86
             build_platform: x86
+            configuration: [ Release, Debug ]
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
+            configuration: [ Release, Debug ]
           - os: windows-2025
             runtime: win-x64
             build_platform: x64
+            configuration: [ Release, Debug ]
           - os: windows-2025
             runtime: win-x86
             build_platform: x86
+            configuration: [ Release, Debug ]
           - os: ubuntu-22.04
             runtime: linux-x64
             build_platform: x64
+            configuration: [ Release, Debug ]
           - os: ubuntu-24.04
             runtime: linux-x64
             build_platform: x64
+            configuration: [ Release, Debug ]
           - os: ubuntu-22.04-arm
             runtime: linux-arm64
             build_platform: ARM64
           - os: ubuntu-24.04-arm
             runtime: linux-arm64
             build_platform: ARM64
+            configuration: [ Release, Debug ]
           - os: macos-13
             runtime: osx-x64
             build_platform: x64
+            configuration: [ Release, Debug ]
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
+            configuration: [ Release, Debug ]
 # Issues with macos-15 found, waiting for official image review to fix it
 #          - os: macos-15
 #            runtime: osx-arm64
@@ -1091,7 +1102,7 @@ jobs:
           Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/Test.idl" -Destination "./IDL" -Force
           Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/TestInclude.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build Test.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          dotnet build Test.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
           dotnet clean Test.csproj
           cd ..
           New-Item -Path "." -Name "TestConsole" -ItemType "directory"
@@ -1101,7 +1112,7 @@ jobs:
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/Program.cs" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          dotnet build TestConsole.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
           
           $publishFolder = "${{ github.workspace }}/Publish/"
           $executable = "TestConsole"
@@ -1110,7 +1121,7 @@ jobs:
               $publishFolder = "${{ github.workspace }}\Publish\"
               $executable += ".exe"
           }
-          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration Release --runtime ${{ matrix.runtime }} --self-contained
+          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained
           cd ${{ github.workspace }}
 
           $pinfo = New-Object System.Diagnostics.ProcessStartInfo
