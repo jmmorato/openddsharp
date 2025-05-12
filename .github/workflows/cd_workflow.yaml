@@ -1000,54 +1000,44 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        configuration: [ Debug, Release ]
         include:
           - os: windows-2019
             runtime: win-x86
-            build_platform: x86
-            configuration: [Release, Debug]
+            build_platform: x86            
           - os: windows-2019
             runtime: win-x64
-            build_platform: x64
-            configuration: [ Release, Debug ]
+            build_platform: x64            
           - os: windows-2022
             runtime: win-x86
-            build_platform: x86
-            configuration: [ Release, Debug ]
+            build_platform: x86            
           - os: windows-2022
             runtime: win-x64
-            build_platform: x64
-            configuration: [ Release, Debug ]
+            build_platform: x64            
           - os: windows-2025
             runtime: win-x64
-            build_platform: x64
-            configuration: [ Release, Debug ]
+            build_platform: x64            
           - os: windows-2025
             runtime: win-x86
-            build_platform: x86
-            configuration: [ Release, Debug ]
+            build_platform: x86            
           - os: ubuntu-22.04
             runtime: linux-x64
-            build_platform: x64
-            configuration: [ Release, Debug ]
+            build_platform: x64            
           - os: ubuntu-24.04
             runtime: linux-x64
-            build_platform: x64
-            configuration: [ Release, Debug ]
+            build_platform: x64            
           - os: ubuntu-22.04-arm
             runtime: linux-arm64
             build_platform: ARM64
           - os: ubuntu-24.04-arm
             runtime: linux-arm64
-            build_platform: ARM64
-            configuration: [ Release, Debug ]
+            build_platform: ARM64            
           - os: macos-13
             runtime: osx-x64
-            build_platform: x64
-            configuration: [ Release, Debug ]
+            build_platform: x64            
           - os: macos-14
             runtime: osx-arm64
-            build_platform: ARM64
-            configuration: [ Release, Debug ]
+            build_platform: ARM64            
 # Issues with macos-15 found, waiting for official image review to fix it
 #          - os: macos-15
 #            runtime: osx-arm64
