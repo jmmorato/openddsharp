@@ -18,8 +18,8 @@
     <RootNamespace>TestIdlCdr</RootNamespace>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CmakeGenerator Condition="'$(IsWindows)'=='true'">Visual Studio 17 2022</CmakeGenerator>
-    <CmakeGenerator Condition="'$(IsWindows)'=='true' And '$(VisualStudioMajorVersion)'=='16'">Visual Studio 16 2019</CmakeGenerator>
+    <CmakeGenerator Condition="'$(IsWindows)'=='true' And '$(VisualStudioVersion)'=='17.0'">Visual Studio 17 2022</CmakeGenerator>
+    <CmakeGenerator Condition="'$(IsWindows)'=='true' And '$(VisualStudioVersion)'=='16.0'">Visual Studio 16 2019</CmakeGenerator>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
