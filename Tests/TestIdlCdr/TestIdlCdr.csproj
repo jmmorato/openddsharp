@@ -232,7 +232,7 @@
   <!--Build cmake-->
   <Target Name="OpenDDSharpConfigureBuildCmakeWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\$(ProjectName).dll')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Configure cmake project..." Importance="High" />
-    <Exec Command="cmake --build . --config $(Configuration)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="cmake --build . --config Release" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpConfigureBuildCmakeLinux" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\lib$(ProjectName).so')" Condition="'$(IsLinux)'=='true'">
     <Message Text="Configure cmake project..." Importance="High" />
