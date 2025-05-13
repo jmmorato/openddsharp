@@ -9,8 +9,6 @@
     <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
     <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CmakeGenerator Condition="'$(IsWindows)'=='true' And '$(VisualStudioVersion)'=='17.0'">Visual Studio 17 2022</CmakeGenerator>
-    <CmakeGenerator Condition="'$(IsWindows)'=='true' And '$(VisualStudioVersion)'=='16.0'">Visual Studio 16 2019</CmakeGenerator>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(RuntimeIdentifier)'=='win-x64' Or '$(Platform)'=='x64'">
@@ -199,11 +197,11 @@
   <!--Create cmake-->
   <Target Name="OpenDDSharpCmakeOpenddsx64" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x64' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec Command="cmake -DCMAKE_BUILD_TYPE:STRING=&quot;$(Configuration)&quot; -DCMAKE_PREFIX_PATH:STRING=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake -DCMAKE_BUILD_TYPE:STRING=&quot;Release&quot; -DCMAKE_PREFIX_PATH:STRING=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A x64 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsx86" BeforeTargets="PreBuildEvent" Condition="'$(PlatformFolder)'=='x86' And '$(IsWindows)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
-	  <Exec Command="cmake -DCMAKE_BUILD_TYPE:STRING=&quot;$(Configuration)&quot; -DCMAKE_PREFIX_PATH:STRING=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -G &quot;$(CmakeGenerator)&quot; -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+	  <Exec Command="cmake -DCMAKE_BUILD_TYPE:STRING=&quot;Release&quot; -DCMAKE_PREFIX_PATH:STRING=&quot;$(DDS_ROOT.Replace('\', '/'))&quot; -DOPENDDS_ACE=&quot;$(ACE_ROOT.Replace('\', '/'))&quot; -DOPENDDS_TAO=&quot;$(TAO_ROOT.Replace('\', '/'))&quot; -DOPENDDS_RAPIDJSON=&quot;$(RAPIDJSON_ROOT.Replace('\', '/'))&quot; -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A Win32 -S. -B." WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpCmakeOpenddsLinux" BeforeTargets="PreBuildEvent" Condition="'$(IsLinux)'=='true'" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\$(IntermediateOutputPath)NativeProject\CMakeFiles\CMakeOutput.log')">
 	  <Message Text="Creating native project with cmake..." Importance="High" />
