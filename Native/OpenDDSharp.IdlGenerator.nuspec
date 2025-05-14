@@ -326,7 +326,7 @@
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\orbsvcs\**\*.idl" target="tools\ACE_osx-arm64\TAO\orbsvcs" />
     <file src="..\ext\OpenDDS_osx-arm64\ACE_wrappers\TAO\orbsvcs\**\*.cpp" target="tools\ACE_osx-arm64\TAO\orbsvcs" />
 
-    <!--Required OpenDDS libraries x86-->
+    <!--Required OpenDDS libraries Release x86-->
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\ACE.lib" target="tools\ACE_x86\lib" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO.lib" target="tools\ACE_x86\lib" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_AnyTypeCode.lib" target="tools\ACE_x86\lib" />
@@ -348,7 +348,29 @@
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Udp.lib" target="tools\DDS_x86\lib" />
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.lib" target="tools\DDS_x86\lib" />
 
-    <!--Required OpenDDS libraries x64-->
+    <!--Required OpenDDS libraries Debug x86-->
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\ACEd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAOd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_AnyTypeCoded.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_PortableServerd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_CodecFactoryd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_PId.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_BiDirGIOPd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_Valuetyped.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_IDL_FEd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_IDL_BEd.lib" target="tools\ACE_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Dcpsd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Rtpsd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoLibd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_InfoRepoDiscoveryd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Rtps_Udpd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Shmemd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Tcpd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Multicastd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Udpd.lib" target="tools\DDS_x86\lib" />
+    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Utild.lib" target="tools\DDS_x86\lib" />
+
+    <!--Required OpenDDS libraries x64 Release-->
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\ACE.lib" target="tools\ACE_x64\lib" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO.lib" target="tools\ACE_x64\lib" />
     <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_AnyTypeCode.lib" target="tools\ACE_x64\lib" />
@@ -369,6 +391,28 @@
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Multicast.lib" target="tools\DDS_x64\lib" />
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Udp.lib" target="tools\DDS_x64\lib" />
     <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Util.lib" target="tools\DDS_x64\lib" />
+
+    <!--Required OpenDDS libraries x64 Debug-->
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\ACEd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAOd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_AnyTypeCoded.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_PortableServerd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_CodecFactoryd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_PId.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_BiDirGIOPd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_Valuetyped.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_IDL_FEd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\ACE_wrappers\lib\TAO_IDL_BEd.lib" target="tools\ACE_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Dcpsd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Rtpsd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoLibd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_InfoRepoDiscovery.libd" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Rtps_Udpd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Shmemd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Tcpd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Multicastd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Udpd.lib" target="tools\DDS_x64\lib" />
+    <file src="..\ext\OpenDDS_x64\lib\OpenDDS_Utild.lib" target="tools\DDS_x64\lib" />
 
     <!--Required OpenDDS libraries linux-x64-->
     <file src="..\ext\OpenDDS_linux-x64\ACE_wrappers\ace\libACE.so*" target="tools\ACE_linux-x64\lib" />
