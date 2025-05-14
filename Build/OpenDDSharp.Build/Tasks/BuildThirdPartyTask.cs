@@ -40,12 +40,7 @@ public class BuildThirdPartyTask : FrostingTask<BuildContext>
     /// <inheritdoc/>
     public override bool ShouldRun(BuildContext context)
     {
-        if (context.IgnoreThirdPartyBuild)
-        {
-            return false;
-        }
-
-        return true;
+        return !context.IgnoreThirdPartyBuild;
     }
 
     /// <inheritdoc/>
@@ -61,7 +56,13 @@ public class BuildThirdPartyTask : FrostingTask<BuildContext>
         }
 
         var vsVersion = "2022";
+
         var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        if (context.BuildPlatform == PlatformTarget.x86)
+        {
+            programFiles = Path.Combine("C:", "Program Files");
+        }
+
         if (context.VisualStudioVersion == MSBuildToolVersion.VS2019)
         {
             vsVersion = "2019";
