@@ -28,7 +28,6 @@ elseif (UNIX)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG")
 endif ()
 
-
 OPENDDS_TARGET_SOURCES(OpenDDSTestData
         PUBLIC
             TestData.idl
