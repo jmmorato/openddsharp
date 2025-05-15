@@ -97,15 +97,9 @@ namespace OpenDDSharp.Build.Tasks
                     { "TAO_ROOT", Path.GetFullPath(context.TaoRoot).TrimEnd(Path.DirectorySeparatorChar) },
                     { "MPC_ROOT", Path.GetFullPath(context.MpcRoot).TrimEnd(Path.DirectorySeparatorChar) },
                 },
+                Configuration = "Release",
             };
-            if (BuildContext.IsWindows)
-            {
-                buildSettings.Configuration = context.BuildConfiguration;
-            }
-            else
-            {
-                buildSettings.Configuration = "Release";
-            }
+
             context.CMakeBuild(buildSettings);
         }
     }
