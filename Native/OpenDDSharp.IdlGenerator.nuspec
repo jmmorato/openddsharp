@@ -37,7 +37,6 @@
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_AnyTypeCode.dll" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\lib\TAO_CodecFactory.dll" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.dll" target="tools\DDS_x86\bin" />
-    <file src="..\ext\OpenDDS_x86\lib\OpenDDS_Util.dll" target="tools\DDS_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\VERSION.txt" target="tools\ACE_x86\" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\bin\tao_idl.exe" target="tools\ACE_x86\bin" />
     <file src="..\ext\OpenDDS_x86\ACE_wrappers\bin\ace_gperf.exe" target="tools\ACE_x86\bin" />
