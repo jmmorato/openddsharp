@@ -39,8 +39,8 @@ namespace ConsoleDemo
             Ace.Init();
 
             Console.WriteLine("Get domain participant factory...");
-            var dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini",
-                "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10");
+            // Debug parameters: "-DCPSDebugLevel", "10", "-ORBLogFile", "LogFile.log", "-ORBDebugLevel", "10"
+            var dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSConfigFile", "rtps.ini");
             if (dpf == null)
             {
                 Console.Error.WriteLine("Domain participant factory could NOT be created.");
