@@ -74,7 +74,7 @@ namespace OpenDDSharp.Build.Tasks
             {
                 SourcePath = nativeFolder,
                 OutputPath = buildFolder,
-                ArgumentCustomization = args => arguments,
+                ArgumentCustomization = _ => arguments,
                 WorkingDirectory = nativeFolder,
                 EnvironmentVariables =
                 {
