@@ -1160,7 +1160,9 @@ jobs:
           cd TestConsole
           dotnet new openddsharp-console-app
           Remove-Item Program.cs
+          Remove-Item rtps.ini
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/Program.cs" -Destination "."
+          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/rtps.ini" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build TestConsole.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
