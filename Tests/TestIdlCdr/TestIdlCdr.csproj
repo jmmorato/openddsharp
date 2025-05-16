@@ -271,7 +271,7 @@
 
   <ItemGroup>
 	<!-- OpenDDS native Libraries -->
-	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlCdrWrapper.dll" Visible="false" />
+	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\Release\TestIdlCdrWrapper.dll" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
