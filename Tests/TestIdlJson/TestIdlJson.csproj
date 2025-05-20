@@ -236,7 +236,7 @@
   <!--Generate OpenDDSharp IDL files-->
   <Target Name="OpenDDSharpIdlCSharpWindows" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsWindows)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/$(Configuration)/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)../../Native/build_$(PlatformFolder)/OpenDDSharp.IdlGenerator/Release/openddsharp_idl&quot; &quot;$(MSBuildThisFileDirectory)%(IdlFiles.Identity)&quot; -csharp_json -P$(ProjectName)" WorkingDirectory="$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)NativeProject'))" IgnoreExitCode="false" ContinueOnError="false" />
   </Target>
   <Target Name="OpenDDSharpIdlCSharpLinuxX64" BeforeTargets="PreBuildEvent" Inputs="@(IdlFiles)" Outputs="@(IdlFiles->'%(RootDir)%(Directory)..\%(filename)TypeSupport.cs')" Condition="'$(IsLinux)'=='true' And '$(IsX64)'=='true'">
     <Message Text="Generating OpenDDSharp %(IdlFiles.Identity) code..." Importance="High" />
@@ -261,7 +261,7 @@
 
   <ItemGroup>
 	<!-- OpenDDS native Libraries -->
-	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\$(Configuration)\TestIdlJsonWrapper.dll" Visible="false" />
+	<NativeWrapperWindows Include="$(IntermediateOutputPath)NativeProject\Release\TestIdlJsonWrapper.dll" Visible="false" />
 	<ContentWithTargetPath Include="@(NativeWrapperWindows)" Visible="false" Condition="'$(IsWindows)'=='true'">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
