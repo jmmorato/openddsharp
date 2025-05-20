@@ -44,7 +44,7 @@ namespace OpenDDSharp.Build.Tasks
             {
                 buildFolder += $"_{context.BuildPlatform}";
             }
-            var arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE={context.BuildConfiguration} -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFolder}";
+            var arguments = $"--no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH={Path.GetFullPath(context.DdsRoot)} -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -A {platform} -H{nativeFolder} -B{buildFolder}";
 
             if (BuildContext.IsLinux)
             {

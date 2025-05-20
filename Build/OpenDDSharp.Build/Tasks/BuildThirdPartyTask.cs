@@ -80,7 +80,7 @@ public class BuildThirdPartyTask : FrostingTask<BuildContext>
         {
             context.MSBuild(context.OpenDdsSolutionFile, new MSBuildSettings
             {
-                Configuration = context.BuildConfiguration,
+                Configuration = "Release",
                 PlatformTarget = platform,
                 Targets = { "Build" },
                 MaxCpuCount = 0,
