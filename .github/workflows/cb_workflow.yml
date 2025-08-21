@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
+          - os: windows-2022
             runtime: win-x64
             build_platform: x64
 
@@ -381,7 +381,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
+          - os: windows-2022
             runtime: win-x64
             build_platform: x64
 
@@ -488,7 +488,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
+          - os: windows-2022
             runtime: win-x64
             build_platform: x64
 
