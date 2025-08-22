@@ -29,10 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
+          - os: windows-2022
             runtime: win-x64
             build_platform: x64
-          - os: windows-2019
+          - os: windows-2022
             runtime: win-x86
             build_platform: x86
 
@@ -79,16 +79,16 @@ jobs:
           ${{ github.workspace }}/ext/OpenDDS_${{ matrix.build_platform }}/ACE_wrappers/TAO/VERSION.txt
         key: opendds-cache-${{ env.OpenDdsVersion }}-${{ matrix.runtime }}-cd
 
-    - name: Build Native (No cached)
+    - name: Build Native Release (No cached)
       shell: pwsh
       if: steps.opendds-libraries-windows-cd.outputs.cache-hit != 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --VisualStudioVersion=VS2019 --VisualStudioEdition=Enterprise --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --VisualStudioVersion=VS2022 --VisualStudioEdition=Enterprise --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=False --IgnoreThirdPartyBuild=False
       working-directory: ${{ github.workspace }}/Build
 
-    - name: Build Native (Cached)
+    - name: Build Native Release (Cached)
       shell: pwsh
       if: steps.opendds-libraries-windows-cd.outputs.cache-hit == 'true'
-      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --VisualStudioVersion=VS2019 --VisualStudioEdition=Enterprise --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+      run: ${{ github.workspace }}/Build/OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive --VisualStudioVersion=VS2022 --VisualStudioEdition=Enterprise --BuildConfiguration=Release --BuildPlatform=${{ matrix.build_platform }} --OpenDdsVersion=${{ env.OpenDdsVersion }} --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
       working-directory: ${{ github.workspace }}/Build
 
     - name: Stage Native
@@ -388,12 +388,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
-            runtime: win-x64
-            build_platform: x64
-          - os: windows-2019
-            runtime: win-x86
-            build_platform: x86
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
@@ -832,7 +826,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-          carryforward: "coverage-windows-2019-win-x64,coverage-windows-2019-win-x86,coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-windows-2025-win-x64,coverage-windows-2025-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
+          carryforward: "coverage-windows-2022-win-x64,coverage-windows-2022-win-x86,coverage-windows-2025-win-x64,coverage-windows-2025-win-x86,coverage-ubuntu-22.04-linux-x64,coverage-ubuntu-22.04-arm-linux-arm64,coverage-ubuntu-24.04-linux-x64,coverage-ubuntu-24.04-arm-linux-arm64,coverage-macos-13-osx-x64,coverage-macos-14-osx-arm64"
           fail-on-error: false
 
   build_artifacts:
@@ -1001,46 +995,94 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
-            runtime: win-x86
-            build_platform: x86
-          - os: windows-2019
-            runtime: win-x64
-            build_platform: x64
           - os: windows-2022
             runtime: win-x86
             build_platform: x86
+            configuration: Release
           - os: windows-2022
             runtime: win-x64
             build_platform: x64
+            configuration: Release
           - os: windows-2025
             runtime: win-x64
             build_platform: x64
+            configuration: Release
           - os: windows-2025
             runtime: win-x86
             build_platform: x86
+            configuration: Release
           - os: ubuntu-22.04
             runtime: linux-x64
             build_platform: x64
+            configuration: Release
           - os: ubuntu-24.04
             runtime: linux-x64
             build_platform: x64
+            configuration: Release
           - os: ubuntu-22.04-arm
             runtime: linux-arm64
             build_platform: ARM64
+            configuration: Release
           - os: ubuntu-24.04-arm
             runtime: linux-arm64
             build_platform: ARM64
+            configuration: Release
           - os: macos-13
             runtime: osx-x64
             build_platform: x64
+            configuration: Release
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
+            configuration: Release
+#          Windows Debug artifact test throws 0xC0000005 Access Violation exception during Topic creation
+#          https://github.com/jmmorato/openddsharp/issues/297
+#          - os: windows-2022
+#            runtime: win-x86
+#            build_platform: x86
+#            configuration: Debug
+#          - os: windows-2022
+#            runtime: win-x64
+#            build_platform: x64
+#            configuration: Release
+#          - os: windows-2025
+#            runtime: win-x64
+#            build_platform: x64
+#            configuration: Debug
+#          - os: windows-2025
+#            runtime: win-x86
+#            build_platform: x86
+#            configuration: Debug
+          - os: ubuntu-22.04
+            runtime: linux-x64
+            build_platform: x64
+            configuration: Debug
+          - os: ubuntu-24.04
+            runtime: linux-x64
+            build_platform: x64
+            configuration: Debug
+          - os: ubuntu-22.04-arm
+            runtime: linux-arm64
+            build_platform: ARM64
+            configuration: Debug
+          - os: ubuntu-24.04-arm
+            runtime: linux-arm64
+            build_platform: ARM64
+            configuration: Debug
+          - os: macos-13
+            runtime: osx-x64
+            build_platform: x64
+            configuration: Debug
+          - os: macos-14
+            runtime: osx-arm64
+            build_platform: ARM64
+            configuration: Debug
 # Issues with macos-15 found, waiting for official image review to fix it
 #          - os: macos-15
 #            runtime: osx-arm64
 #            build_platform: ARM64
+#            configuration: Release
+
 
     runs-on: ${{ matrix.os }}
 
@@ -1091,17 +1133,19 @@ jobs:
           Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/Test.idl" -Destination "./IDL" -Force
           Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/TestInclude.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build Test.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          dotnet build Test.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
           dotnet clean Test.csproj
           cd ..
           New-Item -Path "." -Name "TestConsole" -ItemType "directory"
           cd TestConsole
           dotnet new openddsharp-console-app
           Remove-Item Program.cs
+          Remove-Item rtps.ini
           Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/Program.cs" -Destination "."
+          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/rtps.ini" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
-          dotnet build TestConsole.csproj --configuration Release --runtime ${{ matrix.runtime }} --self-contained --no-restore
+          dotnet build TestConsole.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
           
           $publishFolder = "${{ github.workspace }}/Publish/"
           $executable = "TestConsole"
@@ -1110,7 +1154,7 @@ jobs:
               $publishFolder = "${{ github.workspace }}\Publish\"
               $executable += ".exe"
           }
-          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration Release --runtime ${{ matrix.runtime }} --self-contained
+          dotnet publish TestConsole.csproj --output "$publishFolder" --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained
           cd ${{ github.workspace }}
 
           $pinfo = New-Object System.Diagnostics.ProcessStartInfo

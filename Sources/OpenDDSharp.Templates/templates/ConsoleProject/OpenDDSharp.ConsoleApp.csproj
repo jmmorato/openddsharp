@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <Platforms>x64;x86</Platforms>
+    <Platforms>x64;x86;ARM64</Platforms>
     <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
@@ -17,6 +17,7 @@
     <RuntimeIdentifier Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">osx-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">osx-arm64</RuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

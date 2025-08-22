@@ -47,6 +47,11 @@ namespace ConsoleDemo
                 Environment.Exit(-1);
             }
 
+            dpf.SetQos(new DomainParticipantFactoryQos
+            {
+                EntityFactory = { AutoenableCreatedEntities = false },
+            });
+
             Console.WriteLine("Create participant...");
             var participant = dpf.CreateParticipant(42);
             if (participant == null)
@@ -54,6 +59,10 @@ namespace ConsoleDemo
                 throw new InvalidOperationException("Participant could NOT be created.");
             }
 
+            Console.WriteLine("Enable participant...");
+            participant.Enable();
+
+            Console.WriteLine("Create topic...");
             var topic = CreateTestTopic(participant);
             if (topic == null)
             {
