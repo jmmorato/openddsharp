@@ -21,7 +21,6 @@ branches:
     source-branches: [ develop ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 23000
   develop:
     regex: ^dev(elop)?(ment)?$
@@ -35,7 +34,6 @@ branches:
     source-branches: [ ]
     tracks-release-branches: true
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 20000
   feature:
     regex: ^(feature|features|fix|fixes)[/-]
@@ -49,7 +47,6 @@ branches:
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 10000
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/-]
@@ -64,5 +61,4 @@ branches:
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 10000
