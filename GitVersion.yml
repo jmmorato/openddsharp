@@ -1,8 +1,8 @@
-next-version: "3.310.2"
+next-version: "3.310.3"
 mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]'
-continuous-delivery-fallback-tag: ' '
+continuous-delivery-fallback-label: ' '
 
 assembly-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
 assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
@@ -12,7 +12,7 @@ branches:
   main:
     regex: ^master$|^main$
     mode: ContinuousDeployment
-    tag: ''
+    label: ''
     increment: None
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
@@ -24,7 +24,7 @@ branches:
   develop:
     regex: ^dev(elop)?(ment)?$
     mode: ContinuousDeployment
-    tag: beta
+    label: beta
     increment: None
     prevent-increment-of-merged-branch-version: false
     track-merge-target: true
@@ -36,7 +36,7 @@ branches:
   feature:
     regex: ^(feature|features|fix|fixes)[/-]
     mode: ContinuousDeployment
-    tag: alpha
+    label: alpha
     increment: None
     prevent-increment-of-merged-branch-version: false
     track-merge-target: false
@@ -48,10 +48,10 @@ branches:
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/-]
     mode: ContinuousDeployment
-    tag: alpha
+    label: alpha
     increment: None
     prevent-increment-of-merged-branch-version: false
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
+    label-number-pattern: '[/-](?<number>\d+)[-/]'
     track-merge-target: false
     source-branches: [ 'develop' ]
     tracks-release-branches: false
