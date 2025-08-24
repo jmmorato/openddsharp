@@ -14,7 +14,9 @@ branches:
     mode: ContinuousDeployment
     label: ''
     increment: None
-    prevent-increment-of-merged-branch-version: true
+    prevent-increment:
+      of-merged-branch: true
+      when-branch-merged: false
     track-merge-target: false
     source-branches: [ develop ]
     tracks-release-branches: false
@@ -26,7 +28,9 @@ branches:
     mode: ContinuousDeployment
     label: beta
     increment: None
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      of-merged-branch: false
+      when-branch-merged: false
     track-merge-target: true
     source-branches: [ ]
     tracks-release-branches: true
@@ -38,7 +42,9 @@ branches:
     mode: ContinuousDeployment
     label: alpha
     increment: None
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      of-merged-branch: false
+      when-branch-merged: false
     track-merge-target: false
     source-branches: [ 'develop' ]
     tracks-release-branches: false
@@ -50,7 +56,9 @@ branches:
     mode: ContinuousDeployment
     label: alpha
     increment: None
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      of-merged-branch: false
+      when-branch-merged: false
     label-number-pattern: '[/-](?<number>\d+)[-/]'
     track-merge-target: false
     source-branches: [ 'develop' ]
