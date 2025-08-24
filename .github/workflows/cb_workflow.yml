@@ -413,7 +413,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
@@ -519,7 +519,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
@@ -624,7 +624,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
@@ -725,7 +725,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
@@ -825,7 +825,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
@@ -926,7 +926,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
 
