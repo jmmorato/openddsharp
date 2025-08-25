@@ -50,7 +50,7 @@ branches:
   pull-request:
     regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
     mode: ContinuousDeployment
-    label: PullRequest{Number}
+    label: pull-request-{Number}
     increment: None
     prevent-increment:
       of-merged-branch: false
