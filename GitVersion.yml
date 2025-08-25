@@ -49,14 +49,13 @@ branches:
     is-release-branch: false
     pre-release-weight: 10000
   pull-request:
-    regex: ^(pull|pull\-requests|pr)[/-]
+    regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
     mode: ContinuousDeployment
-    label: alpha
+    label: PullRequest{Number}
     increment: None
     prevent-increment:
       of-merged-branch: false
       when-branch-merged: false
-    label-number-pattern: '[/-](?<number>\d+)[-/]'
     track-merge-target: false
     source-branches: [ 'develop' ]
     tracks-release-branches: false
