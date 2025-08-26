@@ -41,7 +41,7 @@ branches:
     regex: ^(feature|features|fix|fixes)?[\/-](?<BranchName>.+)
     mode: ManualDeployment
     label: 'branch-{BranchName}'
-    increment: Inherit
+    increment: None
     prevent-increment:
       of-merged-branch: false
       when-branch-merged: false
@@ -55,11 +55,11 @@ branches:
     regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
     mode: ManualDeployment
     label: 'pr-{Number}'
-    increment: Inherit
+    increment: None
     prevent-increment:
-      of-merged-branch: true
+      of-merged-branch: false
       when-current-commit-tagged: false
-    track-merge-target: true
+    track-merge-target: false
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false

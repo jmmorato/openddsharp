@@ -1107,7 +1107,7 @@ jobs:
       - name: Determine Version
         uses: gittools/actions/gitversion/execute@v4
         with:
-          useConfigFile: true
+          configFilePath: ${{ github.workspace }}/GitVersion.yml
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v5
