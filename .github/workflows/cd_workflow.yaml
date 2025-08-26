@@ -849,12 +849,12 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v4
       with:
-        versionSpec: '5.x'
+        versionSpec: '6.x'
 
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v4
       with:
-        useConfigFile: true
+        configFilePath: ${{ github.workspace }}/GitVersion.yml
 
     - name: Get branch names
       id: branch-name
@@ -1102,12 +1102,12 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4
         with:
-          versionSpec: '5.12.0'
+          versionSpec: '6.x'
 
       - name: Determine Version
         uses: gittools/actions/gitversion/execute@v4
         with:
-          useConfigFile: true
+          configFilePath: ${{ github.workspace }}/GitVersion.yml
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v5

@@ -22,6 +22,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Frosting;
 
 namespace OpenDDSharp.Build
@@ -163,10 +164,12 @@ namespace OpenDDSharp.Build
                 {
                     if (BuildPlatform == PlatformTarget.x64)
                     {
+                        Log.Information("Using win-x64 runtime.");
                         runtime = "win-x64";
                     }
                     else
                     {
+                        Log.Information("Using win-x86 runtime.");
                         runtime = "win-x86";
                     }
                 }
@@ -176,16 +179,25 @@ namespace OpenDDSharp.Build
 
                     if (BuildPlatform == PlatformTarget.ARM64)
                     {
+                        Log.Information("Using linux-arm64 runtime.");
                         runtime = "linux-arm64";
+                    }
+                    else
+                    {
+                        Log.Information("Using linux-arm64 runtime.");
                     }
                 }
                 else if (IsOSX)
                 {
                     runtime = "osx-x64";
-
                     if (BuildPlatform == PlatformTarget.ARM64)
                     {
+                        Log.Information("Using mac-arm64 runtime.");
                         runtime = "osx-arm64";
+                    }
+                    else
+                    {
+                        Log.Information("Using mac-x64 runtime.");
                     }
                 }
 

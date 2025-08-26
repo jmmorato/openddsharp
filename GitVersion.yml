@@ -1,8 +1,10 @@
-next-version: "3.310.2"
-mode: ContinuousDeployment
+next-version: "3.310.3"
+mode: ContinuousDelivery
 update-build-number: true
-tag-prefix: '(release-)?[vV]'
-continuous-delivery-fallback-tag: ' '
+tag-prefix: '(release-)?[vV]?'
+semantic-version-format: Strict
+strategies:
+  - ConfiguredNextVersion
 
 assembly-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
 assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
@@ -11,50 +13,54 @@ assembly-informational-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumbe
 branches:
   main:
     regex: ^master$|^main$
-    mode: ContinuousDeployment
-    tag: ''
+    mode: ContinuousDelivery
+    label: ''
     increment: None
-    prevent-increment-of-merged-branch-version: true
+    prevent-increment:
+      of-merged-branch: true
+      when-branch-merged: false
     track-merge-target: false
     source-branches: [ develop ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 23000
   develop:
     regex: ^dev(elop)?(ment)?$
-    mode: ContinuousDeployment
-    tag: beta
+    mode: ContinuousDelivery
+    label: beta
     increment: None
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      of-merged-branch: false
+      when-branch-merged: false
     track-merge-target: true
     source-branches: [ ]
     tracks-release-branches: true
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 20000
   feature:
-    regex: ^(feature|features|fix|fixes)[/-]
-    mode: ContinuousDeployment
-    tag: alpha
+    regex: ^(feature|features|fix|fixes)?[\/-](?<BranchName>.+)
+    mode: ManualDeployment
+    label: 'branch-{BranchName}'
     increment: None
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      of-merged-branch: false
+      when-branch-merged: false
     track-merge-target: false
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
+    is-main-branch: false
     pre-release-weight: 10000
   pull-request:
-    regex: ^(pull|pull\-requests|pr)[/-]
-    mode: ContinuousDeployment
-    tag: alpha
+    regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
+    mode: ManualDeployment
+    label: 'pr-{Number}'
     increment: None
-    prevent-increment-of-merged-branch-version: false
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
+    prevent-increment:
+      of-merged-branch: false
+      when-current-commit-tagged: false
     track-merge-target: false
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false
-    is-mainline: false
     pre-release-weight: 10000
