@@ -1,11 +1,10 @@
-next-version: "3.310.2"
+next-version: "3.310.3"
 mode: ContinuousDeployment
 update-build-number: true
 tag-prefix: '(release-)?[vV]?'
-semantic-version-format: Loose
+semantic-version-format: Strict
 strategies:
   - ConfiguredNextVersion
-  - Mainline
 
 assembly-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
 assembly-file-versioning-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumber ?? 0}'
@@ -54,7 +53,7 @@ branches:
   pull-request:
     regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
     mode: ContinuousDeployment
-    label: pull-request-{Number}
+    label: PullRequest{Number}
     increment: None
     prevent-increment:
       of-merged-branch: false
