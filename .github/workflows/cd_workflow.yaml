@@ -854,7 +854,7 @@ jobs:
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v4
       with:
-        useConfigFile: true
+        configFilePath: ${{ github.workspace }}/GitVersion.yml
 
     - name: Get branch names
       id: branch-name

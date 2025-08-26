@@ -1,5 +1,5 @@
 next-version: "3.310.3"
-mode: ContinuousDeployment
+mode: ContinuousDelivery
 update-build-number: true
 tag-prefix: '(release-)?[vV]?'
 semantic-version-format: Strict
@@ -13,7 +13,7 @@ assembly-informational-format: '{Major}.{Minor}.{Patch}.{WeightedPreReleaseNumbe
 branches:
   main:
     regex: ^master$|^main$
-    mode: ContinuousDeployment
+    mode: ContinuousDelivery
     label: ''
     increment: None
     prevent-increment:
@@ -26,7 +26,7 @@ branches:
     pre-release-weight: 23000
   develop:
     regex: ^dev(elop)?(ment)?$
-    mode: ContinuousDeployment
+    mode: ContinuousDelivery
     label: beta
     increment: None
     prevent-increment:
@@ -38,10 +38,10 @@ branches:
     is-release-branch: false
     pre-release-weight: 20000
   feature:
-    regex: ^(feature|features|fix|fixes)[/-]
-    mode: ContinuousDeployment
-    label: alpha
-    increment: None
+    regex: ^(feature|features|fix|fixes)?[\/-](?<BranchName>.+)
+    mode: ManualDeployment
+    label: 'branch-{BranchName}'
+    increment: Inherit
     prevent-increment:
       of-merged-branch: false
       when-branch-merged: false
@@ -49,16 +49,17 @@ branches:
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false
+    is-main-branch: false
     pre-release-weight: 10000
   pull-request:
     regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
-    mode: ContinuousDeployment
-    label: PullRequest{Number}
-    increment: None
+    mode: ManualDeployment
+    label: 'pr-{Number}'
+    increment: Inherit
     prevent-increment:
-      of-merged-branch: false
-      when-branch-merged: false
-    track-merge-target: false
+      of-merged-branch: true
+      when-current-commit-tagged: false
+    track-merge-target: true
     source-branches: [ 'develop' ]
     tracks-release-branches: false
     is-release-branch: false
