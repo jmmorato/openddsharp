@@ -1,7 +1,7 @@
 next-version: "3.310.2"
 mode: ContinuousDeployment
 update-build-number: true
-tag-prefix: '(release-)?[vV]'
+tag-prefix: '(release-)?[vV]?'
 semantic-version-format: Loose
 strategies:
   - ConfiguredNextVersion
