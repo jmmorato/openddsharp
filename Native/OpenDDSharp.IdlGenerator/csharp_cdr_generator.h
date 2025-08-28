@@ -10,13 +10,12 @@
 
 #include "dds_generator.h"
 #include "ast_field.h"
-#include "ast_decl.h"
-#include "utl_identifier.h"
-
+#include <unordered_set>
 #include <string>
 #include <vector>
 
-class csharp_cdr_generator : public dds_generator {
+class csharp_cdr_generator final : public dds_generator {
+
 public:
     csharp_cdr_generator();
 
@@ -36,47 +35,70 @@ public:
     bool gen_typedef(AST_Typedef *node, UTL_ScopedName *name, AST_Type *base, const char *repoid);
 
 private:
-    std::string impl_template_;
+  // C# Reserved Keywords (from official Microsoft docs)
+  const std::unordered_set<std::string> csharpReservedWords = {
+    // Reserved keywords
+    "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char",
+    "checked", "class", "const", "continue", "decimal", "default", "delegate",
+    "do", "double", "else", "enum", "event", "explicit", "extern", "false",
+    "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit",
+    "in", "int", "interface", "internal", "is", "lock", "long", "namespace",
+    "new", "null", "object", "operator", "out", "override", "params", "private",
+    "protected", "public", "readonly", "ref", "return", "sbyte", "sealed",
+    "short", "sizeof", "stackalloc", "static", "string", "struct", "switch",
+    "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked",
+    "unsafe", "ushort", "using", "virtual", "void", "volatile", "while",
 
-    std::string declare_struct_fields(const std::vector<AST_Field *> &fields, const std::string indent);
+    // Contextual keywords (commonly included for completeness)
+    "add", "alias", "ascending", "async", "await", "by", "descending",
+    "dynamic", "equals", "from", "get", "global", "group", "into", "join",
+    "let", "nameof", "on", "orderby", "partial", "remove", "select", "set",
+    "value", "var", "when", "where", "yield"
+  };
 
-    std::string declare_marshal_fields(const std::vector<AST_Field *> &fields, const std::string indent);
+  std::string impl_template_;
 
-    std::string implement_struct_constructor(const std::vector<AST_Field *> &fields, const std::string name,
+  bool isCSharpReserved(const std::string& s);
+
+  std::string declare_struct_fields(const std::vector<AST_Field *> &fields, const std::string indent);
+
+  std::string declare_marshal_fields(const std::vector<AST_Field *> &fields, const std::string indent);
+
+  std::string implement_struct_constructor(const std::vector<AST_Field *> &fields, const std::string name,
                                              const std::string indent);
 
-    std::string implement_struct_properties(const std::vector<AST_Field *> &fields, const std::string indent);
+  std::string implement_struct_properties(const std::vector<AST_Field *> &fields, const std::string indent);
 
-    std::string implement_struct_memberwise_copy(const std::vector<AST_Field *> &fields, const std::string name,
+  std::string implement_struct_memberwise_copy(const std::vector<AST_Field *> &fields, const std::string name,
                                                  const std::string indent);
 
-    std::string get_csharp_type(AST_Type *type);
+  std::string get_csharp_type(AST_Type *type);
 
-    std::string get_csharp_default_value(AST_Type *type, const char *name);
+  std::string get_csharp_default_value(AST_Type *type, const char *name);
 
-    std::string get_csharp_constructor_initialization(AST_Type *type, const char *name);
+  std::string get_csharp_constructor_initialization(AST_Type *type, const char *name);
 
-    std::string get_csharp_struct_array_constructor_initialization(AST_Type *type, const char *name, std::string loop_indent);
+  std::string get_csharp_struct_array_constructor_initialization(AST_Type *type, const char *name, std::string loop_indent);
 
-    std::string implement_to_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
+  std::string implement_to_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
 
-    std::string implement_to_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
+  std::string implement_to_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
 
-    std::string implement_from_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
+  std::string implement_from_cdr(const std::vector<AST_Field *> &fields, const std::string indent);
 
-    std::string implement_from_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
+  std::string implement_from_cdr_field(AST_Type *field_type, std::string field_name, std::string indent);
 
-    std::string read_cdr_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent);
+  std::string read_cdr_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent);
 
-    std::string read_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent);
+  std::string read_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string read_method, AST_Expression **dims, int total_dim, std::string indent);
 
-    std::string read_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent);
+  std::string read_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent);
 
-    std::string write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
+  std::string write_cdr_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
 
-    std::string write_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
+  std::string write_cdr_enum_multi_array(std::string name, std::string csharp_base_type, std::string write_method, AST_Expression **dims, int total_dim, std::string indent);
 
-    std::string write_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent);
+  std::string write_cdr_struct_multi_array(std::string name, std::string csharp_base_type, AST_Expression **dims, int total_dim, std::string indent);
 };
 
 #endif

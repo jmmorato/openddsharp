@@ -425,4 +425,14 @@ module CdrWrapper {
     struct TestSpanField {
         double span;
     };
+
+    // Regression test for a struct with C# reserved keywords fields.
+    @topic
+    struct ServiceEvent {
+      long            event;
+      long            unixtime;
+      long            device_id;
+      long            param1;
+      long            param2;
+    };
 };
