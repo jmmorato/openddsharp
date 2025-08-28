@@ -376,9 +376,9 @@ csharp_cdr_generator::implement_struct_memberwise_copy(const std::vector<AST_Fie
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
-    const char *field_name = field->local_name()->get_string();
+    std::string field_name = field->local_name()->get_string();
     if (isCSharpReserved(field_name)) {
-      field_name = std::string("@").append(field_name).c_str();
+      field_name = std::string("@").append(field_name);
     }
 
     ret.append(indent);
@@ -850,9 +850,9 @@ csharp_cdr_generator::implement_to_cdr(const std::vector<AST_Field *> &fields, c
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
-    const char *field_name = field->local_name()->get_string();
+    std::string field_name = field->local_name()->get_string();
     if (isCSharpReserved(field_name)) {
-      field_name = std::string("@").append(field_name).c_str();
+      field_name = std::string("@").append(field_name);
     }
 
     ret.append(implement_to_cdr_field(field_type, field_name, indent));
@@ -871,9 +871,9 @@ csharp_cdr_generator::implement_to_cdr(const std::vector<AST_Field *> &fields, c
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
-    const char *field_name = field->local_name()->get_string();
+    std::string field_name = field->local_name()->get_string();
     if (isCSharpReserved(field_name)) {
-      field_name = std::string("@").append(field_name).c_str();
+      field_name = std::string("@").append(field_name);
     }
 
     ret.append(implement_to_cdr_field(field_type, field_name, indent));
@@ -1515,9 +1515,9 @@ csharp_cdr_generator::implement_from_cdr(const std::vector<AST_Field *> &fields,
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
-    const char *field_name = field->local_name()->get_string();
+    std::string field_name = field->local_name()->get_string();
     if (isCSharpReserved(field_name)) {
-      field_name = std::string("@").append(field_name).c_str();
+      field_name = std::string("@").append(field_name);
     }
 
     ret.append(implement_from_cdr_field(field_type, field_name, indent));
@@ -1534,9 +1534,9 @@ csharp_cdr_generator::implement_from_cdr(const std::vector<AST_Field *> &fields,
   for (unsigned int i = 0; i < fields.size(); i++) {
     AST_Field *field = fields[i];
     AST_Type *field_type = field->field_type();
-    const char *field_name = field->local_name()->get_string();
+    std::string field_name = field->local_name()->get_string();
     if (isCSharpReserved(field_name)) {
-      field_name = std::string("@").append(field_name).c_str();
+      field_name = std::string("@").append(field_name);
     }
 
     ret.append(implement_from_cdr_field(field_type, field_name, indent));
