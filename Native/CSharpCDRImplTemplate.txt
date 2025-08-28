@@ -16,7 +16,8 @@
             },
         };
 
-        private static readonly <%TYPE%>SerializerContext _serializerContext = new <%TYPE%>SerializerContext(_serializerOptions);
+        // Issue with keywords identifiers "@". Avoid code generator serialization
+        //private static readonly <%TYPE%>SerializerContext _serializerContext = new <%TYPE%>SerializerContext(_serializerOptions);
 
         private IntPtr _native;
 
@@ -48,12 +49,16 @@
 
         public string EncodeToString(<%TYPE%> sample)
         {
-            return JsonSerializer.Serialize(sample, typeof(<%TYPE%>), _serializerContext);
+            // Issue with keywords identifiers "@". Avoid code generator serialization
+            //return JsonSerializer.Serialize(sample, typeof(<%TYPE%>), _serializerContext);
+            return JsonSerializer.Serialize(sample, typeof(<%TYPE%>));
         }
 
         public <%TYPE%> DecodeFromString(string str)
         {
-            return JsonSerializer.Deserialize(str, typeof(<%TYPE%>), _serializerContext) as <%TYPE%>;
+            // Issue with keywords identifiers "@". Avoid code generator serialization
+            //return JsonSerializer.Deserialize(str, typeof(<%TYPE%>), _serializerContext) as <%TYPE%>;
+            return JsonSerializer.Deserialize(str, typeof(<%TYPE%>)) as <%TYPE%>;
         }
 
         public byte[] EncodeToBytes(<%TYPE%> sample)
@@ -123,11 +128,12 @@
 #endif
     }
 
-    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default)]
-    [JsonSerializable(typeof(<%TYPE%>))]
-    public partial class <%TYPE%>SerializerContext : JsonSerializerContext
-    {
-    }
+    // Issue with keywords identifiers "@". Avoid code generator serialization
+    // [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default)]
+    // [JsonSerializable(typeof(<%TYPE%>))]
+    // public partial class <%TYPE%>SerializerContext : JsonSerializerContext
+    // {
+    // }
 
     public class <%TYPE%>DataWriter : DataWriter
     {
