@@ -105,8 +105,10 @@ internal sealed class CDRLatencyTest : IDisposable
 
         var pubQos = new PublisherQos
         {
-            EntityFactory = { AutoenableCreatedEntities = false }
+            EntityFactory = { AutoenableCreatedEntities = false },
         };
+        pubQos.Partition.Name.Add($"/CDRLatency/{Environment.MachineName}/{Environment.ProcessId}");
+
         _publisher = _participant.CreatePublisher(pubQos);
 
         var dwQos = new DataWriterQos
@@ -119,7 +121,7 @@ internal sealed class CDRLatencyTest : IDisposable
             {
                 Kind = HistoryQosPolicyKind.KeepAllHistoryQos,
             },
-            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos }
+            Durability = { Kind = DurabilityQosPolicyKind.TransientLocalDurabilityQos },
         };
         var dw = _publisher.CreateDataWriter(_topic, dwQos);
         _dataWriter = new KeyedOctetsDataWriter(dw);
@@ -128,6 +130,8 @@ internal sealed class CDRLatencyTest : IDisposable
         {
             EntityFactory = { AutoenableCreatedEntities = false }
         };
+        subQos.Partition.Name.Add($"/CDRLatency/{Environment.MachineName}/{Environment.ProcessId}");
+
         _subscriber = _participant.CreateSubscriber(subQos);
 
         var drQos = new DataReaderQos

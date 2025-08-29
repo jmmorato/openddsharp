@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Cake.CMake" Version="1.4.0" />
     <PackageReference Include="Cake.FileHelpers" Version="7.0.0" />
-    <PackageReference Include="Cake.Frosting" Version="4.0.0" />
+    <PackageReference Include="Cake.Frosting" Version="5.0.0" />
     <PackageReference Include="Cake.Json" Version="7.0.1" />
   </ItemGroup>
 
@@ -35,7 +35,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.9.0.115408">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 

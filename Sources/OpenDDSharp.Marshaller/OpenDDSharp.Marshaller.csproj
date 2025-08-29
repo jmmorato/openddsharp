@@ -34,7 +34,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="System.Memory" Version="4.6.2" />
+        <PackageReference Include="System.Memory" Version="4.6.3" />
         <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
@@ -51,7 +51,7 @@
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.9.0.115408">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

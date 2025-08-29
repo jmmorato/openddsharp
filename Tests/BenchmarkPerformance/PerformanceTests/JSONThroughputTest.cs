@@ -81,6 +81,8 @@ internal sealed class JSONThroughputTest : IDisposable
         {
             EntityFactory = { AutoenableCreatedEntities = false }
         };
+        pubQos.Partition.Name.Add($"/JSONThroughput/{Environment.MachineName}/{Environment.ProcessId}");
+
         _publisher = _participant.CreatePublisher(pubQos);
 
         var dwQos = new DataWriterQos
@@ -103,6 +105,8 @@ internal sealed class JSONThroughputTest : IDisposable
         {
             EntityFactory = { AutoenableCreatedEntities = false }
         };
+        subQos.Partition.Name.Add($"/JSONThroughput/{Environment.MachineName}/{Environment.ProcessId}");
+
         _subscriber = _participant.CreateSubscriber(subQos);
 
         var drQos = new DataReaderQos

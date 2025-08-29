@@ -6,6 +6,9 @@
     <Platforms>x64;x86;ARM64</Platforms>
     <IsARM64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">true</IsARM64>
     <IsX64 Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">true</IsX64>
+    <IsWindows Condition="'$(OS)' == 'Windows_NT'">true</IsWindows>
+    <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+    <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     <RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <RuntimeIdentifier Condition="'$(IsWindows)'=='true' And '$(Platform)'=='x64'">win-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(IsWindows)'=='true' And '$(Platform)'=='x86'">win-x86</RuntimeIdentifier>
@@ -35,7 +38,7 @@
 	<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
-	<PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+	<PackageReference Include="SonarAnalyzer.CSharp" Version="10.9.0.115408">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
 

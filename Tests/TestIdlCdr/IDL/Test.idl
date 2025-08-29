@@ -419,4 +419,20 @@ module CdrWrapper {
 //        LongDoubleArrayType LongDoubleArrayField;
 //		LongDoubleMultiArrayType LongDoubleMultiArrayField;
     };
+
+    // Regression test for a span field to ensure is not matching the argument name in the methods FromCDR and ToCDR.
+    @topic
+    struct TestSpanField {
+        double span;
+    };
+
+    // Regression test for a struct with C# reserved keywords fields.
+    @topic
+    struct ServiceEvent {
+      long            event;
+      long            unixtime;
+      long            device_id;
+      long            param1;
+      long            param2;
+    };
 };

@@ -41,12 +41,12 @@ public class LatencyTest
     public int TotalInstances { get; set; }
 
     /// <summary>
-    /// Gets or sets the  number of instance for the test.
+    /// Gets or sets the  number of instances for the test.
     /// </summary>
     public static IEnumerable<int> TotalInstancesValues { get; set; }
 
     /// <summary>
-    /// Gets or sets the current number of instance for the test.
+    /// Gets or sets the current number of instances for the test.
     /// </summary>
     [ParamsSource(nameof(TotalSamplesValues))]
     public int TotalSamples { get; set; }
@@ -119,6 +119,7 @@ public class LatencyTest
         _configJson.Insert(transportJson);
 
         _participantJson = _dpf.CreateParticipant(DOMAIN_ID_JSON);
+
         TransportRegistry.Instance.BindConfig(configNameJson, _participantJson);
     }
 
