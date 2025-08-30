@@ -146,7 +146,7 @@ namespace OpenDDSharp.Build.Tasks
                 });
 
                 var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}";
-                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test --std=c++20";
+                var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test --std=c++17";
                 if (context.BuildConfiguration == "Release")
                 {
                     arguments += " --no-debug --optimize";
