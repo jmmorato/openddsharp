@@ -1,4 +1,11 @@
-# OpenDDSharp 3.310.2
+# OpenDDSharp v3.310.3
+
+### Bug Fixes
+
+- [fix] IDL Generator's FromCDR span argument variable [#298](https://github.com/jmmorato/openddsharp/pull/298)
+- [fix] IDL "event" named property makes compile errors in the TypeSupport file [#299](https://github.com/jmmorato/openddsharp/pull/299)
+
+# OpenDDSharp v3.310.2
 
 ### New Features
 
