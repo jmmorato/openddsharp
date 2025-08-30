@@ -42,7 +42,7 @@ namespace OpenDDSharp.Build.Tasks
         public override bool ShouldRun(BuildContext context)
         {
             _clonePath = new DirectoryPath(System.IO.Path.GetFullPath(context.DdsRoot));
-            _versionTag = "DDS-" + context.OpenDdsVersion;
+            _versionTag = "v" + context.OpenDdsVersion;
 
             if (context.IgnoreThirdPartySetup)
             {
