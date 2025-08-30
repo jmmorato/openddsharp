@@ -112,11 +112,11 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --no-inline --compiler=clang++-18 --std=c++20";
+                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --no-inline --compiler=clang++ --std=c++20";
                 if (context.BuildConfiguration == "Debug")
                 {
                     context.Log.Information("Building OpenDDS in Debug mode...");
-                    arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative --no-inline --compiler=clang++-18 --std=c++20";
+                    arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative --no-inline --compiler=clang++ --std=c++20";
                 }
 
                 context.Log.Information("Configure script arguments: " + arguments);
