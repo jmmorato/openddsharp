@@ -121,7 +121,7 @@ namespace OpenDDSharp.Build.Tasks
 
                 if (BuildContext.IsOSX)
                 {
-                    arguments += " --no-std-optional";
+                    arguments += " --compiler=clang++ --no-std-optional";
                 }
 
                 context.Log.Information("Configure script arguments: " + arguments);
