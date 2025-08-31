@@ -13,9 +13,9 @@ In order to follow this tutorial, you need to install in your computer:
 
 OpenDDSharp provides .NET project templates in order to ease the process of creating OpenDDSharp applications.
 
-Run the following command to install OpenDDSharp templates in your computer from the [NuGet.org feed](https://www.nuget.org/packages/OpenDDSharp.Templates/3.310.2):
+Run the following command to install OpenDDSharp templates in your computer from the [NuGet.org feed](https://www.nuget.org/packages/OpenDDSharp.Templates/3.330.0):
 
-`dotnet new --install OpenDDSharp.Templates::3.310.2`
+`dotnet new --install OpenDDSharp.Templates::3.330.0`
 
 Two new templates will be added to the dotnet templates system, `openddsharp-idl-project` and `openddsharp-console-app`,
 that can be used to create the projects for your OpenDDSharp solution.

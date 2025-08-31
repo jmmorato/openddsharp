@@ -42,7 +42,7 @@ namespace OpenDDSharp.Build.Tasks
         public override bool ShouldRun(BuildContext context)
         {
             _clonePath = new DirectoryPath(System.IO.Path.GetFullPath(context.DdsRoot));
-            _versionTag = "DDS-" + context.OpenDdsVersion;
+            _versionTag = "v" + context.OpenDdsVersion;
 
             if (context.IgnoreThirdPartySetup)
             {
@@ -112,11 +112,16 @@ namespace OpenDDSharp.Build.Tasks
             if (BuildContext.IsLinux || BuildContext.IsOSX)
             {
                 var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --no-inline --std=gnu++17";
+                var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --no-inline --std=c++17";
                 if (context.BuildConfiguration == "Debug")
                 {
                     context.Log.Information("Building OpenDDS in Debug mode...");
-                    arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative --no-inline --std=gnu++17";
+                    arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative --no-inline --std=c++17";
+                }
+
+                if (BuildContext.IsOSX)
+                {
+                    arguments += " --compiler=clang++ --no-std-optional";
                 }
 
                 context.Log.Information("Configure script arguments: " + arguments);
