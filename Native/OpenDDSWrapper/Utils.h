@@ -25,7 +25,7 @@ along with OpenDDSharp. If not, see <http://www.gnu.org/licenses/>.
   #ifdef _WIN32
     #define EXTERN_METHOD_EXPORT extern "C" __declspec(dllexport)
   #else
-    #define EXTERN_METHOD_EXPORT extern "C"
+    #define EXTERN_METHOD_EXPORT extern "C" __attribute__((visibility("default")))
   #endif
 #endif
 

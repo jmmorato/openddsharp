@@ -202,7 +202,7 @@ namespace {
                 << "    #ifdef _WIN32\n"
                 << "        #define EXTERN_METHOD_EXPORT extern \"C\" __declspec(dllexport)\n"
                 << "    #else\n"
-                << "        #define EXTERN_METHOD_EXPORT extern \"C\"\n"
+                << "        #define EXTERN_METHOD_EXPORT extern \"C\" __attribute__ ((visibility(\"default\")))\n"
                 << "    #endif\n"
                 << "#endif\n\n"
                 << "#ifndef EXTERN_STRUCT_EXPORT\n"
