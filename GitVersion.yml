@@ -1,4 +1,4 @@
-next-version: "3.320.1"
+next-version: "3.330.1"
 mode: ContinuousDelivery
 update-build-number: true
 tag-prefix: '(release-)?[vV]?'
