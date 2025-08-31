@@ -119,6 +119,11 @@ namespace OpenDDSharp.Build.Tasks
                     arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative --no-inline --std=c++17";
                 }
 
+                if (BuildContext.IsOSX)
+                {
+                    arguments += " --compiler=clang++ --no-std-optional";
+                }
+
                 context.Log.Information("Configure script arguments: " + arguments);
 
                 var exit = context.StartProcess(configurePath, new ProcessSettings
