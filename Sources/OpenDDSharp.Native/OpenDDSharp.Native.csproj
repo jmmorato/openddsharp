@@ -351,26 +351,14 @@
         <!-- Native dependency from this project. -->
         <ProjectNativeDepsReleasex64 Include="..\..\Native\build_x64\OpenDDSWrapper\Release\OpenDDSWrapper.dll" Visible="false" />
         <None Include="@(ProjectNativeDepsReleasex64)" Pack="true" PackagePath="runtimes\win-x64\native" Visible="false">
-          <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToOutputDirectory>
-          <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x64'">PreserveNewest</CopyToPublishDirectory>
-        </None>
-
-        <ProjectNativeDepsDebugx64 Include="..\..\Native\build_x64\OpenDDSWrapper\Debug\OpenDDSWrapper.dll" Visible="false" />
-        <None Include="@(ProjectNativeDepsDebugx64)" Pack="false" Visible="false">
-          <CopyToOutputDirectory Condition="('$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x64'">PreserveNewest</CopyToOutputDirectory>
-          <CopyToPublishDirectory Condition="('$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT') Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x64'">PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory Condition="('$(Platform)'=='x64' And '$(OS)' == 'Windows_NT') Or '$(RuntimeIdentifier)'=='win-x64'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="('$(Platform)'=='x64' And '$(OS)' == 'Windows_NT') Or '$(RuntimeIdentifier)'=='win-x64'">PreserveNewest</CopyToPublishDirectory>
         </None>
 
         <ProjectNativeDepsReleasex86 Include="..\..\Native\build_x86\OpenDDSWrapper\Release\OpenDDSWrapper.dll" Visible="false" />
         <None Include="@(ProjectNativeDepsReleasex86)" Pack="true" PackagePath="runtimes\win-x86\native" Visible="false">
-          <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToOutputDirectory>
-          <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Release|win-x86'">PreserveNewest</CopyToPublishDirectory>
-        </None>
-
-        <ProjectNativeDepsDebugx86 Include="..\..\Native\build_x86\OpenDDSWrapper\Debug\OpenDDSWrapper.dll" Visible="false" />
-        <None Include="@(ProjectNativeDepsDebugx86)" Pack="false" Visible="false">
-          <CopyToOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x86'">PreserveNewest</CopyToOutputDirectory>
-          <CopyToPublishDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x86' Or '$(Configuration)|$(RuntimeIdentifier)'=='Debug|win-x86'">PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory Condition="'$(Platform)'=='x86' Or '$(RuntimeIdentifier)'=='win-x86'">PreserveNewest</CopyToOutputDirectory>
+          <CopyToPublishDirectory Condition="'$(Platform)'=='x86' Or '$(RuntimeIdentifier)'=='win-x86'">PreserveNewest</CopyToPublishDirectory>
         </None>
 
         <None Include="..\..\Native\build_linux-x64\OpenDDSWrapper\libOpenDDSWrapper.so" Pack="true" PackagePath="runtimes/linux-x64/native" Visible="false">
