@@ -17,7 +17,7 @@
     <RuntimeIdentifier Condition="'$(IsOSX)'=='true' And '$(IsX64)'=='true'">osx-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">osx-arm64</RuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

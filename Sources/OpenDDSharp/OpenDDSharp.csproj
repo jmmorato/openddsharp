@@ -2,12 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;</TargetFrameworks>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <Platforms>x64;x86;ARM64</Platforms>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <Authors>Jose Morato</Authors>
     <Company>OpenDDSharp</Company>
     <Copyright>Copyright © Jose Morato 2018. All rights reserved.</Copyright>
@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
@@ -50,14 +50,11 @@
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.9.0.115408">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.61">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
