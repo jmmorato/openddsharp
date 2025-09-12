@@ -166,18 +166,28 @@ jobs:
         fetch-depth: 0
 
     - name: Setup dotnet 8.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '8.0.x'
 
     - name: Setup dotnet 9.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '9.0.x'
+
+#    - name: Setup dotnet 8.0
+#      shell: sh
+#      run: |
+#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#
+#    - name: Setup dotnet 9.0
+#      shell: sh
+#      run: |
+#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
+#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -295,20 +305,30 @@ jobs:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
-        working-directory: ${{ github.workspace }}
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
-        working-directory: ${{ github.workspace }}
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+
+#      - name: Setup dotnet 8.0
+#        shell: sh
+#        run: |
+#          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+#          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#        working-directory: ${{ github.workspace }}
+#
+#      - name: Setup dotnet 9.0
+#        shell: sh
+#        run: |
+#          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
+#          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#        working-directory: ${{ github.workspace }}
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-macos-cd
@@ -578,20 +598,30 @@ jobs:
         fetch-depth: 0
 
     - name: Setup dotnet 8.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
-      working-directory: ${{ github.workspace }}
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '8.0.x'
 
     - name: Setup dotnet 9.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
-      working-directory: ${{ github.workspace }}
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '9.0.x'
+
+#    - name: Setup dotnet 8.0
+#      shell: sh
+#      run: |
+#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#      working-directory: ${{ github.workspace }}
+#
+#    - name: Setup dotnet 9.0
+#      shell: sh
+#      run: |
+#        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
+#        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#      working-directory: ${{ github.workspace }}
 
     - name: Download ${{ matrix.runtime }} native
       uses: actions/download-artifact@v5
@@ -713,20 +743,30 @@ jobs:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
-        working-directory: ${{ github.workspace }}
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
-        working-directory: ${{ github.workspace }}
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+
+#      - name: Setup dotnet 8.0
+#        shell: sh
+#        run: |
+#          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+#          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#        working-directory: ${{ github.workspace }}
+#
+#      - name: Setup dotnet 9.0
+#        shell: sh
+#        run: |
+#          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
+#          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+#          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
+#        working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v5
