@@ -169,15 +169,15 @@ jobs:
       shell: sh
       run: |
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
 
     - name: Setup dotnet 9.0
       shell: sh
       run: |
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc 
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -298,16 +298,16 @@ jobs:
         shell: sh
         run: |
           curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}
 
       - name: Setup dotnet 9.0
         shell: sh
         run: |
           curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}
 
       - name: Cache OpenDDS libraries
@@ -581,16 +581,16 @@ jobs:
       shell: sh
       run: |
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
       working-directory: ${{ github.workspace }}
 
     - name: Setup dotnet 9.0
       shell: sh
       run: |
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
       working-directory: ${{ github.workspace }}
 
     - name: Download ${{ matrix.runtime }} native
@@ -716,16 +716,16 @@ jobs:
         shell: sh
         run: |
           curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}
 
       - name: Setup dotnet 9.0
         shell: sh
         run: |
           curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $GITHUB_ENV
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}
 
       - name: Download ${{ matrix.runtime }} native artifact
