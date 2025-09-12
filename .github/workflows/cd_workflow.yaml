@@ -48,7 +48,14 @@ jobs:
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append      
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Setup dotnet 9.0
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append  
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
@@ -164,6 +171,13 @@ jobs:
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
         echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
         echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+
+    - name: Setup dotnet 9.0
+      shell: sh
+      run: |
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc 
 
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
@@ -284,6 +298,14 @@ jobs:
         shell: sh
         run: |
           curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 9.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
           echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
           echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
         working-directory: ${{ github.workspace }}
@@ -419,27 +441,19 @@ jobs:
           echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
-      - name: Setup dotnet 6.0
-        shell: pwsh
-        run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 6.0;
-          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        working-directory: ${{ github.workspace }}
-
-      - name: Setup dotnet 7.0
-        shell: pwsh
-        run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 7.0;
-          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        working-directory: ${{ github.workspace }}
-
       - name: Setup dotnet 8.0
         shell: pwsh
         run: |
           Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
           ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 8.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 9.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
@@ -563,26 +577,18 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup dotnet 6.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-      working-directory: ${{ github.workspace }}
-
-    - name: Setup dotnet 7.0
-      shell: sh
-      run: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
-        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-      working-directory: ${{ github.workspace }}
-
     - name: Setup dotnet 8.0
       shell: sh
       run: |
         curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+        echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+        echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+      working-directory: ${{ github.workspace }}
+
+    - name: Setup dotnet 9.0
+      shell: sh
+      run: |
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
         echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
         echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
       working-directory: ${{ github.workspace }}
@@ -706,26 +712,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 6.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 6.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-        working-directory: ${{ github.workspace }}
-
-      - name: Setup dotnet 7.0
-        shell: sh
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 7.0
-          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
-        working-directory: ${{ github.workspace }}
-
       - name: Setup dotnet 8.0
         shell: sh
         run: |
           curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 8.0
+          echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+          echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 9.0
+        shell: sh
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --architecture '${{ matrix.build_platform }}' --channel 9.0
           echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
           echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc
         working-directory: ${{ github.workspace }}
@@ -844,6 +842,13 @@ jobs:
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture 'x64' -Channel 8.0;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Setup dotnet 9.0
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture 'x64' -Channel 9.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Install GitVersion
