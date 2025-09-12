@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <Platforms>x64;x86;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
