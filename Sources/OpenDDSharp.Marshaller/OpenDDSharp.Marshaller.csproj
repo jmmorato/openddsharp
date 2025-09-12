@@ -60,21 +60,15 @@
         <None Include="$(IntermediateOutputPath)/netstandard2.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
             <PackagePath>ref\netstandard2.0</PackagePath>
         </None>
-        <None Include="$(IntermediateOutputPath)/net6.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
-            <PackagePath>ref\net6.0</PackagePath>
-        </None>
-        <None Include="$(IntermediateOutputPath)/net7.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
-            <PackagePath>ref\net7.0</PackagePath>
+        <None Include="$(IntermediateOutputPath)/net8.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+            <PackagePath>ref\net8.0</PackagePath>
         </None>
 
         <None Include="$(IntermediateOutputPath)/netstandard2.0/$(AssemblyName).xml" Pack="true" Visible="false">
             <PackagePath>ref\netstandard2.0</PackagePath>
         </None>
-        <None Include="$(IntermediateOutputPath)/net6.0/$(AssemblyName).xml" Pack="true" Visible="false">
-            <PackagePath>ref\net6.0</PackagePath>
-        </None>
-        <None Include="$(IntermediateOutputPath)/net7.0/$(AssemblyName).xml" Pack="true" Visible="false">
-            <PackagePath>ref\net7.0</PackagePath>
+        <None Include="$(IntermediateOutputPath)/net8.0/$(AssemblyName).xml" Pack="true" Visible="false">
+            <PackagePath>ref\net8.0</PackagePath>
         </None>
     </ItemGroup>
 
