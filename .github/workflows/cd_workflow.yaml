@@ -531,7 +531,7 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: pwsh
-        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
+        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
         working-directory: ${{ github.workspace }}
 
       - name: Test Report
@@ -677,7 +677,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
+      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
       working-directory: ${{ github.workspace }}
 
     - name: Test Report
@@ -822,7 +822,7 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: bash
-        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results"
+        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
         working-directory: ${{ github.workspace }}
 
       - name: Test Report
