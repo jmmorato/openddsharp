@@ -1138,7 +1138,6 @@ jobs:
 #            build_platform: ARM64
 #            configuration: Release
 
-
     runs-on: ${{ matrix.os }}
 
     env:
@@ -1153,6 +1152,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
+
+      - name: Setup dotnet 9.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4
