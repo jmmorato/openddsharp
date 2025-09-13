@@ -80,7 +80,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Fields
         private readonly string _runtime;
         private readonly TestContext _testContext;
-        private string _platformFolder;
+        private readonly string _platformFolder;
         private string _targetFolder;
         #endregion
 
@@ -140,13 +140,13 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Methods
         public Process SpawnSupportProcess(SupportTestKind testKind)
         {
-            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+            var supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _platformFolder, _targetFolder, "net9.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
             supportProcessPath = Path.GetFullPath(supportProcessPath);
             Console.WriteLine(supportProcessPath);
 
             if (!File.Exists(supportProcessPath))
             {
-                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net8.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
+                supportProcessPath = Path.Combine(TEST_SUPPORT_PROCESS_PATH, _targetFolder, "net9.0", _runtime, TEST_SUPPORT_PROCESS_EXE_NAME);
 
                 if (!File.Exists(supportProcessPath))
                 {
@@ -165,7 +165,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         public Process SpawnDCPSInfoRepo()
         {
-            string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
+            var ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT") ?? string.Empty;
 #if Windows
             string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
@@ -193,11 +193,14 @@ namespace OpenDDSharp.UnitTest.Helpers
                 RedirectStandardError = true,
                 CreateNoWindow = true,
                 UseShellExecute = false,
+                EnvironmentVariables =
+                {
+                    ["DDS_ROOT"] = ddsPath,
+                    ["ACE_ROOT"] = acePath,
+                    ["TAO_ROOT"] = taoPath
+                }
             };
 
-            processInfo.EnvironmentVariables["DDS_ROOT"] = ddsPath;
-            processInfo.EnvironmentVariables["ACE_ROOT"] = acePath;
-            processInfo.EnvironmentVariables["TAO_ROOT"] = taoPath;
 #if Linux
             processInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"$LD_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
 #elif OSX
