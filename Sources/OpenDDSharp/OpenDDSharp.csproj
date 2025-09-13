@@ -22,7 +22,6 @@
     <Configurations>Debug;Release</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>OpenDDSharp</PackageId>
-    <CETCompat>false</CETCompat>
   </PropertyGroup>
 
   <!-- NuGet properties -->
@@ -75,13 +74,13 @@
      the `lib\` folder. We need to copy them to the runtime and ref (compile-time)
      directories. We keep the one in the `lib` for applications using .NET Framework. -->
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">
-      <PackagePath>runtimes\win-x64\lib\netstandard2.0;runtimes\linux-x64\lib\netstandard2.0;runtimes\osx-x64\lib\netstandard2.0;runtimes\osx-arm64\lib\netstandard2.0;</PackagePath>
+      <PackagePath>runtimes\win-x64\lib\netstandard2.0;runtimes\linux-x64\lib\netstandard2.0;runtimes\osx-x64\lib\netstandard2.0;</PackagePath>
     </None>
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net8.0/$(AssemblyName).dll" Pack="true" Visible="false">
-      <PackagePath>runtimes\win-x64\lib\net8.0;runtimes\linux-x64\lib\net8.0;runtimes\osx-x64\lib\net8.0;runtimes\osx-arm64\lib\net8.0;</PackagePath>
+      <PackagePath>runtimes\win-x64\lib\net8.0;runtimes\linux-x64\lib\net8.0;runtimes\osx-x64\lib\net8.0;</PackagePath>
     </None>
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net9.0/$(AssemblyName).dll" Pack="true" Visible="false">
-      <PackagePath>runtimes\win-x64\lib\net9.0;runtimes\linux-x64\lib\net9.0;runtimes\osx-x64\lib\net9.0;runtimes\osx-arm64\lib\net9.0;</PackagePath>
+      <PackagePath>runtimes\win-x64\lib\net9.0;runtimes\linux-x64\lib\net9.0;runtimes\osx-x64\lib\net9.0;</PackagePath>
     </None>
 
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">

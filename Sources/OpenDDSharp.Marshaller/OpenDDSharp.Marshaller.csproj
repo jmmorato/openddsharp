@@ -15,7 +15,6 @@
         </Description>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <CETCompat>false</CETCompat>
     </PropertyGroup>
 
     <!-- NuGet properties -->
