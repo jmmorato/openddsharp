@@ -22,6 +22,7 @@
     <SelfContained>true</SelfContained>
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>OpenDDSharp.TestSupportProcess</RootNamespace>
+    <CETCompat>false</CETCompat>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -15,6 +15,7 @@
     <RootNamespace>OpenDDSharp.UnitTest</RootNamespace>
     <TargetFrameworks Condition="'$(IsARM64)' != 'true' And '$(IsLinux)' != 'true'">net481;net8.0;net9.0;</TargetFrameworks>
     <TargetFrameworks Condition="'$(IsARM64)' == 'true' Or '$(IsLinux)' == 'true'">net8.0;net9.0;</TargetFrameworks>
+    <CETCompat>false</CETCompat>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
