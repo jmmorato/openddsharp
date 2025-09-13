@@ -23,6 +23,7 @@
         <RuntimeIdentifier Condition="'$(IsOSX)'=='true' And '$(IsARM64)'=='true'">osx-arm64</RuntimeIdentifier>
         <SelfContained>true</SelfContained>
         <PublishSelfContained>true</PublishSelfContained>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
 
     <ItemGroup>

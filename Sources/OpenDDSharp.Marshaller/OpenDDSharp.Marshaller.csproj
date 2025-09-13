@@ -15,6 +15,7 @@
         </Description>
         <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
 
     <!-- NuGet properties -->
@@ -63,12 +64,18 @@
         <None Include="$(IntermediateOutputPath)/net8.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
             <PackagePath>ref\net8.0</PackagePath>
         </None>
+        <None Include="$(IntermediateOutputPath)/net9.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+            <PackagePath>ref\net9.0</PackagePath>
+        </None>
 
         <None Include="$(IntermediateOutputPath)/netstandard2.0/$(AssemblyName).xml" Pack="true" Visible="false">
             <PackagePath>ref\netstandard2.0</PackagePath>
         </None>
         <None Include="$(IntermediateOutputPath)/net8.0/$(AssemblyName).xml" Pack="true" Visible="false">
             <PackagePath>ref\net8.0</PackagePath>
+        </None>
+        <None Include="$(IntermediateOutputPath)/net9.0/$(AssemblyName).xml" Pack="true" Visible="false">
+            <PackagePath>ref\net9.0</PackagePath>
         </None>
     </ItemGroup>
 
