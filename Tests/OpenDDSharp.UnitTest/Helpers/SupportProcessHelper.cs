@@ -80,7 +80,7 @@ namespace OpenDDSharp.UnitTest.Helpers
         #region Fields
         private readonly string _runtime;
         private readonly TestContext _testContext;
-        private readonly string _platformFolder;
+        private string _platformFolder;
         private string _targetFolder;
         #endregion
 
