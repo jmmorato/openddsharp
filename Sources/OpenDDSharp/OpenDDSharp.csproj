@@ -22,6 +22,7 @@
     <Configurations>Debug;Release</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>OpenDDSharp</PackageId>
+    <CETCompat>false</CETCompat>
   </PropertyGroup>
 
   <!-- NuGet properties -->
