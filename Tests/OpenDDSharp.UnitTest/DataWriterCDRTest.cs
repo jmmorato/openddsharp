@@ -594,7 +594,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.TotalCountChange);
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastSubscriptionHandle);
 
-            // Create a not compatible reader
+            // Create a no compatible reader
             var subscriber = _participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
 
