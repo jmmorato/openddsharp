@@ -687,6 +687,7 @@ jobs:
       - name: Performance Tests
         shell: bash
         run: |
+          rm -f ${{ github.workspace }}/global.json
           dotnet build ${{ github.workspace }}/Tests/TestIdlCdr/TestIdlCdr.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
           dotnet build ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
           dotnet publish ${{ github.workspace }}/Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --configuration Release --runtime ${{ matrix.runtime }} --framework net8.0 --self-contained
