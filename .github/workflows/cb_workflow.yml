@@ -425,14 +425,6 @@ jobs:
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
-      - name: Setup dotnet 9.0
-        shell: pwsh
-        run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
-          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        working-directory: ${{ github.workspace }}
-
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v5
         with:
@@ -539,14 +531,6 @@ jobs:
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
-      - name: Setup dotnet 9.0
-        shell: pwsh
-        run: |
-          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
-          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        working-directory: ${{ github.workspace }}
-
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v5
         with:
@@ -644,10 +628,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 9.0
+      - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v5
@@ -743,10 +727,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 9.0
+      - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v5
@@ -840,10 +824,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 9.0
+      - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v5
@@ -938,10 +922,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 9.0
+      - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v5
