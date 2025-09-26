@@ -417,6 +417,14 @@ jobs:
           echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
+      - name: Setup dotnet 9.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
       - name: Setup dotnet 8.0
         shell: pwsh
         run: |
@@ -521,6 +529,14 @@ jobs:
         run: |
           echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
+      - name: Setup dotnet 9.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
       - name: Setup dotnet 8.0
@@ -628,6 +644,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup dotnet 9.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+
       - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
         with:
@@ -727,6 +748,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup dotnet 9.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+
       - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
         with:
@@ -823,6 +849,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
+      - name: Setup dotnet 9.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
 
       - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
@@ -921,6 +952,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
+      - name: Setup dotnet 9.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
 
       - name: Setup dotnet 8.0
         uses: actions/setup-dotnet@v5
