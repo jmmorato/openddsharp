@@ -644,11 +644,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
-
       - name: Setup dotnet 9.0
         uses: actions/setup-dotnet@v5
         with:
@@ -748,11 +743,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
-
       - name: Setup dotnet 9.0
         uses: actions/setup-dotnet@v5
         with:
@@ -850,15 +840,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
-
       - name: Setup dotnet 9.0
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
+
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v5
         with:
@@ -951,11 +937,6 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
         uses: actions/setup-dotnet@v5
