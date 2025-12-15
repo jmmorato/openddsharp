@@ -53,7 +53,7 @@ jobs:
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-windows-cb
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ github.workspace }}/README.md
@@ -163,7 +163,7 @@ jobs:
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-linux-cb
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ github.workspace }}/README.md
@@ -283,7 +283,7 @@ jobs:
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-macos-cb
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ github.workspace }}/README.md
@@ -464,7 +464,7 @@ jobs:
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .\cache
           key: latency-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -571,7 +571,7 @@ jobs:
 
       # Download previous benchmark result from cache (if exists)
       - name: Download previous benchmark data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .\cache
           key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -672,7 +672,7 @@ jobs:
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./cache
           key: latency-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -774,7 +774,7 @@ jobs:
 
       # Download previous benchmark result from cache (if exists)
       - name: Download previous benchmark data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./cache
           key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -875,7 +875,7 @@ jobs:
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./cache
           key: latency-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -976,7 +976,7 @@ jobs:
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./cache
           key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
