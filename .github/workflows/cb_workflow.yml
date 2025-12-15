@@ -125,7 +125,7 @@ jobs:
           Compress-Archive @compress        
 
       - name: Artifacts OpenDDS libraries
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
@@ -247,7 +247,7 @@ jobs:
           zip -r "opendds-native-${{ matrix.runtime }}.zip" "./opendds-native-${{ matrix.runtime }}"
 
       - name: Artifact OpenDDS libraries
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
@@ -369,7 +369,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
       - name: Artifacts OpenDDS libraries
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: opendds-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/opendds-native-${{ matrix.runtime }}.zip
@@ -458,7 +458,7 @@ jobs:
         continue-on-error: false
 
       - name: Benchmark Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-latency-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
@@ -564,7 +564,7 @@ jobs:
         continue-on-error: false
 
       - name: Benchmark Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net8.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
@@ -666,7 +666,7 @@ jobs:
         continue-on-error: false
 
       - name: Benchmark Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-latency-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
@@ -767,7 +767,7 @@ jobs:
         continue-on-error: false
 
       - name: Benchmark Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
@@ -869,7 +869,7 @@ jobs:
         continue-on-error: false
 
       - name: Benchmark Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-latency-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
@@ -970,7 +970,7 @@ jobs:
         continue-on-error: false
 
       - name: Benchmark Artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: benchmark-throughput-${{ matrix.os }}-${{ matrix.runtime }}-${{ github.run_number }}
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net8.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
