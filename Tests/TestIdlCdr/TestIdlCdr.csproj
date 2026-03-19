@@ -118,7 +118,7 @@
       <Visible>false</Visible>
       <Link>Native\CSharpCDRImplTemplate.txt</Link>
     </IdlTemplates>
-    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpCdrImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
+    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpCDRImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
   </ItemGroup>
 
   <!-- Ensure templates are copied for code generation-->
