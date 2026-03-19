@@ -710,6 +710,12 @@ jobs:
           - os: macos-15-intel
             runtime: osx-x64
             build_platform: x64
+          - os: macos-26
+            runtime: osx-arm64
+            build_platform: ARM64
+          - os: macos-26-intel
+            runtime: osx-x64
+            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
