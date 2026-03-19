@@ -879,12 +879,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-15
+          - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
-          - os: macos-15-intel
-            runtime: osx-x64
-            build_platform: x64
+#          - os: macos-15
+#            runtime: osx-arm64
+#            build_platform: ARM64
+#          - os: macos-15-intel
+#            runtime: osx-x64
+#            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
@@ -990,12 +993,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-15
+          - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
-          - os: macos-15-intel
-            runtime: osx-x64
-            build_platform: x64
+#          - os: macos-15
+#            runtime: osx-arm64
+#            build_platform: ARM64
+#          - os: macos-15-intel
+#            runtime: osx-x64
+#            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
