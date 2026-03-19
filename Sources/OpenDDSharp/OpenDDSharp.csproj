@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net8.0;net9.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0;</TargetFrameworks>
     <RootNamespace>OpenDDSharp</RootNamespace>
     <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
     <Platforms>x64;x86;ARM64</Platforms>
@@ -42,15 +42,15 @@
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
     <!-- Third-party analyzers included. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.201">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
@@ -82,6 +82,9 @@
     <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net9.0/$(AssemblyName).dll" Pack="true" Visible="false">
       <PackagePath>runtimes\win-x64\lib\net9.0;runtimes\linux-x64\lib\net9.0;runtimes\osx-x64\lib\net9.0;</PackagePath>
     </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x64/Release/net10.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x64\lib\net10.0;runtimes\linux-x64\lib\net10.0;runtimes\osx-x64\lib\net10.0;</PackagePath>
+    </None>
 
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">
       <PackagePath>runtimes\win-x86\lib\netstandard2.0</PackagePath>
@@ -91,6 +94,9 @@
     </None>
     <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/net9.0/$(AssemblyName).dll" Pack="true" Visible="false">
       <PackagePath>runtimes\win-x86\lib\net9.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/x86/Release/net10.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\win-x86\lib\net10.0</PackagePath>
     </None>
 
     <None Include="$(IntermediateOutputPath)/netstandard2.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
@@ -102,6 +108,9 @@
     <None Include="$(IntermediateOutputPath)/net9.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
       <PackagePath>ref\net9.0</PackagePath>
     </None>
+    <None Include="$(IntermediateOutputPath)/net10.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>ref\net10.0</PackagePath>
+    </None>
 
     <None Include="$(IntermediateOutputPath)/netstandard2.0/$(AssemblyName).xml" Pack="true" Visible="false">
       <PackagePath>ref\netstandard2.0</PackagePath>
@@ -111,6 +120,9 @@
     </None>
     <None Include="$(IntermediateOutputPath)/net9.0/$(AssemblyName).xml" Pack="true" Visible="false">
       <PackagePath>ref\net9.0</PackagePath>
+    </None>
+    <None Include="$(IntermediateOutputPath)/net10.0/$(AssemblyName).xml" Pack="true" Visible="false">
+      <PackagePath>ref\net10.0</PackagePath>
     </None>
   </ItemGroup>
 </Project>

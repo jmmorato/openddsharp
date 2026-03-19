@@ -13,8 +13,8 @@
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     <RootNamespace>OpenDDSharp.UnitTest</RootNamespace>
-    <TargetFrameworks Condition="'$(IsARM64)' != 'true' And '$(IsLinux)' != 'true'">net481;net8.0;net9.0;</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsARM64)' == 'true' Or '$(IsLinux)' == 'true'">net8.0;net9.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsARM64)' != 'true' And '$(IsLinux)' != 'true'">net481;net8.0;net9.0;net10.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsARM64)' == 'true' Or '$(IsLinux)' == 'true'">net8.0;net9.0;net10.0;</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
@@ -57,13 +57,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
+    <PackageReference Include="coverlet.collector" Version="8.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.10.4" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.10.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,12 +73,12 @@
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
     <!-- Third-party analyzers included. -->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 

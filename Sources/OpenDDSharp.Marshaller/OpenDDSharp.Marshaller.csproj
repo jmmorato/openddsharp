@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net8.0;net9.0;</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0;</TargetFrameworks>
         <Platforms>x64;x86;ARM64</Platforms>
         <Configurations>Debug;Release</Configurations>
         <CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
@@ -35,20 +35,20 @@
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
         <PackageReference Include="System.Memory" Version="4.6.3" />
-        <PackageReference Include="System.Text.Json" Version="9.0.9" />
+        <PackageReference Include="System.Text.Json" Version="10.0.5" />
     </ItemGroup>
 
     <ItemGroup>
         <!-- Analyzer API for our custom checks. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
         <!-- Third-party analyzers included. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.201">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
@@ -66,6 +66,9 @@
         <None Include="$(IntermediateOutputPath)/net9.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
             <PackagePath>ref\net9.0</PackagePath>
         </None>
+        <None Include="$(IntermediateOutputPath)/net10.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
+            <PackagePath>ref\net10.0</PackagePath>
+        </None>
 
         <None Include="$(IntermediateOutputPath)/netstandard2.0/$(AssemblyName).xml" Pack="true" Visible="false">
             <PackagePath>ref\netstandard2.0</PackagePath>
@@ -75,6 +78,9 @@
         </None>
         <None Include="$(IntermediateOutputPath)/net9.0/$(AssemblyName).xml" Pack="true" Visible="false">
             <PackagePath>ref\net9.0</PackagePath>
+        </None>
+        <None Include="$(IntermediateOutputPath)/net10.0/$(AssemblyName).xml" Pack="true" Visible="false">
+            <PackagePath>ref\net10.0</PackagePath>
         </None>
     </ItemGroup>
 

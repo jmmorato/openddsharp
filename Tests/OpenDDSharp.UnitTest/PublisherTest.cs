@@ -413,7 +413,7 @@ namespace OpenDDSharp.UnitTest
             listener.Dispose();
 
             // Test with null parameter
-            Assert.ThrowsException<ArgumentNullException>(() => publisher.CreateDataWriter(null));
+            Assert.ThrowsExactly<ArgumentNullException>(() => publisher.CreateDataWriter(null));
 
             // Test with wrong qos
             var dwQos = new DataWriterQos

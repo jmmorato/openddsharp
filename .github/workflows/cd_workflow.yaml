@@ -55,7 +55,14 @@ jobs:
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 9.0;
-        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append  
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Setup dotnet 10.0
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 10.0;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
@@ -175,6 +182,11 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
+    - name: Setup dotnet 10.0
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
+
     - name: Cache OpenDDS libraries
       id: opendds-libraries-linux-cd
       uses: actions/cache@v4
@@ -271,12 +283,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-13
-            runtime: osx-x64
-            build_platform: x64
-          - os: macos-14
+          - os: macos-15
             runtime: osx-arm64
             build_platform: ARM64
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
@@ -299,6 +311,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
+
+      - name: Setup dotnet 10.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-macos-cd
@@ -447,6 +464,14 @@ jobs:
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
+      - name: Setup dotnet 10.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+          ./dotnet-install.ps1 -Architecture '${{ matrix.build_platform }}' -Channel 10.0;
+          echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        working-directory: ${{ github.workspace }}
+
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v5
         with:
@@ -577,6 +602,11 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
+    - name: Setup dotnet 10.0
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
+
     - name: Download ${{ matrix.runtime }} native
       uses: actions/download-artifact@v5
       with:
@@ -671,16 +701,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-13
-            runtime: osx-x64
-            build_platform: x64
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
-# Issues with macos-15 found, waiting for official image review to fix it
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
+          - os: macos-15
+            runtime: osx-arm64
+            build_platform: ARM64
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
@@ -705,6 +734,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
+
+      - name: Setup dotnet 10.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
 
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v5
@@ -827,6 +861,13 @@ jobs:
       run: |
         Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
         ./dotnet-install.ps1 -Architecture 'x64' -Channel 9.0;
+        echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Setup dotnet 10.0
+      shell: pwsh
+      run: |
+        Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
+        ./dotnet-install.ps1 -Architecture 'x64' -Channel 10.0;
         echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Install GitVersion
@@ -1020,13 +1061,17 @@ jobs:
             runtime: linux-arm64
             build_platform: ARM64
             configuration: Release
-          - os: macos-13
-            runtime: osx-x64
-            build_platform: x64
-            configuration: Release
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
+            configuration: Release
+          - os: macos-15
+            runtime: osx-arm64
+            build_platform: ARM64
+            configuration: Release
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
             configuration: Release
 #          win-x86 Debug artifact test throws 0xC0000005 Access Violation exception during Topic creation
 #          https://github.com/jmmorato/openddsharp/issues/297
@@ -1062,19 +1107,18 @@ jobs:
             runtime: linux-arm64
             build_platform: ARM64
             configuration: Debug
-          - os: macos-13
-            runtime: osx-x64
-            build_platform: x64
-            configuration: Debug
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
             configuration: Debug
-# Issues with macos-15 found, waiting for official image review to fix it
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#            configuration: Release
+          - os: macos-15
+            runtime: osx-arm64
+            build_platform: ARM64
+            configuration: Debug
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
+            configuration: Debug
 
     runs-on: ${{ matrix.os }}
 
@@ -1095,6 +1139,11 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
+
+      - name: Setup dotnet 10.0
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4
@@ -1189,7 +1238,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Download OpenDDSharp NuGets
         uses: actions/download-artifact@v5
