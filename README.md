@@ -77,7 +77,7 @@ The following table shows the Target Frameworks that are already implemented and
 | netstandard2.0   | :white_check_mark: |
 | net8.0           | :white_check_mark: |
 | net9.0           | :white_check_mark: |
-| net9.0           | :white_check_mark: |
+| net10.0          | :white_check_mark: |
 
 The following table shows the Runtimes Identifiers that are already implemented and tested and
 the ones that are planned for next versions:
