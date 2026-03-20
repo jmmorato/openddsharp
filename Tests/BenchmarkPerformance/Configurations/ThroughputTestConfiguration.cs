@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Engines;
+using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Exporters.Json;
@@ -9,7 +10,6 @@ using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
-using OpenDDSharp.BenchmarkPerformance.Helpers;
 
 namespace OpenDDSharp.BenchmarkPerformance.Configurations;
 
@@ -24,7 +24,8 @@ internal class ThroughputTestConfiguration : ManualConfig
             .WithUnrollFactor(1)
             .WithInvocationCount(10)
             .WithWarmupCount(5)
-            .WithStrategy(RunStrategy.Throughput);
+            .WithStrategy(RunStrategy.Throughput)
+            .WithRuntime(CoreRuntime.Core80);
 
         if (name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {

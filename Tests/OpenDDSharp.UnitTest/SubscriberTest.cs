@@ -717,7 +717,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Create a DataReader with null parameter
-            Assert.ThrowsException<System.ArgumentNullException>(() => subscriber.CreateDataReader(null));
+            Assert.ThrowsExactly<ArgumentNullException>(() => subscriber.CreateDataReader(null));
 
             // Create DataReader with incorrect qos
             var drQos = new DataReaderQos

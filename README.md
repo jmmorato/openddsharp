@@ -9,9 +9,9 @@ OpenDDS wrapper for .NET languages.
 OpenDDS is an open source implementation of the Object Management Group
 (OMG) Data Distribution Service (DDS), developed and copyrighted by
 Object Computing Incorporated (OCI). The OMG DDS specification is intended
-to be suitable for systems whose requirements include real-time, high
-volume, robustness, failure tolerant data distribution utilizing a
-publish and subscribe model.
+to be suitable for systems whose requirements include real-time, high volume,
+robustness, failure-tolerant data distribution using a
+publish/subscribe model.
 
 OpenDDS Website: [https://www.opendds.org](https://www.opendds.org)  
 OpenDDS Repository: [https://github.com/OpenDDS/OpenDDS](https://github.com/OpenDDS/OpenDDS)  
@@ -56,10 +56,10 @@ OpenDDS articles:
 * [Using TAO and OpenDDS with .NET](https://objectcomputing.com/resources/publications/mnb/2009/01/15/using-tao-and-opendds-net-part-i)
 * [Code Generation with OpenDDS](https://objectcomputing.com/resources/publications/mnb/2010/06/02/code-generation-opendds-part-i)
 
-The first versions of OpenDDSharp were using a similar C++/CLI wrapper than the articles explain but that solution
+The first versions of OpenDDSharp were using a similar C++/CLI wrapper than the articles explain, but that solution
 ties the API to .NET Framework and Windows operating systems.
 
-In order to avoid the restrictions, the wrapper has been re-implemented using PInvoke and compiled for NET Standard 2.0.
+To avoid the restrictions, the wrapper has been re-implemented using PInvoke and compiled for NET Standard 2.0.
 
 The Data-Centric Publish-Subscribe (DCPS) model described in the main [DDS Specification v1.4](https://www.omg.org/spec/DDS/1.4)
 is already implemented and ready to be used.
@@ -70,24 +70,17 @@ Visit https://www.openddsharp.com/articles/idl.html to check the current status 
 As OpenDDSharp is based on native OpenDDS libraries, it needs a different compilation for each Framework/Runtime that
 support.
 
-The following table shows the Target Frameworks that are already implemented and tested ( :white_check_mark: ) and
-the ones that are planned for next versions ( :x: ):
+The following table shows the Target Frameworks that are already implemented and tested:
 
-| Target Framework  | Status             |
-|-------------------|--------------------|
-| net462 (or above) | :white_check_mark: |
-| net6.0            | :white_check_mark: |
-| net6.0-android    | :x:                |
-| net6.0-ios        | :x:                |
-| net7.0            | :white_check_mark: |
-| net7.0-android    | :x:                |
-| net7.0-ios        | :x:                |
-| net8.0            | :white_check_mark: |
-| net8.0-android    | :x:                |
-| net8.0-ios        | :x:                |
+| Target Framework | Status             |
+|------------------|--------------------|
+| netstandard2.0   | :white_check_mark: |
+| net8.0           | :white_check_mark: |
+| net9.0           | :white_check_mark: |
+| net9.0           | :white_check_mark: |
 
-The following table shows the Runtimes Identifiers that are already implemented and tested ( :white_check_mark: ) and
-the ones that are planned for next versions ( :x: ):
+The following table shows the Runtimes Identifiers that are already implemented and tested and
+the ones that are planned for next versions:
 
 | Runtime ID  | Status             |
 |-------------|--------------------|
@@ -100,7 +93,7 @@ the ones that are planned for next versions ( :x: ):
 | osx-arm64   | :white_check_mark: |
 
 Once the core API is stable and working for all the planned Frameworks/Runtimes,
-the development will be focus to provide other advanced DDS features
+the development will be focus on providing other advanced DDS features
 
 * [DDS Security](https://www.omg.org/spec/DDS-SECURITY)
 * [Extensible and Dynamic Topic Types for DDS](https://www.omg.org/spec/DDS-XTypes)
@@ -109,23 +102,22 @@ the development will be focus to provide other advanced DDS features
 * ...
 
 # How to Collaborate
-OpenDDSharp is developed and maintained as a hobby during my free time but as (almost) all human been I have kids,
-wife, family, friends or other hobbies that I like to enjoy with.
+OpenDDSharp is developed and maintained as a hobby during my free time, but as almost all humans, I have kids,
+wife, family, friends and other hobbies that I like to enjoy with.
 
-You should understand that I'm not 100% dedicated to the project and the only way to make it grow is collaborating
-together.
+You should understand that I'm not 100% dedicated to the project and the only way to make it grow is by collaborating.
 
 ## Use it, test it and report it
 Just using OpenDDSharp you are already collaborating with the project.
 
 Share your thoughts with the community by creating new [Discussions](https://github.com/jmmorato/openddsharp/discussions) and
-report bugs or improvement requests on the [Issues](https://github.com/jmmorato/openddsharp/issues) section.
+reporting bugs or improvement requests in the [Issues](https://github.com/jmmorato/openddsharp/issues) section.
 
 In addition, the online documentation contains one advertisement per page. I'm sorry for that but...
-please consider to whitelist www.openddsharp.com in your favorite adsblock software if you are using one.
+please consider allowing www.openddsharp.com in your favorite adsblock software if you are using one.
 
 ## Implement it yourself
-As in almost all open sources projects, pull request are welcome.
+As in almost all open source projects, pull requests are welcome.
 If you find bugs or your project requires a not implemented feature, feel free to code it yourself and create a
 pull request.
 
@@ -133,7 +125,7 @@ Try to structure your code nicely and follow the OpenDDSharp coding guidelines (
 All pull requests will be reviewed and merged when approved. 
 
 ## Sponsor it
-If you are using OpenDDSharp successfully in your projects or just want an open source alternative for your DDS
-systems in C#, you should consider to sponsor it to ensure the future development of the project.
+If you are using OpenDDSharp successfully in your projects or just want an open-source alternative for your DDS
+systems in C#, you should consider sponsoring it to ensure the future development of the project.
 
 Check the monthly and one-time tiers in the GitHub [Sponsor](https://github.com/sponsors/jmmorato) section for more information.

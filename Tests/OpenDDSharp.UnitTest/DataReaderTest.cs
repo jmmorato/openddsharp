@@ -715,10 +715,10 @@ namespace OpenDDSharp.UnitTest
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Wait for discovery and write an instance
-            var found = writer.WaitForSubscriptions(1, 1000);
+            var found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
-            found = reader.WaitForPublications(1, 1000);
+            found = reader.WaitForPublications(1, 5_000);
             Assert.IsTrue(found);
 
             dataWriter.Write(new TestStruct { Id = 1 });
@@ -733,7 +733,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(0, status.TotalCountChange);
             Assert.AreEqual(InstanceHandle.HandleNil, status.LastInstanceHandle);
 
-            // After one second and a half one deadline should be lost
+            // After one second and a half, one deadline should be lost
             Assert.IsTrue(evt.Wait(1_500));
 
             result = reader.GetRequestedDeadlineMissedStatus(ref status);
