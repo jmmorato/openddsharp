@@ -42,7 +42,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Initialization/Cleanup
         /// <summary>
-        /// Test the properties default values after calling the constructor.
+        /// Test the properties' default values after calling the constructor.
         /// </summary>
         [TestInitialize]
         public void TestInitialize()
@@ -61,7 +61,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the properties non-default values after calling the constructor.
+        /// Test the properties' non-default values after calling the constructor.
         /// </summary>
         [TestCleanup]
         public void TestCleanup()
@@ -463,7 +463,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(_participant.WaitForParticipants(1, 20_000));
             Assert.IsTrue(otherParticipant.WaitForParticipants(1, 20_000));
 
-            // Get the for an existing instance
+            // Get the next sample for an existing instance
             ret = _dr.ReadNextSample(ref data, info);
             Assert.AreEqual(ReturnCode.Ok, ret);
             Assert.AreEqual(1, data.UserData.Value.Count);

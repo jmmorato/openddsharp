@@ -102,9 +102,9 @@ public readonly struct StatusMask : IEquatable<StatusMask>
         }
 
         StatusMask aux;
-        if (obj is uint)
+        if (obj is uint u)
         {
-            aux = (uint)obj;
+            aux = u;
         }
         else
         {

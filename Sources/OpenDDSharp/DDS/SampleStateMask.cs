@@ -90,9 +90,9 @@ public readonly struct SampleStateMask : IEquatable<SampleStateMask>
         }
 
         SampleStateMask aux;
-        if (obj is uint)
+        if (obj is uint u)
         {
-            aux = (uint)obj;
+            aux = u;
         }
         else
         {
