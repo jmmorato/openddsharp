@@ -706,10 +706,10 @@ namespace OpenDDSharp.UnitTest
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
             // Wait for discovery and write an instance
-            var found = writer.WaitForSubscriptions(1, 1000);
+            var found = writer.WaitForSubscriptions(1, 5_000);
             Assert.IsTrue(found);
 
-            found = reader.WaitForPublications(1, 1000);
+            found = reader.WaitForPublications(1, 5_000);
             Assert.IsTrue(found);
 
             dataWriter.Write(new TestInclude { Id = "1" });

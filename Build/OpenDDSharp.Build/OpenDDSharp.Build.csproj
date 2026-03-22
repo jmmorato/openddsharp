@@ -18,21 +18,21 @@
   <ItemGroup>
     <PackageReference Include="Cake.CMake" Version="1.4.0" />
     <PackageReference Include="Cake.FileHelpers" Version="7.0.0" />
-    <PackageReference Include="Cake.Frosting" Version="5.0.0" />
+    <PackageReference Include="Cake.Frosting" Version="5.1.0" />
     <PackageReference Include="Cake.Json" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Analyzer API for our custom checks. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
     <!-- Third-party analyzers included. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.201">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
