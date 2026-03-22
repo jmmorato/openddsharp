@@ -99,6 +99,19 @@
       <PackagePath>runtimes\win-x86\lib\net10.0</PackagePath>
     </None>
 
+    <None Include="$(MSBuildProjectDirectory)/bin/ARM64/Release/netstandard2.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\linux-arm64\lib\netstandard2.0;runtimes\osx-arm64\lib\netstandard2.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/ARM64/Release/net8.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\linux-arm64\lib\net8.0;runtimes\osx-arm64\lib\net8.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/ARM64/Release/net9.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\linux-arm64\lib\net9.0;runtimes\osx-arm64\lib\net9.0</PackagePath>
+    </None>
+    <None Include="$(MSBuildProjectDirectory)/bin/ARM64/Release/net10.0/$(AssemblyName).dll" Pack="true" Visible="false">
+      <PackagePath>runtimes\linux-arm64\lib\net10.0;runtimes\osx-arm64\lib\net10.0</PackagePath>
+    </None>
+
     <None Include="$(IntermediateOutputPath)/netstandard2.0/ref/$(AssemblyName).dll" Pack="true" Visible="false">
       <PackagePath>ref\netstandard2.0</PackagePath>
     </None>
