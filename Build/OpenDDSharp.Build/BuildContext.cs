@@ -174,7 +174,7 @@ namespace OpenDDSharp.Build
                     }
                     else
                     {
-                        Log.Information("Using linux-arm64 runtime.");
+                        Log.Information("Using linux-x64 runtime.");
                     }
                 }
                 else if (IsOSX)
@@ -182,12 +182,12 @@ namespace OpenDDSharp.Build
                     runtime = "osx-x64";
                     if (BuildPlatform == PlatformTarget.ARM64)
                     {
-                        Log.Information("Using mac-arm64 runtime.");
+                        Log.Information("Using osx-arm64 runtime.");
                         runtime = "osx-arm64";
                     }
                     else
                     {
-                        Log.Information("Using mac-x64 runtime.");
+                        Log.Information("Using osx-x64 runtime.");
                     }
                 }
 
