@@ -165,7 +165,7 @@ namespace OpenDDSharp.UnitTest.Helpers
 
         public Process SpawnDCPSInfoRepo()
         {
-            string ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT");
+            var ddsPath = Environment.GetEnvironmentVariable("DDS_ROOT") ?? string.Empty;
 #if Windows
             string infoRepoPath = Path.Combine($"{ddsPath}_{_platformFolder}", $"bin", DCPSINFOREPO_PROCESS_EXE_NAME);
 #else
@@ -193,11 +193,14 @@ namespace OpenDDSharp.UnitTest.Helpers
                 RedirectStandardError = true,
                 CreateNoWindow = true,
                 UseShellExecute = false,
+                EnvironmentVariables =
+                {
+                    ["DDS_ROOT"] = ddsPath,
+                    ["ACE_ROOT"] = acePath,
+                    ["TAO_ROOT"] = taoPath
+                }
             };
 
-            processInfo.EnvironmentVariables["DDS_ROOT"] = ddsPath;
-            processInfo.EnvironmentVariables["ACE_ROOT"] = acePath;
-            processInfo.EnvironmentVariables["TAO_ROOT"] = taoPath;
 #if Linux
             processInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"$LD_LIBRARY_PATH:{ddsPath}/lib:{acePath}/lib:.";
 #elif OSX

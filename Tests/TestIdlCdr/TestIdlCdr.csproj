@@ -1,7 +1,7 @@
 ﻿<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0;</TargetFrameworks>
     <LangVersion>12.0</LangVersion>
     <Platforms>x64;x86;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
@@ -118,7 +118,7 @@
       <Visible>false</Visible>
       <Link>Native\CSharpCDRImplTemplate.txt</Link>
     </IdlTemplates>
-    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpCdrImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
+    <IdlTemplates Include="..\..\Native\CSharpStructImplTemplate.txt;..\..\Native\CSharpCDRImplTemplate.txt;..\..\Native\CWrapperHeaderTemplate.txt;..\..\Native\CWrapperImplTemplate.txt" Visible="false" />
   </ItemGroup>
 
   <!-- Ensure templates are copied for code generation-->
