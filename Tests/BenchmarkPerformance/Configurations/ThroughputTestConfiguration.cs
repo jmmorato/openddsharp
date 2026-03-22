@@ -25,7 +25,7 @@ internal class ThroughputTestConfiguration : ManualConfig
             .WithInvocationCount(10)
             .WithWarmupCount(5)
             .WithStrategy(RunStrategy.Throughput)
-            .WithRuntime(CoreRuntime.Core80);
+            .WithRuntime(CoreRuntime.Core10_0);
 
         if (name.Equals("dry", StringComparison.InvariantCultureIgnoreCase))
         {
