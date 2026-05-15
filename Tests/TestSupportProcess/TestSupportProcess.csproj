@@ -49,13 +49,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.201">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.300">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
     <!-- Third-party analyzers included. -->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.25.0.139117">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 

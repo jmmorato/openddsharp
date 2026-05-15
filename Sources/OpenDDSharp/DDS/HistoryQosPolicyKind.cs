@@ -23,7 +23,7 @@ public enum HistoryQosPolicyKind
     KeepLastHistoryQos = 0,
 
     /// <summary>
-    /// specifies that all possible samples for that instance should be kept. When "keep all" is specified and
+    /// Specifies that all possible samples for that instance should be kept. When "keep all" is specified and
     /// the number of unread samples is equal to the "resource limits" property of MaxSamplesPerInstance then
     /// any incoming samples are rejected.
     /// </summary>

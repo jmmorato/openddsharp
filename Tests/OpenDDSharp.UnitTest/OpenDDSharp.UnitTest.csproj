@@ -57,13 +57,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="8.0.1">
+    <PackageReference Include="coverlet.collector" Version="10.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,7 +78,7 @@
     </PackageReference>
 
     <!-- Third-party analyzers included. -->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.25.0.139117">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
