@@ -10,18 +10,18 @@
 #      href: infrastructure_module.md
     - name: Domain Module
       href: domain_module.md
-#    - name: Topic Definition Module
-#      href: topic_definition_module.md
-#    - name: Publication Module
-#      href: publication_module.md
-#    - name: Subscription Module
-#      href: subscription_module.md
+    - name: Topic Definition Module
+      href: topic_definition_module.md
+    - name: Publication Module
+      href: publication_module.md
+    - name: Subscription Module
+      href: subscription_module.md
 #    - name: Transports
 #      href: transports.md
 #    - name: Built-in Topics
 #      href: built_in_topics.md
-#- name: How to build OpenDDSharp
-#  href: how_to_build.md
+- name: How to build OpenDDSharp
+  href: how_to_build.md
 - name: IDL to C# Mapping
   href: idl.md
 - name: Performance Tests

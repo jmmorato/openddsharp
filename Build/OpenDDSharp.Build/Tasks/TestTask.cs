@@ -31,7 +31,6 @@ public class TestTask : FrostingTask<BuildContext>
         var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
         var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.UnitTest/bin/{context.BuildConfiguration}/net8.0/{context.RunTime}");
         context.Log.Information($"Unit test path: {path}");
-        // var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/6.0.4/build/netstandard2.0");
         var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
         context.Log.Information($"Settings file: {settingsFile}");
 
