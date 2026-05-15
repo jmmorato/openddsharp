@@ -740,6 +740,15 @@ namespace OpenDDSharp.UnitTest.Helpers
                         DataRepresentationQosPolicy.XML_DATA_REPRESENTATION,
                     },
                 },
+                TypeConsistencyEnforcement =
+                {
+                    Kind = TypeConsistencyEnforcementQosPolicyKind.DisallowTypeCoercion,
+                    IgnoreSequenceBounds = false,
+                    IgnoreStringBounds = false,
+                    IgnoreMemberNames = true,
+                    PreventTypeWidening = true,
+                    ForceTypeValidation = true,
+                },
             };
 
             return qos;
@@ -800,6 +809,12 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.IsNotNull(qos.UserData.Value);
             Assert.AreEqual(0, qos.UserData.Value.Count);
             Assert.AreEqual(0, qos.Representation.Value.Count);
+            Assert.AreEqual(TypeConsistencyEnforcementQosPolicyKind.AllowTypeCoercion, qos.TypeConsistencyEnforcement.Kind);
+            Assert.IsTrue(qos.TypeConsistencyEnforcement.IgnoreSequenceBounds);
+            Assert.IsTrue(qos.TypeConsistencyEnforcement.IgnoreStringBounds);
+            Assert.IsFalse(qos.TypeConsistencyEnforcement.IgnoreMemberNames);
+            Assert.IsFalse(qos.TypeConsistencyEnforcement.PreventTypeWidening);
+            Assert.IsFalse(qos.TypeConsistencyEnforcement.ForceTypeValidation);
         }
 
         public static void TestNonDefaultDataReaderQos(DataReaderQos qos)
@@ -858,6 +873,12 @@ namespace OpenDDSharp.UnitTest.Helpers
             Assert.AreEqual(3U, qos.TimeBasedFilter.MinimumSeparation.NanoSeconds);
             Assert.AreEqual(0x5, qos.UserData.Value[0]);
             Assert.AreEqual(3, qos.Representation.Value.Count);
+            Assert.AreEqual(TypeConsistencyEnforcementQosPolicyKind.DisallowTypeCoercion, qos.TypeConsistencyEnforcement.Kind);
+            Assert.IsFalse(qos.TypeConsistencyEnforcement.IgnoreSequenceBounds);
+            Assert.IsFalse(qos.TypeConsistencyEnforcement.IgnoreStringBounds);
+            Assert.IsTrue(qos.TypeConsistencyEnforcement.IgnoreMemberNames);
+            Assert.IsTrue(qos.TypeConsistencyEnforcement.PreventTypeWidening);
+            Assert.IsTrue(qos.TypeConsistencyEnforcement.ForceTypeValidation);
         }
         #endregion
 

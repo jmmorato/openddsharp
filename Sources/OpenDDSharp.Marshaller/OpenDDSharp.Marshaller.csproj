@@ -35,7 +35,7 @@
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
         <PackageReference Include="System.Memory" Version="4.6.3" />
-        <PackageReference Include="System.Text.Json" Version="10.0.5" />
+        <PackageReference Include="System.Text.Json" Version="10.0.8" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,10 +45,10 @@
         </PackageReference>
 
         <!-- Third-party analyzers included. -->
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.201">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.300">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.25.0.139117">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

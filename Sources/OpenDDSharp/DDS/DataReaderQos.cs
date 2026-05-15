@@ -83,6 +83,11 @@ public sealed class DataReaderQos : IEquatable<DataReaderQos>
     /// Gets the <see cref="DataRepresentationQosPolicy"/>.
     /// </summary>
     public DataRepresentationQosPolicy Representation { get; internal set; }
+
+    /// <summary>
+    /// Gets the <see cref="TypeConsistencyEnforcementQosPolicy"/>.
+    /// </summary>
+    public TypeConsistencyEnforcementQosPolicy TypeConsistencyEnforcement { get; internal set; }
     #endregion
 
     #region Constructors
@@ -104,6 +109,7 @@ public sealed class DataReaderQos : IEquatable<DataReaderQos>
         TimeBasedFilter = new TimeBasedFilterQosPolicy();
         ReaderDataLifecycle = new ReaderDataLifecycleQosPolicy();
         Representation = new DataRepresentationQosPolicy();
+        TypeConsistencyEnforcement = new TypeConsistencyEnforcementQosPolicy();
     }
     #endregion
 
@@ -123,6 +129,7 @@ public sealed class DataReaderQos : IEquatable<DataReaderQos>
             ResourceLimits = ResourceLimits,
             TimeBasedFilter = TimeBasedFilter,
             ReaderDataLifecycle = ReaderDataLifecycle,
+            TypeConsistencyEnforcement = TypeConsistencyEnforcement,
         };
 
         if (UserData != null)
@@ -151,6 +158,7 @@ public sealed class DataReaderQos : IEquatable<DataReaderQos>
         ResourceLimits = wrapper.ResourceLimits;
         TimeBasedFilter = wrapper.TimeBasedFilter;
         ReaderDataLifecycle = wrapper.ReaderDataLifecycle;
+        TypeConsistencyEnforcement = wrapper.TypeConsistencyEnforcement;
 
         if (UserData == null)
         {
@@ -196,7 +204,8 @@ public sealed class DataReaderQos : IEquatable<DataReaderQos>
                Ownership == other.Ownership &&
                TimeBasedFilter == other.TimeBasedFilter &&
                ReaderDataLifecycle == other.ReaderDataLifecycle &&
-               Representation == other.Representation;
+               Representation == other.Representation &&
+               TypeConsistencyEnforcement == other.TypeConsistencyEnforcement;
     }
 
     /// <summary>
@@ -229,6 +238,7 @@ public sealed class DataReaderQos : IEquatable<DataReaderQos>
         hashCode = (hashCode * -1521134295) + EqualityComparer<TimeBasedFilterQosPolicy>.Default.GetHashCode(TimeBasedFilter);
         hashCode = (hashCode * -1521134295) + EqualityComparer<ReaderDataLifecycleQosPolicy>.Default.GetHashCode(ReaderDataLifecycle);
         hashCode = (hashCode * -1521134295) + EqualityComparer<DataRepresentationQosPolicy>.Default.GetHashCode(Representation);
+        hashCode = (hashCode * -1521134295) + EqualityComparer<TypeConsistencyEnforcementQosPolicy>.Default.GetHashCode(TypeConsistencyEnforcement);
         return hashCode;
     }
     #endregion
@@ -308,5 +318,7 @@ internal struct DataReaderQosWrapper
     public ReaderDataLifecycleQosPolicyWrapper ReaderDataLifecycle;
     [MarshalAs(UnmanagedType.Struct)]
     public DataRepresentationQosPolicyWrapper Representation;
+    [MarshalAs(UnmanagedType.Struct)]
+    public TypeConsistencyEnforcementQosPolicyWrapper TypeConsistencyEnforcement;
     #endregion
 }

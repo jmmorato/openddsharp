@@ -14,6 +14,45 @@ it under the terms of the MIT License.
 
 #include "dds/DdsDcpsDomainC.h"
 
+EXTERN_STRUCT_EXPORT TypeConsistencyEnforcementQosPolicyWrapper {
+  CORBA::Short kind;
+  CORBA::Boolean ignore_sequence_bounds;
+  CORBA::Boolean ignore_string_bounds;
+  CORBA::Boolean ignore_member_names;
+  CORBA::Boolean prevent_type_widening;
+  CORBA::Boolean force_type_validation;
+
+public:
+  TypeConsistencyEnforcementQosPolicyWrapper() {
+    kind = DDS::ALLOW_TYPE_COERCION;
+    ignore_sequence_bounds = true;
+    ignore_string_bounds = true;
+    ignore_member_names = false;
+    prevent_type_widening = false;
+    force_type_validation = false;
+  }
+
+  TypeConsistencyEnforcementQosPolicyWrapper(const ::DDS::TypeConsistencyEnforcementQosPolicy native) {
+    force_type_validation = native.force_type_validation;
+    ignore_member_names = native.ignore_member_names;
+    ignore_sequence_bounds = native.ignore_sequence_bounds;
+    ignore_string_bounds = native.ignore_string_bounds;
+    prevent_type_widening = native.prevent_type_widening;
+    kind = native.kind;
+  }
+
+  operator ::DDS::TypeConsistencyEnforcementQosPolicy() const {
+    ::DDS::TypeConsistencyEnforcementQosPolicy native;
+    native.force_type_validation = force_type_validation;
+    native.ignore_member_names = ignore_member_names;
+    native.ignore_sequence_bounds = ignore_sequence_bounds;
+    native.ignore_string_bounds = ignore_string_bounds;
+    native.prevent_type_widening = prevent_type_widening;
+    native.kind = (::DDS::TypeConsistencyEnforcementQosPolicyKind_t) kind;
+    return native;
+  }
+};
+
 EXTERN_STRUCT_EXPORT DataRepresentationQosPolicyWrapper {
     void *value;
 
@@ -742,6 +781,7 @@ EXTERN_STRUCT_EXPORT DataReaderQosWrapper {
     TimeBasedFilterQosPolicyWrapper time_based_filter;
     ReaderDataLifecycleQosPolicyWrapper reader_data_lifecycle;
     DataRepresentationQosPolicyWrapper representation;
+    TypeConsistencyEnforcementQosPolicyWrapper type_consistency;
 
 public:
     DataReaderQosWrapper();
@@ -760,6 +800,7 @@ public:
       time_based_filter = native.time_based_filter;
       reader_data_lifecycle = native.reader_data_lifecycle;
       representation = native.representation;
+      type_consistency = native.type_consistency;
     }
 
     operator ::DDS::DataReaderQos() const {
@@ -777,6 +818,7 @@ public:
       native.time_based_filter = time_based_filter;
       native.reader_data_lifecycle = reader_data_lifecycle;
       native.representation = representation;
+      native.type_consistency = type_consistency;
       return native;
     }
 };
