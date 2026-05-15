@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0;</TargetFrameworks>
+	<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     <Nullable>disable</Nullable>
 	<LangVersion>12.0</LangVersion>
 	<CodeAnalysisRuleSet>..\..\OpenDDSharpRules.ruleset</CodeAnalysisRuleSet>
