@@ -36,7 +36,6 @@ public class TestTask : FrostingTask<BuildContext>
 
         var dotnetTestSettings = new DotNetTestSettings
         {
-            // TestAdapterPath = Path.GetFullPath(testAdapterPath),
             WorkingDirectory = path,
             EnvironmentVariables =
             {
@@ -54,7 +53,8 @@ public class TestTask : FrostingTask<BuildContext>
             Loggers = { "trx;LogFilePrefix=test-results", "console;verbosity=normal" },
             ArgumentCustomization = builder => builder
                 .Append("--collect:\"XPlat Code Coverage\"")
-                .Append($"--results-directory {solutionFullPath}/TestResults"),
+                .Append($"--results-directory {solutionFullPath}/TestResults")
+                .Append("-p:TestTfmsInParallel=false"),
         };
 
         var projectFile = Path.Combine(solutionFullPath, "Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj");
