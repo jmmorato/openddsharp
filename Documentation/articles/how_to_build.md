@@ -123,24 +123,13 @@ graph TD
 
 ## Step 1 — Build the Native Libraries
 
-Run the build script from the `Build` directory. The `BuildOpenDDSharpNativeTask` target downloads, configures, and compiles OpenDDS along with the C++ wrappers.
+The first step to build OpenDDSharp is to build the native libraries. As OpenDDSharp is a wrapper around OpenDDS,
+you need to have OpenDDS compiled for your target platform. The build script automates this process by downloading the
+specified version of OpenDDS, configuring it up, and compiling it along with the OpenDDSharp C++ wrapper. The OpenDDSharp
+C++ wrapper will be used to invoke the native OpenDDS library from managed code via P/Invoke.
 
-### Windows (x64)
-
-```powershell
-cd Build
-./OpenDDSharp.Build.ps1 `
-  --target=BuildOpenDDSharpNativeTask `
-  --VisualStudioVersion=VS2022 `
-  --VisualStudioEdition=Enterprise `
-  --BuildConfiguration=Release `
-  --BuildPlatform=x64 `
-  --OpenDdsVersion=3.33.0 `
-  --IgnoreThirdPartySetup=False `
-  --IgnoreThirdPartyBuild=False
-```
-
-### Windows (x86)
+For example, to build the native libraries for Windows x64, with Visual Studio 2022 Enterprise edition,
+run the following command from the `Build` directory:
 
 ```powershell
 cd Build
@@ -149,73 +138,23 @@ cd Build
   --VisualStudioVersion=VS2022 `
   --VisualStudioEdition=Enterprise `
   --BuildConfiguration=Release `
-  --BuildPlatform=x86 `
-  --OpenDdsVersion=3.33.0 `
-  --IgnoreThirdPartySetup=False `
-  --IgnoreThirdPartyBuild=False
-```
-
-### Linux (x64)
-
-```powershell
-cd Build
-./OpenDDSharp.Build.ps1 `
-  --target=BuildOpenDDSharpNativeTask `
-  --BuildConfiguration=Release `
   --BuildPlatform=x64 `
   --OpenDdsVersion=3.33.0 `
   --IgnoreThirdPartySetup=False `
   --IgnoreThirdPartyBuild=False
 ```
 
-### Linux (ARM64)
-
-```powershell
-cd Build
-./OpenDDSharp.Build.ps1 `
-  --target=BuildOpenDDSharpNativeTask `
-  --BuildConfiguration=Release `
-  --BuildPlatform=ARM64 `
-  --OpenDdsVersion=3.33.0 `
-  --IgnoreThirdPartySetup=False `
-  --IgnoreThirdPartyBuild=False
-```
-
-### macOS (Apple Silicon / ARM64)
-
-```powershell
-cd Build
-./OpenDDSharp.Build.ps1 `
-  --target=BuildOpenDDSharpNativeTask `
-  --BuildConfiguration=Release `
-  --BuildPlatform=ARM64 `
-  --OpenDdsVersion=3.33.0 `
-  --IgnoreThirdPartySetup=False `
-  --IgnoreThirdPartyBuild=False
-```
-
-### macOS (Intel / x64)
-
-```powershell
-cd Build
-./OpenDDSharp.Build.ps1 `
-  --target=BuildOpenDDSharpNativeTask `
-  --BuildConfiguration=Release `
-  --BuildPlatform=x64 `
-  --OpenDdsVersion=3.33.0 `
-  --IgnoreThirdPartySetup=False `
-  --IgnoreThirdPartyBuild=False
-```
-
-> **Tip — skipping the third-party build on subsequent runs:**
-> Once OpenDDS has been compiled successfully, you can skip the lengthy third-party build by setting both flags to `True` and adding `--exclusive`:
+> **Tip — skipping the third-party setup on subsequent runs:**
+> Once OpenDDS has been compiled successfully, you can skip the third-party setup by setting to `True` the
+> `IgnoreThirdPartySetup` parameter. For example, to build the native libraries for Windows x86, skipping the
+> third-party setup after a previous compilation for x64, run the following command:
 > ```powershell
 > ./OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive `
->   --BuildPlatform=x64 --OpenDdsVersion=3.33.0 `
->   --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=True
+>   --BuildPlatform=x86 --OpenDdsVersion=3.33.0 `
+>   --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=False
 > ```
 
-After a successful native build the compiled artifacts are placed under:
+After a successful native build, the compiled artifacts are placed under:
 
 | Platform    | Directory                                                  |
 |-------------|------------------------------------------------------------|
@@ -226,105 +165,137 @@ After a successful native build the compiled artifacts are placed under:
 | macOS ARM64 | `ext/OpenDDS_osx-arm64/` and `Native/build_osx-arm64/`     |
 | macOS x64   | `ext/OpenDDS_osx-x64/` and `Native/build_osx-x64/`         |
 
----
-
 ## Step 2 — Set Environment Variables
 
-The managed build and tests require the OpenDDS paths to be exported. Adjust the paths to match the platform and architecture you built in Step 1.
+The managed OpenDDSharp build and test projects require the OpenDDS paths to be exported in your development environment.
+That will allow the managed build to find the OpenDDS libraries and headers in the expected locations during development.
 
-### Windows (x64)
+You can find all the required paths for your current system in the`setenv.sh` script (`setenv.cmd` on Windows systems)
+created during the native build in the `ext` directory of the OpenDDS source code (i.e. `ext/OpenDDS_linux-x64/`).
 
-```powershell
-$env:DDS_ROOT = "$PWD\ext\OpenDDS_x64"
-$env:ACE_ROOT = "$PWD\ext\OpenDDS_x64\ACE_wrappers"
-$env:TAO_ROOT = "$PWD\ext\OpenDDS_x64\ACE_wrappers\TAO"
-$env:PATH    += ";$PWD\ext\OpenDDS_x64\lib;$PWD\ext\OpenDDS_x64\ACE_wrappers\lib"
-```
+For example:
 
-### Linux (x64)
+#### Windows x64 systems
 
 ```bash
-export DDS_ROOT="$PWD/ext/OpenDDS_linux-x64"
-export ACE_ROOT="$PWD/ext/OpenDDS_linux-x64/ACE_wrappers"
-export TAO_ROOT="$PWD/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
-export LD_LIBRARY_PATH="$PWD/ext/OpenDDS_linux-x64/lib:$PWD/ext/OpenDDS_linux-x64/ACE_wrappers/lib:."
+set "ACE_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers"
+set "DDS_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64"
+set "MPC_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers\MPC"
+set "PATH=%PATH%;C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers\bin;C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\bin;C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers\lib;C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\lib"
+set "RAPIDJSON_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\tools\rapidjson"
+set "TAO_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers\TAO"
 ```
 
-### macOS (ARM64)
+#### Linux x64 systems
 
 ```bash
-export DDS_ROOT="$PWD/ext/OpenDDS_osx-arm64"
-export ACE_ROOT="$PWD/ext/OpenDDS_osx-arm64/ACE_wrappers"
-export TAO_ROOT="$PWD/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
-export DYLD_LIBRARY_PATH="$PWD/ext/OpenDDS_osx-arm64/lib:$PWD/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:."
-export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
+export ACE_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers"
+export DDS_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers/lib:/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/lib"
+export MPC_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers/MPC"
+export PATH="${PATH}:/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers/bin:/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/bin"
+export RAPIDJSON_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/tools/rapidjson"
+export TAO_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
 ```
+
+#### macOS arm64 systems
+
+```bash
+export ACE_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers"
+export DDS_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64"
+export DYLD_LIBRARY_PATH="${DYLD_LIBRARY_PATH}:/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers/lib:/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/lib"
+export MPC_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers/MPC"
+export PATH="${PATH}:/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers/bin:/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/bin"
+export RAPIDJSON_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/tools/rapidjson"
+export TAO_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
+```
+
+Ensure that the environment variables are permanently set in your development environment 
+(e.g., by adding the export statements to your shell profile or in the Windows Environment Variables dialog) to avoid
+having to set them manually before each build.
 
 ---
 
-## Step 3 — Restore NuGet Packages
+## Step 3 — Build the Managed Projects
 
-```bash
-dotnet restore OpenDDSharp.sln --no-cache --configfile nuget.config
-dotnet restore Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-cache --configfile nuget.config
-dotnet restore Tests/TestSupportProcess/TestSupportProcess.csproj --no-cache --configfile nuget.config
-dotnet restore Tests/TestIdlCdr/TestIdlCdr.csproj --no-cache --configfile nuget.config
-dotnet restore Tests/BenchmarkPerformance/BenchmarkPerformance.csproj --no-cache --configfile nuget.config
-dotnet restore Examples/ConsoleDemo/ConsoleDemo.csproj --no-cache --configfile nuget.config
-```
+Once the native libraries have been built, you can build the managed OpenDDSharp projects with your preferred IDE or
+using the command line. However, to build the unit tests project and some other testing tools, you'll need to "manually"
+solve some additional dependencies between the projects first.
 
----
-
-## Step 4 — Build the Managed Projects
-
-Build the `OpenDDSharp.BuildTasks` project first — it is required by the other projects as a build-time tool:
+The `OpenDDSharp.BuildTasks` project contains some build-time tools used by the IDL code generation projects. As 
+some tools depends on an internal IDL project (`Tests/TestIdlCdr`),you will need to build the `BuildTasks` project first:
 
 ```bash
 dotnet build Sources/OpenDDSharp.BuildTasks/OpenDDSharp.BuildTasks.csproj --configuration Release
 ```
 
-Then build the main library. On Windows the pipeline builds all four platform targets; for local development build only the target you need:
+In addition, some tests use an external support process (`Tests/TestSupportProcess`) to test the inter-process 
+communication capabilities of OpenDDSharp.
+
+As the `TestSupportProcess` project depends on OpenDDS native libraries, you will need to ensure that the runtime
+identifier is set correctly for your platform. For example, on Windows x64, build the `TestSupportProcess`
+project with the following command:
 
 ```bash
-# Any CPU (works on all platforms)
-dotnet msbuild -target:build Sources/OpenDDSharp/OpenDDSharp.csproj \
-  -property:Configuration=Release -property:Platform=AnyCPU
+dotnet build Tests/TestSupportProcess/TestSupportProcess.csproj --configuration Release --runtime win-x64 --self-contained
+```
 
-# x64 only
-dotnet msbuild -target:build Sources/OpenDDSharp/OpenDDSharp.csproj \
-  -property:Configuration=Release -property:Platform=x64
+By building the `Tests/OpenDDSharp.UnitTest` you will ensure that the main related projects are built correctly, and
+you will be able to run the unit tests later on. You can build the `OpenDDSharp.UnitTest` project for Windows x64 platform
+with the following command:
 
-# Marshaller — same pattern
-dotnet msbuild -target:build Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj \
-  -property:Configuration=Release -property:Platform=AnyCPU
+```bash
+dotnet build Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --configuration Release --runtime win-x64 --self-contained
+```
+
+All the previous steps can be automated running the `OpenDDSharp.Build.ps1` script with the target `BuildOpenDDSharpTask` 
+from the `Build` directory. For example, to build the managed projects for Windows x64, run the following command:
+
+```powershell
+./OpenDDSharp.Build.ps1 `
+ --target=BuildOpenDDSharpTask `
+ --exclusive `
+ --BuildConfiguration=Release `
+ --BuildPlatform=x64
 ```
 
 ---
 
-## Step 5 — Run the Unit Tests
+## Step 3 — Run the Unit Tests
 
-Build the test support projects first, then run the tests:
+Tests are implemented using `MSTest` framework and are located in the `Tests/OpenDDSharp.UnitTest` project.
+You can run the tests from your preferred IDE or using the command line. If you are using the command line, ensure that 
+the `TestTfmsInParallel` flag is set to `false` to avoid running the tests in parallel. For example, to run the tests
+for a Windows x64 platform, use the following command:
+
 
 ```bash
-# Runtime identifier — adjust to match your platform:
-#   win-x64 | win-x86 | linux-x64 | linux-arm64 | osx-arm64 | osx-x64
-RUNTIME=linux-x64
-
-dotnet build Tests/TestSupportProcess/TestSupportProcess.csproj \
-  --configuration Release --runtime $RUNTIME --self-contained
-
-dotnet build Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj \
-  --configuration Release --runtime $RUNTIME --self-contained
-
 dotnet test Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj \
   --no-build --no-restore \
   --configuration Release \
-  --runtime $RUNTIME \
+  --runtime win-x64 \
   --collect:"XPlat Code Coverage" \
   --settings Tests.runsettings \
   --logger "console;verbosity=normal" \
   -p:TestTfmsInParallel=false
 ```
+
+You can also run the tests from the `Build` directory using the `TestTask` target from the `OpenDDSharp.Build.ps1`
+script. For example, to run the tests for a Windows x64 platform, use the following command:
+
+```powershell
+./OpenDDSharp.Build.ps1 `
+ --target=TestTask `
+ --BuildConfiguration=Release `
+ --BuildPlatform=x64
+```
+
+## Conclusion
+
+To start developing for OpenDDSharp is not an easy task and requires time and patienc, but understanding the build
+process and the required environment could help you to get started and contribute to the project. If you have any
+questions or need help, feel free to open a [discussion](https://github.com/jmmorato/openddsharp/discussions) in the 
+GitHub repository.
 
 ---
 
