@@ -1,12 +1,13 @@
 # How to build OpenDDSharp
 
-This guide explains how to build OpenDDSharp locally, following the same steps used by the CI/CD pipeline.
+This guide explains how to build OpenDDSharp locally, following similar steps used by the
+[CI/CD workflow](https://github.com/jmmorato/openddsharp/blob/develop/.github/workflows/cd_workflow.yaml).
 
 ## Overview
 
-The build is split into two stages:
+The OpenDDSharp build process is split into two stages:
 
-1. **Native build** — compiles OpenDDS and the OpenDDSharp C++ wrapper (`OpenDDSWrapper`) for your target platform.
+1. **Native build** — compiles OpenDDS, the OpenDDSharp C++ wrapper (`OpenDDSWrapper`) and the OpenDDSharp IDL compiler (`Native/OpenDDSharp.IdlGenerator`) for your target platform.
 2. **Managed build** — compiles the .NET projects (`OpenDDSharp`, `OpenDDSharp.Marshaller`, etc.) against the native artifacts.
 
 Both stages are driven by a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) script located in `Build/OpenDDSharp.Build.ps1`.
@@ -81,7 +82,7 @@ All parameters are passed to `Build/OpenDDSharp.Build.ps1` using `--ParameterNam
 
 #### Target dependency chains
 
-When you invoke a target, Cake automatically runs all of its dependencies first (unless you pass `--exclusive`).
+When you invoke a target, Cake automatically runs all of its dependencies first (unless you pass `--exclusive` parameter).
 
 ```mermaid
 graph TD
@@ -165,18 +166,20 @@ After a successful native build, the compiled artifacts are placed under:
 | macOS ARM64 | `ext/OpenDDS_osx-arm64/` and `Native/build_osx-arm64/`     |
 | macOS x64   | `ext/OpenDDS_osx-x64/` and `Native/build_osx-x64/`         |
 
+The `ext/OpenDDS_<runtime>/` directory contains the OpenDDS sources and the compiled OpenDDS libraries and tools.
+The `Native/build_<runtime>/` directory contains the compiled OpenDDSharp native libraries and tools.
+
 ## Step 2 — Set Environment Variables
 
 The managed OpenDDSharp build and test projects require the OpenDDS paths to be exported in your development environment.
 That will allow the managed build to find the OpenDDS libraries and headers in the expected locations during development.
 
 You can find all the required paths for your current system in the`setenv.sh` script (`setenv.cmd` on Windows systems)
-created during the native build in the `ext` directory of the OpenDDS source code (i.e. `ext/OpenDDS_linux-x64/`).
+created during the native build in the `ext` directory of the OpenDDS source code (e.g. `ext/OpenDDS_<runtime>/`).
 
 For example:
 
-#### Windows x64 systems
-
+**`Windows x64`**
 ```bash
 set "ACE_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers"
 set "DDS_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64"
@@ -186,8 +189,7 @@ set "RAPIDJSON_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenD
 set "TAO_ROOT=C:\Users\josemorato\Documents\PROJECTS\OPENDDSHARP\ext\OpenDDS_x64\ACE_wrappers\TAO"
 ```
 
-#### Linux x64 systems
-
+**`Linux x64`**
 ```bash
 export ACE_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers"
 export DDS_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64"
@@ -198,8 +200,7 @@ export RAPIDJSON_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/Ope
 export TAO_ROOT="/home/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_linux-x64/ACE_wrappers/TAO"
 ```
 
-#### macOS arm64 systems
-
+**`macOS arm64`**
 ```bash
 export ACE_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers"
 export DDS_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64"
@@ -210,9 +211,10 @@ export RAPIDJSON_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/Op
 export TAO_ROOT="/Users/josemorato/Projects/OPENDDSHARP/OPENDDSHARP/ext/OpenDDS_osx-arm64/ACE_wrappers/TAO"
 ```
 
-Ensure that the environment variables are permanently set in your development environment 
-(e.g., by adding the export statements to your shell profile or in the Windows Environment Variables dialog) to avoid
-having to set them manually before each build.
+> **Tip — permanent environment variables:**
+> Ensure that the environment variables are permanently set in your development environment
+> (e.g., by adding the export statements to your shell profile or in the Windows Environment Variables dialog) to avoid
+> having to set them manually before each build.
 
 ---
 
@@ -292,7 +294,7 @@ script. For example, to run the tests for a Windows x64 platform, use the follow
 
 ## Conclusion
 
-To start developing for OpenDDSharp is not an easy task and requires time and patienc, but understanding the build
+To start developing for OpenDDSharp is not an easy task and requires time and patience, but understanding the build
 process and the required environment could help you to get started and contribute to the project. If you have any
 questions or need help, feel free to open a [discussion](https://github.com/jmmorato/openddsharp/discussions) in the 
 GitHub repository.
