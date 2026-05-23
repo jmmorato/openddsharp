@@ -1,26 +1,77 @@
 # OpenDDSharp Topic-Definition Module
 
 The Topic-Definition module is a central component of the Data Distribution Service (DDS) standard
-(OMG DDS 1.4, §2.2.2.3). It defines the data types and communication channels used for publishing and
+(OMG DDS 1.4). It defines the data types and communication channels used for publishing and
 subscribing to data within a DDS domain. Every piece of data exchanged between DDS entities is tied to a topic,
 and it is the Topic-Definition module that provides the abstractions needed to define, register, and manage those
 topics.
 
-The module is comprised of the following main classes and interfaces:
+In OpenDDSharp, the module is composed of the following main classes and interfaces:
 
-- **TypeSupport** — a per-type interface (auto-generated from IDL) that registers the type with the middleware.
-- **ITopicDescription** — the base interface that ties a name to a type within a `DomainParticipant`.
+```mermaid
+classDiagram
+    class ITypeSupport {
+        <<interface>>
+        +GetTypeName() string
+        +RegisterType(DomainParticipant, string) ReturnCode
+        +UnregisterType(DomainParticipant, string) ReturnCode
+    }
+    class ITypeSupportT["ITypeSupport~T~"] {
+        <<interface>>
+        +EncodeToString(T) string
+        +DecodeFromString(string) T
+        +EncodeToBytes(T) byte[]
+        +DecodeFromBytes(byte[]) T
+    }
+    class TypeNameTypeSupport["&lt;TypeName&gt;TypeSupport"] {
+        <<generated>>
+    }
+    class ITopicDescription {
+        <<interface>>
+        +Name string
+        +TypeName string
+        +Participant DomainParticipant
+    }
+    class Topic {
+        +GetInconsistentTopicStatus() ReturnCode
+    }
+    class ContentFilteredTopic {
+        +FilterExpression string
+        +GetExpressionParameters(List~string~) ReturnCode
+        +SetExpressionParameters(string[]) ReturnCode
+    }
+    class MultiTopic {
+        +SubscriptionExpression string
+        +GetExpressionParameters(List~string~) ReturnCode
+        +SetExpressionParameters(string[]) ReturnCode
+    }
+    class TopicListener {
+        <<abstract>>
+        +OnInconsistentTopic(Topic, InconsistentTopicStatus)
+    }
+
+    ITypeSupportT --|> ITypeSupport : extends
+    TypeNameTypeSupport ..|> ITypeSupportT : implements
+    Topic ..|> ITopicDescription : implements
+    ContentFilteredTopic ..|> ITopicDescription : implements
+    MultiTopic ..|> ITopicDescription : implements
+    ContentFilteredTopic --> Topic : relatedTopic
+    Topic "0..1" o-- TopicListener : listener
+```
+
+- **<TypeName>TypeSupport** — a per-type class (auto-generated from IDL) that registers the type with the middleware.
+- **TopicDescription** — the base class that ties a name to a type within a `DomainParticipant`.
 - **Topic** — the concrete topic entity associated with `DataWriter` and `DataReader` objects.
 - **ContentFilteredTopic** — a content-filtered view of a `Topic` that delivers only samples matching a filter.
-- **MultiTopic** — a virtual topic that combines, filters, and re-arranges data from multiple topics *(optional)*.
+- **MultiTopic** — a virtual topic that combines, filters, and re-arranges data from multiple topics.
 - **TopicListener** — the listener interface for receiving status-change notifications on a `Topic`.
 
 ## Auto-Generated TypeSupport Classes
 
-Before a type can be used in a DDS system it must be defined in an IDL file and its type information must be
-communicated to the middleware. Per the DDS specification (§2.2.2.3.6), the `TypeSupport` interface is abstract
+Before a type can be used in a DDS system, it must be defined in an IDL file and its type information must be
+communicated to the middleware. Per the DDS specification, the `TypeSupport` interface is abstract
 and must be specialized for each concrete type that will be used by the application. The spec requires that each DDS
-implementation provides an **automatic means to generate** this type-specific class from a description of the type —
+implementation provides an **automatic means to generate** this type-specific class from a description of the type 
 using IDL.
 
 OpenDDSharp provides the `OpenDDSharp.IdlGenerator` tool that processes IDL files and produces the necessary
@@ -34,7 +85,7 @@ out-of-band serialization.
 
 `ITypeSupport` defines the core type registration operations mandated by the DDS spec:
 
-- **`GetTypeName()`** — Returns the default fully-qualified type name as derived from the IDL definition.
+- **`GetTypeName()`** — Returns the default fully qualified type name as derived from the IDL definition.
   For example, a `struct MyType` inside IDL `module MyModule` returns `"MyModule::MyType"`. This name is used
   internally by the middleware to match publications with subscriptions.
 
@@ -43,11 +94,11 @@ out-of-band serialization.
   to manage the type, including its key definition (fields annotated `@key`) that allow the service to distinguish
   different instances of the same type.
 
-  Per the spec (§2.2.2.3.6.1), the following rules apply:
+  Per the spec, the following rules apply:
   - It is a precondition error to register **two different types** under the same `typeName` with the same
     `DomainParticipant`; the operation returns `ReturnCode.PreconditionNotMet`.
   - Registering the **same TypeSupport** multiple times with the same `DomainParticipant` and `typeName` is
-    allowed; subsequent calls are silently ignored and return `ReturnCode.Ok`.
+    allowed; later calls are silently ignored and return `ReturnCode.Ok`.
   - Passing `null` as `typeName` causes the default type name (from `GetTypeName()`) to be used automatically.
 
 - **`UnregisterType(DomainParticipant dp, string typeName)`** — Removes a previously registered type from the
@@ -98,7 +149,7 @@ For a detailed description of the `ITypeSupport` and `ITypeSupport<T>` interface
 
 ## ITopicDescription Interface
 
-Per the DDS specification (§2.2.2.3.1), `TopicDescription` (mapped to `ITopicDescription` in OpenDDSharp) is an
+Per the DDS specification, `TopicDescription` (mapped to `ITopicDescription` in OpenDDSharp) is an
 abstract base that represents the fact that both publications and subscriptions are tied to a single data type. It is
 the base for `Topic`, `ContentFilteredTopic`, and `MultiTopic`.
 
@@ -118,7 +169,7 @@ Console.WriteLine($"Topic name:      {topicDescription.Name}");
 Console.WriteLine($"Topic type name: {topicDescription.TypeName}");
 ```
 
-> **`LookupTopicDescription` vs `FindTopic`:** Per the spec (§2.2.2.2.1.10–11), `LookupTopicDescription`
+> **`LookupTopicDescription` vs `FindTopic`:** Per the spec, `LookupTopicDescription`
 > searches only among the **locally created** `Topic`, `ContentFilteredTopic`, and `MultiTopic` objects and never
 > blocks. `FindTopic` (not exposed by `ITopicDescription`) gives access to an existing or soon-to-exist enabled
 > `Topic` by name and may block until the topic appears or a timeout expires. A `Topic` obtained via `FindTopic`
@@ -131,7 +182,7 @@ For a detailed description of the interface members, please refer to the
 
 ## Topic Class
 
-Per the DDS specification (§2.2.2.3.2), `Topic` is the most basic description of the data to be published and
+Per the DDS specification, `Topic` is the most basic description of the data to be published and
 subscribed. A `Topic` is identified by its name, which must be **unique in the whole Domain**. In addition, by
 virtue of implementing `ITopicDescription`, it fully specifies the type of data that can be communicated when
 publishing or subscribing to the topic.
@@ -206,21 +257,21 @@ making the topic QoS the baseline for communication behavior.
 The following table lists all QoS policies available on a `TopicQos`, their default values, the **RxO**
 (Request/Offer compatibility) column, and whether they are **changeable** after the entity has been enabled:
 
-| Policy | Default Value | RxO | Changeable |
-|---|---|:---:|:---:|
-| `TopicData` | Empty sequence | No | Yes |
-| `Durability` | `Volatile` | Yes | **No** |
-| `DurabilityService` | `KeepLast`, depth=1; limits=unlimited; cleanup_delay=0 | — | **No** |
-| `Deadline` | Period = infinite | Yes | Yes |
-| `LatencyBudget` | Duration = 0 | Yes | Yes |
-| `Liveliness` | `Automatic`, lease_duration = infinite | Yes | **No** |
-| `Reliability` | `BestEffort`, max_blocking_time = 100 ms | Yes | **No** |
-| `DestinationOrder` | `ByReceptionTimestamp` | Yes | **No** |
-| `History` | `KeepLast`, depth = 1 | No | **No** |
-| `ResourceLimits` | All `LengthUnlimited` | No | **No** |
-| `TransportPriority` | 0 | N/A | Yes |
-| `Lifespan` | Duration = infinite | N/A | Yes |
-| `Ownership` | `Shared` | Yes | **No** |
+| Policy              | Default Value                                          | RxO | Changeable |
+|---------------------|--------------------------------------------------------|:---:|:----------:|
+| `TopicData`         | Empty sequence                                         | No  |    Yes     |
+| `Durability`        | `Volatile`                                             | Yes |   **No**   |
+| `DurabilityService` | `KeepLast`, depth=1; limits=unlimited; cleanup_delay=0 |  —  |   **No**   |
+| `Deadline`          | Period = infinite                                      | Yes |    Yes     |
+| `LatencyBudget`     | Duration = 0                                           | Yes |    Yes     |
+| `Liveliness`        | `Automatic`, lease_duration = infinite                 | Yes |   **No**   |
+| `Reliability`       | `BestEffort`, max_blocking_time = 100 ms               | Yes |   **No**   |
+| `DestinationOrder`  | `ByReceptionTimestamp`                                 | Yes |   **No**   |
+| `History`           | `KeepLast`, depth = 1                                  | No  |   **No**   |
+| `ResourceLimits`    | All `LengthUnlimited`                                  | No  |   **No**   |
+| `TransportPriority` | 0                                                      | N/A |    Yes     |
+| `Lifespan`          | Duration = infinite                                    | N/A |    Yes     |
+| `Ownership`         | `Shared`                                               | Yes |   **No**   |
 
 **Key semantics of each policy:**
 
@@ -280,7 +331,7 @@ var topic = participant.CreateTopic("MyTopic", typeName, qos);
 
 You can also read and update the QoS of an existing `Topic` via `GetQos` and `SetQos`. Immutable policies
 (those marked **No** in the Changeable column) can only be set before the `Topic` is enabled; attempting to
-change them afterwards causes `SetQos` to return `ReturnCode.ImmutablePolicy`.
+change them afterward causes `SetQos` to return `ReturnCode.ImmutablePolicy`.
 
 ```csharp
 var qos = new TopicQos();
@@ -292,8 +343,8 @@ var result = topic.SetQos(qos);
 ```
 
 The `DomainParticipant` also maintains default `TopicQos` values for newly created topics. These can be read and
-updated via `GetDefaultTopicQos` and `SetDefaultTopicQos`. The special value `TOPIC_QOS_DEFAULT` (equivalent to
-the current factory defaults) can be passed to `CreateTopic` to explicitly request the current defaults:
+updated via `GetDefaultTopicQos` and `SetDefaultTopicQos`. Changing the default QoS does not affect existing topics,
+but subsequent `CreateTopic` calls that do not:
 
 ```csharp
 // Retrieve the current default Topic QoS
@@ -313,12 +364,12 @@ For a detailed description of all QoS policies, please refer to the
 
 ### TopicListener Class
 
-Per the DDS specification (§2.2.2.3.5), since `Topic` is a kind of `Entity`, it has the ability to have an
+Per the DDS specification, since `Topic` is a kind of `Entity`, it has the ability to have an
 associated listener of concrete type `TopicListener`.
 
 `TopicListener` is an abstract class with a single callback:
 
-- **`OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)`** — Invoked when the `INCONSISTENT_TOPIC`
+- **`OnInconsistentTopic(Topic topic, InconsistentTopicStatus status)`** — Invoked when the `InconsistentTopic`
   status changes, i.e., when a `Topic` was attempted to be used that already exists in the domain with the same
   name but different characteristics (typically a different type or incompatible QoS). The `status` parameter
   provides the `TotalCount` and `TotalCountChange` fields.
@@ -358,13 +409,13 @@ For a detailed description, please refer to the
 
 ## ContentFilteredTopic Class
 
-Per the DDS specification (§2.2.2.3.3), `ContentFilteredTopic` is a specialization of `TopicDescription` that
+Per the DDS specification, `ContentFilteredTopic` is a specialization of `TopicDescription` that
 allows for content-based subscriptions. It describes a more sophisticated subscription that indicates the subscriber
 does not want to necessarily see all values of each instance published under the `Topic`. Rather, it wants to see
 only the values whose contents satisfy certain criteria.
 
 A `ContentFilteredTopic` is always associated with an underlying **related `Topic`** from which it receives data.
-It does not itself define a communication channel — it only filters data from the related topic's channel.
+It does not itself define a communication channel, it only filters data from the related topic's channel.
 
 The content selection is controlled by two attributes:
 
@@ -426,7 +477,7 @@ For a detailed description, please refer to the
 
 ## MultiTopic Class
 
-Per the DDS specification (§2.2.2.3.4), `MultiTopic` is an **optional** specialization of `TopicDescription`
+Per the DDS specification, `MultiTopic` is an **optional** specialization of `TopicDescription`
 that allows subscriptions to combine, filter, and re-arrange data coming from **several topics**. `MultiTopic`
 allows a more sophisticated subscription that can select and combine data received from multiple topics into a
 single resulting type (specified by the inherited `TypeName`). The data is then filtered (selection) and possibly
@@ -473,13 +524,13 @@ condition mechanisms whenever modifications occur to **any** of the topics relev
 multiple `DataWriter` entities. A `MultiTopic` access instance begins to exist only once all constituting topic
 instances are in existence.
 
-The `view_state` and `instance_state` of a `MultiTopic` instance are derived from the corresponding states of
-the constituting instances per the DDS spec (§2.2.2.3.4):
+The `ViewState` and `InstanceState` of a `MultiTopic` instance are derived from the corresponding states of
+the constituting instances per the DDS spec:
 
-- The `view_state` is `NewViewState` if **at least one** constituting instance has `NewViewState`; otherwise
+- The `ViewState` is `NewViewState` if **at least one** constituting instance has `NewViewState`; otherwise
   `NotNewViewState`.
-- The `instance_state` is `AliveInstanceState` if **all** constituting topic instances are alive. It is
-  `NotAliveDisposedInstanceState` if **at least one** is disposed. Otherwise it is
+- The `InstanceState` is `AliveInstanceState` if **all** constituting topic instances are alive. It is
+  `NotAliveDisposedInstanceState` if **at least one** is disposed. Otherwise, it is
   `NotAliveNoWritersInstanceState`.
 
 The subscription expression parameters can be updated at runtime without recreating the `MultiTopic`:
@@ -509,20 +560,20 @@ For a detailed description, please refer to the
 ## Topic-Definition Module Diagram
 
 The following diagram illustrates the class model of the Topic-Definition module as defined in the DDS
-specification (§2.2.2.3, Figure 2.7), showing the relationships between the main classes and their interactions
+specification, showing the relationships between the main classes and their interactions
 with the surrounding modules:
 
 ```mermaid
 graph TB
     subgraph A[Topic-Definition Module]
         direction TB
-        TS["&lt;&lt;interface&gt;&gt;\nITypeSupport / TypeSupport\nregister_type()\nget_type_name()"] -->|register type in| DP[DomainParticipant]
-        DP -->|create| T[Topic\nget_inconsistent_topic_status()]
-        DP -->|create| CFT[ContentFilteredTopic\nfilter_expression\nget/set_expression_parameters()]
-        DP -->|create| MT["MultiTopic [optional]\nsubscription_expression\nget/set_expression_parameters()"]
+        TS["&lt;&lt;interface&gt;&gt;\nITypeSupport / TypeSupport\nRegisterType()\nGetTypeName()"] -->|register type in| DP[DomainParticipant]
+        DP -->|create| T["Topic\nGetInconsistentTopicStatus()"]
+        DP -->|create| CFT["ContentFilteredTopic\nFilterExpression\nGet/SetExpressionParameters()"]
+        DP -->|create| MT["MultiTopic\nSubscriptionExpression\nGet/SetExpressionParameters()"]
         T o-.-o|1| TQ[TopicQos]
-        T o-.-o|0..1| TL["&lt;&lt;interface&gt;&gt;\nTopicListener\non_inconsistent_topic()"]
-        T -.->|implements| ITD["&lt;&lt;interface&gt;&gt;\nITopicDescription\nname\ntype_name\nget_participant()"]
+        T o-.-o|0..1| TL["&lt;&lt;interface&gt;&gt;\nTopicListener\nOnInconsistentTopic()"]
+        T -.->|implements| ITD["&lt;&lt;interface&gt;&gt;\nITopicDescription\nName\nTypeName\nGetParticipant()"]
         CFT -.->|implements| ITD
         MT -.->|implements| ITD
         CFT -->|related to| T
