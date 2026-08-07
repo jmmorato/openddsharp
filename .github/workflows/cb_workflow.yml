@@ -35,7 +35,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -69,7 +69,7 @@ jobs:
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-windows-cb
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ github.workspace }}/README.md
@@ -166,28 +166,28 @@ jobs:
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
       - name: Setup dotnet 10.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-linux-cb
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ github.workspace }}/README.md
@@ -296,28 +296,28 @@ jobs:
       DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
       - name: Setup dotnet 10.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
       - name: Cache OpenDDS libraries
         id: opendds-libraries-macos-cb
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ github.workspace }}/README.md
@@ -428,7 +428,7 @@ jobs:
       COMPlus_JITMinOpts: "1"
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -514,7 +514,7 @@ jobs:
           path: ${{ github.workspace }}\Tests\BenchmarkPerformance\bin\Release\net10.0\${{ matrix.runtime }}\publish\PerformanceTestArtifacts\results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .\cache
           key: latency-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -550,7 +550,7 @@ jobs:
       TAO_ROOT: "${{ github.workspace }}\\ext\\OpenDDS_${{ matrix.build_platform }}\\ACE_wrappers\\TAO"
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -637,7 +637,7 @@ jobs:
 
       # Download previous benchmark result from cache (if exists)
       - name: Download previous benchmark data
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .\cache
           key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -677,22 +677,22 @@ jobs:
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
       - name: Setup dotnet 10.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -746,7 +746,7 @@ jobs:
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net10.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ./cache
           key: latency-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -786,22 +786,22 @@ jobs:
       LD_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
       - name: Setup dotnet 10.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -855,7 +855,7 @@ jobs:
 
       # Download previous benchmark result from cache (if exists)
       - name: Download previous benchmark data
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ./cache
           key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -899,22 +899,22 @@ jobs:
       DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
       - name: Setup dotnet 10.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -969,7 +969,7 @@ jobs:
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net10.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ./cache
           key: latency-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
@@ -1013,22 +1013,22 @@ jobs:
       DYLD_FALLBACK_LIBRARY_PATH: "${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/lib:${{ github.workspace }}/ext/OpenDDS_${{ matrix.runtime }}/ACE_wrappers/lib:."
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup dotnet 8.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup dotnet 9.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '9.0.x'
 
       - name: Setup dotnet 10.0
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -1083,7 +1083,7 @@ jobs:
           path: ${{ github.workspace }}/Tests/BenchmarkPerformance/bin/Release/net10.0/${{ matrix.runtime }}/publish/PerformanceTestArtifacts/results
 
       - name: Download previous benchmark data
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ./cache
           key: throughput-${{ matrix.os }}_${{ matrix.runtime }}-benchmark
