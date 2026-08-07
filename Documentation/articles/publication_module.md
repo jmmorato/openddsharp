@@ -1,11 +1,11 @@
 # OpenDDSharp Publication Module
 
 The Publication module is the component of the Data Distribution Service (DDS) standard
-(OMG DDS 1.4, §2.2.2.4) responsible for the dissemination of data. It provides the abstractions needed to
+(OMG DDS 1.4) responsible for the dissemination of data. It provides the abstractions needed to
 publish typed data samples to a DDS domain, allowing other participants to receive those samples through
 the Subscription module.
 
-The module is comprised of the following classifiers:
+The module comprises the following classes:
 
 - **Publisher** — manages a group of `DataWriter` objects and controls their collective behavior.
 - **DataWriter** — the entity through which typed data samples are actually written to the domain.
@@ -27,7 +27,7 @@ graph LR
 
 ## Publisher Class
 
-Per the DDS specification (§2.2.2.4.1), a `Publisher` is the object responsible for the actual dissemination of
+Per the DDS specification, a `Publisher` is the object responsible for the actual dissemination of
 publications. It acts on behalf of one or several `DataWriter` objects that belong to it. When it is informed of
 a change to the data associated with one of its `DataWriter` objects, it decides when it is appropriate to send
 the data-update message, taking into consideration the timestamps, QoS of the `Publisher`, and the QoS of the
@@ -117,7 +117,7 @@ writer2.Write(velocityVector);
 publisher.EndCoherentChanges();
 ```
 
-> Per the spec (§2.2.2.4.1.10), calls to `BeginCoherentChanges` / `EndCoherentChanges` can be nested.
+> Per the spec, calls to `BeginCoherentChanges` / `EndCoherentChanges` can be nested.
 > The coherent set terminates only with the last call to `EndCoherentChanges`. If there is no matching
 > `BeginCoherentChanges`, `EndCoherentChanges` returns `ReturnCode.PreconditionNotMet`.
 >
@@ -169,12 +169,12 @@ For a detailed description, please refer to the
 The `PublisherQos` class holds the QoS policies that control the behavior of the `Publisher` as a whole. These
 are the policies that apply collectively to all `DataWriter` objects that belong to it:
 
-| Policy | Default Value | RxO | Changeable |
-|---|---|:---:|:---:|
-| `Presentation` | `Instance` scope, coherent=false, ordered=false | Yes | **No** |
-| `Partition` | Empty (matches default partition) | No | Yes |
-| `GroupData` | Empty sequence | No | Yes |
-| `EntityFactory` | `AutoenableCreatedEntities = true` | No | Yes |
+| Policy          | Default Value                                   | RxO | Changeable |
+|-----------------|-------------------------------------------------|:---:|:----------:|
+| `Presentation`  | `Instance` scope, coherent=false, ordered=false | Yes |   **No**   |
+| `Partition`     | Empty (matches default partition)               | No  |    Yes     |
+| `GroupData`     | Empty sequence                                  | No  |    Yes     |
+| `EntityFactory` | `AutoenableCreatedEntities = true`              | No  |    Yes     |
 
 - **`Presentation`** — Controls the scope and ordering of changes. `Instance` scope (default) treats each
   instance independently. `Topic` scope enables ordering/coherency within a single `DataWriter`. `Group` scope
@@ -208,19 +208,19 @@ For a detailed description, please refer to the
 ### PublisherListener Class
 
 The `PublisherListener` is an abstract class that can be registered with a `Publisher` to receive notifications
-about status changes on **any** of its contained `DataWriter` objects. Per the spec (§2.2.2.4.3), `Publisher`
+about status changes on **any** of its contained `DataWriter` objects. Per the spec (2.2.2.4.3), `Publisher`
 has no additional listener operations beyond those inherited from `DataWriterListener`. The `PublisherListener`
 acts as a fallback: if a `DataWriter` has no listener attached, the status change propagates to the
 `PublisherListener`.
 
 The following callbacks must be implemented:
 
-| Callback | Status | Description |
-|---|---|---|
-| `OnLivelinessLost` | `LIVELINESS_LOST` | The `DataWriter` failed to assert its liveliness within the lease duration. Matched `DataReader` objects will consider it inactive. |
-| `OnOfferedDeadlineMissed` | `OFFERED_DEADLINE_MISSED` | The `DataWriter` failed to write a new value for an instance within the committed deadline period. |
-| `OnOfferedIncompatibleQos` | `OFFERED_INCOMPATIBLE_QOS` | A `DataReader` was found with a requested QoS incompatible with the `DataWriter`'s offered QoS. |
-| `OnPublicationMatched` | `PUBLICATION_MATCHED` | A compatible `DataReader` has been found (or a previously matched one has been removed). |
+| Callback                   | Status                     | Description                                                                                                                         |
+|----------------------------|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `OnLivelinessLost`         | `LIVELINESS_LOST`          | The `DataWriter` failed to assert its liveliness within the lease duration. Matched `DataReader` objects will consider it inactive. |
+| `OnOfferedDeadlineMissed`  | `OFFERED_DEADLINE_MISSED`  | The `DataWriter` failed to write a new value for an instance within the committed deadline period.                                  |
+| `OnOfferedIncompatibleQos` | `OFFERED_INCOMPATIBLE_QOS` | A `DataReader` was found with a requested QoS incompatible with the `DataWriter`'s offered QoS.                                     |
+| `OnPublicationMatched`     | `PUBLICATION_MATCHED`      | A compatible `DataReader` has been found (or a previously matched one has been removed).                                            |
 
 ```csharp
 public class MyPublisherListener : PublisherListener
@@ -269,12 +269,12 @@ For a detailed description, please refer to the
 
 ## DataWriter Class
 
-Per the DDS specification (§2.2.2.4.2), `DataWriter` allows the application to set the value of the data to
+Per the DDS specification (2.2.2.4.2), `DataWriter` allows the application to set the value of the data to
 be published under a given `Topic`. A `DataWriter` is attached to exactly one `Publisher` that acts as its
 factory, and bound to exactly one `Topic` and therefore to exactly one data type. The `Topic` must exist prior
 to the `DataWriter`'s creation.
 
-`DataWriter` is an abstract class that is specialized for each application data type by the code generator. For
+`DataWriter` is an abstract class specialized for each application data type by the code generator. For
 a hypothetical IDL type `MyType`, the generator creates a `MyTypeDataWriter` class that extends `DataWriter`
 with typed `Write`, `Dispose`, `RegisterInstance`, and `UnregisterInstance` operations.
 
@@ -390,30 +390,30 @@ For a detailed description, please refer to the
 The `DataWriterQos` class holds all QoS policies that control the behavior of a `DataWriter`. Note that the
 default `Reliability` kind for `DataWriter` is `Reliable` (unlike `Topic`, which defaults to `BestEffort`):
 
-| Policy | Default Value | RxO | Changeable |
-|---|---|:---:|:---:|
-| `UserData` | Empty sequence | No | Yes |
-| `Durability` | `Volatile` | Yes | **No** |
-| `DurabilityService` | `KeepLast`, depth=1; limits=unlimited | — | **No** |
-| `Deadline` | Period = infinite | Yes | Yes |
-| `LatencyBudget` | Duration = 0 | Yes | Yes |
-| `Liveliness` | `Automatic`, lease_duration = infinite | Yes | **No** |
-| `Reliability` | **`Reliable`**, max_blocking_time = 100 ms | Yes | **No** |
-| `DestinationOrder` | `ByReceptionTimestamp` | Yes | **No** |
-| `History` | `KeepLast`, depth = 1 | No | **No** |
-| `ResourceLimits` | All `LengthUnlimited` | No | **No** |
-| `TransportPriority` | 0 | N/A | Yes |
-| `Lifespan` | Duration = infinite | N/A | Yes |
-| `Ownership` | `Shared` | Yes | **No** |
-| `OwnershipStrength` | 0 | N/A | Yes |
-| `WriterDataLifecycle` | `AutodisposeUnregisteredInstances = true` | N/A | Yes |
+| Policy                | Default Value                              | RxO | Changeable |
+|-----------------------|--------------------------------------------|:---:|:----------:|
+| `UserData`            | Empty sequence                             | No  |    Yes     |
+| `Durability`          | `Volatile`                                 | Yes |   **No**   |
+| `DurabilityService`   | `KeepLast`, depth=1; limits=unlimited      |  —  |   **No**   |
+| `Deadline`            | Period = infinite                          | Yes |    Yes     |
+| `LatencyBudget`       | Duration = 0                               | Yes |    Yes     |
+| `Liveliness`          | `Automatic`, lease_duration = infinite     | Yes |   **No**   |
+| `Reliability`         | **`Reliable`**, max_blocking_time = 100 ms | Yes |   **No**   |
+| `DestinationOrder`    | `ByReceptionTimestamp`                     | Yes |   **No**   |
+| `History`             | `KeepLast`, depth = 1                      | No  |   **No**   |
+| `ResourceLimits`      | All `LengthUnlimited`                      | No  |   **No**   |
+| `TransportPriority`   | 0                                          | N/A |    Yes     |
+| `Lifespan`            | Duration = infinite                        | N/A |    Yes     |
+| `Ownership`           | `Shared`                                   | Yes |   **No**   |
+| `OwnershipStrength`   | 0                                          | N/A |    Yes     |
+| `WriterDataLifecycle` | `AutodisposeUnregisteredInstances = true`  | N/A |    Yes     |
 
 Key policies unique to `DataWriter`:
 
 - **`UserData`** — Application-defined opaque data attached to the `DataWriter` and distributed via built-in
   topics. Can be used to attach security credentials or other application-specific information.
 - **`OwnershipStrength`** — Only applies when `Ownership` kind is `Exclusive`. The `DataWriter` with the
-  highest strength among currently live writers "owns" each data instance. Default strength is 0.
+  highest strength among currently live writers "owns" each data instance. The default strength is 0.
 - **`WriterDataLifecycle`** — When `AutodisposeUnregisteredInstances` is `true` (default), deleting the
   `DataWriter` or calling `UnregisterInstance` automatically disposes the affected instances, sending a
   `NOT_ALIVE_DISPOSED` notification to matched readers.
@@ -457,12 +457,12 @@ The `DataWriterListener` is an abstract class that can be registered with a `Dat
 asynchronous notifications about its specific status changes. It has the same four callbacks as
 `PublisherListener`, but applies to a single `DataWriter`:
 
-| Callback | Triggered when... |
-|---|---|
-| `OnLivelinessLost` | The `DataWriter` did not assert liveliness within its `lease_duration`. |
-| `OnOfferedDeadlineMissed` | The `DataWriter` missed its `Deadline` period for at least one instance. |
-| `OnOfferedIncompatibleQos` | A `DataReader` with incompatible QoS was discovered. |
-| `OnPublicationMatched` | A compatible `DataReader` was matched or unmatched. |
+| Callback                   | Triggered when...                                                        |
+|----------------------------|--------------------------------------------------------------------------|
+| `OnLivelinessLost`         | The `DataWriter` did not assert liveliness within its `lease_duration`.  |
+| `OnOfferedDeadlineMissed`  | The `DataWriter` missed its `Deadline` period for at least one instance. |
+| `OnOfferedIncompatibleQos` | A `DataReader` with incompatible QoS was discovered.                     |
+| `OnPublicationMatched`     | A compatible `DataReader` was matched or unmatched.                      |
 
 ```csharp
 public class MyDataWriterListener : DataWriterListener
@@ -508,7 +508,7 @@ For a detailed description, please refer to the
 ## Publication Module Diagram
 
 The following diagram illustrates the class model of the Publication module as defined in the DDS specification
-(§2.2.2.4, Figure 2.9), showing the relationships between its classes and their connection to the
+(2.2.2.4, Figure 2.9), showing the relationships between its classes and their connection to the
 Topic-Definition module:
 
 ```mermaid
