@@ -49,7 +49,6 @@ namespace OpenDDSharp.UnitTest
 
             Factory = ParticipantService.Instance.GetDomainParticipantFactory(
                 "-DCPSScheduler", "SCHED_OTHER",
-                "-DCPSDefaultAddress", "127.0.0.1",
                 "-DCPSPendingTimeout", "3",
                 "-DCPSDebugLevel", "10",
                 "-DCPSTransportDebugLevel", "5");
@@ -69,9 +68,9 @@ namespace OpenDDSharp.UnitTest
             ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
             ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
-            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::127.0.0.1:12345/DCPSInfoRepo");
+            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::localhost:12345/DCPSInfoRepo");
             ParticipantService.Instance.AddDiscovery(infoRepo);
-            infoRepo.BitTransportIp = "127.0.0.1";
+            infoRepo.BitTransportIp = "localhost";
             infoRepo.BitTransportPort = 0;
             ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
 
