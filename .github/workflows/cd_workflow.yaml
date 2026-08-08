@@ -448,6 +448,10 @@ jobs:
           echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
+      - name: Install VC Redistributables
+        run: |
+          choco install vcredist140 --${{ matrix.build_platform }} -y
+
       - name: Setup dotnet 8.0
         shell: pwsh
         run: |

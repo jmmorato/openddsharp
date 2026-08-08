@@ -48,7 +48,11 @@ namespace OpenDDSharp.UnitTest
             Ace.Init();
 
             Factory = ParticipantService.Instance.GetDomainParticipantFactory(
-                "-DCPSPendingTimeout", "3", "-DCPSDebugLevel", "10", "-DCPSTransportDebugLevel", "5");
+                "-DCPSDefaultAddress", "127.0.0.1",
+                "-DCPSThreadSchedulingPolicy", "SUB_CONFIG_DISABLED",
+                "-DCPSPendingTimeout", "3",
+                "-DCPSDebugLevel", "10",
+                "-DCPSTransportDebugLevel", "5");
 
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
@@ -65,15 +69,15 @@ namespace OpenDDSharp.UnitTest
             ParticipantService.Instance.SetRepoDomain(RTPS_DOMAIN, RTPS_DISCOVERY);
             ParticipantService.Instance.SetRepoDomain(RTPS_OTHER_DOMAIN, RTPS_DISCOVERY);
 
-            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::localhost:12345/DCPSInfoRepo");
+            var infoRepo = new InfoRepoDiscovery(INFOREPO_DISCOVERY, "corbaloc::127.0.0.1:12345/DCPSInfoRepo");
             ParticipantService.Instance.AddDiscovery(infoRepo);
-            infoRepo.BitTransportIp = "localhost";
+            infoRepo.BitTransportIp = "127.0.0.1";
             infoRepo.BitTransportPort = 0;
             ParticipantService.Instance.SetRepoDomain(INFOREPO_DOMAIN, INFOREPO_DISCOVERY);
 
             _supportProcess = new SupportProcessHelper(context);
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(5_000);
 
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
