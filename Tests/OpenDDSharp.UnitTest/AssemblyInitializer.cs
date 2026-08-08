@@ -47,6 +47,9 @@ namespace OpenDDSharp.UnitTest
         {
             Ace.Init();
 
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory(
+                "-DCPSPendingTimeout", "3", "-DCPSDebugLevel", "10", "-DCPSTransportDebugLevel", "5");
+
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
                 ResendPeriod = new TimeValue
@@ -72,15 +75,12 @@ namespace OpenDDSharp.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(1000);
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory(
-                "-DCPSPendingTimeout", "3", "-DCPSDebugLevel", "10", "-DCPSTransportDebugLevel", "5");
-
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
         }
 
         /// <summary>
-        /// The assembly clean up method.
+        /// The assembly cleanup method.
         /// </summary>
         [AssemblyCleanup]
         public static void AssemblyCleanup()
