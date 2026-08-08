@@ -16,6 +16,11 @@ add_library(OpenDDSTestData SHARED)
 if (MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
     add_compile_definitions(_WINSOCK_DEPRECATED_NO_WARNINGS)
+    # MSVC 19.40+ (VS 2022 17.10+) removed stdext::checked_array_iterator used by ACE.
+    # Define _STLPORT_VERSION to use ACE's fallback implementation (plain pointer return).
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.40")
+        add_compile_definitions(_STLPORT_VERSION=0)
+    endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /wd4190 /MD")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2 /D NDEBUG /D NOMINMAX")
 elseif (APPLE)
