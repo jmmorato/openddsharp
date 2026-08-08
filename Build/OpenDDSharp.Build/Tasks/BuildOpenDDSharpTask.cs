@@ -34,31 +34,32 @@ public class BuildOpenDDSharpTask : FrostingTask<BuildContext>
         System.Environment.SetEnvironmentVariable("TAO_ROOT", taoPath);
 
         var solutionFolder = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
+        context.Log.Information($"Building OpenDDSharp solution in {solutionFolder}");
 
         context.Log.Information("Restoring NuGet packages...");
         context.DotNetRestore("./Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj", new DotNetRestoreSettings
         {
-            ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
+            ConfigFile = Path.Combine(solutionFolder, "nuget.config"),
             NoCache = true,
-            PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
+            PackagesDirectory = Path.Combine(solutionFolder, "packages"),
             WorkingDirectory = solutionFolder,
             Runtime = context.RunTime,
         });
 
         context.DotNetRestore("./Tests/TestSupportProcess/TestSupportProcess.csproj", new DotNetRestoreSettings
         {
-            ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
+            ConfigFile = Path.Combine(solutionFolder, "nuget.config"),
             NoCache = true,
-            PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
+            PackagesDirectory = Path.Combine(solutionFolder, "packages"),
             WorkingDirectory = solutionFolder,
             Runtime = context.RunTime,
         });
 
         context.DotNetRestore("./Sources/OpenDDSharp.Marshaller/OpenDDSharp.Marshaller.csproj", new DotNetRestoreSettings
         {
-            ConfigFile = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "nuget.config"),
+            ConfigFile = Path.Combine(solutionFolder, "nuget.config"),
             NoCache = true,
-            PackagesDirectory = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "/packages"),
+            PackagesDirectory = Path.Combine(solutionFolder, "packages"),
             WorkingDirectory = solutionFolder,
             Runtime = context.RunTime,
         });

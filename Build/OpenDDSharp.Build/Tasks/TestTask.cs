@@ -31,13 +31,11 @@ public class TestTask : FrostingTask<BuildContext>
         var solutionFullPath = Path.GetFullPath(BuildContext.OPENDDSHARP_SOLUTION_FOLDER);
         var path = Path.Combine(solutionFullPath, $"Tests/OpenDDSharp.UnitTest/bin/{context.BuildConfiguration}/net8.0/{context.RunTime}");
         context.Log.Information($"Unit test path: {path}");
-        // var testAdapterPath = Path.Combine(BuildContext.OPENDDSHARP_SOLUTION_FOLDER, "packages/coverlet.collector/6.0.4/build/netstandard2.0");
         var settingsFile = Path.Combine(solutionFullPath, "Tests.runsettings");
         context.Log.Information($"Settings file: {settingsFile}");
 
         var dotnetTestSettings = new DotNetTestSettings
         {
-            // TestAdapterPath = Path.GetFullPath(testAdapterPath),
             WorkingDirectory = path,
             EnvironmentVariables =
             {
@@ -55,7 +53,8 @@ public class TestTask : FrostingTask<BuildContext>
             Loggers = { "trx;LogFilePrefix=test-results", "console;verbosity=normal" },
             ArgumentCustomization = builder => builder
                 .Append("--collect:\"XPlat Code Coverage\"")
-                .Append($"--results-directory {solutionFullPath}/TestResults"),
+                .Append($"--results-directory {solutionFullPath}/TestResults")
+                .Append("-p:TestTfmsInParallel=false"),
         };
 
         var projectFile = Path.Combine(solutionFullPath, "Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj");
