@@ -26,7 +26,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Method
         /// <summary>
-        /// Test the properties default values after calling the constructor.
+        /// Test the properties' default values after calling the constructor.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -57,7 +57,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// Test the properties non-default values after calling the constructor.
+        /// Test the properties' non-default values after calling the constructor.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
