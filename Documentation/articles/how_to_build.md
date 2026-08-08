@@ -60,7 +60,7 @@ All parameters are passed to `Build/OpenDDSharp.Build.ps1` using `--ParameterNam
 | `--target`                | `Default`                | Cake build target to execute                          |
 | `--BuildConfiguration`    | `Release`                | `Release` or `Debug`                                  |
 | `--BuildPlatform`         | `x64`                    | `x64`, `x86`, or `ARM64`                              |
-| `--OpenDdsVersion`        | `3.33.0`                 | OpenDDS version to download and build                 |
+| `--OpenDdsVersion`        | `3.34.0`                 | OpenDDS version to download and build                 |
 | `--VisualStudioVersion`   | `VS2022`                 | Visual Studio version (Windows only)                  |
 | `--VisualStudioEdition`   | `Enterprise`             | VS edition: `Enterprise`, `Professional`, `Community` |
 | `--PerlPath`              | `C:/Strawberry/perl/bin` | Path to the Perl binary directory                     |
@@ -140,7 +140,7 @@ cd Build
   --VisualStudioEdition=Enterprise `
   --BuildConfiguration=Release `
   --BuildPlatform=x64 `
-  --OpenDdsVersion=3.33.0 `
+  --OpenDdsVersion=3.34.0 `
   --IgnoreThirdPartySetup=False `
   --IgnoreThirdPartyBuild=False
 ```
@@ -151,7 +151,7 @@ cd Build
 > third-party setup after a previous compilation for x64, run the following command:
 > ```powershell
 > ./OpenDDSharp.Build.ps1 --target=BuildOpenDDSharpNativeTask --exclusive `
->   --BuildPlatform=x86 --OpenDdsVersion=3.33.0 `
+>   --BuildPlatform=x86 --OpenDdsVersion=3.34.0 `
 >   --IgnoreThirdPartySetup=True --IgnoreThirdPartyBuild=False
 > ```
 
