@@ -48,8 +48,8 @@ namespace OpenDDSharp.UnitTest
             Ace.Init();
 
             Factory = ParticipantService.Instance.GetDomainParticipantFactory(
+                "-DCPSScheduler", "SCHED_OTHER",
                 "-DCPSDefaultAddress", "127.0.0.1",
-                "-DCPSThreadSchedulingPolicy", "SUB_CONFIG_DISABLED",
                 "-DCPSPendingTimeout", "3",
                 "-DCPSDebugLevel", "10",
                 "-DCPSTransportDebugLevel", "5");
