@@ -472,6 +472,12 @@ jobs:
           echo "PATH=$Env:PATH" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
+      - name: Setup MSVC Build Tools
+          uses: loonghao/msvc-kit@v1
+          with:
+            msvc-version: "14.50"
+            arch: ${{ matrix.build_platform }}
+
       - name: Download ${{ matrix.runtime }} native
         uses: actions/download-artifact@v8
         with:
