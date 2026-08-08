@@ -1,15 +1,15 @@
 # OpenDDSharp Subscription Module
 
 The Subscription module is the component of the Data Distribution Service (DDS) standard
-(OMG DDS 1.4, §2.2.2.5) responsible for the reception of data. It provides the abstractions needed to
+(OMG DDS 1.4) responsible for the reception of data. It provides the abstractions needed to
 declare interest in data and to access the received samples, including mechanisms for filtering, ordering, and
 state tracking of data instances.
 
-The module is comprised of the following classifiers:
+The module consists of the following classes:
 
 - **Subscriber** — manages a group of `DataReader` objects and coordinates their access to received data.
 - **DataReader** — the entity through which typed data samples are received and accessed.
-- **SampleInfo** — metadata accompanying each sample, describing its state, instance, and timing.
+- **SampleInfo** — metadata coming with each sample, describing its state, instance, and timing.
 - **SubscriberListener** — receives status-change notifications at the `Subscriber` level.
 - **DataReaderListener** — receives status-change notifications at the `DataReader` level.
 - **ReadCondition / QueryCondition** — conditions for filtering data access and integrating with wait-sets.
@@ -31,7 +31,7 @@ graph LR
 
 ## Subscriber Class
 
-Per the DDS specification (§2.2.2.5.2), a `Subscriber` is the object responsible for the actual reception of
+Per the DDS specification, a `Subscriber` is the object responsible for the actual reception of
 data resulting from its subscriptions. It acts on behalf of one or several `DataReader` objects related to it.
 When it receives data from other parts of the system, it builds the list of concerned `DataReader` objects and
 indicates to the application that data is available — through its listener or by enabling related conditions.
@@ -71,33 +71,11 @@ var listener = new MyDataReaderListener();
 var reader = subscriber.CreateDataReader(topic, qos, listener);
 ```
 
-A common pattern for constructing `DataReader` QoS is to merge the `Topic` QoS with the `Subscriber`'s
-default `DataReader` QoS so that compatible policies are set automatically:
-
-```csharp
-var topicQos = new TopicQos();
-topic.GetQos(topicQos);
-
-var readerQos = new DataReaderQos();
-subscriber.GetDefaultDataReaderQos(readerQos);
-
-// Merge: topic policies override the reader defaults for compatible policies
-subscriber.CopyFromTopicQos(readerQos, topicQos);
-
-var reader = subscriber.CreateDataReader(topic, readerQos);
-```
-
-> **Note:** `DATAREADER_QOS_USE_TOPIC_QOS` cannot be used when creating a `DataReader` for a
-> `MultiTopic`. Per the spec (§2.2.2.5.2.5), this will return a `nil` result.
-
-**Deletion constraints** — A `DataReader` cannot be deleted while:
-- Any `ReadCondition` or `QueryCondition` objects are attached to it.
-- There are outstanding loans from a `Read` or `Take` operation (i.e., `ReturnLoan` has not been called).
-
 The `DeleteDataReader` operation must be called on the same `Subscriber` that created it:
 
 ```csharp
-reader.DeleteContainedEntities(); // delete ReadConditions/QueryConditions first
+// Delete ReadConditions/QueryConditions first
+reader.DeleteContainedEntities();
 subscriber.DeleteDataReader(reader);
 ```
 
@@ -108,6 +86,11 @@ All contained `DataReader` objects (and their conditions) can be deleted recursi
 subscriber.DeleteContainedEntities();
 participant.DeleteSubscriber(subscriber);
 ```
+
+**Deletion constraints** — A `DataReader` cannot be deleted while:
+- Any `ReadCondition` or `QueryCondition` objects are attached to it.
+- There are outstanding loans from a `Read` or `Take` operation
+  - OpenDDSharp will call `ReturnLoan` automatically for you, in each `Read` or `Take` calls.
 
 ### Coherent Access with BeginAccess / EndAccess
 
@@ -131,10 +114,10 @@ foreach (var reader in readers)
 subscriber.EndAccess();
 ```
 
-> Per the spec (§2.2.2.5.2.8), `BeginAccess` / `EndAccess` calls may be nested. If
-> `PRESENTATION access_scope` is set to anything other than `Group`, these calls have no effect and are
+> Per the spec, `BeginAccess` / `EndAccess` calls may be nested. If
+> `Presentation.AccessScope` is set to anything other than `Group`, these calls have no effect and are
 > not considered errors. `GetDataReaders` called outside a `BeginAccess` / `EndAccess` block when
-> `access_scope = Group` will return `ReturnCode.PreconditionNotMet`.
+> `AccessScope = Group` will return `ReturnCode.PreconditionNotMet`.
 
 ### GetDataReaders
 
@@ -153,14 +136,14 @@ subscriber.GetDataReaders(
     InstanceStateMask.Alive);
 ```
 
-Per the spec (§2.2.2.5.2.10), if `PRESENTATION access_scope = Group` and `ordered_access = true`, the
+Per the spec, if `Presentation.AccessScope = Group` and `OrderedAccess = true`, the
 returned collection is a **list** that may contain the same `DataReader` more than once — the application
 should process each entry in order and read exactly one sample per entry.
 
 ### Notify DataReaders
 
 `NotifyDataReaders` manually triggers the `OnDataAvailable` callback on all contained `DataReader` listeners
-that have a `DATA_AVAILABLE` status change. This is typically called from `OnDataOnReaders` in the
+that have a `DataAvailable` status change. This is typically called from `OnDataOnReaders` in the
 `SubscriberListener` to delegate data handling to individual `DataReaderListener` objects:
 
 ```csharp
@@ -183,15 +166,15 @@ For a detailed description, please refer to the
 The `SubscriberQos` class holds the QoS policies that control the behavior of the `Subscriber` as a whole.
 The same four policies apply as for `Publisher`:
 
-| Policy | Default Value | RxO | Changeable |
-|---|---|:---:|:---:|
-| `Presentation` | `Instance` scope, coherent=false, ordered=false | Yes | **No** |
-| `Partition` | Empty (matches default partition) | No | Yes |
-| `GroupData` | Empty sequence | No | Yes |
-| `EntityFactory` | `AutoenableCreatedEntities = true` | No | Yes |
+| Policy          | Default Value                                   | RxO | Changeable |
+|-----------------|-------------------------------------------------|:---:|:----------:|
+| `Presentation`  | `Instance` scope, coherent=false, ordered=false | Yes |   **No**   |
+| `Partition`     | Empty (matches default partition)               | No  |    Yes     |
+| `GroupData`     | Empty sequence                                  | No  |    Yes     |
+| `EntityFactory` | `AutoenableCreatedEntities = true`              | No  |    Yes     |
 
 - **`Presentation`** — The offered scope on the publisher side must be >= the requested scope on the subscriber
-  side for them to match. If `ordered_access = true` with `Group` scope, `GetDataReaders` returns an
+  side for them to match. If `OrderedAccess = true` with `Group` scope, `GetDataReaders` returns an
   ordered list and `BeginAccess` / `EndAccess` must be used.
 - **`Partition`** — A `DataReader` communicates only with `DataWriter` objects that share a matching partition.
 - **`GroupData`** — Application-defined opaque data propagated via built-in topics.
@@ -223,16 +206,16 @@ For a detailed description, please refer to the
 The `SubscriberListener` is an abstract class with callbacks for all `DataReader` status changes plus one
 exclusive `Subscriber`-level callback:
 
-| Callback | Status | Description |
-|---|---|---|
-| `OnDataOnReaders` | `DATA_ON_READERS` | New data is available on one or more `DataReader` objects attached to the `Subscriber`. |
-| `OnDataAvailable` | `DATA_AVAILABLE` | Samples are available on a specific `DataReader`. |
-| `OnRequestedDeadlineMissed` | `REQUESTED_DEADLINE_MISSED` | A `DataReader` did not receive a new sample for an instance within the requested deadline period. |
-| `OnRequestedIncompatibleQos` | `REQUESTED_INCOMPATIBLE_QOS` | A `DataWriter` was discovered with QoS incompatible with the `DataReader`'s requested QoS. |
-| `OnSampleRejected` | `SAMPLE_REJECTED` | A received sample was rejected (e.g., `ResourceLimits` exceeded). |
-| `OnLivelinessChanged` | `LIVELINESS_CHANGED` | The liveliness of a matched `DataWriter` has changed. |
-| `OnSubscriptionMatched` | `SUBSCRIPTION_MATCHED` | A compatible `DataWriter` was matched or unmatched. |
-| `OnSampleLost` | `SAMPLE_LOST` | A sample was lost and never received. |
+| Callback                     | Status                       | Description                                                                                       |
+|------------------------------|------------------------------|---------------------------------------------------------------------------------------------------|
+| `OnDataOnReaders`            | `DATA_ON_READERS`            | New data is available on one or more `DataReader` objects attached to the `Subscriber`.           |
+| `OnDataAvailable`            | `DATA_AVAILABLE`             | Samples are available on a specific `DataReader`.                                                 |
+| `OnRequestedDeadlineMissed`  | `REQUESTED_DEADLINE_MISSED`  | A `DataReader` did not receive a new sample for an instance within the requested deadline period. |
+| `OnRequestedIncompatibleQos` | `REQUESTED_INCOMPATIBLE_QOS` | A `DataWriter` was discovered with QoS incompatible with the `DataReader`'s requested QoS.        |
+| `OnSampleRejected`           | `SAMPLE_REJECTED`            | A received sample was rejected (e.g., `ResourceLimits` exceeded).                                 |
+| `OnLivelinessChanged`        | `LIVELINESS_CHANGED`         | The liveliness of a matched `DataWriter` has changed.                                             |
+| `OnSubscriptionMatched`      | `SUBSCRIPTION_MATCHED`       | A compatible `DataWriter` was matched or unmatched.                                               |
+| `OnSampleLost`               | `SAMPLE_LOST`                | A sample was lost and never received.                                                             |
 
 > **`OnDataOnReaders` vs `OnDataAvailable`:** `OnDataOnReaders` is triggered on the `Subscriber` when
 > data arrives on any of its `DataReader` objects. `OnDataAvailable` is triggered per `DataReader`. The
@@ -292,12 +275,12 @@ For a detailed description, please refer to the
 
 ## DataReader Class
 
-Per the DDS specification (§2.2.2.5.3), a `DataReader` allows the application to declare the data it wishes to
+Per the DDS specification, a `DataReader` allows the application to declare the data it wishes to
 receive (i.e., make a subscription) and to access the data received by the attached `Subscriber`. A `DataReader`
 refers to exactly one `ITopicDescription` — either a `Topic`, a `ContentFilteredTopic`, or a `MultiTopic` —
 that identifies the data to be read.
 
-`DataReader` is an abstract class that is specialized for each application data type by the code generator. For
+`DataReader` is an abstract class specialized for each application data type by the code generator. For
 a hypothetical IDL type `MyType`, the generator creates a `MyTypeDataReader` class with typed `Read`, `Take`,
 `ReadInstance`, `TakeInstance`, and related operations.
 
@@ -308,8 +291,7 @@ Data is made available to the application through two families of operations:
 - **`Read`** — The application gets access to the data; the data remains the middleware's responsibility and
   can be read again. Repeated calls to `Read` may return the same sample (with `SampleState = Read`).
 - **`Take`** — The application takes full responsibility for the data; it will no longer be accessible through
-  the `DataReader`. The application must call `ReturnLoan` when it is done with the loaned data (only needed
-  for the non-`Copy` variants).
+  the `DataReader`.
 
 Both families accept filter masks for `SampleState`, `ViewState`, and `InstanceState`:
 
@@ -350,20 +332,20 @@ typedReader.ReadInstance(samples, infos, 10, instanceHandle,
 Each sample returned by `Read` or `Take` is accompanied by a `SampleInfo` object that provides metadata
 about that sample:
 
-| Field | Description |
-|---|---|
-| `ValidData` | `true` if the sample contains valid application data; `false` for lifecycle-change notifications (e.g., disposed or unregistered instances). |
-| `SampleState` | `Read` if the sample was previously accessed via `Read`; `NotRead` if this is the first access. |
-| `ViewState` | `NewView` if this is the first sample seen for this instance; `NotNewView` if the instance was seen before. |
-| `InstanceState` | `Alive` — writer is active; `NotAliveDisposed` — writer called `Dispose`; `NotAliveNoWriters` — no live writers exist. |
-| `SourceTimestamp` | The timestamp provided by the `DataWriter` when the sample was written. |
-| `InstanceHandle` | The local handle identifying the data instance. |
-| `PublicationHandle` | The local handle of the source `DataWriter`. |
-| `DisposedGenerationCount` | How many times the instance has become `Alive` after being explicitly disposed. |
-| `NoWritersGenerationCount` | How many times the instance has become `Alive` after all writers stopped. |
-| `SampleRank` | Number of samples for this instance that follow in the returned collection. |
-| `GenerationRank` | Generation difference between this sample and the most recent in the collection. |
-| `AbsoluteGenerationRank` | Generation difference between this sample and the most recent overall. |
+| Field                      | Description                                                                                                                                  |
+|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `ValidData`                | `true` if the sample contains valid application data; `false` for lifecycle-change notifications (e.g., disposed or unregistered instances). |
+| `SampleState`              | `Read` if the sample was previously accessed via `Read`; `NotRead` if this is the first access.                                              |
+| `ViewState`                | `NewView` if this is the first sample seen for this instance; `NotNewView` if the instance was seen before.                                  |
+| `InstanceState`            | `Alive` — writer is active; `NotAliveDisposed` — writer called `Dispose`; `NotAliveNoWriters` — no live writers exist.                       |
+| `SourceTimestamp`          | The timestamp provided by the `DataWriter` when the sample was written.                                                                      |
+| `InstanceHandle`           | The local handle identifying the data instance.                                                                                              |
+| `PublicationHandle`        | The local handle of the source `DataWriter`.                                                                                                 |
+| `DisposedGenerationCount`  | How many times the instance has become `Alive` after being explicitly disposed.                                                              |
+| `NoWritersGenerationCount` | How many times the instance has become `Alive` after all writers stopped.                                                                    |
+| `SampleRank`               | Number of samples for this instance that follow in the returned collection.                                                                  |
+| `GenerationRank`           | Generation difference between this sample and the most recent in the collection.                                                             |
+| `AbsoluteGenerationRank`   | Generation difference between this sample and the most recent overall.                                                                       |
 
 > **`ValidData = false`** means the sample is a lifecycle notification, not an actual data update. This happens
 > when an instance is disposed or when a `DataWriter` unregisters it. Always check `ValidData` before
@@ -459,20 +441,20 @@ The `DataReaderQos` class holds all QoS policies that control the behavior of a 
 default `Reliability` kind for `DataReader` is `BestEffort` (unlike `DataWriter`, which defaults to
 `Reliable`):
 
-| Policy | Default Value | RxO | Changeable |
-|---|---|:---:|:---:|
-| `UserData` | Empty sequence | No | Yes |
-| `Durability` | `Volatile` | Yes | **No** |
-| `Deadline` | Period = infinite | Yes | Yes |
-| `LatencyBudget` | Duration = 0 | Yes | Yes |
-| `Liveliness` | `Automatic`, lease_duration = infinite | Yes | **No** |
-| `Reliability` | **`BestEffort`** | Yes | **No** |
-| `DestinationOrder` | `ByReceptionTimestamp` | Yes | **No** |
-| `History` | `KeepLast`, depth = 1 | No | **No** |
-| `ResourceLimits` | All `LengthUnlimited` | No | **No** |
-| `Ownership` | `Shared` | Yes | **No** |
-| `TimeBasedFilter` | `MinimumSeparation = 0` | N/A | Yes |
-| `ReaderDataLifecycle` | `AutopurgeNowriterSamplesDelay = infinite`, `AutopurgeDisposedSamplesDelay = infinite` | N/A | Yes |
+| Policy                | Default Value                                                                          | RxO | Changeable |
+|-----------------------|----------------------------------------------------------------------------------------|:---:|:----------:|
+| `UserData`            | Empty sequence                                                                         | No  |    Yes     |
+| `Durability`          | `Volatile`                                                                             | Yes |   **No**   |
+| `Deadline`            | Period = infinite                                                                      | Yes |    Yes     |
+| `LatencyBudget`       | Duration = 0                                                                           | Yes |    Yes     |
+| `Liveliness`          | `Automatic`, lease_duration = infinite                                                 | Yes |   **No**   |
+| `Reliability`         | **`BestEffort`**                                                                       | Yes |   **No**   |
+| `DestinationOrder`    | `ByReceptionTimestamp`                                                                 | Yes |   **No**   |
+| `History`             | `KeepLast`, depth = 1                                                                  | No  |   **No**   |
+| `ResourceLimits`      | All `LengthUnlimited`                                                                  | No  |   **No**   |
+| `Ownership`           | `Shared`                                                                               | Yes |   **No**   |
+| `TimeBasedFilter`     | `MinimumSeparation = 0`                                                                | N/A |    Yes     |
+| `ReaderDataLifecycle` | `AutopurgeNowriterSamplesDelay = infinite`, `AutopurgeDisposedSamplesDelay = infinite` | N/A |    Yes     |
 
 Key policies unique to `DataReader`:
 
@@ -486,15 +468,15 @@ Key policies unique to `DataReader`:
 
 For QoS **compatibility** between a `DataWriter` and a `DataReader`, the following rules apply (per the spec):
 
-| Policy | Compatibility Rule |
-|---|---|
-| `Durability` | offered >= requested (`Volatile < TransientLocal < Transient < Persistent`) |
-| `Deadline` | offered period <= requested period |
-| `LatencyBudget` | offered duration <= requested duration |
-| `Liveliness` | offered kind >= requested; offered lease_duration <= requested |
-| `Reliability` | `Reliable` writer is compatible with both; `BestEffort` writer is only compatible with `BestEffort` reader |
-| `DestinationOrder` | offered kind >= requested (`ByReceptionTimestamp < BySourceTimestamp`) |
-| `Ownership` | must exactly match |
+| Policy             | Compatibility Rule                                                                                         |
+|--------------------|------------------------------------------------------------------------------------------------------------|
+| `Durability`       | offered >= requested (`Volatile < TransientLocal < Transient < Persistent`)                                |
+| `Deadline`         | offered period <= requested period                                                                         |
+| `LatencyBudget`    | offered duration <= requested duration                                                                     |
+| `Liveliness`       | offered kind >= requested; offered lease_duration <= requested                                             |
+| `Reliability`      | `Reliable` writer is compatible with both; `BestEffort` writer is only compatible with `BestEffort` reader |
+| `DestinationOrder` | offered kind >= requested (`ByReceptionTimestamp < BySourceTimestamp`)                                     |
+| `Ownership`        | must exactly match                                                                                         |
 
 ```csharp
 var qos = new DataReaderQos
@@ -529,15 +511,15 @@ For a detailed description, please refer to the
 The `DataReaderListener` is an abstract class that can be registered with a `DataReader` to receive
 asynchronous notifications about its specific status changes:
 
-| Callback | Triggered when... |
-|---|---|
-| `OnDataAvailable` | New samples are available for reading. |
-| `OnRequestedDeadlineMissed` | The `DataReader` did not receive a new sample for an instance within the deadline period. |
-| `OnRequestedIncompatibleQos` | A `DataWriter` with incompatible QoS was discovered. |
-| `OnSampleRejected` | A received sample was rejected (e.g., because `ResourceLimits` are exceeded). |
-| `OnLivelinessChanged` | The liveliness of a matched `DataWriter` changed (became active or inactive). |
-| `OnSubscriptionMatched` | A compatible `DataWriter` was matched or unmatched. |
-| `OnSampleLost` | A sample was completely lost and will never be delivered. |
+| Callback                     | Triggered when...                                                                         |
+|------------------------------|-------------------------------------------------------------------------------------------|
+| `OnDataAvailable`            | New samples are available for reading.                                                    |
+| `OnRequestedDeadlineMissed`  | The `DataReader` did not receive a new sample for an instance within the deadline period. |
+| `OnRequestedIncompatibleQos` | A `DataWriter` with incompatible QoS was discovered.                                      |
+| `OnSampleRejected`           | A received sample was rejected (e.g., because `ResourceLimits` are exceeded).             |
+| `OnLivelinessChanged`        | The liveliness of a matched `DataWriter` changed (became active or inactive).             |
+| `OnSubscriptionMatched`      | A compatible `DataWriter` was matched or unmatched.                                       |
+| `OnSampleLost`               | A sample was completely lost and will never be delivered.                                 |
 
 ```csharp
 public class MyDataReaderListener : DataReaderListener
@@ -610,8 +592,7 @@ For a detailed description, please refer to the
 ## Subscription Module Diagram
 
 The following diagram illustrates the class model of the Subscription module as defined in the DDS
-specification (§2.2.2.5, Figure 2.10), showing the relationships between its classes and their connection
-to the Topic-Definition module:
+specification, showing the relationships between its classes and their connection to the Topic-Definition module:
 
 ```mermaid
 graph TB

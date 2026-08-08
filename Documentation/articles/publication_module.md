@@ -208,7 +208,7 @@ For a detailed description, please refer to the
 ### PublisherListener Class
 
 The `PublisherListener` is an abstract class that can be registered with a `Publisher` to receive notifications
-about status changes on **any** of its contained `DataWriter` objects. Per the spec (2.2.2.4.3), `Publisher`
+about status changes on **any** of its contained `DataWriter` objects. Per the spec, `Publisher`
 has no additional listener operations beyond those inherited from `DataWriterListener`. The `PublisherListener`
 acts as a fallback: if a `DataWriter` has no listener attached, the status change propagates to the
 `PublisherListener`.
@@ -269,7 +269,7 @@ For a detailed description, please refer to the
 
 ## DataWriter Class
 
-Per the DDS specification (2.2.2.4.2), `DataWriter` allows the application to set the value of the data to
+Per the DDS specification, `DataWriter` allows the application to set the value of the data to
 be published under a given `Topic`. A `DataWriter` is attached to exactly one `Publisher` that acts as its
 factory, and bound to exactly one `Topic` and therefore to exactly one data type. The `Topic` must exist prior
 to the `DataWriter`'s creation.
@@ -328,7 +328,7 @@ writer.WriteWithTimestamp(sample, handle, new Timestamp { Seconds = 1000, NanoSe
 ```
 
 **UnregisterInstance** — Signals that the `DataWriter` no longer has anything to say about the instance.
-The instance transitions to `NOT_ALIVE_NO_WRITERS` state at matched readers if no other writer exists.
+The instance transitions to `NotAliveNoWriters` state at matched readers if no other writer exists.
 Calling `UnregisterInstance` relinquishes exclusive ownership if the `Ownership` kind is `Exclusive`:
 
 ```csharp
@@ -336,7 +336,7 @@ writer.UnregisterInstance(sample, handle);
 ```
 
 **Dispose** — Requests the middleware to delete the data instance. Matched readers that know the instance
-receive a notification with `instance_state = NOT_ALIVE_DISPOSED`:
+receive a notification with `instance_state = NotAliveDisposed`:
 
 ```csharp
 writer.Dispose(sample, handle);
@@ -507,8 +507,7 @@ For a detailed description, please refer to the
 
 ## Publication Module Diagram
 
-The following diagram illustrates the class model of the Publication module as defined in the DDS specification
-(2.2.2.4, Figure 2.9), showing the relationships between its classes and their connection to the
+The following diagram illustrates the class model of the Publication module as defined in the DDS specification, showing the relationships between its classes and their connection to the
 Topic-Definition module:
 
 ```mermaid
