@@ -34,9 +34,9 @@ if (MSVC)
     add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
     # MSVC 19.40+ (VS 2022 17.10+) removed stdext::checked_array_iterator used by ACE.
     # Define _STLPORT_VERSION to use ACE's fallback implementation (plain pointer return).
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.40")
-        add_definitions(-D_STLPORT_VERSION=0)
-    endif()
+    #if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.40")
+    #    add_definitions(-D_STLPORT_VERSION=0)
+    #endif()
 elseif (APPLE)
     if (DEFINED CMAKE_APPLE_SILICON_PROCESSOR STREQUAL "arm64")
         set_target_properties(openddsharp_idl PROPERTIES LINK_FLAGS "-Wl,-rpath,@executable_path -Wl,-rpath,@executable_path/../../ACE_osx-arm64/lib -Wl,-rpath,@executable_path/../lib")
