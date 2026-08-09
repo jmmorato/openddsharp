@@ -47,17 +47,15 @@ namespace OpenDDSharp.UnitTest
         {
             Ace.Init();
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory(
-                "-DCPSScheduler", "SCHED_OTHER",
-                "-DCPSPendingTimeout", "3");
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
-                ResendPeriod = new TimeValue
-                {
-                    Seconds = 2,
-                },
-                SedpMulticast = false,
+                // ResendPeriod = new TimeValue
+                // {
+                //     Seconds = 2,
+                // },
+                // SedpMulticast = false,
             };
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
