@@ -49,9 +49,7 @@ namespace OpenDDSharp.UnitTest
 
             Factory = ParticipantService.Instance.GetDomainParticipantFactory(
                 "-DCPSScheduler", "SCHED_OTHER",
-                "-DCPSPendingTimeout", "3",
-                "-DCPSDebugLevel", "10",
-                "-DCPSTransportDebugLevel", "5");
+                "-DCPSPendingTimeout", "3");
 
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
