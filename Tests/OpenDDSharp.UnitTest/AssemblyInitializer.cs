@@ -51,11 +51,11 @@ namespace OpenDDSharp.UnitTest
 
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
-                ResendPeriod = new TimeValue
-                {
-                    Seconds = 2,
-                },
-                SedpMulticast = false,
+                // ResendPeriod = new TimeValue
+                // {
+                //     Seconds = 2,
+                // },
+                // SedpMulticast = false,
             };
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
