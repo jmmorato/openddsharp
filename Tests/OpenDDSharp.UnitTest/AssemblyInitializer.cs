@@ -57,13 +57,7 @@ namespace OpenDDSharp.UnitTest
                     Seconds = 2,
                 },
                 SedpMulticast = false,
-                SpdpLocalAddress = "127.0.0.1",
             };
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                disc.SpdpLocalAddress = "127.0.0.1";
-            }
 
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
