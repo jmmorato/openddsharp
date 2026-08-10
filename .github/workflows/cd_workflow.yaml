@@ -750,6 +750,11 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Route Multicast Traffic Through Loopback Interface
+        run: |
+          sudo route -n add -net 239.0.0.0/8 127.0.0.1
+          sudo route -n add -net 224.0.0.0/4 127.0.0.1
+
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v8
         with:

@@ -9,6 +9,7 @@ it under the terms of the MIT License.
 **********************************************************************/
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
@@ -51,12 +52,19 @@ namespace OpenDDSharp.UnitTest
 
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
-                // ResendPeriod = new TimeValue
-                // {
-                //     Seconds = 2,
-                // },
-                // SedpMulticast = false,
+                ResendPeriod = new TimeValue
+                {
+                    Seconds = 2,
+                },
+                SedpMulticast = false,
+                SpdpLocalAddress = "127.0.0.1",
             };
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                disc.SpdpLocalAddress = "127.0.0.1";
+            }
+
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
