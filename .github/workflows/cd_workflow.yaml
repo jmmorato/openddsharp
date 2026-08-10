@@ -1086,6 +1086,10 @@ jobs:
 #          win-x86 Debug artifact test throws 0xC0000005 Access Violation exception during Topic creation
 #          https://github.com/jmmorato/openddsharp/issues/297
           - os: windows-2022
+            runtime: win-x86
+            build_platform: x86
+            configuration: Debug
+          - os: windows-2022
             runtime: win-x64
             build_platform: x64
             configuration: Release
