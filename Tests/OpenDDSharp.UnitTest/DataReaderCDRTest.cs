@@ -1143,14 +1143,14 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(reader);
 
             // DCPSInfoRepo-based discovery generates Built-In Topic data once (inside the
-            // info repo process) and therefore all known entities in the domain are
+            // info repo process), and therefore all known entities in the domain are
             // reflected in the Built-In Topics. RTPS discovery, on the other hand, follows
             // the DDS specification and omits "local" entities from the Built-In Topics.
-            // The definition of "local" means those entities belonging to the same Domain
+            // The definition of "local" means those entities belong to the same Domain
             // Participant as the given Built-In Topic Subscriber.
             // https://github.com/OpenDDS/OpenDDS/blob/master/docs/design/RTPS
 
-            // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities but GetMatchedSubscriptionData doesn't
+            // OPENDDS ISSUE: GetMatchedSubscriptions returns local entities, but GetMatchedSubscriptionData doesn't
             // because it is looking in the Built-in topic. If not found in the built-in, shouldn't try to look locally?
             // WORKAROUND: Create another participant for the DataReader.
             var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
@@ -1200,9 +1200,9 @@ namespace OpenDDSharp.UnitTest
             _subscriber.DeleteDataReader(reader);
             publisher.DeleteDataWriter(writer);
             publisher.DeleteContainedEntities();
-            otherParticipant.DeletePublisher(publisher);
-            otherParticipant.DeleteTopic(otherTopic);
-            AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+            // otherParticipant.DeletePublisher(publisher);
+            // otherParticipant.DeleteTopic(otherTopic);
+            // AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
         }
 
         /// <summary>

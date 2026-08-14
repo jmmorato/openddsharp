@@ -46,12 +46,6 @@ public sealed class ParticipantService
     }
     #endregion
 
-    #region Constructors
-    private ParticipantService()
-    {
-    }
-    #endregion
-
     #region Properties
     /// <summary>
     /// Gets a value indicating whether the participant has been shutdown or not.
@@ -65,6 +59,21 @@ public sealed class ParticipantService
     {
         get => GetDefaultDiscovery();
         set => SetDefaultDiscovery(value);
+    }
+
+    /// <summary>
+    /// Gets or sets the scheduler policy kind for the participant service.
+    /// </summary>
+    public SchedulerPolicyKind Scheduler
+    {
+        get => (SchedulerPolicyKind)UnsafeNativeMethods.GetScheduler();
+        set => UnsafeNativeMethods.SetScheduler((int)value);
+    }
+    #endregion
+
+    #region Constructors
+    private ParticipantService()
+    {
     }
     #endregion
 
@@ -227,6 +236,16 @@ internal static partial class UnsafeNativeMethods
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool GetIsShutdown();
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetScheduler")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial int GetScheduler();
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_Scheduler")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial void SetScheduler(int scheduler);
 #else
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_new", CallingConvention = CallingConvention.Cdecl)]
@@ -264,5 +283,13 @@ internal static partial class UnsafeNativeMethods
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetIsShutdown", CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool GetIsShutdown();
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetScheduler", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long GetScheduler();
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_Scheduler", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetScheduler(long scheduler);
 #endif
 }

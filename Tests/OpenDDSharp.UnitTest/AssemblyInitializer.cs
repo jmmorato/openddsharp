@@ -9,7 +9,6 @@ it under the terms of the MIT License.
 **********************************************************************/
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
 using OpenDDSharp.OpenDDS.DCPS;
@@ -48,8 +47,6 @@ namespace OpenDDSharp.UnitTest
         {
             Ace.Init();
 
-            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
-
             var disc = new RtpsDiscovery(RTPS_DISCOVERY)
             {
                 ResendPeriod = new TimeValue
@@ -76,6 +73,9 @@ namespace OpenDDSharp.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(5_000);
 
+            ParticipantService.Instance.Scheduler = SchedulerPolicyKind.Default;
+            Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
+
             Assert.IsFalse(TransportRegistry.Instance.Released);
             Assert.IsFalse(ParticipantService.Instance.IsShutdown);
         }
@@ -90,6 +90,7 @@ namespace OpenDDSharp.UnitTest
             {
                 _supportProcess.KillProcess(_infoProcess);
             }
+
             if (File.Exists(INFOREPO_IOR))
             {
                 File.Delete(INFOREPO_IOR);

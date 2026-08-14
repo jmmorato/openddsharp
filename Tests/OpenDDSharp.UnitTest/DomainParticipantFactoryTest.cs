@@ -71,7 +71,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSetQos()
         {
-            // Creates a non-default QoS, set it an check it
+            // Creates a non-default QoS, set it and check it
             var qos = new DomainParticipantFactoryQos
             {
                 EntityFactory =
@@ -129,7 +129,7 @@ namespace OpenDDSharp.UnitTest
         [TestCategory(TEST_CATEGORY)]
         public void TestSetDefaultDomainParticipantQos()
         {
-            // Creates a non-default QoS, set it an check it
+            // Creates a non-default QoS, set it and check it
             var qos = TestHelper.CreateNonDefaultDomainParticipantQos();
             var result = AssemblyInitializer.Factory.SetDefaultDomainParticipantQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
