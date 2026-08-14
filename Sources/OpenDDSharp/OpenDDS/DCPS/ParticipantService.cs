@@ -286,10 +286,10 @@ internal static partial class UnsafeNativeMethods
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_GetScheduler", CallingConvention = CallingConvention.Cdecl)]
-    public static extern long GetScheduler();
+    public static extern int GetScheduler();
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "ParticipantService_Scheduler", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetScheduler(long scheduler);
+    public static extern void SetScheduler(int scheduler);
 #endif
 }

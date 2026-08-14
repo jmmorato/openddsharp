@@ -42,8 +42,8 @@ bool ParticipantService_GetIsShutdown() {
   return TheServiceParticipant->is_shut_down();
 }
 
-long ParticipantService_GetScheduler() {
-  return TheServiceParticipant->scheduler();
+int ParticipantService_GetScheduler() {
+  return static_cast<int>(TheServiceParticipant->scheduler());
 }
 
 void ParticipantService_Scheduler(int scheduler) {
