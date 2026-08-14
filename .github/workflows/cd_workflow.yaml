@@ -530,7 +530,7 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: pwsh
-        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
+        run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
         working-directory: ${{ github.workspace }}
 
       - name: Test Report
@@ -665,7 +665,7 @@ jobs:
 
     - name: Test OpenDDSharp
       shell: bash
-      run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
+      run: sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
       working-directory: ${{ github.workspace }}
 
     - name: Test Report
@@ -749,11 +749,6 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
-
-#      - name: Route Multicast Traffic Through Loopback Interface
-#        run: |
-#          sudo route -n add -net 239.0.0.0/8 127.0.0.1
-#          sudo route -n add -net 224.0.0.0/4 127.0.0.1
 
       - name: Download ${{ matrix.runtime }} native artifact
         uses: actions/download-artifact@v8
@@ -1225,6 +1220,7 @@ jobs:
           $pinfo.UseShellExecute = $false
           $pinfo.WorkingDirectory = "$publishFolder"
           $pinfo.CreateNoWindow = $true
+          $pinfo.Verb = "runas";
           
           $p = New-Object System.Diagnostics.Process
           $p.StartInfo = $pinfo
