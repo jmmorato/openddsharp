@@ -46,6 +46,6 @@ long ParticipantService_GetScheduler() {
   return TheServiceParticipant->scheduler();
 }
 
-void ParticipantService_Scheduler(long scheduler) {
+void ParticipantService_Scheduler(int scheduler) {
   TheServiceParticipant->scheduler(scheduler);
 }

@@ -13,8 +13,8 @@
     <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
     <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
     <RootNamespace>OpenDDSharp.UnitTest</RootNamespace>
-    <TargetFrameworks Condition="'$(IsWindow)' == 'true'">net481;net8.0;net9.0;net10.0;</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsWindow)' != 'true'">net8.0;net9.0;net10.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsWindows)' == 'true'">net481;net8.0;net9.0;net10.0;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsWindows)' != 'true'">net8.0;net9.0;net10.0;</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Optimize>false</Optimize>
