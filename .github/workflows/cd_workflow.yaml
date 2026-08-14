@@ -1187,9 +1187,6 @@ jobs:
           New-Item -Path "." -Name "Test" -ItemType "directory"
           cd Test
           dotnet new openddsharp-idl-project
-          Remove-Item ./IDL/Test.idl
-          Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/Test.idl" -Destination "./IDL" -Force
-          Copy-Item "${{ github.workspace }}/Tests/TestIdlCdr/IDL/TestInclude.idl" -Destination "./IDL" -Force
           dotnet restore Test.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build Test.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
           dotnet clean Test.csproj
@@ -1197,10 +1194,6 @@ jobs:
           New-Item -Path "." -Name "TestConsole" -ItemType "directory"
           cd TestConsole
           dotnet new openddsharp-console-app
-          Remove-Item Program.cs
-          Remove-Item rtps.ini
-          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/Program.cs" -Destination "."
-          Copy-Item "${{ github.workspace }}/Examples/ConsoleDemo/rtps.ini" -Destination "."
           dotnet add TestConsole.csproj reference ../Test/Test.csproj
           dotnet restore TestConsole.csproj --source https://api.nuget.org/v3/index.json --source ${{ github.workspace }}/nupkg/ --no-cache
           dotnet build TestConsole.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.runtime }} --self-contained --no-restore
