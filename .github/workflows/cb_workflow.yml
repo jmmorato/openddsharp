@@ -879,13 +879,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14
+          - os: macos-26
             runtime: osx-arm64
             build_platform: ARM64
-          - os: macos-15
-            runtime: osx-arm64
-            build_platform: ARM64
-          - os: macos-15-intel
+          - os: macos-26-intel
             runtime: osx-x64
             build_platform: x64
 
@@ -993,15 +990,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14
-            runtime: osx-arm64
-            build_platform: ARM64
-          - os: macos-15
-            runtime: osx-arm64
-            build_platform: ARM64
-          - os: macos-15-intel
-            runtime: osx-x64
-            build_platform: x64
           - os: macos-26
             runtime: osx-arm64
             build_platform: ARM64
