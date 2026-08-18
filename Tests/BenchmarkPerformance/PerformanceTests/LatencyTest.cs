@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Net;
 using BenchmarkDotNet.Attributes;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 using OpenDDSharp.BenchmarkPerformance.Helpers;
@@ -75,7 +76,7 @@ public class LatencyTest
             {
                 Seconds = 2,
                 MicroSeconds = 0,
-            }
+            },
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
@@ -86,26 +87,14 @@ public class LatencyTest
             "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameCdr = "openddsharp_rtps_" + guidCdr;
-        var instNameCdr = "internal_openddsharp_rtps_" + guidCdr;
+        var configNameCdr = "openddsharp_tcp_" + guidCdr;
+        var instNameCdr = "internal_openddsharp_tcp_" + guidCdr;
 
         _configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
-        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "rtps_udp");
-        var transportCdr = new RtpsUdpInst(_instCdr)
+        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
+        var transportCdr = new TcpInst(_instCdr)
         {
-            RcvBufferSize = 4194304,
-            SendBufferSize = 4194304,
-            NakResponseDelay = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 0,
-            },
-            HeartbeatPeriod = new TimeValue
-            {
-                Seconds = 10,
-                MicroSeconds = 0,
-            },
-            NakDepth = 500,
+            LocalAddress = IPAddress.Loopback.ToString(),
         };
         _configCdr.Insert(transportCdr);
 
@@ -121,7 +110,6 @@ public class LatencyTest
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
-                MicroSeconds = 0,
             },
         };
 
@@ -134,31 +122,18 @@ public class LatencyTest
 
         // Create JSON participant
         var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameJson = "openddsharp_rtps_" + guidJson;
-        var instNameCdrJson = "internal_openddsharp_rtps_" + guidJson;
+        var configNameJson = "openddsharp_tcp_" + guidJson;
+        var instNameCdrJson = "internal_openddsharp_tcp_" + guidJson;
 
         _configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
-        _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "rtps_udp");
-        var transportJson = new RtpsUdpInst(_instJson)
+        _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "tcp");
+        var transportJson = new TcpInst(_instJson)
         {
-            RcvBufferSize = 4194304,
-            SendBufferSize = 4194304,
-            NakResponseDelay = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 0,
-            },
-            HeartbeatPeriod = new TimeValue
-            {
-                Seconds = 10,
-                MicroSeconds = 0,
-            },
-            NakDepth = 500
+            LocalAddress = IPAddress.Loopback.ToString(),
         };
         _configJson.Insert(transportJson);
 
         _participantJson = _dpf.CreateParticipant(DOMAIN_ID_JSON);
-
         TransportRegistry.Instance.BindConfig(configNameJson, _participantJson);
     }
 
@@ -170,7 +145,6 @@ public class LatencyTest
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
-                MicroSeconds = 0,
             },
         };
 
@@ -182,26 +156,14 @@ public class LatencyTest
             "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         var guidNative = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameNative = "openddsharp_rtps_" + guidNative;
-        var instNameNative = "internal_openddsharp_rtps_" + guidNative;
+        var configNameNative = "openddsharp_tcp_" + guidNative;
+        var instNameNative = "internal_openddsharp_tcp_" + guidNative;
 
         _configNative = TransportRegistry.Instance.CreateConfig(configNameNative);
-        _instNative = TransportRegistry.Instance.CreateInst(instNameNative, "rtps_udp");
-        var transportNative = new RtpsUdpInst(_instNative)
+        _instNative = TransportRegistry.Instance.CreateInst(instNameNative, "tcp");
+        var transportNative = new TcpInst(_instNative)
         {
-            RcvBufferSize = 4194304,
-            SendBufferSize = 4194304,
-            NakResponseDelay = new TimeValue
-            {
-                Seconds = 0,
-                MicroSeconds = 0,
-            },
-            HeartbeatPeriod = new TimeValue
-            {
-                Seconds = 10,
-                MicroSeconds = 0,
-            },
-            NakDepth = 500
+            LocalAddress = IPAddress.Loopback.ToString(),
         };
         _configNative.Insert(transportNative);
 
