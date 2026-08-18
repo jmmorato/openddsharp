@@ -73,7 +73,6 @@ namespace OpenDDSharp.UnitTest
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
             System.Threading.Thread.Sleep(5_000);
 
-            ParticipantService.Instance.Scheduler = SchedulerPolicyKind.Default;
             Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
             Assert.IsFalse(TransportRegistry.Instance.Released);

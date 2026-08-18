@@ -208,12 +208,23 @@ public class RtpsDiscovery : Discovery
     }
 
     /// <summary>
-    /// Gets a list (comma or whitespace separated) of host:port
-    /// pairs used as destinations for SPDP content. This
-    /// can be a combination of Unicast and Multicast
-    /// addresses.
+    /// Gets a list of host:port pairs used as destinations for SPDP content.
+    /// This can be a combination of Unicast and Multicast addresses.
     /// </summary>
-    public IEnumerable<string> SpdpSendAddrs => GetSpdpSendAddrs();
+    public IEnumerable<string> SpdpSendAddrs
+    {
+        get => GetSpdpSendAddrs();
+        set
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            var list = new List<string>(value);
+            SetSpdpSendAddrs(list);
+        }
+    }
 
     /// <summary>
     /// Gets or sets the specific network interface to use when
@@ -368,7 +379,7 @@ public class RtpsDiscovery : Discovery
 
     private void SetSedpLocalAddress(string value)
     {
-        string full = value;
+        var full = value;
         if (!full.Contains(":"))
         {
             full += ":0";
@@ -378,12 +389,12 @@ public class RtpsDiscovery : Discovery
 
     private string GetSpdpLocalAddress()
     {
-        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetSedpLocalAddress(_native));
+        return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetSpdpLocalAddress(_native));
     }
 
     private void SetSpdpLocalAddress(string value)
     {
-        string full = value;
+        var full = value;
         if (!full.Contains(":"))
         {
             full += ":0";
@@ -418,6 +429,13 @@ public class RtpsDiscovery : Discovery
         UnsafeNativeMethods.GetSpdpSendAddrs(_native).PtrToStringSequence(ref addrs, false);
 
         return addrs;
+    }
+
+    private void SetSpdpSendAddrs(IEnumerable<string> addrs)
+    {
+        var strAddrs = string.Join(",", addrs);
+
+        UnsafeNativeMethods.SetSpdpSendAddrs(_native, strAddrs);
     }
 
     private string GetGuidInterface()
@@ -548,6 +566,7 @@ internal static partial class UnsafeNativeMethods
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetSpdpLocalAddress")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     public static partial IntPtr GetSpdpLocalAddress(IntPtr ird);
 
     [SuppressUnmanagedCodeSecurity]
@@ -590,6 +609,11 @@ internal static partial class UnsafeNativeMethods
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetSpdpSendAddrs")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     public static partial IntPtr GetSpdpSendAddrs(IntPtr ird);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_SetSpdpSendAddrs", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial void SetSpdpSendAddrs(IntPtr ird, string addrs);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetGuidInterface")]
@@ -691,6 +715,14 @@ internal static partial class UnsafeNativeMethods
     public static extern void SetSpdpLocalAddress(IntPtr ird, string ip);
 
     [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetSpdpSendAddrs", CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr GetSpdpSendAddrs(IntPtr ird);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_SetSpdpSendAddrs", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+    public static extern void SetSpdpSendAddrs(IntPtr ird, string addrs);
+
+    [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetSedpMulticast", CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool GetSedpMulticast(IntPtr mi);
@@ -714,10 +746,6 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_SetDefaultMulticastGroup", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
     public static extern void SetDefaultMulticastGroup(IntPtr ird, string ip);
-
-    [SuppressUnmanagedCodeSecurity]
-    [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetSpdpSendAddrs", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr GetSpdpSendAddrs(IntPtr ird);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "RtpsDiscovery_GetGuidInterface", CallingConvention = CallingConvention.Cdecl)]

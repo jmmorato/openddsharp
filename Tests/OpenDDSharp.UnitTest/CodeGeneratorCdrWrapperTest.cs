@@ -1758,7 +1758,6 @@ namespace OpenDDSharp.UnitTest
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
 
-
             var defaultStruct = new TestEnumsArray();
 
             var data = new TestEnumsArray

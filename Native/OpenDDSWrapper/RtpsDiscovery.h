@@ -106,6 +106,9 @@ EXTERN_METHOD_EXPORT
 void *RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT
+void RtpsDiscovery_SetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d, char *value);
+
+EXTERN_METHOD_EXPORT
 char *RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d);
 
 EXTERN_METHOD_EXPORT

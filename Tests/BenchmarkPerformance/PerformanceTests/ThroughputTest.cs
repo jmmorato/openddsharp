@@ -59,23 +59,33 @@ public class ThroughputTest
     [GlobalSetup(Target = nameof(OpenDDSharpCDRThroughputTest))]
     public void OpenDDSharpCDRGlobalSetup()
     {
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            SedpMulticast = false,
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+            },
+        };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
         var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameCdr = "openddsharp_tcp_" + guidCdr;
-        var instNameCdr = "internal_openddsharp_tcp_" + guidCdr;
+        var configNameCdr = "openddsharp_rtps_" + guidCdr;
+        var instNameCdr = "internal_openddsharp_rtps_" + guidCdr;
 
         _configCdr = TransportRegistry.Instance.CreateConfig(configNameCdr);
-        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "tcp");
-        var transportCdr = new TcpInst(_instCdr)
+        _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "rtps_udp");
+        var transportCdr = new RtpsUdpInst(_instCdr)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            UseMulticast = false,
+            RcvBufferSize = 1048576,
+            SendBufferSize = 1048576,
         };
         _configCdr.Insert(transportCdr);
 
@@ -88,24 +98,34 @@ public class ThroughputTest
     {
         Ace.Init();
 
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            SedpMulticast = false,
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+            },
+        };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
         // Create JSON participant
         var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameJson = "openddsharp_tcp_" + guidJson;
-        var instNameCdrJson = "internal_openddsharp_tcp_" + guidJson;
+        var configNameJson = "openddsharp_rtps_" + guidJson;
+        var instNameCdrJson = "internal_openddsharp_rtps_" + guidJson;
 
         _configJson = TransportRegistry.Instance.CreateConfig(configNameJson);
-        _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "tcp");
-        var transportJson = new TcpInst(_instJson)
+        _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "rtps_udp");
+        var transportJson = new RtpsUdpInst(_instJson)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            UseMulticast = false,
+            RcvBufferSize = 1048576,
+            SendBufferSize = 1048576,
         };
         _configJson.Insert(transportJson);
 
@@ -116,23 +136,33 @@ public class ThroughputTest
     [GlobalSetup(Target = nameof(OpenDDSNativeThroughputTest))]
     public void OpenDDSNativeGlobalSetup()
     {
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            SedpMulticast = false,
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+            },
+        };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_NATIVE, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
         var guidNative = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-        var configNameNative = "openddsharp_tcp_" + guidNative;
-        var instNameNative = "internal_openddsharp_tcp_" + guidNative;
+        var configNameNative = "openddsharp_rtps_" + guidNative;
+        var instNameNative = "internal_openddsharp_rtps_" + guidNative;
 
         _configNative = TransportRegistry.Instance.CreateConfig(configNameNative);
-        _instNative = TransportRegistry.Instance.CreateInst(instNameNative, "tcp");
-        var transportNative = new TcpInst(_instNative)
+        _instNative = TransportRegistry.Instance.CreateInst(instNameNative, "rtps_udp");
+        var transportNative = new RtpsUdpInst(_instNative)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            UseMulticast = false,
+            RcvBufferSize = 1048576,
+            SendBufferSize = 1048576,
         };
         _configNative.Insert(transportNative);
 

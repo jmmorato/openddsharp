@@ -126,6 +126,19 @@ public class TransportInst
         get => GetDatalinkControlChunks();
         set => SetDatalinkControlChunks(value);
     }
+
+    /// <summary>
+    /// Gets or sets the number of threads used by this transport's EventDispatcher.
+    /// </summary>
+    /// <remarks>
+    /// The default value is 1.
+    /// A value of 0 reuses the <see cref="ParticipantService"/> EventDispatcher.
+    /// </remarks>
+    public int EventDispatcherThreads
+    {
+        get => GetEventDispatcherThreads();
+        set => SetEventDispatcherThreads(value);
+    }
     #endregion
 
     #region Constructors
@@ -204,6 +217,16 @@ public class TransportInst
     private void SetDatalinkControlChunks(ulong value)
     {
         UnsafeNativeMethods.SetDatalinkControlChunks(_native, new UIntPtr(value));
+    }
+
+    private int GetEventDispatcherThreads()
+    {
+        return UnsafeNativeMethods.GetEventDispatcherThreads(_native);
+    }
+
+    private void SetEventDispatcherThreads(int value)
+    {
+        UnsafeNativeMethods.SetEventDispatcherThreads(_native, value);
     }
 
     internal IntPtr ToNative()
@@ -292,6 +315,16 @@ internal static partial class UnsafeNativeMethods
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetDatalinkControlChunks")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     public static partial void SetDatalinkControlChunks(IntPtr ti, UIntPtr value);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetEventDispatcherThreads")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial int GetEventDispatcherThreads(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetEventDispatcherThreads")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial void SetEventDispatcherThreads(IntPtr ti, int value);
 #else
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetTransportType", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
@@ -349,5 +382,13 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetDatalinkControlChunks", CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetDatalinkControlChunks(IntPtr ti, UIntPtr value);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_GetEventDispatcherThreads", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int GetEventDispatcherThreads(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TransportInst_SetEventDispatcherThreads", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetEventDispatcherThreads(IntPtr ti, int value);
 #endif
 }

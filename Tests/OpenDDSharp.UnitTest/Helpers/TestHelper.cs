@@ -1098,6 +1098,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             var rui = new RtpsUdpInst(inst)
             {
                 UseMulticast = false,
+                EventDispatcherThreads = 0,
             };
             config.Insert(rui);
 

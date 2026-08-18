@@ -11,9 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Threading.Tasks;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -50,6 +52,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
+
             _participant.BindRtpsUdpTransportConfig();
         }
 
@@ -511,6 +514,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, otherPublisher.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
             Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
             Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
