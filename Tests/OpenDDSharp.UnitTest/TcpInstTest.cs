@@ -7,6 +7,7 @@ Copyright (C) 2018 Jose Morato - OpenDDSharp
 OpenDDSharp is free software: you can redistribute it and/or modify
 it under the terms of the MIT License.
 **********************************************************************/
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.OpenDDS.DCPS;
 
@@ -35,6 +36,7 @@ namespace OpenDDSharp.UnitTest
             var inst = TransportRegistry.Instance.CreateInst(INSTANCE_NAME, TRANSPORT_TYPE);
             var tcpInst = new TcpInst(inst);
             Assert.AreEqual(2000, tcpInst.PassiveReconnectDuration);
+            Assert.AreEqual(5000, tcpInst.ActiveConnTimeoutPeriod);
             Assert.AreEqual(-1, tcpInst.MaxOutputPausePeriod);
             Assert.AreEqual(3, tcpInst.ConnRetryAttempts);
             Assert.AreEqual(2.0, tcpInst.ConnRetryBackoffMultiplier);
@@ -50,6 +52,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(10U, tcpInst.MaxSamplesPerPacket);
             Assert.AreEqual(INSTANCE_NAME, tcpInst.Name);
             Assert.AreEqual(4096u, tcpInst.OptimumPacketSize);
+            Assert.AreEqual(0, tcpInst.RcvBufferSize);
+            Assert.AreEqual(0, tcpInst.SendBufferSize);
             Assert.AreEqual(TRANSPORT_TYPE, tcpInst.TransportType);
             Assert.IsFalse(tcpInst.ThreadPerConnection);
 
@@ -67,6 +71,7 @@ namespace OpenDDSharp.UnitTest
             var tcpInst = new TcpInst(inst)
             {
                 PassiveReconnectDuration = 1000,
+                ActiveConnTimeoutPeriod = 7500,
                 MaxOutputPausePeriod = 5000,
                 ConnRetryAttempts = 5,
                 ConnRetryBackoffMultiplier = 1.5,
@@ -79,10 +84,13 @@ namespace OpenDDSharp.UnitTest
                 MaxPacketSize = 2147481500u,
                 MaxSamplesPerPacket = 20U,
                 OptimumPacketSize = 2048u,
+                RcvBufferSize = 65530,
+                SendBufferSize = 65530,
                 ThreadPerConnection = true,
             };
 
             Assert.AreEqual(1000, tcpInst.PassiveReconnectDuration);
+            Assert.AreEqual(7500, tcpInst.ActiveConnTimeoutPeriod);
             Assert.AreEqual(5000, tcpInst.MaxOutputPausePeriod);
             Assert.AreEqual(5, tcpInst.ConnRetryAttempts);
             Assert.AreEqual(1.5, tcpInst.ConnRetryBackoffMultiplier);
@@ -96,6 +104,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(2147481500u, tcpInst.MaxPacketSize);
             Assert.AreEqual(20U, tcpInst.MaxSamplesPerPacket);
             Assert.AreEqual(2048u, tcpInst.OptimumPacketSize);
+            Assert.AreEqual(65530, tcpInst.RcvBufferSize);
+            Assert.AreEqual(65530, tcpInst.SendBufferSize);
             Assert.IsTrue(tcpInst.ThreadPerConnection);
 
             TransportRegistry.Instance.RemoveInst(tcpInst);

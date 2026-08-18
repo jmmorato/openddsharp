@@ -95,6 +95,13 @@ public class LatencyTest
         var transportCdr = new TcpInst(_instCdr)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            EnableNagleAlgorithm = false,
+            ConnRetryInitialDelay = 500,
+            ConnRetryBackoffMultiplier = 2.0,
+            ConnRetryAttempts = 5,
+            MaxOutputPausePeriod = 5,
+            SendBufferSize = 1048576,
+            RcvBufferSize = 1048576,
         };
         _configCdr.Insert(transportCdr);
 
@@ -130,6 +137,13 @@ public class LatencyTest
         var transportJson = new TcpInst(_instJson)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            EnableNagleAlgorithm = false,
+            ConnRetryInitialDelay = 500,
+            ConnRetryBackoffMultiplier = 2.0,
+            ConnRetryAttempts = 5,
+            MaxOutputPausePeriod = 5,
+            SendBufferSize = 1048576,
+            RcvBufferSize = 1048576,
         };
         _configJson.Insert(transportJson);
 
@@ -164,6 +178,13 @@ public class LatencyTest
         var transportNative = new TcpInst(_instNative)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            EnableNagleAlgorithm = false,
+            ConnRetryInitialDelay = 500,
+            ConnRetryBackoffMultiplier = 2.0,
+            ConnRetryAttempts = 5,
+            MaxOutputPausePeriod = 5,
+            SendBufferSize = 1048576,
+            RcvBufferSize = 1048576,
         };
         _configNative.Insert(transportNative);
 
