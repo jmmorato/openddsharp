@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Net;
 using BenchmarkDotNet.Attributes;
 using OpenDDSharp.BenchmarkPerformance.CustomColumns;
 using OpenDDSharp.BenchmarkPerformance.Helpers;
@@ -72,7 +71,6 @@ public class LatencyTest
     {
         var disc = new RtpsDiscovery(RTPS_DISCOVERY)
         {
-            SedpMulticast = false,
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
@@ -95,8 +93,6 @@ public class LatencyTest
         _instCdr = TransportRegistry.Instance.CreateInst(instNameCdr, "rtps_udp");
         var transportCdr = new RtpsUdpInst(_instCdr)
         {
-            LocalAddress = IPAddress.Loopback.ToString(),
-            UseMulticast = false,
             RcvBufferSize = 4194304,
             SendBufferSize = 4194304,
             NakResponseDelay = new TimeValue
@@ -122,7 +118,6 @@ public class LatencyTest
     {
         var disc = new RtpsDiscovery(RTPS_DISCOVERY)
         {
-            SedpMulticast = false,
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
@@ -146,8 +141,6 @@ public class LatencyTest
         _instJson = TransportRegistry.Instance.CreateInst(instNameCdrJson, "rtps_udp");
         var transportJson = new RtpsUdpInst(_instJson)
         {
-            LocalAddress = IPAddress.Loopback.ToString(),
-            UseMulticast = false,
             RcvBufferSize = 4194304,
             SendBufferSize = 4194304,
             NakResponseDelay = new TimeValue
@@ -174,7 +167,6 @@ public class LatencyTest
     {
         var disc = new RtpsDiscovery(RTPS_DISCOVERY)
         {
-            SedpMulticast = false,
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
@@ -197,8 +189,6 @@ public class LatencyTest
         _instNative = TransportRegistry.Instance.CreateInst(instNameNative, "rtps_udp");
         var transportNative = new RtpsUdpInst(_instNative)
         {
-            LocalAddress = IPAddress.Loopback.ToString(),
-            UseMulticast = false,
             RcvBufferSize = 4194304,
             SendBufferSize = 4194304,
             NakResponseDelay = new TimeValue
