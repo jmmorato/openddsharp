@@ -1130,6 +1130,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             var tcpInst = new TcpInst(inst)
             {
                 LocalAddress = "localhost:0",
+                EventDispatcherThreads = 0,
             };
             config.Insert(tcpInst);
 

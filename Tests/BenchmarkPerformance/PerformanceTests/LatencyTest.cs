@@ -76,14 +76,17 @@ public class LatencyTest
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
+                MicroSeconds = 0,
             },
+            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3",
+            "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
         var configNameCdr = "openddsharp_rtps_" + guidCdr;
@@ -94,10 +97,20 @@ public class LatencyTest
         var transportCdr = new RtpsUdpInst(_instCdr)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
-            EventDispatcherThreads = 2,
             UseMulticast = false,
-            RcvBufferSize = 1048576,
-            SendBufferSize = 1048576,
+            RcvBufferSize = 4194304,
+            SendBufferSize = 4194304,
+            NakResponseDelay = new TimeValue
+            {
+                Seconds = 0,
+                MicroSeconds = 0,
+            },
+            HeartbeatPeriod = new TimeValue
+            {
+                Seconds = 10,
+                MicroSeconds = 0,
+            },
+            NakDepth = 500,
         };
         _configCdr.Insert(transportCdr);
 
@@ -114,14 +127,17 @@ public class LatencyTest
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
+                MicroSeconds = 0,
             },
+            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3",
+            "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         // Create JSON participant
         var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
@@ -133,10 +149,20 @@ public class LatencyTest
         var transportJson = new RtpsUdpInst(_instJson)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
-            EventDispatcherThreads = 2,
             UseMulticast = false,
-            RcvBufferSize = 1048576,
-            SendBufferSize = 1048576,
+            RcvBufferSize = 4194304,
+            SendBufferSize = 4194304,
+            NakResponseDelay = new TimeValue
+            {
+                Seconds = 0,
+                MicroSeconds = 0,
+            },
+            HeartbeatPeriod = new TimeValue
+            {
+                Seconds = 10,
+                MicroSeconds = 0,
+            },
+            NakDepth = 500
         };
         _configJson.Insert(transportJson);
 
@@ -154,14 +180,17 @@ public class LatencyTest
             ResendPeriod = new TimeValue
             {
                 Seconds = 2,
+                MicroSeconds = 0,
             },
+            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_NATIVE, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3",
+            "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         var guidNative = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
         var configNameNative = "openddsharp_rtps_" + guidNative;
@@ -172,10 +201,20 @@ public class LatencyTest
         var transportNative = new RtpsUdpInst(_instNative)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
-            EventDispatcherThreads = 2,
             UseMulticast = false,
-            RcvBufferSize = 1048576,
-            SendBufferSize = 1048576,
+            RcvBufferSize = 4194304,
+            SendBufferSize = 4194304,
+            NakResponseDelay = new TimeValue
+            {
+                Seconds = 0,
+                MicroSeconds = 0,
+            },
+            HeartbeatPeriod = new TimeValue
+            {
+                Seconds = 10,
+                MicroSeconds = 0,
+            },
+            NakDepth = 500
         };
         _configNative.Insert(transportNative);
 
