@@ -10,6 +10,7 @@ it under the terms of the MIT License.
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -247,7 +248,7 @@ namespace OpenDDSharp.UnitTest
         {
             var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
+            var (transportConfig1, transportInst1) = participant.BindRtpsUdpTransportConfig();
 
             var lookupParticipant = AssemblyInitializer.Factory.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(lookupParticipant);
@@ -255,7 +256,7 @@ namespace OpenDDSharp.UnitTest
 
             var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            var (transportConfig2, transportInst2) = otherParticipant.BindRtpsUdpTransportConfig();
 
             lookupParticipant = AssemblyInitializer.Factory.LookupParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(lookupParticipant);
@@ -269,6 +270,11 @@ namespace OpenDDSharp.UnitTest
 
             result = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            TransportRegistry.Instance.RemoveConfig(transportConfig1);
+            TransportRegistry.Instance.RemoveInst(transportInst1);
+            TransportRegistry.Instance.RemoveConfig(transportConfig2);
+            TransportRegistry.Instance.RemoveInst(transportInst2);
         }
 
         /// <summary>
@@ -280,7 +286,7 @@ namespace OpenDDSharp.UnitTest
         {
             var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindRtpsUdpTransportConfig();
+            var (transportConfig, transportInst) = participant.BindRtpsUdpTransportConfig();
 
             var subscriber = participant.CreateSubscriber();
             Assert.IsNotNull(subscriber);
@@ -296,6 +302,9 @@ namespace OpenDDSharp.UnitTest
 
             result = AssemblyInitializer.Factory.DeleteParticipant(null);
             Assert.AreEqual(ReturnCode.Ok, result);
+
+            TransportRegistry.Instance.RemoveConfig(transportConfig);
+            TransportRegistry.Instance.RemoveInst(transportInst);
         }
         #endregion
     }

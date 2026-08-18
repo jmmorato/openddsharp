@@ -12,6 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -29,6 +30,8 @@ namespace OpenDDSharp.UnitTest
 
         #region Fields
         private DomainParticipant _participant;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
         #endregion
 
         #region Initialization/Cleanup
@@ -40,7 +43,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            (_transportConfig, _transportInst) = _participant.BindRtpsUdpTransportConfig();
         }
 
         /// <summary>
@@ -51,6 +54,9 @@ namespace OpenDDSharp.UnitTest
         {
             _participant?.DeleteContainedEntities();
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
 
             _participant = null;
         }

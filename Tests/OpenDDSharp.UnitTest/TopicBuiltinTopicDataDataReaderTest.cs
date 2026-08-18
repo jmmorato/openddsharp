@@ -13,6 +13,7 @@ using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 
 namespace OpenDDSharp.UnitTest
@@ -32,6 +33,8 @@ namespace OpenDDSharp.UnitTest
         private Subscriber _subscriber;
         private DataReader _dataReader;
         private TopicBuiltinTopicDataDataReader _dr;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
         #endregion
 
         #region Properties
@@ -51,7 +54,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindTcpTransportConfig();
+            (_transportConfig, _transportInst) = _participant.BindTcpTransportConfig();
 
             _subscriber = _participant.GetBuiltinSubscriber();
             Assert.IsNotNull(_subscriber);
@@ -75,6 +78,9 @@ namespace OpenDDSharp.UnitTest
             _participant?.DeleteContainedEntities();
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
+
             _participant = null;
             _subscriber = null;
             _dr = null;
@@ -94,6 +100,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 var data = new List<TopicBuiltinTopicData>();
@@ -105,7 +113,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -146,6 +154,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -163,6 +174,8 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 var data = new List<TopicBuiltinTopicData>();
@@ -174,7 +187,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -215,6 +228,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -232,6 +248,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 var data = new List<TopicBuiltinTopicData>();
@@ -243,7 +262,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -293,6 +312,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -310,6 +332,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 var data = new List<TopicBuiltinTopicData>();
@@ -321,7 +346,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -374,6 +399,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -391,6 +419,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 var data = new List<TopicBuiltinTopicData>();
@@ -402,7 +433,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -443,6 +474,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -460,6 +494,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 var data = new List<TopicBuiltinTopicData>();
@@ -471,7 +508,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -512,6 +549,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -529,6 +569,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 TopicBuiltinTopicData data = default;
@@ -538,7 +581,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -577,6 +620,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -594,6 +640,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 TopicBuiltinTopicData data = default;
@@ -603,7 +652,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -642,6 +691,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -659,6 +711,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 // Call GetKeyValue with HandleNil
@@ -669,7 +724,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -716,6 +771,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }
@@ -732,6 +790,9 @@ namespace OpenDDSharp.UnitTest
             ReturnCode ret;
             DomainParticipant otherParticipant = null;
             Topic topic = null;
+
+            TransportConfig otherTransportConfig = null;
+            TransportInst otherTransportInst = null;
             try
             {
                 TopicBuiltinTopicData data = default;
@@ -739,7 +800,7 @@ namespace OpenDDSharp.UnitTest
 
                 otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
                 Assert.IsNotNull(otherParticipant);
-                otherParticipant.BindRtpsUdpTransportConfig();
+                (otherTransportConfig, otherTransportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
                 var support = new TestStructTypeSupport();
                 var typeName = support.GetTypeName();
@@ -782,6 +843,9 @@ namespace OpenDDSharp.UnitTest
 
                     ret = AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
                     Assert.AreEqual(ReturnCode.Ok, ret);
+
+                    TransportRegistry.Instance.RemoveConfig(otherTransportConfig);
+                    TransportRegistry.Instance.RemoveInst(otherTransportInst);
                 }
             }
         }

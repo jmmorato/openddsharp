@@ -16,6 +16,7 @@ using CdrWrapper;
 using CdrWrapperInclude;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -36,6 +37,8 @@ namespace OpenDDSharp.UnitTest
         private Publisher _publisher;
         private Subscriber _subscriber;
         private Topic _topic;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
         #endregion
 
         #region Properties
@@ -55,7 +58,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            (_transportConfig, _transportInst) = _participant.BindRtpsUdpTransportConfig();
 
             _publisher = _participant.CreatePublisher();
             Assert.IsNotNull(_publisher);
@@ -85,6 +88,9 @@ namespace OpenDDSharp.UnitTest
             _participant?.DeleteTopic(_topic);
             _participant?.DeleteContainedEntities();
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
 
             _participant = null;
             _publisher = null;
@@ -1155,7 +1161,7 @@ namespace OpenDDSharp.UnitTest
             // WORKAROUND: Create another participant for the DataReader.
             var otherParticipant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(otherParticipant);
-            otherParticipant.BindRtpsUdpTransportConfig();
+            var (transportConfig, transportInst) = otherParticipant.BindRtpsUdpTransportConfig();
 
             var support = new TestIncludeTypeSupport();
             var typeName = support.GetTypeName();
@@ -1200,9 +1206,9 @@ namespace OpenDDSharp.UnitTest
             _subscriber.DeleteDataReader(reader);
             publisher.DeleteDataWriter(writer);
             publisher.DeleteContainedEntities();
-            // otherParticipant.DeletePublisher(publisher);
-            // otherParticipant.DeleteTopic(otherTopic);
-            // AssemblyInitializer.Factory.DeleteParticipant(otherParticipant);
+
+            TransportRegistry.Instance.RemoveConfig(transportConfig);
+            TransportRegistry.Instance.RemoveInst(transportInst);
         }
 
         /// <summary>

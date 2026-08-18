@@ -77,8 +77,7 @@ public class LatencyTest
             {
                 Seconds = 2,
                 MicroSeconds = 0,
-            },
-            SedpLocalAddress = IPAddress.Loopback.ToString(),
+            }
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
@@ -129,7 +128,6 @@ public class LatencyTest
                 Seconds = 2,
                 MicroSeconds = 0,
             },
-            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
@@ -182,7 +180,6 @@ public class LatencyTest
                 Seconds = 2,
                 MicroSeconds = 0,
             },
-            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);

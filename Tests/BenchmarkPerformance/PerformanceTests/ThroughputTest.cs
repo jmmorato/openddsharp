@@ -67,7 +67,6 @@ public class ThroughputTest
                 Seconds = 2,
                 MicroSeconds = 0,
             },
-            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
@@ -120,7 +119,6 @@ public class ThroughputTest
                 Seconds = 2,
                 MicroSeconds = 0,
             },
-            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
@@ -172,7 +170,6 @@ public class ThroughputTest
                 Seconds = 2,
                 MicroSeconds = 0,
             },
-            SedpLocalAddress = IPAddress.Loopback.ToString(),
         };
 
         ParticipantService.Instance.AddDiscovery(disc);
