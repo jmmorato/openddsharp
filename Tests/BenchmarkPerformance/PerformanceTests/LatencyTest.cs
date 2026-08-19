@@ -100,8 +100,8 @@ public class LatencyTest
             ConnRetryBackoffMultiplier = 2.0,
             ConnRetryAttempts = 5,
             MaxOutputPausePeriod = 5,
-            SendBufferSize = 1048576,
-            RcvBufferSize = 1048576,
+            SendBufferSize = 65535,
+            RcvBufferSize = 65535,
         };
         _configCdr.Insert(transportCdr);
 
@@ -142,8 +142,8 @@ public class LatencyTest
             ConnRetryBackoffMultiplier = 2.0,
             ConnRetryAttempts = 5,
             MaxOutputPausePeriod = 5,
-            SendBufferSize = 1048576,
-            RcvBufferSize = 1048576,
+            SendBufferSize = 65535,
+            RcvBufferSize = 65535,
         };
         _configJson.Insert(transportJson);
 
@@ -183,8 +183,8 @@ public class LatencyTest
             ConnRetryBackoffMultiplier = 2.0,
             ConnRetryAttempts = 5,
             MaxOutputPausePeriod = 5,
-            SendBufferSize = 1048576,
-            RcvBufferSize = 1048576,
+            SendBufferSize = 65535,
+            RcvBufferSize = 65535,
         };
         _configNative.Insert(transportNative);
 

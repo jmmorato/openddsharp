@@ -89,8 +89,8 @@ public class ThroughputTest
             ConnRetryBackoffMultiplier = 2.0,
             ConnRetryAttempts = 5,
             MaxOutputPausePeriod = 5,
-            SendBufferSize = 1048576,
-            RcvBufferSize = 1048576,
+            SendBufferSize = 4194304,
+            RcvBufferSize = 4194304,
         };
         _configCdr.Insert(transportCdr);
 
@@ -134,8 +134,8 @@ public class ThroughputTest
             ConnRetryBackoffMultiplier = 2.0,
             ConnRetryAttempts = 5,
             MaxOutputPausePeriod = 5,
-            SendBufferSize = 1048576,
-            RcvBufferSize = 1048576,
+            SendBufferSize = 4194304,
+            RcvBufferSize = 4194304,
         };
         _configJson.Insert(transportJson);
 
@@ -176,8 +176,8 @@ public class ThroughputTest
             ConnRetryBackoffMultiplier = 2.0,
             ConnRetryAttempts = 5,
             MaxOutputPausePeriod = 5,
-            SendBufferSize = 1048576,
-            RcvBufferSize = 1048576,
+            SendBufferSize = 4194304,
+            RcvBufferSize = 4194304,
         };
         _configNative.Insert(transportNative);
 
