@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  OpenDdsVersion: "3.33.0"
+  OpenDdsVersion: "3.34.0"
 
 jobs:
   build_windows_native:
@@ -448,6 +448,10 @@ jobs:
           echo "${{ github.workspace }}\ext\OpenDDS_${{ matrix.build_platform }}\ACE_wrappers\lib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         working-directory: ${{ github.workspace }}
 
+      - name: Install VC Redistributables
+        run: |
+          choco install vcredist140 --${{ matrix.build_platform }} -y
+
       - name: Setup dotnet 8.0
         shell: pwsh
         run: |
@@ -704,18 +708,18 @@ jobs:
           - os: macos-14
             runtime: osx-arm64
             build_platform: ARM64
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#          - os: macos-15-intel
-#            runtime: osx-x64
-#            build_platform: x64
-#          - os: macos-26
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#          - os: macos-26-intel
-#            runtime: osx-x64
-#            build_platform: x64
+          - os: macos-15
+            runtime: osx-arm64
+            build_platform: ARM64
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
+          - os: macos-26
+            runtime: osx-arm64
+            build_platform: ARM64
+          - os: macos-26-intel
+            runtime: osx-x64
+            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
@@ -800,7 +804,9 @@ jobs:
 
       - name: Test OpenDDSharp
         shell: bash
-        run: dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
+        run: |
+          sudo dotnet test ${{ github.workspace }}/Tests/OpenDDSharp.UnitTest/OpenDDSharp.UnitTest.csproj --no-build --no-restore --results-directory ${{ github.workspace }}/TestResults --configuration Release --runtime ${{ matrix.runtime }} --collect:"XPlat Code Coverage" --settings ${{ github.workspace }}/Tests.runsettings --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=test-results" -p:TestTfmsInParallel=false
+          sudo chmod -R 777 ${{ github.workspace }}/TestResults
         working-directory: ${{ github.workspace }}
 
       - name: Test Report
@@ -1071,14 +1077,14 @@ jobs:
             runtime: osx-arm64
             build_platform: ARM64
             configuration: Release
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#            configuration: Release
-#          - os: macos-15-intel
-#            runtime: osx-x64
-#            build_platform: x64
-#            configuration: Release
+          - os: macos-15
+            runtime: osx-arm64
+            build_platform: ARM64
+            configuration: Release
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
+            configuration: Release
 #          win-x86 Debug artifact test throws 0xC0000005 Access Violation exception during Topic creation
 #          https://github.com/jmmorato/openddsharp/issues/297
 #          - os: windows-2022
@@ -1117,14 +1123,14 @@ jobs:
             runtime: osx-arm64
             build_platform: ARM64
             configuration: Debug
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#            configuration: Debug
-#          - os: macos-15-intel
-#            runtime: osx-x64
-#            build_platform: x64
-#            configuration: Debug
+          - os: macos-15
+            runtime: osx-arm64
+            build_platform: ARM64
+            configuration: Debug
+          - os: macos-15-intel
+            runtime: osx-x64
+            build_platform: x64
+            configuration: Debug
 
     runs-on: ${{ matrix.os }}
 
@@ -1216,6 +1222,7 @@ jobs:
           $pinfo.UseShellExecute = $false
           $pinfo.WorkingDirectory = "$publishFolder"
           $pinfo.CreateNoWindow = $true
+          $pinfo.Verb = "runas";
           
           $p = New-Object System.Diagnostics.Process
           $p.StartInfo = $pinfo

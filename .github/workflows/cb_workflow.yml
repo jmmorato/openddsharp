@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  OpenDdsVersion: "3.33.0"
+  OpenDdsVersion: "3.34.0"
 
 jobs:
   build_windows_native:
@@ -879,15 +879,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14
+          - os: macos-26
             runtime: osx-arm64
             build_platform: ARM64
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#          - os: macos-15-intel
-#            runtime: osx-x64
-#            build_platform: x64
+          - os: macos-26-intel
+            runtime: osx-x64
+            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 
@@ -993,15 +990,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14
+          - os: macos-26
             runtime: osx-arm64
             build_platform: ARM64
-#          - os: macos-15
-#            runtime: osx-arm64
-#            build_platform: ARM64
-#          - os: macos-15-intel
-#            runtime: osx-x64
-#            build_platform: x64
+          - os: macos-26-intel
+            runtime: osx-x64
+            build_platform: x64
 
     runs-on: ${{ matrix.os }}
 

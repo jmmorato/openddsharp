@@ -70,13 +70,21 @@ public class LatencyTest
     [GlobalSetup(Target = nameof(OpenDDSharpCDRLatencyTest))]
     public void OpenDDSharpGlobalSetupCDR()
     {
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+                MicroSeconds = 0,
+            },
+        };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_CDR, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3",
+            "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         var guidCdr = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
         var configNameCdr = "openddsharp_tcp_" + guidCdr;
@@ -87,6 +95,13 @@ public class LatencyTest
         var transportCdr = new TcpInst(_instCdr)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            EnableNagleAlgorithm = false,
+            ConnRetryInitialDelay = 500,
+            ConnRetryBackoffMultiplier = 2.0,
+            ConnRetryAttempts = 5,
+            MaxOutputPausePeriod = 5,
+            SendBufferSize = 65535,
+            RcvBufferSize = 65535,
         };
         _configCdr.Insert(transportCdr);
 
@@ -97,13 +112,20 @@ public class LatencyTest
     [GlobalSetup(Target = nameof(OpenDDSharpJSONLatencyTest))]
     public void OpenDDSharpGlobalSetupJSON()
     {
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+            },
+        };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_JSON, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3",
+            "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         // Create JSON participant
         var guidJson = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
@@ -115,24 +137,37 @@ public class LatencyTest
         var transportJson = new TcpInst(_instJson)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            EnableNagleAlgorithm = false,
+            ConnRetryInitialDelay = 500,
+            ConnRetryBackoffMultiplier = 2.0,
+            ConnRetryAttempts = 5,
+            MaxOutputPausePeriod = 5,
+            SendBufferSize = 65535,
+            RcvBufferSize = 65535,
         };
         _configJson.Insert(transportJson);
 
         _participantJson = _dpf.CreateParticipant(DOMAIN_ID_JSON);
-
         TransportRegistry.Instance.BindConfig(configNameJson, _participantJson);
     }
 
     [GlobalSetup(Target = nameof(OpenDDSNativeLatencyTest))]
     public void OpenDDSNativeGlobalSetup()
     {
-        var disc = new RtpsDiscovery(RTPS_DISCOVERY);
+        var disc = new RtpsDiscovery(RTPS_DISCOVERY)
+        {
+            ResendPeriod = new TimeValue
+            {
+                Seconds = 2,
+            },
+        };
 
         ParticipantService.Instance.AddDiscovery(disc);
         ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
         ParticipantService.Instance.SetRepoDomain(DOMAIN_ID_NATIVE, RTPS_DISCOVERY);
 
-        _dpf = ParticipantService.Instance.GetDomainParticipantFactory();
+        _dpf = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3",
+            "-DCPSChunks", "1000", "-DCPSChunkAssociationMultiplier", "5");
 
         var guidNative = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
         var configNameNative = "openddsharp_tcp_" + guidNative;
@@ -143,6 +178,13 @@ public class LatencyTest
         var transportNative = new TcpInst(_instNative)
         {
             LocalAddress = IPAddress.Loopback.ToString(),
+            EnableNagleAlgorithm = false,
+            ConnRetryInitialDelay = 500,
+            ConnRetryBackoffMultiplier = 2.0,
+            ConnRetryAttempts = 5,
+            MaxOutputPausePeriod = 5,
+            SendBufferSize = 65535,
+            RcvBufferSize = 65535,
         };
         _configNative.Insert(transportNative);
 

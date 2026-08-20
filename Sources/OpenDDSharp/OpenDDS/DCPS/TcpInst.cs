@@ -40,6 +40,32 @@ public class TcpInst : TransportInst
     public bool IsReliable => GetIsReliable();
 
     /// <summary>
+    /// Gets or sets total send buffer size in bytes for TCP payload.
+    /// </summary>
+    /// <remarks>
+    /// The default value is 0.
+    /// This means that the OS default value will be used.
+    /// </remarks>
+    public int SendBufferSize
+    {
+        get => GetSendBufferSize();
+        set => SetSendBufferSize(value);
+    }
+
+    /// <summary>
+    /// Gets or sets the total receive buffer size in bytes for TCP payload.
+    /// </summary>
+    /// <remarks>
+    /// The default value is 0.
+    /// This means that the OS default value will be used.
+    /// </remarks>
+    public int RcvBufferSize
+    {
+        get => GetRcvBufferSize();
+        set => SetRcvBufferSize(value);
+    }
+
+    /// <summary>
     /// Gets or sets a value indicating whether enable or disable the Nagle’s algorithm.
     /// By default, it is disabled (false).
     /// </summary>
@@ -118,6 +144,19 @@ public class TcpInst : TransportInst
     }
 
     /// <summary>
+    /// Gets or sets the time period in milliseconds for the active side
+    /// of a connection to wait for the connection to be established.
+    /// If not connected within this period then this link is removed
+    /// from pending and any other links are attempted.
+    /// The default is 5 seconds (5000 milliseconds).
+    /// </summary>
+    public int ActiveConnTimeoutPeriod
+    {
+        get => GetActiveConnTimeoutPeriod();
+        set => SetActiveConnTimeoutPeriod(value);
+    }
+
+    /// <summary>
     /// Gets or sets a value that override the address sent to peers with the confgured string.
     /// </summary>
     /// <remarks>
@@ -170,6 +209,26 @@ public class TcpInst : TransportInst
     private bool GetIsReliable()
     {
         return UnsafeNativeMethods.TcpInstGetIsReliable(_native);
+    }
+
+    private int GetSendBufferSize()
+    {
+        return UnsafeNativeMethods.TcpInstGetSendBufferSize(_native);
+    }
+
+    private void SetSendBufferSize(int value)
+    {
+        UnsafeNativeMethods.TcpInstSetSendBufferSize(_native, value);
+    }
+
+    private int GetRcvBufferSize()
+    {
+        return UnsafeNativeMethods.TcpInstGetRcvBufferSize(_native);
+    }
+
+    private void SetRcvBufferSize(int value)
+    {
+        UnsafeNativeMethods.TcpInstSetRcvBufferSize(_native, value);
     }
 
     private bool GetEnableNagleAlgorithm()
@@ -232,6 +291,16 @@ public class TcpInst : TransportInst
         UnsafeNativeMethods.SetPassiveReconnectDuration(_native, value);
     }
 
+    private int GetActiveConnTimeoutPeriod()
+    {
+        return UnsafeNativeMethods.GetActiveConnTimeoutPeriod(_native);
+    }
+
+    private void SetActiveConnTimeoutPeriod(int value)
+    {
+        UnsafeNativeMethods.SetActiveConnTimeoutPeriod(_native, value);
+    }
+
     private string GetPublicAddress()
     {
         return Marshal.PtrToStringAnsi(UnsafeNativeMethods.GetPublicAddress(_native));
@@ -274,6 +343,26 @@ internal static partial class UnsafeNativeMethods
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool TcpInstGetIsReliable(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetSendBufferSize")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial int TcpInstGetSendBufferSize(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetSendBufferSize")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial void TcpInstSetSendBufferSize(IntPtr ti, int value);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetRcvBufferSize")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial int TcpInstGetRcvBufferSize(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetRcvBufferSize")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial void TcpInstSetRcvBufferSize(IntPtr ti, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetEnableNagleAlgorithm")]
@@ -337,6 +426,16 @@ internal static partial class UnsafeNativeMethods
     public static partial void SetPassiveReconnectDuration(IntPtr ti, int value);
 
     [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetActiveConnTimeoutPeriod")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial int GetActiveConnTimeoutPeriod(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetActiveConnTimeoutPeriod")]
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static partial void SetActiveConnTimeoutPeriod(IntPtr ti, int value);
+
+    [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetPublicAddress")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     public static partial IntPtr GetPublicAddress(IntPtr ird);
@@ -364,6 +463,22 @@ internal static partial class UnsafeNativeMethods
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetIsReliable", CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I1)]
     public static extern bool TcpInstGetIsReliable(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetSendBufferSize", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int TcpInstGetSendBufferSize(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetSendBufferSize", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void TcpInstSetSendBufferSize(IntPtr ti, int value);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetRcvBufferSize", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int TcpInstGetRcvBufferSize(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetRcvBufferSize", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void TcpInstSetRcvBufferSize(IntPtr ti, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetEnableNagleAlgorithm", CallingConvention = CallingConvention.Cdecl)]
@@ -413,6 +528,14 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetPassiveReconnectDuration", CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetPassiveReconnectDuration(IntPtr ti, int value);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetActiveConnTimeoutPeriod", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int GetActiveConnTimeoutPeriod(IntPtr ti);
+
+    [SuppressUnmanagedCodeSecurity]
+    [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_SetActiveConnTimeoutPeriod", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetActiveConnTimeoutPeriod(IntPtr ti, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "TcpInst_GetPublicAddress", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

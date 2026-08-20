@@ -41,3 +41,11 @@ void ParticipantService_SetRepoDomain(int domain, char *repo, bool attach_partic
 bool ParticipantService_GetIsShutdown() {
   return TheServiceParticipant->is_shut_down();
 }
+
+int ParticipantService_GetScheduler() {
+  return static_cast<int>(TheServiceParticipant->scheduler());
+}
+
+void ParticipantService_Scheduler(int scheduler) {
+  TheServiceParticipant->scheduler(scheduler);
+}

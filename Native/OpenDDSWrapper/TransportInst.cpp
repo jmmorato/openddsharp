@@ -64,3 +64,11 @@ size_t TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst *ti
 void TransportInst_SetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst *ti, size_t value) {
   ti->datalink_control_chunks(value);
 }
+
+int TransportInst_GetEventDispatcherThreads(::OpenDDS::DCPS::TransportInst *ti) {
+  return ti->event_dispatcher_threads();
+}
+
+void TransportInst_SetEventDispatcherThreads(::OpenDDS::DCPS::TransportInst *ti, int value) {
+  ti->event_dispatcher_threads(value);
+}

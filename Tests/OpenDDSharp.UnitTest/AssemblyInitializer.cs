@@ -55,6 +55,7 @@ namespace OpenDDSharp.UnitTest
                 },
                 SedpMulticast = false,
             };
+
             Assert.AreEqual(RTPS_DISCOVERY, disc.Key);
             ParticipantService.Instance.AddDiscovery(disc);
             ParticipantService.Instance.DefaultDiscovery = RTPS_DISCOVERY;
@@ -70,7 +71,7 @@ namespace OpenDDSharp.UnitTest
 
             _supportProcess = new SupportProcessHelper(context);
             _infoProcess = _supportProcess.SpawnDCPSInfoRepo();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(5_000);
 
             Factory = ParticipantService.Instance.GetDomainParticipantFactory("-DCPSPendingTimeout", "3");
 
@@ -79,7 +80,7 @@ namespace OpenDDSharp.UnitTest
         }
 
         /// <summary>
-        /// The assembly clean-up method.
+        /// The assembly cleanup method.
         /// </summary>
         [AssemblyCleanup]
         public static void AssemblyCleanup()
@@ -88,6 +89,7 @@ namespace OpenDDSharp.UnitTest
             {
                 _supportProcess.KillProcess(_infoProcess);
             }
+
             if (File.Exists(INFOREPO_IOR))
             {
                 File.Delete(INFOREPO_IOR);

@@ -22,6 +22,22 @@ CORBA::Boolean TcpInst_GetIsReliable(::OpenDDS::DCPS::TcpInst *ti) {
   return ti->is_reliable();
 }
 
+CORBA::Int32 TcpInst_GetSendBufferSize(::OpenDDS::DCPS::TcpInst *ti) {
+  return ti->send_buffer_size();
+}
+
+void TcpInst_SetSendBufferSize(::OpenDDS::DCPS::TcpInst *ti, CORBA::Int32 value) {
+  ti->send_buffer_size(value);
+}
+
+CORBA::Int32 TcpInst_GetRcvBufferSize(::OpenDDS::DCPS::TcpInst *ti) {
+  return ti->rcv_buffer_size();
+}
+
+void TcpInst_SetRcvBufferSize(::OpenDDS::DCPS::TcpInst *ti, CORBA::Int32 value) {
+  ti->rcv_buffer_size(value);
+}
+
 CORBA::Boolean TcpInst_GetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti) {
   return ti->enable_nagle_algorithm();
 }
@@ -68,6 +84,14 @@ CORBA::Long TcpInst_GetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti) {
 
 void TcpInst_SetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
   ti->passive_reconnect_duration(value);
+}
+
+CORBA::Long TcpInst_GetActiveConnTimeoutPeriod(::OpenDDS::DCPS::TcpInst *ti) {
+  return ti->active_conn_timeout_period();
+}
+
+void TcpInst_SetActiveConnTimeoutPeriod(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value) {
+  ti->active_conn_timeout_period(value);
 }
 
 char *TcpInst_GetPublicAddress(::OpenDDS::DCPS::TcpInst *ti) {

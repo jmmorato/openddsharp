@@ -23,7 +23,7 @@ namespace OpenDDSharp.Build
     public class BuildContext : FrostingContext
     {
         #region Constants
-        private const string DEFAULT_OPENDDS_VERSION = "3.33.0";
+        private const string DEFAULT_OPENDDS_VERSION = "3.34.0";
 
         private const string DEFAULT_PERL_FOLDER = "C:/Strawberry/perl/bin";
 
@@ -91,7 +91,7 @@ namespace OpenDDSharp.Build
         public bool IgnoreThirdPartyBuild { get; internal set; }
 
         /// <summary>
-        /// Gets a value indicating whether cleanup OpenDDS temporal files.
+        /// Gets a value indicating whether clean up OpenDDS temporal files.
         /// </summary>
         public bool CleanupTemporalFiles { get; internal set; }
 

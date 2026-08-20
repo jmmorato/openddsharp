@@ -15,6 +15,7 @@ using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -39,6 +40,8 @@ namespace OpenDDSharp.UnitTest
         private TestStructDataWriter _dataWriter;
         private MyPublisherListener _listener;
         private DataReader _reader;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
         #endregion
 
         #region Properties
@@ -58,7 +61,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            (_transportConfig, _transportInst) = _participant.BindRtpsUdpTransportConfig();
 
             var support = new TestStructTypeSupport();
             var typeName = support.GetTypeName();
@@ -138,6 +141,9 @@ namespace OpenDDSharp.UnitTest
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
 
             _listener.Dispose();
+
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
 
             _participant = null;
             _publisher = null;

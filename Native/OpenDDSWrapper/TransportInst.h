@@ -54,3 +54,9 @@ size_t TransportInst_GetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst *ti
 
 EXTERN_METHOD_EXPORT
 void TransportInst_SetDatalinkControlChunks(::OpenDDS::DCPS::TransportInst *ti, size_t value);
+
+EXTERN_METHOD_EXPORT
+int TransportInst_GetEventDispatcherThreads(::OpenDDS::DCPS::TransportInst *ti);
+
+EXTERN_METHOD_EXPORT
+void TransportInst_SetEventDispatcherThreads(::OpenDDS::DCPS::TransportInst *ti, int value);

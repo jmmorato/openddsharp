@@ -27,7 +27,7 @@ namespace OpenDDSharp.UnitTest
 
         #region Test Method
         /// <summary>
-        /// Test the properties default values after calling the constructor.
+        /// Test the properties' default values after calling the constructor.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -40,10 +40,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(string.Empty, rui.MulticastInterface);
             Assert.AreEqual("0.0.0.0:0", rui.LocalAddress);
             Assert.AreEqual(0U, rui.NakDepth);
-            Assert.IsNotNull(rui.NakResponseDelay);
             Assert.AreEqual(0, rui.NakResponseDelay.Seconds);
             Assert.AreEqual(200000, rui.NakResponseDelay.MicroSeconds);
-            Assert.IsNotNull(rui.HeartbeatPeriod);
             Assert.AreEqual(1, rui.HeartbeatPeriod.Seconds);
             Assert.AreEqual(0, rui.HeartbeatPeriod.MicroSeconds);
             Assert.AreEqual(1, rui.Ttl);
@@ -69,12 +67,13 @@ namespace OpenDDSharp.UnitTest
             Assert.IsFalse(rui.ThreadPerConnection);
             Assert.AreEqual(5, rui.ReceiveAddressDuration.Seconds);
             Assert.AreEqual(0, rui.ReceiveAddressDuration.MicroSeconds);
+            Assert.AreEqual(1, rui.EventDispatcherThreads);
 
             TransportRegistry.Instance.RemoveInst(rui);
         }
 
         /// <summary>
-        /// Test the properties non-default values after calling the constructor.
+        /// Test the properties' non-default values after calling the constructor.
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
@@ -111,6 +110,7 @@ namespace OpenDDSharp.UnitTest
                     Seconds = 2,
                     MicroSeconds = 100000,
                 },
+                EventDispatcherThreads = 0,
             };
 
             rui.SetMulticastGroupAddress("239.255.0.1:7402");
@@ -120,10 +120,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual("eth0", rui.MulticastInterface);
             Assert.AreEqual("127.0.0.1:0", rui.LocalAddress);
             Assert.AreEqual(64U, rui.NakDepth);
-            Assert.IsNotNull(rui.NakResponseDelay);
             Assert.AreEqual(1, rui.NakResponseDelay.Seconds);
             Assert.AreEqual(400000, rui.NakResponseDelay.MicroSeconds);
-            Assert.IsNotNull(rui.HeartbeatPeriod);
             Assert.AreEqual(2, rui.HeartbeatPeriod.Seconds);
             Assert.AreEqual(100000, rui.HeartbeatPeriod.MicroSeconds);
             Assert.AreEqual(2, rui.Ttl);
@@ -141,6 +139,7 @@ namespace OpenDDSharp.UnitTest
             Assert.IsTrue(rui.ThreadPerConnection);
             Assert.AreEqual(2, rui.ReceiveAddressDuration.Seconds);
             Assert.AreEqual(100000, rui.ReceiveAddressDuration.MicroSeconds);
+            Assert.AreEqual(0, rui.EventDispatcherThreads);
 
             TransportRegistry.Instance.RemoveInst(rui);
         }

@@ -157,6 +157,28 @@ void *RtpsDiscovery_GetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d) {
   return ptr;
 }
 
+void RtpsDiscovery_SetSpdpSendAddrs(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
+  ::OpenDDS::DCPS::NetworkAddressSet addrs;
+
+  TAO::unbounded_basic_string_sequence<char> seq;
+
+  // Split by comma the value string into a sequence of strings
+  std::string value_str(value);
+  std::istringstream ss(value_str);
+  std::string token;
+  while (std::getline(ss, token, ',')) {
+    seq.length(seq.length() + 1);
+    seq[seq.length() - 1] = CORBA::string_dup(token.c_str());
+  }
+
+  for (CORBA::ULong i = 0; i < seq.length(); ++i) {
+    const ::OpenDDS::DCPS::NetworkAddress addr(seq[i].in());
+    addrs.insert(addr);
+  }
+
+  d->spdp_send_addrs(addrs);
+}
+
 char *RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d) {
   return CORBA::string_dup(d->guid_interface().c_str());
 }
@@ -164,3 +186,4 @@ char *RtpsDiscovery_GetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d) {
 void RtpsDiscovery_SetGuidInterface(::OpenDDS::RTPS::RtpsDiscovery *d, char *value) {
   d->guid_interface(value);
 }
+

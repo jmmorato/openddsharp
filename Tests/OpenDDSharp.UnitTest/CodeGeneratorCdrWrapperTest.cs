@@ -7,6 +7,7 @@ using CdrWrapper;
 using CdrWrapperInclude;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 
 namespace OpenDDSharp.UnitTest
@@ -26,6 +27,8 @@ namespace OpenDDSharp.UnitTest
         private Publisher _publisher;
         private Subscriber _subscriber;
         private Topic _topic;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
         #endregion
 
         #region Properties
@@ -45,7 +48,7 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            (_transportConfig, _transportInst) = _participant.BindRtpsUdpTransportConfig();
 
             _publisher = _participant.CreatePublisher();
             Assert.IsNotNull(_publisher);
@@ -65,7 +68,11 @@ namespace OpenDDSharp.UnitTest
             _participant?.DeleteSubscriber(_subscriber);
             _participant?.DeleteTopic(_topic);
             _participant?.DeleteContainedEntities();
+
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
 
             _participant = null;
             _publisher = null;
@@ -1757,7 +1764,6 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(statusCondition);
             statusCondition.EnabledStatuses = StatusKind.DataAvailableStatus;
             TestHelper.CreateWaitSetThread(evt, statusCondition);
-
 
             var defaultStruct = new TestEnumsArray();
 

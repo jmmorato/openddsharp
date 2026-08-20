@@ -15,6 +15,7 @@ using System.Threading;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -40,6 +41,8 @@ namespace OpenDDSharp.UnitTest
         private MyParticipantListener _listener;
         private DataReader _reader;
         private TestStructDataReader _dataReader;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
         #endregion
 
         #region Properties
@@ -60,7 +63,7 @@ namespace OpenDDSharp.UnitTest
             _listener = new MyParticipantListener();
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN, null, _listener);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+            (_transportConfig, _transportInst) = _participant.BindRtpsUdpTransportConfig();
 
             var support = new TestStructTypeSupport();
             var typeName = support.GetTypeName();
@@ -141,6 +144,9 @@ namespace OpenDDSharp.UnitTest
 
             _listener.Dispose();
             _listener = null;
+
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
 
             _participant = null;
             _publisher = null;
@@ -960,12 +966,12 @@ namespace OpenDDSharp.UnitTest
             var instanceHandle = _dataWriter.RegisterInstance(instance);
             _dataWriter.Write(instance, lastInstanceHandle);
 
-            // After half second deadline should not be lost yet
-            Assert.IsFalse(evt.Wait(500));
+            // After half-second deadline should not be lost yet
+            Assert.IsFalse(evt.Wait(500, TestContext.CancellationToken));
             Assert.AreEqual(0, count);
 
-            // After one second and a half one deadline should be lost
-            Assert.IsTrue(evt.Wait(1_500));
+            // After one second and a half, one deadline should be lost
+            Assert.IsTrue(evt.Wait(1_500, TestContext.CancellationToken));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, writer);
             Assert.AreEqual(1, totalCount);
@@ -1041,7 +1047,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // Wait for discovery
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evt.Wait(1_500, TestContext.CancellationToken));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, totalCount);
@@ -1108,11 +1114,11 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // After half second liveliness should not be lost yet
-            Assert.IsFalse(evt.Wait(500));
+            Assert.IsFalse(evt.Wait(500, TestContext.CancellationToken));
             Assert.AreEqual(0, count);
 
             // After one second and a half one liveliness should be lost
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evt.Wait(1_500, TestContext.CancellationToken));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, dw);
 
@@ -1171,7 +1177,7 @@ namespace OpenDDSharp.UnitTest
             var found = _writer.WaitForSubscriptions(1, 1000);
             Assert.IsTrue(found);
 
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evt.Wait(1_500, TestContext.CancellationToken));
             Assert.AreEqual(1, count);
             Assert.AreEqual(_writer, dw);
             Assert.AreEqual(1, currentCount);

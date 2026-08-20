@@ -102,11 +102,11 @@ public sealed class SetupThirdPartyTask : FrostingTask<BuildContext>
         if (BuildContext.IsLinux || BuildContext.IsOSX)
         {
             var configurePath = System.IO.Path.Combine(_clonePath.FullPath, "configure");
-            var arguments = " -v --doc-group3 --no-test --no-debug --optimize --install-origin-relative --no-inline --std=c++17";
+            var arguments = " -v --ace-tao=ace8tao4 --no-test --no-debug --optimize --install-origin-relative --no-inline --std=c++17";
             if (context.BuildConfiguration == "Debug")
             {
                 context.Log.Information("Building OpenDDS in Debug mode...");
-                arguments = " -v --doc-group3 --no-test --debug --no-optimize --install-origin-relative --no-inline --std=c++17";
+                arguments = " -v --ace-tao=ace8tao4 --no-test --debug --no-optimize --install-origin-relative --no-inline --std=c++17";
             }
 
             if (BuildContext.IsOSX)
@@ -141,7 +141,7 @@ public sealed class SetupThirdPartyTask : FrostingTask<BuildContext>
             });
 
             var vcvar = $"\\VC\\Auxiliary\\Build\\vcvarsall.bat\" {context.BuildPlatform}";
-            var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --doc-group3 --no-test --std=c++17";
+            var arguments = " /c \"" + vsPath.FullPath + vcvar + " && " + configurePath + " -v --ace-tao=ace8tao4 --no-test --std=c++17";
             if (context.BuildConfiguration == "Release")
             {
                 arguments += " --no-debug --optimize";

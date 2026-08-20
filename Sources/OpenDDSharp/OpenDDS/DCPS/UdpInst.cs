@@ -96,12 +96,12 @@ public class UdpInst : TransportInst
     }
     private int GetSendBufferSize()
     {
-        return UnsafeNativeMethods.GetSendBufferSize(_native);
+        return UnsafeNativeMethods.UdpInstGetSendBufferSize(_native);
     }
 
     private void SetSendBufferSize(int value)
     {
-        UnsafeNativeMethods.SetSendBufferSize(_native, value);
+        UnsafeNativeMethods.UdpInstSetSendBufferSize(_native, value);
     }
 
     private int GetRcvBufferSize()
@@ -111,7 +111,7 @@ public class UdpInst : TransportInst
 
     private void SetRcvBufferSize(int value)
     {
-        UnsafeNativeMethods.SetRcvBufferSize(_native, value);
+        UnsafeNativeMethods.UdpInstSetRcvBufferSize(_native, value);
     }
 
     private string GetLocalAddress()
@@ -150,12 +150,12 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_GetSendBufferSize")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial int GetSendBufferSize(IntPtr mi);
+    public static partial int UdpInstGetSendBufferSize(IntPtr mi);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_SetSendBufferSize")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial void SetSendBufferSize(IntPtr mi, int value);
+    public static partial void UdpInstSetSendBufferSize(IntPtr mi, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_GetRcvBufferSize")]
@@ -165,7 +165,7 @@ internal static partial class UnsafeNativeMethods
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_SetRcvBufferSize")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    public static partial void SetRcvBufferSize(IntPtr mi, int value);
+    public static partial void UdpInstSetRcvBufferSize(IntPtr mi, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [LibraryImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_GetLocalAddress")]
@@ -188,11 +188,11 @@ internal static partial class UnsafeNativeMethods
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_GetSendBufferSize", CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetSendBufferSize(IntPtr mi);
+    public static extern int UdpInstGetSendBufferSize(IntPtr mi);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_SetSendBufferSize", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetSendBufferSize(IntPtr mi, int value);
+    public static extern void UdpInstSetSendBufferSize(IntPtr mi, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_GetRcvBufferSize", CallingConvention = CallingConvention.Cdecl)]
@@ -200,7 +200,7 @@ internal static partial class UnsafeNativeMethods
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_SetRcvBufferSize", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetRcvBufferSize(IntPtr mi, int value);
+    public static extern void UdpInstSetRcvBufferSize(IntPtr mi, int value);
 
     [SuppressUnmanagedCodeSecurity]
     [DllImport(MarshalHelper.API_DLL, EntryPoint = "UdpInst_GetLocalAddress", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]

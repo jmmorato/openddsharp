@@ -1087,7 +1087,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             return count != 0 || handles.Count == participantCount;
         }
 
-        public static void BindRtpsUdpTransportConfig(this Entity entity)
+        public static (TransportConfig, TransportInst) BindRtpsUdpTransportConfig(this Entity entity)
         {
             var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var configName = "openddsharp_rtps_interop_" + guid;
@@ -1098,10 +1098,13 @@ namespace OpenDDSharp.UnitTest.Helpers
             var rui = new RtpsUdpInst(inst)
             {
                 UseMulticast = false,
+                EventDispatcherThreads = 0,
             };
             config.Insert(rui);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
+
+            return (config, inst);
         }
 
         public static void BindUdpTransportConfig(this Entity entity)
@@ -1118,7 +1121,7 @@ namespace OpenDDSharp.UnitTest.Helpers
             TransportRegistry.Instance.BindConfig(configName, entity);
         }
 
-        public static void BindTcpTransportConfig(this Entity entity)
+        public static (TransportConfig, TransportInst) BindTcpTransportConfig(this Entity entity)
         {
             var guid = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             var configName = "openddsharp_tcp_" + guid;
@@ -1129,10 +1132,13 @@ namespace OpenDDSharp.UnitTest.Helpers
             var tcpInst = new TcpInst(inst)
             {
                 LocalAddress = "localhost:0",
+                EventDispatcherThreads = 0,
             };
             config.Insert(tcpInst);
 
             TransportRegistry.Instance.BindConfig(configName, entity);
+
+            return (config, inst);
         }
 
         public static void BindShmemTransportConfig(this Entity entity)

@@ -11,9 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Threading.Tasks;
 using JsonWrapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDDSharp.DDS;
+using OpenDDSharp.OpenDDS.DCPS;
 using OpenDDSharp.UnitTest.Helpers;
 using OpenDDSharp.UnitTest.Listeners;
 
@@ -31,6 +33,16 @@ namespace OpenDDSharp.UnitTest
 
         #region Fields
         private DomainParticipant _participant;
+        private TransportConfig _transportConfig;
+        private TransportInst _transportInst;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Test context for the current test run.
+        /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by MSTest.")]
+        public TestContext TestContext { get; set; }
         #endregion
 
         #region Initialization/Cleanup
@@ -42,7 +54,8 @@ namespace OpenDDSharp.UnitTest
         {
             _participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.RTPS_DOMAIN);
             Assert.IsNotNull(_participant);
-            _participant.BindRtpsUdpTransportConfig();
+
+            (_transportConfig, _transportInst) = _participant.BindRtpsUdpTransportConfig();
         }
 
         /// <summary>
@@ -53,6 +66,9 @@ namespace OpenDDSharp.UnitTest
         {
             _participant?.DeleteContainedEntities();
             AssemblyInitializer.Factory?.DeleteParticipant(_participant);
+
+            TransportRegistry.Instance.RemoveConfig(_transportConfig);
+            TransportRegistry.Instance.RemoveInst(_transportInst);
 
             _participant = null;
         }
@@ -69,6 +85,9 @@ namespace OpenDDSharp.UnitTest
             var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
             Assert.AreSame(_participant, publisher.Participant);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
         }
 
         /// <summary>
@@ -76,7 +95,6 @@ namespace OpenDDSharp.UnitTest
         /// </summary>
         [TestMethod]
         [TestCategory(TEST_CATEGORY)]
-        [SuppressMessage("Blocker Code Smell", "S2699:Tests should include assertions", Justification = "Included in the calling method.")]
         public void TestNewPublisherQos()
         {
             var qos = new PublisherQos();
@@ -105,6 +123,9 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = publisher.GetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
         }
 
         /// <summary>
@@ -158,10 +179,10 @@ namespace OpenDDSharp.UnitTest
             Assert.IsNotNull(qos.Presentation);
             Assert.IsFalse(qos.EntityFactory.AutoenableCreatedEntities);
             Assert.IsNotNull(qos.GroupData.Value);
-            Assert.AreEqual(1, qos.GroupData.Value.Count);
+            Assert.HasCount(1, qos.GroupData.Value);
             Assert.AreEqual(0x42, qos.GroupData.Value[0]);
             Assert.IsNotNull(qos.Partition.Name);
-            Assert.AreEqual(1, qos.Partition.Name.Count);
+            Assert.HasCount(1, qos.Partition.Name);
             Assert.AreEqual("TestPartition", qos.Partition.Name[0]);
             Assert.IsFalse(qos.Presentation.CoherentAccess);
             Assert.IsFalse(qos.Presentation.OrderedAccess);
@@ -224,6 +245,11 @@ namespace OpenDDSharp.UnitTest
             // Test with null parameter
             result = publisher.SetQos(null);
             Assert.AreEqual(ReturnCode.BadParameter, result);
+
+            Assert.AreEqual(ReturnCode.Ok, otherPublisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
         }
 
         /// <summary>
@@ -238,7 +264,7 @@ namespace OpenDDSharp.UnitTest
             var publisher = _participant.CreatePublisher(null, listener);
             Assert.IsNotNull(publisher);
 
-            // Call to GetListener and check the listener received
+            // Call GetListener and check the listener received
 #pragma warning disable CS0618 // Type or member is obsolete
             var received = (MyPublisherListener)publisher.GetListener();
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -283,6 +309,9 @@ namespace OpenDDSharp.UnitTest
 
             received = (MyPublisherListener)publisher.Listener;
             Assert.IsNull(received);
+
+            Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
         }
 
         /// <summary>
@@ -490,6 +519,7 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             Assert.AreEqual(ReturnCode.Ok, publisher.DeleteContainedEntities());
+            Assert.AreEqual(ReturnCode.Ok, otherPublisher.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(publisher));
             Assert.AreEqual(ReturnCode.Ok, _participant.DeletePublisher(otherPublisher));
             Assert.AreEqual(ReturnCode.Ok, _participant.DeleteTopic(topic));
@@ -520,7 +550,7 @@ namespace OpenDDSharp.UnitTest
             var otherPublisher = _participant.CreatePublisher();
             Assert.IsNotNull(otherPublisher);
 
-            // Create a DataWriter and lookup in the publishers
+            // Create a DataWriter and look up in the publishers
             var datawriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(datawriter);
             Assert.AreEqual(publisher, datawriter.Publisher);
@@ -533,7 +563,7 @@ namespace OpenDDSharp.UnitTest
             received = otherPublisher.LookupDataWriter(nameof(TestLookupDataWriter));
             Assert.IsNull(received);
 
-            // Create other DataWriter in the same topic and lookup again
+            // Create another DataWriter in the same topic and lookup again
             var otherDatawriter = publisher.CreateDataWriter(topic);
             Assert.IsNotNull(otherDatawriter);
             Assert.AreEqual(publisher, otherDatawriter.Publisher);
@@ -656,7 +686,7 @@ namespace OpenDDSharp.UnitTest
             var publisher = _participant.CreatePublisher();
             Assert.IsNotNull(publisher);
 
-            // Creates a non-default QoS, set it an check it
+            // Creates a non-default QoS, set it and check it
             var qos = TestHelper.CreateNonDefaultDataWriterQos();
             result = publisher.SetDefaultDataWriterQos(qos);
             Assert.AreEqual(ReturnCode.Ok, result);
@@ -840,7 +870,8 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, result);
 
             // OpenDDS issue: cannot register more than one instance during SuspendPublications.
-            // Looks like that the control messages are never delivered and the controlTracker never get free during delete_datawriter
+            // Looks like that the control messages are never delivered and the controlTracker never gets
+            // free during delete_datawriter
             var sample = new TestStruct
             {
                 Id = 1,
@@ -853,7 +884,7 @@ namespace OpenDDSharp.UnitTest
             result = dataWriter.Write(sample, handle);
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsFalse(evt.Wait(1_500));
+            Assert.IsFalse(evt.Wait(1_500, TestContext.CancellationToken));
 
             // Check that not samples arrived
             var data = new List<TestStruct>();
@@ -865,10 +896,10 @@ namespace OpenDDSharp.UnitTest
             result = publisher.ResumePublications();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(5_000));
+            Assert.IsTrue(evt.Wait(5_000, TestContext.CancellationToken));
 
-            data = new List<TestStruct>();
-            sampleInfos = new List<SampleInfo>();
+            data = [];
+            sampleInfos = [];
             result = dataReader.Read(data, sampleInfos);
             Assert.AreEqual(ReturnCode.Ok, result);
             Assert.AreEqual(1, data.Count);
@@ -895,7 +926,7 @@ namespace OpenDDSharp.UnitTest
             // Initialize entities
             var participant = AssemblyInitializer.Factory.CreateParticipant(AssemblyInitializer.INFOREPO_DOMAIN);
             Assert.IsNotNull(participant);
-            participant.BindTcpTransportConfig();
+            var (transportConfig, transportInst) = participant.BindTcpTransportConfig();
 
             var support = new TestStructTypeSupport();
             var typeName = support.GetTypeName();
@@ -992,7 +1023,7 @@ namespace OpenDDSharp.UnitTest
                 Assert.AreEqual(ReturnCode.Ok, result);
             }
 
-            Assert.IsFalse(evt.Wait(1_500));
+            Assert.IsFalse(evt.Wait(1_500, TestContext.CancellationToken));
 
             // Check that not samples arrived
             var data = new List<TestStruct>();
@@ -1005,7 +1036,7 @@ namespace OpenDDSharp.UnitTest
             result = publisher.EndCoherentChanges();
             Assert.AreEqual(ReturnCode.Ok, result);
 
-            Assert.IsTrue(evt.Wait(1_500));
+            Assert.IsTrue(evt.Wait(1_500, TestContext.CancellationToken));
 
             data = new List<TestStruct>();
             sampleInfos = new List<SampleInfo>();
@@ -1031,6 +1062,9 @@ namespace OpenDDSharp.UnitTest
             Assert.AreEqual(ReturnCode.Ok, participant.DeleteSubscriber(subscriber));
             Assert.AreEqual(ReturnCode.Ok, participant.DeleteContainedEntities());
             Assert.AreEqual(ReturnCode.Ok, AssemblyInitializer.Factory.DeleteParticipant(participant));
+
+            TransportRegistry.Instance.RemoveConfig(transportConfig);
+            TransportRegistry.Instance.RemoveInst(transportInst);
         }
         #endregion
     }

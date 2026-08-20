@@ -36,3 +36,9 @@ EXTERN_METHOD_EXPORT
 
 EXTERN_METHOD_EXPORT
 bool ParticipantService_GetIsShutdown();
+
+EXTERN_METHOD_EXPORT
+int ParticipantService_GetScheduler();
+
+EXTERN_METHOD_EXPORT
+void ParticipantService_Scheduler(int scheduler);

@@ -22,6 +22,18 @@ EXTERN_METHOD_EXPORT
 CORBA::Boolean TcpInst_GetIsReliable(::OpenDDS::DCPS::TcpInst *ti);
 
 EXTERN_METHOD_EXPORT
+CORBA::Int32 TcpInst_GetSendBufferSize(::OpenDDS::DCPS::TcpInst *ti);
+
+EXTERN_METHOD_EXPORT
+void TcpInst_SetSendBufferSize(::OpenDDS::DCPS::TcpInst *ti, CORBA::Int32 value);
+
+EXTERN_METHOD_EXPORT
+CORBA::Int32 TcpInst_GetRcvBufferSize(::OpenDDS::DCPS::TcpInst *ti);
+
+EXTERN_METHOD_EXPORT
+void TcpInst_SetRcvBufferSize(::OpenDDS::DCPS::TcpInst *ti, CORBA::Int32 value);
+
+EXTERN_METHOD_EXPORT
 CORBA::Boolean TcpInst_GetEnableNagleAlgorithm(::OpenDDS::DCPS::TcpInst *ti);
 
 EXTERN_METHOD_EXPORT
@@ -56,6 +68,12 @@ CORBA::Long TcpInst_GetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti);
 
 EXTERN_METHOD_EXPORT
 void TcpInst_SetPassiveReconnectDuration(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value);
+
+EXTERN_METHOD_EXPORT
+CORBA::Long TcpInst_GetActiveConnTimeoutPeriod(::OpenDDS::DCPS::TcpInst *ti);
+
+EXTERN_METHOD_EXPORT
+void TcpInst_SetActiveConnTimeoutPeriod(::OpenDDS::DCPS::TcpInst *ti, CORBA::Long value);
 
 EXTERN_METHOD_EXPORT
 char *TcpInst_GetPublicAddress(::OpenDDS::DCPS::TcpInst *ti);
